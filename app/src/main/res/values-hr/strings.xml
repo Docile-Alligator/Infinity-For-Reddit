@@ -24,11 +24,21 @@
     <string name="edit_multi_reddit_activity_label">"Uredi multireddit"</string>
     <string name="selected_subeddits_activity_label">"Odaberi podreddite"</string>
     <string name="report_activity_label">"Prijavi"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_image_label">"Slika %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_video_label">"Videozapis %1$d/%2$d"</string>
     <string name="send_private_message_activity_label">"Pošalji poruku"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_image_label">"Slika %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_gif_label">"Gif %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_video_label">"Videozapis %1$d/%2$d"</string>
     <string name="navigation_drawer_open">"Otvor navigacijsku ladicu"</string>
     <string name="navigation_drawer_close">"Zatvori navigacijsku ladicu"</string>
@@ -92,7 +102,11 @@
     <string name="load_messages_failed">"Pogreška pri učitavanju poruka. Dodirnite za ponovni pokušaj."</string>
     <string name="no_messages">"Prazno"</string>
     <string name="nsfw">"NSFW"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info">"Karma: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info_user_detail">"Karma: %1$d (%2$d + %3$d)"</string>
     <string name="cakeday_info">"Cake dan: %1$s"</string>
     <string name="since">"Od:"</string>
@@ -108,7 +122,11 @@
     <string name="saved">"Spremljeno"</string>
     <string name="gilded">"Pozlaćeno"</string>
     <string name="settings">"Postavke"</string>
+
+    <!-- Fuzzy -->
     <string name="subscribers_number_detail">"Pretplatnika: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="online_subscribers_number_detail">"Na mreži: %1$d"</string>
     <string name="cannot_fetch_subreddit_info">"Nije moguće dohvatiti informacije o podredditu"</string>
     <string name="cannot_fetch_user_info">"Nije moguće dohvatiti informacije o korisniku"</string>
@@ -187,6 +205,8 @@
     <string name="spoiler">"Spojler"</string>
     <string name="no_flair">"Nema Flaira"</string>
     <string name="error_loading_flairs">"Pogreška pri učitavanju Flairova. Dodirnite za ponovni pokušaj."</string>
+
+    <!-- Fuzzy -->
     <string name="no_rule">"Nema pravila"</string>
     <string name="error_loading_rules">"Pogreška pri učitavanju pravila. Dodirnite za ponovni pokušaj."</string>
     <string name="error_loading_rules_without_retry">"Pogreška pri učitavanju pravila"</string>
@@ -292,6 +312,8 @@
     <string name="notification_summary_message">"Nova poruka"</string>
     <string name="notification_summary_subreddit">"Podreddit"</string>
     <string name="notification_summary_award">"Nagrada"</string>
+
+    <!-- Fuzzy -->
     <string name="notification_new_messages">"%1$d Nove/ih poruke/a"</string>
     <string name="label_account">"Račun"</string>
     <string name="label_post">"Objava"</string>
@@ -311,8 +333,12 @@
     <string name="settings_mute_autoplaying_videos_title">"Automatski pokrenuti videozapisi bez zvuka"</string>
     <string name="settings_autoplay_nsfw_videos_title">"Automatski pokreni NSFW videozapise"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Pomak vidljivog područja kod automatski pokrenutog videozapisa (Portret)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Započni automatski pokretati videozapise kada ih je %1$d%% vidljivo"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Pomak vidljivog područja kod automatski pokrenutog videozapisa (Pejzažno)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Započni automatski pokretati videozapise kada ih je %1$d%% vidljivo"</string>
     <string name="settings_immersive_interface_title">"Imerzivno sučelje"</string>
 
@@ -455,14 +481,24 @@
     <string name="post_layout_compact">"Kompaktni raspored"</string>
     <string name="elapsed_time_just_now">"Upravo sada"</string>
     <string name="elapsed_time_a_minute_ago">"Prije 1 minute"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_minutes_ago">"Prije %1$d minute/a"</string>
     <string name="elapsed_time_an_hour_ago">"Prije 1 sata"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_hours_ago">"Prije %1$d Sata/i"</string>
     <string name="elapsed_time_yesterday">"Jučer"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_days_ago">"Prije %1$d dana"</string>
     <string name="elapsed_time_a_month_ago">"Prije mjesec dana"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_months_ago">"Prije %1$d mjeseca/i"</string>
     <string name="elapsed_time_a_year_ago">"Prije godinu dana"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_years_ago">"Prije %1$d godine/a"</string>
     <string name="error_getting_multi_reddit_data">"Pogreška pri dohvaćanju podataka multireddita"</string>
     <string name="error_loading_multi_reddit_list">"Nije moguće sinkronizirati multireddite"</string>
@@ -498,6 +534,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"Nije moguće stvoriti ovaj multireddit"</string>
     <string name="duplicate_multi_reddit">"Ovaj multireddit već postoji"</string>
     <string name="edit_multi_reddit_failed">"Nije moguće urediti ovaj multireddit"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_multi_reddit_success">"Brisanje uspješno"</string>
     <string name="delete_multi_reddit_failed">"Brisanje nije uspjelo"</string>
     <string name="delete_multi_reddit_dialog_message">"Jeste li sigurni?"</string>
@@ -686,6 +724,8 @@ Baziraj na Indigo Amoled temi"</string>
     <string name="edit_theme_name">"Uredi ime teme"</string>
     <string name="edit_theme">"Uredi temu"</string>
     <string name="delete_theme">"Obriši temu"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_theme_dialog_message">"Jeste li sigurni da želite obrisati %1$s?"</string>
     <string name="share_theme">"Podijeli temu"</string>
     <string name="change_theme_name">"Promijeni ime"</string>
@@ -738,6 +778,8 @@ Baziraj na Indigo Amoled temi"</string>
     <string name="comment_content_preview">"Djevojka mi je rekla da ju uopće ne razumijem. Nije mi jasno kako to misli."</string>
     <string name="edit_multi_reddit">"Uredi Multireddit"</string>
     <string name="delete_multi_reddit">"Obriši Multireddit"</string>
+
+    <!-- Fuzzy -->
     <string name="n_awards">"%1$d Nagrade/a"</string>
     <string name="one_award">"1 Nagrada"</string>
     <string name="report">"Prijavi"</string>
@@ -961,7 +1003,9 @@ Poruka: %2$s"</string>
     <string name="post_filter_requires_a_name">"Koje je ime filtera objave"</string>
     <string name="duplicate_post_filter_dialog_message">"Poništi?"</string>
     <string name="post_filter_usage_home">"Home"</string>
+    <string name="post_filter_usage_subreddit">"Podreddit: %1$s"</string>
     <string name="post_filter_usage_subreddit_all">"Subreddit"</string>
+    <string name="post_filter_usage_user">"Korisnik: %1$s"</string>
     <string name="subreddit">"Subreddit"</string>
     <string name="user">"Korisnik"</string>
     <string name="choose_a_user">"Odaberi korisnika"</string>

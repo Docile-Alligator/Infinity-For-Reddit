@@ -24,11 +24,21 @@
     <string name="edit_multi_reddit_activity_label">"Multireddit'i Düzenle"</string>
     <string name="selected_subeddits_activity_label">"Seçili Subredditler"</string>
     <string name="report_activity_label">"Bildir"</string>
-    <string name="view_imgur_media_activity_image_label">"Resim %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
+    <string name="view_imgur_media_activity_image_label">"Fotoğraf %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_video_label">"Video %1$d/%2$d"</string>
     <string name="send_private_message_activity_label">"Özel Mesaj Gönder"</string>
-    <string name="view_reddit_gallery_activity_image_label">"Resim %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
+    <string name="view_reddit_gallery_activity_image_label">"Fotoğraf %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_gif_label">"Gif %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_video_label">"Video %1$d/%2$d"</string>
     <string name="navigation_drawer_open">"Gezinme çekmecesini aç"</string>
     <string name="navigation_drawer_close">"Gezinme çekmecesini kapat"</string>
@@ -53,7 +63,7 @@
     <string name="action_edit_flair">"Etiketi Düzenle"</string>
     <string name="action_change_post_layout">"Gönderi Düzenini Değiştir"</string>
     <string name="action_save">"Kaydet"</string>
-    <string name="action_edit_multi_reddit">"MultirReddit'i Düzenle"</string>
+    <string name="action_edit_multi_reddit">"MultiReddit'i Düzenle"</string>
     <string name="action_delete_multi_reddit">"Multireddit'i Sil"</string>
     <string name="action_share">"Paylaş"</string>
     <string name="action_preview">"Önizleme"</string>
@@ -94,9 +104,9 @@ Tekrar denemek için tıklayın."</string>
 Tekrar denemek için tıklayın."</string>
     <string name="no_messages">"Boş"</string>
     <string name="nsfw">"NSFW"</string>
-    <string name="karma_info">"Karma: %1$d"</string>
+    <string name="karma_info">"Karma: %1$,d"</string>
     <string name="karma_info_user_detail">"Karma:
-%1$d (%2$d + %3$d)"</string>
+%1$,d (%2$d + %3$d)"</string>
     <string name="cakeday_info">"Üyelik tarihi:
 %1$s"</string>
 
@@ -115,8 +125,8 @@ This translation does it work well in this kinda format. People use "since" in s
     <string name="saved">"Kaydedilenler"</string>
     <string name="gilded">"Yaldızlananlar"</string>
     <string name="settings">"Ayarlar"</string>
-    <string name="subscribers_number_detail">"Aboneler: %1$d"</string>
-    <string name="online_subscribers_number_detail">"Çevrimiçi: %1$d"</string>
+    <string name="subscribers_number_detail">"Aboneler: %1$,d"</string>
+    <string name="online_subscribers_number_detail">"Çevrimiçi: %1$,d"</string>
     <string name="cannot_fetch_subreddit_info">"Subreddit bilgisi getirilemiyor"</string>
     <string name="cannot_fetch_user_info">"Kullanıcı bilgisi getirilemiyor"</string>
     <string name="cannot_fetch_sidebar">"Hakkındakiler getirilemiyor"</string>
@@ -139,7 +149,7 @@ This translation does it work well in this kinda format. People use "since" in s
     <string name="no_posts_no_lazy_mode">"Hiç gönderi yok"</string>
     <string name="lazy_mode_start">"Uyuşuk Modu %1$.1fs'da başlıyor"</string>
     <string name="lazy_mode_stop">"Uyuşuk Modu durdu"</string>
-    <string name="write_comment_hint">"Buradaki ilginç düşünceleriniz"</string>
+    <string name="write_comment_hint">"Ne düşünüyorsun?"</string>
     <string name="comment_content_required">"İlginç düşünceniz nerede?"</string>
     <string name="sending_comment">"Gönderiliyor"</string>
     <string name="send_comment_success">"Yorum gönderildi"</string>
@@ -159,7 +169,7 @@ This translation does it work well in this kinda format. People use "since" in s
 
     <!-- Fuzzy -->
     <string name="title_required">"Gönderinin iyi bir başlığa ihtiyacı var"</string>
-    <string name="link_required">"Hey, bağlantı nerede?"</string>
+    <string name="link_required">"Bağlantı adresi nerede?"</string>
     <string name="select_an_image">"Lütfen önce bir resim seçin"</string>
     <string name="posting">"Paylaşılıyor"</string>
     <string name="post_failed">"Paylaşılamadı"</string>
@@ -176,7 +186,7 @@ This translation does it work well in this kinda format. People use "since" in s
     <string name="post_link_hint">"Bağlantı Adresi"</string>
     <string name="subreddits">"Subredditler"</string>
     <string name="users">"Kullanıcılar"</string>
-    <string name="multi_reddits">"MultiRedditlr"</string>
+    <string name="multi_reddits">"MultiRedditler"</string>
     <string name="bottom_sheet_post_text">"Metin"</string>
     <string name="bottom_sheet_post_link">"Bağlantı"</string>
     <string name="bottom_sheet_post_image">"Fotoğraf"</string>
@@ -195,6 +205,8 @@ This translation does it work well in this kinda format. People use "since" in s
     <string name="no_flair">"Hiç etiket yok"</string>
     <string name="error_loading_flairs">"Etiketler yüklenirken hata oluştu.
 Tekrar denemek için tıklayın."</string>
+
+    <!-- Fuzzy -->
     <string name="no_rule">"Hiç kural yok"</string>
     <string name="error_loading_rules">"Kurallar yüklenirken hata oluştu.
 Tekrar denemek için tıklayın."</string>
@@ -202,7 +214,7 @@ Tekrar denemek için tıklayın."</string>
     <string name="search_in">"Arama"</string>
     <string name="all_subreddits">"Tüm subredditler"</string>
     <string name="sort_best">"En iyi"</string>
-    <string name="sort_hot">"Sıcak"</string>
+    <string name="sort_hot">"Popüler"</string>
     <string name="sort_new">"Yeni"</string>
     <string name="sort_random">"Rastgele"</string>
     <string name="sort_rising">"Yükselen"</string>
@@ -237,11 +249,7 @@ Tekrar denemek için tıklayın."</string>
     <string name="search">"Arama"</string>
     <string name="posting_video">"Video Paylaşılıyor"</string>
     <string name="posting_image">"Fotoğraf Paylaşılıyor"</string>
-
-    <!-- Fuzzy -->
     <string name="please_wait">"Lütfen bekleyin"</string>
-
-    <!-- Fuzzy -->
     <string name="add_account">"Hesap ekle"</string>
     <string name="anonymous_account">"Anonim"</string>
     <string name="log_out">"Çıkış yap"</string>
@@ -289,6 +297,8 @@ Tekrar denemek için tıklayın."</string>
     <string name="notification_summary_message">"Yeni Mesaj"</string>
     <string name="notification_summary_subreddit">"Subreddit"</string>
     <string name="notification_summary_award">"Ödül"</string>
+
+    <!-- Fuzzy -->
     <string name="notification_new_messages">"%1$d Yeni Mesaj"</string>
     <string name="label_account">"Hesap"</string>
     <string name="label_post">"Gönderi"</string>
@@ -308,8 +318,12 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_mute_autoplaying_videos_title">"Otomatik Oynatılan Videoları Sessize Al"</string>
     <string name="settings_autoplay_nsfw_videos_title">"NSFW Videolarını Otomatik Oynat"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Otomatik Oynatılan Videoların Görünür Alan Uzaklığı (Dikey)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Videoları %1$d%% göründüğünde otomatik oynatmaya başla"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Otomatik Oynatılan Videoların Görünür Alan Uzaklığı (Yatay)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Videoları %1$d%% göründüğünde otomatik oynatmaya başla"</string>
     <string name="settings_immersive_interface_title">"Sürükleyici Arayüz"</string>
     <string name="settings_immersive_interface_summary">"Tüm Sayfalara Uygulanamaz"</string>
@@ -340,11 +354,7 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_time_format_title">"Zaman Biçimi"</string>
     <string name="settings_category_post_title">"Gönderi"</string>
     <string name="settings_default_post_layout">"Varsayılan Gönderi Düzeni"</string>
-
-    <!-- Fuzzy -->
-    <string name="settings_show_divider_in_compact_layout">"Bölücüyü Göster"</string>
-
-    <!-- Fuzzy -->
+    <string name="settings_show_divider_in_compact_layout">"Ayırıcıyı Göster"</string>
     <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"Küçük Resmi Solda Göster"</string>
     <string name="settings_swap_tap_and_long_title">"Yorumlarda Dokunmayı ve Uzun Dokunmayı Değiştirme"</string>
     <string name="settings_swipe_to_go_back_title">"Geri Dönmek İçin Sağa Kaydır"</string>
@@ -422,7 +432,7 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_tab_subreddit_name">"Subreddit Adı (r/ öneksiz)"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_tab_multi_reddit_name">"Multireddit Adı (/user/kullanıcıadın/m/multiredditadın)"</string>
+    <string name="settings_tab_multi_reddit_name">"MultiReddit Adı (/user/kullanıcıadın/m/multiredditadın) (sadece küçük harfler)"</string>
     <string name="settings_tab_username">"Kullanıcı adı (u/ öneksiz)"</string>
     <string name="no_developer_easter_egg">"Burada geliştirici seçeneği yok"</string>
     <string name="no_link_available">"Bağlantı alınamıyor"</string>
@@ -451,14 +461,24 @@ Tekrar denemek için tıklayın."</string>
     <string name="post_layout_compact">"Kompakt Düzeni"</string>
     <string name="elapsed_time_just_now">"Şimdi"</string>
     <string name="elapsed_time_a_minute_ago">"1 Dakika"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_minutes_ago">"%1$d Dakika"</string>
     <string name="elapsed_time_an_hour_ago">"1 Saat"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_hours_ago">"%1$d Saat"</string>
     <string name="elapsed_time_yesterday">"Dün"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_days_ago">"%1$d Gün"</string>
     <string name="elapsed_time_a_month_ago">"1 Ay"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_months_ago">"%1$d Ay"</string>
     <string name="elapsed_time_a_year_ago">"1 Yıl"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_years_ago">"%1$d Yıl"</string>
     <string name="error_getting_multi_reddit_data">"Multireddit verileri alınırken hata oluştu"</string>
     <string name="error_loading_multi_reddit_list">"Multireddit senkronize edilemiyor"</string>
@@ -494,6 +514,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"Bu multireddit oluşturulamıyor"</string>
     <string name="duplicate_multi_reddit">"Bu multireddit zaten var"</string>
     <string name="edit_multi_reddit_failed">"Bu multireddit düzenlenemez"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_multi_reddit_success">"Başarıyla silindi"</string>
     <string name="delete_multi_reddit_failed">"Silinemedi"</string>
     <string name="delete_multi_reddit_dialog_message">"Emin misiniz?"</string>
@@ -568,8 +590,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_toolbar_primary_text_and_icon_color_detail">"Uygulandığı yer: Araç çubuklarındaki birincil metinler ve simgeler"</string>
     <string name="theme_item_toolbar_secondary_text_color">"Araç Çubuğu İkincil Metin Rengi"</string>
     <string name="theme_item_toolbar_secondary_text_color_detail">"Uygulandığı yer: Araç çubuklarındaki ikincil metinler"</string>
-    <string name="theme_item_circular_progress_bar_background_color">"Sirküler İlerleme Çubuğu Arka Plan Rengi"</string>
-    <string name="theme_item_circular_progress_bar_background_color_detail">"Uygulandığı yer: Sirküler ilerleme çubuğunun arka planı"</string>
+    <string name="theme_item_circular_progress_bar_background_color">"Dairesel İlerleme Çubuğu Arka Plan Rengi"</string>
+    <string name="theme_item_circular_progress_bar_background_color_detail">"Uygulandığı yer: Dairesel ilerleme çubuğunun arka planı"</string>
     <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_background">"Genişletilmiş Araç Çubuğundaki Sekme Düzeninin Arka Plan Rengi"</string>
     <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_background_detail">"Uygulandığı yer: Sekme düzeni arka planı (genişletilmiş araç çubuğu)"</string>
     <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_text_color">"Genişletilmiş Araç Çubuğundaki Sekme Düzeninin Metin Rengi"</string>
@@ -684,6 +706,8 @@ Amoled Tema Şablonu Oluştur"</string>
     <string name="edit_theme_name">"Tema Adını Düzenle"</string>
     <string name="edit_theme">"Temayı Düzenle"</string>
     <string name="delete_theme">"Temayı Sil"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_theme_dialog_message">"%1$s? adlı temayı silmek istediğinizden emin misiniz?"</string>
     <string name="share_theme">"Temayı Paylaş"</string>
     <string name="change_theme_name">"Adı Değiştir"</string>
@@ -700,7 +724,7 @@ Amoled Tema Şablonu Oluştur"</string>
     <string name="override">"Geçersizleştir"</string>
     <string name="color_picker">"Renk Seçici"</string>
     <string name="invalid_color">"Geçersiz Renk"</string>
-    <string name="delete_all_subreddits_success">"Tüm subredditler başarıyla silindi"</string>
+    <string name="delete_all_subreddits_success">"Tüm subreddit'ler başarıyla silindi"</string>
     <string name="delete_all_users_success">"Tüm kullanıcılar başarıyla silindi"</string>
     <string name="delete_all_sort_types_success">"Tüm sıralama türleri başarıyla silindi"</string>
     <string name="delete_all_post_layouts_success">"Tüm gönderi düzenleri başarıyla silindi"</string>
@@ -720,6 +744,8 @@ Amoled Tema Şablonu Oluştur"</string>
     <string name="comment_content_preview">"Kız arkadaşıma üstünde \"yakında iyileşmen dileğiyle\" yazan bir kart aldım. Hasta falan değildi, ama kesinlikle iyileşmeliydi."</string>
     <string name="edit_multi_reddit">"Multireddit'i Düzenle"</string>
     <string name="delete_multi_reddit">"Multireddit'i Sil"</string>
+
+    <!-- Fuzzy -->
     <string name="n_awards">"%1$d Ödül"</string>
     <string name="one_award">"1 Ödül"</string>
     <string name="report">"Bildir"</string>
@@ -773,7 +799,7 @@ Amoled Tema Şablonu Oluştur"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Gönderi Akışındaki Sütun Sayısı"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Portre"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Manzara"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW ve Spoiler"</string>
+    <string name="settings_nsfw_and_spoiler_title">"NSFW &amp; Spoiler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Tüm Eski Ayarları Sil"</string>
     <string name="restart_app_see_changes">"Değişiklikleri görmek için uygulamayı yeniden başlatın"</string>
     <string name="settings_tab_count">"Sekme Sayısı"</string>
@@ -785,7 +811,7 @@ Sekmeler, diğerlerine geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay�
     <string name="settings_more_tabs_show_subscribed_subreddits_title">"Subreddit Aboneliklerini Göster"</string>
     <string name="settings_download_location_title">"İndirme Konumu"</string>
     <string name="settings_image_download_location_title">"Fotoğraf İndirme Konumu"</string>
-    <string name="settings_gif_download_location_title">"GIF İndirme Konumu"</string>
+    <string name="settings_gif_download_location_title">"Gif İndirme Konumu"</string>
     <string name="settings_video_download_location_title">"Video İndirme Konumu"</string>
     <string name="settings_separate_folder_for_each_subreddit">"Her Subreddit için Ayrı Klasör"</string>
     <string name="settings_swipe_action_title">"Kaydırma İşlemi"</string>
@@ -796,7 +822,7 @@ Sekmeler, diğerlerine geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay�
     <string name="settings_security_title">"Güvenlik"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Araç Çubuğunu Gizlemek İçin Uzun Bas"</string>
+    <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Araç Çubuğunu Kompakt Düzende Gizlemek İçin Uzun Dokun"</string>
 
     <!-- Fuzzy -->
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Varsayılan Olarak Araç Çubuğunu Gizle"</string>
@@ -871,7 +897,7 @@ Mesaj: %2$s"</string>
     <string name="settings_miscellaneous_title">"Diğer"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_title">"İlgili Subreddit Önerilen Yorum Sıralaması Türü"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"Yorum sıralaması türü kaydedilmez"</string>
-    <string name="settings_subreddit_filter_category">"Subredditleri Gizle"</string>
+    <string name="settings_subreddit_filter_category">"Subreddit'leri Gizle"</string>
     <string name="settings_subreddit_filter_popular_and_all">"r/popular ve r/all"</string>
     <string name="settings_credits_ufo_capturing_animation_title">"UFO Yakalama Animasyonu"</string>
     <string name="select_video_quality">"Video Kalitesini Seç"</string>
@@ -894,7 +920,7 @@ Mesaj: %2$s"</string>
     <string name="action_save_to_database">"Veritabanına Kaydet"</string>
     <string name="action_read_all_messages">"Tümünü Okundu Olarak İşaretle"</string>
     <string name="action_add_to_multireddit">"Multireddit'e Ekle"</string>
-    <string name="search_only_subreddits_hint">"Subredditleri ara"</string>
+    <string name="search_only_subreddits_hint">"Subreddit'leri ara"</string>
     <string name="search_only_users_hint">"Kullanıcıları ara"</string>
     <string name="post_type_gif">"Gif"</string>
     <string name="post_type_gallery">"Galeri"</string>
@@ -918,7 +944,7 @@ Mesaj: %2$s"</string>
     <string name="settings_user_default_sort_type_title">"Kullanıcı Varsayılan Sıralama Türü"</string>
     <string name="settings_user_default_sort_time_title">"Kullanıcı Varsayılan Sıralama Zamanı"</string>
     <string name="open_link">"Bağlantıyı Aç"</string>
-    <string name="select_subreddits_and_users">"Subredditleri ve Kullanıcıları Seç"</string>
+    <string name="select_subreddits_and_users">"Subreddit'leri ve Kullanıcıları Seç"</string>
     <string name="theme_item_read_post_title_color">"Görüntülenmiş Gönderi Başlığı"</string>
     <string name="theme_item_read_post_title_color_detail">"Uygulandığı yer: Görüntülenmiş Gönderi Başlığı"</string>
     <string name="theme_item_read_post_content_color">"Görüntülenmiş Gönderi İçeriği Rengi"</string>
@@ -932,9 +958,9 @@ Mesaj: %2$s"</string>
     <string name="only_spoiler">"Sadece Spoiler"</string>
 
     <!-- What is it? -->
-    <string name="title_excludes_strings_hint">"Başlık: anahtar kelimeleri hariç tut (anahtar 1, anahtar 2)"</string>
+    <string name="title_excludes_strings_hint">"Başlık: anahtar kelimeleri hariç tut (anahtar1,anahtar2)"</string>
     <string name="title_excludes_regex_hint">"Başlık: ifadeyi hariç tut"</string>
-    <string name="exclude_subreddits_hint">"Subredditleri hariç tut (örn: Burdurland, SorReddite)"</string>
+    <string name="exclude_subreddits_hint">"Subredditleri hariç tut (örn: Burdurland,SorReddite)"</string>
     <string name="exclude_users_hint">"Kullanıcıları hariç tut (örn: KerimDemirkaynak, rastgele)"</string>
     <string name="exclude_flairs_hint">"Etiketleri hariç tut (örn: etiket 1, etiket 2)"</string>
     <string name="contain_flairs_hint">"Etiketleri kapsa (örn: etiket 1, etiket 2)"</string>
@@ -959,7 +985,7 @@ Mesaj: %2$s"</string>
     <string name="post_filter_usage_search">"Ara"</string>
     <string name="subreddit">"Subreddit"</string>
     <string name="user">"Kullanıcı"</string>
-    <string name="edit_post_filter_name_of_usage_info">"Bu gönderi filtresini tüm subredditlere / kullanıcılara / multiredditlere uygulamak için boş bırakın"</string>
+    <string name="edit_post_filter_name_of_usage_info">"Bu gönderi filtresini tüm subreddit'lere / kullanıcılara / multireddit'lere uygulamak için boş bırakın"</string>
     <string name="read_all_messages_time_limit">"Bunu çok fazla yaptınız.  Daha sonra tekrar deneyin.  Bu, Reddit API'sinin limit sınırıdır."</string>
     <string name="read_all_messages_success">"Tüm mesajlar başarıyla okundu"</string>
     <string name="read_all_messages_failed">"Tüm mesajlar okunamadı"</string>
@@ -980,7 +1006,7 @@ Mesaj: %2$s"</string>
     <string name="action_share_link">"Bağlantıyı Paylaş"</string>
     <string name="action_copy_link">"Bağlantıyı Kopyala"</string>
     <string name="action_add_to_post_filter">"Gönderi Filtresine Ekle"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"NSFW Subredditlerindeki NSFW Görüntülerini bulanıklaştırma"</string>
+    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"NSFW Subreddit'lerindeki NSFW Görüntülerini Bulanıklaştırma"</string>
 
     <!-- Fuzzy -->
     <string name="settings_show_avatar_on_the_right">"Avatarı Solda Göster"</string>
@@ -992,10 +1018,10 @@ Mesaj: %2$s"</string>
     <string name="settings_collapse_account_section_title">"Hesap Bölümünü Daralt"</string>
     <string name="settings_collapse_post_section_title">"Gönderi Bölümünü Daralt"</string>
     <string name="settings_collapse_preferences_section_title">"Tercihler Bölümünü Daralt"</string>
-    <string name="settings_collapse_favorite_subreddits_section_title">"Favori Subredditler Bölümünü Daralt"</string>
-    <string name="settings_collapse_subscribed_subreddits_section_title">"Abone Olunan Subredditler Bölümünü Daralt"</string>
-    <string name="settings_hide_favorite_subreddits_sections_title">"Favori Subredditler Bölümünü Gizle"</string>
-    <string name="settings_hide_subscribed_subreddits_sections_title">"Abone Olunan Subredditler Bölümünü Gizle"</string>
+    <string name="settings_collapse_favorite_subreddits_section_title">"Favori Subreddit'ler Bölümünü Daralt"</string>
+    <string name="settings_collapse_subscribed_subreddits_section_title">"Abone Olunan Subreddit'ler Bölümünü Daralt"</string>
+    <string name="settings_hide_favorite_subreddits_sections_title">"Favori Subreddi'tler Bölümünü Gizle"</string>
+    <string name="settings_hide_subscribed_subreddits_sections_title">"Abone Olunan Subreddit'ler Bölümünü Gizle"</string>
     <string name="settings_default_search_result_tab">"Varsayılan Arama Sonucu Sekmesi"</string>
     <string name="device_default">"Cihaz Varsayılanı"</string>
     <string name="set_by_battery_saver">"Pil Tasarruflu Olarak Ayarla"</string>
@@ -1042,11 +1068,13 @@ Mesaj: %2$s"</string>
     <string name="suggest_title">"Başlık Öner"</string>
     <string name="suggest_title_failed">"Bir başlık önerilemedi"</string>
     <string name="action_delete_logs">"Seyir Defterini Sil"</string>
+
+    <!-- Fuzzy -->
     <string name="inbox_with_count">"Gelen Kutusu (%1$d)"</string>
     <string name="comment_continue_thread">"Konuya devam et"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_swipe_vertically_to_go_back_from_media_title">"Resim ve GIF'ten Geri Dönmek İçin Dikey Kaydır"</string>
+    <string name="settings_swipe_vertically_to_go_back_from_media_title">"Resim ve Gif'ten Geri Dönmek İçin Dikey Kaydır"</string>
     <string name="settings_hide_post_flair">"Gönderi Etiketini Gizle"</string>
     <string name="settings_crash_reports_title">"Kilitlenme Raporları"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Sakıncalı"</string>
@@ -1056,13 +1084,15 @@ Mesaj: %2$s"</string>
     <string name="unsave_comment">"Kaydetme"</string>
     <string name="copy_multi_reddit_path">"Multireddit'in Yolunu Kopyala"</string>
     <string name="copy_multi_reddit_path_failed">"Multireddit'in yolu kopyalanamadı"</string>
+
+    <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Kilitlenme raporları silindi"</string>
+
+    <!-- Fuzzy -->
     <string name="disable_nsfw_forever_message">"Etkinleştirildikten sonra, NSFW ayarının etkin olup olmadığına bakılmaksızın NSFW kalıcı olarak devre dışı bırakılacaktır. Ve bu seçenek geri alınamaz, NSFW'yi yeniden etkinleştirmenin tek yolu uygulama verilerini temizlemektir.
 
 Yine de etkinleştirmek istiyor musunuz?"</string>
     <string name="reply">"Yanıtla"</string>
-
-    <!-- What is RPAN? -->
     <string name="post_gallery_activity_label">"Galeri Gönderisi"</string>
     <string name="trending_activity_label">"Trendler"</string>
     <string name="action_share_post_link">"Gönderi Bağlantısını Paylaş"</string>
@@ -1075,12 +1105,12 @@ Yine de etkinleştirmek istiyor musunuz?"</string>
     <string name="settings_category_material_you_title">"Material You"</string>
     <string name="settings_enable_material_you_warning_summary">"Şu adda temalarınız olmadığından emin olun;
 \"Material You\",
-\"Material You Dark\" veya
+\"Material You Dark\" ya da
 \"Material You Amoled\".
-Yoksa, Material You'u etkinleştirmeden önce bunları yeniden adlandırın."</string>
-    <string name="settings_enable_material_you_title">"Material You'u Etkinleştir"</string>
+Yoksa, Material You'yu etkinleştirmeden önce bunları yeniden adlandırın."</string>
+    <string name="settings_enable_material_you_title">"Material You'yu Etkinleştir"</string>
     <string name="settings_enable_material_you_summary">"Infinity'yi Duvar Kağıdına Göre Kişiselleştir"</string>
-    <string name="settings_apply_material_you_title">"Material You'u Uygula"</string>
+    <string name="settings_apply_material_you_title">"Material You'yu Uygula"</string>
     <string name="settings_apply_material_you_summary">"Infinity'nin temayı değiştirmemesi durumunda"</string>
     <string name="settings_more_tabs_show_favorite_multireddits_title">"Favori Multiredditleri Göster"</string>
     <string name="settings_more_tabs_show_multireddits_title">"Multiredditleri Göster"</string>
@@ -1114,11 +1144,11 @@ Tekrar denemek için tıklayın."</string>
     <string name="discard_dialog_button">"Kaldır"</string>
     <string name="error_loading_wiki">"Viki yüklenirken hata oluştu"</string>
     <string name="no_wiki">"Bu subreddit'in viki sayfası yok"</string>
-    <string name="material_you_notification_title">"Material You'u Yap"</string>
+    <string name="material_you_notification_title">"Material You'yu Yap"</string>
     <string name="action_go_to_wiki">"Wiki'ye git"</string>
     <string name="action_playback_speed">"Oynatma Hızı"</string>
     <string name="about">"Hakkında"</string>
-    <string name="settings_link_handler_title">"Bağlantı İşleyicisi"</string>
+    <string name="settings_link_handler_title">"Bağlantı Açıcı"</string>
     <string name="settings_main_page_back_button_action">"Ana Sayfaya Dön Düğmesi Eylemi"</string>
     <string name="settings_open_navigation_drawer">"Navigasyon Çekmecesini Aç"</string>
     <string name="settings_number_of_columns_in_post_feed_unfolded_portrait_title">"Portre (Katlanmamış)"</string>
@@ -1131,6 +1161,8 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_app_lock_timeout_title">"Uygulama Kilidi Zaman Aşımı"</string>
     <string name="settings_enable_fold_support_title">"Katlanır telefon desteğini etkinleştir"</string>
     <string name="settings_default_playback_speed_title">"Varsayılan Oynatma Hızı"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_link_handler_value_external_browser">"Harici Tarayıcı"</string>
     <string name="settings_link_handler_value_custom_tab">"Özel Sekme"</string>
     <string name="settings_link_handler_value_internal_browser">"Dahili Tarayıcı"</string>
@@ -1195,4 +1227,124 @@ Tekrar denemek için tıklayın."</string>
     <string name="message_change_banner_failed">"%s bannerı değiştirilemedi"</string>
     <string name="message_save_profile_success">"Profil başarıyla kaydedildi"</string>
     <string name="message_save_profile_failed">"%s profili kaydedilemedi"</string>
+    <string name="post_poll_activity_label">"Anket Gönderisi"</string>
+    <string name="action_open_external_browser">"Tarayıcıda Aç"</string>
+
+    <!-- Fuzzy -->
+    <string name="voting_length">"Oylama süresi: %1$d gün"</string>
+    <string name="two_options_required">"İyi bir anket iki veya daha fazla seçeneğe ihtiyaç duyar!"</string>
+    <string name="bottom_sheet_post_poll">"Anket"</string>
+
+    <!-- Fuzzy -->
+    <string name="no_activity_found_for_external_browser">"Harici tarayıcıda açma işlemini gerçekleştirebilecek bir uygulama yok"</string>
+    <string name="settings_require_authentication_to_show_accounts">"Hesapları Göstermek için Kimlik Doğrulaması Gerektir"</string>
+    <string name="settings_custom_font_family_title">"Özel Yazı Tipi Ailesi"</string>
+    <string name="settings_custom_title_font_family_title">"Özel Başlık Yazı Tipi Ailesi"</string>
+    <string name="settings_custom_content_font_family_title">"Özel İçerik Yazı Tipi Ailesi"</string>
+    <string name="settings_fixed_height_preview_in_card_title">"Karttaki Sabit Yükseklik"</string>
+    <string name="settings_hide_text_post_content">"Metin Gönderisi İçeriğini Gizle"</string>
+    <string name="settings_hide_comment_awards_title">"Yorum Ödüllerini Gizle"</string>
+    <string name="settings_show_fewer_toolbar_options_threshold_title">"Daha Az Araç Çubuğu Seçeneği Göster"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_show_fewer_toolbar_options_threshold_summary">"Seviye %1$d"</string>
+    <string name="settings_show_author_avatar_title">"Yazar Avatarını Göster"</string>
+    <string name="settings_reddit_user_agreement_title">"Reddit Kullanıcı Sözleşmesi"</string>
+    <string name="settings_always_show_child_comment_count_title">"Her Zaman Alt Yorum Sayısını Göster"</string>
+    <string name="settings_hide_upvote_ratio_title">"Olumlu Oy Oranını Gizle"</string>
+    <string name="settings_miscellaneous_dangerous_group_title">"Tehlikeli"</string>
+    <string name="settings_post_feed_max_resolution_warning_title">"Önizlemeleri daha yüksek çözünürlükte göstermek için değeri artırın, ancak uygulama beklenmedik bir şekilde çökebilir."</string>
+    <string name="settings_post_feed_max_resolution_title">"Maks Gönderileri Önizleme Çözünürlüğü (Genişlik * Yükseklik)"</string>
+    <string name="settings_reddit_video_default_resolution">"Varsayılan Reddit Videosu Çözünürlüğü"</string>
+    <string name="select_a_ttf_font">"Bir ttf yazı tipi dosyası seçin"</string>
+    <string name="unable_to_get_font_file">"Yazı tipiniz alınamadı"</string>
+    <string name="unable_to_load_font">"Özel yazı tipi yüklenemiyor"</string>
+    <string name="unable_to_copy_font_file">"Yazı tipiniz kopyalanamadı"</string>
+    <string name="reddit_gallery_item_caption_hint">"Altyazı (en fazla 180 karakter)"</string>
+    <string name="reddit_gallery_item_url_hint">"Bağlantı Adresi"</string>
+    <string name="user_agreement_dialog_title">"Kullanıcı Sözleşmesi"</string>
+    <string name="user_agreement_message">"Giriş yapmadan önce Reddit Kullanıcı Sözleşmesini (%1$s) ve Infinity for Reddit Gizlilik Politikasını (%2$s) kabul etmeniz gerekir."</string>
+    <string name="agree">"Kabul et"</string>
+    <string name="do_not_agree">"Kabul etme"</string>
+    <string name="option_1_hint">"Seçenek 1 (Zorunlu)"</string>
+    <string name="option_2_hint">"Seçenek 2 (Zorunlu)"</string>
+    <string name="option_3_hint">"Seçenek 3"</string>
+    <string name="option_4_hint">"Seçenek 4"</string>
+    <string name="option_5_hint">"Seçenek 5"</string>
+    <string name="option_6_hint">"Seçenek 6"</string>
+    <string name="not_a_valid_number">"Bu geçerli bir sayı değil"</string>
+    <string name="post_karma">"Gönderi Karması:"</string>
+    <string name="comment_karma">"Yorum Karması:"</string>
+    <string name="awarder_karma">"Ödül Verme Karması:"</string>
+    <string name="awardee_karma">"Ödül Alma Karması:"</string>
+    <string name="history_activity_label">"Geçmiş"</string>
+    <string name="history">"Geçmiş"</string>
+    <string name="settings_easier_to_watch_in_full_screen_title">"Tam Ekranda İzlemek Daha Kolay"</string>
+    <string name="clear_user_flair">"Etiket"</string>
+    <string name="clear_user_flair_success">"Etiket kaldırıldı"</string>
+    <string name="extra_small">"Ekstra Küçük"</string>
+    <string name="handle_link">"Ulaşım Bağlantısı"</string>
+    <string name="invalid_link">"Geçersiz Bağlantı"</string>
+    <string name="error_unsupported_video">"Medya video içeriyor, ama hiçbiri bu cihazda çalınamaz"</string>
+    <string name="error_unsupported_audio">"Medya ses içeriyor, ama hiçbiri bu cihazda çalınamaz"</string>
+    <string name="exo_controls_volume_up_description">"Sesi Artır"</string>
+    <string name="exo_controls_volume_off_description">"Sesi Azalt"</string>
+    <string name="action_block_user">"Kullanıcıyı Engelle"</string>
+    <string name="action_create_github_issue">"GitHub Konusu Oluştur"</string>
+    <string name="action_more_options">"Daha Fazla Seçenek"</string>
+    <string name="settings_backup_settings_summary">"Yedekleme dosyası şifresi: \"123321\"."</string>
+    <string name="settings_navigation_drawer_enable_hide_karma_title">"Hesap Karmasını Gizle"</string>
+
+    <!-- What is FAB? -->
+    <string name="settings_hide_fab_in_post_feed">"FAB'ı Gönderi Akışında Gizle"</string>
+    <string name="settings_comment_divider_type">"Yorum Bölücü Türü"</string>
+    <string name="block_user">"Kullanıcıyı Engelle"</string>
+    <string name="block_user_success">"Engellendi"</string>
+    <string name="block_user_failed">"Kullanıcı engellenemedi"</string>
+    <string name="invalid_regex">"Geçersiz regex modeli"</string>
+    <string name="load_more_posts_failed">"Daha fazla gönderi yüklenemedi.
+Tekrar denemek için dokun."</string>
+    <string name="no_more_posts">"Başka gönderi yok"</string>
+    <string name="image_index_in_gallery">"%1$d/%2$d"</string>
+    <string name="denied_notification_permission">"Bildirim izni verilmemiştir"</string>
+    <string name="go_to_settings">"Ayarlar"</string>
+    <string name="subscription_activity_label">"Abonelik"</string>
+    <string name="edited">"Düzenlendi"</string>
+    <string name="edited_time">"%s tarihinde düzenlendi"</string>
+    <string name="welcome_to_infinity">"Reddit portalı Infinity for Reddit'e hoş geldiniz!"</string>
+
+    <!-- Fuzzy -->
+    <string name="subscription_prompt">"Size mümkün olan en iyi hizmeti sağlayabilmek için önemli bir değişikliğe gidiyoruz.
+
+Reddit 1 Temmuz 2023'ten itibaren API erişimi için ücret almaya başlayacak, bu yüzden Infinity for Reddit'in Reddit API'sine erişebilmesi için aylık abonelik sistemine geçiyoruz."</string>
+    <string name="monthly">"Aylık"</string>
+    <string name="yearly">"Yıllık"</string>
+    <string name="weekly">"Haftalık"</string>
+    <string name="billing_error_billing_unavailable">"Faturalandırma hizmeti bu cihazda kullanılamıyor."</string>
+    <string name="billing_error_developer_error">"Geliştirici bazı hatalar yapmış. Senlik bir durum yok."</string>
+    <string name="billing_error_error">"API alınırken büyük bir hata oluştu."</string>
+    <string name="billing_error_feature_not_supported">"İstenilen özellik bu cihazdaki Play Store tarafından desteklenmiyor."</string>
+    <string name="billing_error_item_already_owned">"Öğeye zaten sahip olduğunuzdan satın alma işlemi başarısız oldu."</string>
+    <string name="billing_error_item_unavailable">"İstenilen ürün satın alınamıyor."</string>
+    <string name="billing_error_network_error">"İşlem sırasında bir ağ hatası oluştu."</string>
+    <string name="billing_error_service_disconnected">"Uygulama Google Play Billing Library ile Play Store hizmetine bağlı değil."</string>
+    <string name="billing_error_service_unavailable">"Hizmet şu anda kullanılamıyor."</string>
+    <string name="billing_error_user_canceled">"İşlem kullanıcı tarafından iptal edildi."</string>
+    <string name="subscription_plan_description_monthly">"Bronz"</string>
+    <string name="subscription_plan_description_monthly_399">"Gümüş"</string>
+    <string name="subscription_plan_description_monthly_499">"Altın - Harika Seçim!"</string>
+    <string name="subscription_plan_description_monthly_699">"Platinyum"</string>
+    <string name="subscription_plan_description_monthly_899">"Elmas"</string>
+    <string name="subscription_plan_description_monthly_999">"Infinity"</string>
+    <string name="acknowledge_purchase_failed">"Satın alma işlemi onaylanamıyor"</string>
+    <string name="connect_to_billing_system_failed">"Billing sistemine bağlanılamadı"</string>
+    <string name="connecting_to_billing_system">"Billing sistemine bağlanılıyor. Lütfen bekleyin."</string>
+    <string name="thank_you_for_subscription">"Abone olduğun için sağ ol reis"</string>
+    <string name="load_subscription_options">"Abonelik seçeneklerini yükle"</string>
+    <string name="acknowledging_subscription">"Aboneliğiniz onaylanıyor. Lütfen bekleyin."</string>
+    <string name="acknowledgement_purchase_failed_description">"Hay aksi! Satın alma işleminiz onaylanırken bir hata oluştu. Bu sorun üç gün boyunca devam ederse otomatik olarak paranız iade edilecek.
+Endişelenmeyin, Infinity for Reddit'in keyfini çıkarmaya devam edebilirsiniz."</string>
+    <string name="continue_to_app">"Uygulamaya devam et"</string>
+    <string name="restore_subscription_purchase_details">"Abonelik için ödeme yaptınız mı?"</string>
+    <string name="restore_subscription_purchase">"Satın alınan aboneliği geri yükle"</string>
 </resources>

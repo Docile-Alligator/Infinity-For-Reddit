@@ -16,7 +16,7 @@
     <string name="settings_activity_label">"Налаштування"</string>
     <string name="account_saved_thing_activity_label">"Збережене"</string>
     <string name="create_multi_reddit_activity_label">"Створити мультиредит"</string>
-    <string name="subreddit_multiselection_activity_label">"Вибрати сабредити"</string>
+    <string name="subreddit_multiselection_activity_label">"Виберіть сабредити"</string>
     <string name="custom_theme_listing_activity_label">"Власні теми"</string>
     <string name="customize_theme_activity_label">"Пристосувати тему"</string>
     <string name="customize_theme_activity_create_theme_label">"Створити тему"</string>
@@ -24,11 +24,21 @@
     <string name="edit_multi_reddit_activity_label">"Змінити мультиредит"</string>
     <string name="selected_subeddits_activity_label">"Вибрані сабредити"</string>
     <string name="report_activity_label">"Повідомити"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_image_label">"Зображення %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_video_label">"Відеозапис %1$d/%2$d"</string>
     <string name="send_private_message_activity_label">"Надіслати ПП"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_image_label">"Зображення %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_gif_label">"Gif %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_video_label">"Відеозапис %1$d/%2$d"</string>
     <string name="navigation_drawer_open">"Відкрити шторку переходів"</string>
     <string name="navigation_drawer_close">"Закрити шторку переходів"</string>
@@ -94,7 +104,11 @@
 Натисніть, щоб повторити."</string>
     <string name="no_messages">"Порожньо"</string>
     <string name="nsfw">"НБДР"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info">"Карма: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info_user_detail">"Карма:
 %1$d (%2$d + %3$d)"</string>
     <string name="cakeday_info">"День торта:
@@ -107,10 +121,14 @@
     <string name="upvoted">"Голоси вверх"</string>
     <string name="downvoted">"Голоси вниз"</string>
     <string name="hidden">"Приховане"</string>
-    <string name="saved">"Збережені"</string>
+    <string name="saved">"Збережено"</string>
     <string name="gilded">"Позолочене"</string>
     <string name="settings">"Налаштування"</string>
+
+    <!-- Fuzzy -->
     <string name="subscribers_number_detail">"Підписників: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="online_subscribers_number_detail">"У мережі: %1$d"</string>
     <string name="cannot_fetch_subreddit_info">"Не вдалося отримати інформацію про сабредит"</string>
     <string name="cannot_fetch_user_info">"Не вдалося отримати інформацію про користувача"</string>
@@ -188,13 +206,15 @@
     <string name="no_flair">"Без лички"</string>
     <string name="error_loading_flairs">"Помилка завантаження личок.
 Натисніть, щоб повторити."</string>
+
+    <!-- Fuzzy -->
     <string name="no_rule">"Без правил"</string>
     <string name="error_loading_rules">"Помилка завантаження правил.
 Натисніть, щоб повторити."</string>
     <string name="error_loading_rules_without_retry">"Помилка завантаження правил"</string>
     <string name="search_in">"Шукати в"</string>
     <string name="all_subreddits">"Усіх сабредитах"</string>
-    <string name="sort_best">"Краще"</string>
+    <string name="sort_best">"Найкраще"</string>
     <string name="sort_hot">"Свіже"</string>
     <string name="sort_new">"Нове"</string>
     <string name="sort_random">"Випадкове"</string>
@@ -208,11 +228,11 @@
     <string name="sort_old">"Старе"</string>
     <string name="sort_qa">"ПіВ"</string>
     <string name="sort_live">"Наживо"</string>
-    <string name="sort_time_hour">"За годиною"</string>
-    <string name="sort_time_day">"За днем"</string>
-    <string name="sort_time_week">"За тижнем"</string>
-    <string name="sort_time_month">"За місяцем"</string>
-    <string name="sort_time_year">"За роком"</string>
+    <string name="sort_time_hour">"За годину"</string>
+    <string name="sort_time_day">"За день"</string>
+    <string name="sort_time_week">"За тиждень"</string>
+    <string name="sort_time_month">"За місяць"</string>
+    <string name="sort_time_year">"За рік"</string>
     <string name="sort_time_all_time">"Увесь час"</string>
     <string name="no_activity_found_for_share">"Нема програми для обробки поширення"</string>
     <string name="archived_post_vote_unavailable">"Допис заархівовано. Голосування неможливе."</string>
@@ -273,11 +293,13 @@
     <string name="update_flair_failed">"Не вдалося оновити личку"</string>
     <string name="edit_flair">"Змінити личку"</string>
     <string name="only_allow_64_chars">"Дозволено лише не більше 64 знаків"</string>
-    <string name="view_all_comments">"Клацніть тут, щоб передивитися всі коментарі"</string>
+    <string name="view_all_comments">"Натисніть тут, щоб переглянути всі коментарі"</string>
     <string name="notification_summary_account">"Обліківка"</string>
     <string name="notification_summary_message">"Нове повідомлення"</string>
     <string name="notification_summary_subreddit">"Сабредит"</string>
     <string name="notification_summary_award">"Нагорода"</string>
+
+    <!-- Fuzzy -->
     <string name="notification_new_messages">"%1$d нових повідомлень"</string>
     <string name="label_account">"Обліківка"</string>
     <string name="label_post">"Допис"</string>
@@ -291,14 +313,18 @@
     <string name="settings_interface_title">"Інтерфейс"</string>
     <string name="settings_gestures_and_buttons_title">"Жести і кнопки"</string>
     <string name="settings_save_front_page_scrolled_position_title">"Зберігати позицію гортання в ДОМІВЦІ"</string>
-    <string name="settings_save_front_page_scrolled_position_summary">"Оглядати нові дописи після оновлення ДОМІВКИ (Перша сторінка, тип сортування: Кращі)"</string>
+    <string name="settings_save_front_page_scrolled_position_summary">"Оглядати нові дописи після оновлення ДОМІВКИ (Перша сторінка, тип сортування: Найкраще)"</string>
     <string name="settigns_video_title">"Відео"</string>
     <string name="settings_video_autoplay_title">"Самовідтворення відео"</string>
     <string name="settings_mute_autoplaying_videos_title">"Глушити самовідтворювані відео"</string>
     <string name="settings_autoplay_nsfw_videos_title">"Самовідтворювати відео НБДР"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Область видимості самовідтворюваного відео (портретна)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Розпочинати самовідтворення відеозаписів, коли їх видно на %1$d%%"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Область видимості самовідтворюваного відео (альбомна)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Розпочинати самовідтворення відеозаписів, коли їх видно на %1$d%%"</string>
     <string name="settings_immersive_interface_title">"Заглиблений інтерфейс"</string>
     <string name="settings_immersive_interface_summary">"Не застосовувати для всіх сторінок"</string>
@@ -312,7 +338,7 @@
     <string name="settings_volume_keys_navigate_posts_title">"Пересуватися дописами клавішами гучності"</string>
     <string name="settings_mute_video_title">"Глушити відео"</string>
     <string name="settings_mute_nsfw_video_title">"Глушити відео НБДР"</string>
-    <string name="settings_automatically_try_redgifs_title">"Автоматично спробувати отримати доступ до Redgifs, якщо відео на Gfycat видалено."</string>
+    <string name="settings_automatically_try_redgifs_title">"Автоматично пробувати отримати доступ до Redgifs, якщо відео на Gfycat видалено."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ігнорувати панель пересування у відео-програвачі"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Не дозволяти відеоконтролеру мати додаткове поле"</string>
     <string name="settings_confirm_to_exit">"Підтверджувати вихід"</string>
@@ -351,8 +377,8 @@
     <string name="settings_blur_nsfw_title">"Розмивати зображення НБДР"</string>
     <string name="settings_blur_spoiler_title">"Розмивати зображення спойлерів"</string>
     <string name="settings_about_master_title">"Про застосунок"</string>
-    <string name="settings_acknowledgement_master_title">"Вдячність"</string>
-    <string name="settings_credits_master_title">"Кредит довіри"</string>
+    <string name="settings_acknowledgement_master_title">"Подяка"</string>
+    <string name="settings_credits_master_title">"Довіра"</string>
     <string name="settings_credits_icon_foreground_title">"Значок переднього фону"</string>
     <string name="settings_credits_icon_foreground_summary">"Векторна технологія створена freepik - www.freepik.com"</string>
     <string name="settings_credits_icon_background_title">"Значок заднього фону"</string>
@@ -369,7 +395,7 @@
     <string name="settings_credits_best_rocket_icon_summary">"Автор значка Freepik із www.flaticon.com"</string>
     <string name="settings_credits_material_icons_title">"Значки Material"</string>
     <string name="settings_open_source_title">"Відкритий код"</string>
-    <string name="settings_open_source_summary">"Покладіть зірочку на Github, якщо Вам подобається цей застосунок"</string>
+    <string name="settings_open_source_summary">"Поклади зірочку на Github, якщо тобі подобається цей застосунок"</string>
     <string name="settings_rate_title">"Оцініть на Google Play"</string>
     <string name="settings_rate_summary">"Дай мені 5 зірочок і я буду щаслива"</string>
     <string name="settings_email_title">"Ел. пошта"</string>
@@ -378,8 +404,8 @@
     <string name="settings_reddit_account_summary">"u/Hostilenemy"</string>
     <string name="settings_subreddit_title">"Сабредит"</string>
     <string name="settings_subreddit_summary">"r/Infinity_For_Reddit"</string>
-    <string name="settings_share_title">"Поширте"</string>
-    <string name="settings_share_summary">"Поділіться цим застосунком з іншими людьми, якщо він Вам подобається"</string>
+    <string name="settings_share_title">"Пошир"</string>
+    <string name="settings_share_summary">"Поділися цим застосунком з іншими, якщо він тобі подобається"</string>
     <string name="settings_version_title">"Infinity For Reddit"</string>
     <string name="settings_version_summary">"Версія %s"</string>
     <string name="settings_category_customization_title">"Пристосування"</string>
@@ -401,9 +427,11 @@
     <string name="settings_tab_title">"Назва"</string>
     <string name="settings_tab_post_type">"Тип"</string>
     <string name="settings_tab_subreddit_name">"Назва сабредиту (без префіксу r/)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"Шлях мультиредиту (/user/yourusername/m/yourmultiredditname)"</string>
     <string name="settings_tab_username">"Імʼя користувача (без префіксу u/)"</string>
-    <string name="no_developer_easter_egg">"Тут нема опцій розробника"</string>
+    <string name="no_developer_easter_egg">"Тут нема параметрів розробника"</string>
     <string name="no_link_available">"Не можливо отримати посилання"</string>
     <string name="exit_when_submit">"Покинути?"</string>
     <string name="exit_when_submit_post_detail">"Допис буде надіслано, навіть якщо Ви вийдете звідси."</string>
@@ -430,14 +458,24 @@
     <string name="post_layout_compact">"Компактний вигляд"</string>
     <string name="elapsed_time_just_now">"Тільки що"</string>
     <string name="elapsed_time_a_minute_ago">"1 хвилина"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_minutes_ago">"%1$d хвилин"</string>
     <string name="elapsed_time_an_hour_ago">"1 година"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_hours_ago">"%1$d годин"</string>
     <string name="elapsed_time_yesterday">"Учора"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_days_ago">"%1$d днів"</string>
     <string name="elapsed_time_a_month_ago">"1 місяць"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_months_ago">"%1$d місяців"</string>
     <string name="elapsed_time_a_year_ago">"1 рік"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_years_ago">"%1$d років"</string>
     <string name="error_getting_multi_reddit_data">"Помилка отримання даних мультиредиту"</string>
     <string name="error_loading_multi_reddit_list">"Не можливо синхронувати мультиредити"</string>
@@ -473,6 +511,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"Не можливо створити цей мультиредит"</string>
     <string name="duplicate_multi_reddit">"Такий мультиредит уже існує"</string>
     <string name="edit_multi_reddit_failed">"Не можливо змінити цей мультиредит"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_multi_reddit_success">"Вдало видалено"</string>
     <string name="delete_multi_reddit_failed">"Не вдалося видалити"</string>
     <string name="delete_multi_reddit_dialog_message">"Ви впевнені?"</string>
@@ -488,155 +528,155 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_is_dark_theme">"Зробити темною темою"</string>
     <string name="theme_item_is_amoled_theme">"Зробити темою Amoled"</string>
     <string name="theme_item_color_primary">"Основний колір"</string>
-    <string name="theme_item_color_primary_detail">"Задіяно до: Панель засобів"</string>
+    <string name="theme_item_color_primary_detail">"Задіяно для: Панель засобів"</string>
     <string name="theme_item_color_primary_dark">"Основний темний колір"</string>
-    <string name="theme_item_color_primary_dark_detail">"Задіяно до: Рядок стану"</string>
+    <string name="theme_item_color_primary_dark_detail">"Задіяно для: Рядок стану"</string>
     <string name="theme_item_color_accent">"Акцент кольору"</string>
-    <string name="theme_item_color_accent_detail">"Задіяно до: Панель поступу тощо"</string>
+    <string name="theme_item_color_accent_detail">"Задіяно для: Панель поступу і т.п."</string>
     <string name="theme_item_color_primary_light_theme">"Основний колір світлої теми"</string>
-    <string name="theme_item_color_primary_light_theme_detail">"Задіяно до: тло плаваючої кнопки дії і кнопок"</string>
+    <string name="theme_item_color_primary_light_theme_detail">"Задіяно для: тло плаваючої кнопки дії і кнопок"</string>
     <string name="theme_item_primary_text_color">"Колір основного тексту"</string>
-    <string name="theme_item_primary_text_color_detail">"Задіяно до: Основний текст"</string>
+    <string name="theme_item_primary_text_color_detail">"Задіяно для: Основний текст"</string>
     <string name="theme_item_secondary_text_color">"Колір додаткового тексту"</string>
-    <string name="theme_item_secondary_text_color_detail">"Задіяно до: Додатковий текст"</string>
+    <string name="theme_item_secondary_text_color_detail">"Задіяно для: Додатковий текст"</string>
     <string name="theme_item_post_title_color">"Колір заголовка допису"</string>
-    <string name="theme_item_post_title_color_detail">"Задіяно до: Заголовок допису"</string>
+    <string name="theme_item_post_title_color_detail">"Задіяно для: Заголовок допису"</string>
     <string name="theme_item_post_content_color">"Колір вмісту допису"</string>
-    <string name="theme_item_post_content_color_detail">"Задіяно до: Вміст допису"</string>
+    <string name="theme_item_post_content_color_detail">"Задіяно для: Вміст допису"</string>
     <string name="theme_item_comment_color">"Колір коментарів"</string>
-    <string name="theme_item_comment_color_detail">"Задіяно до: Коментарі"</string>
+    <string name="theme_item_comment_color_detail">"Задіяно для: Коментарі"</string>
     <string name="theme_item_button_text_color">"Колір тексту кнопки"</string>
-    <string name="theme_item_button_text_color_detail">"Задіяно до: Текст на кнопці"</string>
+    <string name="theme_item_button_text_color_detail">"Задіяно для: Текст кнопки"</string>
     <string name="theme_item_chip_text_color">"Колір тексту чіпа"</string>
-    <string name="theme_item_chip_text_color_detail">"Задіяно до: Кнопка Підписатися"</string>
+    <string name="theme_item_chip_text_color_detail">"Задіяно для: Кнопка Підписатися"</string>
     <string name="theme_item_link_color">"Колір посилання"</string>
-    <string name="theme_item_link_color_detail">"Задіяно до: URL"</string>
+    <string name="theme_item_link_color_detail">"Задіяно для: URL"</string>
     <string name="theme_item_received_message_text_color">"Колір тексту отриманого посилання"</string>
-    <string name="theme_item_received_message_text_color_detail">"Задіяно до: Отримані приватні повідомлення"</string>
+    <string name="theme_item_received_message_text_color_detail">"Задіяно для: Отримані приватні повідомлення"</string>
     <string name="theme_item_sent_message_text_color">"Колір тексту надісланого посилання"</string>
-    <string name="theme_item_sent_message_text_color_detail">"Задіяно до: Надіслані приватні повідомлення"</string>
+    <string name="theme_item_sent_message_text_color_detail">"Задіяно для: Надіслані приватні повідомлення"</string>
     <string name="theme_item_background_color">"Колір тла"</string>
-    <string name="theme_item_background_color_detail">"Задіяно до: Тло кожної сторінки і шторки переходів"</string>
+    <string name="theme_item_background_color_detail">"Задіяно для: Тло кожної сторінки і шторки переходів"</string>
     <string name="theme_item_card_view_background_color">"Колір тла вигляду картки"</string>
-    <string name="theme_item_card_view_background_color_detail">"Задіяно до: Тло дописів і повідомлень"</string>
+    <string name="theme_item_card_view_background_color_detail">"Задіяно для: Тло дописів і повідомлень"</string>
     <string name="theme_item_comment_background_color">"Колір тла коментарів"</string>
-    <string name="theme_item_comment_background_color_detail">"Задіяно до: Тло коментарів"</string>
+    <string name="theme_item_comment_background_color_detail">"Задіяно для: Тло коментарів"</string>
     <string name="theme_item_fully_collapsed_comment_background_color">"Колір тла повністю згорненого коментаря"</string>
-    <string name="theme_item_fully_collapsed_comment_background_color_detail">"Задіяно до: Тло повністю згорнутих коментарів"</string>
+    <string name="theme_item_fully_collapsed_comment_background_color_detail">"Задіяно для: Тло повністю згорнутих коментарів"</string>
     <string name="theme_item_awarded_comment_background_color">"Колір тла коментаря з нагородою"</string>
-    <string name="theme_item_awarded_comment_background_color_detail">"Задіяно до: Тло нагороджених коментарів"</string>
+    <string name="theme_item_awarded_comment_background_color_detail">"Задіяно для: Тло нагороджених коментарів"</string>
     <string name="theme_item_received_message_background_color">"Колір тла отриманого посилання"</string>
-    <string name="theme_item_received_message_background_color_detail">"Задіяно до: Тло отриманих приватних повідомлень"</string>
+    <string name="theme_item_received_message_background_color_detail">"Задіяно для: Тло отриманих приватних повідомлень"</string>
     <string name="theme_item_sent_message_background_color">"Колір тла надісланого посилання"</string>
-    <string name="theme_item_sent_message_background_color_detail">"Задіяно до: Тло надісланих приватних повідомлень"</string>
+    <string name="theme_item_sent_message_background_color_detail">"Задіяно для: Тло надісланих приватних повідомлень"</string>
     <string name="theme_item_bottom_app_bar_background_color">"Колір нижньої панелі пересування"</string>
-    <string name="theme_item_bottom_app_bar_background_color_detail">"Задіяно до: Кнопка панелі пересування"</string>
+    <string name="theme_item_bottom_app_bar_background_color_detail">"Задіяно для: Кнопка панелі пересування"</string>
     <string name="theme_item_primary_icon_color">"Основний колір значків"</string>
-    <string name="theme_item_primary_icon_color_detail">"Задіяно до: Значки в шторці переходів."</string>
+    <string name="theme_item_primary_icon_color_detail">"Задіяно для: Значки в шторці переходів."</string>
     <string name="theme_item_bottom_app_bar_icon_color">"Колір значка нижньої панелі пересування"</string>
-    <string name="theme_item_bottom_app_bar_icon_color_detail">"Задіяно до: Значки внизу панелі пересування"</string>
+    <string name="theme_item_bottom_app_bar_icon_color_detail">"Задіяно для: Значки внизу панелі пересування"</string>
     <string name="theme_item_post_icon_and_info_color">"Колір інформації і значка допису"</string>
-    <string name="theme_item_post_icon_and_info_color_detail">"Задіяно до: Значки, оцінка і кількість коментарів у дописах"</string>
+    <string name="theme_item_post_icon_and_info_color_detail">"Задіяно для: Значки, оцінка і кількість коментарів у дописах"</string>
     <string name="theme_item_comment_icon_and_info_color">"Колір інформації і значка коментаря"</string>
-    <string name="theme_item_comment_icon_and_info_color_detail">"Задіяно до: Значки і оцінка в коментарях"</string>
+    <string name="theme_item_comment_icon_and_info_color_detail">"Задіяно для: Значки і оцінка в коментарях"</string>
     <string name="theme_item_fab_icon_color">"Колір значка плаваючої кнопки дії"</string>
-    <string name="theme_item_fab_icon_color_detail">"Задіяно до: Значок плаваючої кнопки дії"</string>
+    <string name="theme_item_fab_icon_color_detail">"Задіяно для: Значок плаваючої кнопки дії"</string>
     <string name="theme_item_send_message_icon_color">"Колір значка надісланого повідомлення"</string>
-    <string name="theme_item_send_message_icon_color_detail">"Задіяно до: значка надсилання приватних повідомлень"</string>
+    <string name="theme_item_send_message_icon_color_detail">"Задіяно для: значка надсилання приватних повідомлень"</string>
     <string name="theme_item_toolbar_primary_text_and_icon_color">"Колір значка і тексту основної панелі засобів"</string>
-    <string name="theme_item_toolbar_primary_text_and_icon_color_detail">"Задіяно до: Основний текст і значки на панелі засобів"</string>
+    <string name="theme_item_toolbar_primary_text_and_icon_color_detail">"Задіяно для: Основний текст і значки на панелі засобів"</string>
     <string name="theme_item_toolbar_secondary_text_color">"Колір тексту додаткової панелі засобів"</string>
-    <string name="theme_item_toolbar_secondary_text_color_detail">"Задіяно до: Додатковий текст на панелі засобів"</string>
+    <string name="theme_item_toolbar_secondary_text_color_detail">"Задіяно для: Додатковий текст на панелі засобів"</string>
     <string name="theme_item_circular_progress_bar_background_color">"Колір тла кільцевої шкали поступу"</string>
-    <string name="theme_item_circular_progress_bar_background_color_detail">"Задіяно до: Тло кругової шкали поступу"</string>
+    <string name="theme_item_circular_progress_bar_background_color_detail">"Задіяно для: Тло кругової шкали поступу"</string>
     <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_background">"Колір тла вигляду вкладки в розгорнутій панелі засобів"</string>
-    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_background_detail">"Задіяно до: Тло вигляду вкладки (розгорнута панель засобів)"</string>
+    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_background_detail">"Задіяно для: Тло вигляду вкладки (розгорнута панель засобів)"</string>
     <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_text_color">"Колір тексту вигляду вкладки в розгорнутій панелі засобів"</string>
-    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_text_color_detail">"Задіяно до: Колір тексту вигляду вкладки (розгорнута панель засобів)"</string>
+    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_text_color_detail">"Задіяно для: Колір тексту вигляду вкладки (розгорнута панель засобів)"</string>
     <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_indicator">"Колір індикатора вигляду вкладки в розгорнутій панелі засобів"</string>
-    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_indicator_detail">"Задіяно до: Колір індикатора вкладки у вигляді вкладок (розгорнута панель засобів)"</string>
+    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_indicator_detail">"Задіяно для: Колір індикатора вкладки у вигляді вкладок (розгорнута панель засобів)"</string>
     <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_background">"Колір тла вигляду вкладки в згорнутій панелі засобів"</string>
-    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_background_detail">"Задіяно до: Тло вигляду вкладки (згорнута панель засобів)"</string>
+    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_background_detail">"Задіяно для: Тло вигляду вкладки (згорнута панель засобів)"</string>
     <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_text_color">"Колір тла п"</string>
-    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_text_color_detail">"Задіяно до: Колір тексту вигляду вкладки (згорнута панель засобів)"</string>
+    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_text_color_detail">"Задіяно для: Колір тексту вигляду вкладки (згорнута панель засобів)"</string>
     <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_indicator">"Колір індикатора вкладки вигляду вкладки у згорнутій панелі засобів"</string>
-    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_indicator_detail">"Задіяно до: Колір індикатора вкладки у вигляді вкладок (згорнута панель засобів)"</string>
+    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_indicator_detail">"Задіяно для: Колір індикатора вкладки у вигляді вкладок (згорнута панель засобів)"</string>
     <string name="theme_item_upvoted_color">"Колір з голосами вверх"</string>
-    <string name="theme_item_upvoted_color_detail">"Задіяно до: Кнопки голосування і оцінок (голос вгору)"</string>
+    <string name="theme_item_upvoted_color_detail">"Задіяно для: Кнопки голосування і оцінок (голос вгору)"</string>
     <string name="theme_item_downvoted_color">"Колір з голосами вниз"</string>
-    <string name="theme_item_downvoted_color_detail">"Задіяно до: Кнопки голосування і оцінок (голос вниз)"</string>
+    <string name="theme_item_downvoted_color_detail">"Задіяно для: Кнопки голосування і оцінок (голос вниз)"</string>
     <string name="theme_item_post_type_background_color">"Колір тла типу допису"</string>
-    <string name="theme_item_post_type_background_color_detail">"Задіяно до: Тло типу дописів (ЗОБРАЖЕННЯ, ТЕКСТ, ВІДЕО, GIF, ЛАНКА)"</string>
+    <string name="theme_item_post_type_background_color_detail">"Задіяно для: Тло типу дописів (ЗОБРАЖЕННЯ, ТЕКСТ, ВІДЕО, GIF, ЛАНКА)"</string>
     <string name="theme_item_post_type_text_color">"Колір тексту типу допису"</string>
-    <string name="theme_item_post_type_text_color_detail">"Задіяно до: Колір тексту типу дописів (ЗОБРАЖЕННЯ, ТЕКСТ, ВІДЕО, GIF, ЛАНКА)"</string>
+    <string name="theme_item_post_type_text_color_detail">"Задіяно для: Колір тексту типу дописів (ЗОБРАЖЕННЯ, ТЕКСТ, ВІДЕО, GIF, ЛАНКА)"</string>
     <string name="theme_item_spoiler_background_color">"Колір тла спойлера"</string>
-    <string name="theme_item_spoiler_background_color_detail">"Задіяно до: Тло позначки спойлера"</string>
+    <string name="theme_item_spoiler_background_color_detail">"Задіяно для: Тло позначки спойлера"</string>
     <string name="theme_item_spoiler_text_color">"Колір тексту спойлера"</string>
-    <string name="theme_item_spoiler_text_color_detail">"Задіяно до: Колір тексту позначки спойлера"</string>
+    <string name="theme_item_spoiler_text_color_detail">"Задіяно для: Колір тексту позначки спойлера"</string>
     <string name="theme_item_nsfw_background_color">"Колір тла НБДР"</string>
-    <string name="theme_item_nsfw_background_color_detail">"Задіяно до: Тло позначки НБДР"</string>
+    <string name="theme_item_nsfw_background_color_detail">"Задіяно для: Тло позначки НБДР"</string>
     <string name="theme_item_nsfw_text_color">"Колір тексту НБДР"</string>
-    <string name="theme_item_nsfw_text_color_detail">"Задіяно до: Колір тексту позначки НБДР"</string>
+    <string name="theme_item_nsfw_text_color_detail">"Задіяно для: Колір тексту позначки НБДР"</string>
     <string name="theme_item_flair_background_color">"Колір тла лички"</string>
-    <string name="theme_item_flair_background_color_detail">"Задіяно до: Тло лички"</string>
+    <string name="theme_item_flair_background_color_detail">"Задіяно для: Тло лички"</string>
     <string name="theme_item_flair_text_color">"Колір тексту лички"</string>
-    <string name="theme_item_flair_text_color_detail">"Задіяно до: Колір тексту лички"</string>
+    <string name="theme_item_flair_text_color_detail">"Задіяно для: Колір тексту лички"</string>
     <string name="theme_item_awards_background_color">"Колір тла нагороди"</string>
-    <string name="theme_item_awards_background_color_detail">"Задіяно до: Тло позначки нагород"</string>
+    <string name="theme_item_awards_background_color_detail">"Задіяно для: Тло позначки нагород"</string>
     <string name="theme_item_awards_text_color">"Колір тексту нагороди"</string>
-    <string name="theme_item_awards_text_color_detail">"Задіяно до: Колір тексту позначки нагород"</string>
+    <string name="theme_item_awards_text_color_detail">"Задіяно для: Колір тексту позначки нагород"</string>
     <string name="theme_item_archived_tint">"Колір тексту заархівованого"</string>
-    <string name="theme_item_archived_tint_detail">"Задіяно до: Значок Заархівовано"</string>
+    <string name="theme_item_archived_tint_detail">"Задіяно для: Значок Заархівовано"</string>
     <string name="theme_item_locked_icon_tint">"Колір значка замкненого"</string>
-    <string name="theme_item_locked_icon_tint_detail">"Задіяно до: Значок Замкнено"</string>
+    <string name="theme_item_locked_icon_tint_detail">"Задіяно для: Значок Замкнено"</string>
     <string name="theme_item_crosspost_icon_tint">"Колір значка передопису"</string>
-    <string name="theme_item_crosspost_icon_tint_detail">"Задіяно до: Значок передопису"</string>
+    <string name="theme_item_crosspost_icon_tint_detail">"Задіяно для: Значок передопису"</string>
     <string name="theme_item_stickied_post_icon_tint">"Колір значка закріпленого допису"</string>
-    <string name="theme_item_stickied_post_icon_tint_detail">"Задіяно до: Значок приліпленого допису"</string>
+    <string name="theme_item_stickied_post_icon_tint_detail">"Задіяно для: Значок прикріпленого допису"</string>
     <string name="theme_item_subscribed_color">"Підписано"</string>
-    <string name="theme_item_subscribed_color_detail">"Задіяно до: Кнопка Відписатися"</string>
+    <string name="theme_item_subscribed_color_detail">"Задіяно для: Кнопка Відписатися"</string>
     <string name="theme_item_unsubscribed_color">"Відписано"</string>
-    <string name="theme_item_unsubscribed_color_detail">"Задіяно до: Кнопка Підписатися"</string>
+    <string name="theme_item_unsubscribed_color_detail">"Задіяно для: Кнопка Підписатися"</string>
     <string name="theme_item_username_color">"Колір імені користувача"</string>
-    <string name="theme_item_username_color_detail">"Задіяно до: Імʼя користувача"</string>
+    <string name="theme_item_username_color_detail">"Задіяно для: Імʼя користувача"</string>
     <string name="theme_item_subreddit_color">"Колір сабредиту"</string>
-    <string name="theme_item_subreddit_color_detail">"Задіяно до: Назва сабредиту"</string>
+    <string name="theme_item_subreddit_color_detail">"Задіяно для: Назва сабредиту"</string>
     <string name="theme_item_author_flair_text_color">"Колір авторської лички"</string>
-    <string name="theme_item_author_flair_text_color_detail">"Задіяно до: Авторська личка в коментарях"</string>
+    <string name="theme_item_author_flair_text_color_detail">"Задіяно для: Авторська личка в коментарях"</string>
     <string name="theme_item_submitter_color">"Надсилач"</string>
-    <string name="theme_item_submitter_color_detail">"Задіяно до: Надсилач у коментарях"</string>
+    <string name="theme_item_submitter_color_detail">"Задіяно для: Надсилач у коментарях"</string>
     <string name="theme_item_moderator_color">"Модератор"</string>
-    <string name="theme_item_moderator_color_detail">"Задіяно до: Модератор у коментарях"</string>
+    <string name="theme_item_moderator_color_detail">"Задіяно для: Модератор у коментарях"</string>
     <string name="theme_item_single_comment_thread_background_color">"Колір тла гілки одного коментаря"</string>
-    <string name="theme_item_single_comment_thread_background_color_detail">"Задіяно до: Один коментар"</string>
+    <string name="theme_item_single_comment_thread_background_color_detail">"Задіяно для: Один коментар"</string>
     <string name="theme_item_unread_message_background_color">"Колір тла непрочитаного повідомлення"</string>
-    <string name="theme_item_unread_message_background_color_detail">"Задіяно до: Колір тла непрочитаного повідомлення"</string>
+    <string name="theme_item_unread_message_background_color_detail">"Задіяно для: Колір тла непрочитаного повідомлення"</string>
     <string name="theme_item_divider_color">"Колір роздільника"</string>
-    <string name="theme_item_divider_color_detail">"Задіяно до: Роздільник коментарів, роздільник на сторінках надсилання дописів тощо."</string>
+    <string name="theme_item_divider_color_detail">"Задіяно для: Роздільник коментарів, роздільник на сторінках надсилання дописів тощо."</string>
     <string name="theme_item_vote_and_reply_unavailable_button_color">"Колір кнопки недоступного голосування і відповіді"</string>
-    <string name="theme_item_vote_and_reply_unavailable_button_color_detail">"Задіяно до: Кнопки голосування і відповіді (недоступно)"</string>
+    <string name="theme_item_vote_and_reply_unavailable_button_color_detail">"Задіяно для: Кнопки голосування і відповіді (недоступно)"</string>
     <string name="theme_item_comment_vertical_bar_color_1">"Колір вертикальної шкали коментарів 1"</string>
-    <string name="theme_item_comment_vertical_bar_color_1_detail">"Задіяно до: Вертикальна шкала коментарів (рівень 1)"</string>
+    <string name="theme_item_comment_vertical_bar_color_1_detail">"Задіяно для: Вертикальна шкала коментарів (рівень 1)"</string>
     <string name="theme_item_comment_vertical_bar_color_2">"Колір вертикальної шкали коментарів 2"</string>
-    <string name="theme_item_comment_vertical_bar_color_2_detail">"Задіяно до: Вертикальна шкала коментарів (рівень 2)"</string>
+    <string name="theme_item_comment_vertical_bar_color_2_detail">"Задіяно для: Вертикальна шкала коментарів (рівень 2)"</string>
     <string name="theme_item_comment_vertical_bar_color_3">"Колір вертикальної шкали коментарів 3"</string>
-    <string name="theme_item_comment_vertical_bar_color_3_detail">"Задіяно до: Вертикальна шкала коментарів (рівень 3)"</string>
+    <string name="theme_item_comment_vertical_bar_color_3_detail">"Задіяно для: Вертикальна шкала коментарів (рівень 3)"</string>
     <string name="theme_item_comment_vertical_bar_color_4">"Колір вертикальної шкали коментарів 4"</string>
-    <string name="theme_item_comment_vertical_bar_color_4_detail">"Задіяно до: Вертикальна шкала коментарів (рівень 4)"</string>
+    <string name="theme_item_comment_vertical_bar_color_4_detail">"Задіяно для: Вертикальна шкала коментарів (рівень 4)"</string>
     <string name="theme_item_comment_vertical_bar_color_5">"Колір вертикальної шкали коментарів 5"</string>
-    <string name="theme_item_comment_vertical_bar_color_5_detail">"Задіяно до: Вертикальна шкала коментарів (рівень 5)"</string>
+    <string name="theme_item_comment_vertical_bar_color_5_detail">"Задіяно для: Вертикальна шкала коментарів (рівень 5)"</string>
     <string name="theme_item_comment_vertical_bar_color_6">"Колір вертикальної шкали коментарів 6"</string>
-    <string name="theme_item_comment_vertical_bar_color_6_detail">"Задіяно до: Вертикальна шкала коментарів (рівень 6)"</string>
+    <string name="theme_item_comment_vertical_bar_color_6_detail">"Задіяно для: Вертикальна шкала коментарів (рівень 6)"</string>
     <string name="theme_item_comment_vertical_bar_color_7">"Колір вертикальної шкали коментарів 7"</string>
-    <string name="theme_item_comment_vertical_bar_color_7_detail">"Задіяно до: Вертикальна шкала коментарів (рівень 7)"</string>
+    <string name="theme_item_comment_vertical_bar_color_7_detail">"Задіяно для: Вертикальна шкала коментарів (рівень 7)"</string>
     <string name="theme_item_nav_bar_color">"Колір панелі пересування"</string>
-    <string name="theme_item_nav_bar_color_detail">"Задіяно до: Панель пересування"</string>
+    <string name="theme_item_nav_bar_color_detail">"Задіяно для: Панель пересування"</string>
     <string name="theme_item_light_status_bar">"Колір значка темної панелі стану"</string>
     <string name="theme_item_light_nav_bar">"Колір значка темної панелі пересування"</string>
     <string name="theme_item_change_status_bar_icon_color_after_toolbar_collapsed_in_immersive_interface">"Змінити колір панелі стану після згортання панелі засобів у заглибленому інтерфейсі"</string>
     <string name="theme_item_available_on_android_8">"Доступна лише для Android 8.0 або вище."</string>
     <string name="theme_item_available_on_android_6">"Доступна лише для Android 6.0 або вище."</string>
-    <string name="predefined_themes">"Підготовлені теми"</string>
+    <string name="predefined_themes">"Заготовлені теми"</string>
     <string name="user_themes">"Ваші теми"</string>
     <string name="no_theme_name">"Яка назва цієї теми?"</string>
     <string name="theme_name_hint">"Назва теми"</string>
@@ -657,17 +697,19 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 на основі теми Темної Індиґо"</string>
     <string name="create_amoled_theme">"Створити тему Amoled
 на основі теми Індиґо Amoled"</string>
-    <string name="create_theme_info">"Якщо Ви бажаєте створити тему на основі іншої теми, клацніть кнопку \"+\" біля неї."</string>
+    <string name="create_theme_info">"Якщо Ви бажаєте створити тему на основі іншої теми, натисніть кнопку \"+\" біля неї."</string>
     <string name="edit_theme_name">"Змінити назву теми"</string>
     <string name="edit_theme">"Змінити тему"</string>
     <string name="delete_theme">"Видалити тему"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_theme_dialog_message">"Ви дійсно хочете видалити %1$s?"</string>
     <string name="share_theme">"Поширити тему"</string>
     <string name="change_theme_name">"Змінити назву"</string>
     <string name="theme_copied">"Скопійовано! Вставте і поділіться нею з іншими людьми."</string>
     <string name="copy_theme_faied">"Не можливо скопіювати налаштування теми"</string>
     <string name="cannot_find_theme">"Не можливо знайти цю тему"</string>
-    <string name="import_theme">"Імпорт теми"</string>
+    <string name="import_theme">"Імпортувати тему"</string>
     <string name="no_data_in_clipboard">"Не можливо знайти дані в буфері обміну"</string>
     <string name="import_theme_success">"Тему вдало імпортовано"</string>
     <string name="parse_theme_failed">"Не вдалося розпізнати тему"</string>
@@ -689,15 +731,17 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="primary_text_preview">"Основний текст"</string>
     <string name="secondary_text_preview">"Додатковий текст"</string>
     <string name="post_title_preview">"Це допис"</string>
-    <string name="post_content_preview">"Цей жарт про гравітацію трохи застарів, але я щоразу падаю від нього."</string>
+    <string name="post_content_preview">"Цей жарт про гравітацію трохи застарілий, але я щоразу від нього падаю."</string>
     <string name="post_type_preview">"ДОПИС"</string>
     <string name="flair_preview">"Личка"</string>
     <string name="awards_preview">"4 нагороди"</string>
     <string name="author_flair_preview">"Авторська личка"</string>
     <string name="comment_content_preview">"Я дав своїй дівчині листівку «Поправляйся швидше».
-Вона не хвора чи щось таке, але їй точно стане краще."</string>
+Вона не те щоб хвора, але їй точно стане краще."</string>
     <string name="edit_multi_reddit">"Змінити мультиредит"</string>
     <string name="delete_multi_reddit">"Видалити мультиредит"</string>
+
+    <!-- Fuzzy -->
     <string name="n_awards">"%1$d нагород"</string>
     <string name="one_award">"1 нагорода"</string>
     <string name="report">"Повідомити"</string>
@@ -737,7 +781,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="default_font_font_preview">"Типово"</string>
     <string name="load_video_in_redgifs">"Спробувати завантажити відеозапис на Redgifs"</string>
     <string name="top_score">"%1$s блв"</string>
-    <string name="login_activity_2fa_prompt">"Якщо у Вас дозволена 2-факторна автентифікація, вводьте свій пароль наступним чином: &lt;пароль&gt;:&lt;код 2ФА&gt;.
+    <string name="login_activity_2fa_prompt">"Якщо у Вас дозволено 2-факторну автентифікацію, введіть свій пароль наступним чином: &lt;пароль&gt;:&lt;код 2ФА&gt;.
 Приклад: yourpass:123456"</string>
     <string name="submit_crosspost_activity_label">"Передопис"</string>
     <string name="give_award_activity_label">"Дати нагороду"</string>
@@ -745,13 +789,13 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="action_select_user_flair">"Вибрати користувацьку личку"</string>
     <string name="action_give_award">"Дати нагороду"</string>
     <string name="posts">"Дописи"</string>
-    <string name="only_for_logged_in_user">"Лише для користувачів, що ввійшли"</string>
+    <string name="only_for_logged_in_user">"Лише для авторизованих користувачів"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Кількість стовпців у стрічці дописів"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Портретна"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Альбомна"</string>
     <string name="settings_nsfw_and_spoiler_title">"НБДР і спойлери"</string>
     <string name="settings_delete_all_legacy_settings_title">"Видалити всі успадковані налаштування"</string>
-    <string name="restart_app_see_changes">"Перезапустіть застосунок, щоб побачити зміни"</string>
+    <string name="restart_app_see_changes">"Перезапустіть застосунок, щоб зміни ввійшли в дію"</string>
     <string name="settings_tab_count">"Кількість вкладок"</string>
     <string name="settings_show_tab_names">"Показувати назви вкладок"</string>
     <string name="settings_more_tabs_summary">"Більше вкладок"</string>
@@ -787,7 +831,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 Відеозаписи Reddit мають низьку роздільність.
 Вимкнено самовідтворення відеозаписів."</string>
     <string name="settings_translation_title">"Переклад"</string>
-    <string name="settings_translation_summary">"Цей застосунок перекладається через POEditor. Дякую всім співрозробникам."</string>
+    <string name="settings_translation_summary">"Цей застосунок перекладається в POEditor. Дякую всім співрозробникам."</string>
     <string name="settings_credits_national_flags">"Міжнародні прапори"</string>
     <string name="settings_credits_national_flags_summary">"Автор значка Freepik із www.flaticon.com"</string>
     <string name="copy_failed">"Не вдалося скопіювати"</string>
@@ -812,6 +856,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="change_post_layout">"Змінити форму дописів"</string>
     <string name="give_award_dialog_title">"Дати нагороду?"</string>
     <string name="anonymous">"Анонімно"</string>
+
+    <!-- Fuzzy -->
     <string name="give_award_error_message">"Код: %1$d/
 Повідомлення: %2$s"</string>
     <string name="give_award_success">"Дано нагороду"</string>
@@ -834,7 +880,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all і r/popular"</string>
     <string name="settings_miscellaneous_title">"Різне"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_title">"Поважати тип сортування рекомендованих коментарів сабредиту"</string>
-    <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"Тип сортування коментарів не збережеться"</string>
+    <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"Тип сортування коментарів не зберігатиметься"</string>
     <string name="settings_subreddit_filter_category">"Ховати сабредити"</string>
     <string name="settings_subreddit_filter_popular_and_all">"У r/popular і r/all"</string>
     <string name="settings_credits_ufo_capturing_animation_title">"Анімація захоплення НЛО"</string>
@@ -848,7 +894,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_no_preview_post_type_icon_tint">"Колір значка типу допису без передперегляду"</string>
     <string name="theme_item_no_preview_post_type_icon_tint_detail">"Задіяти до: значок, що позначає тип допису коли не доступний передперегляд"</string>
     <string name="theme_item_no_preview_post_type_background_color">"Колір тла типу допису без передперегляду"</string>
-    <string name="theme_item_no_preview_post_type_background_color_detail">"Задіяно до: Заповнювач, що вказує тип публікації, якщо попередній перегляд недоступний"</string>
+    <string name="theme_item_no_preview_post_type_background_color_detail">"Задіяно для: Заповнювач, що вказує тип публікації, якщо попередній перегляд недоступний"</string>
     <string name="settings_language_title">"Мова"</string>
     <string name="customize_post_filter_activity_label">"Налаштувати фільтр дописів"</string>
     <string name="filtered_posts_activity_subtitle">"Відфільтровані дописи"</string>
@@ -874,26 +920,26 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_mark_posts_as_read_on_scroll_title">"Позначати дописи прочитаними під час прокручування"</string>
     <string name="settings_hide_read_posts_automatically_title">"Ховати прочитані дописи автоматично"</string>
     <string name="settings_sort_type_title">"Тип сортування"</string>
-    <string name="settings_save_sort_type_title">"Зберегти тип сортування"</string>
-    <string name="settings_subreddit_default_sort_type_title">"Типовий для сабредиту тип сортування"</string>
+    <string name="settings_save_sort_type_title">"Зберігати тип сортування"</string>
+    <string name="settings_subreddit_default_sort_type_title">"Типовий тип сортування сабредиту"</string>
     <string name="settings_subreddit_default_sort_time_title">"Типовий час сортування сабредиту"</string>
-    <string name="settings_user_default_sort_type_title">"Типовий для користувача тип сортування"</string>
-    <string name="settings_user_default_sort_time_title">"Користувацький типовий час сортування"</string>
+    <string name="settings_user_default_sort_type_title">"Типовий тип сортування користувача"</string>
+    <string name="settings_user_default_sort_time_title">"Типовий час сортування користувача"</string>
     <string name="open_link">"Відкрити ланку"</string>
     <string name="select_subreddits_and_users">"Вибрати сабредити і користувачів"</string>
     <string name="theme_item_read_post_title_color">"Колір заголовка прочитаного допису"</string>
-    <string name="theme_item_read_post_title_color_detail">"Задіяно до: Заголовок прочитаного допису"</string>
+    <string name="theme_item_read_post_title_color_detail">"Задіяно для: Заголовок прочитаного допису"</string>
     <string name="theme_item_read_post_content_color">"Колір вмісту прочитаного допису"</string>
-    <string name="theme_item_read_post_content_color_detail">"Задіяно до: Вміст прочитаного допису"</string>
+    <string name="theme_item_read_post_content_color_detail">"Задіяно для: Вміст прочитаного допису"</string>
     <string name="theme_item_read_post_card_view_background_color">"Колір тла перегляду прочитаного допису"</string>
-    <string name="theme_item_read_post_card_view_background_color_detail">"Задіяно до: Тло прочитаного допису"</string>
+    <string name="theme_item_read_post_card_view_background_color_detail">"Задіяно для: Тло прочитаного допису"</string>
     <string name="delete_all_read_posts_success">"Усі прочитані дописи вдало видалено"</string>
     <string name="hide_read_posts">"Сховати прочитані дописи"</string>
     <string name="filter_posts">"Фільтр дописів"</string>
     <string name="only_nsfw">"Лише НБДР"</string>
     <string name="only_spoiler">"Лише спойлер"</string>
     <string name="title_excludes_strings_hint">"Заголовок: виключати ключові слова (слово1,слово2)"</string>
-    <string name="title_excludes_regex_hint">"Заголовок: виключати рег.вир."</string>
+    <string name="title_excludes_regex_hint">"Заголовок: не враховувати рег.вир."</string>
     <string name="exclude_subreddits_hint">"Не враховувати сабредити (напр., funny,AskReddit)"</string>
     <string name="exclude_users_hint">"Не враховувати користувачів (напр., Hostilenemy,random)"</string>
     <string name="exclude_flairs_hint">"Не враховувати лички (напр., личка1,личка2)"</string>
@@ -908,7 +954,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="post_filter_requires_a_name">"Яка назва для цього фільтру дописів?"</string>
     <string name="duplicate_post_filter_dialog_title">"'%1$s' вже існує"</string>
     <string name="duplicate_post_filter_dialog_message">"Перезаписати його?"</string>
-    <string name="apply_post_filter_to">"Задіяно до"</string>
+    <string name="apply_post_filter_to">"Задіяно для"</string>
     <string name="post_filter_usage_home">"Домівка"</string>
     <string name="post_filter_usage_subreddit">"Сабредит: %1$s"</string>
     <string name="post_filter_usage_subreddit_all">"Сабредит"</string>
@@ -942,8 +988,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="action_add_to_post_filter">"Додати до фільтру дописів"</string>
     <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Не розмивати зображення НБДР для сабредитів НБДР"</string>
     <string name="settings_show_avatar_on_the_right">"Показувати аватарку праворуч"</string>
-    <string name="settings_backup_settings_title">"Налаштування резервного копіювання"</string>
-    <string name="settings_restore_settings_title">"Налаштування відновлення"</string>
+    <string name="settings_backup_settings_title">"Резервне копіювання налаштувань"</string>
+    <string name="settings_restore_settings_title">"Відновити налаштування"</string>
     <string name="settings_credits_love_animation_title">"Анімація любові"</string>
     <string name="settings_swipe_between_posts_title">"Ковзати між дописами"</string>
     <string name="settings_navigation_drawer_title">"Шторка переходів"</string>
@@ -960,14 +1006,16 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_upvote_ratio_icon_tint">"Колір значка оцінки вверх"</string>
     <string name="theme_item_upvote_ratio_icon_tint_detail">"Задіяти до: значок оцінки вверх"</string>
     <string name="theme_item_current_user_color">"Поточний користувач"</string>
-    <string name="theme_item_current_user_color_detail">"Задіяно до: Поточний користувач у коментарях"</string>
-    <string name="exclude_domains_hint">"Виключати домени"</string>
+    <string name="theme_item_current_user_color_detail">"Задіяно для: Поточний користувач у коментарях"</string>
+    <string name="exclude_domains_hint">"Не враховувати домени"</string>
     <string name="anonymous_front_page_no_subscriptions">"Розпочніть долучившись до сабредиту!"</string>
-    <string name="backup_settings_success">"Налаштування вдало експортовано в призначений каталог. Пароль для зґенерованого zip-файлу — 123321. Будь ласка, не змінюйте файл zip."</string>
+
+    <!-- Fuzzy -->
+    <string name="backup_settings_success">"Налаштування вдало експортовані в призначений каталог. Пароль для створеного zip-файлу — 123321. Будь ласка, не змінюйте файл zip."</string>
     <string name="create_zip_in_destination_directory_failed">"Не вдалося створити резервну zip-копію в призначеному каталозі"</string>
     <string name="backup_some_settings_failed">"Не вдалося зарезервувати деякі налаштування, але інші вдало експортовано в призначений каталог"</string>
-    <string name="restore_settings_success">"Налаштування успішно відновлено. Перезапустіть застосунок, щоб побачити зміни."</string>
-    <string name="restore_settings_partially_failed">"Деякі налаштування можливо не відновляться успішно. Перезапустіть застосунок, щоб побачити зміни."</string>
+    <string name="restore_settings_success">"Налаштування вдало відновлено. Перезапустіть застосунок, щоб зміни ввійшли в дію."</string>
+    <string name="restore_settings_partially_failed">"Деякі налаштування можуть не відновитися успішно. Перезапустіть застосунок, щоб зміни ввійшли в дію."</string>
     <string name="restore_settings_failed_file_corrupted">"Не можливо відновити налаштування. Файл можливо пошкоджений."</string>
     <string name="restore_settings_failed_cannot_get_file">"Нема доступу до файлу"</string>
     <string name="suicide_prevention_quote">"Якщо Ви бачите знак не вбивати себе, так ось він і є.\u2764"</string>
@@ -979,7 +1027,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="always_on">"Завжди увімк."</string>
     <string name="only_on_wifi">"Лише через Wifi"</string>
     <string name="never">"Ніколи"</string>
-    <string name="normal">"Нормальний"</string>
+    <string name="normal">"Нормальна"</string>
     <string name="extra_large">"Дуже великий"</string>
     <string name="enormously_large">"Величезний"</string>
     <string name="default_in_array">"Типово"</string>
@@ -996,6 +1044,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="suggest_title">"Пропонований заголовок"</string>
     <string name="suggest_title_failed">"Не вдалося запропонувати заголовок"</string>
     <string name="action_delete_logs">"Видалити журнали"</string>
+
+    <!-- Fuzzy -->
     <string name="inbox_with_count">"Вхідні (%1$d)"</string>
     <string name="comment_continue_thread">"Продовжити гілку"</string>
     <string name="settings_swipe_vertically_to_go_back_from_media_title">"Ковзніть вертикально, щоб вернутися назад від зображення або Gif"</string>
@@ -1008,8 +1058,12 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="unsave_comment">"Не зберігати"</string>
     <string name="copy_multi_reddit_path">"Копіювати шлях мультиредиту"</string>
     <string name="copy_multi_reddit_path_failed">"Неможливо скопіювати шлях мультиредиту"</string>
+
+    <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Звіти про збої видалено"</string>
-    <string name="disable_nsfw_forever_message">"Увімкнувши раз, НБДР буде назавжди вимкнено, не залежно від того ввімкнено параметр НБДР чи ні. І ця опція незворотна, єдиний спосіб знову ввімкнути NSFW — очистити дані програми.
+
+    <!-- Fuzzy -->
+    <string name="disable_nsfw_forever_message">"Увімкнувши раз, НБДР буде вимкнено назавжди, не залежно від того ввімкнено параметр НБДР чи ні. І ця дія незворотна, єдиний спосіб увімкнути НБДР знову — очистити дані програми.
 
 Усе ще бажаєте ввімкнути це?"</string>
     <string name="reply">"Відповісти"</string>
@@ -1035,14 +1089,14 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_more_tabs_show_favorite_multireddits_title">"Показувати відібрані мультиредити"</string>
     <string name="settings_more_tabs_show_multireddits_title">"Показувати мультиредити"</string>
     <string name="settings_collapse_reddit_section_title">"Згорнути розділ Reddit"</string>
-    <string name="settings_video_player_automatic_landscape_orientation">"Автоматично перемикати на альбомну орієнтацію у відео-програвачі"</string>
-    <string name="settings_remember_muting_option_in_post_feed">"Запамʼятати опцію приглушення в стрічці дописів"</string>
+    <string name="settings_video_player_automatic_landscape_orientation">"Автоматично перемикати відеопрогравач на альбомну орієнтацію"</string>
+    <string name="settings_remember_muting_option_in_post_feed">"Памʼятати параметр приглушення в стрічці дописів"</string>
     <string name="link_post_layout_auto">"Авто"</string>
     <string name="uploaded_images">"Відвантажені зображення"</string>
     <string name="select_image">"Вибрати зображення"</string>
     <string name="capture">"Захопити"</string>
     <string name="uploading_image">"Відвантаження"</string>
-    <string name="upload_image_success">"Зображення успішно відвантажене. Клацніть кнопку зображення ще раз, щоб переглянути відвантажені зображення."</string>
+    <string name="upload_image_success">"Зображення вдало відвантажено. Натисніть ще раз кнопку зображення, щоб переглянути відвантажені зображення."</string>
     <string name="get_image_bitmap_failed">"Неможливо отримати bitmap зображення"</string>
     <string name="upload_image_failed">"Неможливо відвантажити зображення"</string>
     <string name="search_comments">"Пошук коментарів"</string>
@@ -1081,6 +1135,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_app_lock_timeout_title">"Час замикання застосунку"</string>
     <string name="settings_enable_fold_support_title">"Дозволити підтримку згортання телефона"</string>
     <string name="settings_default_playback_speed_title">"Типова швидкість відтворення"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_link_handler_value_external_browser">"Зовнішній оглядач"</string>
     <string name="settings_link_handler_value_custom_tab">"Власна вкладка"</string>
     <string name="settings_link_handler_value_internal_browser">"Внутрішній оглядач"</string>
@@ -1088,9 +1144,9 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_pinch_to_zoom_video_title">"Щипком збільшувати відео"</string>
     <string name="settings_experimental_feature">"Експериментальна функція"</string>
     <string name="theme_item_media_indicator_icon_color">"Колір значка індикатора медія"</string>
-    <string name="theme_item_media_indicator_icon_color_detail">"Задіяно до: значки відеозаписів або галереї на передперегляді допису"</string>
+    <string name="theme_item_media_indicator_icon_color_detail">"Задіяно для: значки відеозаписів або галереї на передперегляді допису"</string>
     <string name="theme_item_media_indicator_background_color">"Колір тла індикатора медія"</string>
-    <string name="theme_item_media_indicator_background_color_detail">"Задіяно до: тло значка відеозапису або галереї на передперегляді допису"</string>
+    <string name="theme_item_media_indicator_background_color_detail">"Задіяно для: тло значка відеозапису або галереї на передперегляді допису"</string>
     <string name="go_to_top">"Перейти на верх"</string>
     <string name="title_contains_strings_hint">"Заголовок: містить ключові слова (слово1,слово2)"</string>
     <string name="title_contains_regex_hint">"Заголовок: містить рег.вир."</string>
@@ -1147,9 +1203,13 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="message_save_profile_failed">"Не вдалося змінити профіль %s"</string>
     <string name="post_poll_activity_label">"Опитування"</string>
     <string name="action_open_external_browser">"Відкрити в оглядачі"</string>
+
+    <!-- Fuzzy -->
     <string name="voting_length">"Тривалість голосування: %1$d днів"</string>
     <string name="two_options_required">"Хороше опитування потребує два або більше варіантів!"</string>
     <string name="bottom_sheet_post_poll">"Опитування"</string>
+
+    <!-- Fuzzy -->
     <string name="no_activity_found_for_external_browser">"Нема програми, яка може обробити дію відкривання в зовнішньому оглядачі"</string>
     <string name="settings_require_authentication_to_show_accounts">"Щоб показати обліківки потрібна автентифікація"</string>
     <string name="settings_custom_font_family_title">"Власне сімейство шрифтів"</string>
@@ -1159,6 +1219,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_hide_text_post_content">"Ховати текст вмісту дописів"</string>
     <string name="settings_hide_comment_awards_title">"Ховати нагороди коментарів"</string>
     <string name="settings_show_fewer_toolbar_options_threshold_title">"Показувати менше параметрів панелі засобів починаючи з"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_fewer_toolbar_options_threshold_summary">"Рівень %1$d"</string>
     <string name="settings_show_author_avatar_title">"Показувати аватарку автора"</string>
     <string name="settings_reddit_user_agreement_title">"Угода користувача Reddit"</string>
@@ -1175,7 +1237,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="reddit_gallery_item_caption_hint">"Заголовок (не більше 180 знаків)"</string>
     <string name="reddit_gallery_item_url_hint">"URL"</string>
     <string name="user_agreement_dialog_title">"Угода користувача"</string>
-    <string name="user_agreement_message">"Перед входом Вам потрібно погодитися з Умовами користувача Reddit (%1$s) та Політикою приватності Infinity for Reddit (%2$s)."</string>
+    <string name="user_agreement_message">"Перед входом погодьтеся на Умови користувача Reddit (%1$s) та Політику приватності Infinity for Reddit (%2$s)."</string>
     <string name="agree">"Погоджуюся"</string>
     <string name="do_not_agree">"Не погоджуюся"</string>
     <string name="option_1_hint">"Варіант 1 (обовʼязково)"</string>
@@ -1189,4 +1251,16 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="comment_karma">"Карма за коментарі:"</string>
     <string name="awarder_karma">"Карма за надання нагород:"</string>
     <string name="awardee_karma">"Карма за отримання нагород:"</string>
+    <string name="history_activity_label">"Історія"</string>
+    <string name="history">"Історія"</string>
+    <string name="settings_easier_to_watch_in_full_screen_title">"Легше дивитися на повному екрані"</string>
+    <string name="clear_user_flair">"Очистити личку"</string>
+    <string name="clear_user_flair_success">"Личку користувача очищено"</string>
+    <string name="extra_small">"Дуже малий"</string>
+    <string name="handle_link">"Обробка посилання"</string>
+    <string name="invalid_link">"Неправильне посилання"</string>
+    <string name="error_unsupported_video">"Медія містить відеодоріжки, але жодна не відтворюється цим пристроєм"</string>
+    <string name="error_unsupported_audio">"Медія містить звукові доріжки, але жодна не відтворюється цим пристроєм"</string>
+    <string name="exo_controls_volume_up_description">"Збільшити звук"</string>
+    <string name="exo_controls_volume_off_description">"Вимкнути звук"</string>
 </resources>

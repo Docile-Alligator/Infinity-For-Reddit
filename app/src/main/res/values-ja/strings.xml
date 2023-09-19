@@ -24,11 +24,21 @@
     <string name="edit_multi_reddit_activity_label">"カスタムフィードを編集"</string>
     <string name="selected_subeddits_activity_label">"選択したSubreddit"</string>
     <string name="report_activity_label">"通報"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_image_label">"画像 %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_video_label">"動画 %1$d/%2$d"</string>
     <string name="send_private_message_activity_label">"個人メッセージを送信"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_image_label">"画像 %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_gif_label">"GIF %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_video_label">"動画 %1$d/%2$d"</string>
     <string name="navigation_drawer_open">"ナビゲーションドロワーを開く"</string>
     <string name="navigation_drawer_close">"ナビゲーションドロワーを閉じる"</string>
@@ -97,7 +107,11 @@
 タップでリトライします。"</string>
     <string name="no_messages">"なし"</string>
     <string name="nsfw">"NSFW"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info">"カルマ: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info_user_detail">"カルマ:
 %1$d (%2$d + %3$d)"</string>
     <string name="cakeday_info">"ケーキの日:
@@ -123,7 +137,11 @@
 (2) Someone's posts that I gave (gold or better only?) rewards for them. -->
     <string name="gilded">"アワードを贈った投稿"</string>
     <string name="settings">"設定"</string>
+
+    <!-- Fuzzy -->
     <string name="subscribers_number_detail">"登録者数: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="online_subscribers_number_detail">"オンライン: %1$d"</string>
     <string name="cannot_fetch_subreddit_info">"Subredditの情報が取得できませんでした"</string>
     <string name="cannot_fetch_user_info">"ユーザー情報が取得できませんでした"</string>
@@ -203,6 +221,8 @@
     <string name="no_flair">"フレアーなし"</string>
     <string name="error_loading_flairs">"フレアーをロード中にエラーが発生しました。
 タップでリトライします。"</string>
+
+    <!-- Fuzzy -->
     <string name="no_rule">"ルールなし"</string>
     <string name="error_loading_rules">"ルールをロード中にエラーが発生しました。
 タップでリトライします。"</string>
@@ -318,6 +338,8 @@
     <string name="notification_summary_message">"新しいメッセージ"</string>
     <string name="notification_summary_subreddit">"Subreddit"</string>
     <string name="notification_summary_award">"アワード"</string>
+
+    <!-- Fuzzy -->
     <string name="notification_new_messages">"%1$d個の新しいメッセージ"</string>
     <string name="label_account">"アカウント"</string>
     <string name="label_post">"投稿"</string>
@@ -337,8 +359,12 @@
     <string name="settings_mute_autoplaying_videos_title">"自動再生の動画をミュート"</string>
     <string name="settings_autoplay_nsfw_videos_title">"NSFW動画を自動再生"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"自動再生開始の表示オフセット(縦画面時)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"%1$d%%の動画エリアが画面内に収まっている場合に自動再生を開始します"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"自動再生開始の表示オフセット(横画面時)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"%1$d%%の動画エリアが画面内に収まっている場合に自動再生を開始します"</string>
 
     <!-- Fuzzy -->
@@ -490,14 +516,24 @@
     <string name="post_layout_compact">"コンパクトレイアウト"</string>
     <string name="elapsed_time_just_now">"たった今"</string>
     <string name="elapsed_time_a_minute_ago">"1分"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_minutes_ago">"%1$d分"</string>
     <string name="elapsed_time_an_hour_ago">"1時間"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_hours_ago">"%1$d時間"</string>
     <string name="elapsed_time_yesterday">"昨日"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_days_ago">"%1$d日"</string>
     <string name="elapsed_time_a_month_ago">"1ヶ月"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_months_ago">"%1$dヶ月"</string>
     <string name="elapsed_time_a_year_ago">"1年"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_years_ago">"%1$d年"</string>
     <string name="error_getting_multi_reddit_data">"カスタムフィードのデータを取得中にエラーが発生しました"</string>
     <string name="error_loading_multi_reddit_list">"カスタムフィードの同期ができませんでした"</string>
@@ -533,6 +569,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"このカスタムフィードを作成できませんでした"</string>
     <string name="duplicate_multi_reddit">"このカスタムフィードは既に存在しています"</string>
     <string name="edit_multi_reddit_failed">"このカスタムフィードを編集できませんでした"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_multi_reddit_success">"削除が完了しました"</string>
     <string name="delete_multi_reddit_failed">"削除できませんでした"</string>
     <string name="delete_multi_reddit_dialog_message">"よろしいですか？"</string>
@@ -725,6 +763,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="edit_theme_name">"テーマ名を編集"</string>
     <string name="edit_theme">"テーマを編集"</string>
     <string name="delete_theme">"テーマを削除"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_theme_dialog_message">"「%1$s」を削除してよろしいですか？"</string>
     <string name="share_theme">"テーマを共有"</string>
     <string name="change_theme_name">"名前を変更"</string>
@@ -783,6 +823,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="comment_content_preview">"オチがないのがオチなんですね。"</string>
     <string name="edit_multi_reddit">"カスタムフィードを編集"</string>
     <string name="delete_multi_reddit">"カスタムフィードを削除"</string>
+
+    <!-- Fuzzy -->
     <string name="n_awards">"%1$d個のアワード"</string>
     <string name="one_award">"1個のアワード"</string>
     <string name="report">"通報"</string>
@@ -961,12 +1003,14 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="search_only_subreddits_hint">"Subredditを検索"</string>
     <string name="search_only_users_hint">"ユーザーを検索"</string>
     <string name="post_type_gif">"GIF"</string>
+    <string name="post_type_gallery">"ギャラリー"</string>
     <string name="settings_disable_immersive_interface_in_landscape_mode">"横画面では没入型インターフェースを無効にする"</string>
     <string name="settings_privacy_policy_title">"プライバシーポリシー"</string>
     <string name="settings_delete_read_posts_in_database_title">"データベース中の全ての既読の投稿を削除"</string>
     <string name="settings_post_filter_title">"投稿フィルター"</string>
     <string name="settings_only_disable_preview_in_video_and_gif_posts_title">"ビデオとGIF投稿でのみプレビューを無効にする"</string>
     <string name="settings_enable_search_history_title">"検索履歴を有効化"</string>
+    <string name="settings_post_history_title">"投稿履歴"</string>
     <string name="settings_mark_posts_as_read_title">"投稿を既読にする"</string>
     <string name="settings_mark_posts_as_read_after_voting_title">"投票後に投稿を既読にする"</string>
     <string name="settings_mark_posts_as_read_on_scroll_title">"スクロール時に投稿を既読にする"</string>
@@ -994,6 +1038,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="post_filter_usage_subreddit_all">"Subreddit"</string>
     <string name="post_filter_usage_user">"ユーザー: %1$s"</string>
     <string name="post_filter_usage_user_all">"ユーザー"</string>
+    <string name="post_filter_usage_search">"検索"</string>
+    <string name="subreddit">"サブレディット"</string>
     <string name="user">"ユーザー"</string>
     <string name="edit_post_filter_name_of_usage_info">"この投稿フィルターを全てのSubreddit / ユーザー / Multiredditに適用するには空のままにしてください"</string>
     <string name="read_all_messages_time_limit">"頻繁にこの操作を行っています。後ほどまたお試しください。これはRedditのAPIの制限です。"</string>
@@ -1002,10 +1048,13 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="add_subreddit_or_user_to_multireddit_success">"%1$s は Multireddit「%2$s」に追加されました"</string>
     <string name="add_subreddit_or_user_to_multireddit_failed">"%1$s を Multireddit「%2$s」に追加できません"</string>
     <string name="choose_a_user">"ユーザーを選択"</string>
+    <string name="settings_click_to_show_media_in_gallery_layout">"クリックしてギャラリービューでメディアを見る"</string>
     <string name="settings_hide_post_type">"投稿の種類を非表示にする"</string>
     <string name="settings_hide_the_number_of_awards">"Awardsの数を非表示にする"</string>
     <string name="settings_hide_the_number_of_comments">"コメント数を非表示にする"</string>
+    <string name="post_layout_gallery">"ギャラリーレイアウト"</string>
     <string name="post_layout_card_2">"カードレイアウト2"</string>
+    <string name="have_trouble_login_title">"ログインに問題が発生"</string>
     <string name="have_trouble_login_message">"別のログイン方法を試しますか？"</string>
     <string name="vote">"投票"</string>
     <string name="action_share_link">"リンクを共有"</string>
@@ -1024,8 +1073,12 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_collapse_subscribed_subreddits_section_title">"「登録済みSubreddit」セクションを折り畳む"</string>
     <string name="settings_default_search_result_tab">"検索時デフォルトで表示するタブ"</string>
     <string name="device_default">"デバイスの設定に従う"</string>
+    <string name="set_by_battery_saver">"バッテリーセーバーが設定されました"</string>
+    <string name="theme_item_current_user_color">"現在のユーザー"</string>
     <string name="exclude_domains_hint">"除外するドメイン"</string>
     <string name="anonymous_front_page_no_subscriptions">"Subredditに参加して始めましょう！"</string>
+
+    <!-- Fuzzy -->
     <string name="backup_settings_success">"設定を目的のディレクトリに正常にエクスポートしました。生成されたzipファイルのパスワードは123321です。zipファイルは変更しないでください。"</string>
     <string name="create_zip_in_destination_directory_failed">"目的のディレクトリにバックアップzipファイルを作成することができませんでした"</string>
     <string name="backup_some_settings_failed">"一部の設定をバックアップできませんでしたが、他の設定は目的ディレクトリに正常にエクスポートされました"</string>
@@ -1033,6 +1086,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="restore_settings_partially_failed">"いくつかの設定が正しく復元されませんでした。変更を反映するにはアプリを再起動してください。"</string>
     <string name="restore_settings_failed_file_corrupted">"設定を復元できません。ファイルが破損している可能性があります。"</string>
     <string name="restore_settings_failed_cannot_get_file">"ファイルにアクセスできません"</string>
+    <string name="do_not_show_this_again">"再度表示しない"</string>
+    <string name="continue_suicide_prevention_activity">"続ける"</string>
     <string name="error_fetching_v_redd_it_video_cannot_get_redirect_url">"v.redd.itからの動画の取得に失敗しました: Cannot get the redirect url"</string>
     <string name="error_fetching_v_redd_it_video_cannot_get_post">"v.redd.itからの動画の取得に失敗しました:  Cannot get the post"</string>
     <string name="error_fetching_v_redd_it_video_cannot_get_post_id">"v.redd.itからの動画の取得に失敗しました: Cannot get the post id"</string>
@@ -1049,18 +1104,30 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="exclude_flair">"このFlairを除外"</string>
     <string name="contain_flair">"このFlairを含む"</string>
     <string name="exclude_domain">"このドメインを除外"</string>
+
+    <!-- Fuzzy -->
     <string name="inbox_with_count">"受信トレイ (%1$d)"</string>
     <string name="settings_swipe_vertically_to_go_back_from_media_title">"縦方向にスワイプして画像やGIF動画の画面から戻る"</string>
     <string name="settings_crash_reports_title">"クラッシュレポート"</string>
     <string name="settings_disable_nsfw_forever_title">"NSFWを永久に無効にする"</string>
+    <string name="save_comment">"保存"</string>
+    <string name="unsave_comment">"保存しない"</string>
     <string name="copy_multi_reddit_path">"Multiredditのパスをコピー"</string>
     <string name="copy_multi_reddit_path_failed">"Multiredditのパスをコピーできません"</string>
+
+    <!-- Fuzzy -->
     <string name="crash_reports_deleted">"クラッシュレポートが削除されました"</string>
+
+    <!-- Fuzzy -->
     <string name="disable_nsfw_forever_message">"一度有効にすると、NSFW設定が有効かどうかに関係なく、NSFWは永続的に無効になります。そして、このオプションは元に戻せません。アプリのデータを消去することによってのみ、NSFWを再度有効にすることができます。
 
 それでも有効にしますか？"</string>
     <string name="reply">"返信"</string>
+    <string name="post_gallery_activity_label">"ギャラリー投稿"</string>
     <string name="trending_activity_label">"トレンド"</string>
+    <string name="action_share_post_link">"投稿リンクを共有"</string>
+    <string name="bottom_sheet_post_gallery">"ギャラリー"</string>
+    <string name="posting_gallery">"ギャラリーを投稿"</string>
     <string name="label_reddit">"Reddit"</string>
     <string name="settings_default_link_post_layout">"デフォルトのリンク付き投稿のレイアウト"</string>
     <string name="settings_category_material_you_title">"Material You"</string>
@@ -1079,6 +1146,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="link_post_layout_auto">"自動"</string>
     <string name="uploaded_images">"アップロードされた画像"</string>
     <string name="select_image">"画像を選択"</string>
+    <string name="capture">"キャプチャ"</string>
     <string name="uploading_image">"アップロード中"</string>
     <string name="upload_image_failed">"画像をアップロードできません"</string>
     <string name="search_comments">"コメントを検索"</string>
@@ -1093,15 +1161,21 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="discard_dialog_button">"破棄"</string>
     <string name="error_loading_wiki">"Wikiの読み込み中にエラーが発生しました"</string>
     <string name="no_wiki">"このSubredditにはwikiのページがありません。"</string>
+    <string name="material_you_notification_title">"Material Youを適用"</string>
+    <string name="action_go_to_wiki">"Wikiを見る"</string>
     <string name="action_playback_speed">"再生速度"</string>
     <string name="about">"About"</string>
     <string name="settings_loop_video_title">"動画をループ再生する"</string>
     <string name="settings_loop_video_summary">"この設定を反映するにはアプリを再起動して下さい"</string>
     <string name="settings_default_playback_speed_title">"デフォルトの再生速度"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_link_handler_value_external_browser">"外部ブラウザ"</string>
+    <string name="settings_link_handler_value_custom_tab">"カスタムタブ"</string>
     <string name="settings_link_handler_value_internal_browser">"内部ブラウザ"</string>
     <string name="settings_pinch_to_zoom_video_title">"ピンチしてビデオをズームする"</string>
     <string name="settings_experimental_feature">"実験的機能"</string>
+    <string name="go_to_top">"トップへ"</string>
     <string name="contain_domain">"このドメインを含める"</string>
     <string name="app_lock_timeout_immediately">"即時"</string>
     <string name="app_lock_timeout_1_min">"1分"</string>
@@ -1119,4 +1193,38 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="app_lock_timeout_6_hours">"6時間"</string>
     <string name="app_lock_timeout_12_hours">"12時間"</string>
     <string name="app_lock_timeout_24_hours">"24時間"</string>
+    <string name="edit_profile_activity_label">"プロフィールを編集"</string>
+    <string name="action_contact_mods">"モデレーターに連絡"</string>
+
+    <!-- EditProfileService Notification -->
+    <string name="submit_change_avatar">"アバターの変更を送信"</string>
+    <string name="submit_change_banner">"バナーの変更を送信"</string>
+    <string name="about_you_hint">"あなた自身についての簡単な説明"</string>
+    <string name="message_remove_avatar_success">"アバターが正常に削除されました"</string>
+    <string name="message_remove_avatar_failed">"アバター%sの削除に失敗しました"</string>
+    <string name="message_save_profile_success">"プロフィールの保存が成功しました"</string>
+    <string name="message_save_profile_failed">"プロフィール%sの保存に失敗しました"</string>
+    <string name="post_poll_activity_label">"投票付き投稿"</string>
+    <string name="action_open_external_browser">"ブラウザで開く"</string>
+    <string name="voting_length">"投票期間: %1$d日間"</string>
+    <string name="two_options_required">"良い投票には2つ以上の選択肢が必要です！"</string>
+    <string name="bottom_sheet_post_poll">"投票"</string>
+    <string name="no_activity_found_for_external_browser">"開くための外部アプリがありません"</string>
+    <string name="settings_require_authentication_to_show_accounts">"アカウントを表示するためには認証が必要です"</string>
+    <string name="settings_miscellaneous_dangerous_group_title">"危険"</string>
+    <string name="select_a_ttf_font">"ttfフォントファイルを選択してください"</string>
+    <string name="unable_to_get_font_file">"このフォントを取得できません"</string>
+    <string name="unable_to_load_font">"カスタムフォントを読み込めません"</string>
+    <string name="unable_to_copy_font_file">"このフォントをコピーできません"</string>
+    <string name="reddit_gallery_item_caption_hint">"説明文（180字以内）"</string>
+    <string name="agree">"同意"</string>
+    <string name="do_not_agree">"同意しない"</string>
+    <string name="option_1_hint">"選択肢1（必須）"</string>
+    <string name="option_2_hint">"選択肢2（必須）"</string>
+    <string name="option_3_hint">"選択肢3"</string>
+    <string name="option_4_hint">"選択肢4"</string>
+    <string name="option_5_hint">"選択肢5"</string>
+    <string name="option_6_hint">"選択肢6"</string>
+    <string name="no_more_posts">"投稿はこれ以上ありません"</string>
+    <string name="go_to_settings">"設定"</string>
 </resources>

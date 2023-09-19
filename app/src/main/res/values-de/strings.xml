@@ -17,8 +17,8 @@
     <string name="view_message_activity_label">"Posteingang"</string>
     <string name="settings_activity_label">"Einstellungen"</string>
     <string name="account_saved_thing_activity_label">"Gespeichert"</string>
-    <string name="create_multi_reddit_activity_label">"Multireddit erstellen"</string>
-    <string name="subreddit_multiselection_activity_label">"Multireddits auswählen"</string>
+    <string name="create_multi_reddit_activity_label">"Subreddit erstellen"</string>
+    <string name="subreddit_multiselection_activity_label">"Subreddits auswählen"</string>
     <string name="custom_theme_listing_activity_label">"Benutzerdefinierte Themen"</string>
     <string name="customize_theme_activity_label">"Thema anpassen"</string>
     <string name="customize_theme_activity_create_theme_label">"Thema erstellen"</string>
@@ -26,11 +26,21 @@
     <string name="edit_multi_reddit_activity_label">"Multireddit bearbeiten"</string>
     <string name="selected_subeddits_activity_label">"Ausgewählte Subreddits"</string>
     <string name="report_activity_label">"Melden"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_image_label">"Bild %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_video_label">"Video %1$d/%2$d"</string>
     <string name="send_private_message_activity_label">"PN senden"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_image_label">"Bild %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_gif_label">"GIF %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_video_label">"Video %1$d/%2$d"</string>
     <string name="navigation_drawer_open">"Navigationsleiste öffnen"</string>
     <string name="navigation_drawer_close">"Navigationsleiste schließen"</string>
@@ -38,7 +48,7 @@
     <string name="action_refresh">"Aktualisieren"</string>
     <string name="action_add_comment">"Kommentar hinzufügen"</string>
     <string name="action_save_post">"Beitrag speichern"</string>
-    <string name="action_view_crosspost_parent">"Originalbeitrag crossposten"</string>
+    <string name="action_view_crosspost_parent">"Originalbeitrag öffnen"</string>
     <string name="action_search">"Suchen"</string>
     <string name="action_start_lazy_mode">"Lazy Mode starten"</string>
     <string name="action_stop_lazy_mode">"Lazy Mode stoppen"</string>
@@ -96,9 +106,13 @@ Tippen für Neuversuch."</string>
 Tippen für Neuversuch."</string>
     <string name="no_messages">"Leer"</string>
     <string name="nsfw">"NSFW"</string>
-    <string name="karma_info">"Karma: %1$d"</string>
+
+    <!-- Fuzzy -->
+    <string name="karma_info">"Karma: %1$,d"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info_user_detail">"Karma:
-%1$d (%2$d + %3$d)"</string>
+%1$,d (%2$d + %3$d)"</string>
     <string name="cakeday_info">"Cake Day:
 %1$s"</string>
     <string name="since">"Seit:"</string>
@@ -112,8 +126,8 @@ Tippen für Neuversuch."</string>
     <string name="saved">"Gespeichert"</string>
     <string name="gilded">"Vergoldet"</string>
     <string name="settings">"Einstellungen"</string>
-    <string name="subscribers_number_detail">"Abonnenten: %1$d"</string>
-    <string name="online_subscribers_number_detail">"Online: %1$d"</string>
+    <string name="subscribers_number_detail">"Abonnenten: %1$,d"</string>
+    <string name="online_subscribers_number_detail">"Online: %1$,d"</string>
     <string name="cannot_fetch_subreddit_info">"Kann Subredddit-Info nicht abrufen"</string>
     <string name="cannot_fetch_user_info">"Kann Benutzer-Info nicht abrufen"</string>
     <string name="cannot_fetch_sidebar">"Kann Seitenleiste nicht abrufen"</string>
@@ -153,8 +167,6 @@ Tippen für Neuversuch."</string>
     <string name="send_message_success">"Nachricht gesendet"</string>
     <string name="send_message_failed">"Nachricht konnte nicht gesendet werden"</string>
     <string name="select_a_subreddit">"Bitte wähle zuerst ein Subreddit aus"</string>
-
-    <!-- Fuzzy -->
     <string name="title_required">"Der Beitrag braucht einen guten Titel"</string>
     <string name="link_required">"Hey, wo ist der Link?"</string>
     <string name="select_an_image">"Bitte wähle zuerst ein Bild"</string>
@@ -237,8 +249,6 @@ Tippen für Neuversuch."</string>
     <string name="posting_video">"Poste Video"</string>
     <string name="posting_image">"Poste Bild"</string>
     <string name="please_wait">"Bitte warten"</string>
-
-    <!-- Fuzzy -->
     <string name="add_account">"Konto hinzufügen"</string>
     <string name="anonymous_account">"Anonym"</string>
     <string name="log_out">"Abmelden"</string>
@@ -266,13 +276,9 @@ Tippen für Neuversuch."</string>
     <string name="show_removed_post_failed">"Konnte den entfernten Beitrag nicht finden"</string>
     <string name="cancel">"Abbrechen"</string>
     <string name="ok">"OK"</string>
-
-    <!-- Fuzzy -->
     <string name="edit_success">"Bearbeiten erfolgreich"</string>
     <string name="delete_post_success">"Löschen erfolgreich"</string>
     <string name="delete_post_failed">"Löschen fehlgeschlagen"</string>
-
-    <!-- Fuzzy -->
     <string name="mark_nsfw_success">"NSFW-Markierung erfolgreich"</string>
     <string name="mark_nsfw_failed">"NSFW-Markierung fehlgeschlagen"</string>
 
@@ -287,8 +293,6 @@ Tippen für Neuversuch."</string>
     <!-- Fuzzy -->
     <string name="unmark_spoiler_success">"Entfernen der Spoiler-Markierung erfolgreich"</string>
     <string name="unmark_spoiler_failed">"Entfernen der Spoiler-Markierung fehlgeschlagen"</string>
-
-    <!-- Fuzzy -->
     <string name="update_flair_success">"Aktualisierung des Flairs erfolgreich"</string>
     <string name="update_flair_failed">"Aktualisierung des Flais fehlgeschlagen"</string>
     <string name="edit_flair">"Flair aktualisieren"</string>
@@ -317,8 +321,12 @@ Tippen für Neuversuch."</string>
     <string name="settings_mute_autoplaying_videos_title">"Automatisch abgespielte Videos stummschalten"</string>
     <string name="settings_autoplay_nsfw_videos_title">"NSFW-Videos automatisch abspielen"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Versatz für sichtbaren Bereich bei automatisch abgespielten Videos (Portrait)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Videos automatisch abspielen, wenn %1$d%% von ihnen sichtbar sind"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Versatz für sichtbaren Bereich bei automatisch abgespielten Videos (Landscape)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Videos automatisch abspielen, wenn %1$d%% von ihnen sichtbar sind"</string>
     <string name="settings_immersive_interface_title">"Immersive Oberfläche"</string>
 
@@ -360,8 +368,6 @@ Tippen für Neuversuch."</string>
     <string name="settings_swap_tap_and_long_title">"Antippen und Gedrückthalten in Kommentaren tauschen"</string>
     <string name="settings_swipe_to_go_back_title">"Nach rechts wischen, um zurück zu gehen"</string>
     <string name="settings_swipe_to_go_back_summary">"Trifft nicht auf alle Seiten zu"</string>
-
-    <!-- Fuzzy -->
     <string name="settings_lock_jump_to_next_top_level_comment_button_title">"\"Zum nächsten Top-Level-Kommentar springen\"-Knopf sperren"</string>
     <string name="settings_lock_bottom_app_bar_title">"Untere Navigationsleiste sperren"</string>
 
@@ -393,7 +399,7 @@ Tippen für Neuversuch."</string>
     <string name="settings_credits_icon_background_summary">"Hintergrund Vektor von freepik erstellt - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Fehlerbild"</string>
     <string name="settings_credits_error_image_summary">"Technologie Vektor von freepik erstellt - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Vergoldetes Symbol"</string>
+    <string name="settings_credits_gilded_icon_title">"Vergoldet Symbol"</string>
     <string name="settings_credits_gilded_icon_summary">"Symbol von Freepik von www.flaticon.com erstellt"</string>
     <string name="settings_credits_crosspost_icon_title">"Crosspost-Symbol"</string>
     <string name="settings_credits_crosspost_icon_summary">"Symbol von Freepik von www.flaticon.com erstellt"</string>
@@ -437,7 +443,7 @@ Tippen für Neuversuch."</string>
     <string name="settings_tab_subreddit_name">"Subreddit-Name (ohne r/ Präfix)"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_tab_multi_reddit_name">"Multireddit-Name (/user/DeinBenutzername/m/DeinMultiredditName)"</string>
+    <string name="settings_tab_multi_reddit_name">"Multireddit-Name (/user/DeinBenutzername/m/DeinMultiredditName) (nur Kleinbuchstaben)"</string>
     <string name="settings_tab_username">"Benutzername (ohne u/ Präfix)"</string>
     <string name="no_developer_easter_egg">"Es gibt hier keine Entwickleroptionen"</string>
     <string name="no_link_available">"Konnte den Link nicht abrufen"</string>
@@ -509,6 +515,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"Kann dieses Multireddit nicht erstellen"</string>
     <string name="duplicate_multi_reddit">"Dieses Multireddit existiert bereits"</string>
     <string name="edit_multi_reddit_failed">"Kann dieses Multireddit nicht bearbeiten"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_multi_reddit_success">"Löschen erfolgreich"</string>
     <string name="delete_multi_reddit_failed">"Löschen fehlgeschlagen"</string>
     <string name="delete_multi_reddit_dialog_message">"Bist du sicher?"</string>
@@ -528,7 +536,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_color_primary_dark">"Primärfarbe Dunkel"</string>
     <string name="theme_item_color_primary_dark_detail">"Angewandt auf: Statusleiste"</string>
     <string name="theme_item_color_accent">"Akzentfarbe"</string>
-    <string name="theme_item_color_accent_detail">"Angewandt auf: Fortschrittsleiste, usw."</string>
+    <string name="theme_item_color_accent_detail">"Angewandt auf: Fortschrittsleiste, usw"</string>
     <string name="theme_item_color_primary_light_theme">"Primärfarbe Helles Thema"</string>
     <string name="theme_item_color_primary_light_theme_detail">"Angewandt auf: Hintergrund des schwebenden Aktionsknopfes und Knöpfe"</string>
     <string name="theme_item_primary_text_color">"Primäre Textfarbe"</string>
@@ -705,6 +713,8 @@ Basiere auf Indigo-AMOLED-Thema"</string>
     <string name="edit_theme_name">"Thema-Name bearbeiten"</string>
     <string name="edit_theme">"Thema bearbeiten"</string>
     <string name="delete_theme">"Thema löschen"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_theme_dialog_message">"Bist du sicher, dass du %1$s löschen willst?"</string>
     <string name="share_theme">"Thema teilen"</string>
     <string name="change_theme_name">"Name ändern"</string>
@@ -723,8 +733,6 @@ Basiere auf Indigo-AMOLED-Thema"</string>
     <string name="override">"Überschreiben"</string>
     <string name="color_picker">"Farbauswahl"</string>
     <string name="invalid_color">"Ungültige Farbe"</string>
-
-    <!-- Fuzzy -->
     <string name="delete_all_subreddits_success">"Alle Subreddits erfolgreich gelöscht"</string>
 
     <!-- Fuzzy -->
@@ -735,15 +743,11 @@ Basiere auf Indigo-AMOLED-Thema"</string>
 
     <!-- Fuzzy -->
     <string name="delete_all_post_layouts_success">"Alle Beitragslayouts erfolgreich gelöscht"</string>
-
-    <!-- Fuzzy -->
     <string name="delete_all_themes_success">"Alle Themen erfolgreich gelöscht"</string>
 
     <!-- Fuzzy -->
     <string name="delete_all_front_page_scrolled_positions_success">"Alle Scrollpositionen der Frontseite erfolgreich gelöscht"</string>
-
-    <!-- Fuzzy -->
-    <string name="reset_all_settings_success">"Alle Einstellungen erfolgreich gelöscht"</string>
+    <string name="reset_all_settings_success">"Alle Einstellungen erfolgreich zurückgesetzt"</string>
     <string name="username_preview">"u/Hostilenemy"</string>
     <string name="subreddit_preview">"r/Infinity_For_Reddit"</string>
     <string name="primary_text_preview">"Primärer Text"</string>
@@ -758,7 +762,7 @@ Basiere auf Indigo-AMOLED-Thema"</string>
 Sie ist nicht krank oder so, aber sie könnte sich definitiv bessern."</string>
     <string name="edit_multi_reddit">"Multireddit bearbeiten"</string>
     <string name="delete_multi_reddit">"Multireddit löschen"</string>
-    <string name="n_awards">"%1$d Auszeichnungen"</string>
+    <string name="n_awards">"%1$,d Auszeichnungen"</string>
     <string name="one_award">"1 Auszeichnung"</string>
     <string name="report">"Melden"</string>
     <string name="reporting">"Melde"</string>
@@ -1085,7 +1089,9 @@ Nachricht: %2$s"</string>
     <string name="suggest_title">"Titel vorschlagen"</string>
     <string name="suggest_title_failed">"Konnte Titel nicht vorschlagen"</string>
     <string name="action_delete_logs">"Logs löschen"</string>
-    <string name="inbox_with_count">"Posteingang (%1$d)"</string>
+
+    <!-- Fuzzy -->
+    <string name="inbox_with_count">"Posteingang (%1$,d)"</string>
     <string name="comment_continue_thread">"Thread fortsetzen"</string>
 
     <!-- Fuzzy -->
@@ -1099,7 +1105,9 @@ Nachricht: %2$s"</string>
     <string name="unsave_comment">"Nicht mehr speichern"</string>
     <string name="copy_multi_reddit_path">"Pfad des Multireddit kopieren"</string>
     <string name="copy_multi_reddit_path_failed">"Pfad des Multireddit kann nicht kopiert werden"</string>
-    <string name="crash_reports_deleted">"Absturzmeldungen werden gelöscht"</string>
+    <string name="crash_reports_deleted">"Absturzmeldungen wurden gelöscht"</string>
+
+    <!-- Fuzzy -->
     <string name="disable_nsfw_forever_message">"Wenn du diese Option aktivierst, wird NSFW dauerhaft deaktiviert, egal ob die NSFW-Option ein- oder ausgeschaltet ist. Diese Option ist irreversibel, wenn du NSFW wieder einschalten willst, müssen die Daten der App gelöscht werden.
 
 Möchtest du trotzdem fortfahren?"</string>
@@ -1176,6 +1184,8 @@ Antippen zum Wiederholen."</string>
     <string name="settings_app_lock_timeout_title">"App sperren nach"</string>
     <string name="settings_enable_fold_support_title">"Fold-Handy Unterstützung aktivieren"</string>
     <string name="settings_default_playback_speed_title">"Standard Wiedergabegeschwindigkeit"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_link_handler_value_external_browser">"Externer Browser"</string>
     <string name="settings_link_handler_value_custom_tab">"Custom Tab"</string>
     <string name="settings_link_handler_value_internal_browser">"Interner Browser"</string>
@@ -1242,9 +1252,11 @@ Antippen zum Wiederholen."</string>
     <string name="message_save_profile_failed">"Profil konnte nicht gespeichert werden %s"</string>
     <string name="post_poll_activity_label">"Umfrage-Post"</string>
     <string name="action_open_external_browser">"Im Browser öffnen"</string>
-    <string name="voting_length">"Abstimmungslänge: %1$d tage"</string>
+    <string name="voting_length">"Abstimmungslänge: %1$d Tage"</string>
     <string name="two_options_required">"Eine gute Umfrage braucht zwei oder mehr Optionen!"</string>
     <string name="bottom_sheet_post_poll">"Umfrage"</string>
+
+    <!-- Fuzzy -->
     <string name="no_activity_found_for_external_browser">"Keinen externen Browser gefunden"</string>
     <string name="settings_require_authentication_to_show_accounts">"Authentifizierung benötigt um Profile anzuzeigen"</string>
     <string name="settings_custom_font_family_title">"Benutzerdefinierte Schriftart-familie"</string>
@@ -1252,11 +1264,13 @@ Antippen zum Wiederholen."</string>
     <string name="settings_custom_content_font_family_title">"Benutzerdefinierte Inhaltschriftart-familie"</string>
     <string name="settings_fixed_height_preview_in_card_title">"Festgestellte Höhe in Kartenansicht"</string>
     <string name="settings_hide_text_post_content">"Text-Post Inhalt verstecken"</string>
-    <string name="settings_hide_comment_awards_title">"Kommentarauszeichnungen verstecken "</string>
+    <string name="settings_hide_comment_awards_title">"Kommentarauszeichnungen verstecken"</string>
     <string name="settings_show_fewer_toolbar_options_threshold_title">"Weniger Werkzeugleistenoptionen anzeigen"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_fewer_toolbar_options_threshold_summary">"Wert %1$d"</string>
     <string name="settings_show_author_avatar_title">"Autoravatar zeigen"</string>
-    <string name="settings_reddit_user_agreement_title">"Reddit Nutzungsbestimmungen "</string>
+    <string name="settings_reddit_user_agreement_title">"Reddit Nutzungsbestimmungen"</string>
     <string name="settings_always_show_child_comment_count_title">"Immer die Anzahl von untergeordneten Kommentaren anzeigen"</string>
     <string name="settings_hide_upvote_ratio_title">"Upvoteverhaltnis verstecken"</string>
     <string name="settings_miscellaneous_dangerous_group_title">"Gefährlich"</string>
@@ -1272,7 +1286,7 @@ Antippen zum Wiederholen."</string>
     <string name="user_agreement_dialog_title">"Nutzungsbedingungen"</string>
     <string name="user_agreement_message">"Du musst Reddit Nutzungsbedingungen (%1$s) und Infinity for reddit's Datenschutz-Bestimmungen (%2$s) zustimmen bevor du dich anmelden kannst."</string>
     <string name="agree">"Zustimmen"</string>
-    <string name="do_not_agree">"Nicht zustimmen "</string>
+    <string name="do_not_agree">"Nicht zustimmen"</string>
     <string name="option_1_hint">"Option 1 (notwendig)"</string>
     <string name="option_2_hint">"Option 2 (notwendig)"</string>
     <string name="option_3_hint">"Option 3"</string>
@@ -1284,4 +1298,72 @@ Antippen zum Wiederholen."</string>
     <string name="comment_karma">"Kommentarkarma:"</string>
     <string name="awarder_karma">"Auszeichnungskarma:"</string>
     <string name="awardee_karma">"Ausgezeichnetenkarma:"</string>
+    <string name="history_activity_label">"Verlauf"</string>
+    <string name="history">"Verlauf"</string>
+    <string name="settings_easier_to_watch_in_full_screen_title">"Einfacher im Full Screen anzusehen"</string>
+    <string name="clear_user_flair">"Flair entfernen"</string>
+    <string name="clear_user_flair_success">"Benutzerflair entfernt"</string>
+    <string name="extra_small">"Extra klein"</string>
+    <string name="handle_link">"Link behandeln"</string>
+    <string name="invalid_link">"Ungültiger Link"</string>
+    <string name="error_unsupported_video">"Medium enthält Video-Tracks, aber keiner von ihnen ist abspielbar"</string>
+    <string name="error_unsupported_audio">"Medium enthält Audio-Tracks, aber keiner von ihnen ist abspielbar"</string>
+    <string name="exo_controls_volume_up_description">"Lautstärke erhöhen"</string>
+    <string name="exo_controls_volume_off_description">"Lautstärke aus"</string>
+    <string name="action_block_user">"Benutzer blockieren"</string>
+    <string name="action_create_github_issue">"GitHub-Issue erstellen"</string>
+    <string name="action_more_options">"Mehr Einstellungen"</string>
+    <string name="settings_backup_settings_summary">"Das Passwort der Backup-Datei ist \"123321\"."</string>
+    <string name="settings_navigation_drawer_enable_hide_karma_title">"Kontokarma verstecken"</string>
+    <string name="settings_hide_fab_in_post_feed">"Verstecke schwebenden Aktionsknopf im Beitragsfeed"</string>
+    <string name="settings_comment_divider_type">"Kommentar-Trennleisten-Typ"</string>
+    <string name="block_user">"Benutzer blockieren"</string>
+    <string name="block_user_success">"Blockiert"</string>
+    <string name="block_user_failed">"Blockieren des Benutzers fehlgeschlagen"</string>
+    <string name="invalid_regex">"Ungültiges Regex-Schema"</string>
+    <string name="load_more_posts_failed">"Laden weiterer Beiträge fehlgeschlagen.
+Tippe zum Wiederholen."</string>
+    <string name="no_more_posts">"Keine weiteren Posts"</string>
+    <string name="image_index_in_gallery">"%1$d/%2$d"</string>
+    <string name="denied_notification_permission">"Benachrichtigungs-Berechtigung nicht erteilt"</string>
+    <string name="go_to_settings">"Einstellungen"</string>
+    <string name="subscription_activity_label">"Abonnement"</string>
+    <string name="edited">"Bearbeitet"</string>
+    <string name="edited_time">"Bearbeitet am %s"</string>
+    <string name="welcome_to_infinity">"Willkommen bei Infinity for Reddit, deinem Tor zu einer ganz neuen Dimension des Reddit-Browsing!"</string>
+
+    <!-- Fuzzy -->
+    <string name="subscription_prompt">"Bevor du in die unzähligen Möglichkeiten dieser App eintauchst, möchte ich dir eine wichtige Änderung mitteilen, die ich vorgenommen habe, um dir den bestmöglichen Service zu bieten.
+
+Von nun an benötigst du ein monatliches Abonnement, um auf die Reddit-API in Infinity for Reddit zuzugreifen. Der Grund dafür ist, dass Reddit seit dem 1. Juli 2023 Gebühren für den API-Zugang erhebt."</string>
+    <string name="monthly">"Monatlich"</string>
+    <string name="yearly">"Jährlich"</string>
+    <string name="weekly">"Wöchentlich"</string>
+    <string name="billing_error_billing_unavailable">"Der Abrechnungsdienst ist auf dem Gerät nicht verfügbar."</string>
+    <string name="billing_error_developer_error">"Der Entwickler hat einige Fehler gemacht. Nicht deine Schuld."</string>
+    <string name="billing_error_error">"Schwerer Fehler während der API-Aktion."</string>
+    <string name="billing_error_feature_not_supported">"Die angeforderte Funktion wird vom Play Store auf dem aktuellen Gerät nicht unterstützt."</string>
+    <string name="billing_error_item_already_owned">"Der Kauf ist fehlgeschlagen, weil der Artikel bereits im Besitz ist."</string>
+    <string name="billing_error_item_unavailable">"Das gewünschte Produkt ist nicht verfügbar."</string>
+    <string name="billing_error_network_error">"Ein Netzwerkfehler ist während des Vorgangs aufgetreten."</string>
+    <string name="billing_error_service_disconnected">"Die App ist nicht mit dem Play Store-Dienst über die Google Play Billing Library verbunden."</string>
+    <string name="billing_error_service_unavailable">"Der Dienst ist derzeit nicht verfügbar."</string>
+    <string name="billing_error_user_canceled">"Die Transaktion wurde vom Benutzer abgebrochen."</string>
+    <string name="subscription_plan_description_monthly">"Bronze"</string>
+    <string name="subscription_plan_description_monthly_399">"Silber"</string>
+    <string name="subscription_plan_description_monthly_499">"Gold - Perfekte Entscheidung!"</string>
+    <string name="subscription_plan_description_monthly_699">"Platinum"</string>
+    <string name="subscription_plan_description_monthly_899">"Diamant"</string>
+    <string name="subscription_plan_description_monthly_999">"Unbegrenzt"</string>
+    <string name="acknowledge_purchase_failed">"Kann den Kauf nicht bestätigen"</string>
+    <string name="connect_to_billing_system_failed">"Verbindung zum Abrechnungssystem fehlgeschlagen"</string>
+    <string name="connecting_to_billing_system">"Verbindung zum Abrechnungssystem wirdhhergestellt. Bitte warten."</string>
+    <string name="thank_you_for_subscription">"Danke für dein Abonnement"</string>
+    <string name="load_subscription_options">"Optionen für Abonnements laden"</string>
+    <string name="acknowledging_subscription">"Bestätigung deines Abonnements. Bitte warten."</string>
+    <string name="acknowledgement_purchase_failed_description">"Ups, es ist ein Fehler bei der Bestätigung deines Kaufs aufgetreten. Wenn dieses Problem drei Tage lang bestehen bleibt, erhältst du automatisch eine Rückerstattung.
+Keine Sorge, du kannst Infinity for Reddit trotzdem genießen."</string>
+    <string name="continue_to_app">"Weiter zur App"</string>
+    <string name="restore_subscription_purchase_details">"Das Abonnement bereits bezahlt?"</string>
+    <string name="restore_subscription_purchase">"Abo-Kauf wiederherstellen"</string>
 </resources>

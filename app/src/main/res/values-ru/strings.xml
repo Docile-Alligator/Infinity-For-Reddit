@@ -28,13 +28,21 @@
     <string name="report_activity_label">"Пожаловаться"</string>
 
     <!-- Idk what this is supposed to be in english -->
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_image_label">"Изображение %1$d/%2$d"</string>
 
     <!-- Idk what this is supposed to mean. -->
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_video_label">"Видео %1$d/%2$d"</string>
     <string name="send_private_message_activity_label">"Отправить личное сообщение"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_image_label">"Изображение %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_gif_label">"GIF %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_video_label">"Видео %1$d/%2$d"</string>
     <string name="navigation_drawer_open">"Открыть панель навигации"</string>
     <string name="navigation_drawer_close">"Закрыть панель навигации"</string>
@@ -42,7 +50,7 @@
     <string name="action_refresh">"Обновить"</string>
     <string name="action_add_comment">"Добавить комментарий"</string>
     <string name="action_save_post">"Сохранить пост"</string>
-    <string name="action_view_crosspost_parent">"Посмотреть родительский кросспост"</string>
+    <string name="action_view_crosspost_parent">"Посмотреть родительский пост"</string>
     <string name="action_search">"Поиск"</string>
     <string name="action_start_lazy_mode">"Включить ленивый режим"</string>
     <string name="action_stop_lazy_mode">"Остановить ленивый режим"</string>
@@ -67,10 +75,10 @@
     <string name="action_see_removed">"Просмотр удалённого"</string>
     <string name="action_set_wallpaper">"Установить как обои"</string>
     <string name="action_send_private_message">"Отправить личное сообщение"</string>
-    <string name="parse_json_response_error">"Произошла ошибка при анализе JSON-отчёта"</string>
+    <string name="parse_json_response_error">"Произошла ошибка при анализе JSON-ответа"</string>
     <string name="retrieve_token_error">"Ошибка получения токена"</string>
     <string name="something_went_wrong">"Что-то пошло не так. Попробуйте позже."</string>
-    <string name="access_denied">"В доступе отказано"</string>
+    <string name="access_denied">"Доступ запрещён"</string>
     <string name="parse_user_info_error">"Произошла ошибка во время обработки информации о пользователе"</string>
     <string name="no_system_webview_error">"Ошибка открытия системного WebView"</string>
     <string name="error_loading_image_tap_to_retry">"Произошла ошибка при загрузке изображения. Нажмите, чтобы повторить попытку."</string>
@@ -95,10 +103,15 @@
     <string name="no_comments_yet">"Комментариев ещё нет. Написать комментарий?"</string>
     <string name="vote_failed">"Невозможно проголосовать"</string>
     <string name="refresh_post_failed">"Произошла ошибка при обновлении поста."</string>
-    <string name="load_messages_failed">"Ошибка загрузки сообщений. Нажмите для повтора."</string>
+    <string name="load_messages_failed">"Ошибка загрузки сообщений.
+Нажмите, чтобы повторить попытку."</string>
     <string name="no_messages">"Пусто"</string>
     <string name="nsfw">"NSFW"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info">"Карма: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info_user_detail">"Карма:
 %1$d (%2$d + %3$d)"</string>
     <string name="cakeday_info">"День торта:
@@ -114,7 +127,11 @@
     <string name="saved">"Сохранённые"</string>
     <string name="gilded">"Позолоченные"</string>
     <string name="settings">"Настройки"</string>
+
+    <!-- Fuzzy -->
     <string name="subscribers_number_detail">"Подписчики: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="online_subscribers_number_detail">"Онлайн: %1$d"</string>
     <string name="cannot_fetch_subreddit_info">"Невозможно получить информацию о сабреддите"</string>
     <string name="cannot_fetch_user_info">"Невозможно получить информацию о пользователе"</string>
@@ -139,7 +156,7 @@
     <string name="lazy_mode_start">"Ленивый режим начнётся через %1$.1fs"</string>
     <string name="lazy_mode_stop">"Ленивый режим остановлен"</string>
     <string name="write_comment_hint">"Ваши интересные мысли здесь"</string>
-    <string name="comment_content_required">"А где ваши интересные размышления?"</string>
+    <string name="comment_content_required">"А где ваша интересная мысль?"</string>
     <string name="sending_comment">"Отправка"</string>
     <string name="send_comment_success">"Комментарий отправлен"</string>
     <string name="send_comment_failed">"Невозможно отправить данный комментарий"</string>
@@ -166,7 +183,7 @@
     <string name="error_processing_video">"Ошибка при обработке видео"</string>
     <string name="download_started">"Загрузка началась. Проверьте уведомления для отслеживания прогресса."</string>
     <string name="comment_load_more_comments">"Загрузить больше комментариев"</string>
-    <string name="comment_load_more_comments_failed">"Загрузка не выполнена. Нажмите для повторной загрузки."</string>
+    <string name="comment_load_more_comments_failed">"Загрузка не выполнена. Нажмите, чтобы повторить попытку."</string>
     <string name="loading">"Загрузка"</string>
     <string name="post_title_hint">"Заголовок"</string>
     <string name="post_text_content_hint">"Контент"</string>
@@ -189,14 +206,16 @@
     <string name="video_is_processing">"Видео обрабатывается. Пожалуйста, подождите."</string>
     <string name="image_is_processing">"Изображение обрабатывается. Пожалуйста, подождите."</string>
     <string name="gif_is_processing">"GIF обрабатывается. Пожалуйста, подождите."</string>
-    <string name="flair">"Стиль"</string>
+    <string name="flair">"Флейр"</string>
     <string name="spoiler">"Спойлер"</string>
-    <string name="no_flair">"Нет стиля"</string>
+    <string name="no_flair">"Нет флейра"</string>
     <string name="error_loading_flairs">"Ошибка загрузки стилей.
-Нажмите, чтобы перезагрузить."</string>
+Нажмите, чтобы повторить попытку."</string>
+
+    <!-- Fuzzy -->
     <string name="no_rule">"Правил нет"</string>
     <string name="error_loading_rules">"Ошибка загрузки правил.
-Нажмите, чтобы перезагрузить."</string>
+Нажмите, чтобы повторить попытку."</string>
     <string name="error_loading_rules_without_retry">"Ошибка загрузки правил"</string>
     <string name="search_in">"Искать в"</string>
     <string name="all_subreddits">"Все сабреддиты"</string>
@@ -211,14 +230,14 @@
     <string name="sort_comments">"Комментарии"</string>
     <string name="sort_activity">"Активность"</string>
     <string name="sort_confidence">"Доверенное"</string>
-    <string name="sort_old">"Старый"</string>
+    <string name="sort_old">"Старые"</string>
     <string name="sort_qa">"ЧаВО"</string>
     <string name="sort_live">"Непрерывно"</string>
-    <string name="sort_time_hour">"Час"</string>
-    <string name="sort_time_day">"День"</string>
-    <string name="sort_time_week">"Неделя"</string>
-    <string name="sort_time_month">"Месяц"</string>
-    <string name="sort_time_year">"Год"</string>
+    <string name="sort_time_hour">"За час"</string>
+    <string name="sort_time_day">"За день"</string>
+    <string name="sort_time_week">"За неделю"</string>
+    <string name="sort_time_month">"За месяц"</string>
+    <string name="sort_time_year">"За год"</string>
     <string name="sort_time_all_time">"За всё время"</string>
     <string name="no_activity_found_for_share">"Нечем обработать действие «Поделиться»."</string>
     <string name="archived_post_vote_unavailable">"Архивный пост. Голосование недоступно."</string>
@@ -288,6 +307,8 @@
     <string name="notification_summary_message">"Новое сообщение"</string>
     <string name="notification_summary_subreddit">"Сабреддит"</string>
     <string name="notification_summary_award">"Награда"</string>
+
+    <!-- Fuzzy -->
     <string name="notification_new_messages">"Новых сообщений: %1$d"</string>
     <string name="label_account">"Аккаунт"</string>
     <string name="label_post">"Пост"</string>
@@ -300,40 +321,44 @@
     <string name="settings_amoled_dark_title">"Чёрная AMOLED"</string>
     <string name="settings_interface_title">"Интерфейс"</string>
     <string name="settings_gestures_and_buttons_title">"Жесты и кнопки"</string>
-    <string name="settings_save_front_page_scrolled_position_title">"Сохранять прокрученную позицию на «Главной»"</string>
+    <string name="settings_save_front_page_scrolled_position_title">"Сохранять позицию прокрутки на «Главной»"</string>
     <string name="settings_save_front_page_scrolled_position_summary">"Просмотр новых постов после обновления на «Главной» (Заглавная страница, сортировка: лучшее)"</string>
     <string name="settigns_video_title">"Видео"</string>
     <string name="settings_video_autoplay_title">"Автовоспроизведение видео"</string>
     <string name="settings_mute_autoplaying_videos_title">"Отключать звук у автовоспроизводящихся видео"</string>
     <string name="settings_autoplay_nsfw_videos_title">"Автовоспроизведение NSFW-видео"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Автоматическое воспроизведение видео (портрет)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Начинать автовоспроизведение, когда станет доступно %1$d%% видео"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Автоматическое воспроизведение видео (альбом)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Начинать автовоспроизведение, когда станет доступно %1$d%% видео"</string>
     <string name="settings_immersive_interface_title">"Режим погружения"</string>
     <string name="settings_immersive_interface_summary">"Применимо не ко всем страницам"</string>
     <string name="settings_immersive_interface_ignore_nav_bar_title">"Не использовать панель навигации в режиме погружения"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_summary">"Предотвратить лишнее заполнения нижней панели навигации"</string>
+    <string name="settings_immersive_interface_ignore_nav_bar_summary">"Предотвращает лишний отступ нижней панели навигации"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Настройка вкладок на главном экране"</string>
-    <string name="settings_enable_bottom_app_bar_title">"Включить нижнюю навигацию"</string>
+    <string name="settings_enable_bottom_app_bar_title">"Включить нижнюю панель навигации"</string>
     <string name="settings_category_post_and_comment_title">"Посты и комментарии"</string>
-    <string name="settings_vote_buttons_on_the_right_title">"Кнопка голосования справа"</string>
+    <string name="settings_vote_buttons_on_the_right_title">"Кнопки голосования справа"</string>
     <string name="settings_volume_keys_navigate_comments_title">"Навигация кнопками громкости между комментариями в постах"</string>
-    <string name="settings_volume_keys_navigate_posts_title">"Навигация кнопками громкости в постах"</string>
+    <string name="settings_volume_keys_navigate_posts_title">"Навигация кнопками громкости межу постами"</string>
     <string name="settings_mute_video_title">"Видео без звука"</string>
     <string name="settings_mute_nsfw_video_title">"NSFW-видео без звука"</string>
 
     <!-- Fuzzy -->
     <string name="settings_automatically_try_redgifs_title">"Автопопытка доступа к Redgifs, если видео на Gfycat удалены."</string>
-    <string name="settings_video_player_ignore_nav_bar_title">"Не использовать панель навигации в видеоплеере"</string>
-    <string name="settings_video_player_ignore_nav_bar_summary">"Предотвратить случайные нажатия"</string>
+    <string name="settings_video_player_ignore_nav_bar_title">"Не использовать панель навигации в видеопроигрывателе"</string>
+    <string name="settings_video_player_ignore_nav_bar_summary">"Предотвращает случайные нажатия"</string>
     <string name="settings_confirm_to_exit">"Подтверждать выход"</string>
     <string name="settings_category_comment_title">"Комментарий"</string>
     <string name="settings_show_top_level_comments_first_title">"Сначала показывать комментарии верхнего уровня"</string>
     <string name="settings_show_comment_divider_title">"Показывать разделитель комментариев"</string>
-    <string name="settings_comment_toolbar_hide_on_click">"Нажатие показывает/скрывает панель инструментов комментариев"</string>
+    <string name="settings_comment_toolbar_hide_on_click">"Нажатие показывает/скрывает панель инструментов комментария"</string>
     <string name="settings_fully_collapse_comment_title">"Полностью свернуть комментарий"</string>
-    <string name="settings_comment_toolbar_hidden">"Скрыть панель инструментов комментариев по умолчанию"</string>
+    <string name="settings_comment_toolbar_hidden">"Скрыть панель инструментов комментария по умолчанию"</string>
     <string name="settings_show_absolute_number_of_votes_title">"Показывать абсолютное количество голосов"</string>
     <string name="settings_show_elapsed_time">"Показывать прошедшее время в постах и комментариях"</string>
     <string name="settings_time_format_title">"Формат времени"</string>
@@ -342,11 +367,11 @@
     <string name="settings_show_divider_in_compact_layout">"Показывать разделитель"</string>
     <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"Показывать миниатюры слева"</string>
     <string name="settings_swap_tap_and_long_title">"Поменять местами касание и долгое нажатие в комментариях"</string>
-    <string name="settings_swipe_to_go_back_title">"Правый жест для возврата"</string>
+    <string name="settings_swipe_to_go_back_title">"Провести вправо для возврата"</string>
     <string name="settings_swipe_to_go_back_summary">"Не применяется ко всем страницам"</string>
-    <string name="settings_lock_jump_to_next_top_level_comment_button_title">"Блокировать переход к следующей кнопке комментариев верхнего уровня"</string>
+    <string name="settings_lock_jump_to_next_top_level_comment_button_title">"Заблокировать кнопку перехода к следующему комментарию верхнего уровня"</string>
     <string name="settings_lock_bottom_app_bar_title">"Заблокировать нижнюю панель навигации"</string>
-    <string name="settings_swipe_up_to_hide_jump_to_next_top_level_comment_button_title">"Жест вверх, чтобы скрыть кнопку перехода к следующему верхнему уровню комментария"</string>
+    <string name="settings_swipe_up_to_hide_jump_to_next_top_level_comment_button_title">"Провести вверх, чтобы скрыть кнопку перехода к следующему комментарию верхнего уровня"</string>
     <string name="settings_lazy_mode_interval_title">"Интервал ленивого режима"</string>
     <string name="settings_font_title">"Шрифт"</string>
     <string name="settings_preview_font_title">"Предпросмотр шрифтов"</string>
@@ -382,7 +407,7 @@
     <string name="settings_credits_material_icons_title">"Значки Material"</string>
     <string name="settings_open_source_title">"Открытый исходный код"</string>
     <string name="settings_open_source_summary">"Оцените его на Github, если вам нравится это приложение"</string>
-    <string name="settings_rate_title">"Оцените на Google Play"</string>
+    <string name="settings_rate_title">"Оцените в Google Play"</string>
     <string name="settings_rate_summary">"Поставьте мне оценку 5 звёзд, и я буду очень счастлив"</string>
     <string name="settings_email_title">"Электронная почта"</string>
     <string name="settings_email_summary">"docilealligator.app@gmail.com"</string>
@@ -417,11 +442,11 @@
     <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"Путь мультиреддита (/user/yourusername/m/yourmultiredditname)"</string>
     <string name="settings_tab_username">"Имя пользователя (без префикса u/)"</string>
-    <string name="no_developer_easter_egg">"Здесь нет вариантов разработчика"</string>
+    <string name="no_developer_easter_egg">"Здесь нет настроек для разработчика"</string>
     <string name="no_link_available">"Не могу получить ссылку"</string>
     <string name="exit_when_submit">"Выйти?"</string>
     <string name="exit_when_submit_post_detail">"Пост всё равно будет отправлен, даже если вы уйдёте отсюда."</string>
-    <string name="exit_when_edit_post_detail">"Пост может быть отправлено, даже если вы уйдёте отсюда."</string>
+    <string name="exit_when_edit_post_detail">"Пост может быть отправлен, даже если вы уйдёте отсюда."</string>
     <string name="exit_when_edit_comment_detail">"Комментарий всё ещё может быть отправлен, даже если вы уйдёте отсюда."</string>
     <string name="discard">"Отменить?"</string>
     <string name="discard_detail">"Все черновики НЕ будут сохранены."</string>
@@ -430,7 +455,7 @@
     <string name="no_data_received">"Данные не получены"</string>
     <string name="no_image_path_received">"Путь к изображению не получен"</string>
     <string name="no_video_path_received">"Путь к видео не получен"</string>
-    <string name="cannot_handle_intent">"Невозможно обработать запрос «Поделиться»"</string>
+    <string name="cannot_handle_intent">"Невозможно обработать действие «Поделиться»"</string>
     <string name="share">"Поделиться"</string>
     <string name="no_email_client">"Клиент электронной почты не найден"</string>
     <string name="no_app">"Приложение недоступно"</string>
@@ -444,21 +469,30 @@
     <string name="post_layout_compact">"Компактный стиль"</string>
     <string name="elapsed_time_just_now">"Только что"</string>
     <string name="elapsed_time_a_minute_ago">"1 минута"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_minutes_ago">"%1$d мин."</string>
     <string name="elapsed_time_an_hour_ago">"1 час"</string>
-    <string name="elapsed_time_hours_ago">"%1$d час."</string>
+
+    <!-- Fuzzy -->
+    <string name="elapsed_time_hours_ago">"%1$d ч."</string>
     <string name="elapsed_time_yesterday">"Вчера"</string>
 
     <!-- I am not sure how to unify this one. Plural form differs depending on numerals. -->
+    <!-- Fuzzy -->
     <string name="elapsed_time_days_ago">"%1$d дн."</string>
     <string name="elapsed_time_a_month_ago">"1 месяц"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_months_ago">"%1$d мес."</string>
     <string name="elapsed_time_a_year_ago">"1 год"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_years_ago">"%1$d лет"</string>
     <string name="error_getting_multi_reddit_data">"Ошибка при получении данных о мультиреддите"</string>
     <string name="error_loading_multi_reddit_list">"Невозможно синхронизировать мультиреддиты"</string>
     <string name="error_loading_subscriptions">"Невозможно синхронизировать подписки"</string>
-    <string name="share_this_app">"Попробуйте Infinity для Reddit, отличный клиент для Реддита!
+    <string name="share_this_app">"Попробуйте «Infinity для Reddit», отличный клиент для Reddit!
 https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit"</string>
     <string name="error_getting_subreddit_name">"Ошибка при получении названия сабреддита"</string>
     <string name="share_post_link">"Поделиться ссылкой на пост"</string>
@@ -489,6 +523,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"Невозможно создать мультиреддит"</string>
     <string name="duplicate_multi_reddit">"Мультиреддит уже существует"</string>
     <string name="edit_multi_reddit_failed">"Невозможно изменить мультиреддит"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_multi_reddit_success">"Успешно удалено"</string>
     <string name="delete_multi_reddit_failed">"Ошибка удаления"</string>
     <string name="delete_multi_reddit_dialog_message">"Вы уверены?"</string>
@@ -507,8 +543,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_color_primary_detail">"Применяется к: панель инструментов"</string>
     <string name="theme_item_color_primary_dark">"Основной тёмный цвет"</string>
     <string name="theme_item_color_primary_dark_detail">"Применяется к: панель статуса"</string>
-    <string name="theme_item_color_accent">"Акцент цвета"</string>
-    <string name="theme_item_color_accent_detail">"Применяется к: панель выполнения и т.д."</string>
+    <string name="theme_item_color_accent">"Цвет акцента"</string>
+    <string name="theme_item_color_accent_detail">"Применяется к: панель загрузки и т.д."</string>
     <string name="theme_item_color_primary_light_theme">"Основной цвет светлой темы"</string>
     <string name="theme_item_color_primary_light_theme_detail">"Применяется к: фон плавающей кнопки действия"</string>
     <string name="theme_item_primary_text_color">"Цвет основного текста"</string>
@@ -517,20 +553,20 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_secondary_text_color_detail">"Применяется к: дополнительный текст"</string>
     <string name="theme_item_post_title_color">"Цвет заголовка поста"</string>
     <string name="theme_item_post_title_color_detail">"Применяется к: заголовок поста"</string>
-    <string name="theme_item_post_content_color">"Применяется к: заголовок поста"</string>
+    <string name="theme_item_post_content_color">"Цвет содержимого поста"</string>
     <string name="theme_item_post_content_color_detail">"Применяется к: содержимое поста"</string>
     <string name="theme_item_comment_color">"Цвет комментария"</string>
     <string name="theme_item_comment_color_detail">"Применяется к: комментарий"</string>
     <string name="theme_item_button_text_color">"Цвет текста кнопки"</string>
     <string name="theme_item_button_text_color_detail">"Применяется к: текст на кнопке"</string>
-    <string name="theme_item_chip_text_color">"Цвет чип текста"</string>
+    <string name="theme_item_chip_text_color">"Цвет текста чипа"</string>
     <string name="theme_item_chip_text_color_detail">"Применяется к: кнопка «Подписаться»"</string>
     <string name="theme_item_link_color">"Цвет ссылки"</string>
-    <string name="theme_item_link_color_detail">"Применяется к: URL"</string>
+    <string name="theme_item_link_color_detail">"Применяется к: ссылка"</string>
     <string name="theme_item_received_message_text_color">"Цвет текста полученного сообщения"</string>
     <string name="theme_item_received_message_text_color_detail">"Применяется к: полученные личные сообщения"</string>
     <string name="theme_item_sent_message_text_color">"Цвет текста отправленного сообщения"</string>
-    <string name="theme_item_sent_message_text_color_detail">"Применяется к: отправленное личное сообщение"</string>
+    <string name="theme_item_sent_message_text_color_detail">"Применяется к: отправленные личные сообщения"</string>
     <string name="theme_item_background_color">"Цвет фона"</string>
     <string name="theme_item_background_color_detail">"Применяется к: фон каждой страницы и панели навигации"</string>
     <string name="theme_item_card_view_background_color">"Цвет фона карточки"</string>
@@ -546,8 +582,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_sent_message_background_color">"Цвет фона отправленного сообщения"</string>
     <string name="theme_item_sent_message_background_color_detail">"Применяется к: фон отправленного личного сообщения"</string>
     <string name="theme_item_bottom_app_bar_background_color">"Цвет нижней панели навигации"</string>
-    <string name="theme_item_bottom_app_bar_background_color_detail">"Применяется к: кнопки панели навигации"</string>
-    <string name="theme_item_primary_icon_color">"Цвет основного значка"</string>
+    <string name="theme_item_bottom_app_bar_background_color_detail">"Применяется к: нижняя панель навигации"</string>
+    <string name="theme_item_primary_icon_color">"Основной цвет значка"</string>
     <string name="theme_item_primary_icon_color_detail">"Применяется к: значки в панели навигации"</string>
     <string name="theme_item_bottom_app_bar_icon_color">"Цвет значка нижней панели"</string>
     <string name="theme_item_bottom_app_bar_icon_color_detail">"Применяется к: значки на нижней панели навигации"</string>
@@ -555,7 +591,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_post_icon_and_info_color_detail">"Применяется к: значки, оценка и количество комментариев в постах"</string>
     <string name="theme_item_comment_icon_and_info_color">"Значок комментария и цвет информации"</string>
     <string name="theme_item_comment_icon_and_info_color_detail">"Применяется к: значки и оценка в комментариях"</string>
-    <string name="theme_item_fab_icon_color">"Цвет плавающей кнопки действий"</string>
+    <string name="theme_item_fab_icon_color">"Цвет значка плавающей кнопки действий"</string>
     <string name="theme_item_fab_icon_color_detail">"Применяется к: значок плавающей кнопки действий"</string>
     <string name="theme_item_send_message_icon_color">"Цвет значка отправленного сообщения"</string>
     <string name="theme_item_send_message_icon_color_detail">"Применяется к: значок отправленного личного сообщения"</string>
@@ -677,6 +713,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="edit_theme_name">"Изменить название темы"</string>
     <string name="edit_theme">"Изменить тему"</string>
     <string name="delete_theme">"Удалить тему"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_theme_dialog_message">"Удалить тему %1$s?"</string>
     <string name="share_theme">"Поделиться темой"</string>
     <string name="change_theme_name">"Сменить название"</string>
@@ -714,6 +752,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 Она не больна или что-то вроде того, но определённо может поправиться."</string>
     <string name="edit_multi_reddit">"Изменить мультиреддит"</string>
     <string name="delete_multi_reddit">"Удалить мультиреддит"</string>
+
+    <!-- Fuzzy -->
     <string name="n_awards">"%1$d наград"</string>
     <string name="one_award">"1 награда"</string>
     <string name="report">"Пожаловаться"</string>
@@ -828,6 +868,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="change_post_layout">"Изменить макет поста"</string>
     <string name="give_award_dialog_title">"Выдать награду?"</string>
     <string name="anonymous">"Аноним"</string>
+
+    <!-- Fuzzy -->
     <string name="give_award_error_message">"Код: %1$d/
 Сообщение: %2$s"</string>
     <string name="give_award_success">"Награда выдана"</string>
@@ -979,6 +1021,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_current_user_color_detail">"Применяется к: текущий пользователь в комментариях"</string>
     <string name="exclude_domains_hint">"Исключить домены"</string>
     <string name="anonymous_front_page_no_subscriptions">"Начните с присоединения к сабреддиту!"</string>
+
+    <!-- Fuzzy -->
     <string name="backup_settings_success">"Настройки успешно экспортированы в выбранную папку. Пароль созданного zip-архива – 123321. Пожалуйста, не изменяйте zip-файл."</string>
     <string name="create_zip_in_destination_directory_failed">"Невозможно создать zip-архив с резервной копией настроек в выбранной папке."</string>
     <string name="backup_some_settings_failed">"Невозможно создать резервную копию некоторых настроек, но другие были успешно экспортированы в выбранную папку."</string>
@@ -1014,6 +1058,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="suggest_title">"Предложить название"</string>
     <string name="suggest_title_failed">"Невозможно предложить название"</string>
     <string name="action_delete_logs">"Удалить журнал"</string>
+
+    <!-- Fuzzy -->
     <string name="inbox_with_count">"Входящие (%1$d)"</string>
     <string name="comment_continue_thread">"Продолжить обсуждение"</string>
 
@@ -1028,7 +1074,11 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="unsave_comment">"Удалить"</string>
     <string name="copy_multi_reddit_path">"Скопировать путь мультиреддита"</string>
     <string name="copy_multi_reddit_path_failed">"Невозможно скопировать путь мультиреддита"</string>
+
+    <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Отчёты о сбоях удалены"</string>
+
+    <!-- Fuzzy -->
     <string name="disable_nsfw_forever_message">"После включения NSFW будет навсегда отключено, независимо от того, включён параметр NSFW или нет. И эта функция необратима, единственный способ снова включить NSFW – это очистить данные приложения.
 
 Всё ещё хотите включить его?"</string>
@@ -1087,7 +1137,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="material_you_notification_title">"Применение «Material You»"</string>
     <string name="action_go_to_wiki">"Перейти к Вики"</string>
     <string name="action_playback_speed">"Скорость воспроизведения"</string>
-    <string name="about">"О программе"</string>
+    <string name="about">"Описание"</string>
     <string name="settings_link_handler_title">"Обработчик ссылок"</string>
     <string name="settings_main_page_back_button_action">"Действие кнопки возврата на главную страницу"</string>
     <string name="settings_open_navigation_drawer">"Открыть панель навигации"</string>
@@ -1101,7 +1151,9 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_app_lock_timeout_title">"Время ожидания блокировки приложения"</string>
     <string name="settings_enable_fold_support_title">"Включить поддержку складного телефона"</string>
     <string name="settings_default_playback_speed_title">"Скорость воспроизведения по умолчанию"</string>
-    <string name="settings_link_handler_value_external_browser">"Внешнее приложение"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_link_handler_value_external_browser">"Внешний браузер"</string>
     <string name="settings_link_handler_value_custom_tab">"Пользовательская вкладка"</string>
     <string name="settings_link_handler_value_internal_browser">"Встроенный браузер"</string>
     <string name="settings_legacy_autoplay_video_controller_ui_title">"Устаревший пользовательский интерфейс видеоконтроллера"</string>
@@ -1167,10 +1219,14 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="message_save_profile_failed">"Невозможно сохранить профиль %s"</string>
     <string name="post_poll_activity_label">"Пост для опроса"</string>
     <string name="action_open_external_browser">"Открыть в браузере"</string>
+
+    <!-- Fuzzy -->
     <string name="voting_length">"Продолжительность голосования: %1$d дн."</string>
     <string name="two_options_required">"Хороший опрос требует двух или более вариантов!"</string>
     <string name="bottom_sheet_post_poll">"Опрос"</string>
-    <string name="no_activity_found_for_external_browser">"Внешнее приложение отсутствует"</string>
+
+    <!-- Fuzzy -->
+    <string name="no_activity_found_for_external_browser">"Внешний браузер отсутствует"</string>
     <string name="settings_require_authentication_to_show_accounts">"Для отображения аккаунтов необходима аутентификация"</string>
     <string name="settings_custom_font_family_title">"Пользовательское семейство шрифтов"</string>
     <string name="settings_custom_title_font_family_title">"Пользовательское семейство шрифтов заголовка"</string>
@@ -1179,6 +1235,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_hide_text_post_content">"Скрыть содержание текстового поста"</string>
     <string name="settings_hide_comment_awards_title">"Скрыть награды за комментарии"</string>
     <string name="settings_show_fewer_toolbar_options_threshold_title">"Показывать меньше параметров панели инструментов, начиная с"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_fewer_toolbar_options_threshold_summary">"Уровень %1$d"</string>
     <string name="settings_show_author_avatar_title">"Показывать аватар автора"</string>
     <string name="settings_reddit_user_agreement_title">"Пользовательское соглашение Reddit"</string>
@@ -1209,4 +1267,33 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="comment_karma">"Карма комментария:"</string>
     <string name="awarder_karma">"Карма наградителя:"</string>
     <string name="awardee_karma">"Карма награждённого:"</string>
+    <string name="history_activity_label">"История"</string>
+    <string name="history">"История"</string>
+    <string name="settings_easier_to_watch_in_full_screen_title">"Удобный просмотр в полноэкранном режиме"</string>
+    <string name="clear_user_flair">"Очистить флейр"</string>
+    <string name="clear_user_flair_success">"Флейр пользователя очищен"</string>
+    <string name="extra_small">"Очень мелкий"</string>
+    <string name="handle_link">"Действие со ссылкой"</string>
+    <string name="invalid_link">"Неправильная ссылка"</string>
+    <string name="error_unsupported_video">"Медиафайл содержит видеодорожки, но ни одна из них не может быть воспроизведена на этом устройстве"</string>
+    <string name="error_unsupported_audio">"Медиафайл содержит аудиодорожки, но ни одна из них не может быть воспроизведена на этом устройстве"</string>
+    <string name="exo_controls_volume_up_description">"Увеличить громкость"</string>
+    <string name="exo_controls_volume_off_description">"Отключить звук"</string>
+    <string name="action_block_user">"Заблокировать пользователя"</string>
+    <string name="action_create_github_issue">"Создать проблему на GitHub"</string>
+    <string name="action_more_options">"Ещё…"</string>
+    <string name="settings_backup_settings_summary">"Пароль файла резервной копии «123321»."</string>
+    <string name="settings_navigation_drawer_enable_hide_karma_title">"Скрыть карму аккаунта"</string>
+    <string name="settings_hide_fab_in_post_feed">"Скрыть плавающую кнопку действий в ленте сообщений"</string>
+    <string name="settings_comment_divider_type">"Тип разделителя комментариев"</string>
+    <string name="block_user">"Заблокировать пользователя"</string>
+    <string name="block_user_success">"Заблокирован"</string>
+    <string name="block_user_failed">"Невозможно заблокировать пользователя"</string>
+    <string name="invalid_regex">"Неправильное регулярное выражение"</string>
+    <string name="load_more_posts_failed">"Невозможно загрузить больше постов.
+Нажмите, чтобы повторить попытку."</string>
+    <string name="no_more_posts">"Больше постов нет"</string>
+    <string name="image_index_in_gallery">"%1$d/%2$d"</string>
+    <string name="denied_notification_permission">"Разрешение на отображение уведомлений не предоставлено"</string>
+    <string name="go_to_settings">"Настройки"</string>
 </resources>

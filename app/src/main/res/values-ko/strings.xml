@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_activity_label">"로그인"</string>
+    <string name="comment_activity_label">"댓글 전송"</string>
+    <string name="comment_activity_label_is_replying">"답장"</string>
+    <string name="post_text_activity_label">"텍스트 글"</string>
+    <string name="subreddit_selection_activity_label">"서브레딧 선택"</string>
+    <string name="post_link_activity_label">"링크 글"</string>
+    <string name="post_image_activity_label">"사진 글"</string>
+    <string name="post_video_activity_label">"둥영상 글"</string>
+    <string name="rules_activity_label">"규칙"</string>
+    <string name="search_subreddits_activity_label">"서브레딧"</string>
+    <string name="edit_post_activity_label">"글 편집"</string>
+    <string name="edit_comment_activity_label">"댓글 편집"</string>
+    <string name="view_message_activity_label">"받은편지함"</string>
+    <string name="settings_activity_label">"설정"</string>
+    <string name="account_saved_thing_activity_label">"저장함"</string>
+    <string name="create_multi_reddit_activity_label">"멀티레딧 생성"</string>
+    <string name="subreddit_multiselection_activity_label">"서브레딧 선택"</string>
+    <string name="custom_theme_listing_activity_label">"커스텀 테마"</string>
+    <string name="customize_theme_activity_label">"테마 편집하기"</string>
+    <string name="customize_theme_activity_create_theme_label">"테마 만들기"</string>
+    <string name="theme_preview_activity_label">"테마 미리보기"</string>
+    <string name="edit_multi_reddit_activity_label">"멀티레딧 편집"</string>
+    <string name="selected_subeddits_activity_label">"선택된 서브레딧"</string>
+    <string name="report_activity_label">"신고"</string>
+
+    <!-- Fuzzy -->
+    <string name="view_imgur_media_activity_image_label">"사진 %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
+    <string name="view_imgur_media_activity_video_label">"둥영상 %1$d/%2$d"</string>
+    <string name="send_private_message_activity_label">"개인 메시지 보내기"</string>
+
+    <!-- Fuzzy -->
+    <string name="view_reddit_gallery_activity_image_label">"사진 %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
+    <string name="view_reddit_gallery_activity_gif_label">"Gif %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
+    <string name="view_reddit_gallery_activity_video_label">"둥영상 %1$d/%2$d"</string>
+    <string name="navigation_drawer_open">"네비게이션 드로어 열기"</string>
+    <string name="navigation_drawer_close">"네비게이션 드로어 닫기"</string>
+    <string name="action_download">"다운로드"</string>
+    <string name="action_refresh">"새로 고침"</string>
+    <string name="action_add_comment">"댓글 추가"</string>
+    <string name="action_save_post">"글 저장"</string>
+    <string name="action_view_crosspost_parent">"글 원본 보기"</string>
+    <string name="action_search">"검색"</string>
+    <string name="action_start_lazy_mode">"게으른 모드 시작"</string>
+    <string name="action_stop_lazy_mode">"게으른 모드 중지"</string>
+    <string name="action_send">"전송"</string>
+    <string name="action_sort">"정렬"</string>
+    <string name="action_hide_post">"글 숨기기"</string>
+    <string name="action_unhide_post">"글 숨기기 해제"</string>
+    <string name="action_edit_post">"글 편집"</string>
+    <string name="action_delete_post">"글 삭제"</string>
+    <string name="action_mark_nsfw">"NSFW 표기"</string>
+    <string name="action_unmark_nsfw">"NSFW 표기 해제"</string>
+    <string name="action_mark_spoiler">"스포일러 표기"</string>
+    <string name="action_unmark_spoiler">"스포일러 표기 해제"</string>
+    <string name="action_edit_flair">"플레어 편집"</string>
+    <string name="action_change_post_layout">"글 레이아웃 변경"</string>
+    <string name="action_save">"저장"</string>
+    <string name="action_edit_multi_reddit">"멀티레딧 편집"</string>
+    <string name="action_delete_multi_reddit">"멀티레딧 삭제"</string>
+    <string name="action_share">"공유"</string>
+    <string name="action_preview">"미리 보기"</string>
+    <string name="action_report">"신고"</string>
+    <string name="action_see_removed">"삭제된 항목 보기"</string>
+    <string name="action_set_wallpaper">"배경화면으로 설정"</string>
+    <string name="action_send_private_message">"개인 메시지 보내기"</string>
+    <string name="parse_json_response_error">"JSON 답변을 파싱하는데 오류가 발생했습니다"</string>
+    <string name="retrieve_token_error">"토큰을 가져오는데 실패했습니다"</string>
+    <string name="something_went_wrong">"문제가 생겼습니다. 나중에 다시 시도하세요."</string>
+    <string name="access_denied">"접근 금지됨"</string>
+    <string name="parse_user_info_error">"사용자 정보를 파싱하는데 오류가 발생했습니다"</string>
+    <string name="no_system_webview_error">"시스템의 웹뷰를 여는데 오류가 발생했습니다"</string>
+    <string name="error_loading_image_tap_to_retry">"사진을 로드하는데 오류가 발생했습니다. 재시도하려면 탭하세요."</string>
+    <string name="load_posts_error">"글들을 불러오는데 오류가 발생했습니다.
+재시도하려면 탭하세요."</string>
+    <string name="load_more_posts_error">"글들을 불러오는데 오류가 발생했습니다."</string>
+    <string name="load_post_error">"이 글을 로드하는데 오류가 발생했습니다.
+재시도하려면 탭하세요."</string>
+    <string name="search_subreddits_error">"서브레딧을 검색하는데 오류가 발생했습니다.
+재시도하려면 탭하세요."</string>
+    <string name="search_users_error">"사용자를 검색하는데 오류가 발생했습니다.
+재시도하려면 탭하세요."</string>
+    <string name="no_posts">"글들을 찾지 못함"</string>
+    <string name="no_comments">"댓글들을 찾지 못함"</string>
+    <string name="no_subreddits">"서브레딧들을 찾지 못함"</string>
+    <string name="no_users">"사용자들을 찾지 못함"</string>
+    <string name="no_multi_reddits">"멀티레딧들을 찾지 못함"</string>
+    <string name="no_storage_permission">"이 파일을 저장할 저장소 권한이 없음"</string>
+    <string name="load_comments_failed">"댓글들을 불러오는데 오류가 발생했습니다.
+재시도하려면 탭하세요."</string>
+    <string name="retry">"재시도"</string>
+    <string name="comments">"댓글들"</string>
+    <string name="no_comments_yet">"댓글이 아직 없습니다. 댓글을 쓸까요?"</string>
+    <string name="vote_failed">"투표 실패"</string>
+    <string name="refresh_post_failed">"글을 새로 고침하는데 오류가 발생했습니다"</string>
+    <string name="load_messages_failed">"메시지들을 로드하는데 오류가 발생했습니다.
+재시도하려면 탭하세요."</string>
+    <string name="no_messages">"비어 있음"</string>
+    <string name="nsfw">"NSFW"</string>
+
+    <!-- Fuzzy -->
+    <string name="karma_info">"카르마: %1$d"</string>
+
+    <!-- Fuzzy -->
+    <string name="karma_info_user_detail">"카르마:
+%1$d (%2$d + %3$d)"</string>
+    <string name="cakeday_info">"케이크날:
+%1$s"</string>
+    <string name="since">"가입:"</string>
+    <string name="profile">"프로필"</string>
+    <string name="subscriptions">"구독"</string>
+    <string name="multi_reddit">"멀티레딧"</string>
+    <string name="inbox">"받은편지함"</string>
+    <string name="upvoted">"+1 투표함"</string>
+    <string name="downvoted">"-1 투표함"</string>
+    <string name="hidden">"숨김"</string>
+    <string name="saved">"저장됨"</string>
+    <string name="gilded">"선물 단 글"</string>
+    <string name="settings">"설정"</string>
+
+    <!-- Fuzzy -->
+    <string name="subscribers_number_detail">"구독자 수: %1$d"</string>
+
+    <!-- Fuzzy -->
+    <string name="online_subscribers_number_detail">"온라인: %1$d"</string>
+    <string name="cannot_fetch_subreddit_info">"서브레딧 정보 불러올 수 없음"</string>
+    <string name="cannot_fetch_user_info">"사용자 정보 불러올 수 없음"</string>
+    <string name="cannot_fetch_sidebar">"사이드바 불러올 수 없음"</string>
+    <string name="cannot_fetch_multireddit">"멀티레딧 불러올 수 없음"</string>
+    <string name="subscribe">"구독하기"</string>
+    <string name="unsubscribe">"구독 해제하기"</string>
+    <string name="subscribed">"구독됨"</string>
+    <string name="subscribe_failed">"구독 실패"</string>
+    <string name="unsubscribed">"구독 해제됨"</string>
+    <string name="unsubscribe_failed">"구독 해제 실패"</string>
+    <string name="follow">"팔로우"</string>
+    <string name="unfollow">"언팔로우"</string>
+    <string name="followed">"팔로우됨"</string>
+    <string name="follow_failed">"팔로우 실패"</string>
+    <string name="unfollowed">"언팔로우됨"</string>
+    <string name="unfollow_failed">"언팔로우 실패"</string>
+    <string name="content_description_banner_imageview">"서브레딧 배너 사진"</string>
+    <string name="app_label">"인피니티"</string>
+    <string name="search_hint">"아무거나 검색"</string>
+    <string name="no_posts_no_lazy_mode">"글 없음"</string>
+    <string name="lazy_mode_start">"게으른 모드는 %1$.1fs 이후 시작됩니다"</string>
+    <string name="lazy_mode_stop">"게으른 모드 중지됨"</string>
+    <string name="write_comment_hint">"흥미로운 생각들 여기에 적기"</string>
+    <string name="comment_content_required">"흥미로운 생각이 무엇인가요?"</string>
+    <string name="sending_comment">"전송 중"</string>
+    <string name="send_comment_success">"댓글 전송됨"</string>
+    <string name="send_comment_failed">"이 댓글을 전송할 수 없습니다"</string>
+    <string name="send_message_username_hint">"사용자"</string>
+    <string name="send_message_subject_hint">"제목 (최대 100자)"</string>
+    <string name="send_message_content_hint">"메시지"</string>
+    <string name="reply_message_failed">"이 메시지에 답변할 수 없습니다"</string>
+    <string name="error_getting_message">"이 메시지를 불러오는데 오류가 발생했습니다"</string>
+    <string name="message_username_required">"누구에게 이 메시지를 전송할까요?"</string>
+    <string name="message_subject_required">"메시지는 제목을 필요로 합니다"</string>
+    <string name="message_content_required">"메시지는 내용을 필요로 합니다"</string>
+    <string name="sending_message">"전송 중"</string>
+    <string name="send_message_success">"메시지 전송됨"</string>
+    <string name="send_message_failed">"이 메시지를 전송할 수 없습니다"</string>
+    <string name="select_a_subreddit">"서브레딧을 먼저 선택하세요"</string>
+
+    <!-- Fuzzy -->
+    <string name="title_required">"글은 좋은 제목이 필요합니다"</string>
+    <string name="link_required">"링크가 어디 있죠?"</string>
+    <string name="select_an_image">"사진을 먼저 선택하세요"</string>
+    <string name="posting">"글 게시 중"</string>
+    <string name="post_failed">"게시에 실패했습니다"</string>
+    <string name="error_processing_image">"사진 처리에 오류가 발생했습니다"</string>
+    <string name="error_processing_video">"둥영상 처리에 오류가 발생했습니다"</string>
+    <string name="download_started">"다운로드가 시작되었습니다. 알림창에서 진행 상태를 확인하세요."</string>
+    <string name="comment_load_more_comments">"댓글들 더 불러오기"</string>
+    <string name="comment_load_more_comments_failed">"불러오기에 실패했습니다. 재시도하려면 탭하세요."</string>
+    <string name="loading">"로딩 중"</string>
+    <string name="post_title_hint">"제목"</string>
+    <string name="post_text_content_hint">"내용"</string>
+    <string name="choose_a_subreddit">"서브레딧을 선택하세요"</string>
+    <string name="rules">"규칙"</string>
+    <string name="post_link_hint">"URL"</string>
+    <string name="subreddits">"서브레딧들"</string>
+    <string name="users">"사용자들"</string>
+    <string name="multi_reddits">"멀티레딧들"</string>
+    <string name="bottom_sheet_post_text">"텍스트"</string>
+    <string name="bottom_sheet_post_link">"링크"</string>
+    <string name="bottom_sheet_post_image">"사진"</string>
+    <string name="bottom_sheet_post_video">"둥영상"</string>
+    <string name="select_from_gallery">"사진을 선택하기"</string>
+    <string name="select_again">"다시 선택"</string>
+    <string name="error_getting_image">"사진을 불러오는데 오류가 발생했습니다"</string>
+    <string name="error_getting_video">"둥영상을 불러오는데 오류가 발생했습니다"</string>
+    <string name="no_camera_available">"사용 가능한 카메라 어플이 없습니다"</string>
+    <string name="error_creating_temp_file">"임시 파일을 생성하는데 오류가 발생했습니다"</string>
+    <string name="video_is_processing">"둥영상을 처리중입니다. 잠시만 기다려주세요."</string>
+    <string name="image_is_processing">"사진을 처리중입니다. 잠시만 기다려주세요."</string>
+    <string name="gif_is_processing">"Gif를 처리중입니다. 잠시만 기다려주세요."</string>
+    <string name="flair">"플레어"</string>
+    <string name="spoiler">"스포일러"</string>
+    <string name="no_flair">"플레어 없음"</string>
+    <string name="error_loading_flairs">"플레어를 로드하는데 오류가 발생했습니다.
+재시도하려면 탭하세요."</string>
+
+    <!-- Fuzzy -->
+    <string name="no_rule">"규칙 없음"</string>
+    <string name="error_loading_rules">"규칙을 로드하는데 오류가 발생했습니다.
+재시도하려면 탭하세요."</string>
+    <string name="error_loading_rules_without_retry">"규칙을 로드하는데 오류가 발생했습니다"</string>
+    <string name="search_in">"여기에서 검색"</string>
+    <string name="all_subreddits">"모든 서브레딧"</string>
+    <string name="sort_best">"최고"</string>
+    <string name="sort_hot">"인기"</string>
+    <string name="sort_new">"신규"</string>
+    <string name="sort_random">"랜덤"</string>
+    <string name="sort_rising">"상승세"</string>
+    <string name="sort_top">"톱"</string>
+    <string name="sort_controversial">"논쟁성"</string>
+    <string name="sort_relevance">"관련성"</string>
+    <string name="sort_comments">"댓글들"</string>
+    <string name="sort_activity">"활성"</string>
+    <string name="sort_confidence">"확신성"</string>
+    <string name="sort_old">"예전"</string>
+    <string name="sort_qa">"QA"</string>
+    <string name="sort_live">"실시간"</string>
+    <string name="sort_time_hour">"시간"</string>
+    <string name="sort_time_day">"일"</string>
+    <string name="sort_time_week">"주"</string>
+    <string name="sort_time_month">"월"</string>
+    <string name="sort_time_year">"년"</string>
+    <string name="sort_time_all_time">"전체"</string>
+    <string name="no_activity_found_for_share">"공유를 할 수 있는 어플이 없습니다"</string>
+    <string name="archived_post_vote_unavailable">"보관된 글. 투표할 수 없습니다."</string>
+    <string name="archived_post_comment_unavailable">"보관된 글. 댓글을 달 수 없습니다."</string>
+    <string name="archived_post_reply_unavailable">"보관된 글. 답장할 수 없습니다."</string>
+    <string name="locked_post_comment_unavailable">"잠긴 글. 댓글을 달 수 없습니다."</string>
+    <string name="locked_post_reply_unavailable">"잠긴 글. 답장할 수 없습니다."</string>
+    <string name="text">"텍스트"</string>
+    <string name="link">"링크"</string>
+    <string name="image">"사진"</string>
+    <string name="video">"비디오"</string>
+    <string name="gif">"GIF"</string>
+    <string name="gallery">"갤러리"</string>
+    <string name="best">"최고"</string>
+    <string name="search">"검색"</string>
+    <string name="posting_video">"둥영상 올리는 중"</string>
+    <string name="posting_image">"사진 올리는 중"</string>
+    <string name="please_wait">"기다려 주세요"</string>
+
+    <!-- Fuzzy -->
+    <string name="add_account">"계정 추가"</string>
+    <string name="anonymous_account">"익명"</string>
+    <string name="log_out">"로그아웃"</string>
+    <string name="press_here_to_login">"여기를 눌러 로그인하세요"</string>
+    <string name="login_first">"먼저 로그인하세요"</string>
+    <string name="post_saved_success">"글 저장됨"</string>
+    <string name="post_saved_failed">"글을 저장할 수 없습니다"</string>
+    <string name="post_unsaved_success">"글 저장 해제됨"</string>
+    <string name="post_unsaved_failed">"글을 저장 해제할 수 없습니다"</string>
+    <string name="post_hide_success">"글 숨겨짐"</string>
+    <string name="post_hide_failed">"글을 숨길 수 없습니다"</string>
+    <string name="post_unhide_success">"글 숨김 해제됨"</string>
+    <string name="thing_favorite_failed">"즐겨찾기 설정 실패"</string>
+    <string name="thing_unfavorite_failed">"즐겨찾기 해제 실패"</string>
+    <string name="post_unhide_failed">"글을 숨김 해제할 수 없습니다"</string>
+    <string name="delete_this_post">"이 글 삭제"</string>
+    <string name="delete_this_comment">"이 댓글 삭제"</string>
+    <string name="are_you_sure">"정말로 실행할까요?"</string>
+    <string name="edit">"편집"</string>
+    <string name="delete">"삭제"</string>
+    <string name="see_removed_comment">"삭제된 댓글 보기"</string>
+    <string name="fetching_removed_comment">"삭제된 댓글 가져오는 중"</string>
+    <string name="show_removed_comment_failed">"삭제된 댓글을 찾을 수 없습니다"</string>
+    <string name="fetching_removed_post">"삭제된 글 가져오는 중"</string>
+    <string name="show_removed_post_failed">"삭제된 글을 찾을 수 없습니다"</string>
+    <string name="cancel">"취소"</string>
+    <string name="ok">"확인"</string>
+    <string name="edit_success">"성공적으로 편집"</string>
+    <string name="delete_post_success">"성공적으로 삭제"</string>
+    <string name="delete_post_failed">"삭제 실패"</string>
+    <string name="mark_nsfw_success">"성공적으로 NSFW 표기"</string>
+    <string name="mark_nsfw_failed">"NSFW 표기 실패"</string>
+    <string name="unmark_nsfw_success">"성공적으로 NSFW 표기 해제"</string>
+    <string name="unmark_nsfw_failed">"NSFW 표기 해제 실패"</string>
+    <string name="mark_spoiler_success">"성공적으로 스포일러 표기"</string>
+    <string name="mark_spoiler_failed">"스포일러 표기 실패"</string>
+    <string name="unmark_spoiler_success">"성공적으로 스포일러 표기 해제"</string>
+    <string name="unmark_spoiler_failed">"스포일러 표기 해제 실패"</string>
+    <string name="update_flair_success">"성공적으로 플레어 변경"</string>
+    <string name="update_flair_failed">"플레어 변경에 실패했습니다"</string>
+    <string name="edit_flair">"플레어 편집"</string>
+    <string name="only_allow_64_chars">"64자 이하로만 허용"</string>
+    <string name="view_all_comments">"여기를 눌러 모든 댓글을 확인하세요"</string>
+    <string name="notification_summary_account">"계정"</string>
+    <string name="notification_summary_message">"새로운 메시지"</string>
+    <string name="notification_summary_subreddit">"서브레딧"</string>
+    <string name="notification_summary_award">"수상"</string>
+
+    <!-- Fuzzy -->
+    <string name="notification_new_messages">"%1$d 개의 새 메세지"</string>
+    <string name="label_account">"계정"</string>
+    <string name="label_post">"게시"</string>
+    <string name="label_preferences">"설정"</string>
+    <string name="account_switched">"계정이 변경되었습니다. 다른 모든 페이지가 제거되었습니다."</string>
+    <string name="settings_notification_master_title">"알림"</string>
+    <string name="settings_notification_enable_notification_title">"알림 활성화"</string>
+    <string name="settings_notification_interval_title">"알림 확인 주기"</string>
+    <string name="settings_theme_title">"테마"</string>
+    <string name="settings_amoled_dark_title">"아몰레드 다크"</string>
+    <string name="settings_interface_title">"인터페이스"</string>
+    <string name="settings_gestures_and_buttons_title">"제스처와 버튼"</string>
+    <string name="settings_save_front_page_scrolled_position_title">"홈에서 스크롤 위치 저장"</string>
+    <string name="settings_save_front_page_scrolled_position_summary">"홈에서 새로고침후 새게시글 둘러보기(프론트 페이지, 정렬기준:최고)"</string>
+    <string name="settigns_video_title">"둥영상"</string>
+    <string name="settings_video_autoplay_title">"둥영상 자동 재생"</string>
+    <string name="settings_mute_autoplaying_videos_title">"자동 재생된 둥영상 음소거"</string>
+    <string name="settings_autoplay_nsfw_videos_title">"NSFW 둥영상 자동 재생"</string>
+    <string name="settings_start_autoplay_visible_area_offset_portrait_title">"화면에 보이지 않아도 자동재생(초상화)"</string>
+    <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"영상이 보일시 자동재생"</string>
+    <string name="settings_start_autoplay_visible_area_offset_landscape_title">"화면에 보이지 않아도 자동재생(렌드스케이프)"</string>
+    <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"보일경우 자동재생 비활성화"</string>
+    <string name="settings_immersive_interface_summary">"모든 페이지에 적용되지 않음"</string>
+    <string name="settings_customize_tabs_in_main_page_title">"메인 페이지에 커스터마이징 탭"</string>
+    <string name="settings_enable_bottom_app_bar_title">"하단 내비게이션 활성화"</string>
+    <string name="settings_category_post_and_comment_title">"게시글과 댓글"</string>
+    <string name="settings_vote_buttons_on_the_right_title">"투표버튼 우측으로 이동"</string>
+    <string name="settings_volume_keys_navigate_comments_title">"볼륨키로 게시글 댓글 이동"</string>
+    <string name="settings_volume_keys_navigate_posts_title">"볼륨 키로 포스트 스크롤하기"</string>
+    <string name="settings_mute_video_title">"둥영상 음소거"</string>
+    <string name="settings_mute_nsfw_video_title">"NSFW 둥영상 음소거"</string>
+    <string name="settings_automatically_try_redgifs_title">"Gfycat 비디오가 제거되었을 시 자동으로 Redgifs 접근 시도하기"</string>
+    <string name="settings_video_player_ignore_nav_bar_title">"영상에서 내비게이션 바 무시"</string>
+    <string name="settings_confirm_to_exit">"나갈 때 확인"</string>
+    <string name="settings_category_comment_title">"댓글"</string>
+    <string name="settings_show_top_level_comments_first_title">"가장 높은 댓글 우선 표시"</string>
+    <string name="settings_comment_toolbar_hide_on_click">"터치하여 댓글 툴바 표시/숨기기"</string>
+    <string name="settings_fully_collapse_comment_title">"댓글 숨기기"</string>
+    <string name="settings_comment_toolbar_hidden">"댓글 툴바 기본으로 숨김"</string>
+    <string name="settings_show_absolute_number_of_votes_title">"투표수 표시"</string>
+    <string name="settings_show_elapsed_time">"게시글과 댓글 지나간시간 표시"</string>
+    <string name="settings_time_format_title">"시간 형식"</string>
+    <string name="settings_category_post_title">"글"</string>
+    <string name="settings_default_post_layout">"기본 글 레이아웃"</string>
+    <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"썸네일 좌측으로 표시"</string>
+    <string name="settings_swap_tap_and_long_title">"댓글에서 터치와 길게 누르는걸 변경"</string>
+    <string name="settings_swipe_to_go_back_title">"오른쪽으로 밀어 돌아가기"</string>
+    <string name="settings_swipe_to_go_back_summary">"모든 페이지에 적용되지않음"</string>
+    <string name="settings_lock_bottom_app_bar_title">"내비게이션 바 잠근"</string>
+    <string name="settings_lazy_mode_interval_title">"게으른 모드 간격"</string>
+    <string name="settings_font_title">"폰트"</string>
+    <string name="settings_preview_font_title">"폰트 미리보기"</string>
+    <string name="settings_font_summary">"폰트"</string>
+    <string name="settings_title_font_summary">"제목"</string>
+    <string name="settings_content_font_summary">"콘텐츠"</string>
+    <string name="settings_enable_nsfw_title">"NSFW 활성화"</string>
+    <string name="settings_blur_nsfw_title">"NSFW 사진 흐리게 하기"</string>
+    <string name="settings_blur_spoiler_title">"스포일러 사진 흐리게 하기"</string>
+    <string name="settings_about_master_title">"정보"</string>
+    <string name="settings_credits_master_title">"크레딧"</string>
+    <string name="settings_credits_best_rocket_icon_title">"로켓 아이콘"</string>
+    <string name="settings_open_source_title">"오픈 소스"</string>
+    <string name="settings_open_source_summary">"어플을 좋아한다면 깃허브에서 별표하세요"</string>
+    <string name="settings_rate_title">"구글 플레이에서 리뷰"</string>
+    <string name="settings_rate_summary">"별표 5점을 주신다면 감사하겠습니다"</string>
+    <string name="settings_email_title">"이메일"</string>
+    <string name="settings_email_summary">"docilealligator.app@gmail.com"</string>
+    <string name="settings_reddit_account_title">"레딧 계정"</string>
+    <string name="settings_reddit_account_summary">"u/Hostilenemy"</string>
+    <string name="settings_subreddit_title">"서브레딧"</string>
+    <string name="settings_subreddit_summary">"r/Infinity_For_Reddit"</string>
+    <string name="settings_share_title">"공유"</string>
+    <string name="settings_version_summary">"버전 %s"</string>
+    <string name="settings_customize_light_theme_title">"라이트 테마"</string>
+    <string name="settings_customize_dark_theme_title">"다크 테마"</string>
+    <string name="settings_customize_amoled_theme_title">"아몰레드 테마"</string>
+    <string name="settings_manage_themes_title">"테마 관리"</string>
+    <string name="settings_advanced_master_title">"고급"</string>
+    <string name="settings_delete_all_subreddits_data_in_database_title">"데이터베이스의 모든 서브레딧 삭제"</string>
+    <string name="settings_delete_all_users_data_in_database_title">"데이터베이스의 모든 사용자 삭제"</string>
+    <string name="settings_reset_all_settings_title">"모든 설정 초기화"</string>
+    <string name="share">"공유"</string>
+    <string name="no_email_client">"이메일 클라이언트 찾을 수 없음"</string>
+    <string name="no_app">"사용 가능한 어플 없음"</string>
+    <string name="comment_saved_success">"댓글 저장됨"</string>
+    <string name="comment_saved_failed">"댓글 저장 실패"</string>
+    <string name="comment_unsaved_success">"댓글 저장 해제됨"</string>
+    <string name="comment_unsaved_failed">"댓글 저장 해제 실패"</string>
+    <string name="all">"모두"</string>
+    <string name="post_layout_card">"카드 레이아웃"</string>
+    <string name="elapsed_time_just_now">"방금"</string>
+    <string name="elapsed_time_a_minute_ago">"1분"</string>
+
+    <!-- Fuzzy -->
+    <string name="elapsed_time_minutes_ago">"%1$d분"</string>
+    <string name="elapsed_time_an_hour_ago">"1시간"</string>
+
+    <!-- Fuzzy -->
+    <string name="elapsed_time_hours_ago">"%1$d시간"</string>
+    <string name="elapsed_time_yesterday">"어제"</string>
+
+    <!-- Fuzzy -->
+    <string name="elapsed_time_days_ago">"%1$d일"</string>
+    <string name="elapsed_time_a_month_ago">"1달"</string>
+
+    <!-- Fuzzy -->
+    <string name="elapsed_time_months_ago">"%1$d달"</string>
+    <string name="elapsed_time_a_year_ago">"1년"</string>
+
+    <!-- Fuzzy -->
+    <string name="elapsed_time_years_ago">"%1$d년"</string>
+    <string name="error_getting_multi_reddit_data">"멀티레딧 데이터를 가져오는데 오류가 발생했습니다"</string>
+    <string name="error_loading_multi_reddit_list">"멀티레딧 동기화를 할 수 없음"</string>
+    <string name="share_post_link">"글 링크 공유"</string>
+    <string name="share_image_link">"사진 링크 공유"</string>
+    <string name="share_gif_link">"Gif 링크 공유"</string>
+    <string name="share_video_link">"둥영상 링크 공유"</string>
+    <string name="share_link">"링크 공유"</string>
+    <string name="copy_post_link">"글 링크 복사"</string>
+    <string name="copy_image_link">"사진 링크 복사"</string>
+    <string name="copy_gif_link">"Gif 링크 복사"</string>
+    <string name="copy_video_link">"둥영상 링크 복사"</string>
+    <string name="copy_link">"링크 복사"</string>
+    <string name="copy_success">"복사됨"</string>
+    <string name="copy_link_failed">"링크를 복사할 수 없습니다"</string>
+    <string name="copy_text">"복사"</string>
+    <string name="copy_all">"모두 복사"</string>
+    <string name="copy_markdown">"Markdown 복사"</string>
+    <string name="copy_raw_text">"원본 텍스트 복사"</string>
+    <string name="copy_all_markdown">"모든 Markdown 복사"</string>
+    <string name="copy_all_raw_text">"모든 원본 텍스트 복사"</string>
+    <string name="exit_app">"종료?"</string>
+    <string name="light_theme">"라이트 테마"</string>
+    <string name="dark_theme">"다크 테마"</string>
+    <string name="multi_reddit_name_hint">"이름 (최대 50자)"</string>
+    <string name="multi_reddit_description_hint">"설명"</string>
+    <string name="no_multi_reddit_name">"이름이 무엇인가요?"</string>
+    <string name="create_multi_reddit_failed">"이 멀티레딧을 생성할 수 없음"</string>
+    <string name="duplicate_multi_reddit">"이 멀티레딧은 이미 존재합니다"</string>
+    <string name="edit_multi_reddit_failed">"이 멀티레딧을 편집할 수 없음"</string>
+
+    <!-- Fuzzy -->
+    <string name="delete_multi_reddit_success">"성공적으로 삭제"</string>
+    <string name="delete_multi_reddit_failed">"삭제 실패"</string>
+    <string name="delete_multi_reddit_dialog_message">"정말로 삭제할까요?"</string>
+    <string name="enable_nsfw">"NSFW 활성화"</string>
+    <string name="disable_nsfw">"NSFW 비활성화"</string>
+    <string name="cannot_save_image">"이 사진을 저장할 수 없습니다"</string>
+    <string name="cannot_save_gif">"이 gif를 저장할 수 없습니다"</string>
+    <string name="cannot_get_storage">"어플 저장소에 접근할 수 없습니다"</string>
+    <string name="save_image_first">"사진을 저장 중입니다. 잠시만 기다려주세요."</string>
+    <string name="save_gif_first">"Gif를 저장 중입니다. 잠시만 기다려주세요."</string>
+    <string name="theme_name_description">"이 테마의 이름을 바꾸려면 탭하세요."</string>
+    <string name="theme_item_is_light_theme">"라이트 테마로 설정"</string>
+    <string name="theme_item_is_dark_theme">"다크 테마로 설정"</string>
+    <string name="theme_item_is_amoled_theme">"아몰레드 테마로 설정"</string>
+    <string name="theme_item_color_primary">"주 색상"</string>
+    <string name="theme_item_color_primary_detail">"적용 대상: 툴바"</string>
+    <string name="theme_item_color_primary_dark">"다크 주 색상"</string>
+    <string name="theme_item_color_primary_dark_detail">"적용 대상: 상태표시줄"</string>
+    <string name="theme_item_color_accent">"악센트 색상"</string>
+    <string name="theme_item_color_accent_detail">"적용 대상: 진행표시줄 등"</string>
+    <string name="theme_item_color_primary_light_theme">"라이트 테마 주 색상"</string>
+    <string name="theme_item_color_primary_light_theme_detail">"적용 대상: 플로팅 액션 버튼과 버튼 배경"</string>
+    <string name="theme_item_primary_text_color">"주 글씨 색상"</string>
+    <string name="theme_item_primary_text_color_detail">"적용 대상: 주 글씨"</string>
+    <string name="theme_item_secondary_text_color">"보조 글씨 색상"</string>
+    <string name="theme_item_secondary_text_color_detail">"적용 대상: 보조 글씨"</string>
+    <string name="theme_item_post_title_color">"글 제목 색상"</string>
+    <string name="theme_item_post_title_color_detail">"적용 대상: 글 제목"</string>
+    <string name="theme_item_post_content_color">"글 내용 색상"</string>
+    <string name="theme_item_post_content_color_detail">"적용 대상: 글 내용"</string>
+    <string name="theme_item_comment_color">"댓글 색상"</string>
+    <string name="theme_item_comment_color_detail">"적용 대상: 댓글"</string>
+    <string name="theme_item_button_text_color">"버튼 글씨 색상"</string>
+    <string name="theme_item_button_text_color_detail">"적용 대상: 버튼의 글씨"</string>
+    <string name="theme_item_chip_text_color">"칩 글씨 색상"</string>
+    <string name="theme_item_chip_text_color_detail">"적용 대상: 구독 버튼"</string>
+    <string name="theme_item_link_color">"링크 색상"</string>
+    <string name="theme_item_link_color_detail">"적용 대상: URL"</string>
+    <string name="theme_item_received_message_text_color">"받은 메시지 글씨 색상"</string>
+    <string name="theme_item_received_message_text_color_detail">"적용 대상: 받은 개인 메시지"</string>
+    <string name="theme_item_sent_message_text_color">"보낸 메시지 글씨 색상"</string>
+    <string name="theme_item_sent_message_text_color_detail">"적용 대상: 보낸 개인 메시지"</string>
+    <string name="theme_item_background_color">"배경 색상"</string>
+    <string name="theme_item_background_color_detail">"적용 대상: 모든 페이지의 배경과 네비게이션 드로어"</string>
+    <string name="theme_item_card_view_background_color">"카드 뷰 배경 색상"</string>
+    <string name="theme_item_spoiler_background_color">"스포일러 배경 색상"</string>
+    <string name="theme_item_spoiler_text_color">"스포일러 글씨 색상"</string>
+    <string name="theme_item_subscribed_color">"구독됨"</string>
+    <string name="theme_item_subscribed_color_detail">"적용 대상: 구독 해제 버튼"</string>
+    <string name="theme_item_unsubscribed_color">"구독 해제됨"</string>
+    <string name="theme_item_unsubscribed_color_detail">"적용 대상: 구독 버튼"</string>
+    <string name="settings_nsfw_and_spoiler_title">"NSFW와 스포일러"</string>
+    <string name="settings_more_tabs_show_subscribed_subreddits_title">"구독한 서브레딧 보기"</string>
+    <string name="only_spoiler">"스포일러만"</string>
+    <string name="settings_nsfw_and_spoiler_dangerous_group_title">"위험"</string>
+    <string name="about">"정보"</string>
+    <string name="exo_controls_volume_up_description">"볼륨 올리기"</string>
+    <string name="exo_controls_volume_off_description">"볼륨 끄기"</string>
+    <string name="action_block_user">"유저차단"</string>
+    <string name="action_create_github_issue">"깃허브 문제 생성"</string>
+    <string name="action_more_options">"더많은 설정"</string>
+    <string name="settings_backup_settings_summary">"백업 파일 비밀번호는 \"123321\"."</string>
+    <string name="settings_navigation_drawer_enable_hide_karma_title">"계정 카르마 숨기기"</string>
+    <string name="settings_hide_fab_in_post_feed">"게시글 피드에 FAB 숨기기"</string>
+    <string name="block_user">"유저 차단"</string>
+    <string name="block_user_success">"차단됨"</string>
+    <string name="block_user_failed">"유저 차단 실패"</string>
+    <string name="load_more_posts_failed">"게시글 불러오는데 실패했습니다. 다시 눌러 시도하세요."</string>
+    <string name="no_more_posts">"게시글 없음"</string>
+    <string name="denied_notification_permission">"알림 권한이 허용되지 않았습니다"</string>
+    <string name="go_to_settings">"설정"</string>
+</resources>

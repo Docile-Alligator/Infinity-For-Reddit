@@ -24,11 +24,21 @@
     <string name="edit_multi_reddit_activity_label">"Upravit multireddit"</string>
     <string name="selected_subeddits_activity_label">"Vybrané subreddity"</string>
     <string name="report_activity_label">"Nahlásit"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_image_label">"Obrázek %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_video_label">"Video %1$d/%2$d"</string>
     <string name="send_private_message_activity_label">"Poslat SZ"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_image_label">"Obrázek %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_gif_label">"GIF %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_video_label">"Video %1$d/%2$d"</string>
     <string name="navigation_drawer_open">"Otevřít navigační panel"</string>
     <string name="navigation_drawer_close">"Zavřít navigační panel"</string>
@@ -94,7 +104,11 @@
 Ťukněte pro opakování."</string>
     <string name="no_messages">"Prázdné"</string>
     <string name="nsfw">"NSFW"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info">"Karma: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info_user_detail">"Karma:
 %1$d (%2$d + %3$d)"</string>
     <string name="cakeday_info">"Dortový den:
@@ -110,7 +124,11 @@
     <string name="saved">"Uložené"</string>
     <string name="gilded">"Pozlacené"</string>
     <string name="settings">"Nastavení"</string>
+
+    <!-- Fuzzy -->
     <string name="subscribers_number_detail">"Odběratelů: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="online_subscribers_number_detail">"Online: %1$d"</string>
     <string name="cannot_fetch_subreddit_info">"Nepodařilo se získat informace o subredditu"</string>
     <string name="cannot_fetch_user_info">"Nepodařilo se získat informace o uživateli"</string>
@@ -190,6 +208,8 @@
     <string name="no_flair">"Žádný štítek"</string>
     <string name="error_loading_flairs">"Chyba při načítání štítků.
 Ťukněte pro opakování."</string>
+
+    <!-- Fuzzy -->
     <string name="no_rule">"Žádná pravidla"</string>
     <string name="error_loading_rules">"Chyba při načítání pravidel.
 Ťukněte pro opakování."</string>
@@ -282,6 +302,8 @@
     <string name="notification_summary_message">"Nová zpráva"</string>
     <string name="notification_summary_subreddit">"Subreddit"</string>
     <string name="notification_summary_award">"Ocenění"</string>
+
+    <!-- Fuzzy -->
     <string name="notification_new_messages">"%1$d nových zpráv"</string>
     <string name="label_account">"Účet"</string>
     <string name="label_post">"Příspěvek"</string>
@@ -301,8 +323,12 @@
     <string name="settings_mute_autoplaying_videos_title">"Ztlumit automaticky přehrávaná videa"</string>
     <string name="settings_autoplay_nsfw_videos_title">"Automaticky přehrávat NSFW videa"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Viditelná oblast pro automatické přehrávání videí (na výšku)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Začít automaticky přehrávat video, když je vidět %1$d%% z něj"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Viditelná oblast pro automatické přehrávání videí (na šířku)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Začít automaticky přehrávat video, když je vidět %1$d%% z něj"</string>
     <string name="settings_immersive_interface_title">"Pohlcující rozhraní"</string>
     <string name="settings_immersive_interface_summary">"Nevztahuje se na všechny stránky"</string>
@@ -389,7 +415,7 @@
     <string name="settings_category_customization_title">"Přizpůsobení"</string>
     <string name="settings_customize_light_theme_title">"Světlý motiv"</string>
     <string name="settings_customize_dark_theme_title">"Tmavý motiv"</string>
-    <string name="settings_customize_amoled_theme_title">"Amoled"</string>
+    <string name="settings_customize_amoled_theme_title">"Motiv Amoled"</string>
     <string name="settings_manage_themes_title">"Spravovat motivy"</string>
     <string name="settings_advanced_master_title">"Pokročilé"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Odstranit všechny subreddity v databázi"</string>
@@ -436,14 +462,24 @@
     <string name="post_layout_compact">"Kompaktní rozložení"</string>
     <string name="elapsed_time_just_now">"Právě teď"</string>
     <string name="elapsed_time_a_minute_ago">"1 minuta"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_minutes_ago">"%1$d minut"</string>
     <string name="elapsed_time_an_hour_ago">"1 hodina"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_hours_ago">"%1$d hodin"</string>
     <string name="elapsed_time_yesterday">"Včera"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_days_ago">"%1$d dní"</string>
     <string name="elapsed_time_a_month_ago">"1 měsíc"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_months_ago">"%1$d měsíců"</string>
     <string name="elapsed_time_a_year_ago">"1 rok"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_years_ago">"%1$d let"</string>
     <string name="error_getting_multi_reddit_data">"Chyba při získávání dat o multiredditu"</string>
     <string name="error_loading_multi_reddit_list">"Nelze synchronizovat multireddity"</string>
@@ -479,6 +515,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"Nelze vytvořit tento multireddit"</string>
     <string name="duplicate_multi_reddit">"Tento multireddit již existuje"</string>
     <string name="edit_multi_reddit_failed">"Nelze upravit tento multireddit"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_multi_reddit_success">"Odstranění úspěšné"</string>
     <string name="delete_multi_reddit_failed">"Odstranění selhalo"</string>
     <string name="delete_multi_reddit_dialog_message">"Jste si jisti?"</string>
@@ -667,6 +705,8 @@ Založené na amoled indigovém motivu"</string>
     <string name="edit_theme_name">"Upravit název motivu"</string>
     <string name="edit_theme">"Upravit motiv"</string>
     <string name="delete_theme">"Odstranit motiv"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_theme_dialog_message">"Opravdu chcete odstranit %1$s?"</string>
     <string name="share_theme">"Sdílet téma"</string>
     <string name="change_theme_name">"Změnit název"</string>
@@ -704,6 +744,8 @@ Založené na amoled indigovém motivu"</string>
 Chodí popředu."</string>
     <string name="edit_multi_reddit">"Upravit multireddit"</string>
     <string name="delete_multi_reddit">"Odstranit multireddit"</string>
+
+    <!-- Fuzzy -->
     <string name="n_awards">"%1$d ocenění"</string>
     <string name="one_award">"1 ocenění"</string>
     <string name="report">"Nahlásit"</string>
@@ -818,6 +860,8 @@ Automatické přehrávání videí je zakázáno."</string>
     <string name="change_post_layout">"Změnit rozložení příspěvků"</string>
     <string name="give_award_dialog_title">"Dát ocenění?"</string>
     <string name="anonymous">"Anonymní"</string>
+
+    <!-- Fuzzy -->
     <string name="give_award_error_message">"Kód: %1$d/
 Zpráva: %2$s"</string>
     <string name="give_award_success">"Ocenění uděleno"</string>
@@ -969,6 +1013,8 @@ Zpráva: %2$s"</string>
     <string name="theme_item_current_user_color_detail">"Použito na: aktuálního uživatele v komentářích"</string>
     <string name="exclude_domains_hint">"Vyloučit domény"</string>
     <string name="anonymous_front_page_no_subscriptions">"Začněte připojením se do subredditu!"</string>
+
+    <!-- Fuzzy -->
     <string name="backup_settings_success">"Nastavení byla úspěšně exportována do cílového adresáře. Heslo vygenerovaného zip souboru je 123321. Neupravujte prosím daný zip soubor."</string>
     <string name="create_zip_in_destination_directory_failed">"Nelze vytvořit záložní zip v cílovém adresáři"</string>
     <string name="backup_some_settings_failed">"Některá nastavení nebyla zálohována, ale ostatní byla exportována do cílového adresáře"</string>
@@ -1004,6 +1050,8 @@ Zpráva: %2$s"</string>
     <string name="suggest_title">"Navrhnout název"</string>
     <string name="suggest_title_failed">"Nepodařilo se navrhnout název"</string>
     <string name="action_delete_logs">"Smazat protokol"</string>
+
+    <!-- Fuzzy -->
     <string name="inbox_with_count">"Pošta (%1$d)"</string>
     <string name="comment_continue_thread">"Pokračovat ve vlákně"</string>
     <string name="settings_swipe_vertically_to_go_back_from_media_title">"Posunout vertikálně pro návrat zpět z obrázku a GIFu"</string>
@@ -1016,7 +1064,11 @@ Zpráva: %2$s"</string>
     <string name="unsave_comment">"Neukládat"</string>
     <string name="copy_multi_reddit_path">"Zkopírovat cestu multiredditu"</string>
     <string name="copy_multi_reddit_path_failed">"Nepodařilo se zkopírovat cestu multiredditu"</string>
+
+    <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Hlášení o pádech byla odstraněna"</string>
+
+    <!-- Fuzzy -->
     <string name="disable_nsfw_forever_message">"Pokud povolíte tuto možnost, bude NSFW permanentně zakázáno, nehledě na to, zda je nastavení NSFW zapnuté nebo ne. Tato možnost je nevratná, jediný způsob jak jej znovu povolit je vymazat data aplikace.
 
 Stále chcete tuto možnost povolit?"</string>
@@ -1089,6 +1141,8 @@ Pokud ano, přejmenujte je, než povolíte Material You."</string>
     <string name="settings_app_lock_timeout_title">"Vypršení zámku aplikace"</string>
     <string name="settings_enable_fold_support_title">"Povolit podporu ohebných telefonů"</string>
     <string name="settings_default_playback_speed_title">"Výchozí rychlost přehrávání"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_link_handler_value_external_browser">"Externí prohlížeč"</string>
     <string name="settings_link_handler_value_custom_tab">"Vlastní záložka"</string>
     <string name="settings_link_handler_value_internal_browser">"Interní prohlížeč"</string>
@@ -1153,4 +1207,83 @@ Pokud ano, přejmenujte je, než povolíte Material You."</string>
     <string name="message_change_banner_failed">"Nepodařilo se změnit banner %s"</string>
     <string name="message_save_profile_success">"Profil úspěšně uložen"</string>
     <string name="message_save_profile_failed">"Nepodařilo se uložit profil %s"</string>
+    <string name="post_poll_activity_label">"Hlasování"</string>
+    <string name="action_open_external_browser">"Otevřít v prohlížeči"</string>
+
+    <!-- Fuzzy -->
+    <string name="voting_length">"Délka hlasování: %1$d dní"</string>
+    <string name="two_options_required">"Dobré hlasování potřebuje dvě nebo více možností!"</string>
+    <string name="bottom_sheet_post_poll">"Hlasování"</string>
+
+    <!-- Fuzzy -->
+    <string name="no_activity_found_for_external_browser">"Není tu žádná aplikace, která umí zacházet s funkcí otevřít v externím prohlížeči"</string>
+    <string name="settings_require_authentication_to_show_accounts">"Vyžadovat ověření pro zobrazení účtů"</string>
+    <string name="settings_custom_font_family_title">"Vlastní rodina písem"</string>
+    <string name="settings_custom_title_font_family_title">"Vlastní rodina nadpisových písem"</string>
+    <string name="settings_custom_content_font_family_title">"Vlastní rodina obsahových písem"</string>
+    <string name="settings_fixed_height_preview_in_card_title">"Pevná výška karty"</string>
+    <string name="settings_hide_text_post_content">"Skrýt obsah textového příspěvku"</string>
+    <string name="settings_hide_comment_awards_title">"Schovat "</string>
+    <string name="settings_show_fewer_toolbar_options_threshold_title">"Zobrazit méně možností na liště nástrojů"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_show_fewer_toolbar_options_threshold_summary">"Úroveň %1$d"</string>
+    <string name="settings_show_author_avatar_title">"Zobrazit avatar autora"</string>
+    <string name="settings_reddit_user_agreement_title">"Smlouva s uživatelem Redditu"</string>
+    <string name="settings_always_show_child_comment_count_title">"Vždy zobrazit počet podřazených komentářů"</string>
+    <string name="settings_hide_upvote_ratio_title">"Skrýt poměr hlasů pro"</string>
+    <string name="settings_miscellaneous_dangerous_group_title">"Nebezpečné"</string>
+    <string name="settings_post_feed_max_resolution_warning_title">"Zvyšte hodnotu pro zobrazení náhledů ve vyšším rozlišení. Může to způsobit náhlé pády aplikace."</string>
+    <string name="settings_post_feed_max_resolution_title">"Maximální rozlišení zdroje příspěvků (šířka * výška)"</string>
+    <string name="settings_reddit_video_default_resolution">"Výchozí rozlišení videa"</string>
+    <string name="select_a_ttf_font">"Vyberte soubor písem ttf"</string>
+    <string name="unable_to_get_font_file">"Nepodařilo se načíst vaše písma"</string>
+    <string name="unable_to_load_font">"Nepodařilo se načíst vaše písmo"</string>
+    <string name="unable_to_copy_font_file">"Nepodařilo se zkopírovat vaše písmo"</string>
+    <string name="reddit_gallery_item_caption_hint">"Popis (max 180 znaků)"</string>
+    <string name="reddit_gallery_item_url_hint">"URL"</string>
+    <string name="user_agreement_dialog_title">"Smlouva s uživatelem"</string>
+    <string name="user_agreement_message">"Před přihlášením musíte souhlasit se Smlovou s uživatelem Redditu (%1$s) a Zásadami ochrany osobních údajů aplikace Infinity for Reddit (%2$s)"</string>
+    <string name="agree">"Souhlasím"</string>
+    <string name="do_not_agree">"Nesouhlasit"</string>
+    <string name="option_1_hint">"Možnost 1 (Povinná)"</string>
+    <string name="option_2_hint">"Možnost 2 (Povinná)"</string>
+    <string name="option_3_hint">"Možnost 3"</string>
+    <string name="option_4_hint">"Možnost 4"</string>
+    <string name="option_5_hint">"Možnost 5"</string>
+    <string name="option_6_hint">"Možnost 6"</string>
+    <string name="not_a_valid_number">"Neplatné číslo"</string>
+    <string name="post_karma">"Příspěvková karma:"</string>
+    <string name="comment_karma">"Komentářová karma:"</string>
+    <string name="awarder_karma">"Karma ocenění:"</string>
+    <string name="awardee_karma">"Karma obdarování:"</string>
+    <string name="history_activity_label">"Historie"</string>
+    <string name="history">"Historie"</string>
+    <string name="settings_easier_to_watch_in_full_screen_title">"Jednodušší sledovat na celé obrazovce"</string>
+    <string name="clear_user_flair">"Odstranit štítek"</string>
+    <string name="clear_user_flair_success">"Uživatelský štítek odstraněn"</string>
+    <string name="extra_small">"Extra malé"</string>
+    <string name="handle_link">"Zpracovat odkaz"</string>
+    <string name="invalid_link">"Neplatný odkaz"</string>
+    <string name="error_unsupported_video">"Médium zahrnuje videa, ale na tomto zařízení nelze žádná přehrát"</string>
+    <string name="error_unsupported_audio">"Médium zahrnuje zvuk, ale na tomto zařízení nelze žádný přehrát"</string>
+    <string name="exo_controls_volume_up_description">"Zvýšit hlasitost"</string>
+    <string name="exo_controls_volume_off_description">"Vypnout hlasitost"</string>
+    <string name="action_block_user">"Zablokovat uživatele"</string>
+    <string name="action_create_github_issue">"Vytvořit problém na GitHubu"</string>
+    <string name="action_more_options">"Další možnosti"</string>
+    <string name="settings_backup_settings_summary">"Heslo souboru se zálohou je „123321“."</string>
+    <string name="settings_navigation_drawer_enable_hide_karma_title">"Skrýt karmu účtu"</string>
+    <string name="settings_hide_fab_in_post_feed">"Skrýt FAB v seznamu příspěvků"</string>
+    <string name="settings_comment_divider_type">"Typ oddělovače komentářů"</string>
+    <string name="block_user">"Zablokovat uživatele"</string>
+    <string name="block_user_success">"Zablokován"</string>
+    <string name="block_user_failed">"Nepodařilo se zablokovat uživatele"</string>
+    <string name="invalid_regex">"Neplatný vzor regex"</string>
+    <string name="load_more_posts_failed">"Nepodařilo se načíst další příspěvky.
+Klepnutím to zkusíte znova."</string>
+    <string name="no_more_posts">"Žádné další příspěvky"</string>
+    <string name="image_index_in_gallery">"%1$d/%2$d"</string>
+    <string name="denied_notification_permission">"Oprávnění k oznámením neuděleno"</string>
+    <string name="go_to_settings">"Nastavení"</string>
 </resources>

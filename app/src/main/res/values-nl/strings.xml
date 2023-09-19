@@ -24,11 +24,21 @@
     <string name="edit_multi_reddit_activity_label">"Multireddit aanpassen"</string>
     <string name="selected_subeddits_activity_label">"Geselecteerde subreddits"</string>
     <string name="report_activity_label">"Melden"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_image_label">"Afbeelding %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_video_label">"Video %1$d/%2$d"</string>
     <string name="send_private_message_activity_label">"Privébericht versturen"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_image_label">"Afbeelding %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_gif_label">"Gif %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_video_label">"Video %1$d/%2$d"</string>
     <string name="navigation_drawer_open">"Navigatiemenu openen"</string>
     <string name="navigation_drawer_close">"Navigatiemenu sluiten"</string>
@@ -91,7 +101,11 @@ Druk om opnieuw te proberen."</string>
 Druk om opnieuw te proberen."</string>
     <string name="no_messages">"Leeg"</string>
     <string name="nsfw">"NSFW"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info">"Karma: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info_user_detail">"Karma:
 %1$d (%2$d + %3$d)"</string>
     <string name="cakeday_info">"Taartdag:
@@ -107,7 +121,11 @@ Druk om opnieuw te proberen."</string>
     <string name="saved">"Opgeslagen"</string>
     <string name="gilded">"Verguld"</string>
     <string name="settings">"Instellingen"</string>
+
+    <!-- Fuzzy -->
     <string name="subscribers_number_detail">"Aantal abonnees: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="online_subscribers_number_detail">"Aantal online: %1$d"</string>
     <string name="cannot_fetch_subreddit_info">"De subreddit-informatie kan niet worden opgehaald"</string>
     <string name="cannot_fetch_user_info">"De gebruikersinformatie kan niet worden opgehaald"</string>
@@ -187,6 +205,8 @@ Druk om opnieuw te proberen."</string>
     <string name="no_flair">"Geen flair"</string>
     <string name="error_loading_flairs">"De flairs kunnen niet worden geladen.
 Druk om opnieuw te proberen."</string>
+
+    <!-- Fuzzy -->
     <string name="no_rule">"Geen regel"</string>
     <string name="error_loading_rules">"De regels kunnen niet worden geladen.
 Druk om opnieuw te proberen."</string>
@@ -279,6 +299,8 @@ Druk om opnieuw te proberen."</string>
     <string name="notification_summary_message">"Nieuw bericht"</string>
     <string name="notification_summary_subreddit">"Subreddit"</string>
     <string name="notification_summary_award">"Prijs"</string>
+
+    <!-- Fuzzy -->
     <string name="notification_new_messages">"%1$d nieuwe berichten"</string>
     <string name="label_account">"Account"</string>
     <string name="label_post">"Bericht"</string>
@@ -298,8 +320,12 @@ Druk om opnieuw te proberen."</string>
     <string name="settings_mute_autoplaying_videos_title">"Automatisch afspelende video's dempen"</string>
     <string name="settings_autoplay_nsfw_videos_title">"NSFW-video's automatisch afspelen"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Zichtbaar gebied van automatische afspelende video's (verticaal)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Speel video's sautomatisch af als %1$d%% ervan zichtbaar is"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Zichtbaar gebied van automatische afspelende video's (horizontaal)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Speel video's sautomatisch af als %1$d%% ervan zichtbaar is"</string>
     <string name="settings_immersive_interface_title">"Beeldvullende modus"</string>
     <string name="settings_immersive_interface_summary">"Niet van toepassing op alle pagina's"</string>
@@ -439,6 +465,8 @@ Druk om opnieuw te proberen."</string>
     <string name="post_layout_compact">"Compacte indeling"</string>
     <string name="elapsed_time_just_now">"Zojuist"</string>
     <string name="elapsed_time_a_minute_ago">"1 minuut"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_minutes_ago">"%1$d minuten"</string>
     <string name="elapsed_time_an_hour_ago">"1 uur"</string>
 
@@ -447,12 +475,19 @@ Druk om opnieuw te proberen."</string>
 It is used in the context of: "5 hours (ago)"
 so translation should be: "5 uur (geleden)"
 not: "5 uren" -->
+    <!-- Fuzzy -->
     <string name="elapsed_time_hours_ago">"%1$d uur"</string>
     <string name="elapsed_time_yesterday">"Gisteren"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_days_ago">"%1$d dagen"</string>
     <string name="elapsed_time_a_month_ago">"1 maand"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_months_ago">"%1$d maanden"</string>
     <string name="elapsed_time_a_year_ago">"1 jaar"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_years_ago">"%1$d jaar"</string>
     <string name="error_getting_multi_reddit_data">"De multiredditgegevens kunnen niet worden opgehaald"</string>
     <string name="error_loading_multi_reddit_list">"De multireddits kunnen niet worden gesynchroniseerd"</string>
@@ -488,6 +523,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"Deze multireddit kan niet worden aangemaakt"</string>
     <string name="duplicate_multi_reddit">"Deze multireddit bestaat al"</string>
     <string name="edit_multi_reddit_failed">"Deze multireddit kan niet worden aangepast"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_multi_reddit_success">"Het verwijderen is voltooid"</string>
     <string name="delete_multi_reddit_failed">"Het verwijderen is mislukt"</string>
     <string name="delete_multi_reddit_dialog_message">"Weet je het zeker?"</string>
@@ -676,6 +713,8 @@ Gebaseerd op een Indigo Amoled Thema"</string>
     <string name="edit_theme_name">"Wijzig Themanaam"</string>
     <string name="edit_theme">"Wijzig Thema"</string>
     <string name="delete_theme">"Verwijder Thema"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_theme_dialog_message">"Weet je zeker dat u %1$s wilt verwijderen?"</string>
     <string name="share_theme">"Deel Thema"</string>
     <string name="change_theme_name">"Naam wijzigen"</string>
@@ -713,6 +752,8 @@ Gebaseerd op een Indigo Amoled Thema"</string>
 Ze is niet ziek of zo, maar ze kan zeker beter worden."</string>
     <string name="edit_multi_reddit">"Wijzig Multireddit"</string>
     <string name="delete_multi_reddit">"Verwijder Multireddit"</string>
+
+    <!-- Fuzzy -->
     <string name="n_awards">"%1$d Awards"</string>
     <string name="one_award">"1 Award"</string>
     <string name="report">"Meld"</string>
@@ -755,7 +796,7 @@ Ze is niet ziek of zo, maar ze kan zeker beter worden."</string>
     <string name="load_video_in_redgifs">"Probeer de video op Redgifs te laden"</string>
     <string name="top_score">"%1$s pnt"</string>
     <string name="login_activity_2fa_prompt">"Als je 2-factor authenticatie hebt ingeschakeld, typ dan je wachtwoord als volgt in: &lt;wachtwoord&gt;: &lt;2FA code&gt;.
-Voorbeeld: yourpass:123456"</string>
+Voorbeeld: yourpass: 123456"</string>
     <string name="submit_crosspost_activity_label">"Crosspost"</string>
     <string name="give_award_activity_label">"Geef Award"</string>
     <string name="action_crosspost">"Crosspost"</string>
@@ -904,8 +945,13 @@ Bericht: %2$s"</string>
     <string name="settings_subreddit_default_sort_type_title">"Subreddit standaard sorteertype"</string>
     <string name="settings_subreddit_default_sort_time_title">"Subreddit standaard sorteertijd"</string>
     <string name="settings_user_default_sort_type_title">"Gebruiker standaard sorteertype"</string>
+    <string name="settings_user_default_sort_time_title">"Standaard sorteertijd gebruiken"</string>
     <string name="open_link">"Open Link"</string>
     <string name="select_subreddits_and_users">"Selecteer Subreddits en Gebruikers"</string>
+    <string name="theme_item_read_post_title_color">"Kleur van gelezen reactietitel"</string>
+    <string name="theme_item_read_post_title_color_detail">"Van toepassing op: gelezen reactietitel"</string>
+    <string name="theme_item_read_post_content_color">"Kleur van gelezen reactie-inhoud"</string>
+    <string name="theme_item_read_post_content_color_detail">"Van toepassing op: gelezen reactie-inhoud"</string>
     <string name="delete_all_read_posts_success">"Verwijder alle gelezen posts succesvol"</string>
     <string name="hide_read_posts">"Verberg Gelezen Posts"</string>
     <string name="filter_posts">"Filter Posts"</string>
@@ -994,6 +1040,8 @@ Bericht: %2$s"</string>
     <string name="suggest_title">"Titel voorstellen"</string>
     <string name="suggest_title_failed">"Mislukt om titel voor te stellen"</string>
     <string name="action_delete_logs">"Verwijder logs"</string>
+
+    <!-- Fuzzy -->
     <string name="inbox_with_count">"Postvak IN"</string>
     <string name="comment_continue_thread">"Ga verder met draad"</string>
     <string name="settings_swipe_vertically_to_go_back_from_media_title">"Omhoog swipen om terug te gaan van foto's en gif's"</string>
@@ -1004,7 +1052,11 @@ Bericht: %2$s"</string>
     <string name="settings_show_only_one_comment_level_indicator">"Laat alleen één reactieniveau indicator zien"</string>
     <string name="save_comment">"Opslaan"</string>
     <string name="unsave_comment">"Niet opslaan"</string>
+
+    <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Crashrapporten zijn verwijderd"</string>
+
+    <!-- Fuzzy -->
     <string name="disable_nsfw_forever_message">"Wanneer geactiveerd zal NSFW permanent uitgeschakeld worden, ongeacht of de NSFW instelling aan of uit staat. En deze optie is onomkeerbaar, de enige manier om NSFW opnieuw aan te zetten is door de app data te verwijderen.
 
 Wil je het nog steeds activeren?"</string>

@@ -16,23 +16,31 @@
     <string name="edit_comment_activity_label">"Éditer le commentaire"</string>
     <string name="view_message_activity_label">"Boîte de réception"</string>
     <string name="settings_activity_label">"Paramètres"</string>
-
-    <!-- Fuzzy -->
     <string name="account_saved_thing_activity_label">"Sauvegardé"</string>
     <string name="create_multi_reddit_activity_label">"Créer un multireddit"</string>
     <string name="subreddit_multiselection_activity_label">"Sélectionner les subreddits"</string>
     <string name="custom_theme_listing_activity_label">"Thèmes personnalisés"</string>
     <string name="customize_theme_activity_label">"Personnaliser le thème"</string>
-    <string name="customize_theme_activity_create_theme_label">"Créer un Thème"</string>
-    <string name="theme_preview_activity_label">"Prévisualiser le Thème"</string>
+    <string name="customize_theme_activity_create_theme_label">"Créer un thème"</string>
+    <string name="theme_preview_activity_label">"Prévisualiser le thème"</string>
     <string name="edit_multi_reddit_activity_label">"Éditer le Multireddit"</string>
-    <string name="selected_subeddits_activity_label">"Subreddits Sélectionnés"</string>
+    <string name="selected_subeddits_activity_label">"Subreddits sélectionnés"</string>
     <string name="report_activity_label">"Signaler"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_image_label">"Image %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_video_label">"Vidéo %1$d/%2$d"</string>
     <string name="send_private_message_activity_label">"Envoyer un message privé"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_image_label">"Image %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_gif_label">"Gif %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_video_label">"Vidéo %1$d/%2$d"</string>
     <string name="navigation_drawer_open">"Ouvrir le tiroir de navigation"</string>
     <string name="navigation_drawer_close">"Fermer le tiroir de navigation"</string>
@@ -43,11 +51,11 @@
 
     <!-- "Poste" isn't an equivalent to post. I'd use "publication" here but it's kind of long. The english word "Post" should be understood by everyone -->
     <!-- Fuzzy -->
-    <string name="action_view_crosspost_parent">"Publication multiple du parent"</string>
+    <string name="action_view_crosspost_parent">"Voir le parent de la publication multiple"</string>
     <string name="action_search">"Rechercher"</string>
 
     <!-- Fuzzy -->
-    <string name="action_start_lazy_mode">"Lancer le mode automatique "</string>
+    <string name="action_start_lazy_mode">"Lancer le mode automatique"</string>
 
     <!-- Fuzzy -->
     <string name="action_stop_lazy_mode">"Arrêter le mode automatique"</string>
@@ -55,27 +63,27 @@
     <string name="action_sort">"Trier"</string>
     <string name="action_hide_post">"Masquer la publication"</string>
     <string name="action_unhide_post">"Afficher la publication"</string>
-    <string name="action_edit_post">"Éditer la Publication"</string>
-    <string name="action_delete_post">"Supprimer la Publication"</string>
+    <string name="action_edit_post">"Éditer la publication"</string>
+    <string name="action_delete_post">"Supprimer la publication"</string>
     <string name="action_mark_nsfw">"Marquer comme NSFW"</string>
 
     <!-- Fuzzy -->
-    <string name="action_unmark_nsfw">"Annuler la Marque NSFW"</string>
+    <string name="action_unmark_nsfw">"Ne pas marquer comme NSFW"</string>
     <string name="action_mark_spoiler">"Marquer comme Spoiler"</string>
 
     <!-- Fuzzy -->
-    <string name="action_unmark_spoiler">"Annuler la Marque Spoiler"</string>
+    <string name="action_unmark_spoiler">"Annuler la marque Spoiler"</string>
     <string name="action_edit_flair">"Éditer le Flair"</string>
-    <string name="action_change_post_layout">"Modifier la Mise en Page des Publications"</string>
+    <string name="action_change_post_layout">"Modifier la mise en page des publications"</string>
     <string name="action_save">"Sauvegarder"</string>
     <string name="action_edit_multi_reddit">"Éditer le Multireddit"</string>
     <string name="action_delete_multi_reddit">"Supprimer le Multireddit"</string>
     <string name="action_share">"Partager"</string>
     <string name="action_preview">"Prévisualiser"</string>
     <string name="action_report">"Reporter"</string>
-    <string name="action_see_removed">"Afficher les Publications Supprimées"</string>
-    <string name="action_set_wallpaper">"Définir comme Fond d'Écran"</string>
-    <string name="action_send_private_message">"Envoyer le Message Privé"</string>
+    <string name="action_see_removed">"Afficher les publications supprimées"</string>
+    <string name="action_set_wallpaper">"Définir comme fond d'écran"</string>
+    <string name="action_send_private_message">"Envoyer le message privé"</string>
     <string name="parse_json_response_error">"Une erreur s'est produite lors de l'analyse de la réponse JSON"</string>
     <string name="retrieve_token_error">"Erreur dans la récupération du jeton"</string>
     <string name="something_went_wrong">"Une erreur s'est produite. Veuillez réessayer plus tard."</string>
@@ -83,9 +91,11 @@
     <string name="parse_user_info_error">"Une erreur s'est produite lors de l'analyse des informations utilisateur"</string>
     <string name="no_system_webview_error">"Erreur lors de l'ouverture du WebView Système"</string>
     <string name="error_loading_image_tap_to_retry">"Erreur de chargement de l'image. Appuyez pour réessayer."</string>
-    <string name="load_posts_error">"Erreur de chargement des publications. Appuyez pour réessayer."</string>
+    <string name="load_posts_error">"Erreur de chargement des publications.
+Appuyez pour réessayer."</string>
     <string name="load_more_posts_error">"Erreur de chargement des publications."</string>
-    <string name="load_post_error">"Erreur de chargement cette publication. Appuyez pour réessayer."</string>
+    <string name="load_post_error">"Erreur de chargement de cette publication.
+Appuyez pour réessayer."</string>
     <string name="search_subreddits_error">"Erreur de recherche des subreddits. Appuyez pour réessayer."</string>
     <string name="search_users_error">"Erreur de recherche des utilisateurs. Appuyez pour réessayer."</string>
     <string name="no_posts">"Aucune publication trouvée"</string>
@@ -103,54 +113,62 @@
     <string name="load_messages_failed">"Erreur de chargement des messages. Appuyez pour réessayer."</string>
     <string name="no_messages">"Vide"</string>
     <string name="nsfw">"NSFW"</string>
-    <string name="karma_info">"Karma : %1$d"</string>
-    <string name="karma_info_user_detail">"Karma :
+
+    <!-- Fuzzy -->
+    <string name="karma_info">"Karma: %1$d"</string>
+
+    <!-- Fuzzy -->
+    <string name="karma_info_user_detail">"Karma:
 %1$d (%2$d + %3$d)"</string>
     <string name="cakeday_info">"Jour de création du compte: %1$s"</string>
     <string name="since">"Depuis"</string>
     <string name="profile">"Profil"</string>
     <string name="subscriptions">"Abonnements"</string>
     <string name="multi_reddit">"Multireddit"</string>
-    <string name="inbox">"Boîte de Réception"</string>
+    <string name="inbox">"Boîte de réception"</string>
     <string name="upvoted">"Voté pour"</string>
     <string name="downvoted">"Voté contre"</string>
     <string name="hidden">"Masquée"</string>
     <string name="saved">"Enregistrée"</string>
     <string name="gilded">"Dorée"</string>
     <string name="settings">"Paramètres"</string>
+
+    <!-- Fuzzy -->
     <string name="subscribers_number_detail">"Abonnés: %1$d"</string>
-    <string name="online_subscribers_number_detail">"En Ligne: %1$d"</string>
+
+    <!-- Fuzzy -->
+    <string name="online_subscribers_number_detail">"En ligne: %1$d"</string>
     <string name="cannot_fetch_subreddit_info">"Impossible d'obtenir des informations sur le subreddit"</string>
     <string name="cannot_fetch_user_info">"Impossible d'obtenir des informations sur l'utilisateur"</string>
     <string name="cannot_fetch_sidebar">"Impossible d'obtenir la barre latérale"</string>
     <string name="cannot_fetch_multireddit">"Impossible d'obtenir des informations sur le Multireddit"</string>
     <string name="subscribe">"S'abonner"</string>
-    <string name="unsubscribe">"Se Désabonner"</string>
+    <string name="unsubscribe">"Se désabonner"</string>
     <string name="subscribed">"Abonné"</string>
-    <string name="subscribe_failed">"Échec de l'abonnement"</string>
+    <string name="subscribe_failed">"Echec de l'abonnement"</string>
     <string name="unsubscribed">"Désabonné"</string>
     <string name="unsubscribe_failed">"Échec du désabonnement"</string>
     <string name="follow">"Suivre"</string>
     <string name="unfollow">"Annuler le suivi"</string>
     <string name="followed">"Suivi"</string>
-    <string name="follow_failed">"Echec du suivi"</string>
+    <string name="follow_failed">"Échec du suivi"</string>
     <string name="unfollowed">"Suivi annulé"</string>
-    <string name="unfollow_failed">"Échec de l'annulation du suivi"</string>
-    <string name="content_description_banner_imageview">"Image de la Bannière du Subreddit"</string>
+    <string name="unfollow_failed">"Echec de l'annulation du suivi"</string>
+    <string name="content_description_banner_imageview">"Image de la bannière du subreddit"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Rechercher n'importe quoi"</string>
     <string name="no_posts_no_lazy_mode">"Aucune publication disponible"</string>
-    <string name="lazy_mode_start">"Le Mode Parasseux commence dans %1$.1fs"</string>
-    <string name="lazy_mode_stop">"Le Mode Parasseux arrêté"</string>
+    <string name="lazy_mode_start">"Le Mode Paresseux commence dans %1$.1fs"</string>
+    <string name="lazy_mode_stop">"Mode Paresseux arrêté"</string>
     <string name="write_comment_hint">"Vos réflexions intéressantes ici"</string>
     <string name="comment_content_required">"Où se trouve votre réflexion intéressante ?"</string>
     <string name="sending_comment">"Envoi"</string>
     <string name="send_comment_success">"Commentaire envoyé"</string>
-    <string name="send_comment_failed">"Échec de l'envoi de ce commentaire"</string>
+    <string name="send_comment_failed">"Echec de l'envoi de ce commentaire"</string>
     <string name="send_message_username_hint">"Utilisateur"</string>
     <string name="send_message_subject_hint">"Sujet (100 caractères maximum)"</string>
     <string name="send_message_content_hint">"Message"</string>
-    <string name="reply_message_failed">"Échec de réponse à ce message"</string>
+    <string name="reply_message_failed">"Echec de réponse à ce message"</string>
     <string name="error_getting_message">"Erreur dans la réception de ce message"</string>
     <string name="message_username_required">"Hé, à qui voulez-vous envoyer ce message ?"</string>
     <string name="message_subject_required">"Votre message doit avoir un sujet"</string>
@@ -166,7 +184,7 @@
     <string name="select_an_image">"Veuillez d'abord sélectionner une image"</string>
     <string name="posting">"Publication en cours"</string>
     <string name="post_failed">"Impossible de le publier"</string>
-    <string name="error_processing_image">"Erreur de traitement d'image"</string>
+    <string name="error_processing_image">"Erreur de traitement de l'image"</string>
     <string name="error_processing_video">"Erreur de traitement de la vidéo"</string>
     <string name="download_started">"Le téléchargement a commencé. Vérifiez l'état de progression sur la notification."</string>
     <string name="comment_load_more_comments">"Charger plus de commentaires"</string>
@@ -174,7 +192,7 @@
     <string name="loading">"Chargement"</string>
     <string name="post_title_hint">"Titre"</string>
     <string name="post_text_content_hint">"Contenu"</string>
-    <string name="choose_a_subreddit">"Choisir une subreddit"</string>
+    <string name="choose_a_subreddit">"Choisir un subreddit"</string>
     <string name="rules">"Règles"</string>
     <string name="post_link_hint">"URL"</string>
     <string name="subreddits">"Subreddits"</string>
@@ -188,7 +206,7 @@
     <string name="select_again">"Sélectionner à nouveau"</string>
     <string name="error_getting_image">"Erreur dans l'obtention de l'image"</string>
     <string name="error_getting_video">"Erreur dans l'obtention de la vidéo"</string>
-    <string name="no_camera_available">"Aucune application de caméra disponible."</string>
+    <string name="no_camera_available">"Aucune application de caméra disponible"</string>
     <string name="error_creating_temp_file">"Erreur de création d'un fichier temporaire"</string>
     <string name="video_is_processing">"La vidéo est en cours de traitement. Veuillez patienter."</string>
     <string name="image_is_processing">"L'image est en cours de traitement. Veuillez patienter."</string>
@@ -198,7 +216,9 @@
     <string name="no_flair">"Pas de flair"</string>
     <string name="error_loading_flairs">"Erreur de chargement des flairs.
 Appuyez pour réessayer."</string>
-    <string name="no_rule">"Aucun règle"</string>
+
+    <!-- Fuzzy -->
+    <string name="no_rule">"Aucune règle"</string>
     <string name="error_loading_rules">"Erreur de chargement des règles.
 Appuyez pour réessayer."</string>
     <string name="error_loading_rules_without_retry">"Erreur de chargement des règles."</string>
@@ -270,17 +290,17 @@ Appuyez pour réessayer."</string>
     <string name="thing_favorite_failed">"Échec de l'ajout en favoris"</string>
     <string name="thing_unfavorite_failed">"Échec de la suppression des favoris"</string>
     <string name="post_unhide_failed">"Impossible de démasquer la publication"</string>
-    <string name="delete_this_post">"Supprimer Cette Publication"</string>
-    <string name="delete_this_comment">"Supprimer Ce Commentaire"</string>
+    <string name="delete_this_post">"Supprimer cette publication"</string>
+    <string name="delete_this_comment">"Supprimer ce commentaire"</string>
     <string name="are_you_sure">"Êtes-vous sûr ?"</string>
     <string name="edit">"Éditer"</string>
     <string name="delete">"Supprimer"</string>
-    <string name="see_removed_comment">"Voir le Commentaire Supprimé"</string>
+    <string name="see_removed_comment">"Voir le commentaire supprimé"</string>
 
     <!-- Fuzzy -->
-    <string name="fetching_removed_comment">"Chargement du commentaire supprimé"</string>
+    <string name="fetching_removed_comment">"Récupération du commentaire supprimé"</string>
     <string name="show_removed_comment_failed">"Impossible de trouver le commentaire supprimé"</string>
-    <string name="fetching_removed_post">"Chargement de la publication supprimée"</string>
+    <string name="fetching_removed_post">"Récupération de la publication supprimée"</string>
     <string name="show_removed_post_failed">"Impossible de trouver la publication supprimée"</string>
     <string name="cancel">"Annuler"</string>
     <string name="ok">"OK"</string>
@@ -297,13 +317,11 @@ Appuyez pour réessayer."</string>
     <!-- Fuzzy -->
     <string name="unmark_nsfw_success">"Annulation de la marque NSFW réussie"</string>
     <string name="unmark_nsfw_failed">"Annulation de la marque NSFW échouée"</string>
-
-    <!-- Fuzzy -->
     <string name="mark_spoiler_success">"Marquage comme spoiler réussi"</string>
     <string name="mark_spoiler_failed">"Marquage comme spoiler échoué"</string>
 
     <!-- Fuzzy -->
-    <string name="unmark_spoiler_success">"Annulation de la marque Spoiler a réussi"</string>
+    <string name="unmark_spoiler_success">"Annulation de la marque Spoiler réussie"</string>
     <string name="unmark_spoiler_failed">"Annulation de la marque Spoiler a échoué"</string>
 
     <!-- Fuzzy -->
@@ -313,16 +331,18 @@ Appuyez pour réessayer."</string>
     <string name="only_allow_64_chars">"N'autoriser que moins de 64 caractères"</string>
     <string name="view_all_comments">"Appuyez ici pour parcourir tous les commentaires"</string>
     <string name="notification_summary_account">"Compte"</string>
-    <string name="notification_summary_message">"Nouveau Message"</string>
+    <string name="notification_summary_message">"Nouveau message"</string>
     <string name="notification_summary_subreddit">"Subreddit"</string>
     <string name="notification_summary_award">"Prix"</string>
+
+    <!-- Fuzzy -->
     <string name="notification_new_messages">"%1$d Nouveaux Messages"</string>
     <string name="label_account">"Compte"</string>
     <string name="label_post">"Publication"</string>
     <string name="label_preferences">"Préférence"</string>
     <string name="account_switched">"Le compte a été changé, toutes les autres pages ont disparu."</string>
     <string name="settings_notification_master_title">"Notification"</string>
-    <string name="settings_notification_enable_notification_title">"Activer les Notifications"</string>
+    <string name="settings_notification_enable_notification_title">"Activer les notifications"</string>
     <string name="settings_notification_interval_title">"Intervalle pour vérifier les notifications"</string>
     <string name="settings_theme_title">"Thème"</string>
     <string name="settings_amoled_dark_title">"Thème sombre Amoled"</string>
@@ -339,18 +359,20 @@ Appuyez pour réessayer."</string>
     <string name="settings_mute_autoplaying_videos_title">"Couper le son des vidéos se lisant automatiquement"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_autoplay_nsfw_videos_title">"Lire Automatiquement les Vidéos NSFW"</string>
+    <string name="settings_autoplay_nsfw_videos_title">"Lire automatiquement les vidéos NSFW"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Décalage de la Zone Visible des Vidéos se Lisant Automatiquement (Portrait)"</string>
+    <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Décalage de la zone visible des vidéos se lisant automatiquement (Portrait)"</string>
 
     <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Commencer à lire automatiquement les vidéos lorsque %1$d%% d'entre elles sont visibles"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Décalage de la Zone Visible des Vidéos se Lisant Automatiquement (Paysage)"</string>
+    <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Décalage de la zone visible des vidéos se lisant automatiquement (Paysage)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Commencer à lire automatiquement les vidéos lorsque %1$d%% d'entre elles sont visibles"</string>
-    <string name="settings_immersive_interface_title">"Interface Immersive"</string>
+    <string name="settings_immersive_interface_title">"Interface immersive"</string>
 
     <!-- Fuzzy -->
     <string name="settings_immersive_interface_summary">"Ne pas s'appliquer à toutes les pages
@@ -359,69 +381,69 @@ peut ne pas fonctionner sur Android 11"</string>
     <string name="settings_immersive_interface_ignore_nav_bar_summary">"Empêcher la barre de navigation inférieure d'avoir un espace supplémentaire"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Personnaliser les onglets de la page principale"</string>
     <string name="settings_enable_bottom_app_bar_title">"Activer la navigation en bas"</string>
-    <string name="settings_category_post_and_comment_title">"Publications et Commentaires"</string>
-    <string name="settings_vote_buttons_on_the_right_title">"Boutons de Vote sur la Droite"</string>
-    <string name="settings_volume_keys_navigate_comments_title">"Utiliser les Boutons de Volume pour Naviguer dans les Commentaires des Publications"</string>
-    <string name="settings_volume_keys_navigate_posts_title">"Utiliser les Boutons de Volume pour Naviguer dans les Publications"</string>
-    <string name="settings_mute_video_title">"Couper le Son des Vidéos"</string>
-    <string name="settings_mute_nsfw_video_title">"Couper le Son des Vidéos NSFW"</string>
+    <string name="settings_category_post_and_comment_title">"Publications et commentaires"</string>
+    <string name="settings_vote_buttons_on_the_right_title">"Boutons de vote sur la droite"</string>
+    <string name="settings_volume_keys_navigate_comments_title">"Utiliser les boutons de volume pour naviguer dans les commentaires des publications"</string>
+    <string name="settings_volume_keys_navigate_posts_title">"Utiliser les boutons de volume pour naviguer dans les publications"</string>
+    <string name="settings_mute_video_title">"Couper le son des vidéos"</string>
+    <string name="settings_mute_nsfw_video_title">"Couper le son des vidéos NSFW"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Essayez d'Accéder Automatiquement aux Redgifs si les Vidéos sur Gfycat sont Supprimées."</string>
-    <string name="settings_video_player_ignore_nav_bar_title">"Ignorer la Barre de Navigation dans le Lecteur Vidéo"</string>
+    <string name="settings_automatically_try_redgifs_title">"Essayez d'accéder automatiquement aux Redgifs si les Vidéos sur Gfycat sont supprimées."</string>
+    <string name="settings_video_player_ignore_nav_bar_title">"Ignorer la barre de navigation dans le lecteur vidéo"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Empêcher le Contrôleur Vidéo de créer une Marge Supplémentaire"</string>
-    <string name="settings_confirm_to_exit">"Confirmer pour Quitter"</string>
+    <string name="settings_confirm_to_exit">"Confirmer pour quitter"</string>
     <string name="settings_category_comment_title">"Commentaires"</string>
     <string name="settings_show_top_level_comments_first_title">"Afficher d'abord les Commentaires de Haut Niveau"</string>
-    <string name="settings_show_comment_divider_title">"Afficher le Diviseur de Commentaires"</string>
-    <string name="settings_comment_toolbar_hide_on_click">"Appuyez pour Afficher/Masquer la Barre d'Outils des Commentaires"</string>
-    <string name="settings_fully_collapse_comment_title">"Réduire Complètement le Commentaire"</string>
-    <string name="settings_comment_toolbar_hidden">"Barre d'Outils de Commentaires Cachée par Défaut"</string>
-    <string name="settings_show_absolute_number_of_votes_title">"Afficher le Nombre Absolu de Votes"</string>
-    <string name="settings_show_elapsed_time">"Afficher le Temps Écoulé dans les Publications et les Commentaires"</string>
+    <string name="settings_show_comment_divider_title">"Afficher le séparateur de commentaires"</string>
+    <string name="settings_comment_toolbar_hide_on_click">"Appuyez pour afficher ou masquer la barre d'outils des commentaires"</string>
+    <string name="settings_fully_collapse_comment_title">"Réduire complètement le commentaire"</string>
+    <string name="settings_comment_toolbar_hidden">"Barre d'outils de commentaires masquée par défaut"</string>
+    <string name="settings_show_absolute_number_of_votes_title">"Afficher le nombre absolu de votes"</string>
+    <string name="settings_show_elapsed_time">"Afficher le temps écoulé dans les publications et les commentaires"</string>
     <string name="settings_time_format_title">"Format de l'heure"</string>
     <string name="settings_category_post_title">"Publication"</string>
-    <string name="settings_default_post_layout">"Mise en Page par Défaut des Publications"</string>
+    <string name="settings_default_post_layout">"Mise en page par défaut des publications"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_show_divider_in_compact_layout">"Afficher le Diviseur de Commentaires dans la Mise en Page Compacte"</string>
+    <string name="settings_show_divider_in_compact_layout">"Afficher le séparateur"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"Afficher la Miniature à Gauche en Format Compact"</string>
+    <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"Afficher la miniature à gauche"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_swap_tap_and_long_title">"Échangez l'Appui et l'Appui Long dans les Commentaires"</string>
-    <string name="settings_swipe_to_go_back_title">"Balayer à Droite Pour Revenir en Arrière"</string>
-    <string name="settings_swipe_to_go_back_summary">"Ne s'applique pas à Toutes les Pages"</string>
-    <string name="settings_lock_jump_to_next_top_level_comment_button_title">"Verrouiller le Bouton « Passer au Commentaire de Niveau Supérieur Suivant »"</string>
-    <string name="settings_lock_bottom_app_bar_title">"Verrouiller la Barre de Navigation Inférieure"</string>
-    <string name="settings_swipe_up_to_hide_jump_to_next_top_level_comment_button_title">"Balayer pour Masquer le Bouton « Passer au Commentaire de Niveau Supérieur Suivant »"</string>
-    <string name="settings_lazy_mode_interval_title">"Intervalle du Mode Parasseux"</string>
+    <string name="settings_swap_tap_and_long_title">"Échanger l'appui et l'appui long dans les commentaires"</string>
+    <string name="settings_swipe_to_go_back_title">"Balayer à droite pour revenir en arrière"</string>
+    <string name="settings_swipe_to_go_back_summary">"Ne s'applique pas à toutes les pages"</string>
+    <string name="settings_lock_jump_to_next_top_level_comment_button_title">"Verrouiller le bouton «Passer au commentaire de niveau supérieur suivant»"</string>
+    <string name="settings_lock_bottom_app_bar_title">"Verrouiller la barre de navigation inférieure"</string>
+    <string name="settings_swipe_up_to_hide_jump_to_next_top_level_comment_button_title">"Balayer ver le haut pour masquer le bouton «Passer au commentaire de niveau supérieur suivant»"</string>
+    <string name="settings_lazy_mode_interval_title">"Intervalle du Mode Paresseux"</string>
     <string name="settings_font_title">"Police"</string>
-    <string name="settings_preview_font_title">"Prévisualisation de la Police"</string>
+    <string name="settings_preview_font_title">"Prévisualisation de la police"</string>
     <string name="settings_font_summary">"Police"</string>
     <string name="settings_title_font_summary">"Titre"</string>
     <string name="settings_content_font_summary">"Contenu"</string>
-    <string name="settings_font_family_title">"Famille de Police"</string>
-    <string name="settings_title_font_family_title">"Famille de Police du Titre"</string>
-    <string name="settings_content_font_family_title">"Famille de Police du Contenu"</string>
-    <string name="settings_font_size_title">"Taille de Police"</string>
-    <string name="settings_title_font_size_title">"Taille de Police du Titre"</string>
-    <string name="settings_content_font_size_title">"Taille de Police du Contenu"</string>
-    <string name="settings_enable_nsfw_title">"Afficher le Contenu NSFW"</string>
+    <string name="settings_font_family_title">"Famille de police"</string>
+    <string name="settings_title_font_family_title">"Famille de police du titre"</string>
+    <string name="settings_content_font_family_title">"Famille de police du contenu"</string>
+    <string name="settings_font_size_title">"Taille de police"</string>
+    <string name="settings_title_font_size_title">"Taille de police du titre"</string>
+    <string name="settings_content_font_size_title">"Taille de police du contenu"</string>
+    <string name="settings_enable_nsfw_title">"Afficher le contenu NSFW"</string>
     <string name="settings_blur_nsfw_title">"Flouter les images NSFW"</string>
     <string name="settings_blur_spoiler_title">"Flouter les images Spoiler"</string>
-    <string name="settings_about_master_title">"À propos de"</string>
+    <string name="settings_about_master_title">"À propos"</string>
     <string name="settings_acknowledgement_master_title">"Reconnaissance"</string>
     <string name="settings_credits_master_title">"Crédits"</string>
     <string name="settings_credits_icon_foreground_title">"Premier plan de l'Icône"</string>
 
     <!-- Not sure what technology vector is supposed to mean -->
-    <string name="settings_credits_icon_foreground_summary">"Vecteur technologique créé par freepik — www.freepik.com"</string>
+    <string name="settings_credits_icon_foreground_summary">"Vecteur technologique créé par freepik - www.freepik.com"</string>
     <string name="settings_credits_icon_background_title">"Arrière plan de l'Icône"</string>
-    <string name="settings_credits_icon_background_summary">"Vecteur d'arrière plan créé par freepik — www.freepik.com"</string>
+    <string name="settings_credits_icon_background_summary">"Vecteur d'arrière plan créé par freepik - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Image d'erreur"</string>
-    <string name="settings_credits_error_image_summary">"Vecteur technologique créé par freepik — www.freepik.com"</string>
+    <string name="settings_credits_error_image_summary">"Vecteur technologique créé par freepik - www.freepik.com"</string>
     <string name="settings_credits_gilded_icon_title">"Icône dorée"</string>
     <string name="settings_credits_gilded_icon_summary">"Icône créée par freepik depuis www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"Icône de publication multiple"</string>
@@ -451,10 +473,10 @@ peut ne pas fonctionner sur Android 11"</string>
     <string name="settings_customize_amoled_theme_title">"Thème Amoled"</string>
     <string name="settings_manage_themes_title">"Gérer les Thèmes"</string>
     <string name="settings_advanced_master_title">"Avancés"</string>
-    <string name="settings_delete_all_subreddits_data_in_database_title">"Supprimer Tous les Subreddits de la Base de Données"</string>
-    <string name="settings_delete_all_users_data_in_database_title">"Supprimer Tous les Utilisateurs de la Base de Données"</string>
-    <string name="settings_delete_all_sort_type_data_in_database_title">"Supprimer Tous les Types de Tri de la Base de Données"</string>
-    <string name="settings_delete_all_post_layout_data_in_database_title">"Supprimer Toutes les dispositions de Publications de la Base de Données"</string>
+    <string name="settings_delete_all_subreddits_data_in_database_title">"Supprimer Tous les Subreddits de la Base de Donnée"</string>
+    <string name="settings_delete_all_users_data_in_database_title">"Supprimer Tous les Utilisateurs de la Base de Donnée"</string>
+    <string name="settings_delete_all_sort_type_data_in_database_title">"Supprimer Tous les Types de Tri de la Base de Donnée"</string>
+    <string name="settings_delete_all_post_layout_data_in_database_title">"Supprimer Toutes les dispositions de Publications de la Base de Donnée"</string>
     <string name="settings_delete_all_themes_in_database_title">"Supprimer Tous les Thèmes de la Base de Donnée"</string>
     <string name="settings_delete_front_page_scrolled_positions_in_database_title">"Supprimer Toutes les Positions de Défilement de la Page d'Accueil de la Base de Donnée"</string>
     <string name="settings_reset_all_settings_title">"Remettre à zéro tous les paramètres"</string>
@@ -463,11 +485,11 @@ peut ne pas fonctionner sur Android 11"</string>
     <string name="settings_tab_3_summary">"Onglet 2"</string>
     <string name="settings_tab_title">"Titre"</string>
     <string name="settings_tab_post_type">"Type"</string>
-    <string name="settings_tab_subreddit_name">"Nom du Subreddit (Sans le préfixe r/)"</string>
+    <string name="settings_tab_subreddit_name">"Nom du Subreddit ( Sans le préfixe r/ )"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_tab_multi_reddit_name">"Nom du Multireddit (/user/votreutilisateur/m/votremultireddit)"</string>
-    <string name="settings_tab_username">"Nom d'utilisateur (Sans le préfixe u/)"</string>
+    <string name="settings_tab_multi_reddit_name">"Nom du Multireddit (/user/votrepseudo/m/votremultireddit) (en minuscules uniquement)"</string>
+    <string name="settings_tab_username">"Nom d'utilisateur ( Sans le préfixe u/ )"</string>
     <string name="no_developer_easter_egg">"Il n'y a pas d'options pour développeur ici"</string>
 
     <!-- When is this shown ? -->
@@ -495,19 +517,29 @@ peut ne pas fonctionner sur Android 11"</string>
     <string name="comment_unsaved_failed">"Impossible d'oublier le commentaire"</string>
     <string name="favorites">"Favoris"</string>
     <string name="all">"Tout"</string>
-    <string name="post_layout_card">"Agencement Type Carte"</string>
-    <string name="post_layout_compact">"Agencement Compact"</string>
+    <string name="post_layout_card">"Disposition Carte"</string>
+    <string name="post_layout_compact">"Disposition compacte"</string>
     <string name="elapsed_time_just_now">"Maintenant"</string>
     <string name="elapsed_time_a_minute_ago">"1 Minute"</string>
-    <string name="elapsed_time_minutes_ago">"%1$d Minutes"</string>
+
+    <!-- Fuzzy -->
+    <string name="elapsed_time_minutes_ago">"%1$,d Minutes"</string>
     <string name="elapsed_time_an_hour_ago">"1 Heure"</string>
-    <string name="elapsed_time_hours_ago">"%1$d Heures"</string>
+
+    <!-- Fuzzy -->
+    <string name="elapsed_time_hours_ago">"%1$,d Heures"</string>
     <string name="elapsed_time_yesterday">"Hier"</string>
-    <string name="elapsed_time_days_ago">"%1$d Jours"</string>
+
+    <!-- Fuzzy -->
+    <string name="elapsed_time_days_ago">"%1$,d Jours"</string>
     <string name="elapsed_time_a_month_ago">"1 Mois"</string>
-    <string name="elapsed_time_months_ago">"%1$d Mois"</string>
+
+    <!-- Fuzzy -->
+    <string name="elapsed_time_months_ago">"%1$,d Mois"</string>
     <string name="elapsed_time_a_year_ago">"1 An"</string>
-    <string name="elapsed_time_years_ago">"%1$d Ans"</string>
+
+    <!-- Fuzzy -->
+    <string name="elapsed_time_years_ago">"%1$,d Années"</string>
     <string name="error_getting_multi_reddit_data">"Erreur de récupération des données du multireddit"</string>
     <string name="error_loading_multi_reddit_list">"Impossible de synchroniser les multireddits"</string>
     <string name="error_loading_subscriptions">"Impossible de synchroniser les abonnements"</string>
@@ -535,13 +567,15 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="exit_app">"Quitter ?"</string>
     <string name="light_theme">"Thème Clair"</string>
     <string name="dark_theme">"Thème Sombre"</string>
-    <string name="multi_reddit_name_hint">"Nom (Max. 50 caractères)"</string>
+    <string name="multi_reddit_name_hint">"Nom ( Max. 50 caractères )"</string>
     <string name="multi_reddit_description_hint">"Description"</string>
     <string name="private_multi_reddit">"Privé"</string>
     <string name="no_multi_reddit_name">"Où est le nom ?"</string>
     <string name="create_multi_reddit_failed">"Impossible de créer ce multireddit"</string>
     <string name="duplicate_multi_reddit">"Ce multireddit existe déjà"</string>
     <string name="edit_multi_reddit_failed">"Impossible d'éditer ce multireddit"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_multi_reddit_success">"Supprimé avec succès"</string>
     <string name="delete_multi_reddit_failed">"Supression échouée"</string>
     <string name="delete_multi_reddit_dialog_message">"Êtes vous sûr ?"</string>
@@ -581,25 +615,25 @@ https://s3.eu-west-1.amazonaws.com/po-pub/i/dFZKKms9HbrDGOlcgW9QTcwF.jpg -->
     <string name="theme_item_button_text_color">"Couleur du texte des boutons"</string>
     <string name="theme_item_button_text_color_detail">"Appliqué à : Texte sur les boutons"</string>
     <string name="theme_item_chip_text_color">"Couleur du texte des puces"</string>
-    <string name="theme_item_chip_text_color_detail">"S'applique à : Bouton S'abonner"</string>
+    <string name="theme_item_chip_text_color_detail">"S'applique à: Bouton S'abonner"</string>
     <string name="theme_item_link_color">"Couleur des liens"</string>
     <string name="theme_item_link_color_detail">"Appliqué à : URL"</string>
     <string name="theme_item_received_message_text_color">"Couleur du texte des messages reçus"</string>
     <string name="theme_item_received_message_text_color_detail">"Appliqué à : messages privés reçus"</string>
     <string name="theme_item_sent_message_text_color">"Couleur du texte du message envoyé"</string>
-    <string name="theme_item_sent_message_text_color_detail">"S'applique à : Messages privés envoyés"</string>
+    <string name="theme_item_sent_message_text_color_detail">"S'applique à: Messages privés envoyés"</string>
     <string name="theme_item_background_color">"Couleur de fond"</string>
-    <string name="theme_item_background_color_detail">"S'applique à : Arrière-plan de chaque page et du tiroir de navigation"</string>
+    <string name="theme_item_background_color_detail">"S'applique à: Arrière-plan de chaque page et du tiroir de navigation"</string>
 
     <!-- Same problem as "chip": these terms are used by Material Design Android so I'm not sure there is a correct translation... Maybe we shouldn't translate? and keep something like that: "Couleur d'arrière-plan de Card View" ? -->
     <string name="theme_item_card_view_background_color">"Couleur d'arrière-plan de la vue cartes"</string>
-    <string name="theme_item_card_view_background_color_detail">"S'applique à : Arrière-plan des publications et des commentaires"</string>
+    <string name="theme_item_card_view_background_color_detail">"S'applique à: Arrière-plan des publications et des commentaires"</string>
     <string name="theme_item_comment_background_color">"Couleur de fond des commanditaires"</string>
     <string name="theme_item_comment_background_color_detail">"Appliqué à : Fond des commentaires"</string>
 
     <!-- Not sure how to translate correctly "Fully-Collapsed Comment". -->
     <string name="theme_item_fully_collapsed_comment_background_color">"Couleur d'arrière-plan des commentaires déroulés"</string>
-    <string name="theme_item_fully_collapsed_comment_background_color_detail">"S'applique à : Arrière-plan des commentaires déroulés"</string>
+    <string name="theme_item_fully_collapsed_comment_background_color_detail">"S'applique à: Arrière-plan des commentaires déroulés"</string>
     <string name="theme_item_awarded_comment_background_color">"Couleur de fond des commentaires récompensés"</string>
     <string name="theme_item_awarded_comment_background_color_detail">"Appliqué à : fond des commentaires récompensés"</string>
     <string name="theme_item_received_message_background_color">"Couleur de fond des messages reçus"</string>
@@ -607,45 +641,45 @@ https://s3.eu-west-1.amazonaws.com/po-pub/i/dFZKKms9HbrDGOlcgW9QTcwF.jpg -->
     <string name="theme_item_sent_message_background_color">"Couleur de fond des messages envoyés"</string>
     <string name="theme_item_sent_message_background_color_detail">"Appliqué à : fond des messages privés envoyés"</string>
     <string name="theme_item_bottom_app_bar_background_color">"Couleur de la barre de navigation inférieure"</string>
-    <string name="theme_item_bottom_app_bar_background_color_detail">"S'applique à : Barre de navigation inférieure"</string>
+    <string name="theme_item_bottom_app_bar_background_color_detail">"S'applique à: Barre de navigation inférieure"</string>
     <string name="theme_item_primary_icon_color">"Couleur principale de l'icône"</string>
-    <string name="theme_item_primary_icon_color_detail">"S'applique à : Icônes dans le tiroir de navigation"</string>
+    <string name="theme_item_primary_icon_color_detail">"S'applique à: Icônes dans le tiroir de navigation"</string>
     <string name="theme_item_bottom_app_bar_icon_color">"Couleur des icônes de la barre de navigation inférieure"</string>
-    <string name="theme_item_bottom_app_bar_icon_color_detail">"S'applique à : Icônes dans la barre de navigation inférieure"</string>
+    <string name="theme_item_bottom_app_bar_icon_color_detail">"S'applique à: Icônes dans la barre de navigation inférieure"</string>
     <string name="theme_item_post_icon_and_info_color">"Couleur des icônes et infos des publications"</string>
-    <string name="theme_item_post_icon_and_info_color_detail">"S'applique à : Icônes, score et nombre de commentaires dans les publications"</string>
+    <string name="theme_item_post_icon_and_info_color_detail">"S'applique à: Icônes, score et nombre de commentaires dans les publications"</string>
     <string name="theme_item_comment_icon_and_info_color">"Couleur des icônes et infos des commentaires"</string>
-    <string name="theme_item_comment_icon_and_info_color_detail">"S'applique à : Icônes et score dans les commentaires"</string>
+    <string name="theme_item_comment_icon_and_info_color_detail">"S'applique à: Icônes et score dans les commentaires"</string>
     <string name="theme_item_fab_icon_color">"Couleur de l'icône du bouton d'action flottant"</string>
-    <string name="theme_item_fab_icon_color_detail">"S'applique à : Icône du bouton d'action flottant"</string>
+    <string name="theme_item_fab_icon_color_detail">"S'applique à: Icône du bouton d'action flottant"</string>
     <string name="theme_item_send_message_icon_color">"Couleur de l'icône d'envoi de messages"</string>
-    <string name="theme_item_send_message_icon_color_detail">"S'applique à : Icône d'envoi de messages privés"</string>
+    <string name="theme_item_send_message_icon_color_detail">"S'applique à: Icône d'envoi de messages privés"</string>
     <string name="theme_item_toolbar_primary_text_and_icon_color">"Couleur du texte primaire et des icônes de la barre d'outils"</string>
-    <string name="theme_item_toolbar_primary_text_and_icon_color_detail">"S'applique à : Texte primaire et icônes dans la barre d'outils"</string>
+    <string name="theme_item_toolbar_primary_text_and_icon_color_detail">"S'applique à: Texte primaire et icônes dans la barre d'outils"</string>
     <string name="theme_item_toolbar_secondary_text_color">"Couleur du texte secondaire de la barre d'outils"</string>
-    <string name="theme_item_toolbar_secondary_text_color_detail">"S'applique à : Texte secondaire dans la barre d'outils"</string>
+    <string name="theme_item_toolbar_secondary_text_color_detail">"S'applique à: Texte secondaire dans la barre d'outils"</string>
     <string name="theme_item_circular_progress_bar_background_color">"Couleur d'arrière-plan de la barre de progression circulaire"</string>
-    <string name="theme_item_circular_progress_bar_background_color_detail">"S'applique à : Arrière-plan de la barre de progression circulaire"</string>
+    <string name="theme_item_circular_progress_bar_background_color_detail">"S'applique à: Arrière-plan de la barre de progression circulaire"</string>
     <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_background">"Couleur d'arrière-plan de la disposition des onglets dans la barre d'outils étendue"</string>
-    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_background_detail">"S'applique à : Arrière-plan de la disposition des onglets (barre d'outils étendue)"</string>
+    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_background_detail">"S'applique à: Arrière-plan de la disposition des onglets (barre d'outils étendue)"</string>
     <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_text_color">"Couleur du texte de la disposition des onglets dans la barre d'outils étendue"</string>
-    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_text_color_detail">"S'applique à : Couleur du texte de la disposition des onglets (barre d'outils étendue)"</string>
+    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_text_color_detail">"S'applique à: Couleur du texte de la disposition des onglets (barre d'outils étendue)"</string>
     <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_indicator">"Couleur de l'indicateur d'onglet de la disposition des onglets dans la barre d'outils étendue"</string>
-    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_indicator_detail">"S'applique à : Couleur de l'indicateur d'onglet dans la disposition d'onglet (barre d'outils étendue)"</string>
+    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_indicator_detail">"S'applique à: Couleur de l'indicateur d'onglet dans la disposition d'onglet (barre d'outils étendue)"</string>
     <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_background">"Couleur d'arrière-plan de la disposition des onglets dans la barre d'outils réduite"</string>
-    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_background_detail">"S'applique à : Arrière-plan de la disposition des onglets (barre d'outils réduite)"</string>
+    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_background_detail">"S'applique à: Arrière-plan de la disposition des onglets (barre d'outils réduite)"</string>
     <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_text_color">"Couleur du texte de la disposition des onglets dans la barre d'outils réduite"</string>
-    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_text_color_detail">"S'applique à : Couleur du texte de la disposition des onglets (barre d'outils réduite)"</string>
+    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_text_color_detail">"S'applique à: Couleur du texte de la disposition des onglets (barre d'outils réduite)"</string>
     <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_indicator">"Couleur de l'indicateur d'onglet de la disposition des onglets dans la barre d'outils réduite"</string>
-    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_indicator_detail">"S'applique à : Couleur de l'indicateur d'onglet dans la disposition des onglets (barre d'outils réduite)"</string>
+    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_indicator_detail">"S'applique à: Couleur de l'indicateur d'onglet dans la disposition des onglets (barre d'outils réduite)"</string>
     <string name="theme_item_upvoted_color">"Couleur du vote positif"</string>
     <string name="theme_item_upvoted_color_detail">"Appliqué à : Boutons de vote et scores (vote positif)"</string>
     <string name="theme_item_downvoted_color">"Couleur du vote négatif"</string>
     <string name="theme_item_downvoted_color_detail">"Appliqué à : boutons de votes et scores (votes négatif)"</string>
     <string name="theme_item_post_type_background_color">"Couleur d'arrière-plan du type de publication"</string>
-    <string name="theme_item_post_type_background_color_detail">"S'applique à : Arrière-plan du type de publication (IMAGE, TEXTE, VIDÉO, GIF, LIEN)"</string>
+    <string name="theme_item_post_type_background_color_detail">"S'applique à: Arrière-plan du type de publication (IMAGE, TEXTE, VIDÉO, GIF, LIEN)"</string>
     <string name="theme_item_post_type_text_color">"Couleur du texte du type de publication"</string>
-    <string name="theme_item_post_type_text_color_detail">"S'applique à : Couleur du texte du type de publication (IMAGE, TEXTE, VIDÉO, GIF, LIEN)"</string>
+    <string name="theme_item_post_type_text_color_detail">"S'applique à: Couleur du texte du type de publication (IMAGE, TEXTE, VIDÉO, GIF, LIEN)"</string>
     <string name="theme_item_spoiler_background_color">"Couleur de fond des \"spoilers\""</string>
     <string name="theme_item_spoiler_background_color_detail">"Appliqué à : couleur de fond de l'étiquette spoiler"</string>
     <string name="theme_item_spoiler_text_color">"Couleur du texte spoiler"</string>
@@ -657,9 +691,9 @@ https://s3.eu-west-1.amazonaws.com/po-pub/i/dFZKKms9HbrDGOlcgW9QTcwF.jpg -->
     <string name="theme_item_flair_background_color">"Couleur d'arrière-plan du flair"</string>
 
     <!-- I don't think we need to translate "flair" and "tag"? -->
-    <string name="theme_item_flair_background_color_detail">"S'applique à : Arrière-plan du tag flair"</string>
+    <string name="theme_item_flair_background_color_detail">"S'applique à: Arrière-plan du tag flair"</string>
     <string name="theme_item_flair_text_color">"Couleur de texte du flair"</string>
-    <string name="theme_item_flair_text_color_detail">"S'applique à : Couleur de texte du tag flair"</string>
+    <string name="theme_item_flair_text_color_detail">"S'applique à: Couleur de texte du tag flair"</string>
     <string name="theme_item_awards_background_color">"Couleur de fonds des récompenses"</string>
     <string name="theme_item_awards_background_color_detail">"Appliqué à : Fond des étiquettes de récompenses"</string>
     <string name="theme_item_awards_text_color">"Couleur du texte des récompenses"</string>
@@ -669,9 +703,9 @@ https://s3.eu-west-1.amazonaws.com/po-pub/i/dFZKKms9HbrDGOlcgW9QTcwF.jpg -->
     <string name="theme_item_locked_icon_tint">"Couleur d'icône bloqué"</string>
     <string name="theme_item_locked_icon_tint_detail">"Appliqué à : icône bloqué"</string>
     <string name="theme_item_crosspost_icon_tint">"Couleur de l'icône de crosspostage"</string>
-    <string name="theme_item_crosspost_icon_tint_detail">"S'applique à : Icône de crosspostage"</string>
+    <string name="theme_item_crosspost_icon_tint_detail">"S'applique à: Icône de crosspostage"</string>
     <string name="theme_item_stickied_post_icon_tint">"Couleur de l'icône de publication épinglée"</string>
-    <string name="theme_item_stickied_post_icon_tint_detail">"S'applique à : Icône de publication épinglée"</string>
+    <string name="theme_item_stickied_post_icon_tint_detail">"S'applique à: Icône de publication épinglée"</string>
     <string name="theme_item_subscribed_color">"Abonné"</string>
     <string name="theme_item_subscribed_color_detail">"Appliqué à : bouton de désabonnement"</string>
     <string name="theme_item_unsubscribed_color">"Désabonné"</string>
@@ -681,33 +715,33 @@ https://s3.eu-west-1.amazonaws.com/po-pub/i/dFZKKms9HbrDGOlcgW9QTcwF.jpg -->
     <string name="theme_item_subreddit_color">"Couleur de subreddit"</string>
     <string name="theme_item_subreddit_color_detail">"Appliqué à : Nom de Subreddit"</string>
     <string name="theme_item_author_flair_text_color">"Couleur du flair de l'auteur"</string>
-    <string name="theme_item_author_flair_text_color_detail">"S'applique à : Flair de l'auteur dans les commentaires"</string>
+    <string name="theme_item_author_flair_text_color_detail">"S'applique à: Flair de l'auteur dans les commentaires"</string>
     <string name="theme_item_submitter_color">"Auteur"</string>
-    <string name="theme_item_submitter_color_detail">"S'applique à : Auteur dans les commentaires"</string>
+    <string name="theme_item_submitter_color_detail">"S'applique à: Auteur dans les commentaires"</string>
     <string name="theme_item_moderator_color">"Modérateur"</string>
     <string name="theme_item_moderator_color_detail">"Appliqué à : Modérateur dans les commentaires"</string>
     <string name="theme_item_single_comment_thread_background_color">"Couleur d'arrière-plan du fil de commentaire unique"</string>
     <string name="theme_item_single_comment_thread_background_color_detail">"Appliqué à : commentaire seul"</string>
     <string name="theme_item_unread_message_background_color">"Couleur de fond de Message non lu"</string>
-    <string name="theme_item_unread_message_background_color_detail">"S'applique à : Couleur d'arrière-plan des messages non lus"</string>
+    <string name="theme_item_unread_message_background_color_detail">"S'applique à: Couleur d'arrière-plan des messages non lus"</string>
     <string name="theme_item_divider_color">"Couleur du séparateur"</string>
-    <string name="theme_item_divider_color_detail">"S'applique à : Séparateur de commentaires, séparateurs dans les pages pour la soumission de publications, etc."</string>
+    <string name="theme_item_divider_color_detail">"S'applique à: Séparateur de commentaires, séparateurs dans les pages pour la soumission de publications, etc."</string>
     <string name="theme_item_vote_and_reply_unavailable_button_color">"Couleur des boutons Voter et Répondre indisponibles"</string>
-    <string name="theme_item_vote_and_reply_unavailable_button_color_detail">"S'applique à : Boutons Voter et Répondre (indisponibles)"</string>
+    <string name="theme_item_vote_and_reply_unavailable_button_color_detail">"S'applique à: Boutons Voter et Répondre (indisponibles)"</string>
     <string name="theme_item_comment_vertical_bar_color_1">"Couleur 1 de la barre verticale de commentaire"</string>
-    <string name="theme_item_comment_vertical_bar_color_1_detail">"S'applique à : Barre verticale de commentaire (niveau 1)"</string>
+    <string name="theme_item_comment_vertical_bar_color_1_detail">"S'applique à: Barre verticale de commentaire (niveau 1)"</string>
     <string name="theme_item_comment_vertical_bar_color_2">"Couleur 2 de la barre verticale de commentaire"</string>
-    <string name="theme_item_comment_vertical_bar_color_2_detail">"S'applique à : Barre verticale de commentaire (niveau 2)"</string>
+    <string name="theme_item_comment_vertical_bar_color_2_detail">"S'applique à: Barre verticale de commentaire (niveau 2)"</string>
     <string name="theme_item_comment_vertical_bar_color_3">"Couleur 3 de la barre verticale de commentaire"</string>
-    <string name="theme_item_comment_vertical_bar_color_3_detail">"S'applique à : Barre  verticale de commentaire (niveau 3)"</string>
+    <string name="theme_item_comment_vertical_bar_color_3_detail">"S'applique à: Barre  verticale de commentaire (niveau 3)"</string>
     <string name="theme_item_comment_vertical_bar_color_4">"Couleur 4 de la barre verticale de commentaire"</string>
-    <string name="theme_item_comment_vertical_bar_color_4_detail">"S'applique à : Barre verticale de commentaire (niveau 4)"</string>
+    <string name="theme_item_comment_vertical_bar_color_4_detail">"S'applique à: Barre verticale de commentaire (niveau 4)"</string>
     <string name="theme_item_comment_vertical_bar_color_5">"Couleur 5 de la barre verticale de commentaire"</string>
-    <string name="theme_item_comment_vertical_bar_color_5_detail">"S'applique à : Barre verticale de commentaire (niveau 5)"</string>
+    <string name="theme_item_comment_vertical_bar_color_5_detail">"S'applique à: Barre verticale de commentaire (niveau 5)"</string>
     <string name="theme_item_comment_vertical_bar_color_6">"Couleur 6 de la barre verticale de commentaire"</string>
-    <string name="theme_item_comment_vertical_bar_color_6_detail">"S'applique à : Barre verticale de commentaire (niveau 6)"</string>
+    <string name="theme_item_comment_vertical_bar_color_6_detail">"S'applique à: Barre verticale de commentaire (niveau 6)"</string>
     <string name="theme_item_comment_vertical_bar_color_7">"Couleur 7 de la barre verticale de commentaire"</string>
-    <string name="theme_item_comment_vertical_bar_color_7_detail">"S'applique à : Barre verticale de commentaire (niveau 7)"</string>
+    <string name="theme_item_comment_vertical_bar_color_7_detail">"S'applique à: Barre verticale de commentaire (niveau 7)"</string>
     <string name="theme_item_nav_bar_color">"Couleur de la barre de navigation"</string>
     <string name="theme_item_nav_bar_color_detail">"Appliqué à : barre de navigation"</string>
 
@@ -741,20 +775,22 @@ Basé sur le thème sombre Indigo"</string>
     <string name="edit_theme_name">"Modifier le nom du thème"</string>
     <string name="edit_theme">"Modifier le thème"</string>
     <string name="delete_theme">"Supprimer le thème"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_theme_dialog_message">"Êtes-vous sûr de vouloir supprimer %1$s?"</string>
     <string name="share_theme">"Partager le thème"</string>
     <string name="change_theme_name">"Changer le nom du thème"</string>
-    <string name="theme_copied">"Copié ! Collez et partagez-le à d'autres personnes"</string>
+    <string name="theme_copied">"Copié ! Collez et partagez le à d'autres personnes"</string>
     <string name="copy_theme_faied">"Impossible de copier la configuration du thème"</string>
     <string name="cannot_find_theme">"Impossible de trouver ce thème"</string>
     <string name="import_theme">"Importer un thème"</string>
-    <string name="no_data_in_clipboard">"Il n'y a pas de données dans le presse-papiers"</string>
+    <string name="no_data_in_clipboard">"Il n'y-a pas de données dans le presse-papiers"</string>
 
     <!-- Fuzzy -->
     <string name="import_theme_success">"Réussite de l'import du thème"</string>
     <string name="parse_theme_failed">"Erreur de syntaxe du thème"</string>
     <string name="duplicate_theme_name_dialog_title">"Thème dupliqué trouvé"</string>
-    <string name="duplicate_theme_name_dialog_message">"Un thème dans la base de données est également appelé %1$s. Voulez-vous changer le nom du thème importé ?"</string>
+    <string name="duplicate_theme_name_dialog_message">"Un thème dans la base de données est également appelé %1$s. Voulez-vous changer le nom du thème importé?"</string>
     <string name="rename">"Renommer"</string>
     <string name="override">"Remplacer"</string>
     <string name="color_picker">"Sélecteur de couleurs"</string>
@@ -784,15 +820,17 @@ Basé sur le thème sombre Indigo"</string>
     <string name="post_content_preview">"Cette blague sur la gravité est vieille, mais elle attire les rires. "</string>
 
     <!-- "Publication" is probably the most accurate translation but it seems it's too long... -->
-    <string name="post_type_preview">"POST"</string>
+    <string name="post_type_preview">"PUBLI"</string>
     <string name="flair_preview">"Flair"</string>
     <string name="awards_preview">"4 récompenses"</string>
     <string name="author_flair_preview">"Flair de l'auteur"</string>
 
     <!-- A completely different joke -->
-    <string name="comment_content_preview">"C’est l’histoire de deux pommes de terre. Une d’elles se fait écraser et l’autre s’écrie « Oh purée ! »"</string>
+    <string name="comment_content_preview">"C’est l’histoire de deux pommes de terre. Une d’elles se fait écraser et l’autre s’écrie “Oh purée !”"</string>
     <string name="edit_multi_reddit">"Éditer le multireddit"</string>
     <string name="delete_multi_reddit">"Supprimer le multireddit"</string>
+
+    <!-- Fuzzy -->
     <string name="n_awards">"%1$d récompenses"</string>
     <string name="one_award">"Une récompense"</string>
     <string name="report">"Signaler"</string>
@@ -822,12 +860,12 @@ Basé sur le thème sombre Indigo"</string>
     <string name="downloading_reddit_video_finished">"Téléchargé"</string>
 
     <!-- Fuzzy -->
-    <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"Échec du téléchargement : impossible d'accéder au répertoire de cache"</string>
-    <string name="downloading_reddit_video_failed_cannot_download_video">"Échec du téléchargement : impossible de télécharger la vidéo"</string>
-    <string name="downloading_reddit_video_failed_cannot_save_video">"Échec du téléchargement : impossible d'enregistrer la vidéo dans le répertoire de cache"</string>
-    <string name="downloading_reddit_video_failed_cannot_save_audio">"Échec du téléchargement : impossible d'enregistrer l'audio dans le répertoire de cache"</string>
-    <string name="downloading_reddit_video_failed_cannot_mux">"Échec du téléchargement : impossible de multiplexer la vidéo et l'audio"</string>
-    <string name="downloading_reddit_video_failed_cannot_save_mux_video">"Échec du téléchargement : impossible d'enregistrer la vidéo dans le répertoire public"</string>
+    <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"Échec du téléchargement: impossible d'accéder au répertoire de cache"</string>
+    <string name="downloading_reddit_video_failed_cannot_download_video">"Échec du téléchargement: impossible de télécharger la vidéo"</string>
+    <string name="downloading_reddit_video_failed_cannot_save_video">"Échec du téléchargement: impossible d'enregistrer la vidéo dans le répertoire de cache"</string>
+    <string name="downloading_reddit_video_failed_cannot_save_audio">"Échec du téléchargement: impossible d'enregistrer l'audio dans le répertoire de cache"</string>
+    <string name="downloading_reddit_video_failed_cannot_mux">"Échec du téléchargement: impossible de multiplexer la vidéo et l'audio"</string>
+    <string name="downloading_reddit_video_failed_cannot_save_mux_video">"Échec du téléchargement: impossible d'enregistrer la vidéo dans le répertoire public"</string>
     <string name="wallpaper_set">"Fond d'écran défini"</string>
     <string name="error_set_wallpaper">"Impossible de définir le fond d'écran"</string>
     <string name="set_to_home_screen">"Ajouter à l'écran d'accueil"</string>
@@ -836,14 +874,14 @@ Basé sur le thème sombre Indigo"</string>
     <string name="default_font_font_preview">"Par défaut"</string>
     <string name="load_video_in_redgifs">"Essayez de charger la vidéo sur Redgifs"</string>
     <string name="top_score">"%1$s pts"</string>
-    <string name="login_activity_2fa_prompt">"Si vous avez activé l'authentification à 2 facteurs, veuillez saisir votre mot de passe comme suit : &lt;mot de passe&gt;:&lt;code A2F&gt;.
-Exemple : motdepasse:123456"</string>
-    <string name="submit_crosspost_activity_label">"Crosspost"</string>
+    <string name="login_activity_2fa_prompt">"Si vous avez activé l'authentification à 2 facteurs, veuillez saisir votre mot de passe comme suit: &lt;mot de passe&gt;: &lt;code A2F&gt;.
+Exemple: motdepasse: 123456"</string>
+    <string name="submit_crosspost_activity_label">"Cross publication"</string>
     <string name="give_award_activity_label">"Récompenser"</string>
-    <string name="action_crosspost">"Crosspost"</string>
+    <string name="action_crosspost">"Cross publication"</string>
     <string name="action_select_user_flair">"Sélectionner un flair d'utilisateur"</string>
     <string name="action_give_award">"Récompenser"</string>
-    <string name="posts">"Posts"</string>
+    <string name="posts">"Publis"</string>
     <string name="only_for_logged_in_user">"Seulement pour Les utilisateurs connectés"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Nombre de colonnes dans le flux"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Portrait"</string>
@@ -854,18 +892,18 @@ Exemple : motdepasse:123456"</string>
     <string name="settings_tab_count">"Nombre d'onglets"</string>
     <string name="settings_show_tab_names">"Montrer le nom des onglets"</string>
     <string name="settings_more_tabs_summary">"Plus d'onglets"</string>
-    <string name="settings_more_tabs_info_summary">"Activer les options suivantes va causer un comportement inattendu :
+    <string name="settings_more_tabs_info_summary">"Activer les options suivantes va causer un comportement inattendu:
 Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à l'autre, de même quand vous rafraîchissez les onglets"</string>
     <string name="settings_more_tabs_show_favorite_subscribed_subreddits_title">"Montrer les Subreddits favoris suivis"</string>
     <string name="settings_more_tabs_show_subscribed_subreddits_title">"Montrer les Subreddits suivis"</string>
-    <string name="settings_download_location_title">"Chemin du téléchargement"</string>
+    <string name="settings_download_location_title">"Chemin de téléchargement"</string>
     <string name="settings_image_download_location_title">"Chemin du téléchargement d'image"</string>
     <string name="settings_gif_download_location_title">"Chemin du téléchargement de Gif"</string>
     <string name="settings_video_download_location_title">"Chemin du téléchargement de vidéos"</string>
     <string name="settings_separate_folder_for_each_subreddit">"Dossier séparé pour chaque Subreddit"</string>
-    <string name="settings_swipe_action_title">"Action de glissage"</string>
-    <string name="settings_disable_swiping_between_tabs_title">"Désactiver le glissage entre les onglets"</string>
-    <string name="settings_enable_swipe_action_title">"Activer l'action de glissage"</string>
+    <string name="settings_swipe_action_title">"Action de swipe"</string>
+    <string name="settings_disable_swiping_between_tabs_title">"Désactiver le swiping entre les onglets"</string>
+    <string name="settings_enable_swipe_action_title">"Activer l'action de swipe"</string>
     <string name="settings_swipe_action_threshold">"Seuil"</string>
     <string name="settings_pull_to_refresh_title">"Tirer pour rafraîchir"</string>
     <string name="settings_security_title">"Sécurité"</string>
@@ -887,7 +925,7 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="settings_data_saving_mode">"Mode économie de données"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_data_saving_mode_info_summary">"Dans le mode économie de données, les aperçus d'image et les vidéos sont en plus petite résolution "</string>
+    <string name="settings_data_saving_mode_info_summary">"Dans le mode économie de données, les aperçus d'image et les vidéos sont en plus petite résolution"</string>
     <string name="settings_translation_title">"Traduction"</string>
     <string name="settings_translation_summary">"Traduire cette application dans POEditor. Merci à tous-tes les contributeurs-euses."</string>
     <string name="settings_credits_national_flags">"Drapeaux nationaux"</string>
@@ -895,9 +933,9 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="copy_failed">"Échec de la copie"</string>
     <string name="delete_all_legacy_settings_success">"Suppression des anciens paramètres avec succès"</string>
     <string name="downloading_media_finished">"Téléchargé"</string>
-    <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Échec du téléchargement: le répertoire de la destination est inaccessible"</string>
+    <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Échec du téléchargement: ne peut pas accéder au répertoire de la destination"</string>
     <string name="downloading_media_failed_cannot_download_media">"Échec du téléchargement"</string>
-    <string name="downloading_media_failed_cannot_save_to_destination_directory">"Échec du téléchargement: le fichier ne peut pas être sauvegardé dans le répertoire de destination"</string>
+    <string name="downloading_media_failed_cannot_save_to_destination_directory">"Échec du téléchargement: ne peut pas sauvegarder le fichier dans le répertoire de destination"</string>
     <string name="select_user_flair_success">"Flair sélectionné"</string>
     <string name="select_this_user_flair">"Sélectionner ce flair ? "</string>
     <string name="select_header_size">"Sélectionner la taille de l'en-tête"</string>
@@ -936,7 +974,7 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="random_nsfw_subreddit">"Subreddit NSFW aléatoire"</string>
     <string name="random_post">"Post aléatoire"</string>
     <string name="random_nsfw_post">"Post NSFW aléatoire"</string>
-    <string name="fetch_random_thing_failed">"Réessayer plus tard"</string>
+    <string name="fetch_random_thing_failed">"Réessayer plus-tard"</string>
     <string name="downloading">"Téléchargement"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all et r/popular"</string>
     <string name="settings_miscellaneous_title">"Divers"</string>
@@ -949,8 +987,8 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="settings_swipe_action_haptic_feedback_title">"Retour haptique"</string>
     <string name="settings_hide_subreddit_description_title">"Cacher la description des subreddits"</string>
     <string name="settings_disable_image_preview_title">"Désactiver l'aperçu de l'image en mode économie de données"</string>
-    <string name="settings_swipe_action_swipe_left_title">"Glisser à gauche"</string>
-    <string name="settings_swipe_action_swipe_right_title">"Glisser à droite"</string>
+    <string name="settings_swipe_action_swipe_left_title">"Swipe à gauche"</string>
+    <string name="settings_swipe_action_swipe_right_title">"Swipe à droite"</string>
     <string name="settings_swipe_action_info_summary">"Ne s'applique pas au flux de publication avec plus d'une colonne ou un détail de publication."</string>
     <string name="theme_item_no_preview_post_type_icon_tint">"Couleur de l'icône du type de publication sans prévisualisation"</string>
     <string name="theme_item_no_preview_post_type_icon_tint_detail">"Appliqué à : Icône indiquant le type de publication lorsqu'il n'y a pas d'aperçu disponible"</string>
@@ -983,22 +1021,48 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="settings_sort_type_title">"Type de tri"</string>
     <string name="settings_save_sort_type_title">"Enregistrer le type de tri"</string>
     <string name="settings_subreddit_default_sort_type_title">"Type de tri par défaut des subreddits"</string>
+    <string name="settings_subreddit_default_sort_time_title">"Heure de Tri Par Défaut du Subreddit"</string>
+    <string name="settings_user_default_sort_type_title">"Type de Tri Par Défaut de l'Utilisateur"</string>
+    <string name="settings_user_default_sort_time_title">"Heure de Tri Par Défaut de l'Utilisateur"</string>
     <string name="open_link">"Ouvrir le lien"</string>
+
+    <!-- Fuzzy -->
+    <string name="select_subreddits_and_users">"Sélectionner des Subreddit et des Utilisateurs"</string>
+    <string name="theme_item_read_post_title_color">"Couleur du Titre de Lecture de l'Article"</string>
     <string name="theme_item_read_post_title_color_detail">"Lire le Titre du Post"</string>
     <string name="theme_item_read_post_content_color">"Lire la couleur du contenu du post"</string>
-    <string name="theme_item_read_post_content_color_detail">"Appliqué à : Lire le contenu du post"</string>
+    <string name="theme_item_read_post_content_color_detail">"Appliqué à: Lire le contenu du post"</string>
+    <string name="theme_item_read_post_card_view_background_color">"Couleur d'Arrière-Plan de Lecture de l'Article Card View"</string>
+
+    <!-- Fuzzy -->
+    <string name="theme_item_read_post_card_view_background_color_detail">"Appliquer à: Lire l'arrière plan de la publication"</string>
     <string name="delete_all_read_posts_success">"Suppression de tous les post lus avec succès"</string>
     <string name="hide_read_posts">"Cacher les posts lus"</string>
     <string name="filter_posts">"Filtrer les posts"</string>
     <string name="only_nsfw">"Seulement NSFW"</string>
     <string name="only_spoiler">"Seulement Spoiler"</string>
+    <string name="title_excludes_strings_hint">"Titre: exclure les mots clés (mot1, mot2)"</string>
+
+    <!-- Fuzzy -->
+    <string name="title_excludes_regex_hint">"Titre: exclure regex"</string>
     <string name="exclude_subreddits_hint">"Exclure des subreddits (e.g. funny, AskReddit)"</string>
     <string name="exclude_users_hint">"Exclure des utilisateurs (e.g. Hostilenemy, random)"</string>
+
+    <!-- Fuzzy -->
+    <string name="exclude_flairs_hint">"Exclure flairs (ex: flair1, flair2)"</string>
+    <string name="contain_flairs_hint">"Contient flairs (e.x. flair1,flair2)"</string>
+    <string name="min_vote_hint">"Vote Min (-1: aucune réstriction)"</string>
+    <string name="max_vote_hint">"Vote Max (-1: aucune restriction)"</string>
+    <string name="min_comments_hint">"Commentaires Min (-1: aucune restriction)"</string>
+    <string name="max_comments_hint">"Commentaires Max (-1: aucune réstriction)"</string>
+    <string name="min_awards_hint">"Récompenses Min (-1: aucune réstriction)"</string>
+    <string name="max_awards_hint">"Récompenses Max (-1: aucune réstriction)"</string>
+    <string name="post_filter_name_hint">"Nom du filtre de publication"</string>
     <string name="post_filter_requires_a_name">"Quel est le nom de ce filtre de publication ?"</string>
-    <string name="duplicate_post_filter_dialog_title">"'%1$s' Éxiste déjà"</string>
+    <string name="duplicate_post_filter_dialog_title">"'%1$s' Existe déjà"</string>
     <string name="duplicate_post_filter_dialog_message">"Le remplacer ?"</string>
     <string name="apply_post_filter_to">"Appliquer à"</string>
-    <string name="post_filter_usage_home">"Accueil"</string>
+    <string name="post_filter_usage_home">"Acceuil"</string>
     <string name="post_filter_usage_subreddit">"Subreddit: %1$s"</string>
     <string name="post_filter_usage_subreddit_all">"Subreddit"</string>
     <string name="post_filter_usage_user">"Utilisateur: %1$s"</string>
@@ -1006,25 +1070,27 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="post_filter_usage_multireddit">"MultiReddit: %1$s"</string>
     <string name="post_filter_usage_multireddit_all">"Multireddit"</string>
     <string name="post_filter_usage_search">"Rechercher"</string>
-    <string name="subreddit">"Subreddit"</string>
+    <string name="subreddit">"Subredit"</string>
     <string name="user">"Utilisateur"</string>
     <string name="edit_post_filter_name_of_usage_info">"Laissez-le vide pour appliquer ce filtre de publication à tous les subreddits / utilisateurs / multireddits"</string>
-    <string name="read_all_messages_time_limit">"Vous faites cela trop fréquemment. Essayez plus tard. C'est le taux limite de l'API Reddit."</string>
+    <string name="read_all_messages_time_limit">"You faites cela trop fréquemment. Essayez plus tard. C'est le taux limite de l'Api Reddit."</string>
     <string name="read_all_messages_success">"Lecture de tous les messages avec succès"</string>
     <string name="read_all_messages_failed">"Impossible de lire tous les messages"</string>
-    <string name="add_subreddit_or_user_to_multireddit_success">"%1$s est ajouté au multireddit %2$s"</string>
+    <string name="add_subreddit_or_user_to_multireddit_success">"%1$s a été ajouté au multireddit %2$s"</string>
     <string name="add_subreddit_or_user_to_multireddit_failed">"Impossible d'ajouter %1$s au multireddit %2$s"</string>
     <string name="choose_a_user">"Choisir un utilisateur"</string>
-    <string name="settings_click_to_show_media_in_gallery_layout">"Cliquez pour afficher les médias dans la disposition de la galerie"</string>
+    <string name="settings_click_to_show_media_in_gallery_layout">"Cliquez pour afficher les médias dans la disposition galerie"</string>
     <string name="settings_hide_post_type">"Masquer le type de publication"</string>
     <string name="settings_hide_the_number_of_awards">"Masquer le nombre de récompenses"</string>
     <string name="settings_hide_subreddit_and_user_prefix">"Masquer Subreddit et préfixe utilisateur"</string>
     <string name="settings_hide_the_number_of_votes">"Cacher le Nombre de Votes"</string>
     <string name="settings_hide_the_number_of_comments">"Cacher le Nombre de Commentaires"</string>
-    <string name="post_layout_gallery">"Disposition de la galerie"</string>
-    <string name="post_layout_card_2">"Disposition de carte 2"</string>
+    <string name="post_layout_gallery">"Disposition galerie"</string>
+
+    <!-- Fuzzy -->
+    <string name="post_layout_card_2">"Disposition Carte 2"</string>
     <string name="have_trouble_login_title">"Problème de connexion"</string>
-    <string name="have_trouble_login_message">"Voulez-vous essayer un autre moyen d'identification ?"</string>
+    <string name="have_trouble_login_message">"Voulez vous essayer un autre moyen d'identification ?"</string>
     <string name="vote">"Vote"</string>
     <string name="action_share_link">"Partager le Lien"</string>
     <string name="action_copy_link">"Copier le Lien"</string>
@@ -1033,28 +1099,48 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="settings_show_avatar_on_the_right">"Voir l'avatar à droite"</string>
     <string name="settings_backup_settings_title">"Paramètres de Sauvegarde"</string>
     <string name="settings_restore_settings_title">"Restaurer les Paramètres"</string>
-    <string name="settings_swipe_between_posts_title">"Glisser entre les publications"</string>
+    <string name="settings_credits_love_animation_title">"Animation d'amour"</string>
+    <string name="settings_swipe_between_posts_title">"Swiper entre les publications"</string>
     <string name="settings_navigation_drawer_title">"Onglet de Navigation"</string>
     <string name="settings_collapse_account_section_title">"Réduire la section du compte"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_collapse_post_section_title">"Réduire la section publication"</string>
     <string name="settings_collapse_preferences_section_title">"Réduire la section des préférences"</string>
+    <string name="settings_collapse_favorite_subreddits_section_title">"Réduire la section Subreddit favoris"</string>
+
+    <!-- j'ai mis suivis plutôt qu'abonné sa me parait un peu bizarre dans cette formulation. -->
+    <!-- Fuzzy -->
+    <string name="settings_collapse_subscribed_subreddits_section_title">"Réduire la section Subreddit Suivi"</string>
     <string name="settings_hide_favorite_subreddits_sections_title">"Cacher la section de subreddits favoris"</string>
+
+    <!-- j'ai mis "Suivi" plutôt qu'abonné sa me parait un peu bizarre dans cette formulation. -->
+    <!-- Fuzzy -->
+    <string name="settings_hide_subscribed_subreddits_sections_title">"Caché la section Subreddit Suivi"</string>
     <string name="settings_default_search_result_tab">"Onglet Résultat de la recherche par défaut"</string>
-    <string name="device_default">"Appareil par défaut"</string>
+    <string name="device_default">"Appareil par defaut"</string>
     <string name="set_by_battery_saver">"Défini par l'économiseur de batterie"</string>
+    <string name="theme_item_upvote_ratio_icon_tint">"Couleur d'Icône du Ratio d'Upvote"</string>
+    <string name="theme_item_upvote_ratio_icon_tint_detail">"Appliqué à : icône du ratio d'Upvote"</string>
     <string name="theme_item_current_user_color">"Utilisateur actuel"</string>
     <string name="theme_item_current_user_color_detail">"Appliqué à : Utilisateurs en commentaires"</string>
     <string name="exclude_domains_hint">"Exclure des domaines"</string>
     <string name="anonymous_front_page_no_subscriptions">"Commence en rejoignant un subreddit !"</string>
+
+    <!-- Fuzzy -->
     <string name="backup_settings_success">"Paramètres exportés avec succès vers le répertoire de destination. Le mot de passe du fichier zip généré est 123321. Veuillez ne pas modifier le fichier zip."</string>
     <string name="create_zip_in_destination_directory_failed">"Impossible de créer un zip de sauvegarde dans ce dossier"</string>
     <string name="backup_some_settings_failed">"Impossible de sauvegarder certains paramètres mais d'autres ont été exportés avec succès vers le répertoire de destination"</string>
-    <string name="restore_settings_success">"Paramètres restaurés avec succès. Redémarrer l'application pour voir les changements"</string>
+    <string name="restore_settings_success">"Paramètres restaurés avec succès. Redémarre l'application pour voir les changements"</string>
     <string name="restore_settings_partially_failed">"Certains paramètres peuvent ne pas être restaurés avec succès. Redémarrez l'application pour voir les changements."</string>
     <string name="restore_settings_failed_file_corrupted">"Impossible de restaurer les paramètres. Le fichier est peut-être corrompu."</string>
     <string name="restore_settings_failed_cannot_get_file">"Impossible d'accéder au fichier"</string>
     <string name="suicide_prevention_quote">"Si vous cherchez un signe pour ne pas vous suicider, c'est celui-ci.\u2764"</string>
     <string name="do_not_show_this_again">"Ne plus voir ça"</string>
     <string name="continue_suicide_prevention_activity">"Continuer"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_redirect_url">"Erreur lors de la récupération de la vidéo v.redd.it : Impossible d'obtenir l'URL de redirection"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_post">"Erreur lors de la récupération de la vidéo v.redd.it : Impossible d'obtenir l'article"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_post_id">"Erreur lors de la récupération de la vidéo v.redd.it : Impossible d'obtenir l'id de l'article"</string>
     <string name="always_on">"Toujours activé"</string>
     <string name="only_on_wifi">"Uniquement en Wifi"</string>
     <string name="never">"Jamais"</string>
@@ -1062,7 +1148,7 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="extra_large">"Extra Grand"</string>
     <string name="enormously_large">"Énormement grand"</string>
     <string name="default_in_array">"Défaut"</string>
-    <string name="off">"Désactivé"</string>
+    <string name="off">"désactivé"</string>
     <string name="only_on_cellular_data">"Seulement en donnés mobiles"</string>
     <string name="upvote">"Upvote"</string>
     <string name="downvote">"Downvote"</string>
@@ -1070,12 +1156,15 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="exclude_subreddit">"Exclure ce subreddit"</string>
     <string name="exclude_user">"Exclure cet utilisateur"</string>
     <string name="exclude_flair">"Exclure ce flair"</string>
+    <string name="contain_flair">"Contient ce flair"</string>
 
     <!-- Fuzzy -->
     <string name="exclude_domain">"Exclure le domaine"</string>
     <string name="suggest_title">"Suggérer un titre"</string>
     <string name="suggest_title_failed">"Échec de la suggestion de titre"</string>
     <string name="action_delete_logs">"Supprimer les logs"</string>
+
+    <!-- Fuzzy -->
     <string name="inbox_with_count">"Boîte de Réception (%1$d)"</string>
     <string name="comment_continue_thread">"Continuer le fil"</string>
     <string name="settings_swipe_vertically_to_go_back_from_media_title">"Balayez verticalement pour revenir à l'image et au gif"</string>
@@ -1086,17 +1175,26 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="settings_show_only_one_comment_level_indicator">"Afficher un seul indicateur de niveau de commentaire"</string>
     <string name="save_comment">"Sauvegarder"</string>
     <string name="unsave_comment">"Ne pas enregistrer"</string>
+    <string name="copy_multi_reddit_path">"Copier le Chemin du Multireddit"</string>
+    <string name="copy_multi_reddit_path_failed">"Impossible de copier le chemin du multireddit"</string>
+
+    <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Les rapports de crash sont supprimés"</string>
+
+    <!-- Fuzzy -->
     <string name="disable_nsfw_forever_message">"Une fois activé, NSFW sera définitivement désactivé, que le paramètre NSFW soit activé ou non. Et cette option est irréversible, le seul moyen de réactiver NSFW est d'effacer les données de l'application.
 
 Vous voulez toujours l'activer ?"</string>
     <string name="reply">"Répondre"</string>
+
+    <!-- Fuzzy -->
+    <string name="post_gallery_activity_label">"Publier une galerie"</string>
     <string name="trending_activity_label">"Tendance"</string>
     <string name="action_share_post_link">"Partager le lien du Post"</string>
     <string name="trending">"Tendance"</string>
     <string name="receive_post_reply_notifications">"Recevoir des notifications de réponse de publication"</string>
     <string name="bottom_sheet_post_gallery">"Gallerie"</string>
-    <string name="posting_gallery">"Galerie de publication"</string>
+    <string name="posting_gallery">"Publication de la galerie"</string>
     <string name="label_reddit">"Reddit"</string>
     <string name="settings_default_link_post_layout">"Disposition de publication de lien par défaut"</string>
     <string name="settings_category_material_you_title">"Material You"</string>
@@ -1111,10 +1209,11 @@ Sinon, renommez-les avant d'activer Material You."</string>
     <string name="settings_apply_material_you_summary">"Au cas où Infinity n'aurait pas changé le thème"</string>
     <string name="settings_more_tabs_show_favorite_multireddits_title">"Afficher les Multireddits favoris"</string>
     <string name="settings_more_tabs_show_multireddits_title">"Montrer les Multireddits"</string>
+    <string name="settings_collapse_reddit_section_title">"Réduire Section Reddit"</string>
     <string name="settings_video_player_automatic_landscape_orientation">"Basculer automatiquement vers l'orientation paysage dans le lecteur vidéo"</string>
     <string name="settings_remember_muting_option_in_post_feed">"N'oubliez pas l'option de mise en sourdine dans le flux de publication"</string>
     <string name="link_post_layout_auto">"Auto"</string>
-    <string name="uploaded_images">"Image uploadée"</string>
+    <string name="uploaded_images">"Images uploadées"</string>
     <string name="select_image">"Sélectionner une image"</string>
     <string name="capture">"Capturer"</string>
     <string name="uploading_image">"En train d'uploader"</string>
@@ -1122,7 +1221,7 @@ Sinon, renommez-les avant d'activer Material You."</string>
     <string name="get_image_bitmap_failed">"Impossible d'obtenir le bitmap de l'image"</string>
     <string name="upload_image_failed">"Impossible d'uploader l'image"</string>
     <string name="search_comments">"Chercher des commentaires"</string>
-    <string name="please_wait_image_is_uploading">"Une image est toujours sn train d'être uploadée. Merci d'attendre"</string>
+    <string name="please_wait_image_is_uploading">"Une image est toujours en cours d'upload. Merci de patienter."</string>
     <string name="error_fetch_trending_search">"Échec de la récupération des recherches de tendance.
 Cliquer pour réessayer."</string>
     <string name="error_parse_trending_search">"Échec de l'analyse des recherches de tendance.
@@ -1134,11 +1233,199 @@ Cliquer pour réessayer."</string>
     <string name="settings_separate_post_and_comments_in_portrait_mode_title">"Séparez la publication et les commentaires en mode portrait"</string>
     <string name="settings_separate_post_and_comments_in_landscape_mode_title">"Séparez la publication et les commentaires en mode paysage"</string>
     <string name="settings_separate_post_and_comments_summary">"La lecture automatique de la vidéo sera désactivée dans la page de détail de la publication"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_use_bottom_toolbar_in_media_viewer_title">"Utiliser la barre d'outil en bas dans le lecteur multimédia"</string>
     <string name="settings_secure_mode_title">"Mode sécurisé"</string>
     <string name="settings_secure_mode_summary">"Les captures d'écran et les enregistrements vidéo ne sont pas autorisés. Aucun aperçu dans l'écran de l'application récente."</string>
-    <string name="discard_dialog_button">"Jeter"</string>
+    <string name="discard_dialog_button">"Annuler"</string>
     <string name="error_loading_wiki">"Erreur de chargement du wiki"</string>
     <string name="no_wiki">"Ce subreddit n'a pas de page wiki"</string>
     <string name="material_you_notification_title">"Application de Material You"</string>
-    <string name="about">"À propos de"</string>
+    <string name="action_go_to_wiki">"Aller au Wiki"</string>
+    <string name="action_playback_speed">"Vitesse de lecture"</string>
+    <string name="about">"À propos"</string>
+    <string name="settings_link_handler_title">"Gestionnaires de liens"</string>
+    <string name="settings_main_page_back_button_action">"Action bouton retour page principal"</string>
+    <string name="settings_open_navigation_drawer">"Ouvrir le tiroir de navigation"</string>
+    <string name="settings_number_of_columns_in_post_feed_unfolded_portrait_title">"Portrait (déplié)"</string>
+    <string name="settings_number_of_columns_in_post_feed_unfolded_landscape_title">"Paysage (déplié)"</string>
+    <string name="settings_loop_video_title">"Vidéo en boucle"</string>
+    <string name="settings_loop_video_summary">"Redémarrer l'application pour appliquer le paramètre de lecture automatique des vidéos"</string>
+    <string name="settings_credits_lock_screen_animation_title">"Animation de verrouillage"</string>
+    <string name="settings_app_lock_title">"Verrouillage de l'application"</string>
+    <string name="settings_app_lock_summary">"Demander une authentification avant d'utiliser l'application"</string>
+    <string name="settings_app_lock_timeout_title">"Délai avant verrouillage auto de l'application"</string>
+    <string name="settings_enable_fold_support_title">"Activer le support des téléphones pliants"</string>
+    <string name="settings_default_playback_speed_title">"Vitesse de lecture par défaut"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_link_handler_value_external_browser">"Navigateur externe"</string>
+    <string name="settings_link_handler_value_custom_tab">"Onglet personnalisé"</string>
+    <string name="settings_link_handler_value_internal_browser">"Navigateur interne"</string>
+    <string name="settings_legacy_autoplay_video_controller_ui_title">"Interface Héritée du Contrôleur Vidéo"</string>
+    <string name="settings_pinch_to_zoom_video_title">"Pincer pour zoomer"</string>
+    <string name="settings_experimental_feature">"Fonctionnalités expérimentales"</string>
+    <string name="theme_item_media_indicator_icon_color">"Couleur d'Icône de l'Indicateur Média"</string>
+    <string name="theme_item_media_indicator_icon_color_detail">"Appliqué à : Vidéo ou Icône de Galerie dans l'aperçu de l'article"</string>
+    <string name="theme_item_media_indicator_background_color">"Couleur d'Arrière-Plan de l'Indicateur Média"</string>
+    <string name="theme_item_media_indicator_background_color_detail">"Appliqué à : Arrière plan de la vidéo ou  icône de galerie dans l'aperçu de l'article"</string>
+    <string name="go_to_top">"Aller tout en haut"</string>
+    <string name="title_contains_strings_hint">"Titre: contient les mots clés (mot1, mos2)"</string>
+    <string name="title_contains_regex_hint">"Titre: contient regex"</string>
+    <string name="contain_domains_hint">"Contient un domaine"</string>
+    <string name="anonymous_multireddit_no_subreddit">"Ce multireddit ne contient aucun subreddit!"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_video_url">"Erreur lors de la récupération de la vidéo v.redd.it : Impossible d'obtenir l'url de la vidéo"</string>
+
+    <!-- Fuzzy -->
+    <string name="contain_domain">"Contient ce domaine"</string>
+    <string name="lock_screen_text">"Ou-là doucement!!!"</string>
+    <string name="app_lock_timeout_immediately">"Immédiatement"</string>
+    <string name="app_lock_timeout_1_min">"1 minute"</string>
+    <string name="app_lock_timeout_2_mins">"2 minutes"</string>
+    <string name="app_lock_timeout_5_mins">"5 minutes"</string>
+    <string name="app_lock_timeout_10_mins">"10 minutes"</string>
+    <string name="app_lock_timeout_15_mins">"15 minutes"</string>
+    <string name="app_lock_timeout_20_mins">"20 minutes"</string>
+    <string name="app_lock_timeout_30_mins">"30 minutes"</string>
+    <string name="app_lock_timeout_1_hour">"1 heure"</string>
+    <string name="app_lock_timeout_2_hours">"2 heures"</string>
+    <string name="app_lock_timeout_3_hours">"3 heures"</string>
+    <string name="app_lock_timeout_4_hours">"4 heures"</string>
+    <string name="app_lock_timeout_5_hours">"5 heures"</string>
+    <string name="app_lock_timeout_6_hours">"6 heures"</string>
+    <string name="app_lock_timeout_12_hours">"12 heures"</string>
+    <string name="app_lock_timeout_24_hours">"24 heures"</string>
+    <string name="edit_profile_activity_label">"Éditer le profil"</string>
+    <string name="action_contact_mods">"Contacter les modérateurs"</string>
+    <string name="settings_save_nsfw_media_in_different_folder_title">"Sauvegarder le contenu NSFW dans une destination différente"</string>
+    <string name="settings_nsfw_download_location_title">"Destination des téléchargements NSFW"</string>
+    <string name="fetch_streamable_video_failed">"Échec de la récupération de la vidéo Streamable"</string>
+
+    <!-- EditProfileService Notification -->
+    <string name="submit_change_avatar">"Sauvegarder le changement d'avatar"</string>
+    <string name="submit_change_banner">"Sauvegarder le changement de bannière"</string>
+    <string name="submit_save_profile">"Sauvegarder le profile"</string>
+
+    <!-- EditProfileActivity -->
+    <string name="action_edit_profile">"Éditer le profile"</string>
+    <string name="remove_avatar">"Supprimer l'avatar"</string>
+    <string name="remove_banner">"Supprimer la bannière"</string>
+    <string name="display_name_text">"Afficher le nom"</string>
+    <string name="display_name_hint">"Afficher sur votre profile"</string>
+    <string name="display_name_description">"Cela sera affiché aux visiteur de votre page de profil mais ne changera pas votre nom d'utilisateur."</string>
+    <string name="about_you_text">"À propos de vous"</string>
+    <string name="about_you_hint">"Décrivez-vous"</string>
+    <string name="message_remove_avatar_success">"Suppression de votre avatar réussie"</string>
+    <string name="message_remove_avatar_failed">"Erreur lors de la suppression de votre avatar %s"</string>
+    <string name="message_remove_banner_success">"Suppression de votre bannière réussie"</string>
+    <string name="message_remove_banner_failed">"Erreur lors de la suppression de votre bannière %s"</string>
+    <string name="message_change_avatar_success">"Avatar changé avec succès"</string>
+    <string name="message_change_avatar_failed">"Erreur lors de la sauvegarde de l’avatar %s"</string>
+    <string name="message_change_banner_success">"Bannière changée avec succès"</string>
+    <string name="message_change_banner_failed">"Erreur lors de la sauvegarde de la bannière %s"</string>
+    <string name="message_save_profile_success">"Profil sauvegardé avec succès"</string>
+    <string name="message_save_profile_failed">"Erreur lors de la sauvegarde du profil %s"</string>
+    <string name="post_poll_activity_label">"Publication de vote"</string>
+    <string name="action_open_external_browser">"Ouvrir dans un navigateur"</string>
+
+    <!-- Fuzzy -->
+    <string name="voting_length">"Durée du vote: %1$d jours"</string>
+    <string name="two_options_required">"Un vote a besoin de deux choix ou plus !"</string>
+    <string name="bottom_sheet_post_poll">"Vote"</string>
+
+    <!-- Fuzzy -->
+    <string name="no_activity_found_for_external_browser">"Aucune application ne permet d'ouvrir dans un navigateur externe"</string>
+    <string name="settings_require_authentication_to_show_accounts">"Nécessite de s'authentifier pour afficher les comptes"</string>
+    <string name="settings_custom_font_family_title">"Famille de police personnalisée"</string>
+    <string name="settings_custom_title_font_family_title">"Nom de la police personnalisé"</string>
+    <string name="settings_custom_content_font_family_title">"Famille de Police du Contenu Personnalisé"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_fixed_height_preview_in_card_title">"Figés la Hauteur des cartes"</string>
+    <string name="settings_hide_text_post_content">"Masquer le Contenu de l'Article Textuel"</string>
+    <string name="settings_hide_comment_awards_title">"Cacher les récompenses sur des commentaires"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_show_fewer_toolbar_options_threshold_title">"Afficher moins d'option dans la barre d'outil à partir de"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_show_fewer_toolbar_options_threshold_summary">"Niveau %1$d"</string>
+    <string name="settings_show_author_avatar_title">"Afficher l'avatar de l'auteur"</string>
+    <string name="settings_reddit_user_agreement_title">"Accord d'utilisation de Reddit"</string>
+
+    <!-- Je pensée aussi a mineure plutôt qu'enfant -->
+    <!-- Fuzzy -->
+    <string name="settings_always_show_child_comment_count_title">"Toujours afficher les réponses"</string>
+    <string name="settings_hide_upvote_ratio_title">"Cacher le ratio d'upvotes"</string>
+    <string name="settings_miscellaneous_dangerous_group_title">"Dangereux"</string>
+    <string name="settings_post_feed_max_resolution_warning_title">"Augmenter cette valeur permet d'afficher les prévisualisations avec une plus haute résolution, mais l'application risque de planter."</string>
+    <string name="settings_post_feed_max_resolution_title">"Résolution Max pour la prévisualisation des publication (Largeur * Hauteur)"</string>
+    <string name="settings_reddit_video_default_resolution">"Résolution vidéo Reddit par défaut"</string>
+    <string name="select_a_ttf_font">"Séléctionner un fichier ttf pour la police"</string>
+    <string name="unable_to_get_font_file">"Impossible d'obtenir votre police"</string>
+    <string name="unable_to_load_font">"Impossible de charger la police personnalisée"</string>
+    <string name="unable_to_copy_font_file">"Impossible de copier votre police"</string>
+    <string name="reddit_gallery_item_caption_hint">"Sous titres (Maximum 180 caractères)"</string>
+    <string name="reddit_gallery_item_url_hint">"Url"</string>
+    <string name="user_agreement_dialog_title">"Accord d'utilisation"</string>
+    <string name="user_agreement_message">"Vous devez accepter l'accord d'utilisation de Reddit (%1$s) et la politique de confidentialité d'Infinity for Reddit (%2$s), avant de vous connecter."</string>
+    <string name="agree">"J'accepte"</string>
+    <string name="do_not_agree">"Je n’accepte pas"</string>
+    <string name="option_1_hint">"Option 1 (Requise)"</string>
+    <string name="option_2_hint">"Option 1 (Requise)"</string>
+    <string name="option_3_hint">"Option 3"</string>
+    <string name="option_4_hint">"Option 4"</string>
+    <string name="option_5_hint">"Option 5"</string>
+    <string name="option_6_hint">"Option 6"</string>
+    <string name="not_a_valid_number">"Nombre non valide"</string>
+    <string name="post_karma">"Karma de publication:"</string>
+    <string name="comment_karma">"Karma de commentaires:"</string>
+
+    <!-- Si quelqu'un trouve une formulation plus courte -->
+    <!-- Fuzzy -->
+    <string name="awarder_karma">"Karma pour offrir des récompenses:"</string>
+
+    <!-- Si quelqu'un trouve une formulation plus courte -->
+    <!-- Fuzzy -->
+    <string name="awardee_karma">"Karma pour obtention de récompenses:"</string>
+    <string name="history_activity_label">"Historique"</string>
+    <string name="history">"Historique"</string>
+    <string name="settings_easier_to_watch_in_full_screen_title">"Plus facile à regarder en plein écran"</string>
+    <string name="clear_user_flair">"Effacer le Flair"</string>
+    <string name="clear_user_flair_success">"flair Utilisateur effacé"</string>
+    <string name="extra_small">"Très petit"</string>
+    <string name="handle_link">"Lire le lien"</string>
+    <string name="invalid_link">"Lien invalide"</string>
+    <string name="error_unsupported_video">"Le média inclut des pistes vidéos, mais aucune ne peut être lue sur cet appareil"</string>
+    <string name="error_unsupported_audio">"Le média inclut des pistes audios, mais aucune ne peut être lue sur cet appareil"</string>
+    <string name="exo_controls_volume_up_description">"Monter le volume"</string>
+    <string name="exo_controls_volume_off_description">"Couper le volume"</string>
+    <string name="action_block_user">"Bloquer l'utilisateur"</string>
+    <string name="action_create_github_issue">"Créer une Issue GitHub"</string>
+    <string name="action_more_options">"Plus d'options"</string>
+    <string name="settings_backup_settings_summary">"Le mot de passe de la sauvegarde est \"123321\"."</string>
+    <string name="settings_navigation_drawer_enable_hide_karma_title">"Masquer le karma du compte"</string>
+    <string name="settings_hide_fab_in_post_feed">"Masquer le bouton d'actions flottant dans le fil d'actualités"</string>
+    <string name="settings_comment_divider_type">"Type de Diviseur de Commentaire"</string>
+    <string name="block_user">"Bloquer l'utilisateur"</string>
+    <string name="block_user_success">"Bloqué"</string>
+    <string name="block_user_failed">"Échec du blocage de l'utilisateur"</string>
+    <string name="invalid_regex">"Modèle regex invalide"</string>
+    <string name="load_more_posts_failed">"Impossible de charger plus de messages.
+Cliquez pour réessayer."</string>
+    <string name="no_more_posts">"Pas d'autres publications"</string>
+    <string name="image_index_in_gallery">"%1$d/%2$d"</string>
+    <string name="denied_notification_permission">"La permission de notification n'est pas accordée"</string>
+    <string name="go_to_settings">"Paramètres"</string>
+    <string name="subscription_activity_label">"Abonnement"</string>
+    <string name="edited">"Modifié"</string>
+    <string name="edited_time">"Édité le %s"</string>
+    <string name="welcome_to_infinity">"Bienvenue sur Infinity for Reddit, la porte d'entrée vers une nouvelle façon de naviguer sur Reddit!"</string>
+
+    <!-- Fuzzy -->
+    <string name="subscription_prompt">"Avant que vous puissiez profiter des nombreuses possibilités présentes sur cette appli, je voudrais être totalement honnête et transparent à propos d'un changement majeur que j'ai implémenter afin de vous offrir la meilleure expérience possible.
+
+À partir de maintenant, un abonnement mensuel est requis pour accéder à l'API de Reddit dans Infinity for Reddit dû à la décision de Reddit de facturer l'accès à l'API depuis le 1er Juin 2023."</string>
+    <string name="monthly">"Mensuel"</string>
 </resources>

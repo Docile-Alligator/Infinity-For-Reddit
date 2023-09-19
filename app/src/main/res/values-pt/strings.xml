@@ -24,11 +24,21 @@
     <string name="edit_multi_reddit_activity_label">"Editar Multireddit"</string>
     <string name="selected_subeddits_activity_label">"Comunidades selecionadas"</string>
     <string name="report_activity_label">"Denunciar"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_image_label">"Imagem %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_video_label">"Vídeo %1$d/%2$d"</string>
     <string name="send_private_message_activity_label">"Enviar MP"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_image_label">"Imagem %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_gif_label">"Gif %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_video_label">"Vídeo %1$d/%2$d"</string>
     <string name="navigation_drawer_open">"Abrir gaveta de navegação"</string>
     <string name="navigation_drawer_close">"Fechar gaveta de navegação"</string>
@@ -94,7 +104,11 @@ Toque para tentar novamente."</string>
 Toque para tentar novamente."</string>
     <string name="no_messages">"Vazio"</string>
     <string name="nsfw">"18+"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info">"Karma: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info_user_detail">"Karma:
 %1$d (%2$d + %3$d)"</string>
     <string name="cakeday_info">"Dia de bolo:
@@ -110,7 +124,11 @@ Toque para tentar novamente."</string>
     <string name="saved">"Guardado"</string>
     <string name="gilded">"Dourado"</string>
     <string name="settings">"Definições"</string>
+
+    <!-- Fuzzy -->
     <string name="subscribers_number_detail">"Membros: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="online_subscribers_number_detail">"Online: %1$d"</string>
     <string name="cannot_fetch_subreddit_info">"Não é possível obter informações da comunidade"</string>
     <string name="cannot_fetch_user_info">"Não é possível obter informações do utilizador"</string>
@@ -190,6 +208,8 @@ Toque para tentar novamente."</string>
     <string name="no_flair">"Sem flair"</string>
     <string name="error_loading_flairs">"Erro ao carregar flairs.
 Toque para tentar novamente."</string>
+
+    <!-- Fuzzy -->
     <string name="no_rule">"Sem regra"</string>
     <string name="error_loading_rules">"Erro ao carregar regras.
 Toque para tentar novamente."</string>
@@ -288,6 +308,8 @@ Toque para tentar novamente."</string>
     <string name="notification_summary_message">"Nova Mensagem"</string>
     <string name="notification_summary_subreddit">"Comunidade"</string>
     <string name="notification_summary_award">"Prémio"</string>
+
+    <!-- Fuzzy -->
     <string name="notification_new_messages">"%1$d Mensagens Novas"</string>
     <string name="label_account">"Conta"</string>
     <string name="label_post">"Publicação"</string>
@@ -307,8 +329,12 @@ Toque para tentar novamente."</string>
     <string name="settings_mute_autoplaying_videos_title">"Vídeos em auto-reprodução Sem Som"</string>
     <string name="settings_autoplay_nsfw_videos_title">"Reprodução Automática de Vídeos 18+"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Área Visível de Vídeos para Desencadear Reprodução (Retrato)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Inicia reprodução automática de vídeos quando estão %1$d%% visíveis"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Área Visível de Vídeos para Desencadear Reprodução (Paisagem)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Inicia reprodução automática de vídeos quando estão %1$d%% visíveis"</string>
     <string name="settings_immersive_interface_title">"Interface Imersiva"</string>
     <string name="settings_immersive_interface_summary">"Não é Aplicada a Todas as Páginas"</string>
@@ -443,14 +469,24 @@ Toque para tentar novamente."</string>
     <string name="post_layout_compact">"Compacta"</string>
     <string name="elapsed_time_just_now">"Agora mesmo"</string>
     <string name="elapsed_time_a_minute_ago">"1 Minuto"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_minutes_ago">"%1$d Minutos"</string>
     <string name="elapsed_time_an_hour_ago">"1 Hora"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_hours_ago">"%1$d Horas"</string>
     <string name="elapsed_time_yesterday">"Ontem"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_days_ago">"%1$d Dias"</string>
     <string name="elapsed_time_a_month_ago">"1 Mês"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_months_ago">"%1$d Meses"</string>
     <string name="elapsed_time_a_year_ago">"1 Ano"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_years_ago">"%1$d Anos"</string>
     <string name="error_getting_multi_reddit_data">"Erro ao obter dados do multireddit"</string>
     <string name="error_loading_multi_reddit_list">"Não foi possível sincronizar multireddits"</string>
@@ -486,6 +522,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"Não é possível criar este multireddit"</string>
     <string name="duplicate_multi_reddit">"Este multireddit já existe"</string>
     <string name="edit_multi_reddit_failed">"Não é possível editar este multireddit"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_multi_reddit_success">"Eliminado com sucesso"</string>
     <string name="delete_multi_reddit_failed">"Falha ao eliminar"</string>
     <string name="delete_multi_reddit_dialog_message">"Tem a certeza?"</string>
@@ -662,6 +700,8 @@ com base no Tema Indigo Amoled"</string>
     <string name="edit_theme_name">"Editar Nome do Tema"</string>
     <string name="edit_theme">"Editar Tema"</string>
     <string name="delete_theme">"Eliminar Tema"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_theme_dialog_message">"Tem a certeza que deseja eliminar %1$s?"</string>
     <string name="share_theme">"Partilhar Tema"</string>
     <string name="change_theme_name">"Alterar Nome"</string>
@@ -701,6 +741,8 @@ com base no Tema Indigo Amoled"</string>
 Ela não está doente nem nada, mas certamente poderá melhorar."</string>
     <string name="edit_multi_reddit">"Editar Multireddit"</string>
     <string name="delete_multi_reddit">"Eliminar Multireddit"</string>
+
+    <!-- Fuzzy -->
     <string name="n_awards">"%1$d Prémios"</string>
     <string name="one_award">"1 Prémio"</string>
     <string name="report">"Denunciar"</string>
@@ -815,6 +857,8 @@ Reprodução automática de vídeos desativada."</string>
     <string name="change_post_layout">"Alterar Visualização de Publicações"</string>
     <string name="give_award_dialog_title">"Premiar?"</string>
     <string name="anonymous">"Anónimo"</string>
+
+    <!-- Fuzzy -->
     <string name="give_award_error_message">"Código: %1$d/
 Mensagem: %2$s"</string>
     <string name="give_award_success">"Prémio oferecido"</string>
@@ -966,6 +1010,8 @@ Mensagem: %2$s"</string>
     <string name="theme_item_current_user_color_detail">"Aplicado a: Utilizador atual nos comentários"</string>
     <string name="exclude_domains_hint">"Excluir Domínios"</string>
     <string name="anonymous_front_page_no_subscriptions">"Comece por se juntar a uma comunidade!"</string>
+
+    <!-- Fuzzy -->
     <string name="backup_settings_success">"As definições foram exportadas para o diretório de destino com sucesso. A palavra-chave do ficheiro zip gerado é 123321. Por favor não modifique o ficheiro zip."</string>
     <string name="create_zip_in_destination_directory_failed">"Não foi possível criar a cópia de segurança zip no diretório de destino"</string>
     <string name="backup_some_settings_failed">"Não foi possível copiar algumas definições mas outras foram exportadas com sucesso para o diretório de destino"</string>
@@ -1001,6 +1047,8 @@ Mensagem: %2$s"</string>
     <string name="suggest_title">"Sugerir Título"</string>
     <string name="suggest_title_failed">"Falha ao sugerir título"</string>
     <string name="action_delete_logs">"Eliminar Logs"</string>
+
+    <!-- Fuzzy -->
     <string name="inbox_with_count">"Caixa de Entrada (%1$d)"</string>
     <string name="comment_continue_thread">"Continuar"</string>
 
@@ -1015,7 +1063,11 @@ Mensagem: %2$s"</string>
     <string name="unsave_comment">"Esquecer"</string>
     <string name="copy_multi_reddit_path">"Copiar Caminho do Multireddit"</string>
     <string name="copy_multi_reddit_path_failed">"Não é possível copiar o caminho do multireddit"</string>
+
+    <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Os relatórios de erros eliminados"</string>
+
+    <!-- Fuzzy -->
     <string name="disable_nsfw_forever_message">"Uma vez ativo, todo o conteúdo impróprio será desativado permanentemente, quer a definição de conteúdo 18+ esteja ativa ou não. Esta configuração é irreversível e a única maneira de reativar conteúdo 18+ é limpando os dados da aplicação.
 
 Ainda deseja ativar esta opção?"</string>
@@ -1068,6 +1120,8 @@ Toque para tentar novamente."</string>
     <string name="material_you_notification_title">"Aplicando Material You"</string>
     <string name="action_go_to_wiki">"Ir para a Wiki"</string>
     <string name="about">"Sobre"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_link_handler_value_external_browser">"Browser Externo"</string>
     <string name="settings_link_handler_value_internal_browser">"Browser interno"</string>
     <string name="settings_experimental_feature">"Funcionalidade Experimental"</string>

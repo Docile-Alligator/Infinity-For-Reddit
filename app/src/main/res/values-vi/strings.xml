@@ -24,11 +24,21 @@
     <string name="edit_multi_reddit_activity_label">"Sửa Multireddit"</string>
     <string name="selected_subeddits_activity_label">"Các Subreddit đã chọn"</string>
     <string name="report_activity_label">"Báo cáo"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_image_label">"Hình ảnh %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_video_label">"Video %1$d/%2$d"</string>
     <string name="send_private_message_activity_label">"Gửi tin nhắn riêng tư"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_image_label">"Hình ảnh %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_gif_label">"Gif %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_video_label">"Video %1$d/%2$d"</string>
     <string name="navigation_drawer_open">"Mở thanh điều hướng"</string>
     <string name="navigation_drawer_close">"Đóng thanh điều hướng"</string>
@@ -88,7 +98,11 @@
     <string name="load_messages_failed">"Lỗi khi tải tin nhắn. Chạm để thử lại"</string>
     <string name="no_messages">"Không có tin nhắn"</string>
     <string name="nsfw">"NSFW (18+)"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info">"Karma: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info_user_detail">"Karma:
 %1$d (%2$d + %3$d)"</string>
     <string name="cakeday_info">"Ngày bánh ga tô:
@@ -104,7 +118,11 @@
     <string name="saved">"Lưu"</string>
     <string name="gilded">"Mạ vàng"</string>
     <string name="settings">"Cài đặt"</string>
+
+    <!-- Fuzzy -->
     <string name="subscribers_number_detail">"Người đăng ký: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="online_subscribers_number_detail">"Trực tuyến: %1$d"</string>
     <string name="cannot_fetch_subreddit_info">"Không thể lấy thông tin subreddit"</string>
     <string name="cannot_fetch_user_info">"Không thể lấy thông tin người dùng"</string>
@@ -186,6 +204,8 @@
     <string name="no_flair">"Không có tư cách"</string>
     <string name="error_loading_flairs">"Lỗi khi tải tư cách.
 Nhấn để thử lại."</string>
+
+    <!-- Fuzzy -->
     <string name="no_rule">"Không có luật lệ"</string>
     <string name="error_loading_rules">"Lỗi khi tải qui định. Chạm để thử lại."</string>
     <string name="error_loading_rules_without_retry">"Lỗi khi tải qui định"</string>
@@ -289,6 +309,8 @@ Nhấn để thử lại."</string>
     <string name="notification_summary_message">"Tin nhắn mới"</string>
     <string name="notification_summary_subreddit">"Subreddit"</string>
     <string name="notification_summary_award">"Giải thưởng"</string>
+
+    <!-- Fuzzy -->
     <string name="notification_new_messages">"%1$d Tin nhắn mới"</string>
     <string name="label_account">"Tài khoản"</string>
     <string name="label_post">"Bài đăng"</string>
@@ -308,8 +330,12 @@ Nhấn để thử lại."</string>
     <string name="settings_mute_autoplaying_videos_title">"Tắt tiếng những Video tự động phát"</string>
     <string name="settings_autoplay_nsfw_videos_title">"Tự động phát những video NSFW"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Tự phát Video theo diện tích có thể nhìn được (Dọc)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Tự động phát các video khi %1$d%% trong số chúng có thể nhìn thấy được"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Tự phát Video theo diện tích có thể nhìn được (Ngang)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Tự động phát các video khi %1$d%% trong số chúng có thể nhìn thấy được"</string>
     <string name="settings_immersive_interface_title">"Giao diện đắm mình"</string>
     <string name="settings_immersive_interface_summary">"Không áp dụng cho tất cả trang"</string>
@@ -445,14 +471,24 @@ Nhấn để thử lại."</string>
     <string name="post_layout_compact">"Bố cục nhỏ gọn"</string>
     <string name="elapsed_time_just_now">"Vừa ngay lúc này"</string>
     <string name="elapsed_time_a_minute_ago">"1 phút"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_minutes_ago">"%1$d phút"</string>
     <string name="elapsed_time_an_hour_ago">"1 tiếng"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_hours_ago">"%1$d tiếng"</string>
     <string name="elapsed_time_yesterday">"Hôm qua"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_days_ago">"%1$d ngày"</string>
     <string name="elapsed_time_a_month_ago">"1 tháng"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_months_ago">"%1$d tháng"</string>
     <string name="elapsed_time_a_year_ago">"1 năm"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_years_ago">"%1$d năm"</string>
     <string name="error_getting_multi_reddit_data">"Lỗi khi lấy dữ liệu multireddit"</string>
     <string name="error_loading_multi_reddit_list">"Không thể đồng bộ các multireddit"</string>
@@ -488,6 +524,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"Không thể tạo multireddit này"</string>
     <string name="duplicate_multi_reddit">"Multireddit này đã tồn tại"</string>
     <string name="edit_multi_reddit_failed">"Không thể chỉnh sửa multireddit này"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_multi_reddit_success">"Xoá thành công"</string>
     <string name="delete_multi_reddit_failed">"Xoá thất bại"</string>
     <string name="delete_multi_reddit_dialog_message">"Bạn có chắc không?"</string>
@@ -676,6 +714,8 @@ Dựa trên chủ đề Chàm Amoled"</string>
     <string name="edit_theme_name">"Sửa tên chủ đề"</string>
     <string name="edit_theme">"Sửa chủ đề"</string>
     <string name="delete_theme">"Xoá chủ đề"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_theme_dialog_message">"Bạn có chắc muốn xoá %1$s không?"</string>
     <string name="share_theme">"Chia sẻ chủ đề"</string>
     <string name="change_theme_name">"Đổi tên"</string>
@@ -713,6 +753,8 @@ Dựa trên chủ đề Chàm Amoled"</string>
 Cô ta không ốm hay gì cả, nhưng cô ấy chắc chắn có thể khá hơn."</string>
     <string name="edit_multi_reddit">"Sửa Multireddit"</string>
     <string name="delete_multi_reddit">"Xoá Multireddit"</string>
+
+    <!-- Fuzzy -->
     <string name="n_awards">"%1$d giải thưởng"</string>
     <string name="one_award">"1 giải thưởng"</string>
     <string name="report">"Báo cáo"</string>
@@ -827,6 +869,8 @@ Tự động phát video bị tắt."</string>
     <string name="change_post_layout">"Thay đổi bố cục bài đăng"</string>
     <string name="give_award_dialog_title">"Cho giải thưởng?"</string>
     <string name="anonymous">"Vô danh"</string>
+
+    <!-- Fuzzy -->
     <string name="give_award_error_message">"Mã: %1$d/
 Thông báo: %2$s"</string>
     <string name="give_award_success">"Giải thưởng đã được cho"</string>
@@ -980,6 +1024,8 @@ Thông báo: %2$s"</string>
     <string name="theme_item_current_user_color_detail">"Đã áp dụng vào: Người dùng hiện tại trong bình luận"</string>
     <string name="exclude_domains_hint">"Loại trừ các miền"</string>
     <string name="anonymous_front_page_no_subscriptions">"Hãy bắt đầu bằng cách tham gia một subreddit!"</string>
+
+    <!-- Fuzzy -->
     <string name="backup_settings_success">"Xuất cài đặt ra thư mục đích thành công. Mật khẩu của tệp zip được tạo ra là 123321. Vui lòng đừng sửa đổi tệp zip đó."</string>
     <string name="create_zip_in_destination_directory_failed">"Không thể tạo tệp zip sao lưu trong thư mục đích"</string>
     <string name="backup_some_settings_failed">"Không thể sao lưu một số cài đặt nhưng các cài đặt khác đã được xuất ra thư mục đích thành công"</string>
@@ -1015,6 +1061,8 @@ Thông báo: %2$s"</string>
     <string name="suggest_title">"Đề xuất tiêu đề"</string>
     <string name="suggest_title_failed">"Đề xuất tiêu đề thất bại"</string>
     <string name="action_delete_logs">"Xoá nhật ký"</string>
+
+    <!-- Fuzzy -->
     <string name="inbox_with_count">"Hộp thư đến (%1$d)"</string>
     <string name="comment_continue_thread">"Tiếp tục thread"</string>
 
@@ -1029,7 +1077,11 @@ Thông báo: %2$s"</string>
     <string name="unsave_comment">"Huỷ lưu"</string>
     <string name="copy_multi_reddit_path">"Sao chép đường dẫn của multireddit"</string>
     <string name="copy_multi_reddit_path_failed">"Không thể sao chép đường dẫn của multireddit"</string>
+
+    <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Các báo cáo lỗi đã bị xoá"</string>
+
+    <!-- Fuzzy -->
     <string name="disable_nsfw_forever_message">"Khi được bật, NSFW sẽ bị tắt vĩnh viễn, không kể là cài đặt NSFW có được bật hay không. Và tuỳ chọn này là không thể hoàn tác, cách duy nhất để bật lại NSFW là xoá dữ liệu ứng dụng.
 
 Bạn có vẫn muốn bật tuỳ chọn này không?"</string>
@@ -1102,6 +1154,8 @@ Nhấn để thử lại."</string>
     <string name="settings_app_lock_timeout_title">"Khoá ứng dụng sau"</string>
     <string name="settings_enable_fold_support_title">"Bật chế độ hỗ trợ thiết bị màn hình gập"</string>
     <string name="settings_default_playback_speed_title">"Tốc độ phát mặc định"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_link_handler_value_external_browser">"Trình duyệt ngoài"</string>
     <string name="settings_link_handler_value_custom_tab">"Thẻ tùy chọn"</string>
     <string name="settings_link_handler_value_internal_browser">"Trình duyệt nội bộ"</string>
@@ -1159,11 +1213,11 @@ Nhấn để thử lại."</string>
     <string name="message_remove_avatar_success">"Xoá ảnh đại diện thành công"</string>
     <string name="message_remove_avatar_failed">"Xoá ảnh đại diện %s thất bại"</string>
     <string name="message_remove_banner_success">"Xoá banner thành công"</string>
-    <string name="message_remove_banner_failed">Gỡ bỏ banner thất bại %s</string>
+    <string name="message_remove_banner_failed">"Gỡ bỏ banner thất bại"</string>
     <string name="message_change_avatar_success">"Thay đổi ảnh đại diện thành công"</string>
-    <string name="message_change_avatar_failed">Thay đổi ảnh đại diện thất bại %s</string>
+    <string name="message_change_avatar_failed">"Thay đổi ảnh đại diện thất bại"</string>
     <string name="message_change_banner_success">"Thay đổi banner thành công"</string>
-    <string name="message_change_banner_failed">Thay đổi banner thất bại %s</string>
+    <string name="message_change_banner_failed">"Thay đổi banner thất bại"</string>
     <string name="message_save_profile_success">"Lưu Hồ sơ thành công"</string>
     <string name="message_save_profile_failed">"Lưu hồ sơ %s thất bại"</string>
 </resources>

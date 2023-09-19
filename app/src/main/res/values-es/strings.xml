@@ -26,11 +26,21 @@
     <string name="edit_multi_reddit_activity_label">"Editar multireddit"</string>
     <string name="selected_subeddits_activity_label">"Subreddits seleccionados"</string>
     <string name="report_activity_label">"Reportar"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_image_label">"Imagen %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_imgur_media_activity_video_label">"Vídeo %1$d/%2$d"</string>
     <string name="send_private_message_activity_label">"Enviar MP"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_image_label">"Imagen %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_gif_label">"Gif %1$d/%2$d"</string>
+
+    <!-- Fuzzy -->
     <string name="view_reddit_gallery_activity_video_label">"Vídeo %1$d/%2$d"</string>
     <string name="navigation_drawer_open">"Abrir cajón lateral"</string>
     <string name="navigation_drawer_close">"Cerrar cajón lateral"</string>
@@ -98,7 +108,11 @@ Toca para reintentar."</string>
 Toca para reintentar."</string>
     <string name="no_messages">"Vacío"</string>
     <string name="nsfw">"NSFW"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info">"Karma: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="karma_info_user_detail">"Karma:
 %1$d (%2$d + %3$d)"</string>
     <string name="cakeday_info">"Cumpleaños:
@@ -116,7 +130,11 @@ Toca para reintentar."</string>
     <string name="saved">"Guardado"</string>
     <string name="gilded">"Premiado"</string>
     <string name="settings">"Configuración"</string>
+
+    <!-- Fuzzy -->
     <string name="subscribers_number_detail">"Suscriptores: %1$d"</string>
+
+    <!-- Fuzzy -->
     <string name="online_subscribers_number_detail">"En línea: %1$d"</string>
     <string name="cannot_fetch_subreddit_info">"No fue posible obtener información del subreddit"</string>
     <string name="cannot_fetch_user_info">"No fue posible obtener información del usuario"</string>
@@ -196,6 +214,8 @@ Toca para reintentar."</string>
     <string name="no_flair">"No hay etiqueta temática"</string>
     <string name="error_loading_flairs">"Error al cargar las etiquetas temáticas.
 Toca para reintentar."</string>
+
+    <!-- Fuzzy -->
     <string name="no_rule">"Sin regla"</string>
     <string name="error_loading_rules">"Error al cargar las reglas.
 Toca para reintentar."</string>
@@ -299,6 +319,8 @@ Toca para reintentar."</string>
     <!-- Galardón means award
 Premio means prize, so it's better suited the first word instead of the second one -->
     <string name="notification_summary_award">"Galardón"</string>
+
+    <!-- Fuzzy -->
     <string name="notification_new_messages">"%1$d Nuevos mensajes"</string>
     <string name="label_account">"Cuenta"</string>
     <string name="label_post">"Publicación"</string>
@@ -318,8 +340,12 @@ Premio means prize, so it's better suited the first word instead of the second o
     <string name="settings_mute_autoplaying_videos_title">"Silenciar videos reproducidos automáticamente"</string>
     <string name="settings_autoplay_nsfw_videos_title">"Reproducir vídeos NSFW automáticamente"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Reproducción automática de vídeo en área visible (vertical)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Comenzar la reproducción automática cuando %1$d%% del vídeo sea visible"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Reproducción automática de vídeo en área visible (horizontal)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Comenzar la reproducción automática cuando %1$d%% del vídeo sea visible"</string>
     <string name="settings_immersive_interface_title">"Interfaz inmersiva"</string>
     <string name="settings_immersive_interface_summary">"No aplica a todas las páginas"</string>
@@ -460,14 +486,24 @@ Premio means prize, so it's better suited the first word instead of the second o
     <!-- It is a literal translation from English, translating for clarity -->
     <string name="elapsed_time_just_now">"Ahora mismo"</string>
     <string name="elapsed_time_a_minute_ago">"Hace 1 Minuto"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_minutes_ago">"Hace %1$d minutos"</string>
     <string name="elapsed_time_an_hour_ago">"Hace 1 hora"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_hours_ago">"Hace %1$d horas"</string>
     <string name="elapsed_time_yesterday">"Ayer"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_days_ago">"Hace %1$d días"</string>
     <string name="elapsed_time_a_month_ago">"Hace 1 mes"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_months_ago">"Hace %1$d meses"</string>
     <string name="elapsed_time_a_year_ago">"Hace 1 año"</string>
+
+    <!-- Fuzzy -->
     <string name="elapsed_time_years_ago">"Hace %1$d años"</string>
     <string name="error_getting_multi_reddit_data">"No fue posible obtener los datos del multireddit"</string>
     <string name="error_loading_multi_reddit_list">"No fue posible sincronizar los multireddit"</string>
@@ -505,6 +541,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"No fue posible crear este multireddit"</string>
     <string name="duplicate_multi_reddit">"Este multireddit ya existe"</string>
     <string name="edit_multi_reddit_failed">"No fue posible editar el multireddit"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_multi_reddit_success">"Borrado correctamente"</string>
     <string name="delete_multi_reddit_failed">"Borrado fallido"</string>
     <string name="delete_multi_reddit_dialog_message">"¿Seguro?"</string>
@@ -696,6 +734,8 @@ Basado en Tema Índigo AMOLED"</string>
     <string name="edit_theme_name">"Renombrar tema"</string>
     <string name="edit_theme">"Editar tema"</string>
     <string name="delete_theme">"Borrar tema"</string>
+
+    <!-- Fuzzy -->
     <string name="delete_theme_dialog_message">"¿Seguro que quieres borrar %1$s?"</string>
     <string name="share_theme">"Compartir tema"</string>
     <string name="change_theme_name">"Renombrar"</string>
@@ -745,6 +785,8 @@ Basado en Tema Índigo AMOLED"</string>
 No está enferma ni nada, pero definitivamente podría mejorar."</string>
     <string name="edit_multi_reddit">"Editar multireddit"</string>
     <string name="delete_multi_reddit">"Borrar multireddit"</string>
+
+    <!-- Fuzzy -->
     <string name="n_awards">"%1$d Premios"</string>
     <string name="one_award">"1 Premio"</string>
     <string name="report">"Reportar"</string>
@@ -863,6 +905,7 @@ La reproducción automática de video está deshabilitada."</string>
 Mensaje: %2$s
 
 https://s3.eu-west-1.amazonaws.com/po-pub/i/hJAe7sMhrfJzqjhp9VkDQOVC.PNG -->
+    <!-- Fuzzy -->
     <string name="give_award_error_message">"Código: %1$d/
 Mensaje: %2$s"</string>
     <string name="give_award_success">"Premiado"</string>
@@ -1055,6 +1098,8 @@ Mensaje: %2$s"</string>
     <string name="suggest_title">"Sugerir título"</string>
     <string name="suggest_title_failed">"Sugerencia de título fallida"</string>
     <string name="action_delete_logs">"Eliminar registros"</string>
+
+    <!-- Fuzzy -->
     <string name="inbox_with_count">"Bandeja de Entrada (%1$d)"</string>
     <string name="comment_continue_thread">"Continuar hilo"</string>
 
@@ -1069,7 +1114,11 @@ Mensaje: %2$s"</string>
     <string name="unsave_comment">"No guardar"</string>
     <string name="copy_multi_reddit_path">"Copiar la ruta de multireddit"</string>
     <string name="copy_multi_reddit_path_failed">"No fue posible copiar la ruta de multireddit"</string>
+
+    <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Los informes de fallos han sido eliminados"</string>
+
+    <!-- Fuzzy -->
     <string name="disable_nsfw_forever_message">"Una vez activado, NSFW será permanentemente desactivado, independientemente de si la opción de NFSW esta activada o no. Esta opción es irreversible, la única manera de reactivar NSFW es borrando los datos de la aplicación.
 
 ¿Seguro que quieres activarlo?"</string>
@@ -1142,6 +1191,8 @@ Toque para volver a intentarlo."</string>
     <string name="settings_app_lock_timeout_title">"Tiempo de espera de bloqueo de la aplicación"</string>
     <string name="settings_enable_fold_support_title">"Activar compatibilidad con teléfonos plegables"</string>
     <string name="settings_default_playback_speed_title">"Velocidad de reproducción predeterminada"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_link_handler_value_external_browser">"Navegador externo"</string>
     <string name="settings_link_handler_value_custom_tab">"Pestaña personalizada"</string>
     <string name="settings_link_handler_value_internal_browser">"Navegador interno"</string>
@@ -1205,5 +1256,64 @@ Toque para volver a intentarlo."</string>
     <string name="message_change_banner_success">"Banner cambiado correctamente"</string>
     <string name="message_change_banner_failed">"Error al cambiar banner %s"</string>
     <string name="message_save_profile_success">"Perfil guardado correctamente"</string>
-    <string name="message_save_profile_failed">Error al guardar perfil %s</string>
+    <string name="message_save_profile_failed">"Error al guardar perfil"</string>
+    <string name="post_poll_activity_label">"Publicación de encuesta"</string>
+    <string name="action_open_external_browser">"Abrir en el navegador"</string>
+
+    <!-- Fuzzy -->
+    <string name="voting_length">"Duración de votación: %1$d días"</string>
+    <string name="two_options_required">"¡Una buena encuesta necesita dos o más opciones!"</string>
+    <string name="bottom_sheet_post_poll">"Encuesta"</string>
+
+    <!-- Fuzzy -->
+    <string name="no_activity_found_for_external_browser">"No hay ninguna app que pueda manejar la acción de abrir en navegador"</string>
+    <string name="settings_require_authentication_to_show_accounts">"Requerir autenticación para mostrar cuentas"</string>
+    <string name="settings_custom_font_family_title">"Familia de fuente personalizada"</string>
+    <string name="settings_custom_title_font_family_title">"Familia de fuente del título personalizada"</string>
+    <string name="settings_custom_content_font_family_title">"Familia de fuente del contenido personalizada"</string>
+    <string name="settings_fixed_height_preview_in_card_title">"Altura fija en tarjeta"</string>
+    <string name="settings_hide_text_post_content">"Ocultar contenido de publicación de texto"</string>
+    <string name="settings_hide_comment_awards_title">"Ocultar premios del comentario"</string>
+    <string name="settings_show_fewer_toolbar_options_threshold_title">"Mostrar menos opciones de la barra de herramientas a partir de"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_show_fewer_toolbar_options_threshold_summary">"Nivel %1$d"</string>
+    <string name="settings_show_author_avatar_title">"Mostrar avatar del autor"</string>
+    <string name="settings_reddit_user_agreement_title">"Acuerdo de usuario de Reddit"</string>
+    <string name="settings_always_show_child_comment_count_title">"Mostrar siempre el número de comentarios descendientes"</string>
+    <string name="settings_hide_upvote_ratio_title">"Ocultar proporción de votos"</string>
+    <string name="settings_miscellaneous_dangerous_group_title">"Peligroso"</string>
+    <string name="settings_post_feed_max_resolution_warning_title">"Aumenta el valor para mostrar vistas previas en mayor resolución, pero la aplicación puede fallar inesperadamente."</string>
+    <string name="settings_post_feed_max_resolution_title">"Resolución máxima de vista previa de las publicaciones del feed (Ancho * Alto)"</string>
+    <string name="settings_reddit_video_default_resolution">"Resolución por defecto de los vídeos de Reddit"</string>
+    <string name="select_a_ttf_font">"Selecciona un archivo de fuentes ttf"</string>
+    <string name="unable_to_get_font_file">"No se puede obtener tu fuente"</string>
+    <string name="unable_to_load_font">"No se pudo cargar la fuente personalizada"</string>
+    <string name="unable_to_copy_font_file">"No se pudo copiar tu fuente"</string>
+    <string name="reddit_gallery_item_caption_hint">"Subtítulo (máximo 180 caracteres)"</string>
+    <string name="reddit_gallery_item_url_hint">"Url"</string>
+    <string name="user_agreement_dialog_title">"Acuerdo del usuario"</string>
+    <string name="user_agreement_message">"Tienes que aceptar el Acuerdo de usuario de Reddit (%1$s) y la Política de privacidad de Infinity para Reddit (%2$s) antes de iniciar sesión."</string>
+    <string name="agree">"Aceptar"</string>
+    <string name="do_not_agree">"Rechazar"</string>
+    <string name="option_1_hint">"Opción 1 (Obligatorio)"</string>
+    <string name="option_2_hint">"Opción 2 (Obligatorio)"</string>
+    <string name="option_3_hint">"Opción 3"</string>
+    <string name="option_4_hint">"Opción 4"</string>
+    <string name="option_5_hint">"Opción 5"</string>
+    <string name="option_6_hint">"Opción 6"</string>
+    <string name="not_a_valid_number">"No es un número válido"</string>
+    <string name="post_karma">"Karma de publicación:"</string>
+    <string name="comment_karma">"Karma de comentario:"</string>
+    <string name="awarder_karma">"Karma de premiador:"</string>
+    <string name="awardee_karma">"Karma de premiado:"</string>
+    <string name="history_activity_label">"Historial de actividad"</string>
+    <string name="history">"Historial"</string>
+    <string name="settings_easier_to_watch_in_full_screen_title">"Mejor en pantalla completa"</string>
+    <string name="extra_small">"Extra Chico"</string>
+    <string name="invalid_link">"Vinculo invalido"</string>
+    <string name="action_block_user">"Bloquear Usuario"</string>
+    <string name="action_more_options">"Más opciones"</string>
+    <string name="no_more_posts">"No hay más publicaciones "</string>
+    <string name="go_to_settings">"Ajustes"</string>
 </resources>
