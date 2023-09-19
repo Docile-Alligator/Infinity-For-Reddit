@@ -145,6 +145,14 @@ public class CustomThemeSettingsItem implements Parcelable {
                 context.getString(R.string.theme_item_read_post_card_view_background_color_detail),
                 customTheme.readPostCardViewBackgroundColor));
         customThemeSettingsItems.add(new CustomThemeSettingsItem(
+                context.getString(R.string.theme_item_filled_card_view_background_color),
+                context.getString(R.string.theme_item_filled_card_view_background_color_detail),
+                customTheme.filledCardViewBackgroundColor));
+        customThemeSettingsItems.add(new CustomThemeSettingsItem(
+                context.getString(R.string.theme_item_read_post_filled_card_view_background_color),
+                context.getString(R.string.theme_item_read_post_filled_card_view_background_color_detail),
+                customTheme.readPostFilledCardViewBackgroundColor));
+        customThemeSettingsItems.add(new CustomThemeSettingsItem(
                 context.getString(R.string.theme_item_comment_background_color),
                 context.getString(R.string.theme_item_comment_background_color_detail),
                 customTheme.commentBackgroundColor));

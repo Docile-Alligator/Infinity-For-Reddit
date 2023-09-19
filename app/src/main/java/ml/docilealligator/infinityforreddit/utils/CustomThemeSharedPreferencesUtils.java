@@ -29,6 +29,8 @@ public class CustomThemeSharedPreferencesUtils {
     public static final String BACKGROUND_COLOR = "backgroundColor";
     public static final String CARD_VIEW_BACKGROUND_COLOR = "cardViewBackgroundColor";
     public static final String READ_POST_CARD_VIEW_BACKGROUND_COLOR = "readPostCardViewBackgroundColor";
+    public static final String FILLED_CARD_VIEW_BACKGROUND_COLOR = "filledCardViewBackgroundColor";
+    public static final String READ_POST_FILLED_CARD_VIEW_BACKGROUND_COLOR = "readPostFilledCardViewBackgroundColor";
     public static final String COMMENT_BACKGROUND_COLOR = "commentBackgroundColor";
     public static final String BOTTOM_APP_BAR_BACKGROUND_COLOR = "bottomAppBarBackgroundColor";
     public static final String PRIMARY_ICON_COLOR = "primaryIconColor";
@@ -113,6 +115,8 @@ public class CustomThemeSharedPreferencesUtils {
         editor.putInt(BACKGROUND_COLOR, customTheme.backgroundColor);
         editor.putInt(CARD_VIEW_BACKGROUND_COLOR, customTheme.cardViewBackgroundColor);
         editor.putInt(READ_POST_CARD_VIEW_BACKGROUND_COLOR, customTheme.readPostCardViewBackgroundColor);
+        editor.putInt(FILLED_CARD_VIEW_BACKGROUND_COLOR, customTheme.filledCardViewBackgroundColor);
+        editor.putInt(READ_POST_FILLED_CARD_VIEW_BACKGROUND_COLOR, customTheme.readPostFilledCardViewBackgroundColor);
         editor.putInt(COMMENT_BACKGROUND_COLOR, customTheme.commentBackgroundColor);
         editor.putInt(BOTTOM_APP_BAR_BACKGROUND_COLOR, customTheme.bottomAppBarBackgroundColor);
         editor.putInt(PRIMARY_ICON_COLOR, customTheme.primaryIconColor);

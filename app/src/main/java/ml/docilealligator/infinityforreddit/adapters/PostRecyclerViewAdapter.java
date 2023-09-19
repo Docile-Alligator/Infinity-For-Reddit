@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -182,6 +181,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private int mColorAccent;
     private int mCardViewBackgroundColor;
     private int mReadPostCardViewBackgroundColor;
+    private int mFilledCardViewBackgroundColor;
+    private int mReadPostFilledCardViewBackgroundColor;
     private int mPrimaryTextColor;
     private int mSecondaryTextColor;
     private int mPostTitleColor;
@@ -336,9 +337,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mDefaultLinkPostLayout = Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.DEFAULT_LINK_POST_LAYOUT_KEY, "-1"));
 
             mColorAccent = customThemeWrapper.getColorAccent();
-            //mCardViewBackgroundColor = customThemeWrapper.getCardViewBackgroundColor();
-            mCardViewBackgroundColor = Color.parseColor("#FBEEFC");
+            mCardViewBackgroundColor = customThemeWrapper.getCardViewBackgroundColor();
+            //mCardViewBackgroundColor = Color.parseColor("#FBEEFC");
             mReadPostCardViewBackgroundColor = customThemeWrapper.getReadPostCardViewBackgroundColor();
+            mFilledCardViewBackgroundColor = customThemeWrapper.getFilledCardViewBackgroundColor();
+            mReadPostFilledCardViewBackgroundColor = customThemeWrapper.getReadPostFilledCardViewBackgroundColor();
             mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
             mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
             mPostTitleColor = customThemeWrapper.getPostTitleColor();
@@ -1702,7 +1705,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 ((PostMaterial3CardBaseViewHolder) holder).post = post;
                 ((PostMaterial3CardBaseViewHolder) holder).currentPosition = position;
                 if (post.isRead()) {
-                    holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
+                    holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostFilledCardViewBackgroundColor));
                     ((PostMaterial3CardBaseViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
                 }
                 String authorPrefixed = "u/" + post.getAuthor();
@@ -2500,7 +2503,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     ((PostMaterial3CardBaseViewHolder) holder).markPostRead(post, false);
                 }
             }
-            holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
+            holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mFilledCardViewBackgroundColor));
             mGlide.clear(((PostMaterial3CardBaseViewHolder) holder).iconGifImageView);
             ((PostMaterial3CardBaseViewHolder) holder).titleTextView.setTextColor(mPostTitleColor);
             if (holder instanceof PostMaterial3CardBaseVideoAutoplayViewHolder) {
@@ -5612,7 +5615,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 constraintSet.applyTo(bottomConstraintLayout);
             }
 
-            itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
+            itemView.setBackgroundTintList(ColorStateList.valueOf(mFilledCardViewBackgroundColor));
 
             if (mActivity.typeface != null) {
                 subredditTextView.setTypeface(mActivity.typeface);
@@ -6021,7 +6024,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
                 if (changePostItemColor) {
-                    itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
+                    itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostFilledCardViewBackgroundColor));
                     titleTextView.setTextColor(mReadPostTitleColor);
                     if (this instanceof PostMaterial3CardTextTypeViewHolder) {
                         ((PostMaterial3CardTextTypeViewHolder) this).binding.contentTextViewItemPostCard3TextType.setTextColor(mReadPostContentColor);

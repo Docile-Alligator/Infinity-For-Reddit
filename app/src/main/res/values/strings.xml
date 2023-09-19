@@ -803,6 +803,10 @@
     <string name="theme_item_card_view_background_color_detail">Applied to: Post background and message background</string>
     <string name="theme_item_read_post_card_view_background_color">Read Post Card View Background Color</string>
     <string name="theme_item_read_post_card_view_background_color_detail">Applied to: Read Post background</string>
+    <string name="theme_item_filled_card_view_background_color">Filled Card View Background Color</string>
+    <string name="theme_item_filled_card_view_background_color_detail">Applied to: Background of a post in a filled card view, some edit text fields</string>
+    <string name="theme_item_read_post_filled_card_view_background_color">Read Post Filled Card View Background Color</string>
+    <string name="theme_item_read_post_filled_card_view_background_color_detail">Applied to: Background of a read post in a filled card view</string>
     <string name="theme_item_comment_background_color">Comment Background Color</string>
     <string name="theme_item_comment_background_color_detail">Applied to: Comment background</string>
     <string name="theme_item_fully_collapsed_comment_background_color">Fully-Collapsed Comment Background Color</string>
