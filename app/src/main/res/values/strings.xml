@@ -1,4 +1,4 @@
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+<resources>
     <string name="application_name" translatable="false">Infinity</string>
     <string name="login_activity_label">Login</string>
     <string name="search_activity_label" translatable="false"> </string>
@@ -45,6 +45,7 @@
     <string name="edit_profile_activity_label">Edit Profile</string>
     <string name="post_poll_activity_label">Poll Post</string>
     <string name="history_activity_label">History</string>
+    <string name="subscription_activity_label">Subscription</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -1166,7 +1167,7 @@
     <string name="anonymous_front_page_no_subscriptions">Start by joining a subreddit!</string>
     <string name="anonymous_multireddit_no_subreddit">This multireddit does not have a subreddit!</string>
 
-    <string name="backup_settings_success">Successfully exported settings to the destination directory. The password of the generated zip file is 123321. Please don\'t modify the zip file.</string>
+    <string name="backup_settings_success">Successfully exported settings to the destination directory.</string>
     <string name="create_zip_in_destination_directory_failed">Could not create backup zip in the destination directory</string>
     <string name="backup_some_settings_failed">Could not backup some settings but others were successfully exported to the destination directory</string>
     <string name="restore_settings_success">Successfully restored settings. Restart the app to see the changes.</string>
@@ -1307,12 +1308,8 @@
     <string name="handle_link">Handle Link</string>
     <string name="invalid_link">Invalid link</string>
 
-    <string name="unexpected_intent_action">Unexpected intent action: <xliff:g id="action">%1$s</xliff:g></string>
-    <string name="enable_random_adaptation">Enable random adaptation</string>
     <string name="error_unsupported_video">Media includes video tracks, but none are playable by this device</string>
     <string name="error_unsupported_audio">Media includes audio tracks, but none are playable by this device</string>
-    <string name="storage_permission_denied">Permission to access storage was denied</string>
-    <string name="sample_list_load_error">One or more sample lists failed to load</string>
 
     <string name="exo_controls_volume_up_description">Volume Up</string>
     <string name="exo_controls_volume_off_description">Volume Off</string>
@@ -1327,8 +1324,48 @@
     <string name="denied_notification_permission">Notification permission is not granted</string>
     <string name="go_to_settings">Settings</string>
 
-    <string name="reddit_api_info_title">Please update Infinity after August 30th</string>
-    <string name="reddit_api_info">Starting from August 31st, 2023, Infinity will be a subscription-only app due to Reddit API changes enforced since July 1st. The announcement from Reddit can be found here: %1$s\n\nYou can learn more about the changes in this post: %2$s\n\nIt\'s required for you to update Infinity after August 30th so that you will get the new version with subscription options. None of the previous versions (including this one) will work after August 31st. Thank you for your understanding!</string>
+    <string name="welcome_to_infinity">Welcome to Infinity for Reddit, your gateway to a whole new dimension of Reddit browsing!</string>
+    <string name="subscription_prompt">Before you dive into the countless possibilities this app offers,
+        I want to be upfront and transparent about a significant change I\'ve implemented to ensure the best possible service for you.
+        \n\nFrom now on, you will need a monthly subscription to access the Reddit API within Infinity for Reddit and
+        this is because Reddit has started charging for API access since July 1st, 2023.
+        \n\nAll the tiers work the same. If you want to support Infinity, you can subscribe to a higher tier.
+        Most of the money from the lowest tier goes to Reddit.
+    </string>
+    <string name="monthly">Monthly</string>
+    <string name="yearly">Yearly</string>
+    <string name="weekly">Weekly</string>
+    <string name="billing_error_billing_unavailable">Billing service unavailable on device.</string>
+    <string name="billing_error_developer_error">The developer made some errors. Not your fault.</string>
+    <string name="billing_error_error">Fatal error during the API action.</string>
+    <string name="billing_error_feature_not_supported">The requested feature is not supported by the Play Store on the current device.</string>
+    <string name="billing_error_item_already_owned">The purchase failed because the item is already owned.</string>
+    <string name="billing_error_item_unavailable">The requested product is not available for purchase.</string>
+    <string name="billing_error_network_error">A network error occurred during the operation.</string>
+    <string name="billing_error_service_disconnected">The app is not connected to the Play Store service via the Google Play Billing Library.</string>
+    <string name="billing_error_service_unavailable">The service is currently unavailable.</string>
+    <string name="billing_error_user_canceled">Transaction was canceled by the user.</string>
+    <string name="subscription_plan_description_monthly">Bronze</string>
+    <string name="subscription_plan_description_monthly_399">Silver</string>
+    <string name="subscription_plan_description_monthly_499">Gold - Perfect Choice!</string>
+    <string name="subscription_plan_description_monthly_699">Platinum</string>
+    <string name="subscription_plan_description_monthly_899">Diamond</string>
+    <string name="subscription_plan_description_monthly_999">Infinity</string>
+    <string name="acknowledge_purchase_failed">Cannot acknowledge purchase</string>
+    <string name="connect_to_billing_system_failed">Failed to connect to the billing system</string>
+    <string name="connecting_to_billing_system">Connecting to the billing system. Please wait.</string>
+    <string name="thank_you_for_subscription">Thank you for your subscription</string>
+    <string name="load_subscription_options">Load subscription options</string>
+    <string name="acknowledging_subscription">Acknowledging your subscription. Please wait.</string>
+    <string name="acknowledgement_purchase_failed_description">Oops, there was an error when acknowledging your purchase. If this problem persists for three days, you will automatically get a refund.\nDon\'t worry, you can still enjoy Infinity for Reddit.</string>
+    <string name="continue_to_app">Continue to app</string>
+    <string name="restore_subscription_purchase_details">Already paid for the subscription?</string>
+    <string name="restore_subscription_purchase">Restore subscription purchase</string>
+
+    <string name="important_info_title">Please re-login your account</string>
+    <string name="important_info">Infinity for Reddit with subscription uses a new API key from Reddit and you have to re-login to continue using the app.\n\nJust
+        open the navigation drawer and click your account header and select \"Add an account\" to login to Reddit using the same account again.
+        Otherwise, Infinity may not load posts at all. Sorry for the inconvenience.</string>
     <string name="i_understand">I understand</string>
 
 </resources>
