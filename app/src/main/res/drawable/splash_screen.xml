@@ -9,4 +9,10 @@
             android:gravity="center" />
     </item>
 
+    <item android:bottom="100dp">
+        <bitmap
+            android:gravity="bottom"
+            android:src="@drawable/splash_branding"/>
+    </item>
+
 </layer-list>

@@ -189,6 +189,8 @@ dependencies {
 
     implementation 'com.otaliastudios:zoomlayout:1.9.0'
 
+    implementation 'androidx.core:core-splashscreen:1.0.1'
+
 
 /**** Builds and flavors ****/
     // debugImplementation because LeakCanary should only run in debug builds.
