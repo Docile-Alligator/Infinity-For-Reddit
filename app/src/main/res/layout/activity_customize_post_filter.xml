@@ -51,7 +51,7 @@
                 android:paddingBottom="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/name_text_input_edit_text_customize_post_filter_activity"
@@ -312,7 +312,7 @@
                 android:paddingBottom="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/title_excludes_strings_text_input_edit_text_customize_post_filter_activity"
@@ -333,7 +333,7 @@
                 android:paddingBottom="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/title_contains_strings_text_input_edit_text_customize_post_filter_activity"
@@ -354,7 +354,7 @@
                 android:paddingBottom="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/title_excludes_regex_text_input_edit_text_customize_post_filter_activity"
@@ -375,7 +375,7 @@
                 android:paddingBottom="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/title_contains_regex_text_input_edit_text_customize_post_filter_activity"
@@ -400,7 +400,7 @@
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:layout_marginStart="16dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/excludes_subreddits_text_input_edit_text_customize_post_filter_activity"
@@ -438,7 +438,7 @@
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:layout_marginStart="16dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/excludes_users_text_input_edit_text_customize_post_filter_activity"
@@ -471,7 +471,7 @@
                 android:paddingBottom="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/excludes_flairs_text_input_edit_text_customize_post_filter_activity"
@@ -492,7 +492,7 @@
                 android:paddingBottom="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/contains_flairs_text_input_edit_text_customize_post_filter_activity"
@@ -513,7 +513,7 @@
                 android:paddingBottom="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/exclude_domains_text_input_edit_text_customize_post_filter_activity"
@@ -534,7 +534,7 @@
                 android:paddingBottom="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/contain_domains_text_input_edit_text_customize_post_filter_activity"
@@ -555,7 +555,7 @@
                 android:paddingBottom="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/min_vote_text_input_edit_text_customize_post_filter_activity"
@@ -577,7 +577,7 @@
                 android:paddingBottom="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/max_vote_text_input_edit_text_customize_post_filter_activity"
@@ -599,7 +599,7 @@
                 android:paddingBottom="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/min_comments_text_input_edit_text_customize_post_filter_activity"
@@ -621,7 +621,7 @@
                 android:paddingBottom="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/max_comments_text_input_edit_text_customize_post_filter_activity"
@@ -643,7 +643,7 @@
                 android:paddingBottom="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/min_awards_text_input_edit_text_customize_post_filter_activity"
@@ -665,7 +665,7 @@
                 android:paddingBottom="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/max_awards_text_input_edit_text_customize_post_filter_activity"

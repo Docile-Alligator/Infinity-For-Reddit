@@ -14,7 +14,7 @@
         android:paddingBottom="8dp"
         app:boxStrokeColor="?attr/primaryTextColor"
         app:hintTextColor="?attr/primaryTextColor"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_text_insert_link_dialog"
@@ -37,7 +37,7 @@
         android:paddingBottom="8dp"
         app:boxStrokeColor="?attr/primaryTextColor"
         app:hintTextColor="?attr/primaryTextColor"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_link_insert_link_dialog"

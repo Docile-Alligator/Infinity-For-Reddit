@@ -21,7 +21,7 @@
             android:paddingEnd="16dp"
             app:boxStrokeColor="?attr/primaryTextColor"
             app:hintTextColor="?attr/primaryTextColor"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/caption_text_input_edit_text_set_reddit_gallery_item_caption_and_url_bottom_sheet_fragment"
@@ -45,7 +45,7 @@
             android:paddingEnd="16dp"
             app:boxStrokeColor="?attr/primaryTextColor"
             app:hintTextColor="?attr/primaryTextColor"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/url_text_input_edit_text_set_reddit_gallery_item_caption_and_url_bottom_sheet_fragment"
