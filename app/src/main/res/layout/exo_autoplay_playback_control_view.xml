@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:layout_toStartOf="@id/fullscreen_exo_playback_control_view"
-        android:src="@drawable/ic_mute_white_rounded_24dp"
+        android:src="@drawable/ic_mute_24dp"
         android:background="@drawable/exo_player_control_button_circular_background"
         android:clickable="true"
         android:focusable="true"
@@ -54,7 +54,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/ic_play_arrow_white_rounded_24dp"
+            android:src="@drawable/ic_play_arrow_24dp"
             android:background="@drawable/exo_player_control_button_circular_background"
             android:clickable="true"
             android:focusable="true" />
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/ic_pause_white_rounded_24dp"
+            android:src="@drawable/ic_pause_24dp"
             android:background="@drawable/exo_player_control_button_circular_background"
             android:clickable="true"
             android:focusable="true" />

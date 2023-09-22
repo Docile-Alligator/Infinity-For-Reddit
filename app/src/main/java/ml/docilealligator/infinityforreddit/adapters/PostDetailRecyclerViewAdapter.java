@@ -1661,11 +1661,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             muteButton.setOnClickListener(view -> {
                 if (helper != null) {
                     if (helper.getVolume() != 0) {
-                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_mute_white_rounded_24dp));
+                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_mute_24dp));
                         helper.setVolume(0f);
                         volume = 0f;
                     } else {
-                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_unmute_white_rounded_24dp));
+                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_unmute_24dp));
                         helper.setVolume(1f);
                         volume = 1f;
                     }
@@ -1702,7 +1702,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, mPost.getSubredditName());
                         intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
                     }
-                    intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, mPost.getTitle());
+                    intent.putExtra(ViewVideoActivity.EXTRA_POST, mPost);
                     if (helper != null) {
                         intent.putExtra(ViewVideoActivity.EXTRA_PROGRESS_SECONDS, helper.getLatestPlaybackInfo().getResumePosition());
                     }
@@ -1798,9 +1798,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                     helper.setVolume(volume);
                                     muteButton.setVisibility(View.VISIBLE);
                                     if (volume != 0f) {
-                                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_unmute_white_rounded_24dp));
+                                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_unmute_24dp));
                                     } else {
-                                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_mute_white_rounded_24dp));
+                                        muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_mute_24dp));
                                     }
                                     break;
                                 }
@@ -1997,7 +1997,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
                         }
-                        intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, mPost.getTitle());
+                        intent.putExtra(ViewVideoActivity.EXTRA_POST, mPost);
                         intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                         mActivity.startActivity(intent);
                     } else if (mPost.getPostType() == Post.GIF_TYPE) {
@@ -2175,7 +2175,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
                         }
-                        intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, mPost.getTitle());
+                        intent.putExtra(ViewVideoActivity.EXTRA_POST, mPost);
                         intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                         mActivity.startActivity(intent);
                     } else if (mPost.getPostType() == Post.IMAGE_TYPE) {

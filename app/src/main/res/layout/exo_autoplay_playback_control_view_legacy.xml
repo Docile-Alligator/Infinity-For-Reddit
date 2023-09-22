@@ -54,14 +54,14 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/ic_play_arrow_white_rounded_24dp" />
+            android:src="@drawable/ic_play_arrow_24dp" />
 
         <ImageView android:id="@id/exo_pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/ic_pause_white_rounded_24dp" />
+            android:src="@drawable/ic_pause_24dp" />
 
         <ImageView
             android:id="@+id/mute_exo_playback_control_view"
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:layout_toStartOf="@id/fullscreen_exo_playback_control_view"
-            android:src="@drawable/ic_mute_white_rounded_24dp"
+            android:src="@drawable/ic_mute_24dp"
             android:visibility="gone" />
 
         <ImageView
