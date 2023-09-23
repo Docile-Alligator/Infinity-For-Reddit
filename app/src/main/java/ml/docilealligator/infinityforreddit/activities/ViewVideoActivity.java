@@ -29,7 +29,6 @@ import android.view.MenuItem;
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -168,10 +167,12 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     BottomAppBar bottomAppBar;
     @BindView(R.id.title_text_view_exo_playback_control_view)
     TextView titleTextView;
+    @BindView(R.id.back_button_exo_playback_control_view)
+    MaterialButton backButton;
     @BindView(R.id.download_image_view_exo_playback_control_view)
-    ImageView downloadImageView;
+    MaterialButton downloadImageView;
     @BindView(R.id.playback_speed_image_view_exo_playback_control_view)
-    ImageView playbackSpeedImageView;
+    MaterialButton playbackSpeedImageView;
     @BindView(R.id.lockable_nested_scroll_view_view_video_activity)
     LockableNestedScrollView nestedScrollView;
 
@@ -311,6 +312,10 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         if (useBottomAppBar) {
             getSupportActionBar().hide();
             bottomAppBar.setVisibility(View.VISIBLE);
+            backButton.setOnClickListener(view -> {
+                finish();
+            });
+
             downloadImageView.setOnClickListener(view -> {
                 if (isDownloading) {
                     return;

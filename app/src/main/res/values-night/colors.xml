@@ -3,7 +3,7 @@
     <color name="colorPrimary">#242424</color>
     <color name="colorPrimaryDark">#121212</color>
     <color name="colorAccent">#FF1868</color>
-    <color name="transparentActionBarAndExoPlayerControllerColor">#88000000</color>
+    <color name="transparentActionBarAndExoPlayerControllerColor">#00000000</color>
     <color name="backgroundColor">#121212</color>
     <color name="playButtonBackgroundColor">#FFFFFF</color>
     <color name="roundedBottomSheetPrimaryBackground">#242424</color>
