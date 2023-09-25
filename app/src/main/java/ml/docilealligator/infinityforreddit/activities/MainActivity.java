@@ -92,7 +92,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsB
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.RandomBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.RedditAPIInfoBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.ImportantInfoBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -339,11 +339,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
         }
 
-        if (!mInternalSharedPreferences.getBoolean(SharedPreferencesUtils.DO_NOT_SHOW_REDDIT_API_INFO_V2_AGAIN, false)) {
-            RedditAPIInfoBottomSheetFragment fragment = new RedditAPIInfoBottomSheetFragment();
+        /*if (!mInternalSharedPreferences.getBoolean(SharedPreferencesUtils.DO_NOT_SHOW_REDDIT_API_INFO_V2_AGAIN, false)) {
+            ImportantInfoBottomSheetFragment fragment = new ImportantInfoBottomSheetFragment();
             fragment.setCancelable(false);
             fragment.show(getSupportFragmentManager(), fragment.getTag());
-        }
+        }*/
 
         initializeNotificationAndBindView();
     }

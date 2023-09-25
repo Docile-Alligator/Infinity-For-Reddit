@@ -11,14 +11,14 @@ import androidx.annotation.NonNull;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.MainActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
-import ml.docilealligator.infinityforreddit.databinding.FragmentRedditApiInfoBottomSheetBinding;
+import ml.docilealligator.infinityforreddit.databinding.FragmentImportantInfoBottomSheetBinding;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
-public class RedditAPIInfoBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
+public class ImportantInfoBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     private MainActivity mainActivity;
 
-    public RedditAPIInfoBottomSheetFragment() {
+    public ImportantInfoBottomSheetFragment() {
         // Required empty public constructor
     }
 
@@ -26,7 +26,7 @@ public class RedditAPIInfoBottomSheetFragment extends LandscapeExpandedRoundedBo
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        FragmentRedditApiInfoBottomSheetBinding binding = FragmentRedditApiInfoBottomSheetBinding.inflate(inflater, container, false);
+        FragmentImportantInfoBottomSheetBinding binding = FragmentImportantInfoBottomSheetBinding.inflate(inflater, container, false);
 
         if (mainActivity != null && mainActivity.typeface != null) {
             Utils.setFontToAllTextViews(binding.getRoot(), mainActivity.typeface);
