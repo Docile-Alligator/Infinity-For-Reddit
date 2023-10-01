@@ -39,6 +39,7 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.button.MaterialButton;
 import com.google.common.collect.ImmutableList;
 
 import javax.inject.Inject;
@@ -73,6 +74,8 @@ public class ViewImgurVideoFragment extends Fragment {
     BottomAppBar bottomAppBar;
     @BindView(R.id.title_text_view_exo_playback_control_view)
     TextView titleTextView;
+    @BindView(R.id.back_button_exo_playback_control_view)
+    MaterialButton backButton;
     @BindView(R.id.download_image_view_exo_playback_control_view)
     ImageView downloadImageView;
     private ViewImgurMediaActivity activity;
@@ -104,6 +107,10 @@ public class ViewImgurVideoFragment extends Fragment {
         ButterKnife.bind(this, rootView);
 
         setHasOptionsMenu(true);
+
+        if (activity.typeface != null) {
+            titleTextView.setTypeface(activity.typeface);
+        }
 
         activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
@@ -158,10 +165,16 @@ public class ViewImgurVideoFragment extends Fragment {
         setPlaybackSpeed(Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_PLAYBACK_SPEED, "100")));
         preparePlayer(savedInstanceState);
 
+        titleTextView.setText(getString(R.string.view_imgur_media_activity_video_label,
+                getArguments().getInt(EXTRA_INDEX) + 1, getArguments().getInt(EXTRA_MEDIA_COUNT)));
+
         if (activity.isUseBottomAppBar()) {
             bottomAppBar.setVisibility(View.VISIBLE);
-            titleTextView.setText(getString(R.string.view_imgur_media_activity_video_label,
-                    getArguments().getInt(EXTRA_INDEX) + 1, getArguments().getInt(EXTRA_MEDIA_COUNT)));
+
+            backButton.setOnClickListener(view -> {
+                activity.finish();
+            });
+
             downloadImageView.setOnClickListener(view -> {
                 if (isDownloading) {
                     return;

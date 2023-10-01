@@ -75,6 +75,8 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     BottomAppBar bottomAppBar;
     @BindView(R.id.title_text_view_exo_playback_control_view)
     TextView titleTextView;
+    @BindView(R.id.back_button_exo_playback_control_view)
+    MaterialButton backButton;
     @BindView(R.id.download_image_view_exo_playback_control_view)
     ImageView downloadImageView;
     private ViewRedditGalleryActivity activity;
@@ -168,10 +170,14 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_PLAYBACK_SPEED, "100"));
         preparePlayer(savedInstanceState);
 
+        titleTextView.setText(getString(R.string.view_reddit_gallery_activity_video_label,
+                getArguments().getInt(EXTRA_INDEX) + 1, getArguments().getInt(EXTRA_MEDIA_COUNT)));
+
         if (activity.isUseBottomAppBar()) {
             bottomAppBar.setVisibility(View.VISIBLE);
-            titleTextView.setText(getString(R.string.view_reddit_gallery_activity_video_label,
-                    getArguments().getInt(EXTRA_INDEX) + 1, getArguments().getInt(EXTRA_MEDIA_COUNT)));
+            backButton.setOnClickListener(view -> {
+                activity.finish();
+            });
             downloadImageView.setOnClickListener(view -> {
                 if (isDownloading) {
                     return;
