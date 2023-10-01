@@ -169,7 +169,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     @BindView(R.id.back_button_exo_playback_control_view)
     MaterialButton backButton;
     @BindView(R.id.download_image_view_exo_playback_control_view)
-    MaterialButton downloadImageView;
+    MaterialButton downloadButton;
     @BindView(R.id.playback_speed_image_view_exo_playback_control_view)
     MaterialButton playbackSpeedImageView;
     @BindView(R.id.lockable_nested_scroll_view_view_video_activity)
@@ -321,7 +321,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 finish();
             });
 
-            downloadImageView.setOnClickListener(view -> {
+            downloadButton.setOnClickListener(view -> {
                 if (isDownloading) {
                     return;
                 }

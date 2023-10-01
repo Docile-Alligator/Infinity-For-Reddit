@@ -15,8 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,7 +67,7 @@ public class ViewImgurVideoFragment extends Fragment {
     @BindView(R.id.player_view_view_imgur_video_fragment)
     PlayerView videoPlayerView;
     @BindView(R.id.mute_exo_playback_control_view)
-    ImageButton muteButton;
+    MaterialButton muteButton;
     @BindView(R.id.bottom_navigation_exo_playback_control_view)
     BottomAppBar bottomAppBar;
     @BindView(R.id.title_text_view_exo_playback_control_view)
@@ -77,7 +75,7 @@ public class ViewImgurVideoFragment extends Fragment {
     @BindView(R.id.back_button_exo_playback_control_view)
     MaterialButton backButton;
     @BindView(R.id.download_image_view_exo_playback_control_view)
-    ImageView downloadImageView;
+    MaterialButton downloadButton;
     private ViewImgurMediaActivity activity;
     private ImgurMedia imgurMedia;
     private ExoPlayer player;
@@ -175,7 +173,7 @@ public class ViewImgurVideoFragment extends Fragment {
                 activity.finish();
             });
 
-            downloadImageView.setOnClickListener(view -> {
+            downloadButton.setOnClickListener(view -> {
                 if (isDownloading) {
                     return;
                 }
@@ -279,17 +277,17 @@ public class ViewImgurVideoFragment extends Fragment {
             isMute = savedInstanceState.getBoolean(IS_MUTE_STATE);
             if (isMute) {
                 player.setVolume(0f);
-                muteButton.setImageResource(R.drawable.ic_mute_24dp);
+                muteButton.setIconResource(R.drawable.ic_mute_24dp);
             } else {
                 player.setVolume(1f);
-                muteButton.setImageResource(R.drawable.ic_unmute_24dp);
+                muteButton.setIconResource(R.drawable.ic_unmute_24dp);
             }
         } else if (muteVideo) {
             isMute = true;
             player.setVolume(0f);
-            muteButton.setImageResource(R.drawable.ic_mute_24dp);
+            muteButton.setIconResource(R.drawable.ic_mute_24dp);
         } else {
-            muteButton.setImageResource(R.drawable.ic_unmute_24dp);
+            muteButton.setIconResource(R.drawable.ic_unmute_24dp);
         }
 
         player.addListener(new Player.Listener() {
@@ -305,11 +303,11 @@ public class ViewImgurVideoFragment extends Fragment {
                                 if (isMute) {
                                     isMute = false;
                                     player.setVolume(1f);
-                                    muteButton.setImageResource(R.drawable.ic_unmute_24dp);
+                                    muteButton.setIconResource(R.drawable.ic_unmute_24dp);
                                 } else {
                                     isMute = true;
                                     player.setVolume(0f);
-                                    muteButton.setImageResource(R.drawable.ic_mute_24dp);
+                                    muteButton.setIconResource(R.drawable.ic_mute_24dp);
                                 }
                             });
                             break;

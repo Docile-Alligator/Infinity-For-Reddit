@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +38,7 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.button.MaterialButton;
 import com.google.common.collect.ImmutableList;
 
 import javax.inject.Inject;
@@ -78,7 +78,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     @BindView(R.id.back_button_exo_playback_control_view)
     MaterialButton backButton;
     @BindView(R.id.download_image_view_exo_playback_control_view)
-    ImageView downloadImageView;
+    MaterialButton downloadButton;
     private ViewRedditGalleryActivity activity;
     private Post.Gallery galleryVideo;
     private String subredditName;
@@ -178,7 +178,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
             backButton.setOnClickListener(view -> {
                 activity.finish();
             });
-            downloadImageView.setOnClickListener(view -> {
+            downloadButton.setOnClickListener(view -> {
                 if (isDownloading) {
                     return;
                 }
