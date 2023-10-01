@@ -76,6 +76,8 @@ public class ViewImgurVideoFragment extends Fragment {
     MaterialButton backButton;
     @BindView(R.id.download_image_view_exo_playback_control_view)
     MaterialButton downloadButton;
+    @BindView(R.id.playback_speed_image_view_exo_playback_control_view)
+    MaterialButton playbackSpeedButton;
     private ViewImgurMediaActivity activity;
     private ImgurMedia imgurMedia;
     private ExoPlayer player;
@@ -180,9 +182,21 @@ public class ViewImgurVideoFragment extends Fragment {
                 isDownloading = true;
                 requestPermissionAndDownload();
             });
+
+            playbackSpeedButton.setOnClickListener(view -> {
+                changePlaybackSpeed();
+            });
         }
 
         return rootView;
+    }
+
+    private void changePlaybackSpeed() {
+        PlaybackSpeedBottomSheetFragment playbackSpeedBottomSheetFragment = new PlaybackSpeedBottomSheetFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(PlaybackSpeedBottomSheetFragment.EXTRA_PLAYBACK_SPEED, playbackSpeed);
+        playbackSpeedBottomSheetFragment.setArguments(bundle);
+        playbackSpeedBottomSheetFragment.show(getChildFragmentManager(), playbackSpeedBottomSheetFragment.getTag());
     }
 
     @Override
@@ -202,11 +216,7 @@ public class ViewImgurVideoFragment extends Fragment {
             requestPermissionAndDownload();
             return true;
         } else if (item.getItemId() == R.id.action_playback_speed_view_imgur_video_fragment) {
-            PlaybackSpeedBottomSheetFragment playbackSpeedBottomSheetFragment = new PlaybackSpeedBottomSheetFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt(PlaybackSpeedBottomSheetFragment.EXTRA_PLAYBACK_SPEED, playbackSpeed);
-            playbackSpeedBottomSheetFragment.setArguments(bundle);
-            playbackSpeedBottomSheetFragment.show(getChildFragmentManager(), playbackSpeedBottomSheetFragment.getTag());
+            changePlaybackSpeed();
             return true;
         }
         return false;

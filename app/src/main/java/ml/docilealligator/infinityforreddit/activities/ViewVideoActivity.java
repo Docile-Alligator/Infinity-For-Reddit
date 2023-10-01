@@ -171,7 +171,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     @BindView(R.id.download_image_view_exo_playback_control_view)
     MaterialButton downloadButton;
     @BindView(R.id.playback_speed_image_view_exo_playback_control_view)
-    MaterialButton playbackSpeedImageView;
+    MaterialButton playbackSpeedButton;
     @BindView(R.id.lockable_nested_scroll_view_view_video_activity)
     LockableNestedScrollView nestedScrollView;
 
@@ -335,12 +335,8 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 requestPermissionAndDownload();
             });
 
-            playbackSpeedImageView.setOnClickListener(view -> {
-                PlaybackSpeedBottomSheetFragment playbackSpeedBottomSheetFragment = new PlaybackSpeedBottomSheetFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt(PlaybackSpeedBottomSheetFragment.EXTRA_PLAYBACK_SPEED, playbackSpeed);
-                playbackSpeedBottomSheetFragment.setArguments(bundle);
-                playbackSpeedBottomSheetFragment.show(getSupportFragmentManager(), playbackSpeedBottomSheetFragment.getTag());
+            playbackSpeedButton.setOnClickListener(view -> {
+                changePlaybackSpeed();
             });
         } else {
             ActionBar actionBar = getSupportActionBar();
@@ -699,6 +695,14 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         });
     }
 
+    private void changePlaybackSpeed() {
+        PlaybackSpeedBottomSheetFragment playbackSpeedBottomSheetFragment = new PlaybackSpeedBottomSheetFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(PlaybackSpeedBottomSheetFragment.EXTRA_PLAYBACK_SPEED, playbackSpeed);
+        playbackSpeedBottomSheetFragment.setArguments(bundle);
+        playbackSpeedBottomSheetFragment.show(getSupportFragmentManager(), playbackSpeedBottomSheetFragment.getTag());
+    }
+
     private int inferPrimaryTrackType(Format format) {
         int trackType = MimeTypes.getTrackType(format.sampleMimeType);
         if (trackType != C.TRACK_TYPE_UNKNOWN) {
@@ -936,11 +940,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             requestPermissionAndDownload();
             return true;
         } else if (itemId == R.id.action_playback_speed_view_video_activity) {
-            PlaybackSpeedBottomSheetFragment playbackSpeedBottomSheetFragment = new PlaybackSpeedBottomSheetFragment();
-            Bundle bundle = new Bundle();
-            bundle.putInt(PlaybackSpeedBottomSheetFragment.EXTRA_PLAYBACK_SPEED, playbackSpeed);
-            playbackSpeedBottomSheetFragment.setArguments(bundle);
-            playbackSpeedBottomSheetFragment.show(getSupportFragmentManager(), playbackSpeedBottomSheetFragment.getTag());
+            changePlaybackSpeed();
             return true;
         }
 
