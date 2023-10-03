@@ -539,7 +539,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 loadStreamableVideo(shortCode, savedInstanceState);
             } else {
                 dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
+                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.getUserAgent()));
                 player.prepare();
                 player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
                 preparePlayer(savedInstanceState);
@@ -571,7 +571,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 }
             } else {
                 dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
+                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.getUserAgent()));
                 player.prepare();
                 player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
                 preparePlayer(savedInstanceState);
@@ -585,7 +585,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             }
             // Produces DataSource instances through which media data is loaded.
             dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
+                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.getUserAgent()));
             // Prepare the player with the source.
             player.prepare();
             player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -597,7 +597,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             videoFileName = subredditName + "-" + id + ".mp4";
             // Produces DataSource instances through which media data is loaded.
             dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
+                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.getUserAgent()));
             // Prepare the player with the source.
             player.prepare();
             player.setMediaSource(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -735,7 +735,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                             mVideoUri = Uri.parse(webm);
                             videoDownloadUrl = mp4;
                             dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
+                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.getUserAgent()));
                             preparePlayer(savedInstanceState);
                             player.prepare();
                             player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -765,7 +765,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                             mVideoUri = Uri.parse(webm);
                             videoDownloadUrl = mp4;
                             dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
+                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.getUserAgent()));
                             preparePlayer(savedInstanceState);
                             player.prepare();
                             player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -831,7 +831,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                                         videoFileName = "imgur-" + FilenameUtils.getName(videoDownloadUrl);
                                         // Produces DataSource instances through which media data is loaded.
                                         dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
+                                                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.getUserAgent()));
                                         // Prepare the player with the source.
                                         player.prepare();
                                         player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -847,7 +847,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                                             videoFileName = subredditName + "-" + id + ".mp4";
                                             // Produces DataSource instances through which media data is loaded.
                                             dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
+                                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.getUserAgent()));
                                             // Prepare the player with the source.
                                             preparePlayer(savedInstanceState);
                                             player.prepare();
@@ -890,7 +890,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                         videoDownloadUrl = streamableVideo.mp4 == null ? streamableVideo.mp4Mobile.url : streamableVideo.mp4.url;
                         mVideoUri = Uri.parse(videoDownloadUrl);
                         dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
+                                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.getUserAgent()));
                         preparePlayer(savedInstanceState);
                         player.prepare();
                         player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));

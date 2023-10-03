@@ -674,7 +674,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 if (mPost.isGfycat() || mPost.isRedgifs() && !mPost.isLoadGfycatOrStreamableVideoSuccess()) {
                     ((PostDetailBaseVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall =
                             mPost.isGfycat() ? mGfycatRetrofit.create(GfycatAPI.class).getGfycatData(mPost.getGfycatId()) :
-                                    mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")), mPost.getGfycatId(), APIUtils.USER_AGENT);
+                                    mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")), mPost.getGfycatId(), APIUtils.getUserAgent());
                     FetchGfycatOrRedgifsVideoLinks.fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
                             ((PostDetailBaseVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall,
                             mPost.isGfycat(), mAutomaticallyTryRedgifs,

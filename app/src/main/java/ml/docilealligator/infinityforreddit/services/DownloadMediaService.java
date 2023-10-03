@@ -132,7 +132,7 @@ public class DownloadMediaService extends Service {
                     .addInterceptor(chain -> chain.proceed(
                             chain.request()
                                     .newBuilder()
-                                    .header("User-Agent", APIUtils.USER_AGENT)
+                                    .header("User-Agent", APIUtils.getUserAgent())
                                     .build()
                     ))
                     .build();

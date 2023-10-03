@@ -92,7 +92,6 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsB
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.RandomBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.ImportantInfoBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -771,7 +770,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             }
         });
         navigationWrapper.floatingActionButton.setOnLongClickListener(view -> {
-            FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment= new FABMoreOptionsBottomSheetFragment();
+            FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment = new FABMoreOptionsBottomSheetFragment();
             Bundle bundle = new Bundle();
             bundle.putBoolean(FABMoreOptionsBottomSheetFragment.EXTRA_ANONYMOUS_MODE, mAccessToken == null);
             fabMoreOptionsBottomSheetFragment.setArguments(bundle);
@@ -783,101 +782,101 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         adapter = new NavigationDrawerRecyclerViewMergedAdapter(this, mSharedPreferences,
                 mNsfwAndSpoilerSharedPreferences, mNavigationDrawerSharedPreferences, mSecuritySharedPreferences,
                 mCustomThemeWrapper, mAccountName, new NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener() {
-                    @Override
-                    public void onMenuClick(int stringId) {
-                        Intent intent = null;
-                        if (stringId == R.string.profile) {
-                            intent = new Intent(MainActivity.this, ViewUserDetailActivity.class);
-                            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mAccountName);
-                        } else if (stringId == R.string.subscriptions) {
-                            intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
-                        } else if (stringId == R.string.multi_reddit) {
-                            intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
-                            intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
-                        } else if (stringId == R.string.history) {
-                            intent = new Intent(MainActivity.this, HistoryActivity.class);
-                        } else if (stringId == R.string.trending) {
-                            intent = new Intent(MainActivity.this, TrendingActivity.class);
-                        } else if (stringId == R.string.upvoted) {
-                            intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_UPVOTED);
-                        } else if (stringId == R.string.downvoted) {
-                            intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_DOWNVOTED);
-                        } else if (stringId == R.string.hidden) {
-                            intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_HIDDEN);
-                        } else if (stringId == R.string.account_saved_thing_activity_label) {
-                            intent = new Intent(MainActivity.this, AccountSavedThingActivity.class);
-                        } else if (stringId == R.string.gilded) {
-                            intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_GILDED);
-                        } else if (stringId == R.string.light_theme) {
-                            mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "0").apply();
-                            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                            mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.LIGHT);
-                        } else if (stringId == R.string.dark_theme) {
-                            mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "1").apply();
-                            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                            if (mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
-                                mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED);
-                            } else {
-                                mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
-                            }
-                        } else if (stringId == R.string.enable_nsfw) {
-                            if (sectionsPagerAdapter != null) {
-                                mNsfwAndSpoilerSharedPreferences.edit().putBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, true).apply();
-                                sectionsPagerAdapter.changeNSFW(true);
-                            }
-                        } else if (stringId == R.string.disable_nsfw) {
-                            if (sectionsPagerAdapter != null) {
-                                mNsfwAndSpoilerSharedPreferences.edit().putBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false).apply();
-                                sectionsPagerAdapter.changeNSFW(false);
-                            }
-                        } else if (stringId == R.string.settings) {
-                            intent = new Intent(MainActivity.this, SettingsActivity.class);
-                        } else if (stringId == R.string.add_account) {
-                            Intent addAccountIntent = new Intent(MainActivity.this, LoginActivity.class);
-                            startActivityForResult(addAccountIntent, LOGIN_ACTIVITY_REQUEST_CODE);
-                        } else if (stringId == R.string.anonymous_account) {
-                            SwitchToAnonymousMode.switchToAnonymousMode(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
-                                    mExecutor, new Handler(), false, () -> {
-                                        Intent anonymousIntent = new Intent(MainActivity.this, MainActivity.class);
-                                        startActivity(anonymousIntent);
-                                        finish();
-                                    });
-                        } else if (stringId == R.string.log_out) {
-                            SwitchToAnonymousMode.switchToAnonymousMode(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
-                                    mExecutor, new Handler(), true,
-                                    () -> {
-                                        Intent logOutIntent = new Intent(MainActivity.this, MainActivity.class);
-                                        startActivity(logOutIntent);
-                                        finish();
-                                    });
-                        }
-                        if (intent != null) {
-                            startActivity(intent);
-                        }
-                        drawer.closeDrawers();
+            @Override
+            public void onMenuClick(int stringId) {
+                Intent intent = null;
+                if (stringId == R.string.profile) {
+                    intent = new Intent(MainActivity.this, ViewUserDetailActivity.class);
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mAccountName);
+                } else if (stringId == R.string.subscriptions) {
+                    intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
+                } else if (stringId == R.string.multi_reddit) {
+                    intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
+                    intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
+                } else if (stringId == R.string.history) {
+                    intent = new Intent(MainActivity.this, HistoryActivity.class);
+                } else if (stringId == R.string.trending) {
+                    intent = new Intent(MainActivity.this, TrendingActivity.class);
+                } else if (stringId == R.string.upvoted) {
+                    intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                    intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_UPVOTED);
+                } else if (stringId == R.string.downvoted) {
+                    intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                    intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_DOWNVOTED);
+                } else if (stringId == R.string.hidden) {
+                    intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                    intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_HIDDEN);
+                } else if (stringId == R.string.account_saved_thing_activity_label) {
+                    intent = new Intent(MainActivity.this, AccountSavedThingActivity.class);
+                } else if (stringId == R.string.gilded) {
+                    intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                    intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_GILDED);
+                } else if (stringId == R.string.light_theme) {
+                    mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "0").apply();
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                    mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.LIGHT);
+                } else if (stringId == R.string.dark_theme) {
+                    mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "1").apply();
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                    if (mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
+                        mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED);
+                    } else {
+                        mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
                     }
-
-                    @Override
-                    public void onSubscribedSubredditClick(String subredditName) {
-                        Intent intent = new Intent(MainActivity.this, ViewSubredditDetailActivity.class);
-                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditName);
-                        startActivity(intent);
+                } else if (stringId == R.string.enable_nsfw) {
+                    if (sectionsPagerAdapter != null) {
+                        mNsfwAndSpoilerSharedPreferences.edit().putBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, true).apply();
+                        sectionsPagerAdapter.changeNSFW(true);
                     }
+                } else if (stringId == R.string.disable_nsfw) {
+                    if (sectionsPagerAdapter != null) {
+                        mNsfwAndSpoilerSharedPreferences.edit().putBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false).apply();
+                        sectionsPagerAdapter.changeNSFW(false);
+                    }
+                } else if (stringId == R.string.settings) {
+                    intent = new Intent(MainActivity.this, SettingsActivity.class);
+                } else if (stringId == R.string.add_account) {
+                    Intent addAccountIntent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivityForResult(addAccountIntent, LOGIN_ACTIVITY_REQUEST_CODE);
+                } else if (stringId == R.string.anonymous_account) {
+                    SwitchToAnonymousMode.switchToAnonymousMode(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
+                            mExecutor, new Handler(), false, () -> {
+                                Intent anonymousIntent = new Intent(MainActivity.this, MainActivity.class);
+                                startActivity(anonymousIntent);
+                                finish();
+                            });
+                } else if (stringId == R.string.log_out) {
+                    SwitchToAnonymousMode.switchToAnonymousMode(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
+                            mExecutor, new Handler(), true,
+                            () -> {
+                                Intent logOutIntent = new Intent(MainActivity.this, MainActivity.class);
+                                startActivity(logOutIntent);
+                                finish();
+                            });
+                }
+                if (intent != null) {
+                    startActivity(intent);
+                }
+                drawer.closeDrawers();
+            }
 
-                    @Override
-                    public void onAccountClick(String accountName) {
-                        SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
-                                mExecutor, new Handler(), accountName, newAccount -> {
+            @Override
+            public void onSubscribedSubredditClick(String subredditName) {
+                Intent intent = new Intent(MainActivity.this, ViewSubredditDetailActivity.class);
+                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditName);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onAccountClick(String accountName) {
+                SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
+                        mExecutor, new Handler(), accountName, newAccount -> {
                             Intent intent = new Intent(MainActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
                         });
-                    }
-                });
+            }
+        });
         adapter.setInboxCount(inboxCount);
         navDrawerRecyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this));
         navDrawerRecyclerView.setAdapter(adapter.getConcatAdapter());
@@ -1049,21 +1048,21 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         if (!mFetchUserInfoSuccess) {
             FetchUserData.fetchUserData(mRedditDataRoomDatabase, mOauthRetrofit, mAccessToken,
                     mAccountName, new FetchUserData.FetchUserDataListener() {
-                @Override
-                public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
-                    MainActivity.this.inboxCount = inboxCount;
-                    mAccountName = userData.getName();
-                    mFetchUserInfoSuccess = true;
-                    if (adapter != null) {
-                        adapter.setInboxCount(inboxCount);
-                    }
-                }
+                        @Override
+                        public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
+                            MainActivity.this.inboxCount = inboxCount;
+                            mAccountName = userData.getName();
+                            mFetchUserInfoSuccess = true;
+                            if (adapter != null) {
+                                adapter.setInboxCount(inboxCount);
+                            }
+                        }
 
-                @Override
-                public void onFetchUserDataFailed() {
-                    mFetchUserInfoSuccess = false;
-                }
-            });
+                        @Override
+                        public void onFetchUserDataFailed() {
+                            mFetchUserInfoSuccess = false;
+                        }
+                    });
             /*FetchMyInfo.fetchAccountInfo(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
                     new FetchMyInfo.FetchMyInfoListener() {
                         @Override
@@ -1614,8 +1613,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 int postType;
                 String name;
                 if (position == 1) {
-                     postType = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_POPULAR);
-                     name = mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, "");
+                    postType = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_POPULAR);
+                    name = mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, "");
                 } else {
                     postType = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_ALL);
                     name = mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, "");

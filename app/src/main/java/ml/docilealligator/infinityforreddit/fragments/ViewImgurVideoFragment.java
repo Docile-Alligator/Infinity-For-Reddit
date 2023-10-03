@@ -155,7 +155,7 @@ public class ViewImgurVideoFragment extends Fragment {
         player = new ExoPlayer.Builder(activity).setTrackSelector(trackSelector).build();
         videoPlayerView.setPlayer(player);
         dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
+                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.getUserAgent()));
         player.prepare();
         player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(imgurMedia.getLink())));
 

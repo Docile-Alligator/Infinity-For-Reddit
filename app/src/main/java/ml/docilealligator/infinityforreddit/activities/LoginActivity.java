@@ -152,7 +152,7 @@ public class LoginActivity extends BaseActivity {
 
         Uri baseUri = Uri.parse(APIUtils.OAUTH_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
-        uriBuilder.appendQueryParameter(APIUtils.CLIENT_ID_KEY, APIUtils.CLIENT_ID);
+        uriBuilder.appendQueryParameter(APIUtils.CLIENT_ID_KEY, APIUtils.getClientId());
         uriBuilder.appendQueryParameter(APIUtils.RESPONSE_TYPE_KEY, APIUtils.RESPONSE_TYPE);
         uriBuilder.appendQueryParameter(APIUtils.STATE_KEY, APIUtils.STATE);
         uriBuilder.appendQueryParameter(APIUtils.REDIRECT_URI_KEY, APIUtils.REDIRECT_URI);

@@ -24,7 +24,7 @@
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".Infinity"
@@ -36,6 +36,22 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
+        <activity
+            android:name=".activities.APISetupActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.MainActivity"
+            android:exported="true"
+            android:label="@string/application_name"
+            android:theme="@style/AppTheme.Launcher"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.HistoryActivity"
             android:exported="false"
@@ -373,18 +389,6 @@
             android:label="@string/search_activity_label"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
-        <activity
-            android:name=".activities.MainActivity"
-            android:exported="true"
-            android:label="@string/application_name"
-            android:theme="@style/AppTheme.Launcher"
-            android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".activities.LoginActivity"
             android:configChanges="orientation|screenLayout|screenSize|layoutDirection"
