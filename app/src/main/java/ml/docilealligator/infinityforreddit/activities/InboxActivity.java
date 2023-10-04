@@ -50,7 +50,6 @@ import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
-import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
 import ml.docilealligator.infinityforreddit.events.PassPrivateMessageEvent;
 import ml.docilealligator.infinityforreddit.events.PassPrivateMessageIndexEvent;
@@ -267,7 +266,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             }
         });
         viewPager2.setAdapter(sectionsPagerAdapter);
-        viewPager2.setOffscreenPageLimit(2);
+        viewPager2.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
             switch (position) {
                 case 0:

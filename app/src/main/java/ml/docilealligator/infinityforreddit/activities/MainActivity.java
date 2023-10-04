@@ -890,7 +890,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         sectionsPagerAdapter = new SectionsPagerAdapter(this, tabCount, mShowFavoriteMultiReddits,
                 mShowMultiReddits, mShowFavoriteSubscribedSubreddits, mShowSubscribedSubreddits);
         viewPager2.setAdapter(sectionsPagerAdapter);
-        viewPager2.setOffscreenPageLimit(1);
+        viewPager2.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
         viewPager2.setUserInputEnabled(!mDisableSwipingBetweenTabs);
         if (mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_TAB_NAMES, true)) {
             if (mShowFavoriteMultiReddits || mShowMultiReddits || mShowFavoriteSubscribedSubreddits || mShowSubscribedSubreddits) {

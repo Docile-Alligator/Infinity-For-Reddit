@@ -665,7 +665,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private void initializeViewPager() {
         sectionsPagerAdapter = new SectionsPagerAdapter(this);
         viewPager2.setAdapter(sectionsPagerAdapter);
-        viewPager2.setOffscreenPageLimit(2);
+        viewPager2.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
         viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
             switch (position) {
