@@ -32,8 +32,7 @@ public class MessageViewModel extends ViewModel {
         hasMessageLiveData = Transformations.switchMap(messageDataSourceFactory.getMessageDataSourceLiveData(),
                 MessageDataSource::hasPostLiveData);
 
-        whereLiveData = new MutableLiveData<>();
-        whereLiveData.postValue(where);
+        whereLiveData = new MutableLiveData<>(where);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())

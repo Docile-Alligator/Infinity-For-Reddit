@@ -31,8 +31,7 @@ public class SubredditListingViewModel extends ViewModel {
         hasSubredditLiveData = Transformations.switchMap(subredditListingDataSourceFactory.getSubredditListingDataSourceMutableLiveData(),
                 SubredditListingDataSource::hasSubredditLiveData);
 
-        sortTypeLiveData = new MutableLiveData<>();
-        sortTypeLiveData.postValue(sortType);
+        sortTypeLiveData = new MutableLiveData<>(sortType);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())

@@ -23,8 +23,7 @@ public class MultiRedditViewModel extends AndroidViewModel {
     public MultiRedditViewModel(Application application, RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
         super(application);
         mMultiRedditRepository = new MultiRedditRepository(redditDataRoomDatabase, accountName);
-        searchQueryLiveData = new MutableLiveData<>();
-        searchQueryLiveData.postValue("");
+        searchQueryLiveData = new MutableLiveData<>("");
 
         mAllMultiReddits = Transformations.switchMap(searchQueryLiveData, searchQuery -> mMultiRedditRepository.getAllMultiRedditsWithSearchQuery(searchQuery));
         mAllFavoriteMultiReddits = Transformations.switchMap(searchQueryLiveData, searchQuery -> mMultiRedditRepository.getAllFavoriteMultiRedditsWithSearchQuery(searchQuery));

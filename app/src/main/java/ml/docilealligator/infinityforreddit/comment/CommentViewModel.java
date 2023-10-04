@@ -35,8 +35,7 @@ public class CommentViewModel extends ViewModel {
         hasCommentLiveData = Transformations.switchMap(commentDataSourceFactory.getCommentDataSourceLiveData(),
                 CommentDataSource::hasPostLiveData);
 
-        sortTypeLiveData = new MutableLiveData<>();
-        sortTypeLiveData.postValue(sortType);
+        sortTypeLiveData = new MutableLiveData<>(sortType);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())

@@ -31,8 +31,7 @@ public class UserListingViewModel extends ViewModel {
         hasUserLiveData = Transformations.switchMap(userListingDataSourceFactory.getUserListingDataSourceMutableLiveData(),
                 UserListingDataSource::hasUserLiveData);
 
-        sortTypeLiveData = new MutableLiveData<>();
-        sortTypeLiveData.postValue(sortType);
+        sortTypeLiveData = new MutableLiveData<>(sortType);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())

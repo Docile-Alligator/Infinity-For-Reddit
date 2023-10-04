@@ -23,8 +23,7 @@ public class SubscribedSubredditViewModel extends AndroidViewModel {
     public SubscribedSubredditViewModel(Application application, RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
         super(application);
         mSubscribedSubredditRepository = new SubscribedSubredditRepository(redditDataRoomDatabase, accountName);
-        searchQueryLiveData = new MutableLiveData<>();
-        searchQueryLiveData.postValue("");
+        searchQueryLiveData = new MutableLiveData<>("");
 
         mAllSubscribedSubreddits = Transformations.switchMap(searchQueryLiveData, searchQuery -> mSubscribedSubredditRepository.getAllSubscribedSubredditsWithSearchQuery(searchQuery));
         mAllFavoriteSubscribedSubreddits = Transformations.switchMap(searchQueryLiveData, searchQuery -> mSubscribedSubredditRepository.getAllFavoriteSubscribedSubredditsWithSearchQuery(searchQuery));
