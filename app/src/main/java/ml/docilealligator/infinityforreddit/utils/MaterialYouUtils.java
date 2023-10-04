@@ -93,6 +93,7 @@ public class MaterialYouUtils {
             lightTheme.colorPrimaryLightTheme = lightTheme.colorPrimary;
             lightTheme.backgroundColor = context.getColor(android.R.color.system_neutral1_50);
             lightTheme.cardViewBackgroundColor = context.getColor(android.R.color.system_neutral2_10);
+            lightTheme.filledCardViewBackgroundColor = lightTheme.cardViewBackgroundColor;
             lightTheme.commentBackgroundColor = context.getColor(android.R.color.system_neutral2_10);
             lightTheme.awardedCommentBackgroundColor = context.getColor(android.R.color.system_neutral2_10);
             lightTheme.bottomAppBarBackgroundColor = lightTheme.colorPrimary;
@@ -123,6 +124,7 @@ public class MaterialYouUtils {
             darkTheme.colorPrimaryLightTheme = lightTheme.colorPrimary;
             darkTheme.backgroundColor = context.getColor(android.R.color.system_neutral1_900);
             darkTheme.cardViewBackgroundColor = context.getColor(android.R.color.system_neutral2_800);
+            darkTheme.filledCardViewBackgroundColor = darkTheme.cardViewBackgroundColor;
             darkTheme.commentBackgroundColor = darkTheme.cardViewBackgroundColor;
             darkTheme.awardedCommentBackgroundColor = darkTheme.cardViewBackgroundColor;
             darkTheme.bottomAppBarBackgroundColor = darkTheme.colorPrimary;
@@ -189,6 +191,7 @@ public class MaterialYouUtils {
                 lightTheme.colorPrimaryLightTheme = colorPrimaryInt;
                 lightTheme.backgroundColor = backgroundColor;
                 lightTheme.cardViewBackgroundColor = cardViewBackgroundColor;
+                lightTheme.filledCardViewBackgroundColor = cardViewBackgroundColor;
                 lightTheme.commentBackgroundColor = cardViewBackgroundColor;
                 lightTheme.awardedCommentBackgroundColor = cardViewBackgroundColor;
                 lightTheme.bottomAppBarBackgroundColor = colorPrimaryInt;
