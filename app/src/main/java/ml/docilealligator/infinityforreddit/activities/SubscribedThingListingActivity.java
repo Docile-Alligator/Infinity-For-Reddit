@@ -56,7 +56,6 @@ import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThings;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
-import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.events.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.events.RefreshMultiRedditsEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -108,6 +107,9 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     @Inject
     @Named("current_account")
     SharedPreferences mCurrentAccountSharedPreferences;
+    @Inject
+    @Named("internal")
+    SharedPreferences mInternalSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
@@ -317,6 +319,10 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     }
 
     public void loadSubscriptions(boolean forceLoad) {
+        if (!forceLoad && System.currentTimeMillis() - mInternalSharedPreferences.getLong(SharedPreferencesUtils.SUBSCRIBED_THINGS_SYNC_TIME, 0L) < 24 * 60 * 60 * 1000) {
+            return;
+        }
+
         if (mAccessToken != null && !(!forceLoad && mInsertSuccess)) {
             FetchSubscribedThing.fetchSubscribedThing(mOauthRetrofit, mAccessToken, mAccountName, null,
                     new ArrayList<>(), new ArrayList<>(),
@@ -326,6 +332,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                         public void onFetchSubscribedThingSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                                                   ArrayList<SubscribedUserData> subscribedUserData,
                                                                   ArrayList<SubredditData> subredditData) {
+                            mInternalSharedPreferences.edit().putLong(SharedPreferencesUtils.SUBSCRIBED_THINGS_SYNC_TIME, System.currentTimeMillis()).apply();
                             InsertSubscribedThings.insertSubscribedThings(
                                     mExecutor,
                                     new Handler(),
