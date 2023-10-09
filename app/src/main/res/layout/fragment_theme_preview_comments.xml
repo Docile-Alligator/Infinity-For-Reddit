@@ -104,108 +104,123 @@
                     android:id="@+id/bottom_constraint_layout_theme_preview_comments_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="12dp"
                     android:paddingStart="4dp"
                     android:paddingEnd="4dp">
 
-                    <ImageView
-                        android:id="@+id/up_vote_button_theme_preview_comments_fragment"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/vote_button_toggle_theme_preview_comments_fragment"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:background="?actionBarItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:src="@drawable/ic_arrow_upward_grey_24dp"
+                        app:singleSelection="true"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
+                        app:layout_constraintBottom_toBottomOf="parent">
 
-                    <TextView
-                        android:id="@+id/score_text_view_theme_preview_comments_fragment"
-                        android:layout_width="64dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="1234"
-                        android:textSize="?attr/font_12"
-                        android:textStyle="bold"
-                        android:fontFamily="?attr/font_family"
-                        app:layout_constraintStart_toEndOf="@+id/up_vote_button_theme_preview_comments_fragment"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        <com.google.android.material.button.MaterialButton
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:id="@+id/upvote_button_theme_preview_comments_fragment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:minWidth="0dp"
+                            android:text="1234"
+                            android:textSize="?attr/font_12"
+                            android:textStyle="bold"
+                            android:fontFamily="?attr/font_family"
+                            app:strokeWidth="0dp"
+                            app:icon="@drawable/ic_upvote_24dp"
+                            app:iconSize="24dp"
+                            android:backgroundTint="#00000000" />
 
-                    <ImageView
-                        android:id="@+id/down_vote_button_theme_preview_comments_fragment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:background="?actionBarItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:src="@drawable/ic_arrow_downward_grey_24dp"
-                        app:layout_constraintStart_toEndOf="@+id/score_text_view_theme_preview_comments_fragment"
-                        app:layout_constraintEnd_toStartOf="@id/more_button_theme_preview_comments_fragment"
-                        app:layout_constraintTop_toTopOf="parent"
+                        <com.google.android.material.button.MaterialButton
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:id="@+id/downvote_button_theme_preview_comments_fragment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:minWidth="0dp"
+                            app:strokeWidth="0dp"
+                            app:icon="@drawable/ic_downvote_24dp"
+                            app:iconSize="24dp"
+                            android:backgroundTint="#00000000" />
+
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                    <View
+                        android:id="@+id/placeholder_theme_preview_comments_fragment"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintWidth_min="1dp"
+                        app:layout_constrainedWidth="true"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintHorizontal_bias="0" />
+                        app:layout_constraintEnd_toStartOf="@+id/more_button_theme_preview_comments_fragment"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/vote_button_toggle_theme_preview_comments_fragment"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/more_button_theme_preview_comments_fragment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:background="?actionBarItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:src="@drawable/ic_more_vert_grey_24dp"
+                        app:strokeWidth="0dp"
+                        app:icon="@drawable/ic_more_vert_grey_24dp"
+                        app:iconSize="24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/expand_button_theme_preview_comments_fragment"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/placeholder_theme_preview_comments_fragment"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        style="?attr/materialIconButtonOutlinedStyle" />
 
-                    <ImageView
+                    <TextView
                         android:id="@+id/expand_button_theme_preview_comments_fragment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
                         android:background="?actionBarItemBackground"
                         android:clickable="true"
                         android:focusable="true"
-                        android:src="@drawable/ic_expand_less_grey_24dp"
+                        android:fontFamily="?attr/font_family"
+                        android:gravity="center"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:text="890"
+                        android:textSize="?attr/font_default"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/save_button_theme_preview_comments_fragment"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/more_button_theme_preview_comments_fragment"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/save_button_theme_preview_comments_fragment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:background="?actionBarItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:src="@drawable/ic_bookmark_border_grey_24dp"
+                        app:strokeWidth="0dp"
+                        app:icon="@drawable/ic_bookmark_border_grey_24dp"
+                        app:iconSize="24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/reply_button_theme_preview_comments_fragment"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/expand_button_theme_preview_comments_fragment"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        style="?attr/materialIconButtonOutlinedStyle" />
 
-                    <ImageView
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/reply_button_theme_preview_comments_fragment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:background="?actionBarItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:src="@drawable/ic_reply_grey_24dp"
+                        app:strokeWidth="0dp"
+                        app:icon="@drawable/ic_reply_grey_24dp"
+                        app:iconSize="24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/save_button_theme_preview_comments_fragment"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        style="?attr/materialIconButtonOutlinedStyle" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -311,108 +326,123 @@
                     android:id="@+id/bottom_constraint_layout_award_background_theme_preview_comments_fragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="12dp"
                     android:paddingStart="4dp"
                     android:paddingEnd="4dp">
 
-                    <ImageView
-                        android:id="@+id/up_vote_button_award_background_theme_preview_comments_fragment"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.button.MaterialButtonToggleGroup
+                        android:id="@+id/vote_button_toggle_award_background_theme_preview_comments_fragment"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:background="?actionBarItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:src="@drawable/ic_arrow_upward_grey_24dp"
+                        app:singleSelection="true"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent" />
+                        app:layout_constraintBottom_toBottomOf="parent">
 
-                    <TextView
-                        android:id="@+id/score_text_view_award_background_theme_preview_comments_fragment"
-                        android:layout_width="64dp"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="1234"
-                        android:textSize="?attr/font_12"
-                        android:textStyle="bold"
-                        android:fontFamily="?attr/font_family"
-                        app:layout_constraintStart_toEndOf="@+id/up_vote_button_award_background_theme_preview_comments_fragment"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        <com.google.android.material.button.MaterialButton
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:id="@+id/upvote_button_award_background_theme_preview_comments_fragment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:minWidth="0dp"
+                            android:text="1234"
+                            android:textSize="?attr/font_12"
+                            android:textStyle="bold"
+                            android:fontFamily="?attr/font_family"
+                            app:strokeWidth="0dp"
+                            app:icon="@drawable/ic_upvote_24dp"
+                            app:iconSize="24dp"
+                            android:backgroundTint="#00000000" />
 
-                    <ImageView
-                        android:id="@+id/down_vote_button_award_background_theme_preview_comments_fragment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:background="?actionBarItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:src="@drawable/ic_arrow_downward_grey_24dp"
-                        app:layout_constraintStart_toEndOf="@+id/score_text_view_award_background_theme_preview_comments_fragment"
-                        app:layout_constraintEnd_toStartOf="@id/more_button_award_background_theme_preview_comments_fragment"
-                        app:layout_constraintTop_toTopOf="parent"
+                        <com.google.android.material.button.MaterialButton
+                            style="?attr/materialButtonOutlinedStyle"
+                            android:id="@+id/downvote_button_award_background_theme_preview_comments_fragment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:minWidth="0dp"
+                            app:strokeWidth="0dp"
+                            app:icon="@drawable/ic_downvote_24dp"
+                            app:iconSize="24dp"
+                            android:backgroundTint="#00000000" />
+
+                    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+                    <View
+                        android:id="@+id/placeholder_award_background_theme_preview_comments_fragment"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintWidth_min="1dp"
+                        app:layout_constrainedWidth="true"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintHorizontal_bias="0" />
+                        app:layout_constraintEnd_toStartOf="@+id/more_button_award_background_theme_preview_comments_fragment"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/vote_button_toggle_award_background_theme_preview_comments_fragment"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/more_button_award_background_theme_preview_comments_fragment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:background="?actionBarItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:src="@drawable/ic_more_vert_grey_24dp"
+                        app:strokeWidth="0dp"
+                        app:icon="@drawable/ic_more_vert_grey_24dp"
+                        app:iconSize="24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/expand_button_award_background_theme_preview_comments_fragment"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/placeholder_award_background_theme_preview_comments_fragment"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        style="?attr/materialIconButtonOutlinedStyle" />
 
-                    <ImageView
+                    <TextView
                         android:id="@+id/expand_button_award_background_theme_preview_comments_fragment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
                         android:background="?actionBarItemBackground"
                         android:clickable="true"
                         android:focusable="true"
-                        android:src="@drawable/ic_expand_less_grey_24dp"
+                        android:fontFamily="?attr/font_family"
+                        android:gravity="center"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:text="890"
+                        android:textSize="?attr/font_default"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/save_button_award_background_theme_preview_comments_fragment"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/more_button_award_background_theme_preview_comments_fragment"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                    <ImageView
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/save_button_award_background_theme_preview_comments_fragment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:background="?actionBarItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:src="@drawable/ic_bookmark_border_grey_24dp"
+                        app:strokeWidth="0dp"
+                        app:icon="@drawable/ic_bookmark_border_grey_24dp"
+                        app:iconSize="24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/reply_button_award_background_theme_preview_comments_fragment"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/expand_button_award_background_theme_preview_comments_fragment"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        style="?attr/materialIconButtonOutlinedStyle" />
 
-                    <ImageView
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/reply_button_award_background_theme_preview_comments_fragment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:background="?actionBarItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:src="@drawable/ic_reply_grey_24dp"
+                        app:strokeWidth="0dp"
+                        app:icon="@drawable/ic_reply_grey_24dp"
+                        app:iconSize="24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/save_button_award_background_theme_preview_comments_fragment"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        style="?attr/materialIconButtonOutlinedStyle" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
