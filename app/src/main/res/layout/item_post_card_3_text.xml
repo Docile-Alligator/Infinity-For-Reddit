@@ -9,7 +9,6 @@
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
     app:cardCornerRadius="12dp"
-    app:cardBackgroundColor="#FBEEFC"
     style="?attr/materialCardViewFilledStyle">
 
     <LinearLayout

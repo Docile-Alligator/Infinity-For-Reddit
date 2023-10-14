@@ -13,6 +13,7 @@ import java.util.List;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ItemPostFilterBinding;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
@@ -51,14 +52,14 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         if (viewType == VIEW_TYPE_HEADER) {
             return new HeaderViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_filter_fragment_header, parent, false));
         } else {
-            return new PostFilterViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_filter, parent, false));
+            return new PostFilterViewHolder(ItemPostFilterBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PostFilterViewHolder) {
-            ((PostFilterViewHolder) holder).textView.setText(postFilterList.get(position - 1).name);
+            ((PostFilterViewHolder) holder).binding.postFilterNameTextViewItemPostFilter.setText(postFilterList.get(position - 1).name);
         }
     }
 
@@ -73,16 +74,15 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     }
 
     private class PostFilterViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+        ItemPostFilterBinding binding;
 
-        public PostFilterViewHolder(@NonNull View itemView) {
-            super(itemView);
-            textView = (TextView) itemView;
-
-            textView.setTextColor(customThemeWrapper.getPrimaryTextColor());
+        public PostFilterViewHolder(@NonNull ItemPostFilterBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            binding.postFilterNameTextViewItemPostFilter.setTextColor(customThemeWrapper.getPrimaryTextColor());
 
             if (activity.typeface != null) {
-                textView.setTypeface(activity.typeface);
+                binding.postFilterNameTextViewItemPostFilter.setTypeface(activity.typeface);
             }
 
             itemView.setOnClickListener(view -> {
