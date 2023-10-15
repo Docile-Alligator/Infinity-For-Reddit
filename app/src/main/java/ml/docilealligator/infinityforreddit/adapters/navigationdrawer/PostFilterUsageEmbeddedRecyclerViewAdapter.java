@@ -85,7 +85,14 @@ public class PostFilterUsageEmbeddedRecyclerViewAdapter extends RecyclerView.Ada
 
         public EntryViewHolder(@NonNull ItemPostFilterUsageEmbeddedBinding binding) {
             super(binding.getRoot());
-            this.textView = binding.getRoot();
+            textView = binding.getRoot();
+
+            textView.setTextColor(baseActivity.customThemeWrapper.getSecondaryTextColor());
+
+            if (baseActivity.typeface != null) {
+                textView.setTypeface(baseActivity.typeface);
+            }
+
             textView.setOnClickListener(view -> {
                 Toast.makeText(baseActivity, textView.getText(), Toast.LENGTH_SHORT).show();
             });
