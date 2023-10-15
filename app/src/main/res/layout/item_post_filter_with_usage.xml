@@ -25,10 +25,13 @@
             android:paddingEnd="16dp"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_16"
-            android:fontFamily="?attr/font_family"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground" />
+            android:fontFamily="?attr/font_family" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/post_filter_usage_recycler_view_item_post_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false" />
 
     </LinearLayout>
 

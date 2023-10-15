@@ -1372,4 +1372,7 @@
         Otherwise, Infinity may not load posts at all. Sorry for the inconvenience.</string>
     <string name="i_understand">I understand</string>
 
+    <string name="click_to_apply_post_filter">Click here to apply it to some post feeds</string>
+    <string name="post_filter_usage_embedded_more_count">and %1$d more</string>
+
 </resources>

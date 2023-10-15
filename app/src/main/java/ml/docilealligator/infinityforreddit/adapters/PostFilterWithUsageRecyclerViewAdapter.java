@@ -12,13 +12,15 @@ import java.util.List;
 
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.adapters.navigationdrawer.PostFilterUsageEmbeddedRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.databinding.ItemPostFilterBinding;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.databinding.ItemPostFilterWithUsageBinding;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterWithUsage;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
-public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PostFilterWithUsageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int VIEW_TYPE_HEADER = 1;
     private static final int VIEW_TYPE_POST_FILTER = 2;
@@ -27,15 +29,17 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private CustomThemeWrapper customThemeWrapper;
     private final OnItemClickListener onItemClickListener;
     private List<PostFilterWithUsage> postFilterWithUsageList;
+    private RecyclerView.RecycledViewPool recycledViewPool;
 
     public interface OnItemClickListener {
         void onItemClick(PostFilter postFilter);
     }
 
-    public PostFilterRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper,
-                                         OnItemClickListener onItemClickListener) {
+    public PostFilterWithUsageRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper,
+                                                  OnItemClickListener onItemClickListener) {
         this.activity = activity;
         this.customThemeWrapper = customThemeWrapper;
+        this.recycledViewPool = new RecyclerView.RecycledViewPool();
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -53,7 +57,7 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         if (viewType == VIEW_TYPE_HEADER) {
             return new HeaderViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_filter_fragment_header, parent, false));
         } else {
-            return new PostFilterViewHolder(ItemPostFilterBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+            return new PostFilterViewHolder(ItemPostFilterWithUsageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         }
     }
 
@@ -61,6 +65,7 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PostFilterViewHolder) {
             ((PostFilterViewHolder) holder).binding.postFilterNameTextViewItemPostFilter.setText(postFilterWithUsageList.get(position - 1).postFilter.name);
+            ((PostFilterViewHolder) holder).adapter.setPostFilterUsageList(postFilterWithUsageList.get(position - 1).postFilterUsages);
         }
     }
 
@@ -75,9 +80,10 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     }
 
     private class PostFilterViewHolder extends RecyclerView.ViewHolder {
-        ItemPostFilterBinding binding;
+        ItemPostFilterWithUsageBinding binding;
+        PostFilterUsageEmbeddedRecyclerViewAdapter adapter;
 
-        public PostFilterViewHolder(@NonNull ItemPostFilterBinding binding) {
+        public PostFilterViewHolder(@NonNull ItemPostFilterWithUsageBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             binding.postFilterNameTextViewItemPostFilter.setTextColor(customThemeWrapper.getPrimaryTextColor());
@@ -89,6 +95,11 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             binding.getRoot().setOnClickListener(view -> {
                 onItemClickListener.onItemClick(postFilterWithUsageList.get(getBindingAdapterPosition() - 1).postFilter);
             });
+
+            binding.postFilterUsageRecyclerViewItemPostFilter.setRecycledViewPool(recycledViewPool);
+            binding.postFilterUsageRecyclerViewItemPostFilter.setLayoutManager(new LinearLayoutManagerBugFixed(activity));
+            adapter = new PostFilterUsageEmbeddedRecyclerViewAdapter(activity);
+            binding.postFilterUsageRecyclerViewItemPostFilter.setAdapter(adapter);
         }
     }
 
