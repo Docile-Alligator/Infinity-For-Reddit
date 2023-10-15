@@ -1145,10 +1145,13 @@
     <string name="post_filter_usage_home">Home</string>
     <string name="post_filter_usage_subreddit">Subreddit: %1$s</string>
     <string name="post_filter_usage_subreddit_all">Subreddit</string>
+    <string name="post_filter_usage_embedded_subreddit_all">All subreddits</string>
     <string name="post_filter_usage_user">User: %1$s</string>
     <string name="post_filter_usage_user_all">User</string>
+    <string name="post_filter_usage_embedded_user_all">All users</string>
     <string name="post_filter_usage_multireddit">MultiReddit: %1$s</string>
     <string name="post_filter_usage_multireddit_all">MultiReddit</string>
+    <string name="post_filter_usage_embedded_multireddit_all">All Multireddits</string>
     <string name="post_filter_usage_search">Search</string>
     <string name="subreddit">Subreddit</string>
     <string name="user">User</string>

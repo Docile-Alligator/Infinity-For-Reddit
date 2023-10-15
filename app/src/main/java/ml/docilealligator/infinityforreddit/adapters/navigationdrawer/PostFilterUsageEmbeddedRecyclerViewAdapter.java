@@ -37,7 +37,36 @@ public class PostFilterUsageEmbeddedRecyclerViewAdapter extends RecyclerView.Ada
         } else if (holder.getBindingAdapterPosition() > 4) {
             holder.textView.setText(baseActivity.getString(R.string.post_filter_usage_embedded_more_count, postFilterUsageList.size() - 5));
         } else {
-            holder.textView.setText(postFilterUsageList.get(holder.getBindingAdapterPosition()).nameOfUsage);
+            PostFilterUsage postFilterUsage = postFilterUsageList.get(holder.getBindingAdapterPosition());
+            switch (postFilterUsage.usage) {
+                case PostFilterUsage.HOME_TYPE:
+                    holder.textView.setText(R.string.post_filter_usage_home);
+                    break;
+                case PostFilterUsage.SUBREDDIT_TYPE:
+                    if (postFilterUsage.nameOfUsage.equals(PostFilterUsage.NO_USAGE)) {
+                        holder.textView.setText(R.string.post_filter_usage_embedded_subreddit_all);
+                    } else {
+                        holder.textView.setText("r/" + postFilterUsage.nameOfUsage);
+                    }
+                    break;
+                case PostFilterUsage.USER_TYPE:
+                    if (postFilterUsage.nameOfUsage.equals(PostFilterUsage.NO_USAGE)) {
+                        holder.textView.setText(R.string.post_filter_usage_embedded_user_all);
+                    } else {
+                        holder.textView.setText("u/" + postFilterUsage.nameOfUsage);
+                    }
+                    break;
+                case PostFilterUsage.SEARCH_TYPE:
+                    holder.textView.setText(R.string.post_filter_usage_search);
+                    break;
+                case PostFilterUsage.MULTIREDDIT_TYPE:
+                    if (postFilterUsage.nameOfUsage.equals(PostFilterUsage.NO_USAGE)) {
+                        holder.textView.setText(R.string.post_filter_usage_embedded_multireddit_all);
+                    } else {
+                        holder.textView.setText(postFilterUsage.nameOfUsage);
+                    }
+                    break;
+            }
         }
     }
 
