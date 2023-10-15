@@ -3,11 +3,13 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +18,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -32,7 +35,8 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.postfilter.DeletePostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilterViewModel;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilterWithUsageViewModel;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilterWithUsage;
 
 public class PostFilterPreferenceActivity extends BaseActivity {
 
@@ -61,7 +65,7 @@ public class PostFilterPreferenceActivity extends BaseActivity {
     CustomThemeWrapper customThemeWrapper;
     @Inject
     Executor executor;
-    public PostFilterViewModel postFilterViewModel;
+    public PostFilterWithUsageViewModel postFilterWithUsageViewModel;
     private PostFilterRecyclerViewAdapter adapter;
 
     @Override
@@ -116,10 +120,15 @@ public class PostFilterPreferenceActivity extends BaseActivity {
 
         recyclerView.setAdapter(adapter);
 
-        postFilterViewModel = new ViewModelProvider(this,
-                new PostFilterViewModel.Factory(redditDataRoomDatabase)).get(PostFilterViewModel.class);
+        postFilterWithUsageViewModel = new ViewModelProvider(this,
+                new PostFilterWithUsageViewModel.Factory(redditDataRoomDatabase)).get(PostFilterWithUsageViewModel.class);
 
-        postFilterViewModel.getPostFilterListLiveData().observe(this, postFilters -> adapter.setPostFilterList(postFilters));
+        postFilterWithUsageViewModel.getPostFilterWithUsageListLiveData().observe(this, new Observer<List<PostFilterWithUsage>>() {
+            @Override
+            public void onChanged(List<PostFilterWithUsage> postFilterWithUsages) {
+                adapter.setPostFilterWithUsageList(postFilterWithUsages);
+            }
+        });
     }
 
     public void showPostFilterOptions(Post post, PostFilter postFilter) {

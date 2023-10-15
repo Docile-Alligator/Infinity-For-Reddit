@@ -8,15 +8,15 @@ import java.util.List;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
-public class PostFilterViewModel extends ViewModel {
-    private LiveData<List<PostFilter>> mPostFilterListLiveData;
+public class PostFilterWithUsageViewModel extends ViewModel {
+    private LiveData<List<PostFilterWithUsage>> mPostFilterWithUsageListLiveData;
 
-    public PostFilterViewModel(RedditDataRoomDatabase redditDataRoomDatabase) {
-        mPostFilterListLiveData = redditDataRoomDatabase.postFilterDao().getAllPostFiltersLiveData();
+    public PostFilterWithUsageViewModel(RedditDataRoomDatabase redditDataRoomDatabase) {
+        mPostFilterWithUsageListLiveData = redditDataRoomDatabase.postFilterDao().getAllPostFilterWithUsageLiveData();
     }
 
-    public LiveData<List<PostFilter>> getPostFilterListLiveData() {
-        return mPostFilterListLiveData;
+    public LiveData<List<PostFilterWithUsage>> getPostFilterWithUsageListLiveData() {
+        return mPostFilterWithUsageListLiveData;
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
@@ -30,7 +30,7 @@ public class PostFilterViewModel extends ViewModel {
         @Override
         public <T extends ViewModel> T create(Class<T> modelClass) {
             //noinspection unchecked
-            return (T) new PostFilterViewModel(mRedditDataRoomDatabase);
+            return (T) new PostFilterWithUsageViewModel(mRedditDataRoomDatabase);
         }
     }
 }

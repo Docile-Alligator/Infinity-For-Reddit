@@ -15,6 +15,7 @@ import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostFilterBinding;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilterWithUsage;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -25,7 +26,7 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private BaseActivity activity;
     private CustomThemeWrapper customThemeWrapper;
     private final OnItemClickListener onItemClickListener;
-    private List<PostFilter> postFilterList;
+    private List<PostFilterWithUsage> postFilterWithUsageList;
 
     public interface OnItemClickListener {
         void onItemClick(PostFilter postFilter);
@@ -59,17 +60,17 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PostFilterViewHolder) {
-            ((PostFilterViewHolder) holder).binding.postFilterNameTextViewItemPostFilter.setText(postFilterList.get(position - 1).name);
+            ((PostFilterViewHolder) holder).binding.postFilterNameTextViewItemPostFilter.setText(postFilterWithUsageList.get(position - 1).postFilter.name);
         }
     }
 
     @Override
     public int getItemCount() {
-        return postFilterList == null ? 1 : 1 + postFilterList.size();
+        return postFilterWithUsageList == null ? 1 : 1 + postFilterWithUsageList.size();
     }
 
-    public void setPostFilterList(List<PostFilter> postFilterList) {
-        this.postFilterList = postFilterList;
+    public void setPostFilterWithUsageList(List<PostFilterWithUsage> postFilterWithUsageList) {
+        this.postFilterWithUsageList = postFilterWithUsageList;
         notifyDataSetChanged();
     }
 
@@ -85,8 +86,8 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 binding.postFilterNameTextViewItemPostFilter.setTypeface(activity.typeface);
             }
 
-            itemView.setOnClickListener(view -> {
-                onItemClickListener.onItemClick(postFilterList.get(getBindingAdapterPosition() - 1));
+            binding.getRoot().setOnClickListener(view -> {
+                onItemClickListener.onItemClick(postFilterWithUsageList.get(getBindingAdapterPosition() - 1).postFilter);
             });
         }
     }

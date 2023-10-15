@@ -6,6 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 
 import java.util.List;
 
@@ -39,4 +40,8 @@ public interface PostFilterDao {
             "(SELECT post_filter_usage.name FROM post_filter_usage WHERE (usage = :usage AND name_of_usage = :nameOfUsage) " +
             "OR (usage =:usage AND name_of_usage = '--'))")
     List<PostFilter> getValidPostFilters(int usage, String nameOfUsage);
+
+    @Transaction
+    @Query("SELECT * FROM post_filter ORDER BY name")
+    public LiveData<List<PostFilterWithUsage>> getAllPostFilterWithUsageLiveData();
 }
