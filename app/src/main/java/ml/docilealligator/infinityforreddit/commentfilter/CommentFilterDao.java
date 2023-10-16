@@ -36,10 +36,10 @@ public interface CommentFilterDao {
     @Query("SELECT * FROM comment_filter")
     List<CommentFilter> getAllCommentFilters();
 
-    /*@Query("SELECT * FROM comment_filter WHERE comment_filter.name IN " +
+    @Query("SELECT * FROM comment_filter WHERE comment_filter.name IN " +
             "(SELECT comment_filter_usage.name FROM comment_filter_usage WHERE (usage = :usage AND name_of_usage = :nameOfUsage) " +
             "OR (usage =:usage AND name_of_usage = '--'))")
-    List<CommentFilter> getValidCommentFilters(int usage, String nameOfUsage);*/
+    List<CommentFilter> getValidCommentFilters(int usage, String nameOfUsage);
 
     @Transaction
     @Query("SELECT * FROM comment_filter ORDER BY name")
