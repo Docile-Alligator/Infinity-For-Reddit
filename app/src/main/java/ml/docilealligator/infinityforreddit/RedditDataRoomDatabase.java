@@ -14,6 +14,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.account.AccountDao;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
+import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterUsage;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeDao;
 import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubreddit;
@@ -39,7 +40,8 @@ import ml.docilealligator.infinityforreddit.user.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
         SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class,
-        ReadPost.class, PostFilter.class, PostFilterUsage.class, AnonymousMultiredditSubreddit.class, CommentFilter.class}, version = 25)
+        ReadPost.class, PostFilter.class, PostFilterUsage.class, AnonymousMultiredditSubreddit.class,
+        CommentFilter.class, CommentFilterUsage.class}, version = 25)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
 
     public static RedditDataRoomDatabase create(final Context context) {
@@ -398,6 +400,8 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE comment_filter " +
                     "(name TEXT NOT NULL PRIMARY KEY, max_vote INTEGER NOT NULL, min_vote INTEGER NOT NULL, exclude_strings TEXT)");
+            database.execSQL("CREATE TABLE comment_filter_usage (name TEXT NOT NULL, usage INTEGER NOT NULL, " +
+                    "name_of_usage TEXT NOT NULL, PRIMARY KEY(name, usage, name_of_usage), FOREIGN KEY(name) REFERENCES comment_filter(name) ON DELETE CASCADE)");
         }
     };
 }
