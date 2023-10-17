@@ -974,7 +974,7 @@ Mesaj: %2$s"</string>
     <string name="post_filter_requires_a_name">"Bu gönderi filtresinin adı nedir?"</string>
     <string name="duplicate_post_filter_dialog_title">"'%1$s' Zaten Var"</string>
     <string name="duplicate_post_filter_dialog_message">"Geçersiz kılınsın mı?"</string>
-    <string name="apply_post_filter_to">"Uygulanan:"</string>
+    <string name="apply_to">"Uygulanan:"</string>
     <string name="post_filter_usage_home">"Ana Sayfa"</string>
     <string name="post_filter_usage_subreddit">"Subreddit: %1$s"</string>
     <string name="post_filter_usage_subreddit_all">"Subreddit"</string>

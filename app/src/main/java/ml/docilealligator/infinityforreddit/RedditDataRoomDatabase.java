@@ -14,7 +14,9 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.account.AccountDao;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
+import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterDao;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterUsage;
+import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterUsageDao;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeDao;
 import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubreddit;
@@ -79,6 +81,10 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     public abstract PostFilterUsageDao postFilterUsageDao();
 
     public abstract AnonymousMultiredditSubredditDao anonymousMultiredditSubredditDao();
+
+    public abstract CommentFilterDao commentFilterDao();
+
+    public abstract CommentFilterUsageDao commentFilterUsageDao();
 
     private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override

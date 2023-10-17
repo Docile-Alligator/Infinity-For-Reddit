@@ -950,7 +950,7 @@ Mesaj: %2$s"</string>
     <string name="post_filter_requires_a_name">"Care este numele acestui filtru de post?"</string>
     <string name="duplicate_post_filter_dialog_title">"%1$s' Există Deja"</string>
     <string name="duplicate_post_filter_dialog_message">"Îl înlocuiești?"</string>
-    <string name="apply_post_filter_to">"Se aplică la"</string>
+    <string name="apply_to">"Se aplică la"</string>
     <string name="post_filter_usage_home">"Acasă"</string>
     <string name="post_filter_usage_subreddit">"Subreddit: %1$s"</string>
     <string name="post_filter_usage_subreddit_all">"Subreddit"</string>

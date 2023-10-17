@@ -991,7 +991,7 @@ Nachricht: %2$s"</string>
     <string name="post_filter_requires_a_name">"Wie lautet der Name des Beitragsfilters?"</string>
     <string name="duplicate_post_filter_dialog_title">"'%1$s' existiert bereits"</string>
     <string name="duplicate_post_filter_dialog_message">"Überschreiben?"</string>
-    <string name="apply_post_filter_to">"Anwenden auf"</string>
+    <string name="apply_to">"Anwenden auf"</string>
     <string name="post_filter_usage_home">"Home"</string>
     <string name="post_filter_usage_subreddit">"Subreddit: %1$s"</string>
     <string name="post_filter_usage_subreddit_all">"Subreddit"</string>

@@ -906,7 +906,7 @@ Messaggio: %2$s"</string>
     <string name="post_filter_requires_a_name">"Come vuoi chiamare questo filtro post?"</string>
     <string name="duplicate_post_filter_dialog_title">"'%1$s' esiste già"</string>
     <string name="duplicate_post_filter_dialog_message">"Vuoi sovrascriverlo?"</string>
-    <string name="apply_post_filter_to">"Applica a"</string>
+    <string name="apply_to">"Applica a"</string>
     <string name="post_filter_usage_home">"Home"</string>
     <string name="post_filter_usage_subreddit">"Subreddit: %1$s"</string>
     <string name="post_filter_usage_subreddit_all">"Subreddit"</string>

@@ -981,7 +981,7 @@ Reddit 视频分辨率较低。
     <string name="post_filter_requires_a_name">"该帖子过滤器的名称是什么？"</string>
     <string name="duplicate_post_filter_dialog_title">"“%1$s”已经存在"</string>
     <string name="duplicate_post_filter_dialog_message">"覆盖吗？"</string>
-    <string name="apply_post_filter_to">"应用于"</string>
+    <string name="apply_to">"应用于"</string>
     <string name="post_filter_usage_home">"主页"</string>
     <string name="post_filter_usage_subreddit">"版块：%1$s"</string>
     <string name="post_filter_usage_subreddit_all">"版块"</string>

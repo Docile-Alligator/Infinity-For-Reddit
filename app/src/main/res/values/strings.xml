@@ -1141,7 +1141,7 @@
     <string name="post_filter_requires_a_name">What is the name of this post filter?</string>
     <string name="duplicate_post_filter_dialog_title">\'%1$s\' Already Exists</string>
     <string name="duplicate_post_filter_dialog_message">Override it?</string>
-    <string name="apply_post_filter_to">Apply to</string>
+    <string name="apply_to">Apply to</string>
     <string name="post_filter_usage_home">Home</string>
     <string name="post_filter_usage_subreddit">Subreddit: %1$s</string>
     <string name="post_filter_usage_subreddit_all">Subreddit</string>

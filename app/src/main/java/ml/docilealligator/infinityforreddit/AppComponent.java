@@ -9,6 +9,7 @@ import dagger.Component;
 import ml.docilealligator.infinityforreddit.activities.AccountPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.AccountSavedThingActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
+import ml.docilealligator.infinityforreddit.activities.CommentFilterPreferenceActivity;
 import ml.docilealligator.infinityforreddit.activities.CreateMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomThemeListingActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomThemePreviewActivity;
@@ -306,6 +307,8 @@ public interface AppComponent {
     void inject(HistoryActivity historyActivity);
 
     void inject(MorePostsInfoFragment morePostsInfoFragment);
+
+    void inject(CommentFilterPreferenceActivity commentFilterPreferenceActivity);
 
     @Component.Factory
     interface Factory {

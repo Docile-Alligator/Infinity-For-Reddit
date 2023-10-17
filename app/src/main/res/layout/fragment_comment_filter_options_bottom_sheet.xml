@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/edit_text_view_post_filter_options_bottom_sheet_fragment"
+            android:id="@+id/edit_text_view_comment_filter_options_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/edit"
@@ -30,7 +30,7 @@
             android:background="?attr/selectableItemBackground" />
 
         <TextView
-            android:id="@+id/apply_to_text_view_post_filter_options_bottom_sheet_fragment"
+            android:id="@+id/apply_to_text_view_comment_filter_options_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/apply_to"
@@ -48,7 +48,7 @@
             android:background="?attr/selectableItemBackground" />
 
         <TextView
-            android:id="@+id/delete_text_view_post_filter_options_bottom_sheet_fragment"
+            android:id="@+id/delete_text_view_comment_filter_options_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/delete"

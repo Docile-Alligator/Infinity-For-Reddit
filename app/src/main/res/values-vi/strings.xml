@@ -967,7 +967,7 @@ Thông báo: %2$s"</string>
     <string name="post_filter_requires_a_name">"Bộ lọc bài đăng này tên là gì?"</string>
     <string name="duplicate_post_filter_dialog_title">"'%1$s' đã tồn tại"</string>
     <string name="duplicate_post_filter_dialog_message">"Ghi đè nó?"</string>
-    <string name="apply_post_filter_to">"Áp dụng vào"</string>
+    <string name="apply_to">"Áp dụng vào"</string>
     <string name="post_filter_usage_home">"Trang chủ"</string>
     <string name="post_filter_usage_subreddit">"Subreddit: %1$s"</string>
     <string name="post_filter_usage_subreddit_all">"Subreddit"</string>

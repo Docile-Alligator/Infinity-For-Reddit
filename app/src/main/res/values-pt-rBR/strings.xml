@@ -944,7 +944,7 @@ Mensagem: %2$s"</string>
     <string name="post_filter_requires_a_name">"Qual é o nome deste filtro de postagem?"</string>
     <string name="duplicate_post_filter_dialog_title">"'%1$s' já existe"</string>
     <string name="duplicate_post_filter_dialog_message">"Substituir isto?"</string>
-    <string name="apply_post_filter_to">"Aplicar a"</string>
+    <string name="apply_to">"Aplicar a"</string>
     <string name="post_filter_usage_home">"Início"</string>
     <string name="post_filter_usage_subreddit">"Subreddit: %1$s"</string>
     <string name="post_filter_usage_subreddit_all">"Subreddit"</string>

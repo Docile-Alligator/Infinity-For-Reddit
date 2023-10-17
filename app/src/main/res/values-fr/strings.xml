@@ -1061,7 +1061,7 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="post_filter_requires_a_name">"Quel est le nom de ce filtre de publication ?"</string>
     <string name="duplicate_post_filter_dialog_title">"'%1$s' Existe déjà"</string>
     <string name="duplicate_post_filter_dialog_message">"Le remplacer ?"</string>
-    <string name="apply_post_filter_to">"Appliquer à"</string>
+    <string name="apply_to">"Appliquer à"</string>
     <string name="post_filter_usage_home">"Acceuil"</string>
     <string name="post_filter_usage_subreddit">"Subreddit: %1$s"</string>
     <string name="post_filter_usage_subreddit_all">"Subreddit"</string>
