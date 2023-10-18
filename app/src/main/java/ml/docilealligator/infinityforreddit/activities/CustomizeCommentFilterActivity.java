@@ -176,9 +176,9 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.customize_post_filter_activity, menu);
+        getMenuInflater().inflate(R.menu.customize_comment_filter_activity, menu);
         if (fromSettings) {
-            menu.findItem(R.id.action_save_customize_post_filter_activity).setVisible(false);
+            menu.findItem(R.id.action_save_customize_comment_filter_activity).setVisible(false);
         }
         applyMenuItemTheme(menu);
         return true;
@@ -189,7 +189,7 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
-        } else if (item.getItemId() == R.id.action_save_customize_post_filter_activity) {
+        } else if (item.getItemId() == R.id.action_save_customize_comment_filter_activity) {
             try {
                 constructCommentFilter();
                 Intent returnIntent = new Intent();
@@ -201,14 +201,14 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
             }
 
             return true;
-        } else if (item.getItemId() == R.id.action_save_to_database_customize_post_filter_activity) {
+        } else if (item.getItemId() == R.id.action_save_to_database_customize_comment_filter_activity) {
             try {
                 constructCommentFilter();
 
                 if (!commentFilter.name.equals("")) {
                     saveCommentFilter(originalName);
                 } else {
-                    Toast.makeText(CustomizeCommentFilterActivity.this, R.string.post_filter_requires_a_name, Toast.LENGTH_LONG).show();
+                    Toast.makeText(CustomizeCommentFilterActivity.this, R.string.comment_filter_requires_a_name, Toast.LENGTH_LONG).show();
                 }
             } catch (PatternSyntaxException e) {
                 Toast.makeText(this, R.string.invalid_regex, Toast.LENGTH_SHORT).show();
@@ -231,8 +231,8 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
                     @Override
                     public void duplicate() {
                         new MaterialAlertDialogBuilder(CustomizeCommentFilterActivity.this, R.style.MaterialAlertDialogTheme)
-                                .setTitle(getString(R.string.duplicate_post_filter_dialog_title, commentFilter.name))
-                                .setMessage(R.string.duplicate_post_filter_dialog_message)
+                                .setTitle(getString(R.string.duplicate_comment_filter_dialog_title, commentFilter.name))
+                                .setMessage(R.string.duplicate_comment_filter_dialog_message)
                                 .setPositiveButton(R.string.override, (dialogInterface, i) -> saveCommentFilter(commentFilter.name))
                                 .setNegativeButton(R.string.cancel, null)
                                 .show();

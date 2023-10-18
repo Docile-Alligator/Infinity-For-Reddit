@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_save_customize_comment_filter_activity"
+        android:orderInCategory="1"
+        android:title="@string/action_save"
+        android:icon="@drawable/ic_check_circle_toolbar_24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_save_to_database_customize_comment_filter_activity"
+        android:orderInCategory="2"
+        android:title="@string/action_save_to_database"
+        android:icon="@drawable/ic_save_to_database_24dp"
+        app:showAsAction="ifRoom" />
+</menu>
