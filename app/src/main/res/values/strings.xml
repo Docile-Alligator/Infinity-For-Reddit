@@ -1157,6 +1157,8 @@
     <string name="user">User</string>
     <string name="edit_post_filter_name_of_usage_info">Leave it blank to apply this post filter to all the subreddits / users / multireddits</string>
 
+    <string name="comment_filter_name_hint">Comment Filter Name</string>
+
     <string name="read_all_messages_time_limit">You are doing this too frequently. Try again later. This is Reddit API\'s rate limit.</string>
     <string name="read_all_messages_success">Read all messages successfully</string>
     <string name="read_all_messages_failed">Unable to read all messages</string>

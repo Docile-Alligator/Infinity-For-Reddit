@@ -82,7 +82,7 @@ public class CommentFilterPreferenceActivity extends BaseActivity {
 
     public void editCommentFilter(CommentFilter commentFilter) {
         Intent intent = new Intent(this, CustomizeCommentFilterActivity.class);
-        intent.putExtra(CustomizeCommentFilterActivity.EXTRA_POST_FILTER, commentFilter);
+        intent.putExtra(CustomizeCommentFilterActivity.EXTRA_COMMENT_FILTER, commentFilter);
         intent.putExtra(CustomizeCommentFilterActivity.EXTRA_FROM_SETTINGS, true);
         startActivity(intent);
     }

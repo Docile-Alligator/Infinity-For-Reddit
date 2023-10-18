@@ -13,6 +13,7 @@ import ml.docilealligator.infinityforreddit.activities.CommentFilterPreferenceAc
 import ml.docilealligator.infinityforreddit.activities.CreateMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomThemeListingActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomThemePreviewActivity;
+import ml.docilealligator.infinityforreddit.activities.CustomizeCommentFilterActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomizePostFilterActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.activities.EditCommentActivity;
@@ -309,6 +310,8 @@ public interface AppComponent {
     void inject(MorePostsInfoFragment morePostsInfoFragment);
 
     void inject(CommentFilterPreferenceActivity commentFilterPreferenceActivity);
+
+    void inject(CustomizeCommentFilterActivity customizeCommentFilterActivity);
 
     @Component.Factory
     interface Factory {
