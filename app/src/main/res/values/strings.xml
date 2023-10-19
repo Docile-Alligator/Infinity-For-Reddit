@@ -1159,11 +1159,15 @@
     <string name="subreddit">Subreddit</string>
     <string name="user">User</string>
     <string name="edit_post_filter_name_of_usage_info">Leave it blank to apply this post filter to all the subreddits / users / multireddits</string>
+    <string name="click_to_apply_post_filter">Click here to apply it to some post feeds</string>
+    <string name="post_filter_usage_embedded_more_count">and %1$d more</string>
 
     <string name="comment_filter_name_hint">Comment Filter Name</string>
     <string name="comment_filter_requires_a_name">What is the name of this comment filter?</string>
     <string name="duplicate_comment_filter_dialog_title">\'%1$s\' Already Exists</string>
     <string name="duplicate_comment_filter_dialog_message">Override it?</string>
+    <string name="comment_filter_applied_to_all_subreddits">Applied to all subreddits</string>
+    <string name="comment_filter_usage_embedded_more_count">and %1$d more</string>
 
     <string name="read_all_messages_time_limit">You are doing this too frequently. Try again later. This is Reddit API\'s rate limit.</string>
     <string name="read_all_messages_success">Read all messages successfully</string>
@@ -1382,10 +1386,5 @@
         open the navigation drawer and click your account header and select \"Add an account\" to login to Reddit using the same account again.
         Otherwise, Infinity may not load posts at all. Sorry for the inconvenience.</string>
     <string name="i_understand">I understand</string>
-
-    <string name="click_to_apply_post_filter">Click here to apply it to some post feeds</string>
-    <string name="post_filter_usage_embedded_more_count">and %1$d more</string>
-    <string name="comment_filter_applied_to_all_subreddits">Applied to all subreddits</string>
-    <string name="comment_filter_usage_embedded_more_count">and %1$d more</string>
 
 </resources>

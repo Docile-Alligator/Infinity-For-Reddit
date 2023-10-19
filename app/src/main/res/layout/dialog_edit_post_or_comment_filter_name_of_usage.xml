@@ -5,6 +5,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/message_text_view_edit_post_or_comment_filter_name_of_usage_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
@@ -17,7 +18,7 @@
         android:fontFamily="?attr/font_family" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_input_layout_edit_post_filter_name_of_usage_dialog"
+        android:id="@+id/text_input_layout_edit_post_or_comment_filter_name_of_usage_dialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
@@ -27,7 +28,7 @@
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/text_input_edit_text_edit_post_filter_name_of_usage_dialog"
+            android:id="@+id/text_input_edit_text_edit_post_or_comment_filter_name_of_usage_dialog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="?attr/font_family"
