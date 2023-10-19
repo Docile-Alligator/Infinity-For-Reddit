@@ -499,9 +499,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
         if (typeface != null) {
             Utils.setFontToAllTextViews(coordinatorLayout, typeface);
         }
-    }
-
-    public void setCursorDrawableColor(EditText editText, int color) {
+    }                    void setCursorDrawableColor(EditText editText, int color) {
         try {
             Field fCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
             fCursorDrawableRes.setAccessible(true);

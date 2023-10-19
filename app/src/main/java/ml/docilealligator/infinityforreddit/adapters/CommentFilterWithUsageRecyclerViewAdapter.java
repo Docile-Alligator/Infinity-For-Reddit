@@ -39,14 +39,14 @@ public class CommentFilterWithUsageRecyclerViewAdapter extends RecyclerView.Adap
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof CommentFilterViewHolder) {
-            ((CommentFilterViewHolder) holder).binding.commentFilterNameTextViewItemCommentFilter.setText(commentFilterWithUsageList.get(position - 1).commentFilter.name);
-            ((CommentFilterViewHolder) holder).adapter.setCommentFilterUsageList(commentFilterWithUsageList.get(position - 1).commentFilterUsageList);
+            ((CommentFilterViewHolder) holder).binding.commentFilterNameTextViewItemCommentFilter.setText(commentFilterWithUsageList.get(position).commentFilter.name);
+            ((CommentFilterViewHolder) holder).adapter.setCommentFilterUsageList(commentFilterWithUsageList.get(position).commentFilterUsageList);
         }
     }
 
     @Override
     public int getItemCount() {
-        return commentFilterWithUsageList == null ? 1 : 1 + commentFilterWithUsageList.size();
+        return commentFilterWithUsageList == null ? 0 : commentFilterWithUsageList.size();
     }
 
     public void setCommentFilterWithUsageList(List<CommentFilterWithUsage> commentFilterWithUsageList) {
@@ -68,7 +68,7 @@ public class CommentFilterWithUsageRecyclerViewAdapter extends RecyclerView.Adap
             }
 
             binding.getRoot().setOnClickListener(view -> {
-                onItemClickListener.onItemClick(commentFilterWithUsageList.get(getBindingAdapterPosition() - 1).commentFilter);
+                onItemClickListener.onItemClick(commentFilterWithUsageList.get(getBindingAdapterPosition()).commentFilter);
             });
 
             binding.commentFilterUsageRecyclerViewItemCommentFilter.setRecycledViewPool(recycledViewPool);

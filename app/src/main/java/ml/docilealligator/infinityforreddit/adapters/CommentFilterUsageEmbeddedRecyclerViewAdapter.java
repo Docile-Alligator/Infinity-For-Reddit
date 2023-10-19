@@ -32,9 +32,9 @@ public class CommentFilterUsageEmbeddedRecyclerViewAdapter extends RecyclerView.
     @Override
     public void onBindViewHolder(@NonNull EntryViewHolder holder, int position) {
         if (commentFilterUsageList == null || commentFilterUsageList.isEmpty()) {
-            holder.textView.setText(R.string.click_to_apply_post_filter);
+            holder.textView.setText(R.string.comment_filter_applied_to_all_subreddits);
         } else if (holder.getBindingAdapterPosition() > 4) {
-            holder.textView.setText(baseActivity.getString(R.string.post_filter_usage_embedded_more_count, commentFilterUsageList.size() - 5));
+            holder.textView.setText(baseActivity.getString(R.string.comment_filter_usage_embedded_more_count, commentFilterUsageList.size() - 5));
         } else {
             CommentFilterUsage commentFilterUsage = commentFilterUsageList.get(holder.getBindingAdapterPosition());
             switch (commentFilterUsage.usage) {

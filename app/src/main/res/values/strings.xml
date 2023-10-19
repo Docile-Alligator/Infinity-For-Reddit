@@ -46,6 +46,8 @@
     <string name="post_poll_activity_label">Poll Post</string>
     <string name="history_activity_label">History</string>
     <string name="subscription_activity_label">Subscription</string>
+    <string name="comment_filter_preference_activity_label">Comment Filter</string>
+    <string name="customize_comment_filter_activity_label">Customize Post Filter</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -651,6 +653,7 @@
     <string name="settings_easier_to_watch_in_full_screen_title">Easier to Watch in Full Screen</string>
     <string name="settings_hide_fab_in_post_feed">Hide FAB in Post Feed</string>
     <string name="settings_comment_divider_type">Comment Divider Type</string>
+    <string name="settings_comment_filter_title">Comment Filter</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -1382,5 +1385,7 @@
 
     <string name="click_to_apply_post_filter">Click here to apply it to some post feeds</string>
     <string name="post_filter_usage_embedded_more_count">and %1$d more</string>
+    <string name="comment_filter_applied_to_all_subreddits">Applied to all subreddits</string>
+    <string name="comment_filter_usage_embedded_more_count">and %1$d more</string>
 
 </resources>

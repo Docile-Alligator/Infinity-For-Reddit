@@ -68,6 +68,11 @@
         app:title="@string/settings_post_filter_title" />
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+        app:key="comment_filter"
+        app:icon="@drawable/ic_filter_24dp"
+        app:title="@string/settings_comment_filter_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:icon="@drawable/ic_sort_24dp"
         app:title="@string/settings_sort_type_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.SortTypePreferenceFragment" />
