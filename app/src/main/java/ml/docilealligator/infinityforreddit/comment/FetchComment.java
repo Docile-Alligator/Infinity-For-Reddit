@@ -6,11 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -20,8 +20,9 @@ import retrofit2.Retrofit;
 public class FetchComment {
     public static void fetchComments(Executor executor, Handler handler, Retrofit retrofit,
                                      @Nullable String accessToken, String article,
-                                     String commentId, SortType.Type sortType, String contextNumber, boolean expandChildren,
-                                     Locale locale, FetchCommentListener fetchCommentListener) {
+                                     String commentId, SortType.Type sortType, String contextNumber,
+                                     boolean expandChildren, CommentFilter commentFilter,
+                                     FetchCommentListener fetchCommentListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> comments;
         if (accessToken == null) {
@@ -39,12 +40,13 @@ public class FetchComment {
             }
         }
 
-        comments.enqueue(new Callback<String>() {
+        comments.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
                     ParseComment.parseComment(executor, handler, response.body(),
-                            expandChildren, new ParseComment.ParseCommentListener() {
+                            expandChildren, commentFilter,
+                            new ParseComment.ParseCommentListener() {
                                 @Override
                                 public void onParseCommentSuccess(ArrayList<Comment> topLevelComments,
                                                                   ArrayList<Comment> expandedComments,
@@ -95,7 +97,7 @@ public class FetchComment {
                     sortType, APIUtils.getOAuthHeader(accessToken));
         }
 
-        moreComments.enqueue(new Callback<String>() {
+        moreComments.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
@@ -106,7 +108,7 @@ public class FetchComment {
                                                                   ArrayList<Comment> expandedComments,
                                                                   String parentId, ArrayList<String> moreChildrenIds) {
                                     fetchMoreCommentListener.onFetchMoreCommentSuccess(
-                                            topLevelComments,expandedComments, moreChildrenIds);
+                                            topLevelComments, expandedComments, moreChildrenIds);
                                 }
 
                                 @Override

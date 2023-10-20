@@ -6,12 +6,10 @@ import static ml.docilealligator.infinityforreddit.comment.Comment.VOTE_TYPE_UPV
 
 import android.os.Handler;
 import android.text.Html;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.checkerframework.checker.units.qual.A;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,12 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class ParseComment {
     public static void parseComment(Executor executor, Handler handler, String response,
-                                    boolean expandChildren,
+                                    boolean expandChildren, CommentFilter commentFilter,
                                     ParseCommentListener parseCommentListener) {
         executor.execute(() -> {
             try {
@@ -38,7 +37,7 @@ public class ParseComment {
                 ArrayList<String> moreChildrenIds = new ArrayList<>();
                 ArrayList<Comment> newComments = new ArrayList<>();
 
-                parseCommentRecursion(childrenArray, newComments, moreChildrenIds, 0);
+                parseCommentRecursion(childrenArray, newComments, moreChildrenIds, 0, commentFilter);
                 expandChildren(newComments, expandedNewComments, expandChildren);
 
                 ArrayList<Comment> commentData;
@@ -159,7 +158,8 @@ public class ParseComment {
     }
 
     private static void parseCommentRecursion(JSONArray comments, ArrayList<Comment> newCommentData,
-                                              ArrayList<String> moreChildrenIds, int depth) throws JSONException {
+                                              ArrayList<String> moreChildrenIds, int depth,
+                                              CommentFilter commentFilter) throws JSONException {
         int actualCommentLength;
 
         if (comments.length() == 0) {
@@ -189,13 +189,17 @@ public class ParseComment {
         for (int i = 0; i < actualCommentLength; i++) {
             JSONObject data = comments.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
             Comment singleComment = parseSingleComment(data, depth);
+            if (!CommentFilter.isCommentAllowed(singleComment, commentFilter)) {
+                continue;
+            }
 
             if (data.get(JSONUtils.REPLIES_KEY) instanceof JSONObject) {
                 JSONArray childrenArray = data.getJSONObject(JSONUtils.REPLIES_KEY)
                         .getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
                 ArrayList<Comment> children = new ArrayList<>();
                 ArrayList<String> nextMoreChildrenIds = new ArrayList<>();
-                parseCommentRecursion(childrenArray, children, nextMoreChildrenIds, singleComment.getDepth());
+                parseCommentRecursion(childrenArray, children, nextMoreChildrenIds, singleComment.getDepth(),
+                        commentFilter);
                 singleComment.addChildren(children);
                 singleComment.setMoreChildrenIds(nextMoreChildrenIds);
                 singleComment.setChildCount(getChildCount(singleComment));

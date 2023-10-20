@@ -17,6 +17,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -93,6 +94,8 @@ import ml.docilealligator.infinityforreddit.comment.FetchComment;
 import ml.docilealligator.infinityforreddit.comment.FetchRemovedComment;
 import ml.docilealligator.infinityforreddit.comment.FetchRemovedCommentReveddit;
 import ml.docilealligator.infinityforreddit.comment.ParseComment;
+import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
+import ml.docilealligator.infinityforreddit.commentfilter.FetchCommentFilter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
@@ -216,6 +219,10 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     boolean mRespectSubredditRecommendedSortType;
     @State
     long viewPostDetailFragmentId;
+    @State
+    boolean commentFilterFetched;
+    @State
+    CommentFilter mCommentFilter;
     private ViewPostDetailActivity activity;
     private RequestManager mGlide;
     private Locale mLocale;
@@ -629,21 +636,15 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 mRecyclerView.setAdapter(mConcatAdapter);
             }
 
-            if (comments == null) {
-                fetchCommentsRespectRecommendedSort(false);
+            if (commentFilterFetched) {
+                fetchCommentsAfterCommentFilterAvailable();
             } else {
-                if (isRefreshing) {
-                    isRefreshing = false;
-                    refresh(true, true);
-                } else if (isFetchingComments) {
-                    fetchCommentsRespectRecommendedSort(false);
-                } else {
-                    mCommentsAdapter.addComments(comments, hasMoreChildren);
-                    if (isLoadingMoreChildren) {
-                        isLoadingMoreChildren = false;
-                        fetchMoreComments();
-                    }
-                }
+                FetchCommentFilter.fetchCommentFilter(mExecutor, new Handler(Looper.getMainLooper()), mRedditDataRoomDatabase, mPost.getSubredditName(),
+                        commentFilter -> {
+                            mCommentFilter = commentFilter;
+                            commentFilterFetched = true;
+                            fetchCommentsAfterCommentFilterAvailable();
+                        });
             }
         }
 
@@ -652,6 +653,25 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             VolumeInfo volumeInfo = new VolumeInfo(true, 0f);
             return new PlaybackInfo(INDEX_UNSET, TIME_UNSET, volumeInfo);
         });
+    }
+
+    public void fetchCommentsAfterCommentFilterAvailable() {
+        if (comments == null) {
+            fetchCommentsRespectRecommendedSort(false);
+        } else {
+            if (isRefreshing) {
+                isRefreshing = false;
+                refresh(true, true);
+            } else if (isFetchingComments) {
+                fetchCommentsRespectRecommendedSort(false);
+            } else {
+                mCommentsAdapter.addComments(comments, hasMoreChildren);
+                if (isLoadingMoreChildren) {
+                    isLoadingMoreChildren = false;
+                    fetchMoreComments();
+                }
+            }
+        }
     }
 
     private void setupMenu() {
@@ -1341,7 +1361,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                 fetchCommentsRespectRecommendedSort(false);
                             } else {
                                 ParseComment.parseComment(mExecutor, new Handler(), response.body(),
-                                        mExpandChildren, new ParseComment.ParseCommentListener() {
+                                        mExpandChildren, mCommentFilter, new ParseComment.ParseCommentListener() {
                                             @Override
                                             public void onParseCommentSuccess(ArrayList<Comment> topLevelComments, ArrayList<Comment> expandedComments, String parentId, ArrayList<String> moreChildrenIds) {
                                                 ViewPostDetailFragment.this.children = moreChildrenIds;
@@ -1482,7 +1502,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
         FetchComment.fetchComments(mExecutor, new Handler(), retrofit, mAccessToken, mPost.getId(), commentId, sortType,
-                mContextNumber, mExpandChildren, mLocale, new FetchComment.FetchCommentListener() {
+                mContextNumber, mExpandChildren, mCommentFilter, new FetchComment.FetchCommentListener() {
                     @Override
                     public void onFetchCommentSuccess(ArrayList<Comment> expandedComments,
                                                       String parentId, ArrayList<String> children) {
