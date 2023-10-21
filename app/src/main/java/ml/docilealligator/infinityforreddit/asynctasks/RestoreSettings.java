@@ -14,18 +14,19 @@ import com.google.gson.stream.JsonReader;
 
 import net.lingala.zip4j.ZipFile;
 
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.file.PathUtils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Executor;
 
@@ -43,6 +44,7 @@ import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUt
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class RestoreSettings {
+    @SuppressWarnings("NewApi") // StandardOpenOption is desugared for all Android versions
     public static void restoreSettings(Context context, Executor executor, Handler handler,
                                 ContentResolver contentResolver, Uri zipFileUri,
                                 RedditDataRoomDatabase redditDataRoomDatabase,
@@ -60,116 +62,114 @@ public class RestoreSettings {
                                 RestoreSettingsListener restoreSettingsListener) {
         executor.execute(() -> {
             try {
-                InputStream zipFileInputStream = contentResolver.openInputStream(zipFileUri);
-                if (zipFileInputStream == null) {
-                    handler.post(() -> restoreSettingsListener.failed(context.getString(R.string.restore_settings_failed_cannot_get_file)));
-                    return;
-                }
+                final var cachePath = Objects.requireNonNull(context.getExternalCacheDir())
+                        .toPath().resolve("Restore");
 
-                String cachePath = context.getExternalCacheDir() + "/Restore/";
-                if (new File(cachePath).exists()) {
-                    FileUtils.deleteDirectory(new File(cachePath));
-                }
-                new File(cachePath).mkdir();
-                FileOutputStream zipCacheOutputStream = new FileOutputStream(new File(cachePath + "restore.zip"));
-
-                byte[] fileReader = new byte[1024];
-
-                while (true) {
-                    int read = zipFileInputStream.read(fileReader);
-
-                    if (read == -1) {
-                        break;
+                try (var zipFileInputStream = contentResolver.openInputStream(zipFileUri)) {
+                    if (zipFileInputStream == null) {
+                        handler.post(() -> restoreSettingsListener.failed(context.getString(R.string.restore_settings_failed_cannot_get_file)));
+                        return;
                     }
 
-                    zipCacheOutputStream.write(fileReader, 0, read);
+                    PathUtils.deleteDirectory(cachePath);
+                    Files.createDirectory(cachePath);
+
+                    final var zipCache = cachePath.resolve("restore.zip");
+                    try (var zipCacheOutputStream = Files.newOutputStream(zipCache,
+                            StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.DELETE_ON_CLOSE)) {
+                        zipFileInputStream.transferTo(zipCacheOutputStream);
+
+                        try (var zipCacheFile = new ZipFile(zipCache.toFile(), "123321".toCharArray())) {
+                            zipCacheFile.extractAll(cachePath.toString());
+                        }
+                    }
                 }
 
-                new ZipFile(cachePath + "restore.zip", "123321".toCharArray()).extractAll(cachePath);
-                new File(cachePath + "restore.zip").delete();
-                File[] files = new File(cachePath).listFiles();
-                if (files == null || files.length <= 0) {
+                final Optional<Path> restoreFilesDir;
+                try (var fileStream = Files.list(cachePath)) {
+                    restoreFilesDir = fileStream.filter(Files::isDirectory).findFirst();
+                }
+                if (restoreFilesDir.isEmpty()) {
                     handler.post(() -> restoreSettingsListener.failed(context.getString(R.string.restore_settings_failed_file_corrupted)));
                 } else {
-                    File restoreFilesDir = files[0];
-                    File[] restoreFiles = restoreFilesDir.listFiles();
                     boolean result = true;
-                    if (restoreFiles != null) {
-                        for (File f : restoreFiles) {
-                            if (f.isFile()) {
-                                if (f.getName().startsWith(SharedPreferencesUtils.DEFAULT_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(defaultSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(CustomThemeSharedPreferencesUtils.LIGHT_THEME_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(lightThemeSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(CustomThemeSharedPreferencesUtils.DARK_THEME_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(darkThemeSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(CustomThemeSharedPreferencesUtils.AMOLED_THEME_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(amoledThemeSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(SharedPreferencesUtils.SORT_TYPE_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(sortTypeSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(SharedPreferencesUtils.POST_LAYOUT_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(postLayoutSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(postFeedScrolledPositionSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(SharedPreferencesUtils.MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(mainActivityTabsSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(SharedPreferencesUtils.NSFW_AND_SPOILER_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(nsfwAndSpoilerSharedPreferencs, f.toString());
-                                } else if (f.getName().startsWith(SharedPreferencesUtils.BOTTOM_APP_BAR_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(bottomAppBarSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(SharedPreferencesUtils.POST_HISTORY_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(postHistorySharedPreferences, f.toString());
+
+                    try (var restoreFilesStream = Files.newDirectoryStream(restoreFilesDir.get())) {
+                        for (var path : restoreFilesStream) {
+                            final var fileName = path.getFileName().toString();
+
+                            if (Files.isRegularFile(path)) {
+                                if (fileName.startsWith(SharedPreferencesUtils.DEFAULT_PREFERENCES_FILE)) {
+                                    result &= importSharedPreferencesFromFile(defaultSharedPreferences, path);
+                                } else if (fileName.startsWith(CustomThemeSharedPreferencesUtils.LIGHT_THEME_SHARED_PREFERENCES_FILE)) {
+                                    result &= importSharedPreferencesFromFile(lightThemeSharedPreferences, path);
+                                } else if (fileName.startsWith(CustomThemeSharedPreferencesUtils.DARK_THEME_SHARED_PREFERENCES_FILE)) {
+                                    result &= importSharedPreferencesFromFile(darkThemeSharedPreferences, path);
+                                } else if (fileName.startsWith(CustomThemeSharedPreferencesUtils.AMOLED_THEME_SHARED_PREFERENCES_FILE)) {
+                                    result &= importSharedPreferencesFromFile(amoledThemeSharedPreferences, path);
+                                } else if (fileName.startsWith(SharedPreferencesUtils.SORT_TYPE_SHARED_PREFERENCES_FILE)) {
+                                    result &= importSharedPreferencesFromFile(sortTypeSharedPreferences, path);
+                                } else if (fileName.startsWith(SharedPreferencesUtils.POST_LAYOUT_SHARED_PREFERENCES_FILE)) {
+                                    result &= importSharedPreferencesFromFile(postLayoutSharedPreferences, path);
+                                } else if (fileName.startsWith(SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_SHARED_PREFERENCES_FILE)) {
+                                    result &= importSharedPreferencesFromFile(postFeedScrolledPositionSharedPreferences, path);
+                                } else if (fileName.startsWith(SharedPreferencesUtils.MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE)) {
+                                    result &= importSharedPreferencesFromFile(mainActivityTabsSharedPreferences, path);
+                                } else if (fileName.startsWith(SharedPreferencesUtils.NSFW_AND_SPOILER_SHARED_PREFERENCES_FILE)) {
+                                    result &= importSharedPreferencesFromFile(nsfwAndSpoilerSharedPreferencs, path);
+                                } else if (fileName.startsWith(SharedPreferencesUtils.BOTTOM_APP_BAR_SHARED_PREFERENCES_FILE)) {
+                                    result &= importSharedPreferencesFromFile(bottomAppBarSharedPreferences, path);
+                                } else if (fileName.startsWith(SharedPreferencesUtils.POST_HISTORY_SHARED_PREFERENCES_FILE)) {
+                                    result &= importSharedPreferencesFromFile(postHistorySharedPreferences, path);
                                 }
-                            } else if (f.isDirectory() && f.getName().equals("database")) {
+                            } else if (Files.isDirectory(path) && fileName.equals("database")) {
                                 if (!redditDataRoomDatabase.accountDao().isAnonymousAccountInserted()) {
                                     redditDataRoomDatabase.accountDao().insert(Account.getAnonymousAccount());
                                 }
 
-                                File anonymousSubscribedSubredditsFile = new File(f.getAbsolutePath() + "/anonymous_subscribed_subreddits.json");
-                                File anonymousSubscribedUsersFile = new File(f.getAbsolutePath() + "/anonymous_subscribed_users.json");
-                                File anonymousMultiredditsFile = new File(f.getAbsolutePath() + "/anonymous_multireddits.json");
-                                File anonymousMultiredditSubredditsFile = new File(f.getAbsolutePath() + "/anonymous_multireddit_subreddits.json");
-                                File customThemesFile = new File(f.getAbsolutePath() + "/custom_themes.json");
-                                File postFiltersFile = new File(f.getAbsolutePath() + "/post_filters.json");
-                                File postFilterUsageFile = new File(f.getAbsolutePath() + "/post_filter_usage.json");
+                                final var anonymousSubscribedSubredditsFile = path.resolve("anonymous_subscribed_subreddits.json");
+                                final var anonymousSubscribedUsersFile = path.resolve("anonymous_subscribed_users.json");
+                                final var anonymousMultiredditsFile = path.resolve("anonymous_multireddits.json");
+                                final var anonymousMultiredditSubredditsFile = path.resolve("anonymous_multireddit_subreddits.json");
+                                final var customThemesFile = path.resolve("custom_themes.json");
+                                final var postFiltersFile = path.resolve("post_filters.json");
+                                final var postFilterUsageFile = path.resolve("post_filter_usage.json");
 
-                                if (anonymousSubscribedSubredditsFile.exists()) {
+                                if (Files.exists(anonymousSubscribedSubredditsFile)) {
                                     List<SubscribedSubredditData> anonymousSubscribedSubreddits = getListFromFile(anonymousSubscribedSubredditsFile, new TypeToken<List<SubscribedSubredditData>>() {}.getType());
                                     redditDataRoomDatabase.subscribedSubredditDao().insertAll(anonymousSubscribedSubreddits);
                                 }
-                                if (anonymousSubscribedUsersFile.exists()) {
+                                if (Files.exists(anonymousSubscribedUsersFile)) {
                                     List<SubscribedUserData> anonymousSubscribedUsers = getListFromFile(anonymousSubscribedUsersFile, new TypeToken<List<SubscribedUserData>>() {}.getType());
                                     redditDataRoomDatabase.subscribedUserDao().insertAll(anonymousSubscribedUsers);
                                 }
-                                if (anonymousMultiredditsFile.exists()) {
+                                if (Files.exists(anonymousMultiredditsFile)) {
                                     List<MultiReddit> anonymousMultireddits = getListFromFile(anonymousMultiredditsFile, new TypeToken<List<MultiReddit>>() {}.getType());
                                     redditDataRoomDatabase.multiRedditDao().insertAll(anonymousMultireddits);
 
-                                    if (anonymousMultiredditSubredditsFile.exists()) {
+                                    if (Files.exists(anonymousMultiredditSubredditsFile)) {
                                         List<AnonymousMultiredditSubreddit> anonymousMultiredditSubreddits = getListFromFile(anonymousMultiredditSubredditsFile, new TypeToken<List<AnonymousMultiredditSubreddit>>() {}.getType());
                                         redditDataRoomDatabase.anonymousMultiredditSubredditDao().insertAll(anonymousMultiredditSubreddits);
                                     }
                                 }
-                                if (customThemesFile.exists()) {
+                                if (Files.exists(customThemesFile)) {
                                     List<CustomTheme> customThemes = getListFromFile(customThemesFile, new TypeToken<List<CustomTheme>>() {}.getType());
                                     redditDataRoomDatabase.customThemeDao().insertAll(customThemes);
                                 }
-                                if (postFiltersFile.exists()) {
+                                if (Files.exists(postFiltersFile)) {
                                     List<PostFilter> postFilters = getListFromFile(postFiltersFile, new TypeToken<List<PostFilter>>() {}.getType());
                                     redditDataRoomDatabase.postFilterDao().insertAll(postFilters);
 
-                                    if (postFilterUsageFile.exists()) {
+                                    if (Files.exists(postFilterUsageFile)) {
                                         List<PostFilterUsage> postFilterUsage = getListFromFile(postFilterUsageFile, new TypeToken<List<PostFilterUsage>>() {}.getType());
                                         redditDataRoomDatabase.postFilterUsageDao().insertAll(postFilterUsage);
                                     }
                                 }
                             }
                         }
-                    } else {
-                        handler.post(() -> restoreSettingsListener.failed(context.getString(R.string.restore_settings_failed_file_corrupted)));
                     }
 
-                    FileUtils.deleteDirectory(new File(cachePath));
+                    PathUtils.deleteDirectory(cachePath);
 
                     if (result) {
                         handler.post(restoreSettingsListener::success);
@@ -185,12 +185,8 @@ public class RestoreSettings {
         });
     }
 
-    private static boolean importSharedPreferencsFromFile(SharedPreferences sharedPreferences, String uriString) {
-        boolean result = false;
-        ObjectInputStream input = null;
-
-        try {
-            input = new ObjectInputStream(new FileInputStream(uriString));
+    private static boolean importSharedPreferencesFromFile(SharedPreferences sharedPreferences, Path path) {
+        try (var input = new ObjectInputStream(Files.newInputStream(path))) {
             Object object = input.readObject();
             if (object instanceof Map) {
                 Map<String, Object> map = (Map<String, Object>) object;
@@ -212,32 +208,23 @@ public class RestoreSettings {
 
                 editor.apply();
 
-                result = true;
+                return true;
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (input != null) {
-                    input.close();
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
         }
-        return result;
+        return false;
     }
 
     @Nullable
-    private static <T> List<T> getListFromFile(File file, Type dataType) {
-        try (JsonReader reader = new JsonReader(new FileReader(file))) {
-            Gson gson = new Gson();
+    private static <T> List<T> getListFromFile(Path path, Type dataType) {
+        try (var reader = new JsonReader(Files.newBufferedReader(path))) {
+            var gson = new Gson();
             return gson.fromJson(reader, dataType);
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-
-        return null;
     }
 
     public interface RestoreSettingsListener {
