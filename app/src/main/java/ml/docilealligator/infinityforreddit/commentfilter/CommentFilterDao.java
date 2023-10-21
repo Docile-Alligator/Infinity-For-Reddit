@@ -36,9 +36,9 @@ public interface CommentFilterDao {
     @Query("SELECT * FROM comment_filter")
     List<CommentFilter> getAllCommentFilters();
 
-    @Query("SELECT * FROM comment_filter WHERE comment_filter.name IN " +
-            "(SELECT comment_filter_usage.name FROM comment_filter_usage WHERE (usage = :usage AND name_of_usage = :nameOfUsage) " +
-            "OR (usage =:usage AND name_of_usage = '--'))")
+    @Query("SELECT * FROM comment_filter WHERE (comment_filter.name IN " +
+            "(SELECT comment_filter_usage.name FROM comment_filter_usage WHERE (usage = :usage AND name_of_usage = :nameOfUsage COLLATE NOCASE)))" +
+            " OR (comment_filter.name NOT IN (SELECT comment_filter_usage.name FROM comment_filter_usage))")
     List<CommentFilter> getValidCommentFilters(int usage, String nameOfUsage);
 
     @Transaction
