@@ -45,9 +45,6 @@ public class CommentFilterUsageRecyclerViewAdapter extends RecyclerView.Adapter<
             case CommentFilterUsage.SUBREDDIT_TYPE:
                 ((CommentFilterUsageRecyclerViewAdapter.CommentFilterUsageViewHolder) holder).usageTextView.setText(activity.getString(R.string.post_filter_usage_subreddit, commentFilterUsage.nameOfUsage));
                 break;
-            case CommentFilterUsage.USER_TYPE:
-                ((CommentFilterUsageRecyclerViewAdapter.CommentFilterUsageViewHolder) holder).usageTextView.setText(activity.getString(R.string.post_filter_usage_user, commentFilterUsage.nameOfUsage));
-                break;
         }
     }
 

@@ -32,11 +32,6 @@ public class NewCommentFilterUsageBottomSheetFragment extends LandscapeExpandedR
             dismiss();
         });
 
-        binding.userTextViewNewCommentFilterUsageBottomSheetFragment.setOnClickListener(view -> {
-            activity.newCommentFilterUsage(CommentFilterUsage.USER_TYPE);
-            dismiss();
-        });
-
         if (activity.typeface != null) {
             Utils.setFontToAllTextViews(binding.getRoot(), activity.typeface);
         }

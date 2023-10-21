@@ -13,7 +13,6 @@ import androidx.room.ForeignKey;
                 childColumns = "name", onDelete = ForeignKey.CASCADE))
 public class CommentFilterUsage implements Parcelable {
     public static final int SUBREDDIT_TYPE = 1;
-    public static final int USER_TYPE = 2;
 
     @NonNull
     @ColumnInfo(name = "name")

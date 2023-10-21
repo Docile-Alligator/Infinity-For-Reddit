@@ -23,6 +23,8 @@ public class CommentFilter implements Parcelable {
     public int minVote = -1;
     @ColumnInfo(name = "exclude_strings")
     public String excludeStrings;
+    @ColumnInfo(name = "exclude_users")
+    public String excludeUsers;
 
     public CommentFilter() {
 
@@ -33,6 +35,7 @@ public class CommentFilter implements Parcelable {
         maxVote = in.readInt();
         minVote = in.readInt();
         excludeStrings = in.readString();
+        excludeUsers = in.readString();
     }
 
     public static final Creator<CommentFilter> CREATOR = new Creator<CommentFilter>() {
@@ -62,6 +65,14 @@ public class CommentFilter implements Parcelable {
                 }
             }
         }
+        if (commentFilter.excludeUsers != null && !commentFilter.excludeUsers.equals("")) {
+            String[] users = commentFilter.excludeUsers.split(",", 0);
+            for (String u : users) {
+                if (!u.trim().equals("") && comment.getAuthor().equalsIgnoreCase(u.trim())) {
+                    return false;
+                }
+            }
+        }
 
         return true;
     }
@@ -83,6 +94,12 @@ public class CommentFilter implements Parcelable {
                 stringBuilder.append(",").append(c.excludeStrings);
                 commentFilter.excludeStrings = stringBuilder.toString();
             }
+
+            if (c.excludeUsers != null && !c.excludeUsers.equals("")) {
+                stringBuilder = new StringBuilder(commentFilter.excludeUsers == null ? "" : commentFilter.excludeUsers);
+                stringBuilder.append(",").append(c.excludeUsers);
+                commentFilter.excludeUsers = stringBuilder.toString();
+            }
         }
 
         return commentFilter;
@@ -99,5 +116,6 @@ public class CommentFilter implements Parcelable {
         dest.writeInt(maxVote);
         dest.writeInt(minVote);
         dest.writeString(excludeStrings);
+        dest.writeString(excludeUsers);
     }
 }

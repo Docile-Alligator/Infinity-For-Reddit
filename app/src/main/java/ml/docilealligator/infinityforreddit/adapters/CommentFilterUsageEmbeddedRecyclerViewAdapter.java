@@ -41,9 +41,6 @@ public class CommentFilterUsageEmbeddedRecyclerViewAdapter extends RecyclerView.
                 case CommentFilterUsage.SUBREDDIT_TYPE:
                     holder.textView.setText("r/" + commentFilterUsage.nameOfUsage);
                     break;
-                case CommentFilterUsage.USER_TYPE:
-                    holder.textView.setText("u/" + commentFilterUsage.nameOfUsage);
-                    break;
             }
         }
     }

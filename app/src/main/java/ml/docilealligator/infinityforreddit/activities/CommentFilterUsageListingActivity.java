@@ -94,7 +94,6 @@ public class CommentFilterUsageListingActivity extends BaseActivity {
     public void newCommentFilterUsage(int type) {
         switch (type) {
             case CommentFilterUsage.SUBREDDIT_TYPE:
-            case CommentFilterUsage.USER_TYPE:
                 editAndCommentFilterUsageNameOfUsage(type, null);
                 break;
         }
@@ -118,10 +117,6 @@ public class CommentFilterUsageListingActivity extends BaseActivity {
         switch (type) {
             case CommentFilterUsage.SUBREDDIT_TYPE:
                 textInputEditText.setHint(R.string.settings_tab_subreddit_name);
-                break;
-            case CommentFilterUsage.USER_TYPE:
-                textInputEditText.setHint(R.string.settings_tab_username);
-                titleStringId = R.string.user;
                 break;
         }
 

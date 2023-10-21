@@ -405,7 +405,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE comment_filter " +
-                    "(name TEXT NOT NULL PRIMARY KEY, max_vote INTEGER NOT NULL, min_vote INTEGER NOT NULL, exclude_strings TEXT)");
+                    "(name TEXT NOT NULL PRIMARY KEY, max_vote INTEGER NOT NULL, min_vote INTEGER NOT NULL, exclude_strings TEXT, exclude_users TEXT)");
             database.execSQL("CREATE TABLE comment_filter_usage (name TEXT NOT NULL, usage INTEGER NOT NULL, " +
                     "name_of_usage TEXT NOT NULL, PRIMARY KEY(name, usage, name_of_usage), FOREIGN KEY(name) REFERENCES comment_filter(name) ON DELETE CASCADE)");
         }
