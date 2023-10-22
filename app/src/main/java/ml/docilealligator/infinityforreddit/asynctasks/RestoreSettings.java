@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -17,7 +18,6 @@ import net.lingala.zip4j.ZipFile;
 import org.apache.commons.io.file.PathUtils;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
@@ -44,6 +44,8 @@ import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUt
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class RestoreSettings {
+    private static final String TAG = RestoreSettings.class.getSimpleName();
+
     @SuppressWarnings("NewApi") // StandardOpenOption is desugared for all Android versions
     public static void restoreSettings(Context context, Executor executor, Handler handler,
                                 ContentResolver contentResolver, Uri zipFileUri,
@@ -71,7 +73,9 @@ public class RestoreSettings {
                         return;
                     }
 
-                    PathUtils.deleteDirectory(cachePath);
+                    if (Files.exists(cachePath)) {
+                        PathUtils.deleteDirectory(cachePath);
+                    }
                     Files.createDirectory(cachePath);
 
                     final var zipCache = cachePath.resolve("restore.zip");
@@ -178,7 +182,7 @@ public class RestoreSettings {
                     }
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG, "Error while restoring backup", e);
 
                 handler.post(() -> restoreSettingsListener.failed(context.getString(R.string.restore_settings_partially_failed)));
             }

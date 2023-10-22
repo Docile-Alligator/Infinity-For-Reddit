@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
+import android.util.Log;
 
 import androidx.documentfile.provider.DocumentFile;
 
@@ -40,6 +41,8 @@ import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUt
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class BackupSettings {
+    private static final String TAG = BackupSettings.class.getSimpleName();
+
     public static void backupSettings(Context context, Executor executor, Handler handler,
                                       ContentResolver contentResolver, Uri destinationDirUri,
                                       RedditDataRoomDatabase redditDataRoomDatabase,
@@ -65,10 +68,14 @@ public class BackupSettings {
             if (Files.exists(backupDirPath)) {
                 try {
                     PathUtils.deleteDirectory(backupDirPath);
-                    Files.createDirectories(backupDirPath);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Error while deleting backup directory", e);
                 }
+            }
+            try {
+                Files.createDirectories(databaseDirFile);
+            } catch (IOException e) {
+                Log.e(TAG, "Error while creating backup directories", e);
             }
 
             boolean res = saveSharedPreferencesToFile(defaultSharedPreferences, backupDirPath,
@@ -127,7 +134,7 @@ public class BackupSettings {
             try {
                 PathUtils.deleteDirectory(backupRootDir);
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG, "Error while deleting backup directory", e);
             }
 
             handler.post(() -> {
@@ -151,20 +158,22 @@ public class BackupSettings {
         final var backupFile = backupDir.resolve(fileName + ".txt");
         try (var output = new ObjectOutputStream(Files.newOutputStream(backupFile))) {
             output.writeObject(sharedPreferences.getAll());
+            output.flush();
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error while saving shared preferences to file " + backupFile, e);
             return false;
         }
     }
 
     private static boolean saveDatabaseTableToFile(String dataJson, Path backupDir, String fileName) {
-        try (var out = Files.newBufferedWriter(backupDir.resolve(fileName))) {
-            out.write(dataJson);
-            out.newLine();
+        final var backupFile = backupDir.resolve(fileName);
+        try (var writer = Files.newBufferedWriter(backupFile)) {
+            writer.write(dataJson);
+            writer.newLine();
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error while saving database table to file " + backupFile, e);
             return false;
         }
     }
@@ -207,7 +216,7 @@ public class BackupSettings {
             }
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Error while zipping and/or moving to destination", e);
             return false;
         }
     }
