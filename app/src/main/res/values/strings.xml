@@ -1162,6 +1162,7 @@
     <string name="click_to_apply_post_filter">Click here to apply it to some post feeds</string>
     <string name="post_filter_usage_embedded_more_count">and %1$d more</string>
 
+    <string name="excludes_strings_hint">Exclude keywords (key1,key2)</string>
     <string name="comment_filter_name_hint">Comment Filter Name</string>
     <string name="comment_filter_requires_a_name">What is the name of this comment filter?</string>
     <string name="duplicate_comment_filter_dialog_title">\'%1$s\' Already Exists</string>

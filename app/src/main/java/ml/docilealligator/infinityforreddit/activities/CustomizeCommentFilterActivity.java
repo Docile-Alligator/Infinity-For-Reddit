@@ -1,8 +1,10 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -15,11 +17,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.regex.PatternSyntaxException;
 
@@ -33,6 +39,7 @@ import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
 import ml.docilealligator.infinityforreddit.commentfilter.SaveCommentFilter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCustomizeCommentFilterBinding;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class CustomizeCommentFilterActivity extends BaseActivity {
@@ -79,6 +86,35 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setToolbarGoToTop(binding.toolbarCustomizeCommentFilterActivity);
 
+        ActivityResultLauncher<Intent> requestAddUsersLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            Intent data = result.getData();
+            if (data == null) {
+                return;
+            }
+
+            ArrayList<String> usernames = data.getStringArrayListExtra(SearchActivity.RETURN_EXTRA_SELECTED_USERNAMES);
+            String currentUsers = binding.excludeUsersTextInputEditTextCustomizeCommentFilterActivity.getText().toString().trim();
+            if (usernames != null && !usernames.isEmpty()) {
+                if (!currentUsers.isEmpty() && currentUsers.charAt(currentUsers.length() - 1) != ',') {
+                    String newString = currentUsers + ",";
+                    binding.excludeUsersTextInputEditTextCustomizeCommentFilterActivity.setText(newString);
+                }
+                StringBuilder stringBuilder = new StringBuilder();
+                for (String s : usernames) {
+                    stringBuilder.append(s).append(",");
+                }
+                stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+                binding.excludeUsersTextInputEditTextCustomizeCommentFilterActivity.append(stringBuilder.toString());
+            }
+        });
+
+        binding.addUsersImageViewCustomizeCommentFilterActivity.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SearchActivity.class);
+            intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_USERS, true);
+            intent.putExtra(SearchActivity.EXTRA_IS_MULTI_SELECTION, true);
+            requestAddUsersLauncher.launch(intent);
+        });
+
         fromSettings = getIntent().getBooleanExtra(EXTRA_FROM_SETTINGS, false);
 
         if (savedInstanceState != null) {
@@ -103,6 +139,7 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
     private void bindView() {
         binding.nameTextInputEditTextCustomizeCommentFilterActivity.setText(commentFilter.name);
         binding.excludeStringsTextInputEditTextCustomizeCommentFilterActivity.setText(commentFilter.excludeStrings);
+        binding.excludeUsersTextInputEditTextCustomizeCommentFilterActivity.setText(commentFilter.excludeUsers);
         binding.minVoteTextInputEditTextCustomizeCommentFilterActivity.setText(Integer.toString(commentFilter.minVote));
         binding.maxVoteTextInputEditTextCustomizeCommentFilterActivity.setText(Integer.toString(commentFilter.maxVote));
     }
@@ -130,6 +167,9 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
         binding.excludeStringsTextInputLayoutCustomizeCommentFilterActivity.setBoxStrokeColor(primaryTextColor);
         binding.excludeStringsTextInputLayoutCustomizeCommentFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         binding.excludeStringsTextInputEditTextCustomizeCommentFilterActivity.setTextColor(primaryTextColor);
+        binding.excludeUsersTextInputLayoutCustomizeCommentFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
+        binding.excludeUsersTextInputEditTextCustomizeCommentFilterActivity.setTextColor(primaryTextColor);
+        binding.addUsersImageViewCustomizeCommentFilterActivity.setImageDrawable(Utils.getTintedDrawable(this, R.drawable.ic_add_24dp, primaryIconColor));
         binding.minVoteTextInputLayoutCustomizeCommentFilterActivity.setBoxStrokeColor(primaryTextColor);
         binding.minVoteTextInputLayoutCustomizeCommentFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         binding.minVoteTextInputEditTextCustomizeCommentFilterActivity.setTextColor(primaryTextColor);
@@ -140,11 +180,13 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             binding.nameTextInputEditTextCustomizeCommentFilterActivity.setTextCursorDrawable(cursorDrawable);
             binding.excludeStringsTextInputEditTextCustomizeCommentFilterActivity.setTextCursorDrawable(cursorDrawable);
+            binding.excludeUsersTextInputEditTextCustomizeCommentFilterActivity.setTextCursorDrawable(cursorDrawable);
             binding.minVoteTextInputEditTextCustomizeCommentFilterActivity.setTextCursorDrawable(cursorDrawable);
             binding.maxVoteTextInputEditTextCustomizeCommentFilterActivity.setTextCursorDrawable(cursorDrawable);
         } else {
             setCursorDrawableColor(binding.nameTextInputEditTextCustomizeCommentFilterActivity, primaryTextColor);
             setCursorDrawableColor(binding.excludeStringsTextInputEditTextCustomizeCommentFilterActivity, primaryTextColor);
+            setCursorDrawableColor(binding.excludeUsersTextInputEditTextCustomizeCommentFilterActivity, primaryTextColor);
             setCursorDrawableColor(binding.minVoteTextInputEditTextCustomizeCommentFilterActivity, primaryTextColor);
             setCursorDrawableColor(binding.maxVoteTextInputEditTextCustomizeCommentFilterActivity, primaryTextColor);
         }
@@ -242,9 +284,10 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
 
     private void constructCommentFilter() throws PatternSyntaxException {
         commentFilter.name = binding.nameTextInputEditTextCustomizeCommentFilterActivity.getText().toString();
+        commentFilter.excludeStrings = binding.excludeStringsTextInputEditTextCustomizeCommentFilterActivity.getText().toString();
+        commentFilter.excludeUsers = binding.excludeUsersTextInputEditTextCustomizeCommentFilterActivity.getText().toString();
         commentFilter.maxVote = binding.maxVoteTextInputEditTextCustomizeCommentFilterActivity.getText() == null || binding.maxVoteTextInputEditTextCustomizeCommentFilterActivity.getText().toString().equals("") ? -1 : Integer.parseInt(binding.maxVoteTextInputEditTextCustomizeCommentFilterActivity.getText().toString());
         commentFilter.minVote = binding.minVoteTextInputEditTextCustomizeCommentFilterActivity.getText() == null || binding.minVoteTextInputEditTextCustomizeCommentFilterActivity.getText().toString().equals("") ? -1 : Integer.parseInt(binding.minVoteTextInputEditTextCustomizeCommentFilterActivity.getText().toString());
-        commentFilter.excludeStrings = binding.excludeStringsTextInputEditTextCustomizeCommentFilterActivity.getText().toString();
     }
 
     @Override
