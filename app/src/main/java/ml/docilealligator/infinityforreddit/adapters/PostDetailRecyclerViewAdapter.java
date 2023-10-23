@@ -45,7 +45,6 @@ import com.google.android.exoplayer2.ui.DefaultTimeBar;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.ui.TimeBar;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
 
@@ -556,27 +555,28 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             switch (mPost.getVoteType()) {
                 case 1:
                     //Upvoted
-                    ((PostDetailBaseViewHolder) holder).upvoteButton.setTextColor(mUpvotedColor);
                     ((PostDetailBaseViewHolder) holder).upvoteButton.setIconResource(R.drawable.ic_upvote_filled_24dp);
                     ((PostDetailBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mUpvotedColor));
+                    ((PostDetailBaseViewHolder) holder).scoreTextView.setTextColor(mUpvotedColor);
                     break;
                 case -1:
                     //Downvoted
                     ((PostDetailBaseViewHolder) holder).downvoteButton.setIconResource(R.drawable.ic_downvote_filled_24dp);
                     ((PostDetailBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mDownvotedColor));
+                    ((PostDetailBaseViewHolder) holder).scoreTextView.setTextColor(mDownvotedColor);
                     break;
                 case 0:
-                    ((PostDetailBaseViewHolder) holder).upvoteButton.setTextColor(mPostIconAndInfoColor);
                     ((PostDetailBaseViewHolder) holder).upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
                     ((PostDetailBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
+                    ((PostDetailBaseViewHolder) holder).scoreTextView.setTextColor(mPostIconAndInfoColor);
                     ((PostDetailBaseViewHolder) holder).downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
                     ((PostDetailBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             }
 
             if (mPost.isArchived()) {
                 ((PostDetailBaseViewHolder) holder).archivedImageView.setVisibility(View.VISIBLE);
-                ((PostDetailBaseViewHolder) holder).upvoteButton.setTextColor(mVoteAndReplyUnavailableVoteButtonColor);
                 ((PostDetailBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
+                ((PostDetailBaseViewHolder) holder).scoreTextView.setTextColor(mVoteAndReplyUnavailableVoteButtonColor);
                 ((PostDetailBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
             }
 
@@ -637,9 +637,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             }
 
             if (!mHideTheNumberOfVotes) {
-                ((PostDetailBaseViewHolder) holder).upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, mPost.getScore() + mPost.getVoteType()));
+                ((PostDetailBaseViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, mPost.getScore() + mPost.getVoteType()));
             } else {
-                ((PostDetailBaseViewHolder) holder).upvoteButton.setText(mActivity.getString(R.string.vote));
+                ((PostDetailBaseViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.vote));
             }
 
             ((PostDetailBaseViewHolder) holder).commentsCountButton.setText(Integer.toString(mPost.getNComments()));
@@ -992,9 +992,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof PostDetailBaseViewHolder) {
-            ((PostDetailBaseViewHolder) holder).upvoteButton.setTextColor(mPostIconAndInfoColor);
             ((PostDetailBaseViewHolder) holder).upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
             ((PostDetailBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
+            ((PostDetailBaseViewHolder) holder).scoreTextView.setTextColor(mPostIconAndInfoColor);
             ((PostDetailBaseViewHolder) holder).downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
             ((PostDetailBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             ((PostDetailBaseViewHolder) holder).flairTextView.setVisibility(View.GONE);
@@ -1071,6 +1071,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         RecyclerView contentMarkdownView;
         ConstraintLayout bottomConstraintLayout;
         MaterialButton upvoteButton;
+        TextView scoreTextView;
         MaterialButton downvoteButton;
         MaterialButton commentsCountButton;
         MaterialButton saveButton;
@@ -1097,8 +1098,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                          TextView upvoteRatioTextView,
                          RecyclerView contentMarkdownView,
                          ConstraintLayout bottomConstraintLayout,
-                         MaterialButtonToggleGroup voteButtonToggleGroup,
                          MaterialButton upvoteButton,
+                         TextView scoreTextView,
                          MaterialButton downvoteButton,
                          MaterialButton commentsCountButton,
                          MaterialButton saveButton,
@@ -1121,6 +1122,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             this.contentMarkdownView = contentMarkdownView;
             this.bottomConstraintLayout = bottomConstraintLayout;
             this.upvoteButton = upvoteButton;
+            this.scoreTextView = scoreTextView;
             this.downvoteButton = downvoteButton;
             this.commentsCountButton = commentsCountButton;
             this.saveButton = saveButton;
@@ -1210,6 +1212,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
                 int previousUpvoteButtonTextColor = upvoteButton.getCurrentTextColor();
                 int previousDownvoteButtonTextColor = downvoteButton.getCurrentTextColor();
+                int previousScoreTextViewColor = scoreTextView.getCurrentTextColor();
                 Drawable previousUpvoteButtonDrawable = upvoteButton.getIcon();
                 Drawable previousDownvoteButtonDrawable = downvoteButton.getIcon();
 
@@ -1223,20 +1226,20 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     //Not upvoted before
                     mPost.setVoteType(1);
                     newVoteType = APIUtils.DIR_UPVOTE;
-                    upvoteButton.setTextColor(mUpvotedColor);
                     upvoteButton.setIconResource(R.drawable.ic_upvote_filled_24dp);
                     upvoteButton.setIconTint(ColorStateList.valueOf(mUpvotedColor));
+                    scoreTextView.setTextColor(mUpvotedColor);
                 } else {
                     //Upvoted before
                     mPost.setVoteType(0);
                     newVoteType = APIUtils.DIR_UNVOTE;
-                    upvoteButton.setTextColor(mPostIconAndInfoColor);
                     upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
                     upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
+                    scoreTextView.setTextColor(mPostIconAndInfoColor);
                 }
 
                 if (!mHideTheNumberOfVotes) {
-                    upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                             mPost.getScore() + mPost.getVoteType()));
                 }
 
@@ -1247,20 +1250,20 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     public void onVoteThingSuccess() {
                         if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
                             mPost.setVoteType(1);
-                            upvoteButton.setTextColor(mUpvotedColor);
                             upvoteButton.setIconResource(R.drawable.ic_upvote_filled_24dp);
                             upvoteButton.setIconTint(ColorStateList.valueOf(mUpvotedColor));
+                            scoreTextView.setTextColor(mUpvotedColor);
                         } else {
                             mPost.setVoteType(0);
-                            upvoteButton.setTextColor(mPostIconAndInfoColor);
                             upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
                             upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
+                            scoreTextView.setTextColor(mPostIconAndInfoColor);
                         }
 
                         downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
                         downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
                         if (!mHideTheNumberOfVotes) {
-                            upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                     mPost.getScore() + mPost.getVoteType()));
                         }
 
@@ -1272,18 +1275,22 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                         mPost.setVoteType(previousVoteType);
                         if (!mHideTheNumberOfVotes) {
-                            upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                     mPost.getScore() + previousVoteType));
                         }
-                        upvoteButton.setTextColor(previousUpvoteButtonTextColor);
                         upvoteButton.setIcon(previousUpvoteButtonDrawable);
                         upvoteButton.setIconTint(ColorStateList.valueOf(previousUpvoteButtonTextColor));
+                        scoreTextView.setTextColor(previousScoreTextViewColor);
                         downvoteButton.setIcon(previousDownvoteButtonDrawable);
                         downvoteButton.setIconTint(ColorStateList.valueOf(previousDownvoteButtonTextColor));
 
                         mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
                     }
                 }, mPost.getFullName(), newVoteType);
+            });
+
+            scoreTextView.setOnClickListener(view -> {
+                upvoteButton.performClick();
             });
 
             downvoteButton.setOnClickListener(view -> {
@@ -1299,13 +1306,13 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
                 int previousUpvoteButtonTextColor = upvoteButton.getTextColors().getDefaultColor();
                 int previousDownvoteButtonTextColor = downvoteButton.getTextColors().getDefaultColor();
+                int previousScoreTextViewColor = scoreTextView.getCurrentTextColor();
                 Drawable previousUpvoteButtonDrawable = upvoteButton.getIcon();
                 Drawable previousDownvoteButtonDrawable = downvoteButton.getIcon();
 
                 int previousVoteType = mPost.getVoteType();
                 String newVoteType;
 
-                upvoteButton.setTextColor(mPostIconAndInfoColor);
                 upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
                 upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
 
@@ -1315,16 +1322,18 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     newVoteType = APIUtils.DIR_DOWNVOTE;
                     downvoteButton.setIconResource(R.drawable.ic_downvote_filled_24dp);
                     downvoteButton.setIconTint(ColorStateList.valueOf(mDownvotedColor));
+                    scoreTextView.setTextColor(mDownvotedColor);
                 } else {
                     //Downvoted before
                     mPost.setVoteType(0);
                     newVoteType = APIUtils.DIR_UNVOTE;
                     downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
                     downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
+                    scoreTextView.setTextColor(mPostIconAndInfoColor);
                 }
 
                 if (!mHideTheNumberOfVotes) {
-                    upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                             mPost.getScore() + mPost.getVoteType()));
                 }
 
@@ -1337,17 +1346,18 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             mPost.setVoteType(-1);
                             downvoteButton.setIconResource(R.drawable.ic_downvote_filled_24dp);
                             downvoteButton.setIconTint(ColorStateList.valueOf(mDownvotedColor));
+                            scoreTextView.setTextColor(mDownvotedColor);
                         } else {
                             mPost.setVoteType(0);
                             downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
                             downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
+                            scoreTextView.setTextColor(mPostIconAndInfoColor);
                         }
 
-                        upvoteButton.setTextColor(mPostIconAndInfoColor);
                         upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
                         upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
                         if (!mHideTheNumberOfVotes) {
-                            upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                     mPost.getScore() + mPost.getVoteType()));
                         }
 
@@ -1359,12 +1369,12 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                         mPost.setVoteType(previousVoteType);
                         if (!mHideTheNumberOfVotes) {
-                            upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                     mPost.getScore() + previousVoteType));
                         }
-                        upvoteButton.setTextColor(previousUpvoteButtonTextColor);
                         upvoteButton.setIcon(previousUpvoteButtonDrawable);
                         upvoteButton.setIconTint(ColorStateList.valueOf(previousUpvoteButtonTextColor));
+                        scoreTextView.setTextColor(previousScoreTextViewColor);
                         downvoteButton.setIcon(previousDownvoteButtonDrawable);
                         downvoteButton.setIconTint(ColorStateList.valueOf(previousDownvoteButtonTextColor));
 
@@ -1482,10 +1492,14 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             if (mVoteButtonsOnTheRight) {
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(bottomConstraintLayout);
-                constraintSet.clear(voteButtonToggleGroup.getId(), ConstraintSet.START);
+                constraintSet.clear(upvoteButton.getId(), ConstraintSet.START);
+                constraintSet.clear(scoreTextView.getId(), ConstraintSet.START);
+                constraintSet.clear(downvoteButton.getId(), ConstraintSet.START);
                 constraintSet.clear(saveButton.getId(), ConstraintSet.END);
                 constraintSet.clear(shareButton.getId(), ConstraintSet.END);
-                constraintSet.connect(voteButtonToggleGroup.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+                constraintSet.connect(upvoteButton.getId(), ConstraintSet.END, scoreTextView.getId(), ConstraintSet.START);
+                constraintSet.connect(scoreTextView.getId(), ConstraintSet.END, downvoteButton.getId(), ConstraintSet.START);
+                constraintSet.connect(downvoteButton.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
                 constraintSet.connect(commentsCountButton.getId(), ConstraintSet.START, saveButton.getId(), ConstraintSet.END);
                 constraintSet.connect(commentsCountButton.getId(), ConstraintSet.END, upvoteButton.getId(), ConstraintSet.START);
                 constraintSet.connect(saveButton.getId(), ConstraintSet.START, shareButton.getId(), ConstraintSet.END);
@@ -1538,7 +1552,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     upvoteRatioDrawable, null, null, null);
             upvoteRatioTextView.setTextColor(mSecondaryTextColor);
             upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
-            upvoteButton.setTextColor(mPostIconAndInfoColor);
+            scoreTextView.setTextColor(mPostIconAndInfoColor);
             downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             commentsCountButton.setTextColor(mPostIconAndInfoColor);
             commentsCountButton.setIcon(mCommentIcon);
@@ -1549,21 +1563,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
     class PostDetailBaseVideoAutoplayViewHolder extends PostDetailBaseViewHolder implements ToroPlayer {
         public Call<String> fetchGfycatOrStreamableVideoCall;
-        AspectRatioGifImageView mIconGifImageView;
-        TextView mSubredditTextView;
-        TextView mUserTextView;
-        TextView mAuthorFlairTextView;
-        TextView mPostTimeTextView;
-        TextView mTitleTextView;
-        CustomTextView mTypeTextView;
-        ImageView mCrosspostImageView;
-        ImageView mArchivedImageView;
-        ImageView mLockedImageView;
-        CustomTextView mNSFWTextView;
-        CustomTextView mSpoilerTextView;
-        CustomTextView mFlairTextView;
-        TextView mAwardsTextView;
-        TextView mUpvoteRatioTextView;
         AspectRatioFrameLayout aspectRatioFrameLayout;
         PlayerView playerView;
         GifImageView previewImageView;
@@ -1573,13 +1572,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         ImageView pauseButton;
         ImageView playButton;
         DefaultTimeBar progressBar;
-        RecyclerView mContentMarkdownView;
-        ConstraintLayout mBottomConstraintLayout;
-        MaterialButton mUpvoteButton;
-        MaterialButton mDownvoteButton;
-        MaterialButton commentsCountButton;
-        MaterialButton mSaveButton;
-        MaterialButton mShareButton;
         @Nullable
         Container container;
         @Nullable
@@ -1615,8 +1607,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                                      DefaultTimeBar progressBar,
                                                      RecyclerView contentMarkdownView,
                                                      ConstraintLayout bottomConstraintLayout,
-                                                     MaterialButtonToggleGroup voteButtonToggleGroup,
                                                      MaterialButton upvoteButton,
+                                                     TextView scoreTextView,
                                                      MaterialButton downvoteButton,
                                                      MaterialButton commentsCountButton,
                                                      MaterialButton saveButton,
@@ -1639,8 +1631,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     upvoteRatioTextView,
                     contentMarkdownView,
                     bottomConstraintLayout,
-                    voteButtonToggleGroup,
                     upvoteButton,
+                    scoreTextView,
                     downvoteButton,
                     commentsCountButton,
                     saveButton,
@@ -1892,8 +1884,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     binding.getRoot().findViewById(R.id.exo_progress),
                     binding.contentMarkdownViewItemPostDetailVideoAutoplay,
                     binding.bottomConstraintLayoutItemPostDetailVideoAutoplay,
-                    binding.voteButtonToggleItemPostDetailVideoAutoplay,
                     binding.upvoteButtonItemPostDetailVideoAutoplay,
+                    binding.scoreTextViewItemPostDetailVideoAutoplay,
                     binding.downvoteButtonItemPostDetailVideoAutoplay,
                     binding.commentsCountButtonItemPostDetailVideoAutoplay,
                     binding.saveButtonItemPostDetailVideoAutoplay,
@@ -1930,8 +1922,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     binding.getRoot().findViewById(R.id.exo_progress),
                     binding.contentMarkdownViewItemPostDetailVideoAutoplay,
                     binding.bottomConstraintLayoutItemPostDetailVideoAutoplay,
-                    binding.voteButtonToggleItemPostDetailVideoAutoplay,
                     binding.upvoteButtonItemPostDetailVideoAutoplay,
+                    binding.scoreTextViewItemPostDetailVideoAutoplay,
                     binding.downvoteButtonItemPostDetailVideoAutoplay,
                     binding.commentsCountButtonItemPostDetailVideoAutoplay,
                     binding.saveButtonItemPostDetailVideoAutoplay,
@@ -1962,8 +1954,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     binding.upvoteRatioTextViewItemPostDetailVideoAndGifPreview,
                     binding.contentMarkdownViewItemPostDetailVideoAndGifPreview,
                     binding.bottomConstraintLayoutItemPostDetailVideoAndGifPreview,
-                    binding.voteButtonToggleItemPostDetailVideoAndGifPreview,
                     binding.upvoteButtonItemPostDetailVideoAndGifPreview,
+                    binding.scoreTextViewItemPostDetailVideoAndGifPreview,
                     binding.downvoteButtonItemPostDetailVideoAndGifPreview,
                     binding.commentsCountButtonItemPostDetailVideoAndGifPreview,
                     binding.saveButtonItemPostDetailVideoAndGifPreview,
@@ -2037,8 +2029,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     binding.upvoteRatioTextViewItemPostDetailImageAndGifAutoplay,
                     binding.contentMarkdownViewItemPostDetailImageAndGifAutoplay,
                     binding.bottomConstraintLayoutItemPostDetailImageAndGifAutoplay,
-                    binding.voteButtonToggleItemPostDetailImageAndGifAutoplay,
                     binding.upvoteButtonItemPostDetailImageAndGifAutoplay,
+                    binding.scoreTextViewItemPostDetailImageAndGifAutoplay,
                     binding.downvoteButtonItemPostDetailImageAndGifAutoplay,
                     binding.commentsCountButtonItemPostDetailImageAndGifAutoplay,
                     binding.saveButtonItemPostDetailImageAndGifAutoplay,
@@ -2095,8 +2087,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     binding.upvoteRatioTextViewItemPostDetailLink,
                     binding.contentMarkdownViewItemPostDetailLink,
                     binding.bottomConstraintLayoutItemPostDetailLink,
-                    binding.voteButtonToggleItemPostDetailLink,
                     binding.upvoteButtonItemPostDetailLink,
+                    binding.scoreTextViewItemPostDetailLink,
                     binding.downvoteButtonItemPostDetailLink,
                     binding.commentsCountButtonItemPostDetailLink,
                     binding.saveButtonItemPostDetailLink,
@@ -2142,8 +2134,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     binding.upvoteRatioTextViewItemPostDetailNoPreview,
                     binding.contentMarkdownViewItemPostDetailNoPreview,
                     binding.bottomConstraintLayoutItemPostDetailNoPreview,
-                    binding.voteButtonToggleItemPostDetailNoPreview,
                     binding.upvoteButtonItemPostDetailNoPreview,
+                    binding.scoreTextViewItemPostDetailNoPreview,
                     binding.downvoteButtonItemPostDetailNoPreview,
                     binding.commentsCountButtonItemPostDetailNoPreview,
                     binding.saveButtonItemPostDetailNoPreview,
@@ -2235,8 +2227,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     binding.upvoteRatioTextViewItemPostDetailGallery,
                     binding.contentMarkdownViewItemPostDetailGallery,
                     binding.bottomConstraintLayoutItemPostDetailGallery,
-                    binding.voteButtonToggleItemPostDetailGallery,
                     binding.upvoteButtonItemPostDetailGallery,
+                    binding.scoreTextViewItemPostDetailGallery,
                     binding.downvoteButtonItemPostDetailGallery,
                     binding.commentsCountButtonItemPostDetailGallery,
                     binding.saveButtonItemPostDetailGallery,
@@ -2376,8 +2368,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     binding.upvoteRatioTextViewItemPostDetailText,
                     binding.contentMarkdownViewItemPostDetailText,
                     binding.bottomConstraintLayoutItemPostDetailText,
-                    binding.voteButtonToggleItemPostDetailText,
                     binding.upvoteButtonItemPostDetailText,
+                    binding.scoreTextViewItemPostDetailText,
                     binding.downvoteButtonItemPostDetailText,
                     binding.commentsCountButtonItemPostDetailText,
                     binding.saveButtonItemPostDetailText,
