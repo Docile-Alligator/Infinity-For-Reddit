@@ -152,45 +152,56 @@
             android:paddingStart="4dp"
             android:paddingEnd="4dp">
 
-            <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/vote_button_toggle_item_post_comment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:singleSelection="true"
+            <com.google.android.material.button.MaterialButton
+                style="?attr/materialIconButtonStyle"
+                android:id="@+id/upvote_button_item_post_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:minWidth="0dp"
+                android:backgroundTint="#00000000"
+                app:strokeWidth="0dp"
+                app:icon="@drawable/ic_upvote_24dp"
+                app:iconSize="24dp"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/score_text_view_item_post_comment"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.button.MaterialButton
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:id="@+id/upvote_button_item_post_comment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:minWidth="0dp"
-                    android:textSize="?attr/font_12"
-                    android:textStyle="bold"
-                    android:fontFamily="?attr/font_family"
-                    app:strokeWidth="0dp"
-                    app:icon="@drawable/ic_upvote_24dp"
-                    app:iconSize="24dp"
-                    android:backgroundTint="#00000000" />
+            <TextView
+                android:id="@+id/score_text_view_item_post_comment"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="?attr/font_12"
+                android:textStyle="bold"
+                android:fontFamily="?attr/font_family"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/downvote_button_item_post_comment"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/upvote_button_item_post_comment"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.button.MaterialButton
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:id="@+id/downvote_button_item_post_comment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:minWidth="0dp"
-                    app:strokeWidth="0dp"
-                    app:icon="@drawable/ic_downvote_24dp"
-                    app:iconSize="24dp"
-                    android:backgroundTint="#00000000" />
-
-            </com.google.android.material.button.MaterialButtonToggleGroup>
+            <com.google.android.material.button.MaterialButton
+                style="?attr/materialIconButtonStyle"
+                android:id="@+id/downvote_button_item_post_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:minWidth="0dp"
+                android:backgroundTint="#00000000"
+                app:strokeWidth="0dp"
+                app:icon="@drawable/ic_downvote_24dp"
+                app:iconSize="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/placeholder_item_post_comment"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/score_text_view_item_post_comment"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <View
                 android:id="@+id/placeholder_item_post_comment"
@@ -201,7 +212,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/more_button_item_post_comment"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/vote_button_toggle_item_post_comment"
+                app:layout_constraintStart_toEndOf="@+id/downvote_button_item_post_comment"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.button.MaterialButton
