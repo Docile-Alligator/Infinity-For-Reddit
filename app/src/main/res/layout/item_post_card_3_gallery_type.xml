@@ -141,7 +141,9 @@
             android:id="@+id/bottom_constraint_layout_item_post_card_3_gallery_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp">
+            android:paddingTop="8dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
 
             <com.google.android.material.button.MaterialButton
                 style="?attr/materialIconButtonStyle"

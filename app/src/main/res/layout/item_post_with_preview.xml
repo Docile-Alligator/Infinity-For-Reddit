@@ -258,8 +258,8 @@
             android:id="@+id/bottom_constraint_layout_item_post_with_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp">
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp">
 
             <com.google.android.material.button.MaterialButton
                 style="?attr/materialIconButtonStyle"
