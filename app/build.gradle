@@ -163,7 +163,7 @@ dependencies {
     implementation "io.noties.markwon:recycler-table:$markwonVersion"
     implementation "io.noties.markwon:simple-ext:$markwonVersion"
     implementation "io.noties.markwon:inline-parser:$markwonVersion"
-    implementation 'com.atlassian.commonmark:commonmark-ext-gfm-tables:0.14.0'
+    implementation 'com.atlassian.commonmark:commonmark-ext-gfm-tables:0.17.0'
     implementation 'me.saket:better-link-movement-method:2.2.0'
 
     // Animations
