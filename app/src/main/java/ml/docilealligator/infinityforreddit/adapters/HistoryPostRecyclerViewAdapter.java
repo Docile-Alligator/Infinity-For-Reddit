@@ -2848,8 +2848,8 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                         return;
                     }
 
-                    int previousUpvoteButtonTextColor = upvoteButton.getCurrentTextColor();
-                    int previousDownvoteButtonTextColor = downvoteButton.getCurrentTextColor();
+                    ColorStateList previousUpvoteButtonIconTint = upvoteButton.getIconTint();
+                    ColorStateList previousDownvoteButtonIconTint = downvoteButton.getIconTint();
                     int previousScoreTextViewColor = scoreTextView.getCurrentTextColor();
                     Drawable previousUpvoteButtonDrawable = upvoteButton.getIcon();
                     Drawable previousDownvoteButtonDrawable = downvoteButton.getIcon();
@@ -2920,10 +2920,10 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                                     scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                                 }
                                 upvoteButton.setIcon(previousUpvoteButtonDrawable);
-                                upvoteButton.setIconTint(ColorStateList.valueOf(previousUpvoteButtonTextColor));
+                                upvoteButton.setIconTint(previousUpvoteButtonIconTint);
                                 scoreTextView.setTextColor(previousScoreTextViewColor);
                                 downvoteButton.setIcon(previousDownvoteButtonDrawable);
-                                downvoteButton.setIconTint(ColorStateList.valueOf(previousDownvoteButtonTextColor));
+                                downvoteButton.setIconTint(previousDownvoteButtonIconTint);
                             }
 
                             EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
@@ -2953,9 +2953,9 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                         return;
                     }
 
-                    int previousUpvoteButtonTextColor = upvoteButton.getTextColors().getDefaultColor();
+                    ColorStateList previousUpvoteButtonIconTint = upvoteButton.getIconTint();
+                    ColorStateList previousDownvoteButtonIconTint = downvoteButton.getIconTint();
                     int previousScoreTextViewColor = scoreTextView.getCurrentTextColor();
-                    int previousDownvoteButtonTextColor = downvoteButton.getTextColors().getDefaultColor();
                     Drawable previousUpvoteButtonDrawable = upvoteButton.getIcon();
                     Drawable previousDownvoteButtonDrawable = downvoteButton.getIcon();
 
@@ -3025,10 +3025,10 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                                     scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                                 }
                                 upvoteButton.setIcon(previousUpvoteButtonDrawable);
-                                upvoteButton.setIconTint(ColorStateList.valueOf(previousUpvoteButtonTextColor));
+                                upvoteButton.setIconTint(previousUpvoteButtonIconTint);
                                 scoreTextView.setTextColor(previousScoreTextViewColor);
                                 downvoteButton.setIcon(previousDownvoteButtonDrawable);
-                                downvoteButton.setIconTint(ColorStateList.valueOf(previousDownvoteButtonTextColor));
+                                downvoteButton.setIconTint(previousDownvoteButtonIconTint);
                             }
 
                             EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
@@ -4173,8 +4173,8 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                         return;
                     }
 
-                    int previousUpvoteButtonTextColor = upvoteButton.getCurrentTextColor();
-                    int previousDownvoteButtonTextColor = downvoteButton.getCurrentTextColor();
+                    ColorStateList previousUpvoteButtonIconTint = upvoteButton.getIconTint();
+                    ColorStateList previousDownvoteButtonIconTint = downvoteButton.getIconTint();
                     int previousScoreTextViewColor = scoreTextView.getCurrentTextColor();
                     Drawable previousUpvoteButtonDrawable = upvoteButton.getIcon();
                     Drawable previousDownvoteButtonDrawable = downvoteButton.getIcon();
@@ -4245,10 +4245,10 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                                     scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                                 }
                                 upvoteButton.setIcon(previousUpvoteButtonDrawable);
-                                upvoteButton.setIconTint(ColorStateList.valueOf(previousUpvoteButtonTextColor));
+                                upvoteButton.setIconTint(previousUpvoteButtonIconTint);
                                 scoreTextView.setTextColor(previousScoreTextViewColor);
                                 downvoteButton.setIcon(previousDownvoteButtonDrawable);
-                                downvoteButton.setIconTint(ColorStateList.valueOf(previousDownvoteButtonTextColor));
+                                downvoteButton.setIconTint(previousDownvoteButtonIconTint);
                             }
 
                             EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
@@ -4274,8 +4274,8 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                         return;
                     }
 
-                    int previousUpvoteButtonTextColor = upvoteButton.getTextColors().getDefaultColor();
-                    int previousDownvoteButtonTextColor = downvoteButton.getTextColors().getDefaultColor();
+                    ColorStateList previousUpvoteButtonIconTint = upvoteButton.getIconTint();
+                    ColorStateList previousDownvoteButtonIconTint = downvoteButton.getIconTint();
                     int previousScoreTextViewColor = scoreTextView.getCurrentTextColor();
                     Drawable previousUpvoteButtonDrawable = upvoteButton.getIcon();
                     Drawable previousDownvoteButtonDrawable = downvoteButton.getIcon();
@@ -4346,10 +4346,10 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                                     scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                                 }
                                 upvoteButton.setIcon(previousUpvoteButtonDrawable);
-                                upvoteButton.setIconTint(ColorStateList.valueOf(previousUpvoteButtonTextColor));
+                                upvoteButton.setIconTint(previousUpvoteButtonIconTint);
                                 scoreTextView.setTextColor(previousScoreTextViewColor);
                                 downvoteButton.setIcon(previousDownvoteButtonDrawable);
-                                downvoteButton.setIconTint(ColorStateList.valueOf(previousDownvoteButtonTextColor));
+                                downvoteButton.setIconTint(previousDownvoteButtonIconTint);
                             }
 
                             EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
@@ -5538,8 +5538,8 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                         return;
                     }
 
-                    int previousUpvoteButtonTextColor = upvoteButton.getCurrentTextColor();
-                    int previousDownvoteButtonTextColor = downvoteButton.getCurrentTextColor();
+                    ColorStateList previousUpvoteButtonIconTint = upvoteButton.getIconTint();
+                    ColorStateList previousDownvoteButtonIconTint = downvoteButton.getIconTint();
                     int previousScoreTextViewColor = scoreTextView.getCurrentTextColor();
                     Drawable previousUpvoteButtonDrawable = upvoteButton.getIcon();
                     Drawable previousDownvoteButtonDrawable = downvoteButton.getIcon();
@@ -5610,10 +5610,10 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                                     scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                                 }
                                 upvoteButton.setIcon(previousUpvoteButtonDrawable);
-                                upvoteButton.setIconTint(ColorStateList.valueOf(previousUpvoteButtonTextColor));
+                                upvoteButton.setIconTint(previousUpvoteButtonIconTint);
                                 scoreTextView.setTextColor(previousScoreTextViewColor);
                                 downvoteButton.setIcon(previousDownvoteButtonDrawable);
-                                downvoteButton.setIconTint(ColorStateList.valueOf(previousDownvoteButtonTextColor));
+                                downvoteButton.setIconTint(previousDownvoteButtonIconTint);
                             }
 
                             EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
@@ -5643,8 +5643,8 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                         return;
                     }
 
-                    int previousUpvoteButtonTextColor = upvoteButton.getTextColors().getDefaultColor();
-                    int previousDownvoteButtonTextColor = downvoteButton.getTextColors().getDefaultColor();
+                    ColorStateList previousUpvoteButtonIconTint = upvoteButton.getIconTint();
+                    ColorStateList previousDownvoteButtonIconTint = downvoteButton.getIconTint();
                     int previousScoreTextViewColor = scoreTextView.getCurrentTextColor();
                     Drawable previousUpvoteButtonDrawable = upvoteButton.getIcon();
                     Drawable previousDownvoteButtonDrawable = downvoteButton.getIcon();
@@ -5713,10 +5713,10 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                                     scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                                 }
                                 upvoteButton.setIcon(previousUpvoteButtonDrawable);
-                                upvoteButton.setIconTint(ColorStateList.valueOf(previousUpvoteButtonTextColor));
+                                upvoteButton.setIconTint(previousUpvoteButtonIconTint);
                                 scoreTextView.setTextColor(previousScoreTextViewColor);
                                 downvoteButton.setIcon(previousDownvoteButtonDrawable);
-                                downvoteButton.setIconTint(ColorStateList.valueOf(previousDownvoteButtonTextColor));
+                                downvoteButton.setIconTint(previousDownvoteButtonIconTint);
                             }
 
                             EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));

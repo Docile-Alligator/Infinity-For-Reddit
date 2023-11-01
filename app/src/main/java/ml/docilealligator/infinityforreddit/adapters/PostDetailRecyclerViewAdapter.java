@@ -1190,12 +1190,12 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             contentMarkdownView.setLayoutManager(new SwipeLockLinearLayoutManager(mActivity, new SwipeLockInterface() {
                 @Override
                 public void lockSwipe() {
-                    ((ViewPostDetailActivity) mActivity).lockSwipeRightToGoBack();
+                    mActivity.lockSwipeRightToGoBack();
                 }
 
                 @Override
                 public void unlockSwipe() {
-                    ((ViewPostDetailActivity) mActivity).unlockSwipeRightToGoBack();
+                    mActivity.unlockSwipeRightToGoBack();
                 }
             }));
 
@@ -1210,8 +1210,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     return;
                 }
 
-                int previousUpvoteButtonTextColor = upvoteButton.getCurrentTextColor();
-                int previousDownvoteButtonTextColor = downvoteButton.getCurrentTextColor();
+                ColorStateList previousUpvoteButtonIconTint = upvoteButton.getIconTint();
+                ColorStateList previousDownvoteButtonIconTint = downvoteButton.getIconTint();
                 int previousScoreTextViewColor = scoreTextView.getCurrentTextColor();
                 Drawable previousUpvoteButtonDrawable = upvoteButton.getIcon();
                 Drawable previousDownvoteButtonDrawable = downvoteButton.getIcon();
@@ -1279,10 +1279,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                     mPost.getScore() + previousVoteType));
                         }
                         upvoteButton.setIcon(previousUpvoteButtonDrawable);
-                        upvoteButton.setIconTint(ColorStateList.valueOf(previousUpvoteButtonTextColor));
+                        upvoteButton.setIconTint(previousUpvoteButtonIconTint);
                         scoreTextView.setTextColor(previousScoreTextViewColor);
                         downvoteButton.setIcon(previousDownvoteButtonDrawable);
-                        downvoteButton.setIconTint(ColorStateList.valueOf(previousDownvoteButtonTextColor));
+                        downvoteButton.setIconTint(previousDownvoteButtonIconTint);
 
                         mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
                     }
@@ -1304,8 +1304,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     return;
                 }
 
-                int previousUpvoteButtonTextColor = upvoteButton.getTextColors().getDefaultColor();
-                int previousDownvoteButtonTextColor = downvoteButton.getTextColors().getDefaultColor();
+                ColorStateList previousUpvoteButtonIconTint = upvoteButton.getIconTint();
+                ColorStateList previousDownvoteButtonIconTint = downvoteButton.getIconTint();
                 int previousScoreTextViewColor = scoreTextView.getCurrentTextColor();
                 Drawable previousUpvoteButtonDrawable = upvoteButton.getIcon();
                 Drawable previousDownvoteButtonDrawable = downvoteButton.getIcon();
@@ -1373,10 +1373,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                     mPost.getScore() + previousVoteType));
                         }
                         upvoteButton.setIcon(previousUpvoteButtonDrawable);
-                        upvoteButton.setIconTint(ColorStateList.valueOf(previousUpvoteButtonTextColor));
+                        upvoteButton.setIconTint(previousUpvoteButtonIconTint);
                         scoreTextView.setTextColor(previousScoreTextViewColor);
                         downvoteButton.setIcon(previousDownvoteButtonDrawable);
-                        downvoteButton.setIconTint(ColorStateList.valueOf(previousDownvoteButtonTextColor));
+                        downvoteButton.setIconTint(previousDownvoteButtonIconTint);
 
                         mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
                     }
