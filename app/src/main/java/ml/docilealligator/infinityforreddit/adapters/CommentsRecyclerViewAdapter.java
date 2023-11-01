@@ -279,8 +279,14 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             if (isInitiallyLoading) {
                 return VIEW_TYPE_FIRST_LOADING;
             } else if (isInitiallyLoadingFailed) {
+                if(mIsSingleCommentThreadMode && position == 0) {
+                    return VIEW_TYPE_VIEW_ALL_COMMENTS;
+                }
                 return VIEW_TYPE_FIRST_LOADING_FAILED;
             } else {
+                if(mIsSingleCommentThreadMode && position == 0) {
+                    return VIEW_TYPE_VIEW_ALL_COMMENTS;
+                }
                 return VIEW_TYPE_NO_COMMENT_PLACEHOLDER;
             }
         }
@@ -1137,8 +1143,12 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public int getItemCount() {
-        if (isInitiallyLoading || isInitiallyLoadingFailed || mVisibleComments.size() == 0) {
+        if (isInitiallyLoading) {
             return 1;
+        }
+
+        if (isInitiallyLoadingFailed || mVisibleComments.size() == 0) {
+            return mIsSingleCommentThreadMode ? 2 : 1;
         }
 
         if (mHasMoreComments || loadMoreCommentsFailed) {
