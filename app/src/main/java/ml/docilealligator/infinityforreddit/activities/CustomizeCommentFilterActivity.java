@@ -46,6 +46,7 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
 
     public static final String EXTRA_COMMENT_FILTER = "ECF";
     public static final String EXTRA_FROM_SETTINGS = "EFS";
+    public static final String EXTRA_EXCLUDE_USER = "EEU";
     public static final String RETURN_EXTRA_COMMENT_FILTER = "RECF";
     private static final String COMMENT_FILTER_STATE = "CFS";
     private static final String ORIGINAL_NAME_STATE = "ONS";
@@ -142,6 +143,16 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
         binding.excludeUsersTextInputEditTextCustomizeCommentFilterActivity.setText(commentFilter.excludeUsers);
         binding.minVoteTextInputEditTextCustomizeCommentFilterActivity.setText(Integer.toString(commentFilter.minVote));
         binding.maxVoteTextInputEditTextCustomizeCommentFilterActivity.setText(Integer.toString(commentFilter.maxVote));
+
+        Intent intent = getIntent();
+        String excludeUser = intent.getStringExtra(EXTRA_EXCLUDE_USER);
+
+        if (excludeUser != null && !excludeUser.equals("")) {
+            if (!binding.excludeUsersTextInputEditTextCustomizeCommentFilterActivity.getText().toString().equals("")) {
+                binding.excludeUsersTextInputEditTextCustomizeCommentFilterActivity.append(",");
+            }
+            binding.excludeUsersTextInputEditTextCustomizeCommentFilterActivity.append(excludeUser);
+        }
     }
 
     @Override

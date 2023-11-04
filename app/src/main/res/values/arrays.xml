@@ -577,6 +577,10 @@
         <item>@string/contain_domain</item>
     </string-array>
 
+    <string-array name="add_to_comment_filter_options">
+        <item>@string/exclude_user</item>
+    </string-array>
+
     <string-array name="settings_app_lock_timeout">
         <item>@string/app_lock_timeout_immediately</item>
         <item>@string/app_lock_timeout_1_min</item>

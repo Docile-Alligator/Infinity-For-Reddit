@@ -6,18 +6,22 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.adapters.CommentFilterWithUsageRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CommentFilterOptionsBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterWithUsageViewModel;
 import ml.docilealligator.infinityforreddit.commentfilter.DeleteCommentFilter;
@@ -25,6 +29,8 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCommentFilterPreferenceBinding;
 
 public class CommentFilterPreferenceActivity extends BaseActivity {
+
+    public static final String EXTRA_COMMENT = "EC";
 
     private ActivityCommentFilterPreferenceBinding binding;
 
@@ -51,25 +57,33 @@ public class CommentFilterPreferenceActivity extends BaseActivity {
 
         setContentView(binding.getRoot());
 
-        ButterKnife.bind(this);
-
         applyCustomTheme();
 
         setSupportActionBar(binding.toolbarCommentFilterPreferenceActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Comment comment = getIntent().getParcelableExtra(EXTRA_COMMENT);
+
         binding.fabCommentFilterPreferenceActivity.setOnClickListener(view -> {
-            Intent intent = new Intent(this, CustomizeCommentFilterActivity.class);
-            intent.putExtra(CustomizeCommentFilterActivity.EXTRA_FROM_SETTINGS, true);
-            startActivity(intent);
+            if (comment != null) {
+                showCommentFilterOptions(comment, null);
+            } else {
+                Intent intent = new Intent(this, CustomizeCommentFilterActivity.class);
+                intent.putExtra(CustomizeCommentFilterActivity.EXTRA_FROM_SETTINGS, true);
+                startActivity(intent);
+            }
         });
 
         adapter = new CommentFilterWithUsageRecyclerViewAdapter(this, commentFilter -> {
-            CommentFilterOptionsBottomSheetFragment commentFilterOptionsBottomSheetFragment = new CommentFilterOptionsBottomSheetFragment();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(CommentFilterOptionsBottomSheetFragment.EXTRA_POST_FILTER, commentFilter);
-            commentFilterOptionsBottomSheetFragment.setArguments(bundle);
-            commentFilterOptionsBottomSheetFragment.show(getSupportFragmentManager(), commentFilterOptionsBottomSheetFragment.getTag());
+            if (comment != null) {
+                showCommentFilterOptions(comment, commentFilter);
+            } else {
+                CommentFilterOptionsBottomSheetFragment commentFilterOptionsBottomSheetFragment = new CommentFilterOptionsBottomSheetFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(CommentFilterOptionsBottomSheetFragment.EXTRA_COMMENT_FILTER, commentFilter);
+                commentFilterOptionsBottomSheetFragment.setArguments(bundle);
+                commentFilterOptionsBottomSheetFragment.show(getSupportFragmentManager(), commentFilterOptionsBottomSheetFragment.getTag());
+            }
         });
 
         binding.recyclerViewCommentFilterPreferenceActivity.setAdapter(adapter);
@@ -95,6 +109,32 @@ public class CommentFilterPreferenceActivity extends BaseActivity {
 
     public void deleteCommentFilter(CommentFilter commentFilter) {
         DeleteCommentFilter.deleteCommentFilter(redditDataRoomDatabase, executor, commentFilter);
+    }
+
+    public void showCommentFilterOptions(Comment comment, @Nullable CommentFilter commentFilter) {
+        String[] options = getResources().getStringArray(R.array.add_to_comment_filter_options);
+        boolean[] selectedOptions = new boolean[]{false};
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                .setTitle(R.string.select)
+                .setMultiChoiceItems(options, selectedOptions, (dialogInterface, i, b) -> selectedOptions[i] = b)
+                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+                    Intent intent = new Intent(CommentFilterPreferenceActivity.this, CustomizeCommentFilterActivity.class);
+                    if (commentFilter != null) {
+                        intent.putExtra(CustomizeCommentFilterActivity.EXTRA_COMMENT_FILTER, commentFilter);
+                    }
+                    intent.putExtra(CustomizeCommentFilterActivity.EXTRA_FROM_SETTINGS, true);
+                    for (int j = 0; j < selectedOptions.length; j++) {
+                        if (selectedOptions[j]) {
+                            switch (j) {
+                                case 0:
+                                    intent.putExtra(CustomizeCommentFilterActivity.EXTRA_EXCLUDE_USER, comment.getAuthor());
+                                    break;
+                            }
+                        }
+                    }
+                    startActivity(intent);
+                })
+                .show();
     }
 
     @Override

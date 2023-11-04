@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.Observer;
@@ -130,7 +131,7 @@ public class PostFilterPreferenceActivity extends BaseActivity {
         });
     }
 
-    public void showPostFilterOptions(Post post, PostFilter postFilter) {
+    public void showPostFilterOptions(Post post, @Nullable PostFilter postFilter) {
         String[] options = getResources().getStringArray(R.array.add_to_post_filter_options);
         boolean[] selectedOptions = new boolean[]{false, false, false, false, false, false};
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)

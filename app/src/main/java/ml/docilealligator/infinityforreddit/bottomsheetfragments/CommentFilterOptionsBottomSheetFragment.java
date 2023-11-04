@@ -7,9 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.CommentFilterPreferenceActivity;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
@@ -18,7 +16,7 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class CommentFilterOptionsBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
-    public static final String EXTRA_POST_FILTER = "EPF";
+    public static final String EXTRA_COMMENT_FILTER = "ECF";
     private CommentFilterPreferenceActivity activity;
 
     public CommentFilterOptionsBottomSheetFragment() {
@@ -31,7 +29,7 @@ public class CommentFilterOptionsBottomSheetFragment extends LandscapeExpandedRo
         // Inflate the layout for this fragment
         FragmentCommentFilterOptionsBottomSheetBinding binding = FragmentCommentFilterOptionsBottomSheetBinding.inflate(inflater, container, false);
 
-        CommentFilter commentFilter = getArguments().getParcelable(EXTRA_POST_FILTER);
+        CommentFilter commentFilter = getArguments().getParcelable(EXTRA_COMMENT_FILTER);
 
         binding.editTextViewCommentFilterOptionsBottomSheetFragment.setOnClickListener(view -> {
             activity.editCommentFilter(commentFilter);
