@@ -850,14 +850,8 @@ Redarea automată a videoclipurilor este dezactivată."</string>
     <string name="refresh">"Reîmprospătează"</string>
     <string name="change_sort_type">"Schimbă Tipul de Sortare"</string>
     <string name="change_post_layout">"Schimbă Aspectul Postării"</string>
-    <string name="give_award_dialog_title">"Acordă un premiu?"</string>
-    <string name="anonymous">"Anonim"</string>
 
     <!-- Fuzzy -->
-    <string name="give_award_error_message">"Cod: %1$d/
-Mesaj: %2$s"</string>
-    <string name="give_award_success">"Premiu acordat"</string>
-    <string name="give_award_failed">"A eșuat"</string>
     <string name="warning">"Avertisment"</string>
     <string name="this_is_a_nsfw_subreddit">"Acesta este un subreddit NSFW."</string>
     <string name="this_user_has_nsfw_content">"Acest utilizator are conținut NSFW"</string>

@@ -858,14 +858,8 @@ Automatické přehrávání videí je zakázáno."</string>
     <string name="refresh">"Obnovit"</string>
     <string name="change_sort_type">"Změnit typ řazení"</string>
     <string name="change_post_layout">"Změnit rozložení příspěvků"</string>
-    <string name="give_award_dialog_title">"Dát ocenění?"</string>
-    <string name="anonymous">"Anonymní"</string>
 
     <!-- Fuzzy -->
-    <string name="give_award_error_message">"Kód: %1$d/
-Zpráva: %2$s"</string>
-    <string name="give_award_success">"Ocenění uděleno"</string>
-    <string name="give_award_failed">"Selhání"</string>
     <string name="warning">"Varování"</string>
     <string name="this_is_a_nsfw_subreddit">"Toto je NSFW subreddit."</string>
     <string name="this_user_has_nsfw_content">"Tento uživatel má NSFW obsah"</string>

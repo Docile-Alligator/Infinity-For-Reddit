@@ -866,14 +866,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="refresh">"Обновить"</string>
     <string name="change_sort_type">"Изменить тип сортировки"</string>
     <string name="change_post_layout">"Изменить макет поста"</string>
-    <string name="give_award_dialog_title">"Выдать награду?"</string>
-    <string name="anonymous">"Аноним"</string>
 
     <!-- Fuzzy -->
-    <string name="give_award_error_message">"Код: %1$d/
-Сообщение: %2$s"</string>
-    <string name="give_award_success">"Награда выдана"</string>
-    <string name="give_award_failed">"Ошибка"</string>
     <string name="warning">"Предупреждение"</string>
     <string name="this_is_a_nsfw_subreddit">"Это NSFW-сабреддит"</string>
     <string name="this_user_has_nsfw_content">"У пользователь есть NSFW-контент"</string>

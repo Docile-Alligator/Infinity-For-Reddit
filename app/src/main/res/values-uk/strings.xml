@@ -854,14 +854,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="refresh">"Оновити"</string>
     <string name="change_sort_type">"Змінити тип сортування"</string>
     <string name="change_post_layout">"Змінити форму дописів"</string>
-    <string name="give_award_dialog_title">"Дати нагороду?"</string>
-    <string name="anonymous">"Анонімно"</string>
 
     <!-- Fuzzy -->
-    <string name="give_award_error_message">"Код: %1$d/
-Повідомлення: %2$s"</string>
-    <string name="give_award_success">"Дано нагороду"</string>
-    <string name="give_award_failed">"Не вдалося"</string>
     <string name="warning">"Попередження"</string>
     <string name="this_is_a_nsfw_subreddit">"Це сабредит НБДР."</string>
     <string name="this_user_has_nsfw_content">"У цього користувача є вміст НБДР"</string>

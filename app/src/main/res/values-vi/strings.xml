@@ -867,14 +867,8 @@ Tự động phát video bị tắt."</string>
     <string name="refresh">"Làm mới"</string>
     <string name="change_sort_type">"Thay đổi loại sắp xếp"</string>
     <string name="change_post_layout">"Thay đổi bố cục bài đăng"</string>
-    <string name="give_award_dialog_title">"Cho giải thưởng?"</string>
-    <string name="anonymous">"Vô danh"</string>
 
     <!-- Fuzzy -->
-    <string name="give_award_error_message">"Mã: %1$d/
-Thông báo: %2$s"</string>
-    <string name="give_award_success">"Giải thưởng đã được cho"</string>
-    <string name="give_award_failed">"Thất bại"</string>
     <string name="warning">"Cảnh báo"</string>
     <string name="this_is_a_nsfw_subreddit">"Đây là một subreddit NSFW."</string>
     <string name="this_user_has_nsfw_content">"Người dùng này có nội dung NSFW"</string>

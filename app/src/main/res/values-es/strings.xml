@@ -898,18 +898,12 @@ La reproducción automática de video está deshabilitada."</string>
     <string name="refresh">"Actualizar"</string>
     <string name="change_sort_type">"Cambiar orden"</string>
     <string name="change_post_layout">"Cambiar diseño"</string>
-    <string name="give_award_dialog_title">"¿Premiar?"</string>
-    <string name="anonymous">"Anónimo"</string>
 
     <!-- Código: %1$d/
 Mensaje: %2$s
 
 https://s3.eu-west-1.amazonaws.com/po-pub/i/hJAe7sMhrfJzqjhp9VkDQOVC.PNG -->
     <!-- Fuzzy -->
-    <string name="give_award_error_message">"Código: %1$d/
-Mensaje: %2$s"</string>
-    <string name="give_award_success">"Premiado"</string>
-    <string name="give_award_failed">"Falló"</string>
     <string name="warning">"Precaución"</string>
     <string name="this_is_a_nsfw_subreddit">"Este es un subreddit NSFW."</string>
     <string name="this_user_has_nsfw_content">"Este usuario tiene contenido NSFW"</string>

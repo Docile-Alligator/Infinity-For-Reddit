@@ -885,14 +885,8 @@ Automatisches Abspielen von Videos ist deaktiviert."</string>
     <string name="refresh">"Aktualisieren"</string>
     <string name="change_sort_type">"Sortiertyp ändern"</string>
     <string name="change_post_layout">"Beitragslayout ändern"</string>
-    <string name="give_award_dialog_title">"Auszeichnung verleihen?"</string>
-    <string name="anonymous">"Anonym"</string>
 
     <!-- Fuzzy -->
-    <string name="give_award_error_message">"Code: %1$d/
-Nachricht: %2$s"</string>
-    <string name="give_award_success">"Auszeichnung verliehen"</string>
-    <string name="give_award_failed">"Fehlgeschlagen"</string>
     <string name="warning">"Warnung"</string>
     <string name="this_is_a_nsfw_subreddit">"Dies ist ein NSFW-Subreddit."</string>
     <string name="this_user_has_nsfw_content">"Dieser Nutzer hat NSFW-Inhalte"</string>

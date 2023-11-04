@@ -950,13 +950,8 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="refresh">"Rafraîchir"</string>
     <string name="change_sort_type">"Changer l'ordre de tri"</string>
     <string name="change_post_layout">"Changer la disposition des posts"</string>
-    <string name="give_award_dialog_title">"Êtes-vous sûr de vouloir récompenser ce post ? "</string>
-    <string name="anonymous">"Anonyme"</string>
 
     <!-- Fuzzy -->
-    <string name="give_award_error_message">"Erreur: %2$s, code: %1$d/"</string>
-    <string name="give_award_success">"Succès ! "</string>
-    <string name="give_award_failed">"Échec de la récompense. "</string>
     <string name="warning">"Avertissement "</string>
     <string name="this_is_a_nsfw_subreddit">"Cette Subreddit est PSPT (Pas Sécurisé Pour le Travail) "</string>
     <string name="this_user_has_nsfw_content">"Cet utilisateur poste du contenu NSFW"</string>

@@ -804,12 +804,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="refresh">"Ανανέωση"</string>
     <string name="change_sort_type">"Αλλαγή τύπου ταξινόμησης"</string>
     <string name="change_post_layout">"Αλλαγή Διάταξης Ανάρτησης"</string>
-    <string name="give_award_dialog_title">"Να δωθεί Βραβείο;"</string>
-    <string name="anonymous">"Ανώνυμος"</string>
-    <string name="give_award_error_message">"Κωδικός: %1$d/
-Μήνυμα: %2$s"</string>
-    <string name="give_award_success">"Το βραβείο δόθηκε"</string>
-    <string name="give_award_failed">"Απέτυχε"</string>
     <string name="warning">"Προειδοποίηση"</string>
     <string name="this_is_a_nsfw_subreddit">"Πρόκειται για ένα NSFW subreddit."</string>
     <string name="this_user_has_nsfw_content">"Αυτός ο χρήστης έχει περιεχόμενο NSFW"</string>

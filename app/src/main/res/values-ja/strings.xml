@@ -946,14 +946,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="refresh">"更新"</string>
     <string name="change_sort_type">"並べ替えを変更"</string>
     <string name="change_post_layout">"表示レイアウトを変更"</string>
-    <string name="give_award_dialog_title">"アワードを贈りますか？"</string>
-    <string name="anonymous">"匿名"</string>
 
     <!-- Fuzzy -->
-    <string name="give_award_error_message">"コード: %1$d/
-メッセージ: %2$s"</string>
-    <string name="give_award_success">"アワードを贈りました"</string>
-    <string name="give_award_failed">"失敗しました"</string>
     <string name="warning">"警告"</string>
     <string name="this_is_a_nsfw_subreddit">"このSubredditはNSFWです"</string>
     <string name="this_user_has_nsfw_content">"このユーザーはNSFWの投稿を含んでいます"</string>

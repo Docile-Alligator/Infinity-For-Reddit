@@ -24,7 +24,6 @@ import ml.docilealligator.infinityforreddit.activities.EditProfileActivity;
 import ml.docilealligator.infinityforreddit.activities.FetchRandomSubredditOrPostActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.FullMarkdownActivity;
-import ml.docilealligator.infinityforreddit.activities.GiveAwardActivity;
 import ml.docilealligator.infinityforreddit.activities.HistoryActivity;
 import ml.docilealligator.infinityforreddit.activities.InboxActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
@@ -247,8 +246,6 @@ public interface AppComponent {
     void inject(NsfwAndSpoilerFragment nsfwAndSpoilerFragment);
 
     void inject(CustomizeBottomAppBarFragment customizeBottomAppBarFragment);
-
-    void inject(GiveAwardActivity giveAwardActivity);
 
     void inject(TranslationFragment translationFragment);
 

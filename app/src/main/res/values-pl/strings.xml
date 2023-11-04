@@ -864,14 +864,8 @@ Autoodtwarzanie filmów jest wyłączone."</string>
     <string name="refresh">"Odśwież"</string>
     <string name="change_sort_type">"Zmień typ sortowania"</string>
     <string name="change_post_layout">"Zmień układ postów"</string>
-    <string name="give_award_dialog_title">"Dać nagrodę?"</string>
-    <string name="anonymous">"Anonim"</string>
 
     <!-- Fuzzy -->
-    <string name="give_award_error_message">"Kod: %1$d/
-Wiadomość: %2$s"</string>
-    <string name="give_award_success">"Nagroda przyznana"</string>
-    <string name="give_award_failed">"Niepowodzenie"</string>
     <string name="warning">"Ostrzeżenie "</string>
     <string name="this_is_a_nsfw_subreddit">"To jest subreddit NSFW"</string>
     <string name="this_user_has_nsfw_content">"Ten użytkownik posiada treści NSFW"</string>

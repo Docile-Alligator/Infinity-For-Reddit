@@ -879,14 +879,8 @@ Reddit 视频分辨率较低。
     <string name="refresh">"刷新"</string>
     <string name="change_sort_type">"更改排序类型"</string>
     <string name="change_post_layout">"更改帖子布局"</string>
-    <string name="give_award_dialog_title">"给予奖励？"</string>
-    <string name="anonymous">"匿名"</string>
 
     <!-- Fuzzy -->
-    <string name="give_award_error_message">"错误代码：%1$d/
-错误信息：%2$s"</string>
-    <string name="give_award_success">"奖励已赠送"</string>
-    <string name="give_award_failed">"失败"</string>
     <string name="warning">"警告"</string>
     <string name="this_is_a_nsfw_subreddit">"这是一个 NSFW 版块。"</string>
     <string name="this_user_has_nsfw_content">"该用户有 NSFW 内容"</string>

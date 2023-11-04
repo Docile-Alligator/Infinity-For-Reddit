@@ -844,14 +844,8 @@ A reprodução automática de vídeos fica desativada."</string>
     <string name="refresh">"Atualizar"</string>
     <string name="change_sort_type">"Mudar modo de ordenação"</string>
     <string name="change_post_layout">"Mudar estrutura da postagem"</string>
-    <string name="give_award_dialog_title">"Dar prêmio?"</string>
-    <string name="anonymous">"Anônimo"</string>
 
     <!-- Fuzzy -->
-    <string name="give_award_error_message">"Código: %1$,d/
-Mensagem: %2$s"</string>
-    <string name="give_award_success">"Prêmio concedido"</string>
-    <string name="give_award_failed">"Falhou"</string>
     <string name="warning">"Aviso"</string>
     <string name="this_is_a_nsfw_subreddit">"Este é um subreddit NSFW."</string>
     <string name="this_user_has_nsfw_content">"Este usuário tem conteúdo NSFW"</string>

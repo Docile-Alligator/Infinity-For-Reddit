@@ -99,7 +99,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     public static final String EXTRA_POST_FRAGMENT_ID = "EPFI";
     public static final String EXTRA_IS_NSFW_SUBREDDIT = "EINS";
     public static final int EDIT_COMMENT_REQUEST_CODE = 3;
-    public static final int GIVE_AWARD_REQUEST_CODE = 100;
     @State
     String mNewAccountName;
     @BindView(R.id.coordinator_layout_view_post_detail)
@@ -777,14 +776,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                 editComment(null,
                         data.getStringExtra(EditCommentActivity.EXTRA_EDITED_COMMENT_CONTENT),
                         data.getExtras().getInt(EditCommentActivity.EXTRA_EDITED_COMMENT_POSITION));
-            }
-        } else if (requestCode == GIVE_AWARD_REQUEST_CODE) {
-            if (data != null && resultCode == Activity.RESULT_OK) {
-                Toast.makeText(this, R.string.give_award_success, Toast.LENGTH_SHORT).show();
-                int position = data.getIntExtra(GiveAwardActivity.EXTRA_RETURN_ITEM_POSITION, 0);
-                String newAwardsHTML = data.getStringExtra(GiveAwardActivity.EXTRA_RETURN_NEW_AWARDS);
-                int newAwardsCount = data.getIntExtra(GiveAwardActivity.EXTRA_RETURN_NEW_AWARDS_COUNT, 0);
-                awardGiven(newAwardsHTML, newAwardsCount, position);
             }
         } else if (requestCode == CommentActivity.WRITE_COMMENT_REQUEST_CODE) {
             if (data != null && resultCode == Activity.RESULT_OK) {

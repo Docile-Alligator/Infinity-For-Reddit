@@ -835,14 +835,8 @@ Videó autómatikus lejátszása le van tiltva."</string>
     <string name="refresh">"Frissítés"</string>
     <string name="change_sort_type">"Rendezés típus megváltoztatása"</string>
     <string name="change_post_layout">"Poszt elrendezése megváltoztatása"</string>
-    <string name="give_award_dialog_title">"Adsz kitüntetést?"</string>
-    <string name="anonymous">"Anoním"</string>
 
     <!-- Fuzzy -->
-    <string name="give_award_error_message">"Kód: %1$d/
-Üzenet %2$s"</string>
-    <string name="give_award_success">"Kitüntetés megadva"</string>
-    <string name="give_award_failed">"Nem sikerült"</string>
     <string name="warning">"Figyelem"</string>
     <string name="this_is_a_nsfw_subreddit">"Ez egy NSFW subreddit."</string>
     <string name="this_user_has_nsfw_content">"Ennek a felhasználónak van NSFW tartlama"</string>

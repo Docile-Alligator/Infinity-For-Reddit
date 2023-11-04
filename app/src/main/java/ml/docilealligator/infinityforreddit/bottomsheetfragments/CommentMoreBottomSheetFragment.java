@@ -21,7 +21,6 @@ import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentFilterPreferenceActivity;
 import ml.docilealligator.infinityforreddit.activities.EditCommentActivity;
-import ml.docilealligator.infinityforreddit.activities.GiveAwardActivity;
 import ml.docilealligator.infinityforreddit.activities.ReportActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
@@ -75,19 +74,6 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
         boolean showReplyAndSaveOption = bundle.getBoolean(EXTRA_SHOW_REPLY_AND_SAVE_OPTION, false);
 
         if (accessToken != null && !accessToken.equals("")) {
-            binding.giveAwardTextViewCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
-            binding.giveAwardTextViewCommentMoreBottomSheetFragment.setOnClickListener(view -> {
-                Intent intent = new Intent(activity, GiveAwardActivity.class);
-                intent.putExtra(GiveAwardActivity.EXTRA_THING_FULLNAME, comment.getFullName());
-                intent.putExtra(GiveAwardActivity.EXTRA_ITEM_POSITION, bundle.getInt(EXTRA_POSITION));
-                if (activity instanceof ViewPostDetailActivity) {
-                    activity.startActivityForResult(intent, ViewPostDetailActivity.GIVE_AWARD_REQUEST_CODE);
-                } else if (activity instanceof ViewUserDetailActivity) {
-                    activity.startActivityForResult(intent, ViewUserDetailActivity.GIVE_AWARD_REQUEST_CODE);
-                }
-                dismiss();
-            });
-
             if (editAndDeleteAvailable) {
                 binding.editTextViewCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
                 binding.deleteTextViewCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);

@@ -855,14 +855,8 @@ Reprodução automática de vídeos desativada."</string>
     <string name="refresh">"Atualizar"</string>
     <string name="change_sort_type">"Alterar Tipo de Ordenação"</string>
     <string name="change_post_layout">"Alterar Visualização de Publicações"</string>
-    <string name="give_award_dialog_title">"Premiar?"</string>
-    <string name="anonymous">"Anónimo"</string>
 
     <!-- Fuzzy -->
-    <string name="give_award_error_message">"Código: %1$d/
-Mensagem: %2$s"</string>
-    <string name="give_award_success">"Prémio oferecido"</string>
-    <string name="give_award_failed">"Falhou"</string>
     <string name="warning">"Aviso"</string>
     <string name="this_is_a_nsfw_subreddit">"Esta é uma comunidade 18+."</string>
     <string name="this_user_has_nsfw_content">"Este utilizador tem conteúdo 18+"</string>

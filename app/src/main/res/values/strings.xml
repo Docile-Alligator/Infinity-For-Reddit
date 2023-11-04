@@ -1091,12 +1091,6 @@
     <string name="change_sort_type">Change Sort Type</string>
     <string name="change_post_layout">Change Post Layout</string>
 
-    <string name="give_award_dialog_title">Give Award?</string>
-    <string name="anonymous">Anonymous</string>
-    <string name="give_award_error_message">Code: %1$d/\n Message: %2$s</string>
-    <string name="give_award_success">Award given</string>
-    <string name="give_award_failed">Failed</string>
-
     <string name="edited">Edited</string>
     <string name="edited_time">Edited on %s</string>
 

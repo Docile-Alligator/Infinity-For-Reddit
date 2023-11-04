@@ -808,12 +808,6 @@ La riproduzione automatica video è disabilitata."</string>
     <string name="refresh">"Ricarica"</string>
     <string name="change_sort_type">"Cambia il tipo di ordinamento"</string>
     <string name="change_post_layout">"Cambia il layout dei post"</string>
-    <string name="give_award_dialog_title">"Vuoi dare premio?"</string>
-    <string name="anonymous">"Anonimo"</string>
-    <string name="give_award_error_message">"Codice: %1$d/
-Messaggio: %2$s"</string>
-    <string name="give_award_success">"Premio conferito"</string>
-    <string name="give_award_failed">"Fallito"</string>
     <string name="warning">"Avvertimento"</string>
     <string name="this_is_a_nsfw_subreddit">"Questo è un subreddit marcato NSFW."</string>
     <string name="this_user_has_nsfw_content">"Questo utente è marcato NSFW"</string>

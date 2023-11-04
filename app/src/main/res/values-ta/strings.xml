@@ -107,7 +107,6 @@
     <!-- Fuzzy -->
     <string name="karma_info_user_detail">"கர்மம்:
 %1$d (%2$d + %3$d)"</string>
-    <string name="cakeday_info">"https://crowdin.com/"</string>
     <string name="profile">"சுயவிவரம்"</string>
     <string name="subscriptions">"குழுசேர்வுகள்"</string>
     <string name="multi_reddit">"பல்ரெட்டிட்"</string>
@@ -593,10 +592,6 @@
     <string name="refresh">"புத்துணர்வூட்டு"</string>
     <string name="change_sort_type">"வகைப்படுத்தல் வகையை மாற்று"</string>
     <string name="change_post_layout">"இடுகை தளவமைப்பை மாற்று"</string>
-    <string name="give_award_dialog_title">"விருதளிக்கவா?"</string>
-    <string name="anonymous">"அநாமதேய"</string>
-    <string name="give_award_success">"விருது அளிக்கப்பட்டது"</string>
-    <string name="give_award_failed">"தோல்வியுற்றது"</string>
     <string name="warning">"எச்சரிக்கை"</string>
     <string name="this_is_a_nsfw_subreddit">"இது ஓர் NSFW துணைரெட்டிட்."</string>
     <string name="this_user_has_nsfw_content">"இப்பயனர் NSFW உள்ளடக்கம் கொண்டுள்ளார்"</string>

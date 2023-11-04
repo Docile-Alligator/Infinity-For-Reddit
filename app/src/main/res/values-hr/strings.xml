@@ -897,14 +897,8 @@ Reddit videi su niže rezolucije."</string>
     <string name="refresh">"Osvježi"</string>
     <string name="change_sort_type">"Promijeni tip redosljeda"</string>
     <string name="change_post_layout">"Promjeni raspored objava"</string>
-    <string name="give_award_dialog_title">"Nagraditi?"</string>
-    <string name="anonymous">"Anonimno"</string>
 
     <!-- Fuzzy -->
-    <string name="give_award_error_message">"Kod: %1$d/
-Poruka: %2$s"</string>
-    <string name="give_award_success">"Nagrađeno"</string>
-    <string name="give_award_failed">"Nagrađivanje nije uspjelo"</string>
     <string name="warning">"Upozorenje"</string>
     <string name="this_is_a_nsfw_subreddit">"Ovo je NSFW podreddit."</string>
     <string name="this_user_has_nsfw_content">"Ovaj korisnik ima NSFW sadržaj"</string>

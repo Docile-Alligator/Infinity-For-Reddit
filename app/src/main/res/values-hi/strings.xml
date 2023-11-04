@@ -934,14 +934,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="refresh">"ताजा करें "</string>
     <string name="change_sort_type">"क्रम प्रकार बदलें"</string>
     <string name="change_post_layout">"पोस्ट विन्यास बदलें "</string>
-    <string name="give_award_dialog_title">"पुरस्कार दें? "</string>
-    <string name="anonymous">"अज्ञात"</string>
 
     <!-- Fuzzy -->
-    <string name="give_award_error_message">"कूट: %1$d
-संदेश: %2$s"</string>
-    <string name="give_award_success">"पुरस्कार दे दिया गया "</string>
-    <string name="give_award_failed">"असफल "</string>
     <string name="warning">"चेतावनी "</string>
     <string name="this_is_a_nsfw_subreddit">"यह एक NSFW सबरैडिट है "</string>
     <string name="this_user_has_nsfw_content">"इस यूजर के पास NSFW सामग्री है। "</string>
