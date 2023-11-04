@@ -284,7 +284,14 @@ public class ParsePost {
                             spoiler, nsfw, stickied, archived, locked, saved, isCrosspost, distinguished, suggestedSort);
 
                     if (previews.isEmpty()) {
-                        previews.add(new Post.Preview(url, 0, 0, "", ""));
+                        if ("i.redgifs.com".equals(uri.getAuthority())) {
+                            //No preview link (Not able to load redgifs image)
+                            post.setPostType(Post.NO_PREVIEW_LINK_TYPE);
+                        } else {
+                            previews.add(new Post.Preview(url, 0, 0, "", ""));
+                        }
+                    } else if ("i.redgifs.com".equals(uri.getAuthority())) {
+                        post.setUrl(previews.get(previews.size() - 1).getPreviewUrl());
                     }
                     post.setPreviews(previews);
                 } else {
@@ -423,7 +430,14 @@ public class ParsePost {
                                 distinguished, suggestedSort);
 
                         if (previews.isEmpty()) {
-                            previews.add(new Post.Preview(url, 0, 0, "", ""));
+                            if ("i.redgifs.com".equals(uri.getAuthority())) {
+                                //No preview link (Not able to load redgifs image)
+                                post.setPostType(Post.NO_PREVIEW_LINK_TYPE);
+                            } else {
+                                previews.add(new Post.Preview(url, 0, 0, "", ""));
+                            }
+                        } else if ("i.redgifs.com".equals(uri.getAuthority())) {
+                            post.setUrl(previews.get(previews.size() - 1).getPreviewUrl());
                         }
                         post.setPreviews(previews);
                     } else if (path.endsWith(".gif")) {
@@ -533,7 +547,14 @@ public class ParsePost {
                             spoiler, nsfw, stickied, archived, locked, saved, isCrosspost, distinguished, suggestedSort);
 
                     if (previews.isEmpty()) {
-                        previews.add(new Post.Preview(url, 0, 0, "", ""));
+                        if ("i.redgifs.com".equals(uri.getAuthority())) {
+                            //No preview link (Not able to load redgifs image)
+                            post.setPostType(Post.NO_PREVIEW_LINK_TYPE);
+                        } else {
+                            previews.add(new Post.Preview(url, 0, 0, "", ""));
+                        }
+                    } else if ("i.redgifs.com".equals(uri.getAuthority())) {
+                        post.setUrl(previews.get(previews.size() - 1).getPreviewUrl());
                     }
                     post.setPreviews(previews);
                 } else if (path.endsWith(".mp4")) {
