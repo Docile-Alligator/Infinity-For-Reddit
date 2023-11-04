@@ -135,7 +135,6 @@
     <!-- What posts the app shows when I select this?
 (1) My posts that someone gave (gold or better only?) rewards for me.
 (2) Someone's posts that I gave (gold or better only?) rewards for them. -->
-    <string name="gilded">"アワードを贈った投稿"</string>
     <string name="settings">"設定"</string>
 
     <!-- Fuzzy -->
@@ -441,8 +440,6 @@
     <string name="settings_credits_icon_background_summary">"freepikにより作成されたBackground vectorを使用しています - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"エラー時の画像"</string>
     <string name="settings_credits_error_image_summary">"freepikにより作成されたTechnology vectorを使用しています - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"アワードアイコン"</string>
-    <string name="settings_credits_gilded_icon_summary">"Freepikにより作成されたアイコンを使用しています - www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"クロスポストアイコン"</string>
     <string name="settings_credits_crosspost_icon_summary">"Freepikにより作成されたアイコンを使用しています - www.flaticon.com"</string>
     <string name="settings_credits_thumbtack_icon_title">"画鋲アイコン"</string>

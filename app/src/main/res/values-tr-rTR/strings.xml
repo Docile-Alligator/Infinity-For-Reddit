@@ -123,7 +123,6 @@ This translation does it work well in this kinda format. People use "since" in s
     <string name="downvoted">"Olumsuz Oylananlar"</string>
     <string name="hidden">"Gizlenenler"</string>
     <string name="saved">"Kaydedilenler"</string>
-    <string name="gilded">"Yaldızlananlar"</string>
     <string name="settings">"Ayarlar"</string>
     <string name="subscribers_number_detail">"Aboneler: %1$,d"</string>
     <string name="online_subscribers_number_detail">"Çevrimiçi: %1$,d"</string>
@@ -388,8 +387,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_credits_icon_background_summary">"Freepik tarafından oluşturulan arka plan vektörü - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Hata Görüntüsü"</string>
     <string name="settings_credits_error_image_summary">"Freepik tarafından oluşturulan teknoloji vektörü - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Yaldızlı Simge"</string>
-    <string name="settings_credits_gilded_icon_summary">"Freepik tarafından www.flaticon.com adresinden yapılan simge"</string>
     <string name="settings_credits_crosspost_icon_title">"Çapraz Gönderi Simgesi"</string>
     <string name="settings_credits_crosspost_icon_summary">"Freepik tarafından www.flaticon.com adresinden yapılan simge"</string>
     <string name="settings_credits_thumbtack_icon_title">"Raptiye Simgesi"</string>

@@ -120,7 +120,6 @@
     <string name="downvoted">"Označeno glasom dolje"</string>
     <string name="hidden">"Skriveno"</string>
     <string name="saved">"Spremljeno"</string>
-    <string name="gilded">"Pozlaćeno"</string>
     <string name="settings">"Postavke"</string>
 
     <!-- Fuzzy -->
@@ -408,8 +407,6 @@
     <string name="settings_credits_icon_background_summary">"Pozadinski vektor stvorio freepik - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Slika pogreške"</string>
     <string name="settings_credits_error_image_summary">"Tehnološki vektor stvorio freepik - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Ikona pozlaćenog"</string>
-    <string name="settings_credits_gilded_icon_summary">"Ikonu stvorio Freepik s www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"Ikona crossposta"</string>
     <string name="settings_credits_crosspost_icon_summary">"Ikonu stvorio Freepik s www.flaticon.com"</string>
     <string name="settings_credits_thumbtack_icon_title">"Thumbtack ikona"</string>

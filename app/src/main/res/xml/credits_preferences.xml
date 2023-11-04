@@ -18,11 +18,6 @@
         android:summary="@string/settings_credits_error_image_summary" />
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
-        android:key="gilded_icon"
-        app:title="@string/settings_credits_gilded_icon_title"
-        android:summary="@string/settings_credits_gilded_icon_summary" />
-
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         android:key="crosspost_icon"
         app:title="@string/settings_credits_crosspost_icon_title"
         android:summary="@string/settings_credits_crosspost_icon_summary" />

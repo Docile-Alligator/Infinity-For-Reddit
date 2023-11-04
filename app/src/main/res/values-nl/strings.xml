@@ -119,7 +119,6 @@ Druk om opnieuw te proberen."</string>
     <string name="downvoted">"Omlaagstemmen"</string>
     <string name="hidden">"Verborgen"</string>
     <string name="saved">"Opgeslagen"</string>
-    <string name="gilded">"Verguld"</string>
     <string name="settings">"Instellingen"</string>
 
     <!-- Fuzzy -->
@@ -392,8 +391,6 @@ Druk om opnieuw te proberen."</string>
     <string name="settings_credits_icon_background_summary">"De achtergrondvector is gemaakt door freepik - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Foutmeldingsafbeelding"</string>
     <string name="settings_credits_error_image_summary">"De technologievector is gemaakt door freepik - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Verguld pictogram"</string>
-    <string name="settings_credits_gilded_icon_summary">"Dit pictogram is gemaakt door Freepik - www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"Crosspost-pictogram"</string>
     <string name="settings_credits_crosspost_icon_summary">"Dit pictogram is gemaakt door Freepik - www.flaticon.com"</string>
     <string name="settings_credits_thumbtack_icon_title">"Miniatuurpictogram"</string>

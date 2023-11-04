@@ -124,7 +124,6 @@ Toque para tentar de novo."</string>
     <string name="downvoted">"Votado contra"</string>
     <string name="hidden">"Oculto"</string>
     <string name="saved">"Salvo"</string>
-    <string name="gilded">"Premiações"</string>
     <string name="settings">"Ajustes"</string>
     <string name="subscribers_number_detail">"Inscritos: %1$,d"</string>
     <string name="online_subscribers_number_detail">"Online: %1$,d"</string>
@@ -381,8 +380,6 @@ Toque para tentar de novo."</string>
     <string name="settings_credits_icon_background_summary">"Vetor de fundo criado por Freepik - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Erro na imagem"</string>
     <string name="settings_credits_error_image_summary">"Vetor de tecnologia criado por Freepik - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Ícone de Prêmio"</string>
-    <string name="settings_credits_gilded_icon_summary">"Ícone feito por Freepik - www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"Ícone da postagem cruzada"</string>
     <string name="settings_credits_crosspost_icon_summary">"Ícone feito por Freepik - www.flaticon.com"</string>
     <string name="settings_credits_thumbtack_icon_title">"Ícone do Thumbtack"</string>

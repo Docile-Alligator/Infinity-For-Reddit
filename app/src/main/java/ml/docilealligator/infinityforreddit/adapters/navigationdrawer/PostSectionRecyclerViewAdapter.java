@@ -22,7 +22,7 @@ public class PostSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
     private static final int VIEW_TYPE_MENU_GROUP_TITLE = 1;
     private static final int VIEW_TYPE_MENU_ITEM = 2;
-    private static final int POST_SECTION_ITEMS = 5;
+    private static final int POST_SECTION_ITEMS = 4;
 
     private BaseActivity baseActivity;
     private int primaryTextColor;
@@ -73,10 +73,10 @@ public class PostSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
             holder.itemView.setOnClickListener(view -> {
                 if (collapsePostSection) {
-                    collapsePostSection = !collapsePostSection;
+                    collapsePostSection = false;
                     notifyItemRangeInserted(holder.getBindingAdapterPosition() + 1, POST_SECTION_ITEMS);
                 } else {
-                    collapsePostSection = !collapsePostSection;
+                    collapsePostSection = true;
                     notifyItemRangeRemoved(holder.getBindingAdapterPosition() + 1, POST_SECTION_ITEMS);
                 }
                 notifyItemChanged(holder.getBindingAdapterPosition());
@@ -102,10 +102,6 @@ public class PostSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                     case 4:
                         stringId = R.string.account_saved_thing_activity_label;
                         drawableId = R.drawable.ic_outline_bookmarks_24dp;
-                        break;
-                    case 5:
-                        stringId = R.string.gilded;
-                        drawableId = R.drawable.ic_star_border_24dp;
                         break;
                 }
             }

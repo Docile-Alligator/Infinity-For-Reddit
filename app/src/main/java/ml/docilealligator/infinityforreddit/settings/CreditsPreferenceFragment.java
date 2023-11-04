@@ -25,7 +25,6 @@ public class CreditsPreferenceFragment extends CustomFontPreferenceFragmentCompa
         Preference iconForegroundPreference = findPreference(SharedPreferencesUtils.ICON_FOREGROUND_KEY);
         Preference iconBackgroundPreference = findPreference(SharedPreferencesUtils.ICON_BACKGROUND_KEY);
         Preference errorImagePreference = findPreference(SharedPreferencesUtils.ERROR_IMAGE_KEY);
-        Preference gildedIconPreference = findPreference(SharedPreferencesUtils.GILDED_ICON_KEY);
         Preference crosspostIconPreference = findPreference(SharedPreferencesUtils.CROSSPOST_ICON_KEY);
         Preference thumbtackIconPreference = findPreference(SharedPreferencesUtils.THUMBTACK_ICON_KEY);
         Preference bestRocketIconPreference = findPreference(SharedPreferencesUtils.BEST_ROCKET_ICON_KEY);
@@ -57,15 +56,6 @@ public class CreditsPreferenceFragment extends CustomFontPreferenceFragmentCompa
             errorImagePreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(activity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://www.freepik.com/free-photos-vectors/technology"));
-                startActivity(intent);
-                return true;
-            });
-        }
-
-        if (gildedIconPreference != null) {
-            gildedIconPreference.setOnPreferenceClickListener(preference -> {
-                Intent intent = new Intent(activity, LinkResolverActivity.class);
-                intent.setData(Uri.parse("https://br.flaticon.com/icone-gratis/medalha_1007239"));
                 startActivity(intent);
                 return true;
             });

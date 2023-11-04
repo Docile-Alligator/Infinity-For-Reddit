@@ -122,7 +122,6 @@
     <string name="downvoted">"Hlasováno proti"</string>
     <string name="hidden">"Skryté"</string>
     <string name="saved">"Uložené"</string>
-    <string name="gilded">"Pozlacené"</string>
     <string name="settings">"Nastavení"</string>
 
     <!-- Fuzzy -->
@@ -389,8 +388,6 @@
     <string name="settings_credits_icon_background_summary">"Vektor pozadí vytvořil Freepik - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Obrázek chyby"</string>
     <string name="settings_credits_error_image_summary">"Vektor technologie vytvořil Freepik - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Ikona pozlacených"</string>
-    <string name="settings_credits_gilded_icon_summary">"Ikonu vytvořil Freepik z www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"Ikona crosspostu"</string>
     <string name="settings_credits_crosspost_icon_summary">"Ikonu vytvořil Freepik z www.flaticon.com"</string>
     <string name="settings_credits_thumbtack_icon_title">"Ikona palce"</string>

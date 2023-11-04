@@ -124,7 +124,6 @@ Tippen für Neuversuch."</string>
     <string name="downvoted">"Downgevotet"</string>
     <string name="hidden">"Versteckt"</string>
     <string name="saved">"Gespeichert"</string>
-    <string name="gilded">"Vergoldet"</string>
     <string name="settings">"Einstellungen"</string>
     <string name="subscribers_number_detail">"Abonnenten: %1$,d"</string>
     <string name="online_subscribers_number_detail">"Online: %1$,d"</string>
@@ -399,8 +398,6 @@ Tippen für Neuversuch."</string>
     <string name="settings_credits_icon_background_summary">"Hintergrund Vektor von freepik erstellt - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Fehlerbild"</string>
     <string name="settings_credits_error_image_summary">"Technologie Vektor von freepik erstellt - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Vergoldet Symbol"</string>
-    <string name="settings_credits_gilded_icon_summary">"Symbol von Freepik von www.flaticon.com erstellt"</string>
     <string name="settings_credits_crosspost_icon_title">"Crosspost-Symbol"</string>
     <string name="settings_credits_crosspost_icon_summary">"Symbol von Freepik von www.flaticon.com erstellt"</string>
     <string name="settings_credits_thumbtack_icon_title">"Reißzwecken-Symbol"</string>

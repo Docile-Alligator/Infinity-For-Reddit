@@ -100,8 +100,6 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
             binding.accountPostsToolbar.setTitle(R.string.downvoted);
         } else if (mUserWhere.equals(PostPagingSource.USER_WHERE_HIDDEN)) {
             binding.accountPostsToolbar.setTitle(R.string.hidden);
-        } else if (mUserWhere.equals(PostPagingSource.USER_WHERE_GILDED)) {
-            binding.accountPostsToolbar.setTitle(R.string.gilded);
         }
 
         setSupportActionBar(binding.accountPostsToolbar);

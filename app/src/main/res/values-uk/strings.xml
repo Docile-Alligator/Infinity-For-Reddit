@@ -122,7 +122,6 @@
     <string name="downvoted">"Голоси вниз"</string>
     <string name="hidden">"Приховане"</string>
     <string name="saved">"Збережено"</string>
-    <string name="gilded">"Позолочене"</string>
     <string name="settings">"Налаштування"</string>
 
     <!-- Fuzzy -->
@@ -385,8 +384,6 @@
     <string name="settings_credits_icon_background_summary">"Векторне тло створене freepik - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Зображення помилки"</string>
     <string name="settings_credits_error_image_summary">"Векторна технологія створена freepik - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Значок позолоченого"</string>
-    <string name="settings_credits_gilded_icon_summary">"Автор значка Freepik із www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"Значок передопису"</string>
     <string name="settings_credits_crosspost_icon_summary">"Автор значка Freepik із www.flaticon.com"</string>
     <string name="settings_credits_thumbtack_icon_title">"Значок пришпильки"</string>

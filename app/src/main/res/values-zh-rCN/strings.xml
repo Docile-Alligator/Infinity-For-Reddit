@@ -120,7 +120,6 @@
     <string name="downvoted">"踩过"</string>
     <string name="hidden">"已隐藏"</string>
     <string name="saved">"已保存"</string>
-    <string name="gilded">"镀金帖"</string>
     <string name="settings">"设置"</string>
     <string name="subscribers_number_detail">"关注者：%1$d"</string>
     <string name="online_subscribers_number_detail">"在线：%1$d"</string>
@@ -393,8 +392,6 @@
     <string name="settings_credits_icon_background_summary">"来自 freepik - www.freepik.com 的背景矢量图"</string>
     <string name="settings_credits_error_image_title">"错误图片"</string>
     <string name="settings_credits_error_image_summary">"来自 freepik - www.freepik.com 的科技矢量图"</string>
-    <string name="settings_credits_gilded_icon_title">"镀金图标"</string>
-    <string name="settings_credits_gilded_icon_summary">"图标由来自 www.flaticon.com 的 Freepik 制作"</string>
     <string name="settings_credits_crosspost_icon_title">"转发图标"</string>
     <string name="settings_credits_crosspost_icon_summary">"图标由来自 www.flaticon.com 的 Freepik 制作"</string>
     <string name="settings_credits_thumbtack_icon_title">"图钉图标"</string>

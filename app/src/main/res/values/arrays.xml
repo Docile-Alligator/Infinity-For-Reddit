@@ -208,7 +208,6 @@
         <item>@string/downvoted</item>
         <item>@string/hidden</item>
         <item>@string/saved</item>
-        <item>@string/gilded</item>
     </string-array>
 
     <string-array name="settings_tab_post_type_anonymous">
@@ -307,7 +306,6 @@
         <item>@string/downvoted</item>
         <item>@string/hidden</item>
         <item>@string/saved</item>
-        <item>@string/gilded</item>
         <item>@string/go_to_top</item>
     </string-array>
 
@@ -359,7 +357,6 @@
         <item>@string/downvoted</item>
         <item>@string/hidden</item>
         <item>@string/saved</item>
-        <item>@string/gilded</item>
         <item>@string/go_to_top</item>
     </string-array>
 

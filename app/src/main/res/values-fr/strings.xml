@@ -130,7 +130,6 @@ Appuyez pour réessayer."</string>
     <string name="downvoted">"Voté contre"</string>
     <string name="hidden">"Masquée"</string>
     <string name="saved">"Enregistrée"</string>
-    <string name="gilded">"Dorée"</string>
     <string name="settings">"Paramètres"</string>
 
     <!-- Fuzzy -->
@@ -444,8 +443,6 @@ peut ne pas fonctionner sur Android 11"</string>
     <string name="settings_credits_icon_background_summary">"Vecteur d'arrière plan créé par freepik - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Image d'erreur"</string>
     <string name="settings_credits_error_image_summary">"Vecteur technologique créé par freepik - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Icône dorée"</string>
-    <string name="settings_credits_gilded_icon_summary">"Icône créée par freepik depuis www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"Icône de publication multiple"</string>
     <string name="settings_credits_crosspost_icon_summary">"Icône créée par freepik depuis www.flaticon.com"</string>
     <string name="settings_credits_thumbtack_icon_title">"Icône Épingle"</string>

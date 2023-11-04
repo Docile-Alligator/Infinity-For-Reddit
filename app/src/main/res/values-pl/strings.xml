@@ -117,7 +117,6 @@ Naciśnij, aby spróbować ponownie."</string>
     <string name="downvoted">"Dano downvote"</string>
     <string name="hidden">"Ukryte"</string>
     <string name="saved">"Zapisane"</string>
-    <string name="gilded">"Nagrodzone"</string>
     <string name="settings">"Ustawienia"</string>
 
     <!-- Fuzzy -->
@@ -388,8 +387,6 @@ Naciśnij, aby spróbować ponownie."</string>
     <string name="settings_credits_icon_background_summary">"Background vector created by freepik - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Zdjęcie błędu"</string>
     <string name="settings_credits_error_image_summary">"Technology vector created by freepik - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Pozłacana ikona"</string>
-    <string name="settings_credits_gilded_icon_summary">"Icon made by Freepik from www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"Ikona crosspostu"</string>
     <string name="settings_credits_crosspost_icon_summary">"Icon made by Freepik from www.flaticon.com"</string>
     <string name="settings_credits_thumbtack_icon_title">"Ikona pinezki"</string>

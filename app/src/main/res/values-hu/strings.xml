@@ -102,7 +102,6 @@
     <string name="downvoted">"Leszavazott"</string>
     <string name="hidden">"Rejtett"</string>
     <string name="saved">"Mentett"</string>
-    <string name="gilded">"Jutalmazott"</string>
     <string name="settings">"Beállítások"</string>
 
     <!-- Fuzzy -->
@@ -359,8 +358,6 @@
     <string name="settings_credits_icon_background_summary">"A háttér vektort a freepik készítette - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Kép hiba"</string>
     <string name="settings_credits_error_image_summary">"A technológia vektort a freepik készítette - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Jutalmazott ikon"</string>
-    <string name="settings_credits_gilded_icon_summary">"Az ikont a Freepik készítette a www.flaticon.com-ról"</string>
     <string name="settings_credits_crosspost_icon_title">"Crossposzt ikon"</string>
     <string name="settings_credits_crosspost_icon_summary">"Az ikont a Freepik készítette a www.flaticon.com-ról"</string>
     <string name="settings_credits_thumbtack_icon_title">"Rajzszög ikon"</string>

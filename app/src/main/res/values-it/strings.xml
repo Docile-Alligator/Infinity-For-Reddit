@@ -108,7 +108,6 @@ Tocca per riprovare."</string>
     <string name="downvoted">"Downvotato"</string>
     <string name="hidden">"Nascosto"</string>
     <string name="saved">"Salvato"</string>
-    <string name="gilded">"Premiati"</string>
     <string name="settings">"Impostazioni"</string>
     <string name="subscribers_number_detail">"Iscritti: %1$,d"</string>
     <string name="online_subscribers_number_detail">"In linea: %1$,d"</string>
@@ -359,8 +358,6 @@ Tocca per riprovare."</string>
     <string name="settings_credits_icon_background_summary">"Sfondo vettoriale creato da freepik - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Immagine di Errore"</string>
     <string name="settings_credits_error_image_summary">"Technology vector creato da freepik - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Icona \"Premiato\""</string>
-    <string name="settings_credits_gilded_icon_summary">"Icona creata da Freepik su www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"Icona \"Cross Post\""</string>
     <string name="settings_credits_crosspost_icon_summary">"Icona creata da Freepik su www.flaticon.com"</string>
     <string name="settings_credits_thumbtack_icon_title">"Icona \"Puntina da disegno\""</string>

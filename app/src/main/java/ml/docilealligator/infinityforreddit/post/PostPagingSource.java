@@ -40,7 +40,6 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     public static final String USER_WHERE_DOWNVOTED = "downvoted";
     public static final String USER_WHERE_HIDDEN = "hidden";
     public static final String USER_WHERE_SAVED = "saved";
-    public static final String USER_WHERE_GILDED = "gilded";
 
     private Executor executor;
     private Retrofit retrofit;

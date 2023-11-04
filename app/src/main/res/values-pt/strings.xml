@@ -122,7 +122,6 @@ Toque para tentar novamente."</string>
     <string name="downvoted">"Voto Negativo"</string>
     <string name="hidden">"Escondido"</string>
     <string name="saved">"Guardado"</string>
-    <string name="gilded">"Dourado"</string>
     <string name="settings">"Definições"</string>
 
     <!-- Fuzzy -->
@@ -396,8 +395,6 @@ Toque para tentar novamente."</string>
     <string name="settings_credits_icon_background_summary">"Vetor tecnológico criado por freepik - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Imagem de Erro"</string>
     <string name="settings_credits_error_image_summary">"Vetor tecnológico criado por freepik - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Ícone Dourado"</string>
-    <string name="settings_credits_gilded_icon_summary">"Ícone criado por Freepik da www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"Ícone de Republicação"</string>
     <string name="settings_credits_crosspost_icon_summary">"Ícone criado por Freepik da www.flaticon.com"</string>
     <string name="settings_credits_thumbtack_icon_title">"Ícone Thumbtack"</string>

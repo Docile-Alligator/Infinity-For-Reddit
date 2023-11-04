@@ -125,7 +125,6 @@
     <string name="downvoted">"Голос-"</string>
     <string name="hidden">"Скрытые"</string>
     <string name="saved">"Сохранённые"</string>
-    <string name="gilded">"Позолоченные"</string>
     <string name="settings">"Настройки"</string>
 
     <!-- Fuzzy -->
@@ -396,8 +395,6 @@
     <string name="settings_credits_icon_background_summary">"Фоновый вектор, созданный freepik из www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Ошибка изображения"</string>
     <string name="settings_credits_error_image_summary">"Технологический вектор, созданный freepik из www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Значок золота"</string>
-    <string name="settings_credits_gilded_icon_summary">"Значок создан Freepik из www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"Значок кросспоста"</string>
     <string name="settings_credits_crosspost_icon_summary">"Значок создан Freepik из www.flaticon.com"</string>
     <string name="settings_credits_thumbtack_icon_title">"Значок канцелярской кнопки"</string>

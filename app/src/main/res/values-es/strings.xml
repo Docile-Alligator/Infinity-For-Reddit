@@ -128,7 +128,6 @@ Toca para reintentar."</string>
     <string name="downvoted">"Downvoted"</string>
     <string name="hidden">"Oculto"</string>
     <string name="saved">"Guardado"</string>
-    <string name="gilded">"Premiado"</string>
     <string name="settings">"Configuración"</string>
 
     <!-- Fuzzy -->
@@ -408,8 +407,6 @@ Premio means prize, so it's better suited the first word instead of the second o
     <string name="settings_credits_icon_background_summary">"Vector de fondo creado por Freepik - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Imagen de Error"</string>
     <string name="settings_credits_error_image_summary">"Vector de tecnología creado por Freepik - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Ícono de Gold"</string>
-    <string name="settings_credits_gilded_icon_summary">"Ícono hecho por Freepik desde www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"Ícono de crosspost
 "</string>
     <string name="settings_credits_crosspost_icon_summary">"Ícono hecho por Freepik desde www.flaticon.com"</string>

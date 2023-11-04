@@ -102,7 +102,6 @@
     <string name="downvoted">"Καταψηφίστηκε"</string>
     <string name="hidden">"Κρύφτηκε"</string>
     <string name="saved">"Αποθηκεύτηκε"</string>
-    <string name="gilded">"Επιχρυσωμένο"</string>
     <string name="settings">"Ρυθμήσεις"</string>
     <string name="subscribers_number_detail">"Εγγραφές: %1$,d"</string>
     <string name="online_subscribers_number_detail">"Ενεργοί: %1$,d"</string>
@@ -352,8 +351,6 @@
     <string name="settings_credits_icon_background_summary">"Διάνυσμα Παρασκηνίου δημιουργήθηκε από freepik - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Σφάλμα Εικόνας"</string>
     <string name="settings_credits_error_image_summary">"Διάνυσμα Τεχνολογίας δημιουργήθηκε από freepik - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Εικονίδιο Επιχρυσωμένο"</string>
-    <string name="settings_credits_gilded_icon_summary">"Εικονίδιο έγινε από τον Freepik από www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"Εικονίδιο Αναδημοσίευσης"</string>
     <string name="settings_credits_crosspost_icon_summary">"Εικονίδιο έγινε από τον Freepik από www.flaticon.com"</string>
     <string name="settings_credits_thumbtack_icon_title">"Εικονίδιο Thumbtack"</string>

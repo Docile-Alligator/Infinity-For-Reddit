@@ -147,7 +147,6 @@
     <string name="downvoted">Downvoted</string>
     <string name="hidden">Hidden</string>
     <string name="saved">Saved</string>
-    <string name="gilded">Gilded</string>
     <string name="settings">Settings</string>
     <string name="subscribers_number_detail">Subscribers: %1$,d</string>
     <string name="online_subscribers_number_detail">Online: %1$,d</string>
@@ -462,8 +461,6 @@
     <string name="settings_credits_icon_background_summary">Background vector created by freepik - www.freepik.com</string>
     <string name="settings_credits_error_image_title">Error Image</string>
     <string name="settings_credits_error_image_summary">Technology vector created by freepik - www.freepik.com</string>
-    <string name="settings_credits_gilded_icon_title">Gilded Icon</string>
-    <string name="settings_credits_gilded_icon_summary">Icon made by Freepik from www.flaticon.com</string>
     <string name="settings_credits_crosspost_icon_title">Crosspost Icon</string>
     <string name="settings_credits_crosspost_icon_summary">Icon made by Freepik from www.flaticon.com</string>
     <string name="settings_credits_thumbtack_icon_title">Thumbtack Icon</string>

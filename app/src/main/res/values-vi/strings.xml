@@ -116,7 +116,6 @@
     <string name="downvoted">"Không thích"</string>
     <string name="hidden">"Ẩn"</string>
     <string name="saved">"Lưu"</string>
-    <string name="gilded">"Mạ vàng"</string>
     <string name="settings">"Cài đặt"</string>
 
     <!-- Fuzzy -->
@@ -398,8 +397,6 @@ Nhấn để thử lại."</string>
     <string name="settings_credits_icon_background_summary">"Véc tơ nền được tạo bởi freepik - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Hình ảnh lỗi"</string>
     <string name="settings_credits_error_image_summary">"Véc tơ công nghệ được tạo bởi freepik - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Biểu tượng mạ vàng"</string>
-    <string name="settings_credits_gilded_icon_summary">"Biểu tượng được tạo bởi Freepik từ www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"Biểu tượng bài đăng chéo"</string>
     <string name="settings_credits_crosspost_icon_summary">"Biểu tượng được tạo bởi Freepik từ www.flaticon.com"</string>
     <string name="settings_credits_thumbtack_icon_title">"Biểu tượng đinh ghim"</string>

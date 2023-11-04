@@ -122,7 +122,6 @@ Apăsați pentru reîncercare."</string>
     <string name="downvoted">"Downvote-uri"</string>
     <string name="hidden">"Ascuns"</string>
     <string name="saved">"Salvat"</string>
-    <string name="gilded">"Premiat"</string>
     <string name="settings">"Setări"</string>
 
     <!-- Fuzzy -->
@@ -383,8 +382,6 @@ Apăsați pentru reîncărcare."</string>
     <string name="settings_credits_icon_background_summary">"Vector de fundal creat de freepik - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Imagine de eroare"</string>
     <string name="settings_credits_error_image_summary">"Vector tehnic creat de freepik - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"Pictograma premiului"</string>
-    <string name="settings_credits_gilded_icon_summary">"Pictogramă creată de Freepik - www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"Pictogramă Crosspost"</string>
     <string name="settings_credits_crosspost_icon_summary">"Pictogramă creată de Freepik - www.flaticon.com"</string>
     <string name="settings_credits_thumbtack_icon_title">"Pictogramă pioneză"</string>

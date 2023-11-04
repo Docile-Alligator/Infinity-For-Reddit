@@ -133,7 +133,6 @@
     <string name="hidden">"छिपी हुई"</string>
     <string name="saved">"सहेजी हुई
 "</string>
-    <string name="gilded">"पदक प्राप्त"</string>
     <string name="settings">"सैटिंग्स"</string>
 
     <!-- Fuzzy -->
@@ -438,8 +437,6 @@ Behavior -->
     <string name="settings_credits_icon_background_summary">"ब्याकग्राउंड डिज़ाइन बनाया हे फ्रीपिक - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"त्रुटि चित्र "</string>
     <string name="settings_credits_error_image_summary">"प्रौद्योगिकी डिज़ाइन बनाया हे फ्रीपिक - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"पदक आइकॉन "</string>
-    <string name="settings_credits_gilded_icon_summary">"फ्रीपिक द्वारा आइकॉन डिजाइन  www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"क्रॉसपोस्ट आइकॉन "</string>
     <string name="settings_credits_crosspost_icon_summary">"आइकन बनाया है फ्रीपिक ने - www.flaticon.com"</string>
     <string name="settings_credits_thumbtack_icon_title">"थम्बटेक आइकॉन "</string>
