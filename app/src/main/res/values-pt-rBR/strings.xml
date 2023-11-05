@@ -729,8 +729,6 @@ Baseado no tema Índigo AMOLED"</string>
 Ela não está doente ou algo assim, mas definitivamente poderia melhorar."</string>
     <string name="edit_multi_reddit">"Editar Multireddit"</string>
     <string name="delete_multi_reddit">"Excluir Multireddit"</string>
-    <string name="n_awards">"%1$,d prêmios"</string>
-    <string name="one_award">"1 Prêmio"</string>
     <string name="report">"Reportar"</string>
     <string name="reporting">"Reportando"</string>
     <string name="report_successful">"Reportado"</string>
@@ -955,7 +953,6 @@ A reprodução automática de vídeos fica desativada."</string>
     <string name="choose_a_user">"Escolha um usuário"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"Clicar para exibir mídia na estrutura de galeria"</string>
     <string name="settings_hide_post_type">"Ocultar tipo de postagem"</string>
-    <string name="settings_hide_the_number_of_awards">"Ocultar o Número de Prêmios"</string>
     <string name="settings_hide_subreddit_and_user_prefix">"Ocultar prefixos do subreddit e do usuário"</string>
     <string name="settings_hide_the_number_of_votes">"Ocultar o número de votos"</string>
     <string name="settings_hide_the_number_of_comments">"Ocultar o Número de Comentários"</string>

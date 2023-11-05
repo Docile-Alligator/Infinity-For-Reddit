@@ -583,7 +583,6 @@
     <string name="settings_click_to_show_media_in_gallery_layout">Click to Show Media in Gallery Layout</string>
     <string name="settings_hide_post_type">Hide Post Type</string>
     <string name="settings_hide_post_flair">Hide Post Flair</string>
-    <string name="settings_hide_the_number_of_awards">Hide the Number of Awards</string>
     <string name="settings_hide_subreddit_and_user_prefix">Hide Subreddit and User Prefix</string>
     <string name="settings_hide_the_number_of_votes">Hide the Number of Votes</string>
     <string name="settings_hide_the_number_of_comments">Hide the Number of Comments</string>
@@ -1003,9 +1002,6 @@
     <string name="copy_multi_reddit_path_failed">Unable to copy multireddit\'s path</string>
     <string name="edit_multi_reddit">Edit Multireddit</string>
     <string name="delete_multi_reddit">Delete Multireddit</string>
-
-    <string name="n_awards">%1$,d Awards</string>
-    <string name="one_award">1 Award</string>
 
     <string name="report">Report</string>
     <string name="reporting">Reporting</string>

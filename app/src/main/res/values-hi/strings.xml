@@ -810,8 +810,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit">"मल्टीरैडिट्स मिटा दें "</string>
 
     <!-- Fuzzy -->
-    <string name="n_awards">"%1$d पदक "</string>
-    <string name="one_award">"1 पदक "</string>
     <string name="report">"रिपोर्ट "</string>
     <string name="reporting">"रिपोर्ट हो रही है "</string>
     <string name="report_successful">"रिपोर्ट कर दी गई "</string>

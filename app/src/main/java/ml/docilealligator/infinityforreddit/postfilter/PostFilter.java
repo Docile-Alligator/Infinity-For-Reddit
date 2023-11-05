@@ -137,12 +137,6 @@ public class PostFilter implements Parcelable {
         if (postFilter.minComments > 0 && post.getNComments() < postFilter.minComments) {
             return false;
         }
-        if (postFilter.maxAwards > 0 && post.getNAwards() > postFilter.maxAwards) {
-            return false;
-        }
-        if (postFilter.minAwards > 0 && post.getNAwards() < postFilter.minAwards) {
-            return false;
-        }
         if (postFilter.onlyNSFW && !post.isNSFW()) {
             if (postFilter.onlySpoiler) {
                 return post.isSpoiler();

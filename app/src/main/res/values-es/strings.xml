@@ -784,8 +784,6 @@ No está enferma ni nada, pero definitivamente podría mejorar."</string>
     <string name="delete_multi_reddit">"Borrar multireddit"</string>
 
     <!-- Fuzzy -->
-    <string name="n_awards">"%1$d Premios"</string>
-    <string name="one_award">"1 Premio"</string>
     <string name="report">"Reportar"</string>
     <string name="reporting">"Reportando"</string>
     <string name="report_successful">"Reportado"</string>
@@ -1017,7 +1015,6 @@ https://s3.eu-west-1.amazonaws.com/po-pub/i/hJAe7sMhrfJzqjhp9VkDQOVC.PNG -->
     <string name="choose_a_user">"Elige un usuario"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"Pulsa para mostrar los medios en el diseño de galería"</string>
     <string name="settings_hide_post_type">"Ocultar el tipo de publicación"</string>
-    <string name="settings_hide_the_number_of_awards">"Ocultar el número de premios"</string>
     <string name="settings_hide_subreddit_and_user_prefix">"Ocultar el prefijo de subreddit y de usuario"</string>
     <string name="settings_hide_the_number_of_votes">"Ocultar el número de votos"</string>
     <string name="settings_hide_the_number_of_comments">"Ocultar el número de comentarios"</string>

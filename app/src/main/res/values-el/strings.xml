@@ -689,8 +689,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 Δεν είναι άρρωστη ή κάτι, αλλά σίγουρα θα μπορούσε να γίνει καλύτερα."</string>
     <string name="edit_multi_reddit">"Επεξεργασία Multireddit"</string>
     <string name="delete_multi_reddit">"Διαγραφή Multireddit"</string>
-    <string name="n_awards">"%1$,d Βραβεία"</string>
-    <string name="one_award">"1 Βραβείο"</string>
     <string name="report">"Αναφορά"</string>
     <string name="reporting">"Αναφέρεται"</string>
     <string name="report_successful">"Αναφέρθηκε"</string>
@@ -913,7 +911,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="choose_a_user">"Επιλέξτε έναν χρηστη"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"Κάντε κλικ για Εμφάνιση Πολυμέσων στη Διάταξη Συλλογής"</string>
     <string name="settings_hide_post_type">"Απόκρυψη Τύπου Ανάρτησης"</string>
-    <string name="settings_hide_the_number_of_awards">"Απόκρυψη Αριθμού των Βραβείων"</string>
     <string name="settings_hide_subreddit_and_user_prefix">"Απόκρυψη Subreddit και προθέματος Χρήστη"</string>
     <string name="settings_hide_the_number_of_votes">"Απόκρυψη Αριθμού Ψήφων"</string>
     <string name="settings_hide_the_number_of_comments">"Απόκρυψη Αριθμού Σχολίων"</string>

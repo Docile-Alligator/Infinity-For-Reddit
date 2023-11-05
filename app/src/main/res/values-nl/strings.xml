@@ -751,8 +751,6 @@ Ze is niet ziek of zo, maar ze kan zeker beter worden."</string>
     <string name="delete_multi_reddit">"Verwijder Multireddit"</string>
 
     <!-- Fuzzy -->
-    <string name="n_awards">"%1$d Awards"</string>
-    <string name="one_award">"1 Award"</string>
     <string name="report">"Meld"</string>
     <string name="reporting">"Aan het melden"</string>
     <string name="report_successful">"Gemeld"</string>
@@ -977,7 +975,6 @@ Automatisch afspelen van video is uitgeschakeld."</string>
     <string name="choose_a_user">"Kies een gebruiker"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"Klik om Media in Gallerij Lay-Out te Tonen"</string>
     <string name="settings_hide_post_type">"Verberg Post Type"</string>
-    <string name="settings_hide_the_number_of_awards">"Verberg het Aantal Awards"</string>
     <string name="settings_hide_the_number_of_votes">"Verberg het Aantal Stemmen"</string>
     <string name="settings_hide_the_number_of_comments">"Verberg het aantal reacties"</string>
     <string name="post_layout_gallery">"Gallerij Lay-Out"</string>

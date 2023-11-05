@@ -93,7 +93,6 @@ import ml.docilealligator.infinityforreddit.events.ChangeHidePostFlairEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHidePostTypeEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideSubredditAndUserPrefixEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideTextPostContent;
-import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfAwardsEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfCommentsEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfVotesEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeLongPressToHideToolbarInCompactLayoutEvent;
@@ -1307,14 +1306,6 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
     public void onChangeHidePostFlairEvent(ChangeHidePostFlairEvent event) {
         if (mAdapter != null) {
             mAdapter.setHidePostFlair(event.hidePostFlair);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeHideTheNumberOfAwardsEvent(ChangeHideTheNumberOfAwardsEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setHideTheNumberOfAwards(event.hideTheNumberOfAwards);
             refreshAdapter();
         }
     }

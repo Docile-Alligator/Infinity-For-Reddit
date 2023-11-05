@@ -693,8 +693,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="comment_content_preview">"Non mi fido molto delle statistiche, perché un uomo con la testa nel forno acceso e i piedi nel congelatore statisticamente ha una temperatura media."</string>
     <string name="edit_multi_reddit">"Modifica multireddit"</string>
     <string name="delete_multi_reddit">"Cancella Multireddit"</string>
-    <string name="n_awards">"%1$,d premi"</string>
-    <string name="one_award">"1 Premio"</string>
     <string name="report">"Segnala"</string>
     <string name="reporting">"Segnala"</string>
     <string name="report_successful">"Segnalato"</string>
@@ -917,7 +915,6 @@ La riproduzione automatica video è disabilitata."</string>
     <string name="choose_a_user">"Seleziona un utente"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"Clicca per mostrare i media nel layout a galleria"</string>
     <string name="settings_hide_post_type">"Nascondi tipo di post"</string>
-    <string name="settings_hide_the_number_of_awards">"Nascondi numero di premi"</string>
     <string name="settings_hide_subreddit_and_user_prefix">"Nascondi subreddit e prefisso utente"</string>
     <string name="settings_hide_the_number_of_votes">"Nascondi numero di voti"</string>
     <string name="settings_hide_the_number_of_comments">"Nascondi numero di commenti"</string>

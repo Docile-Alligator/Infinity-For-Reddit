@@ -752,8 +752,6 @@ Cô ta không ốm hay gì cả, nhưng cô ấy chắc chắn có thể khá h�
     <string name="delete_multi_reddit">"Xoá Multireddit"</string>
 
     <!-- Fuzzy -->
-    <string name="n_awards">"%1$d giải thưởng"</string>
-    <string name="one_award">"1 giải thưởng"</string>
     <string name="report">"Báo cáo"</string>
     <string name="reporting">"Đang báo cáo"</string>
     <string name="report_successful">"Đã báo cáo"</string>
@@ -978,7 +976,6 @@ Tự động phát video bị tắt."</string>
     <string name="choose_a_user">"Chọn người dùng"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"Nhấn để hiện phương tiện trong bố cục thư viện"</string>
     <string name="settings_hide_post_type">"Ẩn loại bài đăng"</string>
-    <string name="settings_hide_the_number_of_awards">"Ẩn số lượng giải thưởng"</string>
     <string name="settings_hide_subreddit_and_user_prefix">"Ẩn subreddit và tiền tố người dùng"</string>
     <string name="settings_hide_the_number_of_votes">"Ẩn số lượng vote"</string>
     <string name="settings_hide_the_number_of_comments">"Ẩn số lượng bình luận"</string>

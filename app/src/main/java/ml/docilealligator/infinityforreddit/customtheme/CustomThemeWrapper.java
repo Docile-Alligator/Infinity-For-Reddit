@@ -272,16 +272,6 @@ public class CustomThemeWrapper {
                 getDefaultColor("#FFFFFF", "#FFFFFF", "#FFFFFF"));
     }
 
-    public int getAwardsBackgroundColor() {
-        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.AWARDS_BACKGROUND_COLOR,
-                getDefaultColor("#EEAB02", "#EEAB02", "#EEAB02"));
-    }
-
-    public int getAwardsTextColor() {
-        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.AWARDS_TEXT_COLOR,
-                getDefaultColor("#FFFFFF", "#FFFFFF", "#FFFFFF"));
-    }
-
     public int getArchivedIconTint() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.ARCHIVED_ICON_TINT,
                 getDefaultColor("#B4009F", "#B4009F", "#B4009F"));

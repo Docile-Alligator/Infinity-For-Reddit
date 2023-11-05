@@ -25,11 +25,6 @@
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
-        app:key="hide_the_number_of_awards"
-        app:title="@string/settings_hide_the_number_of_awards" />
-
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
-        app:defaultValue="false"
         app:key="hide_subreddit_and_user_prefix"
         app:title="@string/settings_hide_subreddit_and_user_prefix" />
 

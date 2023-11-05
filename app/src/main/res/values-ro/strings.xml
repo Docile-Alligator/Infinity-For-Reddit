@@ -735,8 +735,6 @@ Nu e bolnavă sau ceva de genul, dar cu siguranță ar putea să se facă bine."
     <string name="delete_multi_reddit">"Șterge Multireddit"</string>
 
     <!-- Fuzzy -->
-    <string name="n_awards">"%1$d Premii"</string>
-    <string name="one_award">"1 Premiu"</string>
     <string name="report">"Raportează"</string>
     <string name="reporting">"Se raportează"</string>
     <string name="report_successful">"Raportat"</string>
@@ -961,7 +959,6 @@ Redarea automată a videoclipurilor este dezactivată."</string>
     <string name="choose_a_user">"Alege un utilizator"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"Apăsă pentru a Afișa Fișierele Media din Galerie"</string>
     <string name="settings_hide_post_type">"Ascunde Tipul de Postare"</string>
-    <string name="settings_hide_the_number_of_awards">"Ascunde Numărul de Premii"</string>
     <string name="settings_hide_subreddit_and_user_prefix">"Ascunde  Prefixul Subreddit-urilor și Utilizatorilor"</string>
     <string name="settings_hide_the_number_of_votes">"Ascunde Numărul de Voturi"</string>
     <string name="settings_hide_the_number_of_comments">"Ascunde Numărul de Comentarii"</string>

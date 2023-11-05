@@ -192,14 +192,6 @@
             android:src="@drawable/crosspost"
             android:visibility="gone" />
 
-        <TextView
-            android:id="@+id/awards_text_view_item_post_detail_gallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="?attr/font_12"
-            android:fontFamily="?attr/font_family"
-            android:visibility="gone" />
-
     </com.nex3z.flowlayout.FlowLayout>
 
     <FrameLayout

@@ -743,8 +743,6 @@ Amoled Tema Şablonu Oluştur"</string>
     <string name="delete_multi_reddit">"Multireddit'i Sil"</string>
 
     <!-- Fuzzy -->
-    <string name="n_awards">"%1$d Ödül"</string>
-    <string name="one_award">"1 Ödül"</string>
     <string name="report">"Bildir"</string>
     <string name="reporting">"Bildiriliyor"</string>
     <string name="report_successful">"Bildirildi"</string>
@@ -985,7 +983,6 @@ Otomatik video oynatma kapatılır."</string>
     <string name="choose_a_user">"Bir kullanıcı seç"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"Medyayı Galeri Düzeninde Göstermek İçin Tıkla"</string>
     <string name="settings_hide_post_type">"Gönderi Türünü Gizle"</string>
-    <string name="settings_hide_the_number_of_awards">"Ödül Sayısını Gizle"</string>
     <string name="settings_hide_subreddit_and_user_prefix">"Subreddit ve Kullanıcı Önekini Gizle"</string>
     <string name="settings_hide_the_number_of_votes">"Oy Sayısını Gizle"</string>
     <string name="settings_hide_the_number_of_comments">"Yorum Sayısını Gizle"</string>

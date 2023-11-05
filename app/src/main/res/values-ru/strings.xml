@@ -751,8 +751,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit">"Удалить мультиреддит"</string>
 
     <!-- Fuzzy -->
-    <string name="n_awards">"%1$d наград"</string>
-    <string name="one_award">"1 награда"</string>
     <string name="report">"Пожаловаться"</string>
     <string name="reporting">"Жалоба отправляется"</string>
     <string name="report_successful">"Жалоба отправлена"</string>
@@ -977,7 +975,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="choose_a_user">"Выберите пользователя"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"Открывать мультимедиа нажатием в режиме галереи"</string>
     <string name="settings_hide_post_type">"Скрыть тип поста"</string>
-    <string name="settings_hide_the_number_of_awards">"Скрыть количество наград"</string>
     <string name="settings_hide_subreddit_and_user_prefix">"Скрыть префикс сабреддита и пользователя"</string>
     <string name="settings_hide_the_number_of_votes">"Скрыть количество голосов"</string>
     <string name="settings_hide_the_number_of_comments">"Скрыть количество комментариев"</string>

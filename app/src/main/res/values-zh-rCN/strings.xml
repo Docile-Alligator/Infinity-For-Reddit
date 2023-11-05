@@ -760,8 +760,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 她没有生病或遇到任何问题，但是她肯定会好起来的。"</string>
     <string name="edit_multi_reddit">"编辑聚合版块"</string>
     <string name="delete_multi_reddit">"删除聚合版块"</string>
-    <string name="n_awards">"%1$d 个奖励"</string>
-    <string name="one_award">"1 个奖励"</string>
     <string name="report">"举报"</string>
     <string name="reporting">"正在举报"</string>
     <string name="report_successful">"已举报"</string>
@@ -992,7 +990,6 @@ Reddit 视频分辨率较低。
     <string name="choose_a_user">"选择一个用户"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"点击在相册布局中显示媒体"</string>
     <string name="settings_hide_post_type">"隐藏帖子类型"</string>
-    <string name="settings_hide_the_number_of_awards">"隐藏奖励数量"</string>
     <string name="settings_hide_subreddit_and_user_prefix">"隐藏版块与用户前缀"</string>
     <string name="settings_hide_the_number_of_votes">"隐藏投票数"</string>
     <string name="settings_hide_the_number_of_comments">"隐藏评论数"</string>

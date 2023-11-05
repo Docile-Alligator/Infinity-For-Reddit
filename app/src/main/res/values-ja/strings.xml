@@ -822,8 +822,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit">"カスタムフィードを削除"</string>
 
     <!-- Fuzzy -->
-    <string name="n_awards">"%1$d個のアワード"</string>
-    <string name="one_award">"1個のアワード"</string>
     <string name="report">"通報"</string>
     <string name="reporting">"通報しています"</string>
     <string name="report_successful">"通報しました"</string>
@@ -1041,7 +1039,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="choose_a_user">"ユーザーを選択"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"クリックしてギャラリービューでメディアを見る"</string>
     <string name="settings_hide_post_type">"投稿の種類を非表示にする"</string>
-    <string name="settings_hide_the_number_of_awards">"Awardsの数を非表示にする"</string>
     <string name="settings_hide_the_number_of_comments">"コメント数を非表示にする"</string>
     <string name="post_layout_gallery">"ギャラリーレイアウト"</string>
     <string name="post_layout_card_2">"カードレイアウト2"</string>

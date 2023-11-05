@@ -178,7 +178,6 @@ public class SharedPreferencesUtils {
     public static final String CLICK_TO_SHOW_MEDIA_IN_GALLERY_LAYOUT = "click_to_show_media_in_gallery_layout";
     public static final String HIDE_POST_TYPE = "hide_post_type";
     public static final String HIDE_POST_FLAIR = "hide_post_flair";
-    public static final String HIDE_THE_NUMBER_OF_AWARDS = "hide_the_number_of_awards";
     public static final String HIDE_SUBREDDIT_AND_USER_PREFIX = "hide_subreddit_and_user_prefix";
     public static final String HIDE_THE_NUMBER_OF_VOTES = "hide_the_number_of_votes";
     public static final String HIDE_THE_NUMBER_OF_COMMENTS = "hide_the_number_of_comments";
@@ -395,4 +394,5 @@ public class SharedPreferencesUtils {
     public static final String OPEN_LINK_IN_APP_LEGACY = "open_link_in_app";
 
     public static final String DO_NOT_SHOW_REDDIT_API_INFO_AGAIN_LEGACY = "do_not_show_reddit_api_info_again";
+    public static final String HIDE_THE_NUMBER_OF_AWARDS_LEGACY = "hide_the_number_of_awards";
 }

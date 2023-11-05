@@ -59,8 +59,6 @@ public class Post implements Parcelable {
     private boolean loadGfyOrStreamableVideoSuccess;
     private String permalink;
     private String flair;
-    private String awards;
-    private int nAwards;
     private long postTimeMillis;
     private int score;
     private int postType;
@@ -106,8 +104,6 @@ public class Post implements Parcelable {
         this.nComments = nComments;
         this.upvoteRatio = upvoteRatio;
         this.flair = flair;
-        this.awards = awards;
-        this.nAwards = nAwards;
         this.hidden = hidden;
         this.spoiler = spoiler;
         this.nsfw = nsfw;
@@ -145,8 +141,6 @@ public class Post implements Parcelable {
         this.nComments = nComments;
         this.upvoteRatio = upvoteRatio;
         this.flair = flair;
-        this.awards = awards;
-        this.nAwards = nAwards;
         this.hidden = hidden;
         this.spoiler = spoiler;
         this.nsfw = nsfw;
@@ -188,8 +182,6 @@ public class Post implements Parcelable {
         loadGfyOrStreamableVideoSuccess = in.readByte() != 0;
         permalink = in.readString();
         flair = in.readString();
-        awards = in.readString();
-        nAwards = in.readInt();
         score = in.readInt();
         postType = in.readInt();
         voteType = in.readInt();
@@ -408,22 +400,6 @@ public class Post implements Parcelable {
         return suggestedSort;
     }
 
-    public String getAwards() {
-        return awards;
-    }
-
-    public void addAwards(String newAwardsHTML) {
-        awards += newAwardsHTML;
-    }
-
-    public int getNAwards() {
-        return nAwards;
-    }
-
-    public void addAwards(int newNAwards) {
-        nAwards += newNAwards;
-    }
-
     public int getScore() {
         return score;
     }
@@ -578,8 +554,6 @@ public class Post implements Parcelable {
         parcel.writeByte((byte) (loadGfyOrStreamableVideoSuccess ? 1 : 0));
         parcel.writeString(permalink);
         parcel.writeString(flair);
-        parcel.writeString(awards);
-        parcel.writeInt(nAwards);
         parcel.writeInt(score);
         parcel.writeInt(postType);
         parcel.writeInt(voteType);

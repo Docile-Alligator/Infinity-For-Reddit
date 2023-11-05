@@ -759,8 +759,6 @@ Basiere auf Indigo-AMOLED-Thema"</string>
 Sie ist nicht krank oder so, aber sie könnte sich definitiv bessern."</string>
     <string name="edit_multi_reddit">"Multireddit bearbeiten"</string>
     <string name="delete_multi_reddit">"Multireddit löschen"</string>
-    <string name="n_awards">"%1$,d Auszeichnungen"</string>
-    <string name="one_award">"1 Auszeichnung"</string>
     <string name="report">"Melden"</string>
     <string name="reporting">"Melde"</string>
     <string name="report_successful">"Gemeldet"</string>
@@ -1006,7 +1004,6 @@ Automatisches Abspielen von Videos ist deaktiviert."</string>
     <string name="choose_a_user">"Wähle einen Benutzer"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"Antippen, um die Medien in der Galerie-Ansicht anzuzeigen"</string>
     <string name="settings_hide_post_type">"Beitragsart verstecken"</string>
-    <string name="settings_hide_the_number_of_awards">"Anzahl der Auszeichnungen verstecken"</string>
     <string name="settings_hide_subreddit_and_user_prefix">"Subreddit und Benutzerpräfix verstecken"</string>
     <string name="settings_hide_the_number_of_votes">"Anzahl der Abstimmungen verstecken"</string>
     <string name="settings_hide_the_number_of_comments">"Anzahl der Kommentare verstecken"</string>

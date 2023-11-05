@@ -739,8 +739,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit">"Видалити мультиредит"</string>
 
     <!-- Fuzzy -->
-    <string name="n_awards">"%1$d нагород"</string>
-    <string name="one_award">"1 нагорода"</string>
     <string name="report">"Повідомити"</string>
     <string name="reporting">"Звітування"</string>
     <string name="report_successful">"Відзвітовано"</string>
@@ -965,7 +963,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="choose_a_user">"Оберіть користувача"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"Клацнути, щоб показати медія у вигляді галереї"</string>
     <string name="settings_hide_post_type">"Ховати тип дописів"</string>
-    <string name="settings_hide_the_number_of_awards">"Ховати кількість нагород"</string>
     <string name="settings_hide_subreddit_and_user_prefix">"Ховати префікс сабредитів і користувачів"</string>
     <string name="settings_hide_the_number_of_votes">"Ховати кількість голосів"</string>
     <string name="settings_hide_the_number_of_comments">"Ховати кількість коментарів"</string>

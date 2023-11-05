@@ -168,7 +168,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private boolean mHidePostType;
     private boolean mHidePostFlair;
     private boolean mHideUpvoteRatio;
-    private boolean mHideTheNumberOfAwards;
     private boolean mHideSubredditAndUserPrefix;
     private boolean mHideTheNumberOfVotes;
     private boolean mHideTheNumberOfComments;
@@ -339,7 +338,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mHidePostType = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_POST_TYPE, false);
         mHidePostFlair = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_POST_FLAIR, false);
         mHideUpvoteRatio = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_UPVOTE_RATIO, false);
-        mHideTheNumberOfAwards = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_AWARDS, false);
         mHideSubredditAndUserPrefix = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_SUBREDDIT_AND_USER_PREFIX, false);
         mHideTheNumberOfVotes = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_VOTES, false);
         mHideTheNumberOfComments = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_COMMENTS, false);
@@ -617,11 +615,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             if (!mHidePostFlair && mPost.getFlair() != null && !mPost.getFlair().equals("")) {
                 ((PostDetailBaseViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
                 Utils.setHTMLWithImageToTextView(((PostDetailBaseViewHolder) holder).flairTextView, mPost.getFlair(), false);
-            }
-
-            if (!mHideTheNumberOfAwards && mPost.getAwards() != null && !mPost.getAwards().equals("")) {
-                ((PostDetailBaseViewHolder) holder).awardsTextView.setVisibility(View.VISIBLE);
-                Utils.setHTMLWithImageToTextView(((PostDetailBaseViewHolder) holder).awardsTextView, mPost.getAwards(), true);
             }
 
             if (mHideUpvoteRatio) {
@@ -974,14 +967,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         }
     }
 
-    public void giveAward(String awardsHTML, int awardCount) {
-        if (mPost != null) {
-            mPost.addAwards(awardsHTML);
-            mPost.addAwards(awardCount);
-            notifyItemChanged(0);
-        }
-    }
-
     public void addOneComment() {
         if (mPost != null) {
             mPost.setNComments(mPost.getNComments() + 1);
@@ -1066,7 +1051,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         CustomTextView nsfwTextView;
         CustomTextView spoilerTextView;
         CustomTextView flairTextView;
-        TextView awardsTextView;
         TextView upvoteRatioTextView;
         RecyclerView contentMarkdownView;
         ConstraintLayout bottomConstraintLayout;
@@ -1094,7 +1078,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                          CustomTextView nSFWTextView,
                          CustomTextView spoilerTextView,
                          CustomTextView flairTextView,
-                         TextView awardsTextView,
                          TextView upvoteRatioTextView,
                          RecyclerView contentMarkdownView,
                          ConstraintLayout bottomConstraintLayout,
@@ -1117,7 +1100,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             this.nsfwTextView = nSFWTextView;
             this.spoilerTextView = spoilerTextView;
             this.flairTextView = flairTextView;
-            this.awardsTextView = awardsTextView;
             this.upvoteRatioTextView = upvoteRatioTextView;
             this.contentMarkdownView = contentMarkdownView;
             this.bottomConstraintLayout = bottomConstraintLayout;
@@ -1517,7 +1499,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 spoilerTextView.setTypeface(mActivity.typeface);
                 nSFWTextView.setTypeface(mActivity.typeface);
                 flairTextView.setTypeface(mActivity.typeface);
-                awardsTextView.setTypeface(mActivity.typeface);
                 upvoteRatioTextView.setTypeface(mActivity.typeface);
                 upvoteButton.setTypeface(mActivity.typeface);
                 commentsCountButton.setTypeface(mActivity.typeface);
@@ -1546,7 +1527,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             archivedImageView.setColorFilter(mArchivedTintColor, PorterDuff.Mode.SRC_IN);
             lockedImageView.setColorFilter(mLockedTintColor, PorterDuff.Mode.SRC_IN);
             crosspostImageView.setColorFilter(mCrosspostTintColor, PorterDuff.Mode.SRC_IN);
-            awardsTextView.setTextColor(mSecondaryTextColor);
             Drawable upvoteRatioDrawable = Utils.getTintedDrawable(mActivity, R.drawable.ic_upvote_ratio, mUpvoteRatioTintColor);
             upvoteRatioTextView.setCompoundDrawablesWithIntrinsicBounds(
                     upvoteRatioDrawable, null, null, null);
@@ -1594,7 +1574,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                                      CustomTextView nsfwTextView,
                                                      CustomTextView spoilerTextView,
                                                      CustomTextView flairTextView,
-                                                     TextView awardsTextView,
                                                      TextView upvoteRatioTextView,
                                                      AspectRatioFrameLayout aspectRatioFrameLayout,
                                                      PlayerView playerView,
@@ -1627,7 +1606,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     nsfwTextView,
                     spoilerTextView,
                     flairTextView,
-                    awardsTextView,
                     upvoteRatioTextView,
                     contentMarkdownView,
                     bottomConstraintLayout,
@@ -1871,7 +1849,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     binding.nsfwTextViewItemPostDetailVideoAutoplay,
                     binding.spoilerCustomTextViewItemPostDetailVideoAutoplay,
                     binding.flairCustomTextViewItemPostDetailVideoAutoplay,
-                    binding.awardsTextViewItemPostDetailVideoAutoplay,
                     binding.upvoteRatioTextViewItemPostDetailVideoAutoplay,
                     binding.aspectRatioFrameLayoutItemPostDetailVideoAutoplay,
                     binding.playerViewItemPostDetailVideoAutoplay,
@@ -1909,7 +1886,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     binding.nsfwTextViewItemPostDetailVideoAutoplay,
                     binding.spoilerCustomTextViewItemPostDetailVideoAutoplay,
                     binding.flairCustomTextViewItemPostDetailVideoAutoplay,
-                    binding.awardsTextViewItemPostDetailVideoAutoplay,
                     binding.upvoteRatioTextViewItemPostDetailVideoAutoplay,
                     binding.aspectRatioFrameLayoutItemPostDetailVideoAutoplay,
                     binding.playerViewItemPostDetailVideoAutoplay,
@@ -1950,7 +1926,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     binding.nsfwTextViewItemPostDetailVideoAndGifPreview,
                     binding.spoilerCustomTextViewItemPostDetailVideoAndGifPreview,
                     binding.flairCustomTextViewItemPostDetailVideoAndGifPreview,
-                    binding.awardsTextViewItemPostDetailVideoAndGifPreview,
                     binding.upvoteRatioTextViewItemPostDetailVideoAndGifPreview,
                     binding.contentMarkdownViewItemPostDetailVideoAndGifPreview,
                     binding.bottomConstraintLayoutItemPostDetailVideoAndGifPreview,
@@ -2025,7 +2000,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     binding.nsfwTextViewItemPostDetailImageAndGifAutoplay,
                     binding.spoilerCustomTextViewItemPostDetailImageAndGifAutoplay,
                     binding.flairCustomTextViewItemPostDetailImageAndGifAutoplay,
-                    binding.awardsTextViewItemPostDetailImageAndGifAutoplay,
                     binding.upvoteRatioTextViewItemPostDetailImageAndGifAutoplay,
                     binding.contentMarkdownViewItemPostDetailImageAndGifAutoplay,
                     binding.bottomConstraintLayoutItemPostDetailImageAndGifAutoplay,
@@ -2083,7 +2057,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     binding.nsfwTextViewItemPostDetailLink,
                     binding.spoilerCustomTextViewItemPostDetailLink,
                     binding.flairCustomTextViewItemPostDetailLink,
-                    binding.awardsTextViewItemPostDetailLink,
                     binding.upvoteRatioTextViewItemPostDetailLink,
                     binding.contentMarkdownViewItemPostDetailLink,
                     binding.bottomConstraintLayoutItemPostDetailLink,
@@ -2130,7 +2103,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     binding.nsfwTextViewItemPostDetailNoPreview,
                     binding.spoilerCustomTextViewItemPostDetailNoPreview,
                     binding.flairCustomTextViewItemPostDetailNoPreview,
-                    binding.awardsTextViewItemPostDetailNoPreview,
                     binding.upvoteRatioTextViewItemPostDetailNoPreview,
                     binding.contentMarkdownViewItemPostDetailNoPreview,
                     binding.bottomConstraintLayoutItemPostDetailNoPreview,
@@ -2223,7 +2195,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     binding.nsfwTextViewItemPostDetailGallery,
                     binding.spoilerCustomTextViewItemPostDetailGallery,
                     binding.flairCustomTextViewItemPostDetailGallery,
-                    binding.awardsTextViewItemPostDetailGallery,
                     binding.upvoteRatioTextViewItemPostDetailGallery,
                     binding.contentMarkdownViewItemPostDetailGallery,
                     binding.bottomConstraintLayoutItemPostDetailGallery,
@@ -2364,7 +2335,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     binding.nsfwTextViewItemPostDetailText,
                     binding.spoilerCustomTextViewItemPostDetailText,
                     binding.flairCustomTextViewItemPostDetailText,
-                    binding.awardsTextViewItemPostDetailText,
                     binding.upvoteRatioTextViewItemPostDetailText,
                     binding.contentMarkdownViewItemPostDetailText,
                     binding.bottomConstraintLayoutItemPostDetailText,

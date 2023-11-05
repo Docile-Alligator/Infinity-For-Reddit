@@ -740,8 +740,6 @@ Ela não está doente nem nada, mas certamente poderá melhorar."</string>
     <string name="delete_multi_reddit">"Eliminar Multireddit"</string>
 
     <!-- Fuzzy -->
-    <string name="n_awards">"%1$d Prémios"</string>
-    <string name="one_award">"1 Prémio"</string>
     <string name="report">"Denunciar"</string>
     <string name="reporting">"A denunciar"</string>
     <string name="report_successful">"Denunciado"</string>
@@ -964,7 +962,6 @@ Reprodução automática de vídeos desativada."</string>
     <string name="choose_a_user">"Escolher um utilizador"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"Clicar para Mostrar Média na Visualização Galeria"</string>
     <string name="settings_hide_post_type">"Esconder Tipo de Publicação"</string>
-    <string name="settings_hide_the_number_of_awards">"Esconder Número de Prémios"</string>
     <string name="settings_hide_subreddit_and_user_prefix">"Esconder Prefixos de Comunidades e Utilizador"</string>
     <string name="settings_hide_the_number_of_votes">"Esconder Número de Votos"</string>
     <string name="settings_hide_the_number_of_comments">"Esconder Número de Comentários"</string>

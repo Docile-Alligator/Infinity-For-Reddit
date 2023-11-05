@@ -522,8 +522,6 @@
     <string name="delete_multi_reddit">"பல்ரெட்டிட்டை அழி"</string>
 
     <!-- Fuzzy -->
-    <string name="n_awards">"%1$d விருதுகள்"</string>
-    <string name="one_award">"1 விருது"</string>
     <string name="report">"புகாரளி"</string>
     <string name="reporting">"புகாரளிக்கிறது"</string>
     <string name="report_successful">"புகாரளிக்கப்பட்டது"</string>
@@ -656,7 +654,6 @@
     <string name="read_all_messages_failed">"எல்லா தகவல்களையும் வாசிக்க இயலவில்லை"</string>
     <string name="choose_a_user">"பயனரைத் தெரிவுசெய்"</string>
     <string name="settings_hide_post_type">"இடுகை வகையை மறை"</string>
-    <string name="settings_hide_the_number_of_awards">"விருது எண்ணிக்கையை மறை"</string>
     <string name="settings_hide_the_number_of_votes">"வாக்கெண்ணிக்கையை மறை"</string>
     <string name="settings_hide_the_number_of_comments">"கருத்தெண்ணிக்கையை மறை"</string>
     <string name="post_layout_gallery">"காட்சியக தளவமைப்பு"</string>

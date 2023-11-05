@@ -743,8 +743,6 @@ Nie jest chora ani nic, ale na pewno może stać się lepsza."</string>
     <string name="delete_multi_reddit">"Usuń Multireddit"</string>
 
     <!-- Fuzzy -->
-    <string name="n_awards">"%1$d Nagród"</string>
-    <string name="one_award">"1 Nagroda"</string>
     <string name="report">"Zgłoś"</string>
     <string name="reporting">"Zagłaszanie"</string>
     <string name="report_successful">"Zgłoszono"</string>
@@ -968,7 +966,6 @@ użytkownika / multireddita"</string>
     <string name="choose_a_user">"Wybierz użytkownika"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"Kliknij by pokazać media w układzie galerii"</string>
     <string name="settings_hide_post_type">"Ukryj typ posta"</string>
-    <string name="settings_hide_the_number_of_awards">"Ukryj liczbę nagród"</string>
     <string name="settings_hide_subreddit_and_user_prefix">"Ukryj prefix subbredita i użytkownika"</string>
     <string name="settings_hide_the_number_of_votes">"Ukryj liczbę głosów"</string>
     <string name="settings_hide_the_number_of_comments">"Ukryj liczbę komentarzy"</string>

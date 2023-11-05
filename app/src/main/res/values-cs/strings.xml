@@ -743,8 +743,6 @@ Chodí popředu."</string>
     <string name="delete_multi_reddit">"Odstranit multireddit"</string>
 
     <!-- Fuzzy -->
-    <string name="n_awards">"%1$d ocenění"</string>
-    <string name="one_award">"1 ocenění"</string>
     <string name="report">"Nahlásit"</string>
     <string name="reporting">"Nahlašování"</string>
     <string name="report_successful">"Nahlášeno"</string>
@@ -969,7 +967,6 @@ Automatické přehrávání videí je zakázáno."</string>
     <string name="choose_a_user">"Vybrat uživatele"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"Klikněte pro zobrazení médií v rozložení galerie"</string>
     <string name="settings_hide_post_type">"Skrýt typ příspěvků"</string>
-    <string name="settings_hide_the_number_of_awards">"Skrýt počet ocenění"</string>
     <string name="settings_hide_subreddit_and_user_prefix">"Skrýt předponu subredditů a uživatelů"</string>
     <string name="settings_hide_the_number_of_votes">"Skrýt počet hlasů"</string>
     <string name="settings_hide_the_number_of_comments">"Skrýt počet komentářů"</string>

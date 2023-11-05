@@ -716,8 +716,6 @@ Az alap az indigó amoled téma"</string>
     <string name="delete_multi_reddit">"Multireddit törlése"</string>
 
     <!-- Fuzzy -->
-    <string name="n_awards">"%1$d kitüntetés"</string>
-    <string name="one_award">"1 kitüntetés"</string>
     <string name="report">"Jelent"</string>
     <string name="reporting">"Jelentés"</string>
     <string name="report_successful">"Jelentve"</string>
@@ -948,7 +946,6 @@ Videó autómatikus lejátszása le van tiltva."</string>
     <string name="choose_a_user">"Felhasználó kiválasztása"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"Koppints a média megjelenítéséhez gallléria elrendezésben."</string>
     <string name="settings_hide_post_type">"Poszt típus elrejtése"</string>
-    <string name="settings_hide_the_number_of_awards">"Díjak számának elrejtése"</string>
     <string name="settings_hide_subreddit_and_user_prefix">"Subreddit és felhasználó prefix elrejtése"</string>
     <string name="settings_hide_the_number_of_votes">"Szavazások számának elrejtése"</string>
     <string name="settings_hide_the_number_of_comments">"Kommentek számának elrejtése"</string>

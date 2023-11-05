@@ -777,8 +777,6 @@ Baziraj na Indigo Amoled temi"</string>
     <string name="delete_multi_reddit">"Obriši Multireddit"</string>
 
     <!-- Fuzzy -->
-    <string name="n_awards">"%1$d Nagrade/a"</string>
-    <string name="one_award">"1 Nagrada"</string>
     <string name="report">"Prijavi"</string>
     <string name="reporting">"Prijavljivanje"</string>
     <string name="report_successful">"Prijavljeno"</string>
@@ -1002,7 +1000,6 @@ Reddit videi su niže rezolucije."</string>
     <string name="choose_a_user">"Odaberi korisnika"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"Klikni da prikažeš medij u obliku galerije"</string>
     <string name="settings_hide_post_type">"Sakrij vrstu objave"</string>
-    <string name="settings_hide_the_number_of_awards">"Sakrij broj nagrada"</string>
     <string name="settings_hide_the_number_of_votes">"Sakrij broj glasanja"</string>
     <string name="settings_hide_the_number_of_comments">"Sakrij broj komentara"</string>
     <string name="post_layout_gallery">"Izgled galerije"</string>
