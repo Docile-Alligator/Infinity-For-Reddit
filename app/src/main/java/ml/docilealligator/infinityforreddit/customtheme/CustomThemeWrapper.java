@@ -447,11 +447,6 @@ public class CustomThemeWrapper {
                 getDefaultColor("#8EDFBA", "#21C561", "#21C561"));
     }
 
-    public int getAwardedCommentBackgroundColor() {
-        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.AWARDED_COMMENT_BACKGROUND_COLOR,
-                getDefaultColor("#FFFFFF", "#242424", "#000000"));
-    }
-
     public int getNavBarColor() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.NAV_BAR_COLOR,
                 getDefaultColor("#FFFFFF", "#121212", "#000000"));

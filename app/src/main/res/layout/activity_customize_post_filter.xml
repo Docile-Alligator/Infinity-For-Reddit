@@ -635,50 +635,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/min_awards_text_input_layout_customize_post_filter_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/min_awards_text_input_edit_text_customize_post_filter_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberSigned"
-                    android:fontFamily="?attr/font_family"
-                    android:textSize="?attr/font_default"
-                    android:hint="@string/min_awards_hint"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/max_awards_text_input_layout_customize_post_filter_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/max_awards_text_input_edit_text_customize_post_filter_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberSigned"
-                    android:fontFamily="?attr/font_family"
-                    android:textSize="?attr/font_default"
-                    android:hint="@string/max_awards_hint"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
         </LinearLayout>
         
     </androidx.core.widget.NestedScrollView>

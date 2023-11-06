@@ -148,7 +148,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private int mButtonTextColor;
     private int mCommentIconAndInfoColor;
     private int mFullyCollapsedCommentBackgroundColor;
-    private int mAwardedCommentBackgroundColor;
     private int[] verticalBlockColors;
 
     private int mSearchCommentIndex = -1;
@@ -260,7 +259,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mButtonTextColor = customThemeWrapper.getButtonTextColor();
         mCommentIconAndInfoColor = customThemeWrapper.getCommentIconAndInfoColor();
         mFullyCollapsedCommentBackgroundColor = customThemeWrapper.getFullyCollapsedCommentBackgroundColor();
-        mAwardedCommentBackgroundColor = customThemeWrapper.getAwardedCommentBackgroundColor();
 
         verticalBlockColors = new int[] {
                 customThemeWrapper.getCommentVerticalBarColor1(),
@@ -366,8 +364,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             if (comment != null) {
                 if (mIsSingleCommentThreadMode && comment.getId().equals(mSingleCommentId)) {
                     holder.itemView.setBackgroundColor(mSingleCommentThreadBackgroundColor);
-                } else if (comment.getAwards() != null && !comment.getAwards().equals("")) {
-                    holder.itemView.setBackgroundColor(mAwardedCommentBackgroundColor);
                 }
 
                 String authorPrefixed = "u/" + comment.getAuthor();

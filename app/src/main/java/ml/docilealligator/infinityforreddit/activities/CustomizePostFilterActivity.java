@@ -188,14 +188,6 @@ public class CustomizePostFilterActivity extends BaseActivity {
     TextInputLayout maxCommentsTextInputLayout;
     @BindView(R.id.max_comments_text_input_edit_text_customize_post_filter_activity)
     TextInputEditText maxCommentsTextInputEditText;
-    @BindView(R.id.min_awards_text_input_layout_customize_post_filter_activity)
-    TextInputLayout minAwardsTextInputLayout;
-    @BindView(R.id.min_awards_text_input_edit_text_customize_post_filter_activity)
-    TextInputEditText minAwardsTextInputEditText;
-    @BindView(R.id.max_awards_text_input_layout_customize_post_filter_activity)
-    TextInputLayout maxAwardsTextInputLayout;
-    @BindView(R.id.max_awards_text_input_edit_text_customize_post_filter_activity)
-    TextInputEditText maxAwardsTextInputEditText;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -330,8 +322,6 @@ public class CustomizePostFilterActivity extends BaseActivity {
         maxVoteTextInputEditText.setText(Integer.toString(postFilter.maxVote));
         minCommentsTextInputEditText.setText(Integer.toString(postFilter.minComments));
         maxCommentsTextInputEditText.setText(Integer.toString(postFilter.maxComments));
-        minAwardsTextInputEditText.setText(Integer.toString(postFilter.minAwards));
-        maxAwardsTextInputEditText.setText(Integer.toString(postFilter.maxAwards));
 
         Intent intent = getIntent();
         String excludeSubreddit = intent.getStringExtra(EXTRA_EXCLUDE_SUBREDDIT);
@@ -451,12 +441,6 @@ public class CustomizePostFilterActivity extends BaseActivity {
         maxCommentsTextInputLayout.setBoxStrokeColor(primaryTextColor);
         maxCommentsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         maxCommentsTextInputEditText.setTextColor(primaryTextColor);
-        minAwardsTextInputLayout.setBoxStrokeColor(primaryTextColor);
-        minAwardsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
-        minAwardsTextInputEditText.setTextColor(primaryTextColor);
-        maxAwardsTextInputLayout.setBoxStrokeColor(primaryTextColor);
-        maxAwardsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
-        maxAwardsTextInputEditText.setTextColor(primaryTextColor);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             nameTextInputEditText.setTextCursorDrawable(cursorDrawable);
@@ -474,8 +458,6 @@ public class CustomizePostFilterActivity extends BaseActivity {
             maxVoteTextInputEditText.setTextCursorDrawable(cursorDrawable);
             minCommentsTextInputEditText.setTextCursorDrawable(cursorDrawable);
             maxCommentsTextInputEditText.setTextCursorDrawable(cursorDrawable);
-            minAwardsTextInputEditText.setTextCursorDrawable(cursorDrawable);
-            maxAwardsTextInputEditText.setTextCursorDrawable(cursorDrawable);
         } else {
             setCursorDrawableColor(nameTextInputEditText, primaryTextColor);
             setCursorDrawableColor(titleExcludesStringsTextInputEditText, primaryTextColor);
@@ -492,8 +474,6 @@ public class CustomizePostFilterActivity extends BaseActivity {
             setCursorDrawableColor(maxVoteTextInputEditText, primaryTextColor);
             setCursorDrawableColor(minCommentsTextInputEditText, primaryTextColor);
             setCursorDrawableColor(maxCommentsTextInputEditText, primaryTextColor);
-            setCursorDrawableColor(minAwardsTextInputEditText, primaryTextColor);
-            setCursorDrawableColor(maxAwardsTextInputEditText, primaryTextColor);
         }
 
         if (typeface != null) {
@@ -636,8 +616,8 @@ public class CustomizePostFilterActivity extends BaseActivity {
         postFilter.minVote = minVoteTextInputEditText.getText() == null || minVoteTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(minVoteTextInputEditText.getText().toString());
         postFilter.maxComments = maxCommentsTextInputEditText.getText() == null || maxCommentsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(maxCommentsTextInputEditText.getText().toString());
         postFilter.minComments = minCommentsTextInputEditText.getText() == null || minCommentsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(minCommentsTextInputEditText.getText().toString());
-        postFilter.maxAwards = maxAwardsTextInputEditText.getText() == null || maxAwardsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(maxAwardsTextInputEditText.getText().toString());
-        postFilter.minAwards = minAwardsTextInputEditText.getText() == null || minAwardsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(minAwardsTextInputEditText.getText().toString());
+        postFilter.maxAwards = -1;
+        postFilter.minAwards = -1;
         postFilter.postTitleExcludesRegex = titleExcludesRegexTextInputEditText.getText().toString();
         Pattern.compile(postFilter.postTitleExcludesRegex);
         postFilter.postTitleContainsRegex = titleContainsRegexTextInputEditText.getText().toString();
