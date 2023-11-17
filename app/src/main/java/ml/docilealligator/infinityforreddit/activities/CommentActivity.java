@@ -64,6 +64,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCommentBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -207,8 +208,9 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     builder.linkColor(linkColor);
                 }
             };
+            ImageAndGifPlugin imageAndGifPlugin = new ImageAndGifPlugin();
             Markwon postBodyMarkwon = MarkdownUtils.createFullRedditMarkwon(this,
-                    miscPlugin, parentTextColor, parentSpoilerBackgroundColor, null);
+                    miscPlugin, imageAndGifPlugin, parentTextColor, parentSpoilerBackgroundColor, null);
             MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(this, mGlide);
             binding.commentContentMarkdownView.setLayoutManager(new LinearLayoutManagerBugFixed(this));
             binding.commentContentMarkdownView.setAdapter(markwonAdapter);

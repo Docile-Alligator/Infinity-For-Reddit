@@ -41,7 +41,7 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
     public void bindHolder(@NonNull Markwon markwon, @NonNull Holder holder, @NonNull ImageAndGifBlock node) {
         holder.binding.progressBarMarkdownImageAndGifBlock.setVisibility(View.VISIBLE);
 
-        RequestBuilder<Drawable> imageRequestBuilder = glide.load("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1280px-Image_created_with_a_mobile_phone.png").listener(holder.requestListener);
+        RequestBuilder<Drawable> imageRequestBuilder = glide.load(node.mediaMetadata.original.url).listener(holder.requestListener);
         boolean blurImage = false;
         if (blurImage) {
             imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))

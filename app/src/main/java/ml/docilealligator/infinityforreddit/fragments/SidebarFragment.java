@@ -44,6 +44,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomS
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.subreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
@@ -144,8 +145,9 @@ public class SidebarFragment extends Fragment {
             urlMenuBottomSheetFragment.show(getChildFragmentManager(), null);
             return true;
         };
+        ImageAndGifPlugin imageAndGifPlugin = new ImageAndGifPlugin();
         Markwon markwon = MarkdownUtils.createFullRedditMarkwon(activity,
-                miscPlugin, markdownColor, spoilerBackgroundColor, onLinkLongClickListener);
+                miscPlugin, imageAndGifPlugin, markdownColor, spoilerBackgroundColor, onLinkLongClickListener);
         MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(activity, Glide.with(this));
 
         linearLayoutManager = new LinearLayoutManagerBugFixed(activity);

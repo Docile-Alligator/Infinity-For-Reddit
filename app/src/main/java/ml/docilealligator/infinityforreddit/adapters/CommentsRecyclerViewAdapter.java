@@ -67,6 +67,7 @@ import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.databinding.ItemCommentBinding;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
+import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -93,6 +94,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private Executor mExecutor;
     private Retrofit mRetrofit;
     private Retrofit mOauthRetrofit;
+    private ImageAndGifPlugin mImageAndGifPlugin;
     private Markwon mCommentMarkwon;
     private String mAccessToken;
     private String mAccountName;
@@ -203,8 +205,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             }
             return true;
         };
+        mImageAndGifPlugin = new ImageAndGifPlugin();
         mCommentMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
-                miscPlugin, mCommentTextColor, commentSpoilerBackgroundColor, onLinkLongClickListener);
+                miscPlugin, mImageAndGifPlugin, mCommentTextColor, commentSpoilerBackgroundColor, onLinkLongClickListener);
         recycledViewPool = new RecyclerView.RecycledViewPool();
         mAccessToken = accessToken;
         mAccountName = accountName;

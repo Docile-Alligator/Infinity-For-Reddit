@@ -34,10 +34,12 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
+import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 
 public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAdapter.RuleViewHolder> {
     private BaseActivity activity;
+    private ImageAndGifPlugin imageAndGifPlugin;
     private Markwon markwon;
     @Nullable
     private final SliderPanel sliderPanel;
@@ -83,8 +85,9 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
             }
             return true;
         };
+        imageAndGifPlugin = new ImageAndGifPlugin();
         markwon = MarkdownUtils.createFullRedditMarkwon(activity,
-                miscPlugin, mPrimaryTextColor, spoilerBackgroundColor, onLinkLongClickListener);
+                miscPlugin, imageAndGifPlugin, mPrimaryTextColor, spoilerBackgroundColor, onLinkLongClickListener);
     }
 
     @NonNull

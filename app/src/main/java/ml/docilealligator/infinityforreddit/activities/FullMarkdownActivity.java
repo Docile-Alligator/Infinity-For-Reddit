@@ -44,6 +44,7 @@ import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
@@ -139,8 +140,9 @@ public class FullMarkdownActivity extends BaseActivity {
                 builder.linkColor(linkColor);
             }
         };
+        ImageAndGifPlugin imageAndGifPlugin = new ImageAndGifPlugin();
         Markwon markwon = MarkdownUtils.createFullRedditMarkwon(this,
-                miscPlugin, markdownColor, spoilerBackgroundColor, null);
+                miscPlugin, imageAndGifPlugin, markdownColor, spoilerBackgroundColor, null);
 
         MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(this, Glide.with(this));
         LinearLayoutManagerBugFixed linearLayoutManager = new SwipeLockLinearLayoutManager(this, new SwipeLockInterface() {

@@ -10,15 +10,18 @@ import org.commonmark.parser.block.BlockStart;
 import org.commonmark.parser.block.MatchedBlockParser;
 import org.commonmark.parser.block.ParserState;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import ml.docilealligator.infinityforreddit.post.Post;
 
 public class ImageAndGifBlockParser extends AbstractBlockParser {
 
     private ImageAndGifBlock imageAndGifBlock;
 
-    ImageAndGifBlockParser() {
-        this.imageAndGifBlock = new ImageAndGifBlock();
+    ImageAndGifBlockParser(Post.MediaMetadata mediaMetadata) {
+        this.imageAndGifBlock = new ImageAndGifBlock(mediaMetadata);
     }
 
     @Override
@@ -33,6 +36,8 @@ public class ImageAndGifBlockParser extends AbstractBlockParser {
 
     public static class Factory extends AbstractBlockParserFactory {
         private Pattern redditPreviewPattern =  Pattern.compile("!\\[img]\\(https://preview.redd.it/\\w+.(jpg|png)((\\?+[-a-zA-Z0-9()@:%_+.~#?&/=]*)|)\\)");
+        private Map<String, Post.MediaMetadata> mediaMetadataMap;
+        private int fromIndex = "![img](https://preview.redd.it/".length();
 
         @Override
         public BlockStart tryStart(ParserState state, MatchedBlockParser matchedBlockParser) {
@@ -41,10 +46,19 @@ public class ImageAndGifBlockParser extends AbstractBlockParser {
             Matcher matcher = redditPreviewPattern.matcher(line);
             if (matcher.find()) {
                 if (matcher.end() == line.length()) {
-                    return BlockStart.of(new ImageAndGifBlockParser());
+                    int endIndex = line.indexOf('.', fromIndex);
+                    if (endIndex > 0) {
+                        String id = line.substring(fromIndex, endIndex);
+                        Log.i("asdfasdf", "s " + id);
+                        return mediaMetadataMap.containsKey(id) ? BlockStart.of(new ImageAndGifBlockParser(mediaMetadataMap.get(id))) : BlockStart.none();
+                    }
                 }
             }
             return BlockStart.none();
+        }
+
+        public void setMediaMetadataMap(Map<String, Post.MediaMetadata> mediaMetadataMap) {
+            this.mediaMetadataMap = mediaMetadataMap;
         }
     }
 }

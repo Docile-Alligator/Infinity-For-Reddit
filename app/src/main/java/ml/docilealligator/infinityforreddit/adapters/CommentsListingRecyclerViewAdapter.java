@@ -55,6 +55,7 @@ import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.databinding.ItemCommentBinding;
+import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -79,6 +80,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private BaseActivity mActivity;
     private Retrofit mOauthRetrofit;
     private Locale mLocale;
+    private ImageAndGifPlugin mImageAndGifPlugin;
     private Markwon mMarkwon;
     private RecyclerView.RecycledViewPool recycledViewPool;
     private String mAccessToken;
@@ -168,8 +170,9 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             }
             return true;
         };
+        mImageAndGifPlugin = new ImageAndGifPlugin();
         mMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
-                miscPlugin, mCommentColor, commentSpoilerBackgroundColor, onLinkLongClickListener);
+                miscPlugin, mImageAndGifPlugin, mCommentColor, commentSpoilerBackgroundColor, onLinkLongClickListener);
         recycledViewPool = new RecyclerView.RecycledViewPool();
     }
 

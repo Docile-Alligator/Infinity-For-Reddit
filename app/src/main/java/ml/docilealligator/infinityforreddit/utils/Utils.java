@@ -19,7 +19,6 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.TypefaceSpan;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -156,14 +155,10 @@ public final class Utils {
         Matcher matcher = inlineRedditImagePattern.matcher(markdownStringBuilder);
         int start = 0;
         while (matcher.find(start)) {
-            int fileNameStartIndex = "https://preview.redd.it/".length();
-            String replacingText = "![" + /*markdownStringBuilder.substring(fileNameStartIndex,
-                    markdownStringBuilder.indexOf(".", fileNameStartIndex))*/"img"
-                    + "](" + markdownStringBuilder.substring(matcher.start(), matcher.end()) + ")";
+            String replacingText = "![img](" + markdownStringBuilder.substring(matcher.start(), matcher.end()) + ")";
             markdownStringBuilder.replace(matcher.start(), matcher.end(), replacingText);
             start = replacingText.length() + matcher.start();
             matcher = inlineRedditImagePattern.matcher(markdownStringBuilder);
-            Log.i("asdf", "S " + start + markdownStringBuilder.length());
         }
 
         return markdownStringBuilder.toString();

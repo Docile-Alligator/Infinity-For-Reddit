@@ -48,7 +48,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executor;
 
@@ -103,6 +103,7 @@ import ml.docilealligator.infinityforreddit.databinding.ItemPostDetailVideoAndGi
 import ml.docilealligator.infinityforreddit.databinding.ItemPostDetailVideoAutoplayBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostDetailVideoAutoplayLegacyControllerBinding;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
+import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
@@ -142,6 +143,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private SharedPreferences mCurrentAccountSharedPreferences;
     private RequestManager mGlide;
     private SaveMemoryCenterInisdeDownsampleStrategy mSaveMemoryCenterInsideDownsampleStrategy;
+    private ImageAndGifPlugin mImageAndGifPlugin;
     private Markwon mPostDetailMarkwon;
     private final MarkwonAdapter mMarkwonAdapter;
     private String mAccessToken;
@@ -287,8 +289,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             }
             return true;
         };
+        mImageAndGifPlugin = new ImageAndGifPlugin();
         mPostDetailMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
-                miscPlugin, markdownColor, postSpoilerBackgroundColor, onLinkLongClickListener);
+                miscPlugin, mImageAndGifPlugin, markdownColor, postSpoilerBackgroundColor, onLinkLongClickListener);
         mMarkwonAdapter = MarkdownUtils.createTablesAdapter(activity, mGlide);
 
         mSeparatePostAndComments = separatePostAndComments;
@@ -646,6 +649,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             if (mPost.getSelfText() != null && !mPost.getSelfText().equals("")) {
                 ((PostDetailBaseViewHolder) holder).contentMarkdownView.setVisibility(View.VISIBLE);
                 ((PostDetailBaseViewHolder) holder).contentMarkdownView.setAdapter(mMarkwonAdapter);
+                mImageAndGifPlugin.setMediaMetadataMap(mPost.getMediaMetadataMap());
                 mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, mPost.getSelfText());
                 // noinspection NotifyDataSetChanged
                 mMarkwonAdapter.notifyDataSetChanged();
@@ -813,7 +817,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     }
 
     @Nullable
-    private Post.Preview getSuitablePreview(ArrayList<Post.Preview> previews) {
+    private Post.Preview getSuitablePreview(List<Post.Preview> previews) {
         Post.Preview preview;
         if (!previews.isEmpty()) {
             int previewIndex;

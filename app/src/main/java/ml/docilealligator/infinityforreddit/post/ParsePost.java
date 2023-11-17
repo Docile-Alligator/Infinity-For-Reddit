@@ -5,14 +5,19 @@ import android.os.Handler;
 import android.text.Html;
 import android.text.TextUtils;
 
+import androidx.annotation.Nullable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -226,6 +231,8 @@ public class ParsePost {
                 previews.add(new Post.Preview(thumbnailPreviewUrl, thumbnailPreviewWidth, thumbnailPreviewHeight, "", ""));
             }
         }
+
+        Map<String, Post.MediaMetadata> mediaMetadataMap = parseMediaMetadata(data);
         if (data.has(JSONUtils.CROSSPOST_PARENT_LIST)) {
             //Cross post
             //data.getJSONArray(JSONUtils.CROSSPOST_PARENT_LIST).getJSONObject(0) out of bounds????????????
@@ -233,7 +240,7 @@ public class ParsePost {
             Post crosspostParent = parseBasicData(data);
             Post post = parseData(data, permalink, id, fullName, subredditName, subredditNamePrefixed,
                     author, authorFlair, authorFlairHTMLBuilder.toString(),
-                    postTime, title, previews,
+                    postTime, title, previews, mediaMetadataMap,
                     score, voteType, nComments, upvoteRatio, flair, awardingsBuilder.toString(), nAwards, hidden,
                     spoiler, nsfw, stickied, archived, locked, saved, deleted, removed, true,
                     distinguished, suggestedSort);
@@ -242,21 +249,61 @@ public class ParsePost {
         } else {
             return parseData(data, permalink, id, fullName, subredditName, subredditNamePrefixed,
                     author, authorFlair, authorFlairHTMLBuilder.toString(),
-                    postTime, title, previews,
+                    postTime, title, previews, mediaMetadataMap,
                     score, voteType, nComments, upvoteRatio, flair, awardingsBuilder.toString(), nAwards, hidden,
                     spoiler, nsfw, stickied, archived, locked, saved, deleted, removed, false,
                     distinguished, suggestedSort);
         }
     }
 
+    @Nullable
+    private static Map<String, Post.MediaMetadata> parseMediaMetadata(JSONObject data) {
+        try {
+            if (data.has(JSONUtils.MEDIA_METADATA_KEY)) {
+                Map<String, Post.MediaMetadata> mediaMetadataMap = new HashMap<>();
+                JSONObject mediaMetadataJSON = data.getJSONObject(JSONUtils.MEDIA_METADATA_KEY);
+                for (Iterator<String> it = mediaMetadataJSON.keys(); it.hasNext();) {
+                    try {
+                        String k = it.next();
+                        JSONObject media = mediaMetadataJSON.getJSONObject(k);
+                        JSONArray downscales = media.getJSONArray(JSONUtils.P_KEY);
+                        JSONObject downscaledItemJSON;
+                        if (downscales.length() <= 3) {
+                            downscaledItemJSON = downscales.getJSONObject(downscales.length() - 1);
+
+                        } else {
+                            downscaledItemJSON = downscales.getJSONObject(3);
+                        }
+                        Post.MediaMetadata.MediaItem downscaledItem = new Post.MediaMetadata.MediaItem(downscaledItemJSON.getInt(JSONUtils.X_KEY),
+                                downscaledItemJSON.getInt(JSONUtils.Y_KEY), downscaledItemJSON.getString(JSONUtils.U_KEY));
+                        JSONObject originalItemJSON = media.getJSONObject(JSONUtils.S_KEY);
+                        Post.MediaMetadata.MediaItem originalItem = new Post.MediaMetadata.MediaItem(originalItemJSON.getInt(JSONUtils.X_KEY),
+                                originalItemJSON.getInt(JSONUtils.Y_KEY), originalItemJSON.getString(JSONUtils.U_KEY));
+
+                        String id = media.getString(JSONUtils.ID_KEY);
+                        mediaMetadataMap.put(id, new Post.MediaMetadata(id, media.getString(JSONUtils.E_KEY),
+                                originalItem, downscaledItem));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return mediaMetadataMap;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     private static Post parseData(JSONObject data, String permalink, String id, String fullName,
                                   String subredditName, String subredditNamePrefixed, String author,
-                                  String authorFlair, String authorFlairHTML,
-                                  long postTimeMillis, String title, ArrayList<Post.Preview> previews,
+                                  String authorFlair, String authorFlairHTML, long postTimeMillis, String title,
+                                  ArrayList<Post.Preview> previews, Map<String, Post.MediaMetadata> mediaMetadataMap,
                                   int score, int voteType, int nComments, int upvoteRatio, String flair,
-                                  String awards, int nAwards, boolean hidden, boolean spoiler,
-                                  boolean nsfw, boolean stickied, boolean archived, boolean locked,
-                                  boolean saved, boolean deleted, boolean removed, boolean isCrosspost,
+                                  String awards, int nAwards, boolean hidden, boolean spoiler, boolean nsfw,
+                                  boolean stickied, boolean archived, boolean locked, boolean saved,
+                                  boolean deleted, boolean removed, boolean isCrosspost,
                                   String distinguished, String suggestedSort) throws JSONException {
         Post post;
 
@@ -750,6 +797,7 @@ public class ParsePost {
             }
         }
 
+        post.setMediaMetadataMap(mediaMetadataMap);
         return post;
     }
 
