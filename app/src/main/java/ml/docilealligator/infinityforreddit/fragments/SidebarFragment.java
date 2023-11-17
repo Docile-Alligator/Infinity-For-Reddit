@@ -18,6 +18,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
+
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -144,7 +146,7 @@ public class SidebarFragment extends Fragment {
         };
         Markwon markwon = MarkdownUtils.createFullRedditMarkwon(activity,
                 miscPlugin, markdownColor, spoilerBackgroundColor, onLinkLongClickListener);
-        MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter();
+        MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(activity, Glide.with(this));
 
         linearLayoutManager = new LinearLayoutManagerBugFixed(activity);
         recyclerView.setLayoutManager(linearLayoutManager);

@@ -289,7 +289,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         };
         mPostDetailMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
                 miscPlugin, markdownColor, postSpoilerBackgroundColor, onLinkLongClickListener);
-        mMarkwonAdapter = MarkdownUtils.createTablesAdapter();
+        mMarkwonAdapter = MarkdownUtils.createTablesAdapter(activity, mGlide);
 
         mSeparatePostAndComments = separatePostAndComments;
         mLegacyAutoplayVideoControllerUI = sharedPreferences.getBoolean(SharedPreferencesUtils.LEGACY_AUTOPLAY_VIDEO_CONTROLLER_UI, false);

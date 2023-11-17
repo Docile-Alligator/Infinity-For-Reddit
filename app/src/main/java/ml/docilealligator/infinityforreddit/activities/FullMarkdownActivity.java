@@ -18,6 +18,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 
@@ -141,7 +142,7 @@ public class FullMarkdownActivity extends BaseActivity {
         Markwon markwon = MarkdownUtils.createFullRedditMarkwon(this,
                 miscPlugin, markdownColor, spoilerBackgroundColor, null);
 
-        MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter();
+        MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(this, Glide.with(this));
         LinearLayoutManagerBugFixed linearLayoutManager = new SwipeLockLinearLayoutManager(this, new SwipeLockInterface() {
             @Override
             public void lockSwipe() {

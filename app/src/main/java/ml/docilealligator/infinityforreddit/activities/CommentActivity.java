@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -15,7 +14,6 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -153,6 +151,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             addOnOffsetChangedListener(binding.commentAppbarLayout);
         }
 
+        mGlide = Glide.with(this);
+
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         if (mAccessToken == null) {
             finish();
@@ -209,7 +209,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             };
             Markwon postBodyMarkwon = MarkdownUtils.createFullRedditMarkwon(this,
                     miscPlugin, parentTextColor, parentSpoilerBackgroundColor, null);
-            MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter();
+            MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(this, mGlide);
             binding.commentContentMarkdownView.setLayoutManager(new LinearLayoutManagerBugFixed(this));
             binding.commentContentMarkdownView.setAdapter(markwonAdapter);
             markwonAdapter.setMarkdown(postBodyMarkwon, parentBodyMarkdown);
@@ -224,8 +224,6 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         }
 
         setSupportActionBar(binding.commentToolbar);
-
-        mGlide = Glide.with(this);
 
         if (savedInstanceState != null) {
             selectedAccount = savedInstanceState.getParcelable(SELECTED_ACCOUNT_STATE);

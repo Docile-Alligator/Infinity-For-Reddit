@@ -6,6 +6,8 @@ import android.text.util.Linkify;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.RequestManager;
+
 import org.commonmark.ext.gfm.tables.TableBlock;
 
 import io.noties.markwon.Markwon;
@@ -21,6 +23,7 @@ import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customviews.CustomMarkwonAdapter;
 
 public class MarkdownUtils {
@@ -47,6 +50,7 @@ public class MarkdownUtils {
                 .usePlugin(MovementMethodPlugin.create(new SpoilerAwareMovementMethod()
                         .setOnLinkLongClickListener(onLinkLongClickListener)))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .usePlugin(new ImageAndGifPlugin())
                 .usePlugin(TableEntryPlugin.create(context))
                 .build();
     }
@@ -93,11 +97,12 @@ public class MarkdownUtils {
      * Creates a MarkwonAdapter configured with support for tables.
      */
     @NonNull
-    public static MarkwonAdapter createTablesAdapter() {
+    public static MarkwonAdapter createTablesAdapter(BaseActivity baseActivity, RequestManager glide) {
         return MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
                 .include(TableBlock.class, TableEntry.create(builder -> builder
                         .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
                         .textLayoutIsRoot(R.layout.view_table_entry_cell)))
+                .include(ImageAndGifBlock.class, new ImageAndGifEntry(baseActivity, glide))
                 .build();
     }
 

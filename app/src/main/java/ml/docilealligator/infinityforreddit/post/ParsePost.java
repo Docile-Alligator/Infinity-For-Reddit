@@ -319,7 +319,7 @@ public class ParsePost {
                         if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                             post.setSelfText("");
                         } else {
-                            post.setSelfText(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))));
+                            post.setSelfText(Utils.modifyMarkdown(Utils.parseInlineRedditImages(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY)))));
                         }
 
                         String authority = uri.getAuthority();
@@ -505,7 +505,7 @@ public class ParsePost {
                             if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                                 post.setSelfText("");
                             } else {
-                                post.setSelfText(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))));
+                                post.setSelfText(Utils.modifyMarkdown(Utils.parseInlineRedditImages(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY)))));
                             }
 
                             post.setPreviews(previews);
@@ -580,7 +580,7 @@ public class ParsePost {
                     if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                         post.setSelfText("");
                     } else {
-                        post.setSelfText(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))));
+                        post.setSelfText(Utils.modifyMarkdown(Utils.parseInlineRedditImages(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY)))));
                     }
 
                     String authority = uri.getAuthority();
@@ -724,7 +724,7 @@ public class ParsePost {
             if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                 post.setSelfText("");
             } else {
-                String selfText = Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY)));
+                String selfText = Utils.modifyMarkdown(Utils.parseInlineRedditImages(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))));
                 post.setSelfText(selfText);
                 if (data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                     post.setSelfTextPlainTrimmed("");
