@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit.markdown;
 
-import android.util.Log;
-
 import org.commonmark.node.Block;
 import org.commonmark.parser.block.AbstractBlockParser;
 import org.commonmark.parser.block.AbstractBlockParserFactory;
@@ -37,19 +35,17 @@ public class ImageAndGifBlockParser extends AbstractBlockParser {
     public static class Factory extends AbstractBlockParserFactory {
         private Pattern redditPreviewPattern =  Pattern.compile("!\\[img]\\(https://preview.redd.it/\\w+.(jpg|png)((\\?+[-a-zA-Z0-9()@:%_+.~#?&/=]*)|)\\)");
         private Map<String, Post.MediaMetadata> mediaMetadataMap;
-        private int fromIndex = "![img](https://preview.redd.it/".length();
+        private final int fromIndex = "![img](https://preview.redd.it/".length();
 
         @Override
         public BlockStart tryStart(ParserState state, MatchedBlockParser matchedBlockParser) {
             String line = state.getLine().toString();
-            Log.i("asdfa", "s " + line + "fuck");
             Matcher matcher = redditPreviewPattern.matcher(line);
             if (matcher.find()) {
                 if (matcher.end() == line.length()) {
                     int endIndex = line.indexOf('.', fromIndex);
                     if (endIndex > 0) {
                         String id = line.substring(fromIndex, endIndex);
-                        Log.i("asdfasdf", "s " + id);
                         return mediaMetadataMap.containsKey(id) ? BlockStart.of(new ImageAndGifBlockParser(mediaMetadataMap.get(id))) : BlockStart.none();
                     }
                 }
