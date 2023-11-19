@@ -567,6 +567,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
                 promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
                 return true;
             } else {
+                redditGalleryImageInfoList = adapter.getRedditGalleryImageInfoList();
                 if (!titleEditText.getText().toString().equals("") || redditGalleryImageInfoList != null) {
                     promptAlertDialog(R.string.discard, R.string.discard_detail);
                     return true;
@@ -585,6 +586,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
                 return true;
             }
 
+            redditGalleryImageInfoList = adapter.getRedditGalleryImageInfoList();
             if (redditGalleryImageInfoList == null || redditGalleryImageInfoList.isEmpty()) {
                 Snackbar.make(coordinatorLayout, R.string.select_an_image, Snackbar.LENGTH_SHORT).show();
                 return true;
@@ -635,6 +637,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
         if (isPosting) {
             promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
         } else {
+            redditGalleryImageInfoList = adapter.getRedditGalleryImageInfoList();
             if (!titleEditText.getText().toString().equals("") || redditGalleryImageInfoList != null) {
                 promptAlertDialog(R.string.discard, R.string.discard_detail);
             } else {
