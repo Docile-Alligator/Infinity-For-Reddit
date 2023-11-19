@@ -486,4 +486,8 @@ public final class Utils {
     public static <T> int fixIndexOutOfBounds(T[] array, int index) {
         return index >= array.length ? array.length - 1 : index;
     }
+
+    public static <T> int fixIndexOutOfBoundsUsingPredetermined(T[] array, int index, int predeterminedIndex) {
+        return index >= array.length ? predeterminedIndex : index;
+    }
 }
