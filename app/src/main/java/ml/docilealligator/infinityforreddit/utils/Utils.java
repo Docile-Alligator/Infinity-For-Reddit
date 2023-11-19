@@ -150,7 +150,8 @@ public final class Utils {
     }
 
     public static String parseInlineRedditImages(String markdown) {
-        StringBuilder markdownStringBuilder = new StringBuilder(markdown);
+        return markdown;
+        /*StringBuilder markdownStringBuilder = new StringBuilder(markdown);
         Pattern inlineRedditImagePattern = REGEX_PATTERNS[6];
         Matcher matcher = inlineRedditImagePattern.matcher(markdownStringBuilder);
         int start = 0;
@@ -161,7 +162,7 @@ public final class Utils {
             matcher = inlineRedditImagePattern.matcher(markdownStringBuilder);
         }
 
-        return markdownStringBuilder.toString();
+        return markdownStringBuilder.toString();*/
     }
 
     public static String trimTrailingWhitespace(String source) {

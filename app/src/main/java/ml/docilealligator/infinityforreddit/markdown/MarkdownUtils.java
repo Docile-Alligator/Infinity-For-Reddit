@@ -51,7 +51,7 @@ public class MarkdownUtils {
                 .usePlugin(MovementMethodPlugin.create(new SpoilerAwareMovementMethod()
                         .setOnLinkLongClickListener(onLinkLongClickListener)))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
-                .usePlugin(imageAndGifPlugin)
+                //.usePlugin(imageAndGifPlugin)
                 .usePlugin(TableEntryPlugin.create(context))
                 .build();
     }
