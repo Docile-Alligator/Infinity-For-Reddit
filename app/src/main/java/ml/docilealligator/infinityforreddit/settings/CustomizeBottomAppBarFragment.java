@@ -168,6 +168,11 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         mainActivityOption4 = sharedPreferences.getInt((accountName == null ? "-" : "") + SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_4, 3);
         mainActivityFAB = sharedPreferences.getInt((accountName == null ? "-" : "") + SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB, accountName == null ? 7: 0);
 
+        mainActivityOption1 = Utils.fixIndexOutOfBounds(mainActivityOptions, mainActivityOption1);
+        mainActivityOption2 = Utils.fixIndexOutOfBounds(mainActivityOptions, mainActivityOption2);
+        mainActivityOption3 = Utils.fixIndexOutOfBounds(mainActivityOptions, mainActivityOption3);
+        mainActivityOption4 = Utils.fixIndexOutOfBounds(mainActivityOptions, mainActivityOption4);
+
         mainActivityOptionCountTextView.setText(Integer.toString(mainActivityOptionCount));
         mainActivityOption1TextView.setText(mainActivityOptions[mainActivityOption1]);
         mainActivityOption2TextView.setText(mainActivityOptions[mainActivityOption2]);
@@ -284,6 +289,11 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         otherActivitiesOption3 = sharedPreferences.getInt((accountName == null ? "-" : "") + SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_3, 2);
         otherActivitiesOption4 = sharedPreferences.getInt((accountName == null ? "-" : "") + SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_4, 3);
         otherActivitiesFAB = sharedPreferences.getInt((accountName == null ? "-" : "") + SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, accountName == null ? 7: 0);
+
+        otherActivitiesOption1 = Utils.fixIndexOutOfBounds(otherActivitiesOptions, otherActivitiesOption1);
+        otherActivitiesOption2 = Utils.fixIndexOutOfBounds(otherActivitiesOptions, otherActivitiesOption2);
+        otherActivitiesOption3 = Utils.fixIndexOutOfBounds(otherActivitiesOptions, otherActivitiesOption3);
+        otherActivitiesOption4 = Utils.fixIndexOutOfBounds(otherActivitiesOptions, otherActivitiesOption4);
 
         otherActivitiesOptionCountTextView.setText(Integer.toString(otherActivitiesOptionCount));
         otherActivitiesOption1TextView.setText(otherActivitiesOptions[otherActivitiesOption1]);

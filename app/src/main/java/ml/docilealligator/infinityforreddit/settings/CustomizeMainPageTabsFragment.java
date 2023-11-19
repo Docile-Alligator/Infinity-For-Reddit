@@ -10,7 +10,6 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -226,6 +225,9 @@ public class CustomizeMainPageTabsFragment extends Fragment {
 
         tab1CurrentTitle = mainActivityTabsSharedPreferences.getString((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_TITLE, getString(R.string.home));
         tab1CurrentPostType = mainActivityTabsSharedPreferences.getInt((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME);
+        if (accountName != null) {
+            tab1CurrentPostType = Utils.fixIndexOutOfBounds(typeValues, tab1CurrentPostType);
+        }
         tab1CurrentName = mainActivityTabsSharedPreferences.getString((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, "");
         tab1TypeSummaryTextView.setText(typeValues[tab1CurrentPostType]);
         tab1TitleSummaryTextView.setText(tab1CurrentTitle);
@@ -315,6 +317,9 @@ public class CustomizeMainPageTabsFragment extends Fragment {
 
         tab2CurrentTitle = mainActivityTabsSharedPreferences.getString((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_TITLE, getString(R.string.popular));
         tab2CurrentPostType = mainActivityTabsSharedPreferences.getInt((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_POPULAR);
+        if (accountName != null) {
+            tab2CurrentPostType = Utils.fixIndexOutOfBounds(typeValues, tab2CurrentPostType);
+        }
         tab2CurrentName = mainActivityTabsSharedPreferences.getString((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, "");
         tab2TypeSummaryTextView.setText(typeValues[tab2CurrentPostType]);
         tab2TitleSummaryTextView.setText(tab2CurrentTitle);
@@ -401,6 +406,9 @@ public class CustomizeMainPageTabsFragment extends Fragment {
 
         tab3CurrentTitle = mainActivityTabsSharedPreferences.getString((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_TITLE, getString(R.string.all));
         tab3CurrentPostType = mainActivityTabsSharedPreferences.getInt((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_ALL);
+        if (accountName == null) {
+            tab3CurrentPostType = Utils.fixIndexOutOfBounds(typeValues, tab3CurrentPostType);
+        }
         tab3CurrentName = mainActivityTabsSharedPreferences.getString((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, "");
         tab3TypeSummaryTextView.setText(typeValues[tab3CurrentPostType]);
         tab3TitleSummaryTextView.setText(tab3CurrentTitle);

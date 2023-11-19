@@ -482,4 +482,8 @@ public final class Utils {
             ((TextView) rootView).setTypeface(typeface);
         }
     }
+
+    public static <T> int fixIndexOutOfBounds(T[] array, int index) {
+        return index >= array.length ? array.length - 1 : index;
+    }
 }
