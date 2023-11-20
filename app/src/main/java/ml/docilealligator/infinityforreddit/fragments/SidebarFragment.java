@@ -44,8 +44,10 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomS
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
+import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.subreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditViewModel;
@@ -148,7 +150,13 @@ public class SidebarFragment extends Fragment {
         ImageAndGifPlugin imageAndGifPlugin = new ImageAndGifPlugin();
         Markwon markwon = MarkdownUtils.createFullRedditMarkwon(activity,
                 miscPlugin, imageAndGifPlugin, markdownColor, spoilerBackgroundColor, onLinkLongClickListener);
-        MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(activity, Glide.with(this));
+        MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(activity, Glide.with(this),
+                new ImageAndGifEntry.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Post.MediaMetadata mediaMetadata) {
+
+                    }
+                }));
 
         linearLayoutManager = new LinearLayoutManagerBugFixed(activity);
         recyclerView.setLayoutManager(linearLayoutManager);

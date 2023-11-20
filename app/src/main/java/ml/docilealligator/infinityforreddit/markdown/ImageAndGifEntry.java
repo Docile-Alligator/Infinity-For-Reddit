@@ -21,14 +21,17 @@ import io.noties.markwon.recycler.MarkwonAdapter;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.databinding.MarkdownImageAndGifBlockBinding;
+import ml.docilealligator.infinityforreddit.post.Post;
 
 public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, ImageAndGifEntry.Holder> {
     private BaseActivity baseActivity;
     private RequestManager glide;
+    private OnItemClickListener onItemClickListener;
 
-    public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide) {
+    public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide, OnItemClickListener onItemClickListener) {
         this.baseActivity = baseActivity;
         this.glide = glide;
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -39,6 +42,8 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
 
     @Override
     public void bindHolder(@NonNull Markwon markwon, @NonNull Holder holder, @NonNull ImageAndGifBlock node) {
+        holder.imageAndGifBlock = node;
+
         holder.binding.progressBarMarkdownImageAndGifBlock.setVisibility(View.VISIBLE);
 
         RequestBuilder<Drawable> imageRequestBuilder = glide.load(node.mediaMetadata.original.url).listener(holder.requestListener);
@@ -62,6 +67,7 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
     public class Holder extends MarkwonAdapter.Holder {
         MarkdownImageAndGifBlockBinding binding;
         RequestListener<Drawable> requestListener;
+        ImageAndGifBlock imageAndGifBlock;
 
         public Holder(@NonNull MarkdownImageAndGifBlockBinding binding) {
             super(binding.getRoot());
@@ -81,6 +87,11 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
                     return false;
                 }
             };
+            binding.getRoot().setOnClickListener(view -> {
+                if (imageAndGifBlock != null) {
+                    onItemClickListener.onItemClick(imageAndGifBlock.mediaMetadata);
+                }
+            });
         }
 
         /*private final RequestListener<Drawable> requestListener = new RequestListener<Drawable>() {
@@ -194,5 +205,9 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
                 return true;
             }
         }*/
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Post.MediaMetadata mediaMetadata);
     }
 }

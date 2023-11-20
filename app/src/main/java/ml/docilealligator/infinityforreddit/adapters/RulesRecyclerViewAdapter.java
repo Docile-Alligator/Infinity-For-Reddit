@@ -34,8 +34,10 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
+import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
+import ml.docilealligator.infinityforreddit.post.Post;
 
 public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAdapter.RuleViewHolder> {
     private BaseActivity activity;
@@ -141,7 +143,13 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
             if (activity.typeface != null) {
                 shortNameTextView.setTypeface(activity.typeface);
             }
-            markwonAdapter = MarkdownUtils.createTablesAdapter(activity, Glide.with(activity));
+            markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(activity, Glide.with(activity),
+                    new ImageAndGifEntry.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Post.MediaMetadata mediaMetadata) {
+
+                        }
+                    }));
             SwipeLockLinearLayoutManager swipeLockLinearLayoutManager = new SwipeLockLinearLayoutManager(activity,
                     new SwipeLockInterface() {
                 @Override

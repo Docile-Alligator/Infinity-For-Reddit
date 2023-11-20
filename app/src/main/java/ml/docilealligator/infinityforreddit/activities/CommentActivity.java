@@ -64,8 +64,10 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCommentBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
+import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import okhttp3.ConnectionPool;
@@ -211,7 +213,12 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             ImageAndGifPlugin imageAndGifPlugin = new ImageAndGifPlugin();
             Markwon postBodyMarkwon = MarkdownUtils.createFullRedditMarkwon(this,
                     miscPlugin, imageAndGifPlugin, parentTextColor, parentSpoilerBackgroundColor, null);
-            MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(this, mGlide);
+            MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(this, mGlide, new ImageAndGifEntry.OnItemClickListener() {
+                @Override
+                public void onItemClick(Post.MediaMetadata mediaMetadata) {
+
+                }
+            }));
             binding.commentContentMarkdownView.setLayoutManager(new LinearLayoutManagerBugFixed(this));
             binding.commentContentMarkdownView.setAdapter(markwonAdapter);
             markwonAdapter.setMarkdown(postBodyMarkwon, parentBodyMarkdown);

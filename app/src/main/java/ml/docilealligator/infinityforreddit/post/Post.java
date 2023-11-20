@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.post;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -771,12 +772,15 @@ public class Post implements Parcelable {
         public String id;
         //E.g. Image
         public String e;
+        public String fileName;
         public MediaItem original;
         public MediaItem downscaled;
 
         public MediaMetadata(String id, String e, MediaItem original, MediaItem downscaled) {
             this.id = id;
             this.e = e;
+            String path = Uri.parse(original.url).getPath();
+            this.fileName = path == null ? "Image.jpg" : path.substring(1);
             this.original = original;
             this.downscaled = downscaled;
         }

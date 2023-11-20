@@ -103,6 +103,7 @@ import ml.docilealligator.infinityforreddit.databinding.ItemPostDetailVideoAndGi
 import ml.docilealligator.infinityforreddit.databinding.ItemPostDetailVideoAutoplayBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostDetailVideoAutoplayLegacyControllerBinding;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
+import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -292,7 +293,20 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mImageAndGifPlugin = new ImageAndGifPlugin();
         mPostDetailMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
                 miscPlugin, mImageAndGifPlugin, markdownColor, postSpoilerBackgroundColor, onLinkLongClickListener);
-        mMarkwonAdapter = MarkdownUtils.createTablesAdapter(activity, mGlide);
+        mMarkwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(activity, mGlide, new ImageAndGifEntry.OnItemClickListener() {
+            @Override
+            public void onItemClick(Post.MediaMetadata mediaMetadata) {
+                Intent intent = new Intent(activity, ViewImageOrGifActivity.class);
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, mediaMetadata.original.url);
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_IS_NSFW, post.isNSFW());
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, post.getSubredditName());
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mediaMetadata.fileName);
+                if (canStartActivity) {
+                    canStartActivity = false;
+                    activity.startActivity(intent);
+                }
+            }
+        }));
 
         mSeparatePostAndComments = separatePostAndComments;
         mLegacyAutoplayVideoControllerUI = sharedPreferences.getBoolean(SharedPreferencesUtils.LEGACY_AUTOPLAY_VIDEO_CONTROLLER_UI, false);
