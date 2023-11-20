@@ -25,20 +25,43 @@ import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.databinding.MarkdownImageAndGifBlockBinding;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, ImageAndGifEntry.Holder> {
     private BaseActivity baseActivity;
     private RequestManager glide;
     private SaveMemoryCenterInisdeDownsampleStrategy saveMemoryCenterInsideDownsampleStrategy;
     private OnItemClickListener onItemClickListener;
+    private boolean dataSavingMode;
+    private boolean blurImage;
 
-    public ImageAndGifEntry(BaseActivity baseActivity, SharedPreferences sharedPreferences,
-                            RequestManager glide, OnItemClickListener onItemClickListener) {
+    public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide,
+                            OnItemClickListener onItemClickListener) {
         this.baseActivity = baseActivity;
         this.glide = glide;
+        SharedPreferences sharedPreferences = baseActivity.getDefaultSharedPreferences();
         this.saveMemoryCenterInsideDownsampleStrategy = new SaveMemoryCenterInisdeDownsampleStrategy(
                 Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.POST_FEED_MAX_RESOLUTION, "5000000")));
         this.onItemClickListener = onItemClickListener;
+
+        String dataSavingModeString = sharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
+        if (dataSavingModeString.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ALWAYS)) {
+            dataSavingMode = true;
+        } else if (dataSavingModeString.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
+            dataSavingMode = Utils.getConnectedNetwork(baseActivity) == Utils.NETWORK_TYPE_CELLULAR;
+        }
+    }
+
+    public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide, boolean dataSavingMode, boolean blurImage,
+                            OnItemClickListener onItemClickListener) {
+        this.baseActivity = baseActivity;
+        this.glide = glide;
+        SharedPreferences sharedPreferences = baseActivity.getDefaultSharedPreferences();
+        this.saveMemoryCenterInsideDownsampleStrategy = new SaveMemoryCenterInisdeDownsampleStrategy(
+                Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.POST_FEED_MAX_RESOLUTION, "5000000")));
+        this.onItemClickListener = onItemClickListener;
+        this.dataSavingMode = dataSavingMode;
+        this.blurImage = blurImage;
     }
 
     @NonNull
@@ -53,8 +76,15 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
 
         holder.binding.progressBarMarkdownImageAndGifBlock.setVisibility(View.VISIBLE);
 
-        RequestBuilder<Drawable> imageRequestBuilder = glide.load(node.mediaMetadata.original.url).listener(holder.requestListener);
-        boolean blurImage = false;
+        RequestBuilder<Drawable> imageRequestBuilder;
+        if (dataSavingMode) {
+            imageRequestBuilder = glide.load(node.mediaMetadata.downscaled.url).listener(holder.requestListener);
+            holder.binding.imageViewMarkdownImageAndGifBlock.setRatio((float) node.mediaMetadata.downscaled.y / node.mediaMetadata.downscaled.x);
+        } else {
+            imageRequestBuilder = glide.load(node.mediaMetadata.original.url).listener(holder.requestListener);
+            holder.binding.imageViewMarkdownImageAndGifBlock.setRatio((float) node.mediaMetadata.original.y / node.mediaMetadata.original.x);
+        }
+
         if (blurImage) {
             imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                     .into(holder.binding.imageViewMarkdownImageAndGifBlock);

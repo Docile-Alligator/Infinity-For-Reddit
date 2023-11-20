@@ -183,7 +183,7 @@ public class WikiActivity extends BaseActivity {
         markwon = MarkdownUtils.createFullRedditMarkwon(this,
                 miscPlugin, imageAndGifPlugin, markdownColor, spoilerBackgroundColor, onLinkLongClickListener);
 
-        markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(this, mSharedPreferences,
+        markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(this,
                 mGlide, new ImageAndGifEntry.OnItemClickListener() {
                     @Override
                     public void onItemClick(Post.MediaMetadata mediaMetadata) {

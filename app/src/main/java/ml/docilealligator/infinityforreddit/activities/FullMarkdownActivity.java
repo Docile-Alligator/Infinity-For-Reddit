@@ -147,7 +147,7 @@ public class FullMarkdownActivity extends BaseActivity {
                 miscPlugin, imageAndGifPlugin, markdownColor, spoilerBackgroundColor, null);
 
         MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(this,
-                mSharedPreferences, Glide.with(this), new ImageAndGifEntry.OnItemClickListener() {
+                Glide.with(this), new ImageAndGifEntry.OnItemClickListener() {
                     @Override
                     public void onItemClick(Post.MediaMetadata mediaMetadata) {
 

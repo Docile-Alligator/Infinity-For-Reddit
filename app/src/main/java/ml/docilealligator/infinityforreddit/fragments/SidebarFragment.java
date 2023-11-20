@@ -51,7 +51,6 @@ import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.subreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditViewModel;
-import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 public class SidebarFragment extends Fragment {
@@ -151,7 +150,7 @@ public class SidebarFragment extends Fragment {
         Markwon markwon = MarkdownUtils.createFullRedditMarkwon(activity,
                 miscPlugin, imageAndGifPlugin, markdownColor, spoilerBackgroundColor, onLinkLongClickListener);
         MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(activity,
-                activity.getDefaultSharedPreferences(),Glide.with(this),
+                Glide.with(this),
                 new ImageAndGifEntry.OnItemClickListener() {
                     @Override
                     public void onItemClick(Post.MediaMetadata mediaMetadata) {
