@@ -125,7 +125,7 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
     }
 
     @Override
-    protected SharedPreferences getDefaultSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

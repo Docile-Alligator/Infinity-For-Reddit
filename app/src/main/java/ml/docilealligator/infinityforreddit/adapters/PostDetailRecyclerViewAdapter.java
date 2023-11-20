@@ -293,7 +293,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mImageAndGifPlugin = new ImageAndGifPlugin();
         mPostDetailMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
                 miscPlugin, mImageAndGifPlugin, markdownColor, postSpoilerBackgroundColor, onLinkLongClickListener);
-        mMarkwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(activity, mGlide, new ImageAndGifEntry.OnItemClickListener() {
+        mMarkwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(activity, sharedPreferences,
+                mGlide, new ImageAndGifEntry.OnItemClickListener() {
             @Override
             public void onItemClick(Post.MediaMetadata mediaMetadata) {
                 Intent intent = new Intent(activity, ViewImageOrGifActivity.class);

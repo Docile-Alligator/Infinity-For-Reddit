@@ -130,7 +130,7 @@ public class MultiredditSelectionActivity extends BaseActivity implements Activi
     }
 
     @Override
-    protected SharedPreferences getDefaultSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

@@ -297,7 +297,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     }
 
     @Override
-    protected SharedPreferences getDefaultSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

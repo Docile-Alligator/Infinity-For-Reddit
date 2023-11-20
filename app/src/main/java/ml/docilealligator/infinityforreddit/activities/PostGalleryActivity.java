@@ -419,7 +419,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     }
 
     @Override
-    protected SharedPreferences getDefaultSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

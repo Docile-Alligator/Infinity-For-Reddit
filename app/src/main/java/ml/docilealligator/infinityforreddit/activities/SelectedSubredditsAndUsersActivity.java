@@ -181,7 +181,7 @@ public class SelectedSubredditsAndUsersActivity extends BaseActivity implements 
     }
 
     @Override
-    protected SharedPreferences getDefaultSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

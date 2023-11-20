@@ -183,8 +183,8 @@ public class WikiActivity extends BaseActivity {
         markwon = MarkdownUtils.createFullRedditMarkwon(this,
                 miscPlugin, imageAndGifPlugin, markdownColor, spoilerBackgroundColor, onLinkLongClickListener);
 
-        markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(this, mGlide,
-                new ImageAndGifEntry.OnItemClickListener() {
+        markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(this, mSharedPreferences,
+                mGlide, new ImageAndGifEntry.OnItemClickListener() {
                     @Override
                     public void onItemClick(Post.MediaMetadata mediaMetadata) {
 
@@ -296,7 +296,7 @@ public class WikiActivity extends BaseActivity {
     }
 
     @Override
-    protected SharedPreferences getDefaultSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

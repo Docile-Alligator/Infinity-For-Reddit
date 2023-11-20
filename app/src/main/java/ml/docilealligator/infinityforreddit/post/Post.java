@@ -788,6 +788,7 @@ public class Post implements Parcelable {
         protected MediaMetadata(Parcel in) {
             id = in.readString();
             e = in.readString();
+            fileName = in.readString();
             original = in.readParcelable(MediaItem.class.getClassLoader());
             downscaled = in.readParcelable(MediaItem.class.getClassLoader());
         }
@@ -813,6 +814,7 @@ public class Post implements Parcelable {
         public void writeToParcel(@NonNull Parcel dest, int flags) {
             dest.writeString(id);
             dest.writeString(e);
+            dest.writeString(fileName);
             dest.writeParcelable(original, flags);
             dest.writeParcelable(downscaled, flags);
         }

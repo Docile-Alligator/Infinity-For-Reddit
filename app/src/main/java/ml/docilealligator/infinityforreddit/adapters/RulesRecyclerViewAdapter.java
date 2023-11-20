@@ -143,7 +143,8 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
             if (activity.typeface != null) {
                 shortNameTextView.setTypeface(activity.typeface);
             }
-            markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(activity, Glide.with(activity),
+            markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(activity,
+                    activity.getDefaultSharedPreferences(), Glide.with(activity),
                     new ImageAndGifEntry.OnItemClickListener() {
                         @Override
                         public void onItemClick(Post.MediaMetadata mediaMetadata) {

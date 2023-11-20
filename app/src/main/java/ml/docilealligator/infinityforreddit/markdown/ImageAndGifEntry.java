@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.markdown;
 
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,18 +20,24 @@ import com.bumptech.glide.request.target.Target;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import jp.wasabeef.glide.transformations.BlurTransformation;
+import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.databinding.MarkdownImageAndGifBlockBinding;
 import ml.docilealligator.infinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, ImageAndGifEntry.Holder> {
     private BaseActivity baseActivity;
     private RequestManager glide;
+    private SaveMemoryCenterInisdeDownsampleStrategy saveMemoryCenterInsideDownsampleStrategy;
     private OnItemClickListener onItemClickListener;
 
-    public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide, OnItemClickListener onItemClickListener) {
+    public ImageAndGifEntry(BaseActivity baseActivity, SharedPreferences sharedPreferences,
+                            RequestManager glide, OnItemClickListener onItemClickListener) {
         this.baseActivity = baseActivity;
         this.glide = glide;
+        this.saveMemoryCenterInsideDownsampleStrategy = new SaveMemoryCenterInisdeDownsampleStrategy(
+                Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.POST_FEED_MAX_RESOLUTION, "5000000")));
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -52,7 +59,7 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
             imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                     .into(holder.binding.imageViewMarkdownImageAndGifBlock);
         } else {
-            imageRequestBuilder.centerInside().into(holder.binding.imageViewMarkdownImageAndGifBlock);
+            imageRequestBuilder.centerInside().downsample(saveMemoryCenterInsideDownsampleStrategy).into(holder.binding.imageViewMarkdownImageAndGifBlock);
         }
     }
 

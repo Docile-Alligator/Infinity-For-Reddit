@@ -429,7 +429,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
     }
 
     @Override
-    protected SharedPreferences getDefaultSharedPreferences() {
+    public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 

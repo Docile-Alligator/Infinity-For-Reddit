@@ -213,7 +213,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             ImageAndGifPlugin imageAndGifPlugin = new ImageAndGifPlugin();
             Markwon postBodyMarkwon = MarkdownUtils.createFullRedditMarkwon(this,
                     miscPlugin, imageAndGifPlugin, parentTextColor, parentSpoilerBackgroundColor, null);
-            MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(this, mGlide, new ImageAndGifEntry.OnItemClickListener() {
+            MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(this, mSharedPreferences, mGlide, new ImageAndGifEntry.OnItemClickListener() {
                 @Override
                 public void onItemClick(Post.MediaMetadata mediaMetadata) {
 
