@@ -302,7 +302,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

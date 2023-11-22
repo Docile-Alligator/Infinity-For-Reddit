@@ -401,7 +401,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

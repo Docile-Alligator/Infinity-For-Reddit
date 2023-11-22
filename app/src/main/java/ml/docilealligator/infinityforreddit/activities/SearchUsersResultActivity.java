@@ -130,7 +130,7 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

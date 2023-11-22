@@ -426,7 +426,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

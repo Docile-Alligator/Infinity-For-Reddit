@@ -434,7 +434,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

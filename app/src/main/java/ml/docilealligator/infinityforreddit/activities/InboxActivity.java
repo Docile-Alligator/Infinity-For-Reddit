@@ -218,7 +218,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

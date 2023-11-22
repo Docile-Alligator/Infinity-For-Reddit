@@ -22,6 +22,7 @@ import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ml.docilealligator.infinityforreddit.MediaMetadata;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -232,7 +233,7 @@ public class ParsePost {
             }
         }
 
-        Map<String, Post.MediaMetadata> mediaMetadataMap = parseMediaMetadata(data);
+        Map<String, MediaMetadata> mediaMetadataMap = parseMediaMetadata(data);
         if (data.has(JSONUtils.CROSSPOST_PARENT_LIST)) {
             //Cross post
             //data.getJSONArray(JSONUtils.CROSSPOST_PARENT_LIST).getJSONObject(0) out of bounds????????????
@@ -257,10 +258,10 @@ public class ParsePost {
     }
 
     @Nullable
-    private static Map<String, Post.MediaMetadata> parseMediaMetadata(JSONObject data) {
+    private static Map<String, MediaMetadata> parseMediaMetadata(JSONObject data) {
         try {
             if (data.has(JSONUtils.MEDIA_METADATA_KEY)) {
-                Map<String, Post.MediaMetadata> mediaMetadataMap = new HashMap<>();
+                Map<String, MediaMetadata> mediaMetadataMap = new HashMap<>();
                 JSONObject mediaMetadataJSON = data.getJSONObject(JSONUtils.MEDIA_METADATA_KEY);
                 for (Iterator<String> it = mediaMetadataJSON.keys(); it.hasNext();) {
                     try {
@@ -274,14 +275,14 @@ public class ParsePost {
                         } else {
                             downscaledItemJSON = downscales.getJSONObject(3);
                         }
-                        Post.MediaMetadata.MediaItem downscaledItem = new Post.MediaMetadata.MediaItem(downscaledItemJSON.getInt(JSONUtils.X_KEY),
+                        MediaMetadata.MediaItem downscaledItem = new MediaMetadata.MediaItem(downscaledItemJSON.getInt(JSONUtils.X_KEY),
                                 downscaledItemJSON.getInt(JSONUtils.Y_KEY), downscaledItemJSON.getString(JSONUtils.U_KEY));
                         JSONObject originalItemJSON = media.getJSONObject(JSONUtils.S_KEY);
-                        Post.MediaMetadata.MediaItem originalItem = new Post.MediaMetadata.MediaItem(originalItemJSON.getInt(JSONUtils.X_KEY),
+                        MediaMetadata.MediaItem originalItem = new MediaMetadata.MediaItem(originalItemJSON.getInt(JSONUtils.X_KEY),
                                 originalItemJSON.getInt(JSONUtils.Y_KEY), originalItemJSON.getString(JSONUtils.U_KEY));
 
                         String id = media.getString(JSONUtils.ID_KEY);
-                        mediaMetadataMap.put(id, new Post.MediaMetadata(id, media.getString(JSONUtils.E_KEY),
+                        mediaMetadataMap.put(id, new MediaMetadata(id, media.getString(JSONUtils.E_KEY),
                                 originalItem, downscaledItem));
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -299,7 +300,7 @@ public class ParsePost {
     private static Post parseData(JSONObject data, String permalink, String id, String fullName,
                                   String subredditName, String subredditNamePrefixed, String author,
                                   String authorFlair, String authorFlairHTML, long postTimeMillis, String title,
-                                  ArrayList<Post.Preview> previews, Map<String, Post.MediaMetadata> mediaMetadataMap,
+                                  ArrayList<Post.Preview> previews, Map<String, MediaMetadata> mediaMetadataMap,
                                   int score, int voteType, int nComments, int upvoteRatio, String flair,
                                   String awards, int nAwards, boolean hidden, boolean spoiler, boolean nsfw,
                                   boolean stickied, boolean archived, boolean locked, boolean saved,
@@ -366,7 +367,7 @@ public class ParsePost {
                         if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                             post.setSelfText("");
                         } else {
-                            post.setSelfText(Utils.modifyMarkdown(Utils.parseInlineRedditImages(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY)))));
+                            post.setSelfText(Utils.parseInlineRedditImages(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY)))));
                         }
 
                         String authority = uri.getAuthority();
@@ -552,7 +553,7 @@ public class ParsePost {
                             if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                                 post.setSelfText("");
                             } else {
-                                post.setSelfText(Utils.modifyMarkdown(Utils.parseInlineRedditImages(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY)))));
+                                post.setSelfText(Utils.parseInlineRedditImages(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY)))));
                             }
 
                             post.setPreviews(previews);
@@ -627,7 +628,7 @@ public class ParsePost {
                     if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                         post.setSelfText("");
                     } else {
-                        post.setSelfText(Utils.modifyMarkdown(Utils.parseInlineRedditImages(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY)))));
+                        post.setSelfText(Utils.parseInlineRedditImages(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY)))));
                     }
 
                     String authority = uri.getAuthority();
@@ -771,7 +772,7 @@ public class ParsePost {
             if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                 post.setSelfText("");
             } else {
-                String selfText = Utils.modifyMarkdown(Utils.parseInlineRedditImages(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))));
+                String selfText = Utils.parseInlineRedditImages(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))));
                 post.setSelfText(selfText);
                 if (data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                     post.setSelfTextPlainTrimmed("");

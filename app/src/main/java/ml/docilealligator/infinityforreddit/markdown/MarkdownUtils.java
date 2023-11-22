@@ -108,11 +108,12 @@ public class MarkdownUtils {
      * Creates a CustomMarkwonAdapter configured with support for tables.
      */
     @NonNull
-    public static CustomMarkwonAdapter createCustomTablesAdapter() {
+    public static CustomMarkwonAdapter createCustomTablesAdapter(ImageAndGifEntry imageAndGifEntry) {
         return CustomMarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
                 .include(TableBlock.class, TableEntry.create(builder -> builder
                         .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
                         .textLayoutIsRoot(R.layout.view_table_entry_cell)))
+                .include(ImageAndGifBlock.class, imageAndGifEntry)
                 .build();
     }
 }

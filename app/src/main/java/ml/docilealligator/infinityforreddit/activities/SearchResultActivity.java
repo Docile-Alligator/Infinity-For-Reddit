@@ -226,7 +226,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

@@ -443,7 +443,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

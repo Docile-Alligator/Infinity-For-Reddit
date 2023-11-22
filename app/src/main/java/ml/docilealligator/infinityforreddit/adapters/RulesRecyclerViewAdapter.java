@@ -25,6 +25,7 @@ import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
+import ml.docilealligator.infinityforreddit.MediaMetadata;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Rule;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
@@ -37,7 +38,6 @@ import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
-import ml.docilealligator.infinityforreddit.post.Post;
 
 public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAdapter.RuleViewHolder> {
     private BaseActivity activity;
@@ -147,7 +147,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                     Glide.with(activity),
                     new ImageAndGifEntry.OnItemClickListener() {
                         @Override
-                        public void onItemClick(Post.MediaMetadata mediaMetadata) {
+                        public void onItemClick(MediaMetadata mediaMetadata) {
 
                         }
                     }));

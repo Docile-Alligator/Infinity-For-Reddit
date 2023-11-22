@@ -207,7 +207,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

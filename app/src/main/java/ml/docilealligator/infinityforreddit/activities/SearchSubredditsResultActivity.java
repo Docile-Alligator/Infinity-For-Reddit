@@ -131,7 +131,7 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

@@ -324,7 +324,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

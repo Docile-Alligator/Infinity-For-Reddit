@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.Locale;
@@ -36,12 +37,14 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
+import ml.docilealligator.infinityforreddit.MediaMetadata;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.VoteThing;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewImageOrGifActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CommentMoreBottomSheetFragment;
@@ -55,6 +58,7 @@ import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.databinding.ItemCommentBinding;
+import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -82,6 +86,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private Locale mLocale;
     private ImageAndGifPlugin mImageAndGifPlugin;
     private Markwon mMarkwon;
+    private ImageAndGifEntry mImageAndGifEntry;
     private RecyclerView.RecycledViewPool recycledViewPool;
     private String mAccessToken;
     private String mAccountName;
@@ -103,13 +108,15 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private String mTimeFormatPattern;
     private boolean mShowCommentDivider;
     private boolean mShowAbsoluteNumberOfVotes;
+    private boolean canStartActivity = true;
     private NetworkState networkState;
     private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
 
     public CommentsListingRecyclerViewAdapter(BaseActivity activity, Retrofit oauthRetrofit,
                                               CustomThemeWrapper customThemeWrapper, Locale locale,
                                               SharedPreferences sharedPreferences, String accessToken,
-                                              String accountName, RetryLoadingMoreCallback retryLoadingMoreCallback) {
+                                              String accountName, String username,
+                                              RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         mActivity = activity;
         mOauthRetrofit = oauthRetrofit;
@@ -173,6 +180,23 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mImageAndGifPlugin = new ImageAndGifPlugin();
         mMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
                 miscPlugin, mImageAndGifPlugin, mCommentColor, commentSpoilerBackgroundColor, onLinkLongClickListener);
+        mImageAndGifEntry = new ImageAndGifEntry(activity, Glide.with(activity), new ImageAndGifEntry.OnItemClickListener() {
+            @Override
+            public void onItemClick(MediaMetadata mediaMetadata) {
+                Intent intent = new Intent(activity, ViewImageOrGifActivity.class);
+                if (mediaMetadata.isGIF) {
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, mediaMetadata.original.url);
+                } else {
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, mediaMetadata.original.url);
+                }
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, username);
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mediaMetadata.fileName);
+                if (canStartActivity) {
+                    canStartActivity = false;
+                    activity.startActivity(intent);
+                }
+            }
+        });
         recycledViewPool = new RecyclerView.RecycledViewPool();
     }
 
@@ -217,6 +241,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     Utils.setHTMLWithImageToTextView(((CommentBaseViewHolder) holder).awardsTextView, comment.getAwards(), true);
                 }
 
+                mImageAndGifPlugin.setMediaMetadataMap(comment.getMediaMetadataMap());
                 ((CommentBaseViewHolder) holder).markwonAdapter.setMarkdown(mMarkwon, comment.getCommentMarkdown());
                 // noinspection NotifyDataSetChanged
                 ((CommentBaseViewHolder) holder).markwonAdapter.notifyDataSetChanged();
@@ -327,22 +352,16 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         }
     }
 
-    public void giveAward(String awardsHTML, int position) {
-        if (position >= 0 && position < getItemCount()) {
-            Comment comment = getItem(position);
-            if (comment != null) {
-                comment.addAwards(awardsHTML);
-                notifyItemChanged(position);
-            }
-        }
-    }
-
     public void editComment(String commentContentMarkdown, int position) {
         Comment comment = getItem(position);
         if (comment != null) {
             comment.setCommentMarkdown(commentContentMarkdown);
             notifyItemChanged(position);
         }
+    }
+
+    public void setCanStartActivity(boolean canStartActivity) {
+        this.canStartActivity = canStartActivity;
     }
 
     public interface RetryLoadingMoreCallback {
@@ -533,7 +552,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 }
             });
             commentMarkdownView.setLayoutManager(linearLayoutManager);
-            markwonAdapter = MarkdownUtils.createCustomTablesAdapter();
+            markwonAdapter = MarkdownUtils.createCustomTablesAdapter(mImageAndGifEntry);
             markwonAdapter.setOnClickListener(view -> {
                 if (view instanceof SpoilerOnClickTextView) {
                     if (((SpoilerOnClickTextView) view).isSpoilerOnClick()) {
@@ -541,7 +560,10 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         return;
                     }
                 }
-                itemView.callOnClick();
+                if (canStartActivity) {
+                    canStartActivity = false;
+                    itemView.callOnClick();
+                }
             });
             commentMarkdownView.setAdapter(markwonAdapter);
 

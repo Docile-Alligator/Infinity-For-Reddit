@@ -254,7 +254,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

@@ -262,11 +262,6 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
             mLinearLayoutManager = new LinearLayoutManagerBugFixed(mActivity);
             mCommentRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-            mAdapter = new CommentsListingRecyclerViewAdapter(mActivity, mOauthRetrofit, customThemeWrapper,
-                    getResources().getConfiguration().locale, mSharedPreferences,
-                    getArguments().getString(EXTRA_ACCESS_TOKEN), getArguments().getString(EXTRA_ACCOUNT_NAME),
-                    () -> mCommentViewModel.retryLoadingMore());
-
             String username = getArguments().getString(EXTRA_USERNAME);
             String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_USER_COMMENT, SortType.Type.NEW.name());
             if (sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
@@ -275,6 +270,11 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
             } else {
                 sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
             }
+
+            mAdapter = new CommentsListingRecyclerViewAdapter(mActivity, mOauthRetrofit, customThemeWrapper,
+                    getResources().getConfiguration().locale, mSharedPreferences,
+                    getArguments().getString(EXTRA_ACCESS_TOKEN), getArguments().getString(EXTRA_ACCOUNT_NAME),
+                    username, () -> mCommentViewModel.retryLoadingMore());
 
             mCommentRecyclerView.setAdapter(mAdapter);
 
@@ -331,6 +331,14 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
             mCommentViewModel.getPaginationNetworkState().observe(getViewLifecycleOwner(), networkState -> mAdapter.setNetworkState(networkState));
 
             mSwipeRefreshLayout.setOnRefreshListener(() -> mCommentViewModel.refresh());
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mAdapter != null) {
+            mAdapter.setCanStartActivity(true);
         }
     }
 
@@ -397,12 +405,6 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
     public SortType getSortType() {
         return sortType;
-    }
-
-    public void giveAward(String awardsHTML, int position) {
-        if (mAdapter != null) {
-            mAdapter.giveAward(awardsHTML, position);
-        }
     }
 
     public void editComment(String commentMarkdown, int position) {

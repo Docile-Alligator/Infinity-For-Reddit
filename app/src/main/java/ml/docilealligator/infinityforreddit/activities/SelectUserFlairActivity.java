@@ -224,7 +224,7 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

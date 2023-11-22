@@ -220,7 +220,7 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

@@ -594,7 +594,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 
@@ -1704,15 +1704,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 } else if (fragment instanceof CommentsListingFragment) {
                     SortType sortType = ((CommentsListingFragment) fragment).getSortType();
                     Utils.displaySortTypeInToolbar(sortType, toolbar);
-                }
-            }
-        }
-
-        void giveAward(String awardsHTML, int position) {
-            if (fragmentManager != null) {
-                Fragment fragment = fragmentManager.findFragmentByTag("f1");
-                if (fragment instanceof CommentsListingFragment) {
-                    ((CommentsListingFragment) fragment).giveAward(awardsHTML, position);
                 }
             }
         }

@@ -176,7 +176,7 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

@@ -186,7 +186,7 @@ public class SelectedSubredditsAndUsersActivity extends BaseActivity implements 
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

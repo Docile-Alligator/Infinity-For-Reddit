@@ -172,7 +172,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

@@ -135,7 +135,7 @@ public class MultiredditSelectionActivity extends BaseActivity implements Activi
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

@@ -278,7 +278,7 @@ public class EditMultiRedditActivity extends BaseActivity {
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

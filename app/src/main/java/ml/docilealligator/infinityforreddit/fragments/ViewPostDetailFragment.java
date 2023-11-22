@@ -1205,6 +1205,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mPostAdapter != null) {
             mPostAdapter.setCanStartActivity(true);
         }
+        if (mCommentsAdapter != null) {
+            mCommentsAdapter.setCanStartActivity(true);
+        }
         if (mRecyclerView != null) {
             mRecyclerView.onWindowVisibilityChanged(View.VISIBLE);
         }

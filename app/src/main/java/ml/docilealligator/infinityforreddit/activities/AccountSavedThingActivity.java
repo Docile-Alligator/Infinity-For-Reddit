@@ -139,7 +139,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

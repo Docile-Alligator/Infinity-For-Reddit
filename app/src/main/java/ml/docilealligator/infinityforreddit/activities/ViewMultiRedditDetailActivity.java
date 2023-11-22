@@ -830,7 +830,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

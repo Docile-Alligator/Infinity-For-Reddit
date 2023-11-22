@@ -405,7 +405,7 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

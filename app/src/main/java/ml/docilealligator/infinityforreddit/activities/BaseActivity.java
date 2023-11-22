@@ -227,7 +227,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
 
     public abstract SharedPreferences getDefaultSharedPreferences();
 
-    protected abstract CustomThemeWrapper getCustomThemeWrapper();
+    public abstract CustomThemeWrapper getCustomThemeWrapper();
 
     protected abstract void applyCustomTheme();
 

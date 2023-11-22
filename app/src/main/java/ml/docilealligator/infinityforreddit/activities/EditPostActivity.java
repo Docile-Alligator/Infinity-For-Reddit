@@ -181,7 +181,7 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

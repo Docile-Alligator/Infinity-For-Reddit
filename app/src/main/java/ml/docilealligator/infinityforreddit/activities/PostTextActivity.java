@@ -423,7 +423,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

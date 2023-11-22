@@ -508,7 +508,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

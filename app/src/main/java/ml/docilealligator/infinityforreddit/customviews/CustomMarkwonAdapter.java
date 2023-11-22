@@ -23,6 +23,7 @@ import io.noties.markwon.MarkwonReducer;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.SimpleEntry;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.markdown.ImageAndGifBlock;
 
 public class CustomMarkwonAdapter extends MarkwonAdapter {
     private final SparseArray<Entry<Node, Holder>> entries;
@@ -136,6 +137,10 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
                     }
                 }
             }
+        }
+
+        if (node instanceof ImageAndGifBlock && !holder.itemView.hasOnClickListeners()) {
+            holder.itemView.setOnClickListener(onClickListener);
         }
     }
 

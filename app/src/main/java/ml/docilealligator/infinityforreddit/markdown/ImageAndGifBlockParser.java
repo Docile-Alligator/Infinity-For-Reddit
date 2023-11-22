@@ -12,13 +12,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ml.docilealligator.infinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.MediaMetadata;
 
 public class ImageAndGifBlockParser extends AbstractBlockParser {
 
     private ImageAndGifBlock imageAndGifBlock;
 
-    ImageAndGifBlockParser(Post.MediaMetadata mediaMetadata) {
+    ImageAndGifBlockParser(MediaMetadata mediaMetadata) {
         this.imageAndGifBlock = new ImageAndGifBlock(mediaMetadata);
     }
 
@@ -34,7 +34,8 @@ public class ImageAndGifBlockParser extends AbstractBlockParser {
 
     public static class Factory extends AbstractBlockParserFactory {
         private final Pattern redditPreviewPattern =  Pattern.compile("!\\[img]\\(https://preview.redd.it/\\w+.(jpg|png)((\\?+[-a-zA-Z0-9()@:%_+.~#?&/=]*)|)\\)");
-        private Map<String, Post.MediaMetadata> mediaMetadataMap;
+        private final Pattern gifPattern = Pattern.compile("!\\[gif]\\(giphy\\|\\w+(\\|downsized)?\\)");
+        private Map<String, MediaMetadata> mediaMetadataMap;
         private final int fromIndex = "![img](https://preview.redd.it/".length();
 
         @Override
@@ -50,10 +51,18 @@ public class ImageAndGifBlockParser extends AbstractBlockParser {
                     }
                 }
             }
+
+            matcher = gifPattern.matcher(line);
+            if (matcher.find()) {
+                if (matcher.end() == line.length()) {
+                    String id = line.substring("![gif](".length(), line.length() - 1);
+                    return mediaMetadataMap.containsKey(id) ? BlockStart.of(new ImageAndGifBlockParser(mediaMetadataMap.get(id))) : BlockStart.none();
+                }
+            }
             return BlockStart.none();
         }
 
-        public void setMediaMetadataMap(Map<String, Post.MediaMetadata> mediaMetadataMap) {
+        public void setMediaMetadataMap(Map<String, MediaMetadata> mediaMetadataMap) {
             this.mediaMetadataMap = mediaMetadataMap;
         }
     }

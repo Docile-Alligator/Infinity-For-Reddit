@@ -49,6 +49,7 @@ import io.noties.markwon.recycler.MarkwonAdapter;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.AnyAccountAccessTokenAuthenticator;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.MediaMetadata;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.UploadImageEnabledActivity;
@@ -67,7 +68,6 @@ import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
-import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import okhttp3.ConnectionPool;
@@ -215,7 +215,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     miscPlugin, imageAndGifPlugin, parentTextColor, parentSpoilerBackgroundColor, null);
             MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(this, mGlide, new ImageAndGifEntry.OnItemClickListener() {
                 @Override
-                public void onItemClick(Post.MediaMetadata mediaMetadata) {
+                public void onItemClick(MediaMetadata mediaMetadata) {
 
                 }
             }));
@@ -318,7 +318,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

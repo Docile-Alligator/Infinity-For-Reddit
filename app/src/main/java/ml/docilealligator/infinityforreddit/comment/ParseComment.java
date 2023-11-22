@@ -15,9 +15,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 
+import ml.docilealligator.infinityforreddit.MediaMetadata;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -267,7 +271,10 @@ public class ParseComment {
         String distinguished = singleCommentData.getString(JSONUtils.DISTINGUISHED_KEY);
         String commentMarkdown = "";
         if (!singleCommentData.isNull(JSONUtils.BODY_KEY)) {
-            commentMarkdown = Utils.parseInlineGifInComments(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(singleCommentData.getString(JSONUtils.BODY_KEY))));
+            commentMarkdown = Utils.parseInlineRedditImages(
+                    Utils.parseInlineGifInComments(
+                    Utils.modifyMarkdown(
+                    Utils.trimTrailingWhitespace(singleCommentData.getString(JSONUtils.BODY_KEY)))));
             if (!singleCommentData.isNull(JSONUtils.MEDIA_METADATA_KEY)) {
                 JSONObject mediaMetadataObject = singleCommentData.getJSONObject(JSONUtils.MEDIA_METADATA_KEY);
                 commentMarkdown = Utils.parseInlineEmotes(commentMarkdown, mediaMetadataObject);
@@ -312,10 +319,62 @@ public class ParseComment {
         // this key can either be a bool (false) or a long (edited timestamp)
         long edited = singleCommentData.optLong(JSONUtils.EDITED_KEY) * 1000;
 
+        Map<String, MediaMetadata> mediaMetadataMap = parseMediaMetadata(singleCommentData);
+
         return new Comment(id, fullName, author, authorFlair, authorFlairHTMLBuilder.toString(),
                 linkAuthor, submitTime, commentMarkdown, commentRawText,
                 linkId, subredditName, parentId, score, voteType, isSubmitter, distinguished,
-                permalink, awardingsBuilder.toString(), depth, collapsed, hasReply, scoreHidden, saved, edited);
+                permalink, awardingsBuilder.toString(), depth, collapsed, hasReply, scoreHidden, saved, edited,
+                mediaMetadataMap);
+    }
+
+    @Nullable
+    private static Map<String, MediaMetadata> parseMediaMetadata(JSONObject data) {
+        try {
+            if (data.has(JSONUtils.MEDIA_METADATA_KEY)) {
+                Map<String, MediaMetadata> mediaMetadataMap = new HashMap<>();
+                JSONObject mediaMetadataJSON = data.getJSONObject(JSONUtils.MEDIA_METADATA_KEY);
+                for (Iterator<String> it = mediaMetadataJSON.keys(); it.hasNext();) {
+                    try {
+                        String k = it.next();
+                        JSONObject media = mediaMetadataJSON.getJSONObject(k);
+                        String e = media.getString(JSONUtils.E_KEY);
+                        JSONArray downscales = media.getJSONArray(JSONUtils.P_KEY);
+                        JSONObject downscaledItemJSON;
+                        if (downscales.length() <= 3) {
+                            downscaledItemJSON = downscales.getJSONObject(downscales.length() - 1);
+                        } else {
+                            downscaledItemJSON = downscales.getJSONObject(3);
+                        }
+                        MediaMetadata.MediaItem downscaledItem = new MediaMetadata.MediaItem(downscaledItemJSON.getInt(JSONUtils.X_KEY),
+                                downscaledItemJSON.getInt(JSONUtils.Y_KEY), downscaledItemJSON.getString(JSONUtils.U_KEY));
+                        if (e.equalsIgnoreCase("Image")) {
+                            JSONObject originalItemJSON = media.getJSONObject(JSONUtils.S_KEY);
+                            MediaMetadata.MediaItem originalItem = new MediaMetadata.MediaItem(originalItemJSON.getInt(JSONUtils.X_KEY),
+                                    originalItemJSON.getInt(JSONUtils.Y_KEY), originalItemJSON.getString(JSONUtils.U_KEY));
+
+                            String id = media.getString(JSONUtils.ID_KEY);
+                            mediaMetadataMap.put(id, new MediaMetadata(id, e, originalItem, downscaledItem));
+                        } else if (e.equalsIgnoreCase("AnimatedImage")) {
+                            JSONObject originalItemJSON = media.getJSONObject(JSONUtils.S_KEY);
+                            MediaMetadata.MediaItem originalItem = new MediaMetadata.MediaItem(originalItemJSON.getInt(JSONUtils.X_KEY),
+                                    originalItemJSON.getInt(JSONUtils.Y_KEY), originalItemJSON.getString(JSONUtils.GIF_KEY),
+                                    originalItemJSON.getString(JSONUtils.MP4_KEY));
+
+                            String id = media.getString(JSONUtils.ID_KEY);
+                            mediaMetadataMap.put(id, new MediaMetadata(id, e, originalItem, downscaledItem));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return mediaMetadataMap;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     @Nullable

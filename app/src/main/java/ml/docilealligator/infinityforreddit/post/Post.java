@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.post;
 
-import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -10,6 +9,7 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Map;
 
+import ml.docilealligator.infinityforreddit.MediaMetadata;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 
 /**
@@ -765,100 +765,6 @@ public class Post implements Parcelable {
             parcel.writeInt(previewHeight);
             parcel.writeString(previewCaption);
             parcel.writeString(previewCaptionUrl);
-        }
-    }
-
-    public static class MediaMetadata implements Parcelable {
-        public String id;
-        //E.g. Image
-        public String e;
-        public String fileName;
-        public MediaItem original;
-        public MediaItem downscaled;
-
-        public MediaMetadata(String id, String e, MediaItem original, MediaItem downscaled) {
-            this.id = id;
-            this.e = e;
-            String path = Uri.parse(original.url).getPath();
-            this.fileName = path == null ? "Image.jpg" : path.substring(1);
-            this.original = original;
-            this.downscaled = downscaled;
-        }
-
-        protected MediaMetadata(Parcel in) {
-            id = in.readString();
-            e = in.readString();
-            fileName = in.readString();
-            original = in.readParcelable(MediaItem.class.getClassLoader());
-            downscaled = in.readParcelable(MediaItem.class.getClassLoader());
-        }
-
-        public static final Creator<MediaMetadata> CREATOR = new Creator<MediaMetadata>() {
-            @Override
-            public MediaMetadata createFromParcel(Parcel in) {
-                return new MediaMetadata(in);
-            }
-
-            @Override
-            public MediaMetadata[] newArray(int size) {
-                return new MediaMetadata[size];
-            }
-        };
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(@NonNull Parcel dest, int flags) {
-            dest.writeString(id);
-            dest.writeString(e);
-            dest.writeString(fileName);
-            dest.writeParcelable(original, flags);
-            dest.writeParcelable(downscaled, flags);
-        }
-
-        public static class MediaItem implements Parcelable {
-            public int x;
-            public int y;
-            public String url;
-
-            public MediaItem(int x, int y, String url) {
-                this.x = x;
-                this.y = y;
-                this.url = url;
-            }
-
-            protected MediaItem(Parcel in) {
-                x = in.readInt();
-                y = in.readInt();
-                url = in.readString();
-            }
-
-            public static final Creator<MediaItem> CREATOR = new Creator<MediaItem>() {
-                @Override
-                public MediaItem createFromParcel(Parcel in) {
-                    return new MediaItem(in);
-                }
-
-                @Override
-                public MediaItem[] newArray(int size) {
-                    return new MediaItem[size];
-                }
-            };
-
-            @Override
-            public int describeContents() {
-                return 0;
-            }
-
-            @Override
-            public void writeToParcel(@NonNull Parcel dest, int flags) {
-                dest.writeInt(x);
-                dest.writeInt(y);
-                dest.writeString(url);
-            }
         }
     }
 }

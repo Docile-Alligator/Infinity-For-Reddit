@@ -147,7 +147,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return customThemeWrapper;
     }
 

@@ -38,7 +38,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputLayout;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParserException;
@@ -88,7 +87,7 @@ public final class Utils {
     }
 
     public static String parseInlineGifInComments(String markdown) {
-        StringBuilder markdownStringBuilder = new StringBuilder(markdown);
+        /*StringBuilder markdownStringBuilder = new StringBuilder(markdown);
         Pattern inlineGifPattern = REGEX_PATTERNS[3];
         Matcher matcher = inlineGifPattern.matcher(markdownStringBuilder);
         while (matcher.find()) {
@@ -107,17 +106,18 @@ public final class Utils {
         Matcher matcher3 = inlineGifPattern3.matcher(markdownStringBuilder);
         while (matcher3.find()) {
             markdownStringBuilder.replace(matcher3.start(), matcher3.end(),
-                    "![gif](https://reddit-meta-production.s3.amazonaws.com/public/fortnitebr/emotes/snoomoji_emotes/"
+                    "![emote](https://reddit-meta-production.s3.amazonaws.com/public/fortnitebr/emotes/snoomoji_emotes/"
                             + markdownStringBuilder.substring(
-                            matcher3.start() + "![gif](emote|".length(), matcher3.end() - 1).replace('|', '/') + ".gif)");
+                            matcher3.start() + "![emote](emote|".length(), matcher3.end() - 1).replace('|', '/') + ".gif)");
             matcher3 = inlineGifPattern3.matcher(markdownStringBuilder);
         }
 
-        return markdownStringBuilder.toString();
+        return markdownStringBuilder.toString();*/
+        return markdown;
     }
 
     public static String parseInlineEmotes(String markdown, JSONObject mediaMetadataObject) throws JSONException {
-        JSONArray mediaMetadataNames = mediaMetadataObject.names();
+        /*JSONArray mediaMetadataNames = mediaMetadataObject.names();
         if (mediaMetadataNames != null) {
             for (int i = 0; i < mediaMetadataNames.length(); i++) {
                 if (!mediaMetadataNames.isNull(i)) {
@@ -146,6 +146,7 @@ public final class Utils {
                 }
             }
         }
+        return markdown;*/
         return markdown;
     }
 

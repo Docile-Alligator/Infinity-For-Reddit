@@ -424,7 +424,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

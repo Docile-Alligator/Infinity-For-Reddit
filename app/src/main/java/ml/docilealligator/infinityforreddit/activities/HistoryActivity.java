@@ -140,7 +140,7 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
 

@@ -45,6 +45,7 @@ import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
+import ml.docilealligator.infinityforreddit.MediaMetadata;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -52,6 +53,7 @@ import ml.docilealligator.infinityforreddit.VoteThing;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewImageOrGifActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CommentMoreBottomSheetFragment;
@@ -67,6 +69,7 @@ import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.databinding.ItemCommentBinding;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
+import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -96,6 +99,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private Retrofit mOauthRetrofit;
     private ImageAndGifPlugin mImageAndGifPlugin;
     private Markwon mCommentMarkwon;
+    private ImageAndGifEntry mImageAndGifEntry;
     private String mAccessToken;
     private String mAccountName;
     private Post mPost;
@@ -154,6 +158,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     private int mSearchCommentIndex = -1;
 
+    private boolean canStartActivity = true;
+
     public CommentsRecyclerViewAdapter(BaseActivity activity, ViewPostDetailFragment fragment,
                                        CustomThemeWrapper customThemeWrapper,
                                        Executor executor, Retrofit retrofit, Retrofit oauthRetrofit,
@@ -208,6 +214,24 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mImageAndGifPlugin = new ImageAndGifPlugin();
         mCommentMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
                 miscPlugin, mImageAndGifPlugin, mCommentTextColor, commentSpoilerBackgroundColor, onLinkLongClickListener);
+        mImageAndGifEntry = new ImageAndGifEntry(activity, mGlide, new ImageAndGifEntry.OnItemClickListener() {
+            @Override
+            public void onItemClick(MediaMetadata mediaMetadata) {
+                Intent intent = new Intent(activity, ViewImageOrGifActivity.class);
+                if (mediaMetadata.isGIF) {
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, mediaMetadata.original.url);
+                } else {
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, mediaMetadata.original.url);
+                }
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_IS_NSFW, post.isNSFW());
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, post.getSubredditName());
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mediaMetadata.fileName);
+                if (canStartActivity) {
+                    canStartActivity = false;
+                    activity.startActivity(intent);
+                }
+            }
+        });
         recycledViewPool = new RecyclerView.RecycledViewPool();
         mAccessToken = accessToken;
         mAccountName = accountName;
@@ -442,6 +466,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     Utils.setHTMLWithImageToTextView(((CommentBaseViewHolder) holder).awardsTextView, comment.getAwards(), true);
                 }
 
+                mImageAndGifPlugin.setMediaMetadataMap(comment.getMediaMetadataMap());
                 ((CommentBaseViewHolder) holder).mMarkwonAdapter.setMarkdown(mCommentMarkwon, comment.getCommentMarkdown());
                 // noinspection NotifyDataSetChanged
                 ((CommentBaseViewHolder) holder).mMarkwonAdapter.notifyDataSetChanged();
@@ -771,6 +796,10 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 });
             }
         }
+    }
+
+    public void setCanStartActivity(boolean canStartActivity) {
+        this.canStartActivity = canStartActivity;
     }
 
     private int getParentPosition(int position) {
@@ -1319,7 +1348,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
             });
             commentMarkdownView.setLayoutManager(linearLayoutManager);
-            mMarkwonAdapter = MarkdownUtils.createCustomTablesAdapter();
+            mMarkwonAdapter = MarkdownUtils.createCustomTablesAdapter(mImageAndGifEntry);
             commentMarkdownView.setAdapter(mMarkwonAdapter);
 
             itemView.setBackgroundColor(mCommentBackgroundColor);

@@ -213,7 +213,7 @@ public class PostFilterPreferenceActivity extends BaseActivity {
     }
 
     @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
+    public CustomThemeWrapper getCustomThemeWrapper() {
         return customThemeWrapper;
     }
 
