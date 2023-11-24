@@ -103,6 +103,7 @@ import ml.docilealligator.infinityforreddit.databinding.ItemPostDetailVideoAndGi
 import ml.docilealligator.infinityforreddit.databinding.ItemPostDetailVideoAutoplayBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostDetailVideoAutoplayLegacyControllerBinding;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
+import ml.docilealligator.infinityforreddit.markdown.EmoteCloseBracketInlineProcessor;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
@@ -144,6 +145,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private SharedPreferences mCurrentAccountSharedPreferences;
     private RequestManager mGlide;
     private SaveMemoryCenterInisdeDownsampleStrategy mSaveMemoryCenterInsideDownsampleStrategy;
+    private EmoteCloseBracketInlineProcessor mEmoteCloseBracketInlineProcessor;
     private ImageAndGifPlugin mImageAndGifPlugin;
     private Markwon mPostDetailMarkwon;
     private ImageAndGifEntry mImageAndGifEntry;
@@ -383,9 +385,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             }
             return true;
         };
+        mEmoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
         mImageAndGifPlugin = new ImageAndGifPlugin();
         mPostDetailMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
-                miscPlugin, mImageAndGifPlugin, markdownColor, postSpoilerBackgroundColor, onLinkLongClickListener);
+                miscPlugin, mEmoteCloseBracketInlineProcessor, mImageAndGifPlugin, markdownColor,
+                postSpoilerBackgroundColor, onLinkLongClickListener);
         mImageAndGifEntry = new ImageAndGifEntry(activity,
                 mGlide, mDataSavingMode,
                 (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit())) || (mPost.isSpoiler() && mNeedBlurSpoiler),
@@ -666,6 +670,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             if (mPost.getSelfText() != null && !mPost.getSelfText().equals("")) {
                 ((PostDetailBaseViewHolder) holder).contentMarkdownView.setVisibility(View.VISIBLE);
                 ((PostDetailBaseViewHolder) holder).contentMarkdownView.setAdapter(mMarkwonAdapter);
+                mEmoteCloseBracketInlineProcessor.setMediaMetadataMap(mPost.getMediaMetadataMap());
                 mImageAndGifPlugin.setMediaMetadataMap(mPost.getMediaMetadataMap());
                 mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, mPost.getSelfText());
                 // noinspection NotifyDataSetChanged

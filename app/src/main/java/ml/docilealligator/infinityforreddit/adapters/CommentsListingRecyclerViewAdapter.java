@@ -58,6 +58,7 @@ import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.databinding.ItemCommentBinding;
+import ml.docilealligator.infinityforreddit.markdown.EmoteCloseBracketInlineProcessor;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
@@ -84,6 +85,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private BaseActivity mActivity;
     private Retrofit mOauthRetrofit;
     private Locale mLocale;
+    private EmoteCloseBracketInlineProcessor mEmoteCloseBracketInlineProcessor;
     private ImageAndGifPlugin mImageAndGifPlugin;
     private Markwon mMarkwon;
     private ImageAndGifEntry mImageAndGifEntry;
@@ -177,9 +179,11 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             }
             return true;
         };
+        mEmoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
         mImageAndGifPlugin = new ImageAndGifPlugin();
         mMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
-                miscPlugin, mImageAndGifPlugin, mCommentColor, commentSpoilerBackgroundColor, onLinkLongClickListener);
+                miscPlugin, mEmoteCloseBracketInlineProcessor, mImageAndGifPlugin, mCommentColor,
+                commentSpoilerBackgroundColor, onLinkLongClickListener);
         mImageAndGifEntry = new ImageAndGifEntry(activity, Glide.with(activity), new ImageAndGifEntry.OnItemClickListener() {
             @Override
             public void onItemClick(MediaMetadata mediaMetadata) {
@@ -241,6 +245,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     Utils.setHTMLWithImageToTextView(((CommentBaseViewHolder) holder).awardsTextView, comment.getAwards(), true);
                 }
 
+                mEmoteCloseBracketInlineProcessor.setMediaMetadataMap(comment.getMediaMetadataMap());
                 mImageAndGifPlugin.setMediaMetadataMap(comment.getMediaMetadataMap());
                 ((CommentBaseViewHolder) holder).markwonAdapter.setMarkdown(mMarkwon, comment.getCommentMarkdown());
                 // noinspection NotifyDataSetChanged

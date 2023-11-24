@@ -12,6 +12,7 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.inlineparser.BangInlineProcessor;
+import io.noties.markwon.inlineparser.CloseBracketInlineProcessor;
 import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
@@ -31,6 +32,7 @@ public class MarkdownUtils {
     @NonNull
     public static Markwon createFullRedditMarkwon(@NonNull Context context,
                                                   @NonNull MarkwonPlugin miscPlugin,
+                                                  @NonNull EmoteCloseBracketInlineProcessor emoteCloseBracketInlineProcessor,
                                                   @NonNull ImageAndGifPlugin imageAndGifPlugin,
                                                   int markdownColor,
                                                   int spoilerBackgroundColor,
@@ -39,6 +41,9 @@ public class MarkdownUtils {
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
                     plugin.excludeInlineProcessor(BangInlineProcessor.class);
+                    plugin.excludeInlineProcessor(CloseBracketInlineProcessor.class);
+                    plugin.addInlineProcessor(new EmoteInlineProcessor());
+                    plugin.addInlineProcessor(emoteCloseBracketInlineProcessor);
                 }))
                 .usePlugin(miscPlugin)
                 .usePlugin(SuperscriptPlugin.create())
@@ -49,6 +54,7 @@ public class MarkdownUtils {
                         .setOnLinkLongClickListener(onLinkLongClickListener)))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .usePlugin(imageAndGifPlugin)
+                .usePlugin(EmotePlugin.create(context))
                 .usePlugin(TableEntryPlugin.create(context))
                 .build();
     }

@@ -33,7 +33,7 @@ public class ImageAndGifBlockParser extends AbstractBlockParser {
     }
 
     public static class Factory extends AbstractBlockParserFactory {
-        private final Pattern redditPreviewPattern =  Pattern.compile("!\\[img]\\(https://preview.redd.it/\\w+.(jpg|png)((\\?+[-a-zA-Z0-9()@:%_+.~#?&/=]*)|)\\)");
+        private final Pattern redditPreviewPattern =  Pattern.compile("!\\[img]\\(https://preview.redd.it/\\w+.(jpg|png|jpeg)((\\?+[-a-zA-Z0-9()@:%_+.~#?&/=]*)|)\\)");
         private final Pattern gifPattern = Pattern.compile("!\\[gif]\\(giphy\\|\\w+(\\|downsized)?\\)");
         private Map<String, MediaMetadata> mediaMetadataMap;
         private final int fromIndex = "![img](https://preview.redd.it/".length();

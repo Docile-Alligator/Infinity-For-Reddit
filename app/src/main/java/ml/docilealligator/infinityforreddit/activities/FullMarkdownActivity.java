@@ -45,6 +45,7 @@ import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.markdown.EmoteCloseBracketInlineProcessor;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
@@ -142,9 +143,11 @@ public class FullMarkdownActivity extends BaseActivity {
                 builder.linkColor(linkColor);
             }
         };
+        EmoteCloseBracketInlineProcessor emoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
         ImageAndGifPlugin imageAndGifPlugin = new ImageAndGifPlugin();
         Markwon markwon = MarkdownUtils.createFullRedditMarkwon(this,
-                miscPlugin, imageAndGifPlugin, markdownColor, spoilerBackgroundColor, null);
+                miscPlugin, emoteCloseBracketInlineProcessor, imageAndGifPlugin, markdownColor,
+                spoilerBackgroundColor, null);
 
         MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(this,
                 Glide.with(this), new ImageAndGifEntry.OnItemClickListener() {

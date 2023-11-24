@@ -75,7 +75,7 @@ public final class Utils {
             Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\)"),
             Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\|downsized\\)"),
             Pattern.compile("!\\[gif]\\(emote\\|\\w+\\|\\w+\\)"),
-            Pattern.compile("https://preview.redd.it/\\w+.(jpg|png)((\\?+[-a-zA-Z0-9()@:%_+.~#?&/=]*)|)")
+            Pattern.compile("https://preview.redd.it/\\w+.(jpg|png|jpeg)((\\?+[-a-zA-Z0-9()@:%_+.~#?&/=]*)|)")
     };
 
     public static String modifyMarkdown(String markdown) {

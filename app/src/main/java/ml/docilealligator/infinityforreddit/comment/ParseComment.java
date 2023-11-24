@@ -339,31 +339,40 @@ public class ParseComment {
                         String k = it.next();
                         JSONObject media = mediaMetadataJSON.getJSONObject(k);
                         String e = media.getString(JSONUtils.E_KEY);
-                        JSONArray downscales = media.getJSONArray(JSONUtils.P_KEY);
-                        JSONObject downscaledItemJSON;
-                        if (downscales.length() <= 3) {
-                            downscaledItemJSON = downscales.getJSONObject(downscales.length() - 1);
-                        } else {
-                            downscaledItemJSON = downscales.getJSONObject(3);
-                        }
-                        MediaMetadata.MediaItem downscaledItem = new MediaMetadata.MediaItem(downscaledItemJSON.getInt(JSONUtils.X_KEY),
-                                downscaledItemJSON.getInt(JSONUtils.Y_KEY), downscaledItemJSON.getString(JSONUtils.U_KEY));
+
+                        JSONObject originalItemJSON = media.getJSONObject(JSONUtils.S_KEY);
+                        MediaMetadata.MediaItem originalItem;
                         if (e.equalsIgnoreCase("Image")) {
-                            JSONObject originalItemJSON = media.getJSONObject(JSONUtils.S_KEY);
-                            MediaMetadata.MediaItem originalItem = new MediaMetadata.MediaItem(originalItemJSON.getInt(JSONUtils.X_KEY),
+                            originalItem = new MediaMetadata.MediaItem(originalItemJSON.getInt(JSONUtils.X_KEY),
                                     originalItemJSON.getInt(JSONUtils.Y_KEY), originalItemJSON.getString(JSONUtils.U_KEY));
-
-                            String id = media.getString(JSONUtils.ID_KEY);
-                            mediaMetadataMap.put(id, new MediaMetadata(id, e, originalItem, downscaledItem));
-                        } else if (e.equalsIgnoreCase("AnimatedImage")) {
-                            JSONObject originalItemJSON = media.getJSONObject(JSONUtils.S_KEY);
-                            MediaMetadata.MediaItem originalItem = new MediaMetadata.MediaItem(originalItemJSON.getInt(JSONUtils.X_KEY),
-                                    originalItemJSON.getInt(JSONUtils.Y_KEY), originalItemJSON.getString(JSONUtils.GIF_KEY),
-                                    originalItemJSON.getString(JSONUtils.MP4_KEY));
-
-                            String id = media.getString(JSONUtils.ID_KEY);
-                            mediaMetadataMap.put(id, new MediaMetadata(id, e, originalItem, downscaledItem));
+                        } else {
+                            if (originalItemJSON.has(JSONUtils.MP4_KEY)) {
+                                originalItem = new MediaMetadata.MediaItem(originalItemJSON.getInt(JSONUtils.X_KEY),
+                                        originalItemJSON.getInt(JSONUtils.Y_KEY), originalItemJSON.getString(JSONUtils.GIF_KEY),
+                                        originalItemJSON.getString(JSONUtils.MP4_KEY));
+                            } else {
+                                originalItem = new MediaMetadata.MediaItem(originalItemJSON.getInt(JSONUtils.X_KEY),
+                                        originalItemJSON.getInt(JSONUtils.Y_KEY), originalItemJSON.getString(JSONUtils.GIF_KEY));
+                            }
                         }
+                        String id = media.getString(JSONUtils.ID_KEY);
+
+                        MediaMetadata.MediaItem downscaledItem;
+                        if (media.has(JSONUtils.P_KEY)) {
+                            JSONArray downscales = media.getJSONArray(JSONUtils.P_KEY);
+                            JSONObject downscaledItemJSON;
+                            if (downscales.length() <= 3) {
+                                downscaledItemJSON = downscales.getJSONObject(downscales.length() - 1);
+                            } else {
+                                downscaledItemJSON = downscales.getJSONObject(3);
+                            }
+                            downscaledItem = new MediaMetadata.MediaItem(downscaledItemJSON.getInt(JSONUtils.X_KEY),
+                                    downscaledItemJSON.getInt(JSONUtils.Y_KEY), downscaledItemJSON.getString(JSONUtils.U_KEY));
+                        } else {
+                            downscaledItem = originalItem;
+                        }
+
+                        mediaMetadataMap.put(id, new MediaMetadata(id, e, originalItem, downscaledItem));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

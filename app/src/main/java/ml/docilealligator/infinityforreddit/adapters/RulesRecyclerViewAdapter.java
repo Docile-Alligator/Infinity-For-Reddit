@@ -35,12 +35,14 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
+import ml.docilealligator.infinityforreddit.markdown.EmoteCloseBracketInlineProcessor;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 
 public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAdapter.RuleViewHolder> {
     private BaseActivity activity;
+    private EmoteCloseBracketInlineProcessor emoteCloseBracketInlineProcessor;
     private ImageAndGifPlugin imageAndGifPlugin;
     private Markwon markwon;
     @Nullable
@@ -87,9 +89,11 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
             }
             return true;
         };
+        emoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
         imageAndGifPlugin = new ImageAndGifPlugin();
         markwon = MarkdownUtils.createFullRedditMarkwon(activity,
-                miscPlugin, imageAndGifPlugin, mPrimaryTextColor, spoilerBackgroundColor, onLinkLongClickListener);
+                miscPlugin, emoteCloseBracketInlineProcessor, imageAndGifPlugin, mPrimaryTextColor,
+                spoilerBackgroundColor, onLinkLongClickListener);
     }
 
     @NonNull

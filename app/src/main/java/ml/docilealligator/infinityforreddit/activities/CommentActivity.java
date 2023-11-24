@@ -65,6 +65,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCommentBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.markdown.EmoteCloseBracketInlineProcessor;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
@@ -210,9 +211,11 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     builder.linkColor(linkColor);
                 }
             };
+            EmoteCloseBracketInlineProcessor emoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
             ImageAndGifPlugin imageAndGifPlugin = new ImageAndGifPlugin();
             Markwon postBodyMarkwon = MarkdownUtils.createFullRedditMarkwon(this,
-                    miscPlugin, imageAndGifPlugin, parentTextColor, parentSpoilerBackgroundColor, null);
+                    miscPlugin, emoteCloseBracketInlineProcessor, imageAndGifPlugin, parentTextColor,
+                    parentSpoilerBackgroundColor, null);
             MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(this, mGlide, new ImageAndGifEntry.OnItemClickListener() {
                 @Override
                 public void onItemClick(MediaMetadata mediaMetadata) {
