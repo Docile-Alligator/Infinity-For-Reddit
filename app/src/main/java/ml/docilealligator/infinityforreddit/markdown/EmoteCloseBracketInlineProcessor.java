@@ -2,6 +2,8 @@ package ml.docilealligator.infinityforreddit.markdown;
 
 import static io.noties.markwon.inlineparser.InlineParserUtils.mergeChildTextNodes;
 
+import androidx.annotation.Nullable;
+
 import org.commonmark.internal.Bracket;
 import org.commonmark.internal.util.Escaping;
 import org.commonmark.node.Link;
@@ -17,6 +19,7 @@ import ml.docilealligator.infinityforreddit.MediaMetadata;
 public class EmoteCloseBracketInlineProcessor extends InlineProcessor {
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
+    @Nullable
     private Map<String, MediaMetadata> mediaMetadataMap;
 
     @Override
@@ -150,7 +153,7 @@ public class EmoteCloseBracketInlineProcessor extends InlineProcessor {
         }
     }
 
-    public void setMediaMetadataMap(Map<String, MediaMetadata> mediaMetadataMap) {
+    public void setMediaMetadataMap(@Nullable Map<String, MediaMetadata> mediaMetadataMap) {
         this.mediaMetadataMap = mediaMetadataMap;
     }
 }

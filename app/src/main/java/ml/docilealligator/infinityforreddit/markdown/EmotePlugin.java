@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.markdown;
 
 import android.content.Context;
+import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.text.Spanned;
 import android.widget.TextView;
@@ -32,7 +33,6 @@ import io.noties.markwon.image.AsyncDrawableLoader;
 import io.noties.markwon.image.AsyncDrawableScheduler;
 import io.noties.markwon.image.DrawableUtils;
 import io.noties.markwon.image.ImageProps;
-import io.noties.markwon.image.ImageSpanFactory;
 import ml.docilealligator.infinityforreddit.MediaMetadata;
 
 public class EmotePlugin extends AbstractMarkwonPlugin {
@@ -82,7 +82,7 @@ public class EmotePlugin extends AbstractMarkwonPlugin {
 
     @Override
     public void configureSpansFactory(@NonNull MarkwonSpansFactory.Builder builder) {
-        builder.setFactory(Emote.class, new ImageSpanFactory());
+        builder.setFactory(Emote.class, new EmoteSpanFactory());
     }
 
     @Override
@@ -92,45 +92,42 @@ public class EmotePlugin extends AbstractMarkwonPlugin {
 
     @Override
     public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
-        builder.on(Emote.class, new MarkwonVisitor.NodeVisitor<Emote>() {
-            @Override
-            public void visit(@NonNull MarkwonVisitor visitor, @NonNull Emote emote) {
-                // if there is no image spanFactory, ignore
-                final SpanFactory spanFactory = visitor.configuration().spansFactory().get(Emote.class);
-                if (spanFactory == null) {
-                    visitor.visitChildren(emote);
-                    return;
-                }
-
-                final int length = visitor.length();
-
+        builder.on(Emote.class, (visitor, emote) -> {
+            // if there is no image spanFactory, ignore
+            final SpanFactory spanFactory = visitor.configuration().spansFactory().get(Emote.class);
+            if (spanFactory == null) {
                 visitor.visitChildren(emote);
-
-                // we must check if anything _was_ added, as we need at least one char to render
-                if (length == visitor.length()) {
-                    visitor.builder().append('\uFFFC');
-                }
-
-                final MarkwonConfiguration configuration = visitor.configuration();
-
-                final Node parent = emote.getParent();
-                final boolean link = parent instanceof Link;
-
-                final String destination = configuration
-                        .imageDestinationProcessor()
-                        .process(emote.getMediaMetadata().original.url);
-
-                final RenderProps props = visitor.renderProps();
-
-                // apply image properties
-                // Please note that we explicitly set IMAGE_SIZE to null as we do not clear
-                // properties after we applied span (we could though)
-                ImageProps.DESTINATION.set(props, destination);
-                ImageProps.REPLACEMENT_TEXT_IS_LINK.set(props, link);
-                ImageProps.IMAGE_SIZE.set(props, null);
-
-                visitor.setSpans(length, spanFactory.getSpans(configuration, props));
+                return;
             }
+
+            final int length = visitor.length();
+
+            visitor.visitChildren(emote);
+
+            // we must check if anything _was_ added, as we need at least one char to render
+            if (length == visitor.length()) {
+                visitor.builder().append('\uFFFC');
+            }
+
+            final MarkwonConfiguration configuration = visitor.configuration();
+
+            final Node parent = emote.getParent();
+            final boolean link = parent instanceof Link;
+
+            final String destination = configuration
+                    .imageDestinationProcessor()
+                    .process(emote.getMediaMetadata().original.url);
+
+            final RenderProps props = visitor.renderProps();
+
+            // apply image properties
+            // Please note that we explicitly set IMAGE_SIZE to null as we do not clear
+            // properties after we applied span (we could though)
+            ImageProps.DESTINATION.set(props, destination);
+            ImageProps.REPLACEMENT_TEXT_IS_LINK.set(props, link);
+            ImageProps.IMAGE_SIZE.set(props, null);
+
+            visitor.setSpans(length, spanFactory.getSpans(configuration, props));
         });
     }
 
@@ -193,6 +190,9 @@ public class EmotePlugin extends AbstractMarkwonPlugin {
                     if (drawable.isAttached()) {
                         DrawableUtils.applyIntrinsicBoundsIfEmpty(resource);
                         drawable.setResult(resource);
+                        if (resource instanceof Animatable) {
+                            ((Animatable) resource).start();
+                        }
                     }
                 }
             }
