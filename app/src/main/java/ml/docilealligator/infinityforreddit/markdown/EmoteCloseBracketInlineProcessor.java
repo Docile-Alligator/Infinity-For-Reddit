@@ -101,21 +101,26 @@ public class EmoteCloseBracketInlineProcessor extends InlineProcessor {
 
         if (isLinkOrImage) {
             // If we got here, open is a potential opener
-            if (mediaMetadataMap == null) {
-                index = startIndex;
-                removeLastBracket();
+            Node linkOrImage;
+            if (opener.image) {
+                if (mediaMetadataMap == null) {
+                    index = startIndex;
+                    removeLastBracket();
 
-                return text("]");
+                    return text("]");
+                }
+                MediaMetadata mediaMetadata = mediaMetadataMap.get(dest);
+                if (mediaMetadata == null) {
+                    index = startIndex;
+                    removeLastBracket();
+
+                    return text("]");
+                }
+
+                linkOrImage = new Emote(mediaMetadata, title);
+            } else {
+                linkOrImage = new Link(dest, title);
             }
-            MediaMetadata mediaMetadata = mediaMetadataMap.get(dest);
-            if (mediaMetadata == null) {
-                index = startIndex;
-                removeLastBracket();
-
-                return text("]");
-            }
-
-            Node linkOrImage = opener.image ? new Emote(mediaMetadata, title) : new Link(dest, title);
 
             Node node = opener.node.getNext();
             while (node != null) {

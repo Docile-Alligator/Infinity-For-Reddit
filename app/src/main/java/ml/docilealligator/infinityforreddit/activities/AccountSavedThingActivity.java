@@ -156,7 +156,6 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     private void initializeViewPager() {
         sectionsPagerAdapter = new SectionsPagerAdapter(this);
         binding.accountSavedThingViewPager2.setAdapter(sectionsPagerAdapter);
-        binding.accountSavedThingViewPager2.setOffscreenPageLimit(2);
         binding.accountSavedThingViewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
         new TabLayoutMediator(binding.accountSavedThingTabLayout, binding.accountSavedThingViewPager2, (tab, position) -> {
             switch (position) {
