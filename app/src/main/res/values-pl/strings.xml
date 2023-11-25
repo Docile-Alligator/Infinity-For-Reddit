@@ -1175,7 +1175,6 @@ Brak podglądu w Ostatnich aplikacjach."</string>
 
     <!-- Fuzzy -->
     <string name="settings_custom_content_font_family_title">"Własna czcionka zawartości"</string>
-    <string name="settings_hide_comment_awards_title">"Ukryj nagrody komentarza"</string>
 
     <!-- Fuzzy -->
     <string name="settings_show_fewer_toolbar_options_threshold_summary">"Poziom %1$d"</string>

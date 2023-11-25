@@ -1141,7 +1141,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_custom_content_font_family_title">"Προσαρμοσμένη Γραμματοσειρά Περιεχομένου"</string>
     <string name="settings_fixed_height_preview_in_card_title">"Σταθερό Ύψος στην Κάρτα"</string>
     <string name="settings_hide_text_post_content">"Απόκρυψη Περιεχομένου Κειμένου Ανάρτησης"</string>
-    <string name="settings_hide_comment_awards_title">"Απόκρυψη Βραβείων Σχολίου"</string>
     <string name="settings_show_fewer_toolbar_options_threshold_title">"Εμφάνιση Λιγότερων Επιλογών Γραμμής Εργαλείων Ξεκινώντας από"</string>
     <string name="settings_show_fewer_toolbar_options_threshold_summary">Επίπεδο %1$d</string>
     <string name="settings_show_author_avatar_title">"Εμφάνιση Άβαταρ Συντάκτη"</string>

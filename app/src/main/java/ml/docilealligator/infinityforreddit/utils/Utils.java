@@ -39,7 +39,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -84,70 +83,6 @@ public final class Utils {
         regexed = REGEX_PATTERNS[2].matcher(regexed).replaceAll("^");
 
         return regexed;
-    }
-
-    public static String parseInlineGifInComments(String markdown) {
-        /*StringBuilder markdownStringBuilder = new StringBuilder(markdown);
-        Pattern inlineGifPattern = REGEX_PATTERNS[3];
-        Matcher matcher = inlineGifPattern.matcher(markdownStringBuilder);
-        while (matcher.find()) {
-            markdownStringBuilder.replace(matcher.start(), matcher.end(), "![gif](https://i.giphy.com/media/" + markdownStringBuilder.substring(matcher.start() + "![gif](giphy|".length(), matcher.end() - 1) + "/giphy.mp4)");
-            matcher = inlineGifPattern.matcher(markdownStringBuilder);
-        }
-
-        Pattern inlineGifPattern2 = REGEX_PATTERNS[4];
-        Matcher matcher2 = inlineGifPattern2.matcher(markdownStringBuilder);
-        while (matcher2.find()) {
-            markdownStringBuilder.replace(matcher2.start(), matcher2.end(), "![gif](https://i.giphy.com/media/" + markdownStringBuilder.substring(matcher2.start() + "![gif](giphy|".length(), matcher2.end() - "|downsized\\)".length() + 1) + "/giphy.mp4)");
-            matcher2 = inlineGifPattern2.matcher(markdownStringBuilder);
-        }
-
-        Pattern inlineGifPattern3 = REGEX_PATTERNS[5];
-        Matcher matcher3 = inlineGifPattern3.matcher(markdownStringBuilder);
-        while (matcher3.find()) {
-            markdownStringBuilder.replace(matcher3.start(), matcher3.end(),
-                    "![emote](https://reddit-meta-production.s3.amazonaws.com/public/fortnitebr/emotes/snoomoji_emotes/"
-                            + markdownStringBuilder.substring(
-                            matcher3.start() + "![emote](emote|".length(), matcher3.end() - 1).replace('|', '/') + ".gif)");
-            matcher3 = inlineGifPattern3.matcher(markdownStringBuilder);
-        }
-
-        return markdownStringBuilder.toString();*/
-        return markdown;
-    }
-
-    public static String parseInlineEmotes(String markdown, JSONObject mediaMetadataObject) throws JSONException {
-        /*JSONArray mediaMetadataNames = mediaMetadataObject.names();
-        if (mediaMetadataNames != null) {
-            for (int i = 0; i < mediaMetadataNames.length(); i++) {
-                if (!mediaMetadataNames.isNull(i)) {
-                    String mediaMetadataKey = mediaMetadataNames.getString(i);
-                    if (mediaMetadataObject.isNull(mediaMetadataKey)) {
-                        continue;
-                    }
-                    JSONObject item = mediaMetadataObject.getJSONObject(mediaMetadataKey);
-                    if (item.isNull(JSONUtils.STATUS_KEY)
-                            || !item.getString(JSONUtils.STATUS_KEY).equals("valid")
-                            || item.isNull(JSONUtils.ID_KEY)
-                            || item.isNull(JSONUtils.T_KEY)
-                            || item.isNull(JSONUtils.S_KEY)) {
-                        continue;
-                    }
-                    String emote_type = item.getString(JSONUtils.T_KEY);
-                    String emote_id = item.getString(JSONUtils.ID_KEY);
-
-                    JSONObject s_key = item.getJSONObject(JSONUtils.S_KEY);
-                    if (s_key.isNull(JSONUtils.U_KEY)) {
-                        continue;
-                    }
-                    String emote_url = s_key.getString(JSONUtils.U_KEY);
-
-                    markdown = markdown.replace("![img](" + emote_id + ")", "[" + emote_type + "](" + emote_url + ") ");
-                }
-            }
-        }
-        return markdown;*/
-        return markdown;
     }
 
     public static String parseInlineRedditImages(String markdown) {

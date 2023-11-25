@@ -1203,7 +1203,6 @@ Apasă pentru a reîncerca."</string>
     <string name="settings_custom_content_font_family_title">"Familia de Fonturi Personalizată pentru Conținut"</string>
     <string name="settings_fixed_height_preview_in_card_title">"Înălțime Fixată în Aspect Card"</string>
     <string name="settings_hide_text_post_content">"Ascunde Conținutul Postărilor Text"</string>
-    <string name="settings_hide_comment_awards_title">"Ascunde Premiile Comentariilor"</string>
     <string name="settings_show_fewer_toolbar_options_threshold_title">"Arată mai Puține Opțiuni din Bara de Instrumente Începând cu"</string>
 
     <!-- Fuzzy -->

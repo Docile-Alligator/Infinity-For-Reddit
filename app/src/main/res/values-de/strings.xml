@@ -1252,7 +1252,6 @@ Antippen zum Wiederholen."</string>
     <string name="settings_custom_content_font_family_title">"Benutzerdefinierte Inhaltschriftart-familie"</string>
     <string name="settings_fixed_height_preview_in_card_title">"Festgestellte Höhe in Kartenansicht"</string>
     <string name="settings_hide_text_post_content">"Text-Post Inhalt verstecken"</string>
-    <string name="settings_hide_comment_awards_title">"Kommentarauszeichnungen verstecken"</string>
     <string name="settings_show_fewer_toolbar_options_threshold_title">"Weniger Werkzeugleistenoptionen anzeigen"</string>
 
     <!-- Fuzzy -->

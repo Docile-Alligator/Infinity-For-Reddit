@@ -1261,7 +1261,6 @@ Toque para volver a intentarlo."</string>
     <string name="settings_custom_content_font_family_title">"Familia de fuente del contenido personalizada"</string>
     <string name="settings_fixed_height_preview_in_card_title">"Altura fija en tarjeta"</string>
     <string name="settings_hide_text_post_content">"Ocultar contenido de publicación de texto"</string>
-    <string name="settings_hide_comment_awards_title">"Ocultar premios del comentario"</string>
     <string name="settings_show_fewer_toolbar_options_threshold_title">"Mostrar menos opciones de la barra de herramientas a partir de"</string>
 
     <!-- Fuzzy -->

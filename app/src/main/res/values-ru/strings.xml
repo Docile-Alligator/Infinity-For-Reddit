@@ -1221,7 +1221,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_custom_content_font_family_title">"Пользовательское семейство шрифтов содержания"</string>
     <string name="settings_fixed_height_preview_in_card_title">"Фиксированная высота карточки"</string>
     <string name="settings_hide_text_post_content">"Скрыть содержание текстового поста"</string>
-    <string name="settings_hide_comment_awards_title">"Скрыть награды за комментарии"</string>
     <string name="settings_show_fewer_toolbar_options_threshold_title">"Показывать меньше параметров панели инструментов, начиная с"</string>
 
     <!-- Fuzzy -->

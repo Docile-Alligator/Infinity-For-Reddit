@@ -1231,7 +1231,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_custom_content_font_family_title">"Özel İçerik Yazı Tipi Ailesi"</string>
     <string name="settings_fixed_height_preview_in_card_title">"Karttaki Sabit Yükseklik"</string>
     <string name="settings_hide_text_post_content">"Metin Gönderisi İçeriğini Gizle"</string>
-    <string name="settings_hide_comment_awards_title">"Yorum Ödüllerini Gizle"</string>
     <string name="settings_show_fewer_toolbar_options_threshold_title">"Daha Az Araç Çubuğu Seçeneği Göster"</string>
 
     <!-- Fuzzy -->

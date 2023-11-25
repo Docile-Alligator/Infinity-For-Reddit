@@ -240,11 +240,6 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     ((CommentBaseViewHolder) holder).commentTimeTextView.setText(Utils.getFormattedTime(mLocale, comment.getCommentTimeMillis(), mTimeFormatPattern));
                 }
 
-                if (comment.getAwards() != null && !comment.getAwards().equals("")) {
-                    ((CommentBaseViewHolder) holder).awardsTextView.setVisibility(View.VISIBLE);
-                    Utils.setHTMLWithImageToTextView(((CommentBaseViewHolder) holder).awardsTextView, comment.getAwards(), true);
-                }
-
                 mEmoteCloseBracketInlineProcessor.setMediaMetadataMap(comment.getMediaMetadataMap());
                 mImageAndGifPlugin.setMediaMetadataMap(comment.getMediaMetadataMap());
                 ((CommentBaseViewHolder) holder).markwonAdapter.setMarkdown(mMarkwon, comment.getCommentMarkdown());
@@ -301,8 +296,6 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         if (holder instanceof CommentBaseViewHolder) {
             ((CommentBaseViewHolder) holder).authorFlairTextView.setText("");
             ((CommentBaseViewHolder) holder).authorFlairTextView.setVisibility(View.GONE);
-            ((CommentBaseViewHolder) holder).awardsTextView.setText("");
-            ((CommentBaseViewHolder) holder).awardsTextView.setVisibility(View.GONE);
             ((CommentBaseViewHolder) holder).upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
             ((CommentBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mCommentIconAndInfoColor));
             ((CommentBaseViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
@@ -378,7 +371,6 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         TextView authorTextView;
         TextView authorFlairTextView;
         TextView commentTimeTextView;
-        TextView awardsTextView;
         RecyclerView commentMarkdownView;
         ConstraintLayout bottomConstraintLayout;
         MaterialButton upvoteButton;
@@ -399,7 +391,6 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                          TextView authorTextView,
                          TextView authorFlairTextView,
                          TextView commentTimeTextView,
-                         TextView awardsTextView,
                          RecyclerView commentMarkdownView,
                          ConstraintLayout bottomConstraintLayout,
                          MaterialButton upvoteButton,
@@ -416,7 +407,6 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             this.authorTextView = authorTextView;
             this.authorFlairTextView = authorFlairTextView;
             this.commentTimeTextView = commentTimeTextView;
-            this.awardsTextView = awardsTextView;
             this.commentMarkdownView = commentMarkdownView;
             this.bottomConstraintLayout = bottomConstraintLayout;
             this.upvoteButton = upvoteButton;
@@ -481,14 +471,12 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 authorTextView.setTypeface(mActivity.typeface);
                 authorFlairTextView.setTypeface(mActivity.typeface);
                 commentTimeTextView.setTypeface(mActivity.typeface);
-                awardsTextView.setTypeface(mActivity.typeface);
                 upvoteButton.setTypeface(mActivity.typeface);
             }
             itemView.setBackgroundColor(mCommentBackgroundColor);
             authorTextView.setTextColor(mUsernameColor);
             authorFlairTextView.setTextColor(mAuthorFlairColor);
             commentTimeTextView.setTextColor(mSecondaryTextColor);
-            awardsTextView.setTextColor(mSecondaryTextColor);
             upvoteButton.setIconTint(ColorStateList.valueOf(mCommentIconAndInfoColor));
             scoreTextView.setTextColor(mCommentIconAndInfoColor);
             downvoteButton.setIconTint(ColorStateList.valueOf(mCommentIconAndInfoColor));
@@ -793,7 +781,6 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     binding.authorTextViewItemPostComment,
                     binding.authorFlairTextViewItemPostComment,
                     binding.commentTimeTextViewItemPostComment,
-                    binding.awardsTextViewItemComment,
                     binding.commentMarkdownViewItemPostComment,
                     binding.bottomConstraintLayoutItemPostComment,
                     binding.upvoteButtonItemPostComment,

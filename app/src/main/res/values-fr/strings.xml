@@ -1333,7 +1333,6 @@ Cliquer pour réessayer."</string>
     <!-- Fuzzy -->
     <string name="settings_fixed_height_preview_in_card_title">"Figés la Hauteur des cartes"</string>
     <string name="settings_hide_text_post_content">"Masquer le Contenu de l'Article Textuel"</string>
-    <string name="settings_hide_comment_awards_title">"Cacher les récompenses sur des commentaires"</string>
 
     <!-- Fuzzy -->
     <string name="settings_show_fewer_toolbar_options_threshold_title">"Afficher moins d'option dans la barre d'outil à partir de"</string>

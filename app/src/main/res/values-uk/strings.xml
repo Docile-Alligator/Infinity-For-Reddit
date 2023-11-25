@@ -1205,7 +1205,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_custom_content_font_family_title">"Власне сімейство шрифтів для вмісту"</string>
     <string name="settings_fixed_height_preview_in_card_title">"Фіксована висота карток"</string>
     <string name="settings_hide_text_post_content">"Ховати текст вмісту дописів"</string>
-    <string name="settings_hide_comment_awards_title">"Ховати нагороди коментарів"</string>
     <string name="settings_show_fewer_toolbar_options_threshold_title">"Показувати менше параметрів панелі засобів починаючи з"</string>
 
     <!-- Fuzzy -->

@@ -1145,7 +1145,6 @@ Premi per riprovare."</string>
     <string name="settings_custom_content_font_family_title">"Famiglia di caratteri contenuto personalizzato"</string>
     <string name="settings_fixed_height_preview_in_card_title">"Altezza fissa nella scheda"</string>
     <string name="settings_hide_text_post_content">"Nascondi il contenuto del post di testo"</string>
-    <string name="settings_hide_comment_awards_title">"Nascondi i premi dei commenti"</string>
     <string name="settings_show_fewer_toolbar_options_threshold_title">"Mostra meno opzioni della barra degli strumenti a partire da"</string>
     <string name="settings_show_fewer_toolbar_options_threshold_summary">"Livello %1$d"</string>
     <string name="settings_show_author_avatar_title">"Mostra avatar dell'autore"</string>

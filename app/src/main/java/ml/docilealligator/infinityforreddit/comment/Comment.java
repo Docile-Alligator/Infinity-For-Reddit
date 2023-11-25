@@ -46,7 +46,6 @@ public class Comment implements Parcelable {
     private boolean isSubmitter;
     private String distinguished;
     private String permalink;
-    private String awards;
     private int depth;
     private int childCount;
     private boolean collapsed;
@@ -68,7 +67,7 @@ public class Comment implements Parcelable {
                    long commentTimeMillis, String commentMarkdown, String commentRawText,
                    String linkId, String subredditName, String parentId, int score,
                    int voteType, boolean isSubmitter, String distinguished, String permalink,
-                   String awards, int depth, boolean collapsed, boolean hasReply,
+                   int depth, boolean collapsed, boolean hasReply,
                    boolean scoreHidden, boolean saved, long edited, Map<String, MediaMetadata> mediaMetadataMap) {
         this.id = id;
         this.fullName = fullName;
@@ -87,7 +86,6 @@ public class Comment implements Parcelable {
         this.isSubmitter = isSubmitter;
         this.distinguished = distinguished;
         this.permalink = APIUtils.API_BASE_URI + permalink;
-        this.awards = awards;
         this.depth = depth;
         this.collapsed = collapsed;
         this.hasReply = hasReply;
@@ -136,7 +134,6 @@ public class Comment implements Parcelable {
         isSubmitter = in.readByte() != 0;
         distinguished = in.readString();
         permalink = in.readString();
-        awards = in.readString();
         depth = in.readInt();
         childCount = in.readInt();
         collapsed = in.readByte() != 0;
@@ -256,14 +253,6 @@ public class Comment implements Parcelable {
 
     public String getPermalink() {
         return permalink;
-    }
-
-    public String getAwards() {
-        return awards;
-    }
-
-    public void addAwards(String newAwardsHTML) {
-        awards += newAwardsHTML;
     }
 
     public int getDepth() {
@@ -440,7 +429,6 @@ public class Comment implements Parcelable {
         parcel.writeByte((byte) (isSubmitter ? 1 : 0));
         parcel.writeString(distinguished);
         parcel.writeString(permalink);
-        parcel.writeString(awards);
         parcel.writeInt(depth);
         parcel.writeInt(childCount);
         parcel.writeByte((byte) (collapsed ? 1 : 0));

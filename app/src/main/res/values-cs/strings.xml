@@ -1211,7 +1211,6 @@ Pokud ano, přejmenujte je, než povolíte Material You."</string>
     <string name="settings_custom_content_font_family_title">"Vlastní rodina obsahových písem"</string>
     <string name="settings_fixed_height_preview_in_card_title">"Pevná výška karty"</string>
     <string name="settings_hide_text_post_content">"Skrýt obsah textového příspěvku"</string>
-    <string name="settings_hide_comment_awards_title">"Schovat "</string>
     <string name="settings_show_fewer_toolbar_options_threshold_title">"Zobrazit méně možností na liště nástrojů"</string>
 
     <!-- Fuzzy -->

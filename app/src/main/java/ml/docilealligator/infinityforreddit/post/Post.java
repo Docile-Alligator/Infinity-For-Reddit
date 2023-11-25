@@ -79,7 +79,7 @@ public class Post implements Parcelable {
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
                 String author, String authorFlair, String authorFlairHTML, long postTimeMillis,
                 String title, String permalink, int score, int postType, int voteType, int nComments,
-                int upvoteRatio, String flair, String awards, int nAwards, boolean hidden, boolean spoiler,
+                int upvoteRatio, String flair, boolean hidden, boolean spoiler,
                 boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved,
                 boolean isCrosspost, String distinguished, String suggestedSort) {
         this.id = id;
@@ -115,7 +115,7 @@ public class Post implements Parcelable {
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
                 String author, String authorFlair, String authorFlairHTML, long postTimeMillis, String title,
                 String url, String permalink, int score, int postType, int voteType, int nComments,
-                int upvoteRatio, String flair, String awards, int nAwards, boolean hidden, boolean spoiler,
+                int upvoteRatio, String flair, boolean hidden, boolean spoiler,
                 boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved,
                 boolean isCrosspost, String distinguished, String suggestedSort) {
         this.id = id;

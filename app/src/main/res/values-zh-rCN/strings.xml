@@ -1222,7 +1222,6 @@ Reddit 视频分辨率较低。
     <string name="settings_custom_content_font_family_title">"自定义正文字体"</string>
     <string name="settings_fixed_height_preview_in_card_title">"卡片固定高度"</string>
     <string name="settings_hide_text_post_content">"隐藏文字帖内容"</string>
-    <string name="settings_hide_comment_awards_title">"隐藏评论奖励"</string>
 
     <!-- What is the "Starting form" -->
     <string name="settings_show_fewer_toolbar_options_threshold_title">"自何处开始显示更少的工具栏选项"</string>

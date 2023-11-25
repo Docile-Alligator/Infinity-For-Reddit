@@ -421,15 +421,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         }
     }
 
-    private void awardGiven(String awardsHTML, int awardCount, int position) {
-        if (sectionsPagerAdapter != null) {
-            ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
-            if (fragment != null) {
-                fragment.awardGiven(awardsHTML, awardCount, position);
-            }
-        }
-    }
-
     public void deleteComment(String fullName, int position) {
         if (sectionsPagerAdapter != null) {
             ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
