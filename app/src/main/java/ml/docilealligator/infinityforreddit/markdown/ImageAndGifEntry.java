@@ -3,9 +3,11 @@ package ml.docilealligator.infinityforreddit.markdown;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,7 +15,9 @@ import androidx.annotation.Nullable;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.bitmap.CenterInside;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
@@ -21,6 +25,7 @@ import com.bumptech.glide.request.target.Target;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.MediaMetadata;
 import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
@@ -83,6 +88,11 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
             ViewGroup.LayoutParams params = holder.binding.imageViewMarkdownImageAndGifBlock.getLayoutParams();
             params.width = (int) Utils.convertDpToPixel(160, baseActivity);
             holder.binding.imageViewMarkdownImageAndGifBlock.setLayoutParams(params);
+
+            FrameLayout.LayoutParams progressBarParams = (FrameLayout.LayoutParams) holder.binding.progressBarMarkdownImageAndGifBlock.getLayoutParams();
+            progressBarParams.gravity = Gravity.CENTER_VERTICAL;
+            progressBarParams.leftMargin = (int) Utils.convertDpToPixel(56, baseActivity);
+            holder.binding.progressBarMarkdownImageAndGifBlock.setLayoutParams(progressBarParams);
         }
 
         RequestBuilder<Drawable> imageRequestBuilder;
@@ -95,10 +105,20 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
         }
 
         if (blurImage && !node.mediaMetadata.isGIF) {
-            imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
+            imageRequestBuilder
+                    .apply(RequestOptions.bitmapTransform(
+                            new MultiTransformation<>(
+                                    new BlurTransformation(50, 10),
+                                    new RoundedCornersTransformation(72, 0))))
                     .into(holder.binding.imageViewMarkdownImageAndGifBlock);
         } else {
-            imageRequestBuilder.centerInside().downsample(saveMemoryCenterInsideDownsampleStrategy).into(holder.binding.imageViewMarkdownImageAndGifBlock);
+            imageRequestBuilder
+                    .apply(RequestOptions.bitmapTransform(
+                            new MultiTransformation<>(
+                                    new CenterInside(),
+                                    new RoundedCornersTransformation(16, 0))))
+                    .downsample(saveMemoryCenterInsideDownsampleStrategy)
+                    .into(holder.binding.imageViewMarkdownImageAndGifBlock);
         }
     }
 
@@ -108,6 +128,11 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
         ViewGroup.LayoutParams params = holder.binding.imageViewMarkdownImageAndGifBlock.getLayoutParams();
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         holder.binding.imageViewMarkdownImageAndGifBlock.setLayoutParams(params);
+
+        FrameLayout.LayoutParams progressBarParams = (FrameLayout.LayoutParams) holder.binding.progressBarMarkdownImageAndGifBlock.getLayoutParams();
+        progressBarParams.gravity = Gravity.CENTER;
+        progressBarParams.leftMargin = (int) Utils.convertDpToPixel(8, baseActivity);
+        holder.binding.progressBarMarkdownImageAndGifBlock.setLayoutParams(progressBarParams);
 
         glide.clear(holder.binding.imageViewMarkdownImageAndGifBlock);
         holder.binding.progressBarMarkdownImageAndGifBlock.setVisibility(View.GONE);
