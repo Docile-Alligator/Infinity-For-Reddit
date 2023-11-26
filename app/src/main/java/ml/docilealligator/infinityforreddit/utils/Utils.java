@@ -99,8 +99,9 @@ public final class Utils {
         int start = 0;
         int previewReddItLength = "https://preview.redd.it/".length();
         while (matcher.find(start)) {
-            String id = markdownStringBuilder.substring(previewReddItLength, markdownStringBuilder.indexOf(".", previewReddItLength));
+            String id = markdownStringBuilder.substring(matcher.start() + previewReddItLength, markdownStringBuilder.indexOf(".", matcher.start() + previewReddItLength));
             if (!mediaMetadataMap.containsKey(id)) {
+                start = matcher.end();
                 continue;
             }
             String replacingText = "![img](" + markdownStringBuilder.substring(matcher.start(), matcher.end()) + ")";
@@ -114,8 +115,9 @@ public final class Utils {
         matcher = iReddItImagePattern.matcher(markdownStringBuilder);
         int iReddItLength = "https://i.redd.it/".length();
         while (matcher.find(start)) {
-            String id = markdownStringBuilder.substring(iReddItLength, markdownStringBuilder.indexOf(".", iReddItLength));
+            String id = markdownStringBuilder.substring(matcher.start() + iReddItLength, matcher.start() + markdownStringBuilder.indexOf(".", iReddItLength));
             if (!mediaMetadataMap.containsKey(id)) {
+                start = matcher.end();
                 continue;
             }
             String replacingText = "![img](" + markdownStringBuilder.substring(matcher.start(), matcher.end()) + ")";

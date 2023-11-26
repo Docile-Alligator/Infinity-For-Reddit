@@ -250,19 +250,26 @@ public class ParsePost {
                     try {
                         String k = it.next();
                         JSONObject media = mediaMetadataJSON.getJSONObject(k);
-                        JSONArray downscales = media.getJSONArray(JSONUtils.P_KEY);
-                        JSONObject downscaledItemJSON;
-                        if (downscales.length() <= 3) {
-                            downscaledItemJSON = downscales.getJSONObject(downscales.length() - 1);
 
-                        } else {
-                            downscaledItemJSON = downscales.getJSONObject(3);
-                        }
-                        MediaMetadata.MediaItem downscaledItem = new MediaMetadata.MediaItem(downscaledItemJSON.getInt(JSONUtils.X_KEY),
-                                downscaledItemJSON.getInt(JSONUtils.Y_KEY), downscaledItemJSON.getString(JSONUtils.U_KEY));
                         JSONObject originalItemJSON = media.getJSONObject(JSONUtils.S_KEY);
                         MediaMetadata.MediaItem originalItem = new MediaMetadata.MediaItem(originalItemJSON.getInt(JSONUtils.X_KEY),
                                 originalItemJSON.getInt(JSONUtils.Y_KEY), originalItemJSON.getString(JSONUtils.U_KEY));
+
+                        JSONArray downscales = media.getJSONArray(JSONUtils.P_KEY);
+                        JSONObject downscaledItemJSON;
+                        MediaMetadata.MediaItem downscaledItem;
+                        if (downscales.length() <= 0) {
+                            downscaledItem = originalItem;
+                        } else {
+                            if (downscales.length() <= 3) {
+                                downscaledItemJSON = downscales.getJSONObject(downscales.length() - 1);
+
+                            } else {
+                                downscaledItemJSON = downscales.getJSONObject(3);
+                            }
+                            downscaledItem = new MediaMetadata.MediaItem(downscaledItemJSON.getInt(JSONUtils.X_KEY),
+                                    downscaledItemJSON.getInt(JSONUtils.Y_KEY), downscaledItemJSON.getString(JSONUtils.U_KEY));
+                        }
 
                         String id = media.getString(JSONUtils.ID_KEY);
                         mediaMetadataMap.put(id, new MediaMetadata(id, media.getString(JSONUtils.E_KEY),
