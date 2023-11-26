@@ -269,11 +269,12 @@ public class ParseComment {
         String parentId = singleCommentData.getString(JSONUtils.PARENT_ID_KEY);
         boolean isSubmitter = singleCommentData.getBoolean(JSONUtils.IS_SUBMITTER_KEY);
         String distinguished = singleCommentData.getString(JSONUtils.DISTINGUISHED_KEY);
+        Map<String, MediaMetadata> mediaMetadataMap = parseMediaMetadata(singleCommentData);
         String commentMarkdown = "";
         if (!singleCommentData.isNull(JSONUtils.BODY_KEY)) {
             commentMarkdown = Utils.parseInlineRedditImages(
                     Utils.modifyMarkdown(
-                    Utils.trimTrailingWhitespace(singleCommentData.getString(JSONUtils.BODY_KEY))));
+                    Utils.trimTrailingWhitespace(singleCommentData.getString(JSONUtils.BODY_KEY))), mediaMetadataMap);
         }
         String commentRawText = Utils.trimTrailingWhitespace(
                 Html.fromHtml(singleCommentData.getString(JSONUtils.BODY_HTML_KEY))).toString();
@@ -299,8 +300,6 @@ public class ParseComment {
 
         // this key can either be a bool (false) or a long (edited timestamp)
         long edited = singleCommentData.optLong(JSONUtils.EDITED_KEY) * 1000;
-
-        Map<String, MediaMetadata> mediaMetadataMap = parseMediaMetadata(singleCommentData);
 
         return new Comment(id, fullName, author, authorFlair, authorFlairHTMLBuilder.toString(),
                 linkAuthor, submitTime, commentMarkdown, commentRawText,

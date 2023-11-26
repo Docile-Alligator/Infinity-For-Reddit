@@ -46,12 +46,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.noties.markwon.core.spans.CustomTypefaceSpan;
+import ml.docilealligator.infinityforreddit.MediaMetadata;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.UploadedImage;
@@ -74,7 +76,8 @@ public final class Utils {
             Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\)"),
             Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\|downsized\\)"),
             Pattern.compile("!\\[gif]\\(emote\\|\\w+\\|\\w+\\)"),
-            Pattern.compile("https://preview.redd.it/\\w+.(jpg|png|jpeg)((\\?+[-a-zA-Z0-9()@:%_+.~#?&/=]*)|)")
+            Pattern.compile("https://preview.redd.it/\\w+.(jpg|png|jpeg)((\\?+[-a-zA-Z0-9()@:%_+.~#?&/=]*)|)"),
+            Pattern.compile("https://i.redd.it/\\w+.(jpg|png|jpeg|gif)")
     };
 
     public static String modifyMarkdown(String markdown) {
@@ -85,16 +88,40 @@ public final class Utils {
         return regexed;
     }
 
-    public static String parseInlineRedditImages(String markdown) {
+    public static String parseInlineRedditImages(String markdown, @Nullable Map<String, MediaMetadata> mediaMetadataMap) {
+        if (mediaMetadataMap == null) {
+            return markdown;
+        }
+
         StringBuilder markdownStringBuilder = new StringBuilder(markdown);
-        Pattern inlineRedditImagePattern = REGEX_PATTERNS[6];
-        Matcher matcher = inlineRedditImagePattern.matcher(markdownStringBuilder);
+        Pattern previewReddItImagePattern = REGEX_PATTERNS[6];
+        Matcher matcher = previewReddItImagePattern.matcher(markdownStringBuilder);
         int start = 0;
+        int previewReddItLength = "https://preview.redd.it/".length();
         while (matcher.find(start)) {
+            String id = markdownStringBuilder.substring(previewReddItLength, markdownStringBuilder.indexOf(".", previewReddItLength));
+            if (!mediaMetadataMap.containsKey(id)) {
+                continue;
+            }
             String replacingText = "![img](" + markdownStringBuilder.substring(matcher.start(), matcher.end()) + ")";
             markdownStringBuilder.replace(matcher.start(), matcher.end(), replacingText);
             start = replacingText.length() + matcher.start();
-            matcher = inlineRedditImagePattern.matcher(markdownStringBuilder);
+            matcher = previewReddItImagePattern.matcher(markdownStringBuilder);
+        }
+
+        start = 0;
+        Pattern iReddItImagePattern = REGEX_PATTERNS[7];
+        matcher = iReddItImagePattern.matcher(markdownStringBuilder);
+        int iReddItLength = "https://i.redd.it/".length();
+        while (matcher.find(start)) {
+            String id = markdownStringBuilder.substring(iReddItLength, markdownStringBuilder.indexOf(".", iReddItLength));
+            if (!mediaMetadataMap.containsKey(id)) {
+                continue;
+            }
+            String replacingText = "![img](" + markdownStringBuilder.substring(matcher.start(), matcher.end()) + ")";
+            markdownStringBuilder.replace(matcher.start(), matcher.end(), replacingText);
+            start = replacingText.length() + matcher.start();
+            matcher = iReddItImagePattern.matcher(markdownStringBuilder);
         }
 
         return markdownStringBuilder.toString();
