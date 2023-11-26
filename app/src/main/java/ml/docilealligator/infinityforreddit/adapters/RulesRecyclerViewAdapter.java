@@ -25,11 +25,11 @@ import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
-import ml.docilealligator.infinityforreddit.MediaMetadata;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Rule;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewImageOrGifActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
@@ -47,14 +47,16 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
     private Markwon markwon;
     @Nullable
     private final SliderPanel sliderPanel;
+    private String subredditName;
     private ArrayList<Rule> rules;
     private int mPrimaryTextColor;
 
     public RulesRecyclerViewAdapter(@NonNull BaseActivity activity,
                                     @NonNull CustomThemeWrapper customThemeWrapper,
-                                    @Nullable SliderPanel sliderPanel) {
+                                    @Nullable SliderPanel sliderPanel, String subredditName) {
         this.activity = activity;
         this.sliderPanel = sliderPanel;
+        this.subredditName = subredditName;
         mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
         int spoilerBackgroundColor = mPrimaryTextColor | 0xFF000000;
         MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
@@ -147,13 +149,17 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
             if (activity.typeface != null) {
                 shortNameTextView.setTypeface(activity.typeface);
             }
-            markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(activity,
+            markwonAdapter = MarkdownUtils.createCustomTablesAdapter(new ImageAndGifEntry(activity,
                     Glide.with(activity),
-                    new ImageAndGifEntry.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(MediaMetadata mediaMetadata) {
-
+                    mediaMetadata -> {
+                        Intent imageIntent = new Intent(activity, ViewImageOrGifActivity.class);
+                        if (mediaMetadata.isGIF) {
+                            imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, mediaMetadata.original.url);
+                        } else {
+                            imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, mediaMetadata.original.url);
                         }
+                        imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, subredditName);
+                        imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mediaMetadata.fileName);
                     }));
             SwipeLockLinearLayoutManager swipeLockLinearLayoutManager = new SwipeLockLinearLayoutManager(activity,
                     new SwipeLockInterface() {

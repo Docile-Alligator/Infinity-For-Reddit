@@ -130,8 +130,18 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
                         TableRow tableRow = ((TableRow) tableLayout.getChildAt(i));
                         for (int j = 0; j < tableRow.getChildCount(); j++) {
                             if (tableRow.getChildAt(j) instanceof TextView) {
-                                tableRow.getChildAt(j).setOnClickListener(onClickListener);
-                                tableRow.getChildAt(j).setOnLongClickListener(onLongClickListener);
+                                TextView textView = (TextView) tableRow.getChildAt(j);
+                                tableRow.getChildAt(j).setOnClickListener(view -> {
+                                    if (textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
+                                        onClickListener.onClick(view);
+                                    }
+                                });
+                                tableRow.getChildAt(j).setOnLongClickListener(view -> {
+                                    if (textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
+                                        onLongClickListener.onLongClick(view);
+                                    }
+                                    return true;
+                                });
                             }
                         }
                     }
@@ -139,8 +149,11 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
             }
         }
 
-        if (node instanceof ImageAndGifBlock && !holder.itemView.hasOnClickListeners()) {
-            holder.itemView.setOnClickListener(onClickListener);
+        if (node instanceof ImageAndGifBlock) {
+            if (!holder.itemView.hasOnClickListeners()) {
+                holder.itemView.setOnClickListener(onClickListener);
+            }
+            holder.itemView.setOnLongClickListener(onLongClickListener);
         }
     }
 

@@ -45,11 +45,9 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.recycler.MarkwonAdapter;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.AnyAccountAccessTokenAuthenticator;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.MediaMetadata;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.UploadImageEnabledActivity;
@@ -62,6 +60,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesB
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.comment.SendComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCommentBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -83,6 +82,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     public static final String EXTRA_PARENT_FULLNAME_KEY = "EPFK";
     public static final String EXTRA_PARENT_DEPTH_KEY = "EPDK";
     public static final String EXTRA_PARENT_POSITION_KEY = "EPPK";
+    public static final String EXTRA_SUBREDDIT_NAME_KEY = "ESNK";
     public static final String EXTRA_IS_REPLYING_KEY = "EIRK";
     public static final String RETURN_EXTRA_COMMENT_DATA_KEY = "RECDK";
     public static final int WRITE_COMMENT_REQUEST_CODE = 1;
@@ -189,9 +189,11 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     }
                     textView.setTextColor(parentTextColor);
                     textView.setOnLongClickListener(view -> {
-                        Utils.hideKeyboard(CommentActivity.this);
-                        CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
-                                parentBody, parentBodyMarkdown);
+                        if (textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
+                            Utils.hideKeyboard(CommentActivity.this);
+                            CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
+                                    parentBody, parentBodyMarkdown);
+                        }
                         return true;
                     });
                 }
@@ -216,12 +218,22 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             Markwon postBodyMarkwon = MarkdownUtils.createFullRedditMarkwon(this,
                     miscPlugin, emoteCloseBracketInlineProcessor, imageAndGifPlugin, parentTextColor,
                     parentSpoilerBackgroundColor, null);
-            MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter(new ImageAndGifEntry(this, mGlide, new ImageAndGifEntry.OnItemClickListener() {
-                @Override
-                public void onItemClick(MediaMetadata mediaMetadata) {
-
+            CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAdapter(new ImageAndGifEntry(this, mGlide, mediaMetadata -> {
+                Intent imageIntent = new Intent(this, ViewImageOrGifActivity.class);
+                if (mediaMetadata.isGIF) {
+                    imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, mediaMetadata.original.url);
+                } else {
+                    imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, mediaMetadata.original.url);
                 }
+                imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, intent.getStringExtra(EXTRA_SUBREDDIT_NAME_KEY));
+                imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mediaMetadata.fileName);
             }));
+            markwonAdapter.setOnLongClickListener(view -> {
+                Utils.hideKeyboard(CommentActivity.this);
+                CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
+                        parentBody, parentBodyMarkdown);
+                return true;
+            });
             binding.commentContentMarkdownView.setLayoutManager(new LinearLayoutManagerBugFixed(this));
             binding.commentContentMarkdownView.setAdapter(markwonAdapter);
             markwonAdapter.setMarkdown(postBodyMarkwon, parentBodyMarkdown);

@@ -17,7 +17,6 @@ import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.movement.MovementMethodPlugin;
-import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
@@ -98,20 +97,7 @@ public class MarkdownUtils {
     }
 
     /**
-     * Creates a MarkwonAdapter configured with support for tables.
-     */
-    @NonNull
-    public static MarkwonAdapter createTablesAdapter(ImageAndGifEntry imageAndGifEntry) {
-        return MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
-                .include(TableBlock.class, TableEntry.create(builder -> builder
-                        .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
-                        .textLayoutIsRoot(R.layout.view_table_entry_cell)))
-                .include(ImageAndGifBlock.class, imageAndGifEntry)
-                .build();
-    }
-
-    /**
-     * Creates a CustomMarkwonAdapter configured with support for tables.
+     * Creates a CustomMarkwonAdapter configured with support for tables and images.
      */
     @NonNull
     public static CustomMarkwonAdapter createCustomTablesAdapter(ImageAndGifEntry imageAndGifEntry) {

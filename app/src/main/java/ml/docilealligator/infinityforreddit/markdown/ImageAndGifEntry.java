@@ -55,6 +55,7 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
         colorAccent = baseActivity.getCustomThemeWrapper().getColorAccent();
         primaryTextColor = baseActivity.getCustomThemeWrapper().getPrimaryTextColor();
         postContentColor = baseActivity.getCustomThemeWrapper().getPostContentColor();
+
         String dataSavingModeString = sharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
         if (dataSavingModeString.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ALWAYS)) {
             dataSavingMode = true;
@@ -63,16 +64,22 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
         }
     }
 
+    public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide, boolean blurImage,
+                            OnItemClickListener onItemClickListener) {
+        this(baseActivity, glide, onItemClickListener);
+        this.blurImage = blurImage;
+    }
+
     public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide, boolean dataSavingMode, boolean blurImage,
                             OnItemClickListener onItemClickListener) {
         this.baseActivity = baseActivity;
         this.glide = glide;
+        this.dataSavingMode = dataSavingMode;
+        this.blurImage = blurImage;
         SharedPreferences sharedPreferences = baseActivity.getDefaultSharedPreferences();
         this.saveMemoryCenterInsideDownsampleStrategy = new SaveMemoryCenterInisdeDownsampleStrategy(
                 Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.POST_FEED_MAX_RESOLUTION, "5000000")));
         this.onItemClickListener = onItemClickListener;
-        this.dataSavingMode = dataSavingMode;
-        this.blurImage = blurImage;
         colorAccent = baseActivity.getCustomThemeWrapper().getColorAccent();
         primaryTextColor = baseActivity.getCustomThemeWrapper().getPrimaryTextColor();
         postContentColor = baseActivity.getCustomThemeWrapper().getPostContentColor();
@@ -192,68 +199,6 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
                 }
             });
         }
-
-        /*void bindImage(ImageMetadata image) {
-            binding.gifLink.setVisibility(View.GONE);
-            binding.iv.setVisibility(View.VISIBLE);
-            binding.progressBar.setVisibility(View.VISIBLE);
-            binding.giphyWatermark.setVisibility(View.GONE);
-
-            ViewGroup.LayoutParams params = binding.iv.getLayoutParams();
-            if (image.x > image.y) {
-                params.height = dpToPx(160);
-                params.width = params.height * image.x / image.y;
-            } else {
-                params.width = dpToPx(160);
-                params.height = params.width * image.y / image.x;
-            }
-            binding.iv.setLayoutParams(params);
-
-            // todo: check if waitForLayout is necessary here since we explicitly set width/height in LP
-            Target<Drawable> target = new DrawableImageViewTarget(binding.iv)
-                    .waitForLayout();
-            glide.load(image.getUrl())
-                    .addListener(requestListener)
-                    .error(R.drawable.ic_error_outline_black_24dp)
-                    .into(target);
-        }
-
-        void bindGif(GiphyGifMetadata gif) {
-            if (!canLoadGif()) {
-                // video autoplay is disabled, don't load gif
-                binding.gifLink.setVisibility(View.VISIBLE);
-                binding.iv.setVisibility(View.GONE);
-                binding.progressBar.setVisibility(View.GONE);
-                binding.giphyWatermark.setVisibility(View.GONE);
-
-                binding.gifLink.setOnClickListener(v -> {
-                    onClickListener.accept(Uri.parse(gif.getGifUrl()));
-                });
-                return;
-            }
-            binding.gifLink.setVisibility(View.GONE);
-            binding.iv.setVisibility(View.VISIBLE);
-            binding.progressBar.setVisibility(View.VISIBLE);
-            binding.giphyWatermark.setVisibility(View.VISIBLE);
-
-            ViewGroup.LayoutParams params = binding.iv.getLayoutParams();
-            if (gif.x > gif.y) {
-                params.height = dpToPx(160);
-                params.width = params.height * gif.x / gif.y;
-            } else {
-                params.width = dpToPx(160);
-                params.height = params.width * gif.y / gif.x;
-            }
-            binding.iv.setLayoutParams(params);
-
-            // todo: check if waitForLayout is necessary here since we explicitly set width/height in LP
-            Target<Drawable> target = new DrawableImageViewTarget(binding.iv)
-                    .waitForLayout();
-            glide.load(gif.getGifUrl())
-                    .addListener(requestListener)
-                    .error(R.drawable.ic_error_outline_black_24dp)
-                    .into(target);
-        }*/
     }
 
     public interface OnItemClickListener {
