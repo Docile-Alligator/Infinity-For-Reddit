@@ -12,6 +12,7 @@ public class MediaMetadata implements Parcelable {
     //E.g. Image
     public String e;
     public String fileName;
+    public String caption;
     public boolean isGIF;
     public MediaItem original;
     public MediaItem downscaled;
@@ -30,6 +31,7 @@ public class MediaMetadata implements Parcelable {
         id = in.readString();
         e = in.readString();
         fileName = in.readString();
+        caption = in.readString();
         isGIF = in.readByte() != 0;
         original = in.readParcelable(MediaItem.class.getClassLoader());
         downscaled = in.readParcelable(MediaItem.class.getClassLoader());
@@ -57,6 +59,7 @@ public class MediaMetadata implements Parcelable {
         dest.writeString(id);
         dest.writeString(e);
         dest.writeString(fileName);
+        dest.writeString(caption);
         dest.writeByte((byte) (isGIF ? 1 : 0));
         dest.writeParcelable(original, flags);
         dest.writeParcelable(downscaled, flags);

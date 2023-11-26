@@ -1,33 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/image_wrapper_relative_layout_markdown_image_and_gif_block"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:padding="8dp">
 
-    <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
-        android:id="@+id/image_view_markdown_image_and_gif_block"
+    <FrameLayout
+        android:id="@+id/image_wrapper_relative_layout_markdown_image_and_gif_block"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true" />
+        android:layout_height="wrap_content">
 
-    <ProgressBar
-        android:id="@+id/progress_bar_markdown_image_and_gif_block"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
+            android:id="@+id/image_view_markdown_image_and_gif_block"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar_markdown_image_and_gif_block"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/load_image_error_text_view_markdown_image_and_gif_block"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="?attr/font_family"
+            android:gravity="center"
+            android:text="@string/error_loading_image_tap_to_retry"
+            android:textSize="?attr/font_default"
+            android:visibility="gone"
+            app:drawableTopCompat="@drawable/ic_error_outline_black_24dp" />
+
+    </FrameLayout>
 
     <TextView
-        android:id="@+id/load_image_error_text_view_markdown_image_and_gif_block"
-        android:layout_width="match_parent"
+        android:id="@+id/caption_text_view_markdown_image_and_gif_block"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_marginTop="4dp"
+        android:layout_gravity="center_horizontal"
         android:fontFamily="?attr/font_family"
         android:gravity="center"
-        android:text="@string/error_loading_image_tap_to_retry"
         android:textSize="?attr/font_default"
-        android:visibility="gone"
-        app:drawableTopCompat="@drawable/ic_error_outline_black_24dp" />
+        android:visibility="gone" />
 
-</FrameLayout>
+</LinearLayout>

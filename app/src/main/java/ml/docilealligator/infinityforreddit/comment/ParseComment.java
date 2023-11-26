@@ -270,7 +270,7 @@ public class ParseComment {
         Map<String, MediaMetadata> mediaMetadataMap = JSONUtils.parseMediaMetadata(singleCommentData);
         String commentMarkdown = "";
         if (!singleCommentData.isNull(JSONUtils.BODY_KEY)) {
-            commentMarkdown = Utils.parseInlineRedditImages(
+            commentMarkdown = Utils.parseRedditImagesBlock(
                     Utils.modifyMarkdown(
                     Utils.trimTrailingWhitespace(singleCommentData.getString(JSONUtils.BODY_KEY))), mediaMetadataMap);
         }

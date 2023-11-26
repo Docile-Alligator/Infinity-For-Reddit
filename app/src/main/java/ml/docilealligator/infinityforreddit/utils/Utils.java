@@ -87,7 +87,7 @@ public final class Utils {
         return regexed;
     }
 
-    public static String parseInlineRedditImages(String markdown, @Nullable Map<String, MediaMetadata> mediaMetadataMap) {
+    public static String parseRedditImagesBlock(String markdown, @Nullable Map<String, MediaMetadata> mediaMetadataMap) {
         if (mediaMetadataMap == null) {
             return markdown;
         }
@@ -99,27 +99,33 @@ public final class Utils {
         int previewReddItLength = "https://preview.redd.it/".length();
         while (matcher.find(start)) {
             String id;
+            String caption = null;
             if (markdownStringBuilder.charAt(matcher.start()) == '[') {
                 //Has caption
                 int urlStartIndex = markdownStringBuilder.lastIndexOf("https://preview.redd.it/", matcher.end());
                 id = markdownStringBuilder.substring(previewReddItLength + urlStartIndex,
                         markdownStringBuilder.indexOf(".", previewReddItLength + urlStartIndex));
+                //Minus "](".length()
+                caption = markdownStringBuilder.substring(matcher.start() + 1, urlStartIndex - 2);
             } else {
                 id = markdownStringBuilder.substring(matcher.start() + previewReddItLength,
                         markdownStringBuilder.indexOf(".", matcher.start() + previewReddItLength));
             }
 
-            if (!mediaMetadataMap.containsKey(id)) {
+            MediaMetadata mediaMetadata = mediaMetadataMap.get(id);
+            if (mediaMetadata == null) {
                 start = matcher.end();
                 continue;
             }
+
+            mediaMetadata.caption = caption;
 
             if (markdownStringBuilder.charAt(matcher.start()) == '[') {
                 //Has caption
                 markdownStringBuilder.insert(matcher.start(), '!');
                 start = matcher.end() + 1;
             } else {
-                String replacingText = "![img](" + markdownStringBuilder.substring(matcher.start(), matcher.end()) + ")";
+                String replacingText = "![](" + markdownStringBuilder.substring(matcher.start(), matcher.end()) + ")";
                 markdownStringBuilder.replace(matcher.start(), matcher.end(), replacingText);
                 start = replacingText.length() + matcher.start();
             }
@@ -133,26 +139,32 @@ public final class Utils {
         int iReddItLength = "https://i.redd.it/".length();
         while (matcher.find(start)) {
             String id;
+            String caption = null;
             if (markdownStringBuilder.charAt(matcher.start()) == '[') {
                 //Has caption
                 int urlStartIndex = markdownStringBuilder.lastIndexOf("https://i.redd.it/", matcher.end());
                 id = markdownStringBuilder.substring(iReddItLength + urlStartIndex,
                         markdownStringBuilder.indexOf(".", iReddItLength + urlStartIndex));
+                //Minus "](".length()
+                caption = markdownStringBuilder.substring(matcher.start() + 1, urlStartIndex - 2);
             } else {
                 id = markdownStringBuilder.substring(matcher.start() + iReddItLength, matcher.start() + markdownStringBuilder.indexOf(".", iReddItLength));
             }
 
-            if (!mediaMetadataMap.containsKey(id)) {
+            MediaMetadata mediaMetadata = mediaMetadataMap.get(id);
+            if (mediaMetadata == null) {
                 start = matcher.end();
                 continue;
             }
+
+            mediaMetadata.caption = caption;
 
             if (markdownStringBuilder.charAt(matcher.start()) == '[') {
                 //Has caption
                 markdownStringBuilder.insert(matcher.start(), '!');
                 start = matcher.end() + 1;
             } else {
-                String replacingText = "![img](" + markdownStringBuilder.substring(matcher.start(), matcher.end()) + ")";
+                String replacingText = "![](" + markdownStringBuilder.substring(matcher.start(), matcher.end()) + ")";
                 markdownStringBuilder.replace(matcher.start(), matcher.end(), replacingText);
                 start = replacingText.length() + matcher.start();
             }

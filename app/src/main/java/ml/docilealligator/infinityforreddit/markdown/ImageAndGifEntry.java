@@ -41,6 +41,8 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
     private boolean dataSavingMode;
     private boolean blurImage;
     private int colorAccent;
+    private int primaryTextColor;
+    private int postContentColor;
 
     public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide,
                             OnItemClickListener onItemClickListener) {
@@ -51,6 +53,8 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
                 Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.POST_FEED_MAX_RESOLUTION, "5000000")));
         this.onItemClickListener = onItemClickListener;
         colorAccent = baseActivity.getCustomThemeWrapper().getColorAccent();
+        primaryTextColor = baseActivity.getCustomThemeWrapper().getPrimaryTextColor();
+        postContentColor = baseActivity.getCustomThemeWrapper().getPostContentColor();
         String dataSavingModeString = sharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
         if (dataSavingModeString.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ALWAYS)) {
             dataSavingMode = true;
@@ -63,13 +67,15 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
                             OnItemClickListener onItemClickListener) {
         this.baseActivity = baseActivity;
         this.glide = glide;
-
         SharedPreferences sharedPreferences = baseActivity.getDefaultSharedPreferences();
         this.saveMemoryCenterInsideDownsampleStrategy = new SaveMemoryCenterInisdeDownsampleStrategy(
                 Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.POST_FEED_MAX_RESOLUTION, "5000000")));
         this.onItemClickListener = onItemClickListener;
         this.dataSavingMode = dataSavingMode;
         this.blurImage = blurImage;
+        colorAccent = baseActivity.getCustomThemeWrapper().getColorAccent();
+        primaryTextColor = baseActivity.getCustomThemeWrapper().getPrimaryTextColor();
+        postContentColor = baseActivity.getCustomThemeWrapper().getPostContentColor();
     }
 
     @NonNull
@@ -120,6 +126,11 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
                     .downsample(saveMemoryCenterInsideDownsampleStrategy)
                     .into(holder.binding.imageViewMarkdownImageAndGifBlock);
         }
+
+        if (node.mediaMetadata.caption != null) {
+            holder.binding.captionTextViewMarkdownImageAndGifBlock.setVisibility(View.VISIBLE);
+            holder.binding.captionTextViewMarkdownImageAndGifBlock.setText(node.mediaMetadata.caption);
+        }
     }
 
     @Override
@@ -137,6 +148,7 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
         glide.clear(holder.binding.imageViewMarkdownImageAndGifBlock);
         holder.binding.progressBarMarkdownImageAndGifBlock.setVisibility(View.GONE);
         holder.binding.loadImageErrorTextViewMarkdownImageAndGifBlock.setVisibility(View.GONE);
+        holder.binding.captionTextViewMarkdownImageAndGifBlock.setVisibility(View.GONE);
     }
 
     public class Holder extends MarkwonAdapter.Holder {
@@ -149,6 +161,15 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
             this.binding = binding;
 
             binding.progressBarMarkdownImageAndGifBlock.setIndeterminateTintList(ColorStateList.valueOf(colorAccent));
+            binding.loadImageErrorTextViewMarkdownImageAndGifBlock.setTextColor(primaryTextColor);
+            binding.captionTextViewMarkdownImageAndGifBlock.setTextColor(postContentColor);
+
+            if (baseActivity.typeface != null) {
+                binding.loadImageErrorTextViewMarkdownImageAndGifBlock.setTypeface(baseActivity.typeface);
+            }
+            if (baseActivity.contentTypeface != null) {
+                binding.captionTextViewMarkdownImageAndGifBlock.setTypeface(baseActivity.contentTypeface);
+            }
 
             requestListener = new RequestListener<>() {
                 @Override
@@ -171,17 +192,6 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
                 }
             });
         }
-
-        /*public Holder(@NonNull AdapterGifEntryBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-
-            binding.progressBar.setIndeterminateTintList(ColorStateList.valueOf(customThemeWrapper.getColorAccent()));
-            binding.giphyWatermark.setTextColor(customThemeWrapper.getCommentColor());
-
-            binding.gifLink.setTextColor(customThemeWrapper.getLinkColor());
-
-        }*/
 
         /*void bindImage(ImageMetadata image) {
             binding.gifLink.setVisibility(View.GONE);
