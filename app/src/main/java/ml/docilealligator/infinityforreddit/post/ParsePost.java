@@ -5,16 +5,12 @@ import android.os.Handler;
 import android.text.Html;
 import android.text.TextUtils;
 
-import androidx.annotation.Nullable;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -216,7 +212,7 @@ public class ParsePost {
             }
         }
 
-        Map<String, MediaMetadata> mediaMetadataMap = parseMediaMetadata(data);
+        Map<String, MediaMetadata> mediaMetadataMap = JSONUtils.parseMediaMetadata(data);
         if (data.has(JSONUtils.CROSSPOST_PARENT_LIST)) {
             //Cross post
             //data.getJSONArray(JSONUtils.CROSSPOST_PARENT_LIST).getJSONObject(0) out of bounds????????????
@@ -238,53 +234,6 @@ public class ParsePost {
                     spoiler, nsfw, stickied, archived, locked, saved, deleted, removed, false,
                     distinguished, suggestedSort);
         }
-    }
-
-    @Nullable
-    private static Map<String, MediaMetadata> parseMediaMetadata(JSONObject data) {
-        try {
-            if (data.has(JSONUtils.MEDIA_METADATA_KEY)) {
-                Map<String, MediaMetadata> mediaMetadataMap = new HashMap<>();
-                JSONObject mediaMetadataJSON = data.getJSONObject(JSONUtils.MEDIA_METADATA_KEY);
-                for (Iterator<String> it = mediaMetadataJSON.keys(); it.hasNext();) {
-                    try {
-                        String k = it.next();
-                        JSONObject media = mediaMetadataJSON.getJSONObject(k);
-
-                        JSONObject originalItemJSON = media.getJSONObject(JSONUtils.S_KEY);
-                        MediaMetadata.MediaItem originalItem = new MediaMetadata.MediaItem(originalItemJSON.getInt(JSONUtils.X_KEY),
-                                originalItemJSON.getInt(JSONUtils.Y_KEY), originalItemJSON.getString(JSONUtils.U_KEY));
-
-                        JSONArray downscales = media.getJSONArray(JSONUtils.P_KEY);
-                        JSONObject downscaledItemJSON;
-                        MediaMetadata.MediaItem downscaledItem;
-                        if (downscales.length() <= 0) {
-                            downscaledItem = originalItem;
-                        } else {
-                            if (downscales.length() <= 3) {
-                                downscaledItemJSON = downscales.getJSONObject(downscales.length() - 1);
-
-                            } else {
-                                downscaledItemJSON = downscales.getJSONObject(3);
-                            }
-                            downscaledItem = new MediaMetadata.MediaItem(downscaledItemJSON.getInt(JSONUtils.X_KEY),
-                                    downscaledItemJSON.getInt(JSONUtils.Y_KEY), downscaledItemJSON.getString(JSONUtils.U_KEY));
-                        }
-
-                        String id = media.getString(JSONUtils.ID_KEY);
-                        mediaMetadataMap.put(id, new MediaMetadata(id, media.getString(JSONUtils.E_KEY),
-                                originalItem, downscaledItem));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                return mediaMetadataMap;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
     private static Post parseData(JSONObject data, String permalink, String id, String fullName,

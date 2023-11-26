@@ -15,8 +15,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -269,7 +267,7 @@ public class ParseComment {
         String parentId = singleCommentData.getString(JSONUtils.PARENT_ID_KEY);
         boolean isSubmitter = singleCommentData.getBoolean(JSONUtils.IS_SUBMITTER_KEY);
         String distinguished = singleCommentData.getString(JSONUtils.DISTINGUISHED_KEY);
-        Map<String, MediaMetadata> mediaMetadataMap = parseMediaMetadata(singleCommentData);
+        Map<String, MediaMetadata> mediaMetadataMap = JSONUtils.parseMediaMetadata(singleCommentData);
         String commentMarkdown = "";
         if (!singleCommentData.isNull(JSONUtils.BODY_KEY)) {
             commentMarkdown = Utils.parseInlineRedditImages(
@@ -306,64 +304,6 @@ public class ParseComment {
                 linkId, subredditName, parentId, score, voteType, isSubmitter, distinguished,
                 permalink, depth, collapsed, hasReply, scoreHidden, saved, edited,
                 mediaMetadataMap);
-    }
-
-    @Nullable
-    private static Map<String, MediaMetadata> parseMediaMetadata(JSONObject data) {
-        try {
-            if (data.has(JSONUtils.MEDIA_METADATA_KEY)) {
-                Map<String, MediaMetadata> mediaMetadataMap = new HashMap<>();
-                JSONObject mediaMetadataJSON = data.getJSONObject(JSONUtils.MEDIA_METADATA_KEY);
-                for (Iterator<String> it = mediaMetadataJSON.keys(); it.hasNext();) {
-                    try {
-                        String k = it.next();
-                        JSONObject media = mediaMetadataJSON.getJSONObject(k);
-                        String e = media.getString(JSONUtils.E_KEY);
-
-                        JSONObject originalItemJSON = media.getJSONObject(JSONUtils.S_KEY);
-                        MediaMetadata.MediaItem originalItem;
-                        if (e.equalsIgnoreCase("Image")) {
-                            originalItem = new MediaMetadata.MediaItem(originalItemJSON.getInt(JSONUtils.X_KEY),
-                                    originalItemJSON.getInt(JSONUtils.Y_KEY), originalItemJSON.getString(JSONUtils.U_KEY));
-                        } else {
-                            if (originalItemJSON.has(JSONUtils.MP4_KEY)) {
-                                originalItem = new MediaMetadata.MediaItem(originalItemJSON.getInt(JSONUtils.X_KEY),
-                                        originalItemJSON.getInt(JSONUtils.Y_KEY), originalItemJSON.getString(JSONUtils.GIF_KEY),
-                                        originalItemJSON.getString(JSONUtils.MP4_KEY));
-                            } else {
-                                originalItem = new MediaMetadata.MediaItem(originalItemJSON.getInt(JSONUtils.X_KEY),
-                                        originalItemJSON.getInt(JSONUtils.Y_KEY), originalItemJSON.getString(JSONUtils.GIF_KEY));
-                            }
-                        }
-                        String id = media.getString(JSONUtils.ID_KEY);
-
-                        MediaMetadata.MediaItem downscaledItem;
-                        if (media.has(JSONUtils.P_KEY)) {
-                            JSONArray downscales = media.getJSONArray(JSONUtils.P_KEY);
-                            JSONObject downscaledItemJSON;
-                            if (downscales.length() <= 3) {
-                                downscaledItemJSON = downscales.getJSONObject(downscales.length() - 1);
-                            } else {
-                                downscaledItemJSON = downscales.getJSONObject(3);
-                            }
-                            downscaledItem = new MediaMetadata.MediaItem(downscaledItemJSON.getInt(JSONUtils.X_KEY),
-                                    downscaledItemJSON.getInt(JSONUtils.Y_KEY), downscaledItemJSON.getString(JSONUtils.U_KEY));
-                        } else {
-                            downscaledItem = originalItem;
-                        }
-
-                        mediaMetadataMap.put(id, new MediaMetadata(id, e, originalItem, downscaledItem));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-                return mediaMetadataMap;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
     @Nullable
