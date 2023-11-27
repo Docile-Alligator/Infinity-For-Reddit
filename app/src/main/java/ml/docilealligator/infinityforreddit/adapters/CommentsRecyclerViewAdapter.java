@@ -61,7 +61,7 @@ import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.comment.FetchComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CommentIndentationView;
-import ml.docilealligator.infinityforreddit.customviews.CustomMarkwonAdapter;
+import ml.docilealligator.infinityforreddit.markdown.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
@@ -69,6 +69,7 @@ import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutMan
 import ml.docilealligator.infinityforreddit.databinding.ItemCommentBinding;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
 import ml.docilealligator.infinityforreddit.markdown.EmoteCloseBracketInlineProcessor;
+import ml.docilealligator.infinityforreddit.markdown.EmotePlugin;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
@@ -98,6 +99,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private Retrofit mRetrofit;
     private Retrofit mOauthRetrofit;
     private EmoteCloseBracketInlineProcessor mEmoteCloseBracketInlineProcessor;
+    private EmotePlugin mEmotePlugin;
     private ImageAndGifPlugin mImageAndGifPlugin;
     private Markwon mCommentMarkwon;
     private ImageAndGifEntry mImageAndGifEntry;
@@ -213,9 +215,10 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             return true;
         };
         mEmoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
+        mEmotePlugin = EmotePlugin.create(activity);
         mImageAndGifPlugin = new ImageAndGifPlugin();
         mCommentMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
-                miscPlugin, mEmoteCloseBracketInlineProcessor, mImageAndGifPlugin, mCommentTextColor,
+                miscPlugin, mEmoteCloseBracketInlineProcessor, mEmotePlugin, mImageAndGifPlugin, mCommentTextColor,
                 commentSpoilerBackgroundColor, onLinkLongClickListener);
 
         boolean needBlurNsfw = nsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.BLUR_NSFW_BASE, true);

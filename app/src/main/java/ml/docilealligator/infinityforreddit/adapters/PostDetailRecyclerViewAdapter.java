@@ -90,7 +90,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareLinkBottom
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
-import ml.docilealligator.infinityforreddit.customviews.CustomMarkwonAdapter;
+import ml.docilealligator.infinityforreddit.markdown.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
@@ -104,6 +104,7 @@ import ml.docilealligator.infinityforreddit.databinding.ItemPostDetailVideoAutop
 import ml.docilealligator.infinityforreddit.databinding.ItemPostDetailVideoAutoplayLegacyControllerBinding;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
 import ml.docilealligator.infinityforreddit.markdown.EmoteCloseBracketInlineProcessor;
+import ml.docilealligator.infinityforreddit.markdown.EmotePlugin;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
@@ -146,6 +147,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private RequestManager mGlide;
     private SaveMemoryCenterInisdeDownsampleStrategy mSaveMemoryCenterInsideDownsampleStrategy;
     private EmoteCloseBracketInlineProcessor mEmoteCloseBracketInlineProcessor;
+    private EmotePlugin mEmotePlugin;
     private ImageAndGifPlugin mImageAndGifPlugin;
     private Markwon mPostDetailMarkwon;
     private ImageAndGifEntry mImageAndGifEntry;
@@ -386,12 +388,13 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             return true;
         };
         mEmoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
+        mEmotePlugin = EmotePlugin.create(activity);
         mImageAndGifPlugin = new ImageAndGifPlugin();
         mPostDetailMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
-                miscPlugin, mEmoteCloseBracketInlineProcessor, mImageAndGifPlugin, markdownColor,
+                miscPlugin, mEmoteCloseBracketInlineProcessor, mEmotePlugin, mImageAndGifPlugin, markdownColor,
                 postSpoilerBackgroundColor, onLinkLongClickListener);
         mImageAndGifEntry = new ImageAndGifEntry(activity,
-                mGlide, mDataSavingMode,
+                mGlide, mDataSavingMode, mDisableImagePreview,
                 (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit())) || (mPost.isSpoiler() && mNeedBlurSpoiler),
                 mediaMetadata -> {
                     Intent intent = new Intent(activity, ViewImageOrGifActivity.class);

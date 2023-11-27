@@ -34,7 +34,6 @@ import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.MediaMetadata;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
@@ -44,9 +43,10 @@ import ml.docilealligator.infinityforreddit.asynctasks.InsertSubredditData;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.CustomMarkwonAdapter;
+import ml.docilealligator.infinityforreddit.markdown.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.markdown.EmoteCloseBracketInlineProcessor;
+import ml.docilealligator.infinityforreddit.markdown.EmotePlugin;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
@@ -149,9 +149,10 @@ public class SidebarFragment extends Fragment {
             return true;
         };
         EmoteCloseBracketInlineProcessor emoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
+        EmotePlugin emotePlugin = EmotePlugin.create(activity);
         ImageAndGifPlugin imageAndGifPlugin = new ImageAndGifPlugin();
         Markwon markwon = MarkdownUtils.createFullRedditMarkwon(activity,
-                miscPlugin, emoteCloseBracketInlineProcessor, imageAndGifPlugin, markdownColor,
+                miscPlugin, emoteCloseBracketInlineProcessor, emotePlugin, imageAndGifPlugin, markdownColor,
                 spoilerBackgroundColor, onLinkLongClickListener);
         CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAdapter(new ImageAndGifEntry(activity,
                 Glide.with(this),

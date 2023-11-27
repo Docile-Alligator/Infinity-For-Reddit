@@ -60,11 +60,12 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesB
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.comment.SendComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.CustomMarkwonAdapter;
+import ml.docilealligator.infinityforreddit.markdown.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCommentBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.EmoteCloseBracketInlineProcessor;
+import ml.docilealligator.infinityforreddit.markdown.EmotePlugin;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
@@ -214,9 +215,10 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                 }
             };
             EmoteCloseBracketInlineProcessor emoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
+            EmotePlugin emotePlugin = EmotePlugin.create(this);
             ImageAndGifPlugin imageAndGifPlugin = new ImageAndGifPlugin();
             Markwon postBodyMarkwon = MarkdownUtils.createFullRedditMarkwon(this,
-                    miscPlugin, emoteCloseBracketInlineProcessor, imageAndGifPlugin, parentTextColor,
+                    miscPlugin, emoteCloseBracketInlineProcessor, emotePlugin, imageAndGifPlugin, parentTextColor,
                     parentSpoilerBackgroundColor, null);
             CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAdapter(new ImageAndGifEntry(this, mGlide, mediaMetadata -> {
                 Intent imageIntent = new Intent(this, ViewImageOrGifActivity.class);

@@ -1,8 +1,13 @@
 package ml.docilealligator.infinityforreddit.markdown;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.URLSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,9 +31,12 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.MediaMetadata;
 import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.databinding.MarkdownImageAndGifBlockBinding;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -39,10 +47,12 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
     private SaveMemoryCenterInisdeDownsampleStrategy saveMemoryCenterInsideDownsampleStrategy;
     private OnItemClickListener onItemClickListener;
     private boolean dataSavingMode;
+    private boolean disableImagePreview;
     private boolean blurImage;
     private int colorAccent;
     private int primaryTextColor;
     private int postContentColor;
+    private int linkColor;
 
     public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide,
                             OnItemClickListener onItemClickListener) {
@@ -55,6 +65,7 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
         colorAccent = baseActivity.getCustomThemeWrapper().getColorAccent();
         primaryTextColor = baseActivity.getCustomThemeWrapper().getPrimaryTextColor();
         postContentColor = baseActivity.getCustomThemeWrapper().getPostContentColor();
+        linkColor = baseActivity.getCustomThemeWrapper().getLinkColor();
 
         String dataSavingModeString = sharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
         if (dataSavingModeString.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ALWAYS)) {
@@ -62,6 +73,7 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
         } else if (dataSavingModeString.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
             dataSavingMode = Utils.getConnectedNetwork(baseActivity) == Utils.NETWORK_TYPE_CELLULAR;
         }
+        disableImagePreview = sharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_IMAGE_PREVIEW, false);
     }
 
     public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide, boolean blurImage,
@@ -70,11 +82,13 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
         this.blurImage = blurImage;
     }
 
-    public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide, boolean dataSavingMode, boolean blurImage,
+    public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide, boolean dataSavingMode,
+                            boolean disableImagePreview, boolean blurImage,
                             OnItemClickListener onItemClickListener) {
         this.baseActivity = baseActivity;
         this.glide = glide;
         this.dataSavingMode = dataSavingMode;
+        this.disableImagePreview = disableImagePreview;
         this.blurImage = blurImage;
         SharedPreferences sharedPreferences = baseActivity.getDefaultSharedPreferences();
         this.saveMemoryCenterInsideDownsampleStrategy = new SaveMemoryCenterInisdeDownsampleStrategy(
@@ -83,6 +97,7 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
         colorAccent = baseActivity.getCustomThemeWrapper().getColorAccent();
         primaryTextColor = baseActivity.getCustomThemeWrapper().getPrimaryTextColor();
         postContentColor = baseActivity.getCustomThemeWrapper().getPostContentColor();
+        linkColor = baseActivity.getCustomThemeWrapper().getLinkColor();
     }
 
     @NonNull
@@ -110,8 +125,18 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
 
         RequestBuilder<Drawable> imageRequestBuilder;
         if (dataSavingMode) {
-            imageRequestBuilder = glide.load(node.mediaMetadata.downscaled.url).listener(holder.requestListener);
-            holder.binding.imageViewMarkdownImageAndGifBlock.setRatio((float) node.mediaMetadata.downscaled.y / node.mediaMetadata.downscaled.x);
+            if (disableImagePreview) {
+                holder.binding.imageWrapperRelativeLayoutMarkdownImageAndGifBlock.setVisibility(View.GONE);
+                holder.binding.captionTextViewMarkdownImageAndGifBlock.setVisibility(View.VISIBLE);
+                holder.binding.captionTextViewMarkdownImageAndGifBlock.setGravity(Gravity.NO_GRAVITY);
+                SpannableString spannableString = new SpannableString(node.mediaMetadata.caption == null ? node.mediaMetadata.original.url : node.mediaMetadata.caption);
+                spannableString.setSpan(new URLSpan(node.mediaMetadata.original.url), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                holder.binding.captionTextViewMarkdownImageAndGifBlock.setText(spannableString);
+                return;
+            } else {
+                imageRequestBuilder = glide.load(node.mediaMetadata.downscaled.url).listener(holder.requestListener);
+                holder.binding.imageViewMarkdownImageAndGifBlock.setRatio((float) node.mediaMetadata.downscaled.y / node.mediaMetadata.downscaled.x);
+            }
         } else {
             imageRequestBuilder = glide.load(node.mediaMetadata.original.url).listener(holder.requestListener);
             holder.binding.imageViewMarkdownImageAndGifBlock.setRatio((float) node.mediaMetadata.original.y / node.mediaMetadata.original.x);
@@ -143,6 +168,7 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
     @Override
     public void onViewRecycled(@NonNull Holder holder) {
         super.onViewRecycled(holder);
+        holder.binding.imageWrapperRelativeLayoutMarkdownImageAndGifBlock.setVisibility(View.VISIBLE);
         ViewGroup.LayoutParams params = holder.binding.imageViewMarkdownImageAndGifBlock.getLayoutParams();
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         holder.binding.imageViewMarkdownImageAndGifBlock.setLayoutParams(params);
@@ -156,6 +182,7 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
         holder.binding.progressBarMarkdownImageAndGifBlock.setVisibility(View.GONE);
         holder.binding.loadImageErrorTextViewMarkdownImageAndGifBlock.setVisibility(View.GONE);
         holder.binding.captionTextViewMarkdownImageAndGifBlock.setVisibility(View.GONE);
+        holder.binding.captionTextViewMarkdownImageAndGifBlock.setGravity(Gravity.CENTER_HORIZONTAL);
     }
 
     public class Holder extends MarkwonAdapter.Holder {
@@ -170,6 +197,7 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
             binding.progressBarMarkdownImageAndGifBlock.setIndeterminateTintList(ColorStateList.valueOf(colorAccent));
             binding.loadImageErrorTextViewMarkdownImageAndGifBlock.setTextColor(primaryTextColor);
             binding.captionTextViewMarkdownImageAndGifBlock.setTextColor(postContentColor);
+            binding.captionTextViewMarkdownImageAndGifBlock.setLinkTextColor(linkColor);
 
             if (baseActivity.typeface != null) {
                 binding.loadImageErrorTextViewMarkdownImageAndGifBlock.setTypeface(baseActivity.typeface);
@@ -198,6 +226,20 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
                     onItemClickListener.onItemClick(imageAndGifBlock.mediaMetadata);
                 }
             });
+
+            binding.captionTextViewMarkdownImageAndGifBlock.setMovementMethod(
+                    BetterLinkMovementMethod.newInstance()
+                            .setOnLinkClickListener((textView, url) -> {
+                                Intent intent = new Intent(baseActivity, LinkResolverActivity.class);
+                                intent.setData(Uri.parse(url));
+                                baseActivity.startActivity(intent);
+                                return true;
+                            })
+                            .setOnLinkLongClickListener((textView, url) -> {
+                                UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = UrlMenuBottomSheetFragment.newInstance(url);
+                                urlMenuBottomSheetFragment.show(baseActivity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+                                return true;
+                            }));
         }
     }
 

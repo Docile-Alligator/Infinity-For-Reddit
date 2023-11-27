@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.customviews;
+package ml.docilealligator.infinityforreddit.markdown;
 
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -23,7 +23,7 @@ import io.noties.markwon.MarkwonReducer;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.SimpleEntry;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.markdown.ImageAndGifBlock;
+import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
 
 public class CustomMarkwonAdapter extends MarkwonAdapter {
     private final SparseArray<Entry<Node, Holder>> entries;
@@ -152,8 +152,24 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
         if (node instanceof ImageAndGifBlock) {
             if (!holder.itemView.hasOnClickListeners()) {
                 holder.itemView.setOnClickListener(onClickListener);
+                holder.itemView.setOnLongClickListener(onLongClickListener);
             }
-            holder.itemView.setOnLongClickListener(onLongClickListener);
+
+            if (holder instanceof ImageAndGifEntry.Holder) {
+                if (!((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.hasOnClickListeners()) {
+                    ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.setOnClickListener(view -> {
+                        if (((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionStart() == -1 && ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionEnd() == -1) {
+                            onClickListener.onClick(view);
+                        }
+                    });
+                    ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.setOnLongClickListener(view -> {
+                        if (((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionStart() == -1 && ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionEnd() == -1) {
+                            return onLongClickListener.onLongClick(view);
+                        }
+                        return false;
+                    });
+                }
+            }
         }
     }
 

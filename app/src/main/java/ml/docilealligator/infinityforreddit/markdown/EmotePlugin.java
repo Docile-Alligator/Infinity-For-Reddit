@@ -28,14 +28,16 @@ import io.noties.markwon.MarkwonSpansFactory;
 import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.RenderProps;
 import io.noties.markwon.SpanFactory;
+import io.noties.markwon.core.CoreProps;
 import io.noties.markwon.image.AsyncDrawable;
 import io.noties.markwon.image.AsyncDrawableLoader;
 import io.noties.markwon.image.AsyncDrawableScheduler;
 import io.noties.markwon.image.DrawableUtils;
 import io.noties.markwon.image.ImageProps;
-import ml.docilealligator.infinityforreddit.MediaMetadata;
 
 public class EmotePlugin extends AbstractMarkwonPlugin {
+    private boolean disableImagePreview = true;
+
     public interface GlideStore {
 
         @NonNull
@@ -93,6 +95,18 @@ public class EmotePlugin extends AbstractMarkwonPlugin {
     @Override
     public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
         builder.on(Emote.class, (visitor, emote) -> {
+            if (disableImagePreview) {
+                Link link = new Link(emote.getMediaMetadata().original.url, emote.getTitle());
+
+                final int length = visitor.length();
+                visitor.visitChildren(emote);
+
+                final String destination = link.getDestination();
+                CoreProps.LINK_DESTINATION.set(visitor.renderProps(), destination);
+                visitor.setSpansForNodeOptional(link, length);
+                return;
+            }
+
             // if there is no image spanFactory, ignore
             final SpanFactory spanFactory = visitor.configuration().spansFactory().get(Emote.class);
             if (spanFactory == null) {
@@ -141,8 +155,8 @@ public class EmotePlugin extends AbstractMarkwonPlugin {
         AsyncDrawableScheduler.schedule(textView);
     }
 
-    public void setMediaMetadataMap(Map<String, MediaMetadata> mediaMetadataMap) {
-
+    public void setDisableImagePreview(boolean disableImagePreview) {
+        this.disableImagePreview = disableImagePreview;
     }
 
     private static class GlideAsyncDrawableLoader extends AsyncDrawableLoader {

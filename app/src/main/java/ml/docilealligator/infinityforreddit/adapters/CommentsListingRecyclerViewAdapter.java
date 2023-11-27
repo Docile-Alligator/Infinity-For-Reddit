@@ -52,13 +52,14 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSh
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CommentIndentationView;
-import ml.docilealligator.infinityforreddit.customviews.CustomMarkwonAdapter;
+import ml.docilealligator.infinityforreddit.markdown.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.databinding.ItemCommentBinding;
 import ml.docilealligator.infinityforreddit.markdown.EmoteCloseBracketInlineProcessor;
+import ml.docilealligator.infinityforreddit.markdown.EmotePlugin;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
@@ -86,6 +87,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private Retrofit mOauthRetrofit;
     private Locale mLocale;
     private EmoteCloseBracketInlineProcessor mEmoteCloseBracketInlineProcessor;
+    private EmotePlugin mEmotePlugin;
     private ImageAndGifPlugin mImageAndGifPlugin;
     private Markwon mMarkwon;
     private ImageAndGifEntry mImageAndGifEntry;
@@ -175,14 +177,15 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener = (textView, url) -> {
             if (!activity.isDestroyed() && !activity.isFinishing()) {
                 UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = UrlMenuBottomSheetFragment.newInstance(url);
-                urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), null);
+                urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
             }
             return true;
         };
         mEmoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
+        mEmotePlugin = EmotePlugin.create(activity);
         mImageAndGifPlugin = new ImageAndGifPlugin();
         mMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
-                miscPlugin, mEmoteCloseBracketInlineProcessor, mImageAndGifPlugin, mCommentColor,
+                miscPlugin, mEmoteCloseBracketInlineProcessor, mEmotePlugin, mImageAndGifPlugin, mCommentColor,
                 commentSpoilerBackgroundColor, onLinkLongClickListener);
         mImageAndGifEntry = new ImageAndGifEntry(activity, Glide.with(activity), new ImageAndGifEntry.OnItemClickListener() {
             @Override

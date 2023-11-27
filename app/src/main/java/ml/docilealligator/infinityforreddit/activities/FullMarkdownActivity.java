@@ -38,13 +38,14 @@ import io.noties.markwon.core.MarkwonTheme;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.CustomMarkwonAdapter;
+import ml.docilealligator.infinityforreddit.markdown.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.EmoteCloseBracketInlineProcessor;
+import ml.docilealligator.infinityforreddit.markdown.EmotePlugin;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
@@ -143,9 +144,10 @@ public class FullMarkdownActivity extends BaseActivity {
             }
         };
         EmoteCloseBracketInlineProcessor emoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
+        EmotePlugin emotePlugin = EmotePlugin.create(this);
         ImageAndGifPlugin imageAndGifPlugin = new ImageAndGifPlugin();
         Markwon markwon = MarkdownUtils.createFullRedditMarkwon(this,
-                miscPlugin, emoteCloseBracketInlineProcessor, imageAndGifPlugin, markdownColor,
+                miscPlugin, emoteCloseBracketInlineProcessor, emotePlugin, imageAndGifPlugin, markdownColor,
                 spoilerBackgroundColor, null);
 
         CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAdapter(new ImageAndGifEntry(this,

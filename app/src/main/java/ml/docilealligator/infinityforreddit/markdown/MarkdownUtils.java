@@ -21,7 +21,6 @@ import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.customviews.CustomMarkwonAdapter;
 
 public class MarkdownUtils {
     /**
@@ -32,6 +31,7 @@ public class MarkdownUtils {
     public static Markwon createFullRedditMarkwon(@NonNull Context context,
                                                   @NonNull MarkwonPlugin miscPlugin,
                                                   @NonNull EmoteCloseBracketInlineProcessor emoteCloseBracketInlineProcessor,
+                                                  @NonNull EmotePlugin emotePlugin,
                                                   @NonNull ImageAndGifPlugin imageAndGifPlugin,
                                                   int markdownColor,
                                                   int spoilerBackgroundColor,
@@ -53,7 +53,7 @@ public class MarkdownUtils {
                         .setOnLinkLongClickListener(onLinkLongClickListener)))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .usePlugin(imageAndGifPlugin)
-                .usePlugin(EmotePlugin.create(context))
+                .usePlugin(emotePlugin)
                 .usePlugin(TableEntryPlugin.create(context))
                 .build();
     }
