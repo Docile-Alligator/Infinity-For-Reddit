@@ -563,7 +563,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 }
                 if (canStartActivity) {
                     canStartActivity = false;
-                    itemView.callOnClick();
+                    itemView.performClick();
                 }
             });
             commentMarkdownView.setAdapter(markwonAdapter);

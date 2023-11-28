@@ -433,7 +433,25 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
             String dataSavingMode = mSharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
             if (dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
                 mAdapter.setDataSavingMode(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_CELLULAR);
+                refreshAdapter(mCommentRecyclerView, mAdapter);
             }
+        }
+    }
+
+    private void refreshAdapter(RecyclerView recyclerView, RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
+        int previousPosition = -1;
+        if (recyclerView.getLayoutManager() != null) {
+            previousPosition = ((LinearLayoutManagerBugFixed) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+        }
+
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        recyclerView.setAdapter(null);
+        recyclerView.setLayoutManager(null);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(layoutManager);
+
+        if (previousPosition > 0) {
+            recyclerView.scrollToPosition(previousPosition);
         }
     }
 }
