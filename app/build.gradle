@@ -8,8 +8,8 @@ android {
         applicationId "ml.docilealligator.infinityforreddit"
         minSdk 21
         targetSdk 33
-        versionCode 142
-        versionName "6.4.1"
+        versionCode 143
+        versionName "6.5.0-beta1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -149,7 +149,7 @@ dependencies {
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.santalu:aspect-ratio-imageview:1.0.9'
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.23'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.28'
     def bivVersion = "1.8.1"
     implementation "com.github.piasy:BigImageViewer:$bivVersion"
     implementation "com.github.piasy:GlideImageLoader:$bivVersion"
