@@ -60,6 +60,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesB
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.comment.SendComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.markdown.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCommentBinding;
@@ -135,6 +136,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     @ColorInt
     private int parentSpoilerBackgroundColor;
     private ActivityCommentBinding binding;
+    private EmotePlugin emotePlugin;
+    private ImageAndGifEntry imageAndGifEntry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,12 +218,9 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                 }
             };
             EmoteCloseBracketInlineProcessor emoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
-            EmotePlugin emotePlugin = EmotePlugin.create(this);
+            emotePlugin = EmotePlugin.create(this);
             ImageAndGifPlugin imageAndGifPlugin = new ImageAndGifPlugin();
-            Markwon postBodyMarkwon = MarkdownUtils.createFullRedditMarkwon(this,
-                    miscPlugin, emoteCloseBracketInlineProcessor, emotePlugin, imageAndGifPlugin, parentTextColor,
-                    parentSpoilerBackgroundColor, null);
-            CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAdapter(new ImageAndGifEntry(this, mGlide, mediaMetadata -> {
+            imageAndGifEntry = new ImageAndGifEntry(this, mGlide, mediaMetadata -> {
                 Intent imageIntent = new Intent(this, ViewImageOrGifActivity.class);
                 if (mediaMetadata.isGIF) {
                     imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, mediaMetadata.original.url);
@@ -229,7 +229,11 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                 }
                 imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, intent.getStringExtra(EXTRA_SUBREDDIT_NAME_KEY));
                 imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mediaMetadata.fileName);
-            }));
+            });
+            Markwon postBodyMarkwon = MarkdownUtils.createFullRedditMarkwon(this,
+                    miscPlugin, emoteCloseBracketInlineProcessor, emotePlugin, imageAndGifPlugin, parentTextColor,
+                    parentSpoilerBackgroundColor, null);
+            CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAdapter(imageAndGifEntry);
             markwonAdapter.setOnLongClickListener(view -> {
                 Utils.hideKeyboard(CommentActivity.this);
                 CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
@@ -512,6 +516,20 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         finish();
+    }
+
+    @Subscribe
+    public void onChangeNetworkStatusEvent(ChangeNetworkStatusEvent changeNetworkStatusEvent) {
+        String dataSavingMode = mSharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
+        if (dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
+            if (emotePlugin != null) {
+                emotePlugin.setDataSavingMode(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_CELLULAR);
+            }
+
+            if (imageAndGifEntry != null) {
+                imageAndGifEntry.setDataSavingMode(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_CELLULAR);
+            }
+        }
     }
 
     @Override

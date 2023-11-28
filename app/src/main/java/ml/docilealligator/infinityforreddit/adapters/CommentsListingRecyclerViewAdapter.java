@@ -365,6 +365,11 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         this.canStartActivity = canStartActivity;
     }
 
+    public void setDataSavingMode(boolean dataSavingMode) {
+        mEmotePlugin.setDataSavingMode(dataSavingMode);
+        mImageAndGifEntry.setDataSavingMode(dataSavingMode);
+    }
+
     public interface RetryLoadingMoreCallback {
         void retryLoadingMore();
     }

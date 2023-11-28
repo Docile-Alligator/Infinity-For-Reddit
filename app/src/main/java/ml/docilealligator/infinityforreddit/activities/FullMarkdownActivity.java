@@ -38,6 +38,7 @@ import io.noties.markwon.core.MarkwonTheme;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.markdown.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
@@ -50,6 +51,7 @@ import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class FullMarkdownActivity extends BaseActivity {
 
@@ -72,6 +74,8 @@ public class FullMarkdownActivity extends BaseActivity {
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    private EmotePlugin emotePlugin;
+    private ImageAndGifEntry imageAndGifEntry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,13 +148,9 @@ public class FullMarkdownActivity extends BaseActivity {
             }
         };
         EmoteCloseBracketInlineProcessor emoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
-        EmotePlugin emotePlugin = EmotePlugin.create(this);
+        emotePlugin = EmotePlugin.create(this);
         ImageAndGifPlugin imageAndGifPlugin = new ImageAndGifPlugin();
-        Markwon markwon = MarkdownUtils.createFullRedditMarkwon(this,
-                miscPlugin, emoteCloseBracketInlineProcessor, emotePlugin, imageAndGifPlugin, markdownColor,
-                spoilerBackgroundColor, null);
-
-        CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAdapter(new ImageAndGifEntry(this,
+        imageAndGifEntry = new ImageAndGifEntry(this,
                 Glide.with(this), mediaMetadata -> {
             Intent intent = new Intent(this, ViewImageOrGifActivity.class);
             if (mediaMetadata.isGIF) {
@@ -160,7 +160,12 @@ public class FullMarkdownActivity extends BaseActivity {
             }
             intent.putExtra(ViewImageOrGifActivity.EXTRA_IS_NSFW, isNsfw);
             intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mediaMetadata.fileName);
-        }));
+        });
+        Markwon markwon = MarkdownUtils.createFullRedditMarkwon(this,
+                miscPlugin, emoteCloseBracketInlineProcessor, emotePlugin, imageAndGifPlugin, markdownColor,
+                spoilerBackgroundColor, null);
+
+        CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAdapter(imageAndGifEntry);
         LinearLayoutManagerBugFixed linearLayoutManager = new SwipeLockLinearLayoutManager(this, new SwipeLockInterface() {
             @Override
             public void lockSwipe() {
@@ -233,6 +238,20 @@ public class FullMarkdownActivity extends BaseActivity {
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         if (!getClass().getName().equals(event.excludeActivityClassName)) {
             finish();
+        }
+    }
+
+    @Subscribe
+    public void onChangeNetworkStatusEvent(ChangeNetworkStatusEvent changeNetworkStatusEvent) {
+        String dataSavingMode = mSharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
+        if (dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
+            if (emotePlugin != null) {
+                emotePlugin.setDataSavingMode(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_CELLULAR);
+            }
+
+            if (imageAndGifEntry != null) {
+                imageAndGifEntry.setDataSavingMode(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_CELLULAR);
+            }
         }
     }
 }

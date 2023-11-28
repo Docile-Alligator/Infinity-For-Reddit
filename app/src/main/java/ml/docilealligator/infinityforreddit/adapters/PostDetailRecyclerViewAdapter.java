@@ -388,7 +388,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             return true;
         };
         mEmoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
-        mEmotePlugin = EmotePlugin.create(activity);
+        mEmotePlugin = EmotePlugin.create(activity, mDataSavingMode, mDisableImagePreview);
         mImageAndGifPlugin = new ImageAndGifPlugin();
         mPostDetailMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
                 miscPlugin, mEmoteCloseBracketInlineProcessor, mEmotePlugin, mImageAndGifPlugin, markdownColor,
@@ -980,6 +980,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
     public void setDataSavingMode(boolean dataSavingMode) {
         mDataSavingMode = dataSavingMode;
+        mEmotePlugin.setDataSavingMode(dataSavingMode);
+        mImageAndGifEntry.setDataSavingMode(dataSavingMode);
     }
 
     public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction, int swipeLeftAction, int swipeRightAction) {

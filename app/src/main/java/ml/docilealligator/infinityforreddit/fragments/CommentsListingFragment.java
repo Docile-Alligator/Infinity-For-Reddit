@@ -30,6 +30,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -49,6 +52,9 @@ import ml.docilealligator.infinityforreddit.adapters.CommentsListingRecyclerView
 import ml.docilealligator.infinityforreddit.comment.CommentViewModel;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.events.ChangeDataSavingModeEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeDisableImagePreviewEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
@@ -129,6 +135,8 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
+
+        EventBus.getDefault().register(this);
 
         applyTheme();
 
@@ -342,6 +350,12 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     public void changeSortType(SortType sortType) {
         mCommentViewModel.changeSortType(sortType);
         this.sortType = sortType;
@@ -410,6 +424,16 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     public void editComment(String commentMarkdown, int position) {
         if (mAdapter != null) {
             mAdapter.editComment(commentMarkdown, position);
+        }
+    }
+
+    @Subscribe
+    public void onChangeNetworkStatusEvent(ChangeNetworkStatusEvent changeNetworkStatusEvent) {
+        if (mAdapter != null) {
+            String dataSavingMode = mSharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
+            if (dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
+                mAdapter.setDataSavingMode(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_CELLULAR);
+            }
         }
     }
 }

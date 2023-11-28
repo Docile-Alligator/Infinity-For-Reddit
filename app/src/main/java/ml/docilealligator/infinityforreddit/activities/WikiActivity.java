@@ -51,6 +51,7 @@ import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFi
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.EmoteCloseBracketInlineProcessor;
 import ml.docilealligator.infinityforreddit.markdown.EmotePlugin;
@@ -103,6 +104,7 @@ public class WikiActivity extends BaseActivity {
     private EmoteCloseBracketInlineProcessor emoteCloseBracketInlineProcessor;
     private EmotePlugin emotePlugin;
     private ImageAndGifPlugin imageAndGifPlugin;
+    private ImageAndGifEntry imageAndGifEntry;
     private Markwon markwon;
     private MarkwonAdapter markwonAdapter;
     private boolean isRefreshing = false;
@@ -188,10 +190,7 @@ public class WikiActivity extends BaseActivity {
         emoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
         emotePlugin = EmotePlugin.create(this);
         imageAndGifPlugin = new ImageAndGifPlugin();
-        markwon = MarkdownUtils.createFullRedditMarkwon(this,
-                miscPlugin, emoteCloseBracketInlineProcessor, emotePlugin, imageAndGifPlugin, markdownColor, spoilerBackgroundColor, onLinkLongClickListener);
-
-        markwonAdapter = MarkdownUtils.createCustomTablesAdapter(new ImageAndGifEntry(this,
+        imageAndGifEntry = new ImageAndGifEntry(this,
                 mGlide, mediaMetadata -> {
             Intent intent = new Intent(this, ViewImageOrGifActivity.class);
             if (mediaMetadata.isGIF) {
@@ -201,7 +200,11 @@ public class WikiActivity extends BaseActivity {
             }
             intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, mSubredditName);
             intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mediaMetadata.fileName);
-        }));
+        });
+        markwon = MarkdownUtils.createFullRedditMarkwon(this,
+                miscPlugin, emoteCloseBracketInlineProcessor, emotePlugin, imageAndGifPlugin, markdownColor, spoilerBackgroundColor, onLinkLongClickListener);
+
+        markwonAdapter = MarkdownUtils.createCustomTablesAdapter(imageAndGifEntry);
         LinearLayoutManagerBugFixed linearLayoutManager = new SwipeLockLinearLayoutManager(this, new SwipeLockInterface() {
             @Override
             public void lockSwipe() {
@@ -333,6 +336,20 @@ public class WikiActivity extends BaseActivity {
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         if (!getClass().getName().equals(event.excludeActivityClassName)) {
             finish();
+        }
+    }
+
+    @Subscribe
+    public void onChangeNetworkStatusEvent(ChangeNetworkStatusEvent changeNetworkStatusEvent) {
+        String dataSavingMode = mSharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
+        if (dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
+            if (emotePlugin != null) {
+                emotePlugin.setDataSavingMode(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_CELLULAR);
+            }
+
+            if (imageAndGifEntry != null) {
+                imageAndGifEntry.setDataSavingMode(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_CELLULAR);
+            }
         }
     }
 }

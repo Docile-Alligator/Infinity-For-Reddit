@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.markdown;
 
-import android.content.Context;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.text.Spanned;
@@ -34,9 +33,14 @@ import io.noties.markwon.image.AsyncDrawableLoader;
 import io.noties.markwon.image.AsyncDrawableScheduler;
 import io.noties.markwon.image.DrawableUtils;
 import io.noties.markwon.image.ImageProps;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class EmotePlugin extends AbstractMarkwonPlugin {
-    private boolean disableImagePreview = true;
+    private final GlideAsyncDrawableLoader glideAsyncDrawableLoader;
+    private boolean dataSavingMode;
+    private boolean disableImagePreview;
 
     public interface GlideStore {
 
@@ -47,16 +51,12 @@ public class EmotePlugin extends AbstractMarkwonPlugin {
     }
 
     @NonNull
-    public static EmotePlugin create(@NonNull final Context context) {
+    public static EmotePlugin create(@NonNull final BaseActivity baseActivity) {
         // @since 4.5.0 cache RequestManager
         //  sometimes `cancel` would be called after activity is destroyed,
-        //  so `Glide.with(context)` will throw an exception
-        return create(Glide.with(context));
-    }
-
-    @NonNull
-    public static EmotePlugin create(@NonNull final RequestManager requestManager) {
-        return create(new GlideStore() {
+        //  so `Glide.with(baseActivity)` will throw an exception
+        RequestManager requestManager = Glide.with(baseActivity);
+        return new EmotePlugin(baseActivity, new GlideStore() {
             @NonNull
             @Override
             public RequestBuilder<Drawable> load(@NonNull AsyncDrawable drawable) {
@@ -71,15 +71,42 @@ public class EmotePlugin extends AbstractMarkwonPlugin {
     }
 
     @NonNull
-    public static EmotePlugin create(@NonNull GlideStore glideStore) {
-        return new EmotePlugin(glideStore);
+    public static EmotePlugin create(@NonNull final BaseActivity baseActivity, boolean dataSavingMode, boolean disableImagePreview) {
+        // @since 4.5.0 cache RequestManager
+        //  sometimes `cancel` would be called after activity is destroyed,
+        //  so `Glide.with(baseActivity)` will throw an exception
+        RequestManager requestManager = Glide.with(baseActivity);
+        return new EmotePlugin(baseActivity, new GlideStore() {
+            @NonNull
+            @Override
+            public RequestBuilder<Drawable> load(@NonNull AsyncDrawable drawable) {
+                return requestManager.load(drawable.getDestination());
+            }
+
+            @Override
+            public void cancel(@NonNull Target<?> target) {
+                requestManager.clear(target);
+            }
+        }, dataSavingMode, disableImagePreview);
     }
 
-    private final GlideAsyncDrawableLoader glideAsyncDrawableLoader;
+    @SuppressWarnings("WeakerAccess")
+    EmotePlugin(@NonNull final BaseActivity baseActivity, @NonNull GlideStore glideStore) {
+        this.glideAsyncDrawableLoader = new GlideAsyncDrawableLoader(glideStore);
+        String dataSavingModeString = baseActivity.getDefaultSharedPreferences().getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
+        if (dataSavingModeString.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ALWAYS)) {
+            dataSavingMode = true;
+        } else if (dataSavingModeString.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
+            dataSavingMode = Utils.getConnectedNetwork(baseActivity) == Utils.NETWORK_TYPE_CELLULAR;
+        }
+        disableImagePreview = baseActivity.getDefaultSharedPreferences().getBoolean(SharedPreferencesUtils.DISABLE_IMAGE_PREVIEW, false);
+    }
 
     @SuppressWarnings("WeakerAccess")
-    EmotePlugin(@NonNull GlideStore glideStore) {
+    EmotePlugin(@NonNull final BaseActivity baseActivity, @NonNull GlideStore glideStore, boolean dataSavingMode, boolean disableImagePreview) {
         this.glideAsyncDrawableLoader = new GlideAsyncDrawableLoader(glideStore);
+        this.dataSavingMode = dataSavingMode;
+        this.disableImagePreview = disableImagePreview;
     }
 
     @Override
@@ -95,7 +122,7 @@ public class EmotePlugin extends AbstractMarkwonPlugin {
     @Override
     public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
         builder.on(Emote.class, (visitor, emote) -> {
-            if (disableImagePreview) {
+            if (dataSavingMode && disableImagePreview) {
                 Link link = new Link(emote.getMediaMetadata().original.url, emote.getTitle());
 
                 final int length = visitor.length();
@@ -155,8 +182,8 @@ public class EmotePlugin extends AbstractMarkwonPlugin {
         AsyncDrawableScheduler.schedule(textView);
     }
 
-    public void setDisableImagePreview(boolean disableImagePreview) {
-        this.disableImagePreview = disableImagePreview;
+    public void setDataSavingMode(boolean dataSavingMode) {
+        this.dataSavingMode = dataSavingMode;
     }
 
     private static class GlideAsyncDrawableLoader extends AsyncDrawableLoader {

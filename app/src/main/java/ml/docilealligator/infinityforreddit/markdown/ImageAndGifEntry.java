@@ -185,6 +185,10 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
         holder.binding.captionTextViewMarkdownImageAndGifBlock.setGravity(Gravity.CENTER_HORIZONTAL);
     }
 
+    public void setDataSavingMode(boolean dataSavingMode) {
+        this.dataSavingMode = dataSavingMode;
+    }
+
     public class Holder extends MarkwonAdapter.Holder {
         MarkdownImageAndGifBlockBinding binding;
         RequestListener<Drawable> requestListener;

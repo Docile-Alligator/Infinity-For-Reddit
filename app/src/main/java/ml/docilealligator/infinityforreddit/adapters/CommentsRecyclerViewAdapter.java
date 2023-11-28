@@ -1187,6 +1187,11 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         }
     }
 
+    public void setDataSavingMode(boolean dataSavingMode) {
+        mEmotePlugin.setDataSavingMode(dataSavingMode);
+        mImageAndGifEntry.setDataSavingMode(dataSavingMode);
+    }
+
     public interface CommentRecyclerViewAdapterCallback {
         void retryFetchingComments();
 
