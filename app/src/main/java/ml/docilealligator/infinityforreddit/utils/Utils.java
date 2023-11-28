@@ -148,7 +148,7 @@ public final class Utils {
                 //Minus "](".length()
                 caption = markdownStringBuilder.substring(matcher.start() + 1, urlStartIndex - 2);
             } else {
-                id = markdownStringBuilder.substring(matcher.start() + iReddItLength, matcher.start() + markdownStringBuilder.indexOf(".", iReddItLength));
+                id = markdownStringBuilder.substring(matcher.start() + iReddItLength, markdownStringBuilder.indexOf(".", matcher.start() + iReddItLength));
             }
 
             MediaMetadata mediaMetadata = mediaMetadataMap.get(id);

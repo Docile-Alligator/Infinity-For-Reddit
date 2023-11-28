@@ -267,7 +267,16 @@ public class DownloadMediaService extends Service {
                 } else {
                     ContentValues contentValues = new ContentValues();
                     contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, destinationFileName);
-                    contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mediaType == EXTRA_MEDIA_TYPE_VIDEO ? "video/mpeg" : "image/jpeg");
+                    String mimeType;
+                    switch (mediaType) {
+                        case EXTRA_MEDIA_TYPE_VIDEO:
+                            mimeType = "video/mpeg";
+                        case EXTRA_MEDIA_TYPE_GIF:
+                            mimeType = "image/gif";
+                        default:
+                            mimeType = "image/jpeg";
+                    }
+                    contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mimeType);
                     contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, destinationFileUriString);
                     contentValues.put(MediaStore.MediaColumns.IS_PENDING, 1);
 

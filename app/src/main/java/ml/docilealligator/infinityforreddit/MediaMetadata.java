@@ -22,7 +22,7 @@ public class MediaMetadata implements Parcelable {
         this.e = e;
         isGIF = !e.equalsIgnoreCase("image");
         String path = Uri.parse(original.url).getPath();
-        this.fileName = path == null ? (isGIF ? "Animated.gif" : "Image.jpg") : path.substring(1);
+        this.fileName = path == null ? (isGIF ? "Animated.gif" : "Image.jpg") : path.substring(path.lastIndexOf('/') + 1);
         this.original = original;
         this.downscaled = downscaled;
     }
