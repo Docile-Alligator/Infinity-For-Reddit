@@ -10,12 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import me.saket.bettermovementmethod.BetterLinkMovementMethod;
-
 /**
- * Extension of {@link BetterLinkMovementMethod} that handles {@link SpoilerSpan}s
+ * Extension of {@link EvenBetterLinkMovementMethod} that handles {@link SpoilerSpan}s
  */
-public class SpoilerAwareMovementMethod extends BetterLinkMovementMethod {
+public class SpoilerAwareMovementMethod extends EvenBetterLinkMovementMethod {
     private final RectF touchedLineBounds = new RectF();
 
     @Override
@@ -85,12 +83,12 @@ public class SpoilerAwareMovementMethod extends BetterLinkMovementMethod {
     }
 
     @Override
-    protected void dispatchUrlLongClick(TextView textView, ClickableSpan clickableSpan) {
+    protected boolean dispatchUrlLongClick(TextView textView, ClickableSpan clickableSpan) {
         if (clickableSpan instanceof SpoilerSpan) {
             ((SpoilerSpan) clickableSpan).onLongClick(textView);
-            return;
+            return false;
         }
-        super.dispatchUrlLongClick(textView, clickableSpan);
+        return super.dispatchUrlLongClick(textView, clickableSpan);
     }
 
     @Override

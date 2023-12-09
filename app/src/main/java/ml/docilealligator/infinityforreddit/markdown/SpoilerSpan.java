@@ -8,8 +8,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.transition.AutoTransition;
-import androidx.transition.TransitionManager;
 
 import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
 

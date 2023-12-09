@@ -24,7 +24,7 @@ public class SpoilerOnClickTextView extends androidx.appcompat.widget.AppCompatT
         return isSpoilerOnClick;
     }
 
-    public void setSpoilerOnClick(boolean spoilerOnClick) {
+    public void  setSpoilerOnClick(boolean spoilerOnClick) {
         isSpoilerOnClick = spoilerOnClick;
     }
 }

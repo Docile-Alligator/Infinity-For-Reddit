@@ -120,8 +120,18 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
         entry.bindHolder(markwon, holder, node);
 
         if (holder.itemView instanceof SpoilerOnClickTextView) {
-            holder.itemView.setOnClickListener(onClickListener);
-            holder.itemView.setOnLongClickListener(onLongClickListener);
+            SpoilerOnClickTextView textView = (SpoilerOnClickTextView) holder.itemView;
+            holder.itemView.setOnClickListener(view -> {
+                if (onClickListener != null && textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
+                    onClickListener.onClick(view);
+                }
+            });
+            holder.itemView.setOnLongClickListener(view -> {
+                if (onLongClickListener != null && textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
+                    return onLongClickListener.onLongClick(view);
+                }
+                return false;
+            });
         } else if (holder.itemView instanceof HorizontalScrollView) {
             TableLayout tableLayout = holder.itemView.findViewById(R.id.table_layout);
             if (tableLayout != null) {
@@ -132,15 +142,16 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
                             if (tableRow.getChildAt(j) instanceof TextView) {
                                 TextView textView = (TextView) tableRow.getChildAt(j);
                                 tableRow.getChildAt(j).setOnClickListener(view -> {
-                                    if (textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
+                                    if (onClickListener != null && textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
                                         onClickListener.onClick(view);
                                     }
                                 });
                                 tableRow.getChildAt(j).setOnLongClickListener(view -> {
-                                    if (textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
+                                    if (onLongClickListener != null && textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
                                         onLongClickListener.onLongClick(view);
+                                        return true;
                                     }
-                                    return true;
+                                    return false;
                                 });
                             }
                         }
@@ -158,12 +169,12 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
             if (holder instanceof ImageAndGifEntry.Holder) {
                 if (!((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.hasOnClickListeners()) {
                     ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.setOnClickListener(view -> {
-                        if (((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionStart() == -1 && ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionEnd() == -1) {
+                        if (onClickListener != null && ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionStart() == -1 && ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionEnd() == -1) {
                             onClickListener.onClick(view);
                         }
                     });
                     ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.setOnLongClickListener(view -> {
-                        if (((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionStart() == -1 && ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionEnd() == -1) {
+                        if (onLongClickListener != null && ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionStart() == -1 && ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionEnd() == -1) {
                             return onLongClickListener.onLongClick(view);
                         }
                         return false;

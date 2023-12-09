@@ -19,7 +19,6 @@ import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
-import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.R;
 
 public class MarkdownUtils {
@@ -35,7 +34,7 @@ public class MarkdownUtils {
                                                   @NonNull ImageAndGifPlugin imageAndGifPlugin,
                                                   int markdownColor,
                                                   int spoilerBackgroundColor,
-                                                  @Nullable BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener) {
+                                                  @Nullable EvenBetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener) {
         return Markwon.builder(context)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
@@ -60,7 +59,7 @@ public class MarkdownUtils {
 
     @NonNull
     public static Markwon createDescriptionMarkwon(Context context, MarkwonPlugin miscPlugin,
-                                                   BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener) {
+                                                   EvenBetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener) {
         return Markwon.builder(context)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
@@ -84,14 +83,14 @@ public class MarkdownUtils {
     @NonNull
     public static Markwon createLinksOnlyMarkwon(@NonNull Context context,
                                                   @NonNull MarkwonPlugin miscPlugin,
-                                                  @Nullable BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener) {
+                                                  @Nullable EvenBetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener) {
         return Markwon.builder(context)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
                     plugin.excludeInlineProcessor(BangInlineProcessor.class);
                 }))
                 .usePlugin(miscPlugin)
-                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.newInstance().setOnLinkLongClickListener(onLinkLongClickListener)))
+                .usePlugin(MovementMethodPlugin.create(EvenBetterLinkMovementMethod.newInstance().setOnLinkLongClickListener(onLinkLongClickListener)))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .build();
     }
