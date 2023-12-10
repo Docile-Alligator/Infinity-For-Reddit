@@ -27,6 +27,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.ShareLinkHandler;
 
 public class LinkResolverActivity extends AppCompatActivity {
 
@@ -40,6 +41,8 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String COMMENT_PATTERN = "/(r|u|U|user)/[\\w-]+/comments/\\w+/?[\\w-]+/\\w+/?";
     private static final String SUBREDDIT_PATTERN = "/[rR]/[\\w-]+/?";
     private static final String USER_PATTERN = "/(u|U|user)/[\\w-]+/?";
+    private static final String SHARELINK_SUBREDDIT_PATTERN = "/r/[\\w-]+/s/[\\w-]+";
+    private static final String SHARELINK_USER_PATTERN = "/u/[\\w-]+/s/[\\w-]+";
     private static final String SIDEBAR_PATTERN = "/[rR]/[\\w-]+/about/sidebar";
     private static final String MULTIREDDIT_PATTERN = "/user/[\\w-]+/m/\\w+/?";
     private static final String MULTIREDDIT_PATTERN_2 = "/[rR]/(\\w+\\+?)+/?";
@@ -59,6 +62,8 @@ public class LinkResolverActivity extends AppCompatActivity {
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
 
+    private ShareLinkHandler shareLinkHandler;
+
     private Uri getRedditUriByPath(String path) {
         if (path.charAt(0) != '/') {
             return Uri.parse("https://www.reddit.com/" + path);
@@ -72,6 +77,8 @@ public class LinkResolverActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        shareLinkHandler = new ShareLinkHandler();
 
         Uri uri = getIntent().getData();
         if (uri == null) {
@@ -97,6 +104,17 @@ public class LinkResolverActivity extends AppCompatActivity {
                 return;
             }
             handleUri(getRedditUriByPath(uri.toString()));
+        } else if (uri.getPath().matches(SHARELINK_SUBREDDIT_PATTERN) || uri.getPath().matches(SHARELINK_USER_PATTERN)) {
+            String urlString = uri.toString();
+            shareLinkHandler.handleUrlResolv(urlString).thenAccept(realUrl -> {
+                if (realUrl != null) {
+                    handleUri(Uri.parse(realUrl));
+                } else {
+                    Toast.makeText(this, R.string.invalid_link, Toast.LENGTH_SHORT).show();
+                    finish();
+                    return;
+                }
+            });        
         } else {
             handleUri(uri);
         }
