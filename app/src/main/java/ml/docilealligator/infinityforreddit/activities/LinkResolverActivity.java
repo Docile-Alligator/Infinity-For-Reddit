@@ -23,6 +23,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import retrofit2.Retrofit;
+
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -55,10 +57,15 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String WIKI_PATTERN = "/[rR]/[\\w-]+/(wiki|w)(?:/[\\w-]+)*";
     private static final String GOOGLE_AMP_PATTERN = "/amp/s/amp.reddit.com/.*";
     private static final String STREAMABLE_PATTERN = "/\\w+/?";
-
+    
+    @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
 
@@ -78,7 +85,7 @@ public class LinkResolverActivity extends AppCompatActivity {
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
-        shareLinkHandler = new ShareLinkHandler();
+        shareLinkHandler = new ShareLinkHandler(mRetrofit);
 
         Uri uri = getIntent().getData();
         if (uri == null) {
