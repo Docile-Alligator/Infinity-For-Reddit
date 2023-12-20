@@ -271,8 +271,10 @@ public class DownloadMediaService extends Service {
                     switch (mediaType) {
                         case EXTRA_MEDIA_TYPE_VIDEO:
                             mimeType = "video/mpeg";
+                            break;
                         case EXTRA_MEDIA_TYPE_GIF:
                             mimeType = "image/gif";
+                            break;
                         default:
                             mimeType = "image/jpeg";
                     }
