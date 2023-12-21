@@ -76,12 +76,15 @@ public final class Utils {
             //Sometimes the reddit preview images and gifs have a caption and the markdown will become [caption](image_link)
             Pattern.compile("(\\[(?:(?!((?<!\\\\)\\[)).)*?]\\()?https://preview.redd.it/\\w+.(jpg|png|jpeg)((\\?+[-a-zA-Z0-9()@:%_+.~#?&/=]*)|)"),
             //Same reason as above. But this time it only matches [caption](image-link. Notice there is no ) at the end.
-            Pattern.compile("(\\[(?:(?!((?<!\\\\)\\[)).)*?]\\()?https://i.redd.it/\\w+.(jpg|png|jpeg|gif)")
+            Pattern.compile("(\\[(?:(?!((?<!\\\\)\\[)).)*?]\\()?https://i.redd.it/\\w+.(jpg|png|jpeg|gif)"),
+            //Replace embedded gif markdown with a link to the gif on Giphy
+            Pattern.compile("!\\[gif]\\(giphy\\|([^)]+)\\)")
     };
 
     public static String modifyMarkdown(String markdown) {
         String regexed = REGEX_PATTERNS[0].matcher(markdown).replaceAll("[$0](https://www.reddit.com$0)");
         regexed = REGEX_PATTERNS[1].matcher(regexed).replaceAll("[$0](https://www.reddit.com/$0)");
+        regexed = REGEX_PATTERNS[5].matcher(regexed).replaceAll("https://giphy.com/gifs/$1");
         regexed = REGEX_PATTERNS[2].matcher(regexed).replaceAll("^");
 
         return regexed;
