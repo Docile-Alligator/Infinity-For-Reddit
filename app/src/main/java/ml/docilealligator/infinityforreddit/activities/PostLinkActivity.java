@@ -362,7 +362,19 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful()) {
-                        titleEditText.setText(response.body().substring(response.body().indexOf("<title>") + 7, response.body().indexOf("</title>")));
+                        String body = response.body();
+                        if (body != null) {
+                            int start = body.indexOf("<title>");
+                            if (start >= 0) {
+                                int end = body.indexOf("</title>");
+                                if (end > start) {
+                                    titleEditText.setText(body.substring(start + 7, end));
+                                    return;
+                                }
+                            }
+                        }
+
+                        Toast.makeText(PostLinkActivity.this, R.string.suggest_title_failed, Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(PostLinkActivity.this, R.string.suggest_title_failed, Toast.LENGTH_SHORT).show();
                     }
