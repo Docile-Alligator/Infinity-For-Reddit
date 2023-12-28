@@ -180,7 +180,7 @@ public class ParsePost {
             flair = postFlairHTMLBuilder.toString();
         }
 
-        if (flair.equals("") && data.has(JSONUtils.LINK_FLAIR_TEXT_KEY) && !data.isNull(JSONUtils.LINK_FLAIR_TEXT_KEY)) {
+        if (flair.isEmpty() && !data.isNull(JSONUtils.LINK_FLAIR_TEXT_KEY)) {
             flair = data.getString(JSONUtils.LINK_FLAIR_TEXT_KEY);
         }
 
@@ -648,15 +648,8 @@ public class ParsePost {
                     }
 
                     JSONObject galleryItem = galleryIdsArray.getJSONObject(i);
-                    String galleryItemCaption = "";
-                    String galleryItemCaptionUrl = "";
-                    if (galleryItem.has(JSONUtils.CAPTION_KEY)) {
-                        galleryItemCaption = galleryItem.getString(JSONUtils.CAPTION_KEY).trim();
-                    }
-
-                    if (galleryItem.has(JSONUtils.CAPTION_URL_KEY)) {
-                        galleryItemCaptionUrl = galleryItem.getString(JSONUtils.CAPTION_URL_KEY).trim();
-                    }
+                    String galleryItemCaption = galleryItem.optString(JSONUtils.CAPTION_KEY);
+                    String galleryItemCaptionUrl = galleryItem.optString(JSONUtils.CAPTION_URL_KEY).trim();
 
                     if (previews.isEmpty() && (mimeType.contains("jpg") || mimeType.contains("png"))) {
                         previews.add(new Post.Preview(galleryItemUrl, singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.X_KEY),
@@ -722,7 +715,7 @@ public class ParsePost {
                     if (selfTextPlain.length() > 250) {
                         selfTextPlain = selfTextPlain.substring(0, 250);
                     }
-                    if (!selfText.equals("")) {
+                    if (!selfText.isEmpty()) {
                         Pattern p = Pattern.compile(">!.+!<");
                         Matcher m = p.matcher(selfText.substring(0, Math.min(selfText.length(), 400)));
                         if (m.find()) {

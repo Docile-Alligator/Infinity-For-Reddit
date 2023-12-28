@@ -46,10 +46,10 @@ public class FetchMyInfo {
     }
 
     private static class ParseAndSaveAccountInfoAsyncTask extends AsyncTask<Void, Void, Void> {
-        private JSONObject jsonResponse;
-        private RedditDataRoomDatabase redditDataRoomDatabase;
-        private FetchMyInfoListener fetchMyInfoListener;
-        private boolean parseFailed;
+        private final String response;
+        private final RedditDataRoomDatabase redditDataRoomDatabase;
+        private final FetchMyInfoListener fetchMyInfoListener;
+        private boolean parseFailed = false;
 
         private String name;
         private String profileImageUrl;
@@ -58,19 +58,15 @@ public class FetchMyInfo {
 
         ParseAndSaveAccountInfoAsyncTask(String response, RedditDataRoomDatabase redditDataRoomDatabase,
                                          FetchMyInfoListener fetchMyInfoListener) {
-            try {
-                jsonResponse = new JSONObject(response);
-                this.redditDataRoomDatabase = redditDataRoomDatabase;
-                this.fetchMyInfoListener = fetchMyInfoListener;
-                parseFailed = false;
-            } catch (JSONException e) {
-                fetchMyInfoListener.onFetchMyInfoFailed(true);
-            }
+            this.response = response;
+            this.redditDataRoomDatabase = redditDataRoomDatabase;
+            this.fetchMyInfoListener = fetchMyInfoListener;
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             try {
+                JSONObject jsonResponse = new JSONObject(response);
                 name = jsonResponse.getString(JSONUtils.NAME_KEY);
                 profileImageUrl = Html.fromHtml(jsonResponse.getString(JSONUtils.ICON_IMG_KEY)).toString();
                 if (!jsonResponse.isNull(JSONUtils.SUBREDDIT_KEY)) {

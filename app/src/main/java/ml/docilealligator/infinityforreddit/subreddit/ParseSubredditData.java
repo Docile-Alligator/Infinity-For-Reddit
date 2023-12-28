@@ -41,7 +41,7 @@ public class ParseSubredditData {
         } else {
             bannerImageUrl = subredditDataJsonObject.getString(JSONUtils.BANNER_BACKGROUND_IMAGE_KEY);
         }
-        if (bannerImageUrl.equals("") && !subredditDataJsonObject.isNull(JSONUtils.BANNER_IMG_KEY)) {
+        if (bannerImageUrl.isEmpty() && !subredditDataJsonObject.isNull(JSONUtils.BANNER_IMG_KEY)) {
             bannerImageUrl = subredditDataJsonObject.getString(JSONUtils.BANNER_IMG_KEY);
         }
 
@@ -51,7 +51,7 @@ public class ParseSubredditData {
         } else {
             iconUrl = subredditDataJsonObject.getString(JSONUtils.COMMUNITY_ICON_KEY);
         }
-        if (iconUrl.equals("") && !subredditDataJsonObject.isNull(JSONUtils.ICON_IMG_KEY)) {
+        if (iconUrl.isEmpty() && !subredditDataJsonObject.isNull(JSONUtils.ICON_IMG_KEY)) {
             iconUrl = subredditDataJsonObject.getString(JSONUtils.ICON_IMG_KEY);
         }
 
@@ -77,26 +77,22 @@ public class ParseSubredditData {
     }
 
     private static class ParseSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {
+        private final String response;
         private JSONObject jsonResponse;
-        private boolean parseFailed;
-        private ParseSubredditDataListener parseSubredditDataListener;
+        private boolean parseFailed = false;
+        private final ParseSubredditDataListener parseSubredditDataListener;
         private SubredditData subredditData;
         private int mNCurrentOnlineSubscribers;
 
         ParseSubredditDataAsyncTask(String response, ParseSubredditDataListener parseSubredditDataListener) {
             this.parseSubredditDataListener = parseSubredditDataListener;
-            try {
-                jsonResponse = new JSONObject(response);
-                parseFailed = false;
-            } catch (JSONException e) {
-                e.printStackTrace();
-                parseSubredditDataListener.onParseSubredditDataFail();
-            }
+            this.response = response;
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             try {
+                JSONObject jsonResponse = new JSONObject(response);
                 JSONObject data = jsonResponse.getJSONObject(JSONUtils.DATA_KEY);
                 mNCurrentOnlineSubscribers = data.getInt(JSONUtils.ACTIVE_USER_COUNT_KEY);
                 subredditData = parseSubredditData(data, true);
@@ -118,41 +114,33 @@ public class ParseSubredditData {
     }
 
     private static class ParseSubredditListingDataAsyncTask extends AsyncTask<Void, Void, Void> {
-        private JSONObject jsonResponse;
-        private boolean nsfw;
-        private boolean parseFailed;
-        private ParseSubredditListingDataListener parseSubredditListingDataListener;
-        private ArrayList<SubredditData> subredditListingData;
+        private final String response;
+        private final boolean nsfw;
+        private boolean parseFailed = false;
+        private final ParseSubredditListingDataListener parseSubredditListingDataListener;
+        private final ArrayList<SubredditData> subredditListingData = new ArrayList<>();
         private String after;
 
         ParseSubredditListingDataAsyncTask(String response, boolean nsfw, ParseSubredditListingDataListener parseSubredditListingDataListener) {
             this.parseSubredditListingDataListener = parseSubredditListingDataListener;
-            try {
-                jsonResponse = new JSONObject(response);
-                this.nsfw = nsfw;
-                parseFailed = false;
-                subredditListingData = new ArrayList<>();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                parseFailed = true;
-            }
+            this.response = response;
+            this.nsfw = nsfw;
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                if (!parseFailed) {
-                    JSONArray children = jsonResponse.getJSONObject(JSONUtils.DATA_KEY)
-                            .getJSONArray(JSONUtils.CHILDREN_KEY);
-                    for (int i = 0; i < children.length(); i++) {
-                        JSONObject data = children.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-                        SubredditData subredditData = parseSubredditData(data, nsfw);
-                        if (subredditData != null) {
-                            subredditListingData.add(subredditData);
-                        }
+                JSONObject jsonResponse = new JSONObject(response);
+                JSONArray children = jsonResponse.getJSONObject(JSONUtils.DATA_KEY)
+                        .getJSONArray(JSONUtils.CHILDREN_KEY);
+                for (int i = 0; i < children.length(); i++) {
+                    JSONObject data = children.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
+                    SubredditData subredditData = parseSubredditData(data, nsfw);
+                    if (subredditData != null) {
+                        subredditListingData.add(subredditData);
                     }
-                    after = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
                 }
+                after = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
             } catch (JSONException e) {
                 e.printStackTrace();
                 parseFailed = true;
