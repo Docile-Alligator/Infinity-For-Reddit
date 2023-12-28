@@ -850,11 +850,15 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     }
 
                     @Override
-                    public void onSubscribedSubredditClick(String subredditName) {
-                        Intent intent = new Intent(MainActivity.this, ViewSubredditDetailActivity.class);
-                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditName);
-                        startActivity(intent);
+                    public void onSubscribedSubredditClick(String subredditName, int type) {
+                            Intent intent = new Intent(MainActivity.this, ViewSubredditDetailActivity.class);
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditName);
+                        if(type==1){
+                            intent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+                        }
+                            startActivity(intent);
                     }
+
 
                     @Override
                     public void onAccountClick(String accountName) {

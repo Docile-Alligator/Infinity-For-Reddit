@@ -141,7 +141,8 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
 
     public interface ItemClickListener {
         void onMenuClick(int stringId);
-        void onSubscribedSubredditClick(String subredditName);
+        void onSubscribedSubredditClick(String subredditName, int type);
+
         void onAccountClick(String accountName);
     }
 }
