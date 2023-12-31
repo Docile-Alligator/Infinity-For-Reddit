@@ -11,6 +11,7 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "accounts")
 public class Account implements Parcelable {
+    public static final String ANONYMOUS_ACCOUNT = "-";
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "username")
@@ -56,7 +57,7 @@ public class Account implements Parcelable {
 
     @Ignore
     public static Account getAnonymousAccount() {
-        return new Account("-", null, null, null, null, null, 0, false);
+        return new Account(Account.ANONYMOUS_ACCOUNT, null, null, null, null, null, 0, false);
     }
 
     public Account(@NonNull String accountName, String accessToken, String refreshToken, String code,

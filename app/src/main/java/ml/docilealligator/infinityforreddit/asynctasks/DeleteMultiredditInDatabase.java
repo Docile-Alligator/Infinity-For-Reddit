@@ -5,6 +5,7 @@ import android.os.Handler;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 
 public class DeleteMultiredditInDatabase {
 
@@ -13,7 +14,7 @@ public class DeleteMultiredditInDatabase {
                                                    String accountName, String multipath,
                                                    DeleteMultiredditInDatabaseListener deleteMultiredditInDatabaseListener) {
         executor.execute(() -> {
-            if (accountName.equals("-")) {
+            if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 redditDataRoomDatabase.multiRedditDao().anonymousDeleteMultiReddit(multipath);
             } else {
                 redditDataRoomDatabase.multiRedditDao().deleteMultiReddit(multipath, accountName);

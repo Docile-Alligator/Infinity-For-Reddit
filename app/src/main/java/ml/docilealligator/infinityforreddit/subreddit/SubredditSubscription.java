@@ -34,7 +34,7 @@ public class SubredditSubscription {
             @Override
             public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                 insertSubscription(executor, handler, redditDataRoomDatabase,
-                        subredditData, "-", subredditSubscriptionListener);
+                        subredditData, Account.ANONYMOUS_ACCOUNT, subredditSubscriptionListener);
             }
 
             @Override
@@ -56,7 +56,7 @@ public class SubredditSubscription {
                                                        RedditDataRoomDatabase redditDataRoomDatabase,
                                                        String subredditName,
                                                        SubredditSubscriptionListener subredditSubscriptionListener) {
-        removeSubscription(executor, handler, redditDataRoomDatabase, subredditName, "-", subredditSubscriptionListener);
+        removeSubscription(executor, handler, redditDataRoomDatabase, subredditName, Account.ANONYMOUS_ACCOUNT, subredditSubscriptionListener);
     }
 
     private static void subredditSubscription(Executor executor, Handler handler, Retrofit oauthRetrofit,
@@ -117,7 +117,7 @@ public class SubredditSubscription {
         executor.execute(() -> {
             SubscribedSubredditData subscribedSubredditData = new SubscribedSubredditData(subredditData.getId(), subredditData.getName(),
                     subredditData.getIconUrl(), accountName, false);
-            if (accountName.equals("-")) {
+            if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 if (!redditDataRoomDatabase.accountDao().isAnonymousAccountInserted()) {
                     redditDataRoomDatabase.accountDao().insert(Account.getAnonymousAccount());
                 }
@@ -132,7 +132,7 @@ public class SubredditSubscription {
                                            String subredditName, String accountName,
                                            SubredditSubscriptionListener subredditSubscriptionListener) {
         executor.execute(() -> {
-            if (accountName.equals("-")) {
+            if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 if (!redditDataRoomDatabase.accountDao().isAnonymousAccountInserted()) {
                     redditDataRoomDatabase.accountDao().insert(Account.getAnonymousAccount());
                 }

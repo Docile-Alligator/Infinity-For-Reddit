@@ -34,6 +34,7 @@ import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.SubredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
@@ -109,7 +110,7 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
             }
         }
 
-        String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME, "-");
+        String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
 
         if (accessToken == null) {

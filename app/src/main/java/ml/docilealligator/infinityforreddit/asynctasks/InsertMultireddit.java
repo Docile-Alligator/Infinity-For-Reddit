@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubreddit;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.multireddit.MultiRedditDao;
@@ -40,7 +41,7 @@ public class InsertMultireddit {
                                          MultiReddit multiReddit,
                                          InsertMultiRedditListener insertMultiRedditListener) {
         executor.execute(() -> {
-            if (multiReddit.getOwner().equals("-")) {
+            if (multiReddit.getOwner().equals(Account.ANONYMOUS_ACCOUNT)) {
                 ArrayList<AnonymousMultiredditSubreddit> allAnonymousMultiRedditSubreddits =
                         (ArrayList<AnonymousMultiredditSubreddit>) redditDataRoomDatabase.anonymousMultiredditSubredditDao().getAllAnonymousMultiRedditSubreddits(multiReddit.getPath());
                 redditDataRoomDatabase.multiRedditDao().insert(multiReddit);

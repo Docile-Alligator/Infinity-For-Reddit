@@ -5,6 +5,7 @@ import android.os.Handler;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
 
 public class CheckIsFollowingUser {
@@ -12,7 +13,7 @@ public class CheckIsFollowingUser {
                                             RedditDataRoomDatabase redditDataRoomDatabase, String username,
                                             String accountName, CheckIsFollowingUserListener checkIsFollowingUserListener) {
         executor.execute(() -> {
-            SubscribedUserData subscribedUserData = redditDataRoomDatabase.subscribedUserDao().getSubscribedUser(username, accountName == null ? "-" : accountName);
+            SubscribedUserData subscribedUserData = redditDataRoomDatabase.subscribedUserDao().getSubscribedUser(username, accountName == null ? Account.ANONYMOUS_ACCOUNT : accountName);
             handler.post(() -> {
                 if (subscribedUserData != null) {
                     checkIsFollowingUserListener.isSubscribed();

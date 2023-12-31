@@ -70,7 +70,7 @@ public class CreateMultiReddit {
                 redditDataRoomDatabase.accountDao().insert(Account.getAnonymousAccount());
             }
             redditDataRoomDatabase.multiRedditDao().insert(new MultiReddit(multipath, name, name, description,
-                    null, null, "private", "-", 0, System.currentTimeMillis(), true, false, false));
+                    null, null, "private", Account.ANONYMOUS_ACCOUNT, 0, System.currentTimeMillis(), true, false, false));
             List<AnonymousMultiredditSubreddit> anonymousMultiredditSubreddits = new ArrayList<>();
             for (String s : subreddits) {
                 anonymousMultiredditSubreddits.add(new AnonymousMultiredditSubreddit(multipath, s));

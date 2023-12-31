@@ -5,6 +5,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 
+import ml.docilealligator.infinityforreddit.account.Account;
+
 @Entity(tableName = "anonymous_multireddit_subreddits", primaryKeys = {"path", "username", "subreddit_name"},
         foreignKeys = @ForeignKey(entity = MultiReddit.class, parentColumns = {"path", "username"},
                 childColumns = {"path", "username"}, onDelete = ForeignKey.CASCADE, onUpdate = ForeignKey.CASCADE))
@@ -14,7 +16,7 @@ public class AnonymousMultiredditSubreddit {
     private String path;
     @NonNull
     @ColumnInfo(name = "username")
-    public String username = "-";
+    public String username = Account.ANONYMOUS_ACCOUNT;
     @NonNull
     @ColumnInfo(name = "subreddit_name")
     private String subredditName;

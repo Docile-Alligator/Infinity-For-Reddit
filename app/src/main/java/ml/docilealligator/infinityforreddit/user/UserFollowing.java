@@ -39,7 +39,7 @@ public class UserFollowing {
                         redditDataRoomDatabase.accountDao().insert(Account.getAnonymousAccount());
                     }
                     redditDataRoomDatabase.subscribedUserDao().insert(new SubscribedUserData(userData.getName(), userData.getIconUrl(),
-                            "-", false));
+                            Account.ANONYMOUS_ACCOUNT, false));
 
                     handler.post(userFollowingListener::onUserFollowingSuccess);
                 });
@@ -64,7 +64,7 @@ public class UserFollowing {
                                     RedditDataRoomDatabase redditDataRoomDatabase,
                                     UserFollowingListener userFollowingListener) {
         executor.execute(() -> {
-            redditDataRoomDatabase.subscribedUserDao().deleteSubscribedUser(username, "-");
+            redditDataRoomDatabase.subscribedUserDao().deleteSubscribedUser(username, Account.ANONYMOUS_ACCOUNT);
 
             handler.post(userFollowingListener::onUserFollowingSuccess);
         });

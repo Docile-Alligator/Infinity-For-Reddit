@@ -50,6 +50,7 @@ import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteMultiredditInDatabase;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertMultireddit;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThings;
@@ -169,7 +170,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         setToolbarGoToTop(toolbar);
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, "-");
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
 
         if (savedInstanceState != null) {
             mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
@@ -489,7 +490,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                 case 1: {
                     FollowedUsersListingFragment fragment = new FollowedUsersListingFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString(FollowedUsersListingFragment.EXTRA_ACCOUNT_NAME, mAccountName == null ? "-" : mAccountName);
+                    bundle.putString(FollowedUsersListingFragment.EXTRA_ACCOUNT_NAME, mAccountName == null ? Account.ANONYMOUS_ACCOUNT : mAccountName);
                     bundle.putString(FollowedUsersListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                     fragment.setArguments(bundle);
                     return fragment;
@@ -498,7 +499,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                     MultiRedditListingFragment fragment = new MultiRedditListingFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(MultiRedditListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-                    bundle.putString(MultiRedditListingFragment.EXTRA_ACCOUNT_NAME, mAccountName == null ? "-" : mAccountName);
+                    bundle.putString(MultiRedditListingFragment.EXTRA_ACCOUNT_NAME, mAccountName == null ? Account.ANONYMOUS_ACCOUNT : mAccountName);
                     fragment.setArguments(bundle);
                     return fragment;
                 }
