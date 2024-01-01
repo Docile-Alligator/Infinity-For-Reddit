@@ -528,6 +528,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         bundle.putBoolean(CommentMoreBottomSheetFragment.EXTRA_EDIT_AND_DELETE_AVAILABLE, true);
                     }
                     bundle.putString(CommentMoreBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                    bundle.putString(CommentMoreBottomSheetFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                     bundle.putParcelable(CommentMoreBottomSheetFragment.EXTRA_COMMENT, comment);
                     bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getBindingAdapterPosition());
                     CommentMoreBottomSheetFragment commentMoreBottomSheetFragment = new CommentMoreBottomSheetFragment();

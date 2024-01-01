@@ -3255,7 +3255,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
 
         void markPostRead(Post post, boolean changePostItemColor) {
-            if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
+            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
                 if (changePostItemColor) {
                     if (itemViewIsNotCardView) {
@@ -4584,7 +4584,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
 
         void markPostRead(Post post, boolean changePostItemColor) {
-            if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
+            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
                 if (changePostItemColor) {
                     itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
@@ -4770,7 +4770,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
 
         void markPostRead(Post post, boolean changePostItemColor) {
-            if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
+            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
                 if (changePostItemColor) {
                     itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
@@ -4958,7 +4958,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
 
         void markPostRead(Post post, boolean changePostItemColor) {
-            if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
+            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
                 if (changePostItemColor) {
                     itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
@@ -5994,7 +5994,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
 
         void markPostRead(Post post, boolean changePostItemColor) {
-            if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
+            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
                 if (changePostItemColor) {
                     itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostFilledCardViewBackgroundColor));

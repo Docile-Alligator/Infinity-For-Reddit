@@ -2,6 +2,8 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.Handler;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -22,7 +24,7 @@ public class FetchPostFilterReadPostsAndConcatenatedSubredditNames {
     }
 
     public static void fetchPostFilterAndReadPosts(RedditDataRoomDatabase redditDataRoomDatabase, Executor executor,
-                                                   Handler handler, String accountName, int postFilterUsage,
+                                                   Handler handler, @NonNull String accountName, int postFilterUsage,
                                                    String nameOfUsage, FetchPostFilterAndReadPostsListener fetchPostFilterAndReadPostsListener) {
         executor.execute(() -> {
             List<PostFilter> postFilters = redditDataRoomDatabase.postFilterDao().getValidPostFilters(postFilterUsage, nameOfUsage);

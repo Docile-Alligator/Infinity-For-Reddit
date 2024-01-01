@@ -988,7 +988,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
         loadUserData();
 
-        if (mAccessToken != null) {
+        if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             if (mMessageFullname != null) {
                 ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
                     @Override
@@ -1006,7 +1006,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     private void loadSubscriptions() {
-        if (mAccessToken != null && !mFetchSubscriptionsSuccess) {
+        if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !mFetchSubscriptionsSuccess) {
             FetchSubscribedThing.fetchSubscribedThing(mOauthRetrofit, mAccessToken, mAccountName, null,
                     new ArrayList<>(), new ArrayList<>(),
                     new ArrayList<>(),

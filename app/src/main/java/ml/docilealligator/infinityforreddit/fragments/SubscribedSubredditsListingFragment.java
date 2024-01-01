@@ -150,7 +150,7 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
                 mGlide.clear(mImageView);
             }
 
-            if (accessToken != null) {
+            if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 adapter.addUser(accountName, getArguments().getString(EXTRA_ACCOUNT_PROFILE_IMAGE_URL));
             }
             adapter.setSubscribedSubreddits(subscribedSubredditData);

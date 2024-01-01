@@ -31,6 +31,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsSubscribedToSubreddit;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -156,7 +157,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
                                 public void isNotSubscribed() {
                                     ((DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
                                     ((DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
-                                        if (accessToken != null) {
+                                        if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                                             SubredditSubscription.subscribeToSubreddit(executor, new Handler(),
                                                     oauthRetrofit, retrofit, accessToken, subredditData.getName(),
                                                     accountName, redditDataRoomDatabase,

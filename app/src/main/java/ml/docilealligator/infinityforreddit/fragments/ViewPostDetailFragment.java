@@ -576,7 +576,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     }
 
     private void bindView() {
-        if (mAccessToken != null && mMessageFullname != null) {
+        if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && mMessageFullname != null) {
             ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
                 @Override
                 public void readSuccess() {
@@ -682,7 +682,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mMenu.findItem(R.id.action_comment_view_post_detail_fragment).setVisible(true);
             mMenu.findItem(R.id.action_sort_view_post_detail_fragment).setVisible(true);
 
-            if (mAccessToken != null) {
+            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 if (mPost.isSaved()) {
                     saveItem.setVisible(true);
                     saveItem.setIcon(mSavedIcon);
@@ -976,7 +976,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             }
             return true;
         } else if (itemId == R.id.action_save_view_post_detail_fragment) {
-            if (mPost != null && mAccessToken != null) {
+            if (mPost != null && !mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 if (mPost.isSaved()) {
                     item.setIcon(mUnsavedIcon);
                     SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
@@ -1040,7 +1040,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             startActivity(crosspostIntent);
             return true;
         } else if (itemId == R.id.action_hide_view_post_detail_fragment) {
-            if (mPost != null && mAccessToken != null) {
+            if (mPost != null && !mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 if (mPost.isHidden()) {
                     Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, getString(R.string.action_hide_post));
 

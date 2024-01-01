@@ -446,7 +446,7 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
 
         if (postFilter == null) {
             FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndReadPosts(mRedditDataRoomDatabase, mExecutor,
-                    new Handler(), null, PostFilterUsage.HISTORY_TYPE, PostFilterUsage.HISTORY_TYPE_USAGE_READ_POSTS, (postFilter, readPostList) -> {
+                    new Handler(), accountName, PostFilterUsage.HISTORY_TYPE, PostFilterUsage.HISTORY_TYPE_USAGE_READ_POSTS, (postFilter, readPostList) -> {
                         if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                             this.postFilter = postFilter;
                             postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.NSFW_BASE, false);

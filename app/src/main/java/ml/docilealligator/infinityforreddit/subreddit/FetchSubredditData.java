@@ -5,8 +5,6 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 import ml.docilealligator.infinityforreddit.SortType;
@@ -59,8 +57,7 @@ public class FetchSubredditData {
                                           boolean nsfw, final FetchSubredditListingDataListener fetchSubredditListingDataListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
-        Map<String, String> map = new HashMap<>();
-        Map<String, String> headers = accessToken != null ? APIUtils.getOAuthHeader(accessToken) : Collections.unmodifiableMap(map);
+        Map<String, String> headers = APIUtils.getOAuthHeader(accessToken);
         Call<String> subredditDataCall = api.searchSubreddits(query, after, sortType, nsfw ? 1 : 0, headers);
         subredditDataCall.enqueue(new Callback<String>() {
             @Override

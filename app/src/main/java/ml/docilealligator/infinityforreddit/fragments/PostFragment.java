@@ -917,12 +917,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             ((ActivityToolbarInterface) activity).displaySortType();
         }
 
-        if (accessToken != null && !accessToken.equals("")) {
+        if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             if (mPostHistorySharedPreferences.getBoolean(accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false) && readPosts == null) {
                 if (getArguments().getBoolean(EXTRA_DISABLE_READ_POSTS, false)) {
                     if (postFilter == null) {
                         FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndReadPosts(mRedditDataRoomDatabase, mExecutor,
-                                new Handler(), null, usage, nameOfUsage, (postFilter, readPostList) -> {
+                                new Handler(), accountName, usage, nameOfUsage, (postFilter, readPostList) -> {
                                     if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                                         this.postFilter = postFilter;
                                         postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.NSFW_BASE, false);
@@ -948,7 +948,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             } else {
                 if (postFilter == null) {
                     FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndReadPosts(mRedditDataRoomDatabase, mExecutor,
-                            new Handler(), null, usage, nameOfUsage, (postFilter, readPostList) -> {
+                            new Handler(), accountName, usage, nameOfUsage, (postFilter, readPostList) -> {
                                 if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                                     this.postFilter = postFilter;
                                     postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.NSFW_BASE, false);
@@ -999,7 +999,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     }
                 } else {
                     FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndReadPosts(mRedditDataRoomDatabase, mExecutor,
-                            new Handler(), null, usage, nameOfUsage, (postFilter, readPostList) -> {
+                            new Handler(), accountName, usage, nameOfUsage, (postFilter, readPostList) -> {
                                 if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                                     this.postFilter = postFilter;
                                     postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);

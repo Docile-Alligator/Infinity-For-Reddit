@@ -324,7 +324,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
             return;
         }
 
-        if (mAccessToken != null && !(!forceLoad && mInsertSuccess)) {
+        if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !(!forceLoad && mInsertSuccess)) {
             FetchSubscribedThing.fetchSubscribedThing(mOauthRetrofit, mAccessToken, mAccountName, null,
                     new ArrayList<>(), new ArrayList<>(),
                     new ArrayList<>(),
@@ -376,7 +376,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     }
 
     private void loadMultiReddits() {
-        if (mAccessToken != null) {
+        if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             FetchMyMultiReddits.fetchMyMultiReddits(mOauthRetrofit, mAccessToken, new FetchMyMultiReddits.FetchMyMultiRedditsListener() {
                 @Override
                 public void success(ArrayList<MultiReddit> multiReddits) {

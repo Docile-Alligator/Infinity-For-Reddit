@@ -300,7 +300,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             }
             return true;
         } else if (item.getItemId() == R.id.action_read_all_messages_inbox_activity) {
-            if (mAccessToken != null) {
+            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 Toast.makeText(this, R.string.please_wait, Toast.LENGTH_SHORT).show();
                 mOauthRetrofit.create(RedditAPI.class).readAllMessages(APIUtils.getOAuthHeader(mAccessToken))
                         .enqueue(new Callback<>() {

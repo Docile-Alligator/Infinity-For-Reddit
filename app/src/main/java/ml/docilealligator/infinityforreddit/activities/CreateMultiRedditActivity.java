@@ -160,7 +160,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
                 return true;
             }
 
-            if (mAccessToken != null) {
+            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 String jsonModel = new MultiRedditJSONModel(nameEditText.getText().toString(), descriptionEditText.getText().toString(),
                         visibilitySwitch.isChecked(), mSubreddits).createJSONModel();
                 CreateMultiReddit.createMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,

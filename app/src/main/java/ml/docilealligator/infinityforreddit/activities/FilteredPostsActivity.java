@@ -339,7 +339,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
             startActivityForResult(intent, CUSTOMIZE_POST_FILTER_ACTIVITY_REQUEST_CODE);
         });
 
-        if (mAccessToken != null) {
+        if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             fab.setOnLongClickListener(view -> {
                 FilteredThingFABMoreOptionsBottomSheetFragment filteredThingFABMoreOptionsBottomSheetFragment
                         = new FilteredThingFABMoreOptionsBottomSheetFragment();
