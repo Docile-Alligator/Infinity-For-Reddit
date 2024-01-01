@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -44,7 +45,7 @@ public class PreferenceSectionRecyclerViewAdapter extends RecyclerView.Adapter<R
         primaryTextColor = customThemeWrapper.getPrimaryTextColor();
         secondaryTextColor = customThemeWrapper.getSecondaryTextColor();
         primaryIconColor = customThemeWrapper.getPrimaryIconColor();
-        isNSFWEnabled = nsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
+        isNSFWEnabled = nsfwAndSpoilerSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
         collapsePreferencesSection = navigationDrawerSharedPreferences.getBoolean(SharedPreferencesUtils.COLLAPSE_PREFERENCES_SECTION, false);
         this.itemClickListener = itemClickListener;
     }

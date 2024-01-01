@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
@@ -86,7 +87,7 @@ public class PostViewModel extends ViewModel {
                                 post -> !post.isRead() || !currentlyReadPostIdsLiveData.getValue()))), ViewModelKt.getViewModelScope(this));
 
         currentlyReadPostIdsLiveData.setValue(postHistorySharedPreferences != null
-                && postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));
+                && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));
     }
 
     public PostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
@@ -126,7 +127,7 @@ public class PostViewModel extends ViewModel {
                                 post -> !post.isRead() || !currentlyReadPostIdsLiveData.getValue()))), ViewModelKt.getViewModelScope(this));
 
         currentlyReadPostIdsLiveData.setValue(postHistorySharedPreferences != null
-                && postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));
+                && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));
     }
 
     public PostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
@@ -169,7 +170,7 @@ public class PostViewModel extends ViewModel {
                                 post -> !post.isRead() || !currentlyReadPostIdsLiveData.getValue()))), ViewModelKt.getViewModelScope(this));
 
         currentlyReadPostIdsLiveData.setValue(postHistorySharedPreferences != null
-                && postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));
+                && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));
     }
 
     public PostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
@@ -212,7 +213,7 @@ public class PostViewModel extends ViewModel {
                                 post -> !post.isRead() || !currentlyReadPostIdsLiveData.getValue()))), ViewModelKt.getViewModelScope(this));
 
         currentlyReadPostIdsLiveData.setValue(postHistorySharedPreferences != null
-                && postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));
+                && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));
     }
 
     public LiveData<PagingData<Post>> getPosts() {

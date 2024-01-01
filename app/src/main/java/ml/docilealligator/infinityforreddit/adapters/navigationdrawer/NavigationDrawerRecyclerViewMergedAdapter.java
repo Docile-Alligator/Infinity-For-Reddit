@@ -48,11 +48,11 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
                     }
                 });
         accountSectionRecyclerViewAdapter = new AccountSectionRecyclerViewAdapter(baseActivity, customThemeWrapper,
-                navigationDrawerSharedPreferences, accountName != null, itemClickListener);
+                navigationDrawerSharedPreferences, !accountName.equals(Account.ANONYMOUS_ACCOUNT), itemClickListener);
         redditSectionRecyclerViewAdapter = new RedditSectionRecyclerViewAdapter(baseActivity, customThemeWrapper,
                 navigationDrawerSharedPreferences, itemClickListener);
         postSectionRecyclerViewAdapter = new PostSectionRecyclerViewAdapter(baseActivity, customThemeWrapper,
-                navigationDrawerSharedPreferences, accountName != null, itemClickListener);
+                navigationDrawerSharedPreferences, !accountName.equals(Account.ANONYMOUS_ACCOUNT), itemClickListener);
         preferenceSectionRecyclerViewAdapter = new PreferenceSectionRecyclerViewAdapter(baseActivity, customThemeWrapper,
                 accountName, nsfwAndSpoilerSharedPreferences, navigationDrawerSharedPreferences, itemClickListener);
         favoriteSubscribedSubredditsSectionRecyclerViewAdapter = new FavoriteSubscribedSubredditsSectionRecyclerViewAdapter(
@@ -60,7 +60,7 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
         subscribedSubredditsRecyclerViewAdapter = new SubscribedSubredditsRecyclerViewAdapter(baseActivity, glide,
                 customThemeWrapper, navigationDrawerSharedPreferences, itemClickListener);
         accountManagementSectionRecyclerViewAdapter = new AccountManagementSectionRecyclerViewAdapter(baseActivity,
-                customThemeWrapper, glide, accountName != null, itemClickListener);
+                customThemeWrapper, glide, !accountName.equals(Account.ANONYMOUS_ACCOUNT), itemClickListener);
 
         mainPageConcatAdapter = new ConcatAdapter(
                 headerSectionRecyclerViewAdapter,

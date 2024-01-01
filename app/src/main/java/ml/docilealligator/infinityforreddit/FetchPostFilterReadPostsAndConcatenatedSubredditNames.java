@@ -27,15 +27,15 @@ public class FetchPostFilterReadPostsAndConcatenatedSubredditNames {
         executor.execute(() -> {
             List<PostFilter> postFilters = redditDataRoomDatabase.postFilterDao().getValidPostFilters(postFilterUsage, nameOfUsage);
             PostFilter mergedPostFilter = PostFilter.mergePostFilter(postFilters);
-            if (accountName != null) {
+            if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                handler.post(() -> fetchPostFilterAndReadPostsListener.success(mergedPostFilter, null));
+            } else {
                 List<ReadPost> readPosts = redditDataRoomDatabase.readPostDao().getAllReadPosts(accountName);
                 ArrayList<String> readPostStrings = new ArrayList<>();
                 for (ReadPost readPost : readPosts) {
                     readPostStrings.add(readPost.getId());
                 }
                 handler.post(() -> fetchPostFilterAndReadPostsListener.success(mergedPostFilter, readPostStrings));
-            } else {
-                handler.post(() -> fetchPostFilterAndReadPostsListener.success(mergedPostFilter, null));
             }
         });
     }

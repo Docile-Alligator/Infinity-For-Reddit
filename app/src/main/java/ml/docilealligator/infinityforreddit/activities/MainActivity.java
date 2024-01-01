@@ -387,7 +387,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         WorkManager workManager = WorkManager.getInstance(this);
 
         if (mNewAccountName != null) {
-            if (mAccountName == null || !mAccountName.equals(mNewAccountName)) {
+            if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT) || !mAccountName.equals(mNewAccountName)) {
                 SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
                         mExecutor, new Handler(), mNewAccountName, newAccount -> {
                             EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
@@ -815,12 +815,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             }
                         } else if (stringId == R.string.enable_nsfw) {
                             if (sectionsPagerAdapter != null) {
-                                mNsfwAndSpoilerSharedPreferences.edit().putBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, true).apply();
+                                mNsfwAndSpoilerSharedPreferences.edit().putBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, true).apply();
                                 sectionsPagerAdapter.changeNSFW(true);
                             }
                         } else if (stringId == R.string.disable_nsfw) {
                             if (sectionsPagerAdapter != null) {
-                                mNsfwAndSpoilerSharedPreferences.edit().putBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false).apply();
+                                mNsfwAndSpoilerSharedPreferences.edit().putBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false).apply();
                                 sectionsPagerAdapter.changeNSFW(false);
                             }
                         } else if (stringId == R.string.settings) {
@@ -871,17 +871,17 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         navDrawerRecyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this));
         navDrawerRecyclerView.setAdapter(adapter.getConcatAdapter());
 
-        int tabCount = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_COUNT, 3);
-        mShowFavoriteMultiReddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_MULTIREDDITS, false);
-        mShowMultiReddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_MULTIREDDITS, false);
-        mShowFavoriteSubscribedSubreddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_SUBSCRIBED_SUBREDDITS, false);
-        mShowSubscribedSubreddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, false);
+        int tabCount = mMainActivityTabsSharedPreferences.getInt((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_COUNT, 3);
+        mShowFavoriteMultiReddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_MULTIREDDITS, false);
+        mShowMultiReddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_MULTIREDDITS, false);
+        mShowFavoriteSubscribedSubreddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_SUBSCRIBED_SUBREDDITS, false);
+        mShowSubscribedSubreddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, false);
         sectionsPagerAdapter = new SectionsPagerAdapter(this, tabCount, mShowFavoriteMultiReddits,
                 mShowMultiReddits, mShowFavoriteSubscribedSubreddits, mShowSubscribedSubreddits);
         viewPager2.setAdapter(sectionsPagerAdapter);
         viewPager2.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
         viewPager2.setUserInputEnabled(!mDisableSwipingBetweenTabs);
-        if (mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_TAB_NAMES, true)) {
+        if (mMainActivityTabsSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_TAB_NAMES, true)) {
             if (mShowFavoriteMultiReddits || mShowMultiReddits || mShowFavoriteSubscribedSubreddits || mShowSubscribedSubreddits) {
                 tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
             } else {
@@ -890,13 +890,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
                 switch (position) {
                     case 0:
-                        Utils.setTitleWithCustomFontToTab(typeface, tab, mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_TITLE, getString(R.string.home)));
+                        Utils.setTitleWithCustomFontToTab(typeface, tab, mMainActivityTabsSharedPreferences.getString((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_TITLE, getString(R.string.home)));
                         break;
                     case 1:
-                        Utils.setTitleWithCustomFontToTab(typeface, tab, mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_TITLE, getString(R.string.popular)));
+                        Utils.setTitleWithCustomFontToTab(typeface, tab, mMainActivityTabsSharedPreferences.getString((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_TITLE, getString(R.string.popular)));
                         break;
                     case 2:
-                        Utils.setTitleWithCustomFontToTab(typeface, tab, mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_TITLE, getString(R.string.all)));
+                        Utils.setTitleWithCustomFontToTab(typeface, tab, mMainActivityTabsSharedPreferences.getString((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_TITLE, getString(R.string.all)));
                         break;
                 }
                 if (position >= tabCount && (mShowFavoriteMultiReddits || mShowMultiReddits ||
@@ -944,7 +944,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         loadSubscriptions();
 
         multiRedditViewModel = new ViewModelProvider(this, new MultiRedditViewModel.Factory(getApplication(),
-                mRedditDataRoomDatabase, mAccountName == null ? Account.ANONYMOUS_ACCOUNT : mAccountName))
+                mRedditDataRoomDatabase, mAccountName))
                 .get(MultiRedditViewModel.class);
 
         multiRedditViewModel.getAllFavoriteMultiReddits().observe(this, multiReddits -> {
@@ -960,7 +960,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         });
 
         subscribedSubredditViewModel = new ViewModelProvider(this,
-                new SubscribedSubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, mAccountName == null ? Account.ANONYMOUS_ACCOUNT : mAccountName))
+                new SubscribedSubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, mAccountName))
                 .get(SubscribedSubredditViewModel.class);
         subscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this,
                 subscribedSubredditData -> {
@@ -1409,7 +1409,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             return false;
         });
 
-        boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
+        boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
         thingEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -1509,7 +1509,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private void randomThing() {
         RandomBottomSheetFragment randomBottomSheetFragment = new RandomBottomSheetFragment();
         Bundle bundle = new Bundle();
-        bundle.putBoolean(RandomBottomSheetFragment.EXTRA_IS_NSFW, !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false));
+        bundle.putBoolean(RandomBottomSheetFragment.EXTRA_IS_NSFW, !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false));
         randomBottomSheetFragment.setArguments(bundle);
         randomBottomSheetFragment.show(getSupportFragmentManager(), randomBottomSheetFragment.getTag());
     }
@@ -1560,8 +1560,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         @Override
         public Fragment createFragment(int position) {
             if (position == 0) {
-                int postType = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME);
-                String name = mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, "");
+                int postType = mMainActivityTabsSharedPreferences.getInt((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME);
+                String name = mMainActivityTabsSharedPreferences.getString((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, "");
                 return generatePostFragment(postType, name);
             } else {
                 if (showFavoriteMultiReddits) {
@@ -1603,11 +1603,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 int postType;
                 String name;
                 if (position == 1) {
-                     postType = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_POPULAR);
-                     name = mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, "");
+                     postType = mMainActivityTabsSharedPreferences.getInt((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_POPULAR);
+                     name = mMainActivityTabsSharedPreferences.getString((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, "");
                 } else {
-                    postType = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_ALL);
-                    name = mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, "");
+                    postType = mMainActivityTabsSharedPreferences.getInt((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_ALL);
+                    name = mMainActivityTabsSharedPreferences.getString((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, "");
                 }
                 return generatePostFragment(postType, name);
             }

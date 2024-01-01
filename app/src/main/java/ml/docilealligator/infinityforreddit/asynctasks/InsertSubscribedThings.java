@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditDao;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditDao;
@@ -26,7 +27,7 @@ public class InsertSubscribedThings {
                                               List<SubredditData> subredditDataList,
                                               InsertSubscribedThingListener insertSubscribedThingListener) {
         executor.execute(() -> {
-            if (accountName != null && redditDataRoomDatabase.accountDao().getAccountData(accountName) == null) {
+            if (!accountName.equals(Account.ANONYMOUS_ACCOUNT) && redditDataRoomDatabase.accountDao().getAccountData(accountName) == null) {
                 handler.post(insertSubscribedThingListener::insertSuccess);
                 return;
             }

@@ -22,6 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -83,7 +84,7 @@ public class PostHistoryFragment extends Fragment {
         }
 
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
-        if (accountName == null) {
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             infoTextView.setText(R.string.only_for_logged_in_user);
             markPostsAsReadLinearLayout.setVisibility(View.GONE);
             markPostsAsReadAfterVotingLinearLayout.setVisibility(View.GONE);

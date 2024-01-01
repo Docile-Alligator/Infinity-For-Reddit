@@ -177,7 +177,7 @@ public class SearchActivity extends BaseActivity {
 
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
+        boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
 
         subredditAutocompleteRecyclerViewAdapter = new SubredditAutocompleteRecyclerViewAdapter(this,
                 mCustomThemeWrapper, subredditData -> {
@@ -322,7 +322,7 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void bindView() {
-        if (mAccountName != null) {
+        if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             adapter = new SearchActivityRecyclerViewAdapter(this, mCustomThemeWrapper, new SearchActivityRecyclerViewAdapter.ItemOnClickListener() {
                 @Override
                 public void onClick(String query) {

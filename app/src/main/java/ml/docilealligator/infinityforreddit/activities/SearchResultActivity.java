@@ -389,7 +389,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             return true;
         });
 
-        if (mAccountName != null && mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SEARCH_HISTORY, true) && !mInsertSearchQuerySuccess && mQuery != null) {
+        if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT)&& mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SEARCH_HISTORY, true) && !mInsertSearchQuerySuccess && mQuery != null) {
             InsertRecentSearchQuery.insertRecentSearchQueryListener(executor, new Handler(getMainLooper()),
                     mRedditDataRoomDatabase, mAccountName, mQuery, () -> mInsertSearchQuerySuccess = true);
         }
@@ -606,7 +606,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             return false;
         });
 
-        boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
+        boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
         thingEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -706,7 +706,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     private void random() {
         RandomBottomSheetFragment randomBottomSheetFragment = new RandomBottomSheetFragment();
         Bundle bundle = new Bundle();
-        bundle.putBoolean(RandomBottomSheetFragment.EXTRA_IS_NSFW, !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false));
+        bundle.putBoolean(RandomBottomSheetFragment.EXTRA_IS_NSFW, !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false));
         randomBottomSheetFragment.setArguments(bundle);
         randomBottomSheetFragment.show(getSupportFragmentManager(), randomBottomSheetFragment.getTag());
     }

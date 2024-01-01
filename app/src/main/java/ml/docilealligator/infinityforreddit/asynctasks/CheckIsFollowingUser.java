@@ -13,7 +13,7 @@ public class CheckIsFollowingUser {
                                             RedditDataRoomDatabase redditDataRoomDatabase, String username,
                                             String accountName, CheckIsFollowingUserListener checkIsFollowingUserListener) {
         executor.execute(() -> {
-            SubscribedUserData subscribedUserData = redditDataRoomDatabase.subscribedUserDao().getSubscribedUser(username, accountName == null ? Account.ANONYMOUS_ACCOUNT : accountName);
+            SubscribedUserData subscribedUserData = redditDataRoomDatabase.subscribedUserDao().getSubscribedUser(username, accountName.equals(Account.ANONYMOUS_ACCOUNT) ? Account.ANONYMOUS_ACCOUNT : accountName);
             handler.post(() -> {
                 if (subscribedUserData != null) {
                     checkIsFollowingUserListener.isSubscribed();

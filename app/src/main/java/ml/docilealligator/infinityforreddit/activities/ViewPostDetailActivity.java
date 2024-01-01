@@ -350,7 +350,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
     private void checkNewAccountAndBindView(Bundle savedInstanceState) {
         if (mNewAccountName != null) {
-            if (mAccountName == null || !mAccountName.equals(mNewAccountName)) {
+            if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT) || !mAccountName.equals(mNewAccountName)) {
                 SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
                         mExecutor, new Handler(), mNewAccountName, newAccount -> {
                             EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));

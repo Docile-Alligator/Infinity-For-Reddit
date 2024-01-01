@@ -499,7 +499,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                     MultiRedditListingFragment fragment = new MultiRedditListingFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(MultiRedditListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-                    bundle.putString(MultiRedditListingFragment.EXTRA_ACCOUNT_NAME, mAccountName == null ? Account.ANONYMOUS_ACCOUNT : mAccountName);
+                    bundle.putString(MultiRedditListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                     fragment.setArguments(bundle);
                     return fragment;
                 }

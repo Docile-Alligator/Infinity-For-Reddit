@@ -164,7 +164,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
 
         int filter = getIntent().getIntExtra(EXTRA_FILTER, -1000);
         PostFilter postFilter = new PostFilter();
-        postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null || mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
+        postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
         switch (filter) {
             case Post.NSFW_TYPE:
                 postFilter.onlyNSFW = true;
