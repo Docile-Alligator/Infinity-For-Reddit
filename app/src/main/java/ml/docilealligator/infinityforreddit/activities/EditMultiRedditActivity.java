@@ -126,7 +126,7 @@ public class EditMultiRedditActivity extends BaseActivity {
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
 
-        if (mAccessToken == null) {
+        if (mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT).equals(Account.ANONYMOUS_ACCOUNT)) {
             visibilityLinearLayout.setVisibility(View.GONE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 nameEditText.setImeOptions(nameEditText.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
@@ -146,7 +146,7 @@ public class EditMultiRedditActivity extends BaseActivity {
 
     private void bindView() {
         if (multiReddit == null) {
-            if (mAccessToken == null) {
+            if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 FetchMultiRedditInfo.anonymousFetchMultiRedditInfo(mExecutor, new Handler(),
                         mRedditDataRoomDatabase, multipath, new FetchMultiRedditInfo.FetchMultiRedditInfoListener() {
                             @Override
@@ -217,7 +217,7 @@ public class EditMultiRedditActivity extends BaseActivity {
                 return true;
             }
 
-            if (mAccessToken == null) {
+            if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 String name = nameEditText.getText().toString();
                 multiReddit.setDisplayName(name);
                 multiReddit.setName(name);

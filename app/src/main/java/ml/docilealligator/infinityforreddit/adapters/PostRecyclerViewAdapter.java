@@ -50,7 +50,6 @@ import com.google.android.exoplayer2.ui.DefaultTimeBar;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.ui.TimeBar;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
 
@@ -74,6 +73,7 @@ import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStra
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.StreamableVideo;
 import ml.docilealligator.infinityforreddit.VoteThing;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
@@ -170,6 +170,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private Retrofit mRedgifsRetrofit;
     private Provider<StreamableAPI> mStreamableApiProvider;
     private String mAccessToken;
+    private String mAccountName;
     private RequestManager mGlide;
     private int mMaxResolution;
     private SaveMemoryCenterInisdeDownsampleStrategy mSaveMemoryCenterInsideDownsampleStrategy;
@@ -273,11 +274,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mRedgifsRetrofit = redgifsRetrofit;
             mStreamableApiProvider = streamableApiProvider;
             mAccessToken = accessToken;
+            mAccountName = accountName;
             mPostType = postType;
             mDisplaySubredditName = displaySubredditName;
-            mNeedBlurNsfw = nsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.BLUR_NSFW_BASE, true);
-            mDoNotBlurNsfwInNsfwSubreddits = nsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.DO_NOT_BLUR_NSFW_IN_NSFW_SUBREDDITS, false);
-            mNeedBlurSpoiler = nsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.BLUR_SPOILER_BASE, false);
+            mNeedBlurNsfw = nsfwAndSpoilerSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.BLUR_NSFW_BASE, true);
+            mDoNotBlurNsfwInNsfwSubreddits = nsfwAndSpoilerSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.DO_NOT_BLUR_NSFW_IN_NSFW_SUBREDDITS, false);
+            mNeedBlurSpoiler = nsfwAndSpoilerSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.BLUR_SPOILER_BASE, false);
             mVoteButtonsOnTheRight = sharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
             mShowElapsedTime = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
             mTimeFormatPattern = sharedPreferences.getString(SharedPreferencesUtils.TIME_FORMAT_KEY, SharedPreferencesUtils.TIME_FORMAT_DEFAULT_VALUE);
@@ -315,9 +317,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mDisableImagePreview = sharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_IMAGE_PREVIEW, false);
             mOnlyDisablePreviewInVideoAndGifPosts = sharedPreferences.getBoolean(SharedPreferencesUtils.ONLY_DISABLE_PREVIEW_IN_VIDEO_AND_GIF_POSTS, false);
 
-            mMarkPostsAsRead = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false);
-            mMarkPostsAsReadAfterVoting = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false);
-            mMarkPostsAsReadOnScroll = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_ON_SCROLL_BASE, false);
+            mMarkPostsAsRead = postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false);
+            mMarkPostsAsReadAfterVoting = postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false);
+            mMarkPostsAsReadOnScroll = postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_ON_SCROLL_BASE, false);
 
             mHidePostType = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_POST_TYPE, false);
             mHidePostFlair = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_POST_FLAIR, false);
@@ -2926,7 +2928,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
                 Post post = getItem(position);
                 if (post != null) {
-                    if (mAccessToken == null) {
+                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                         Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -3035,7 +3037,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
                 Post post = getItem(position);
                 if (post != null) {
-                    if (mAccessToken == null) {
+                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                         Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -3142,7 +3144,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
                 Post post = getItem(position);
                 if (post != null) {
-                    if (mAccessToken == null) {
+                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                         Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -4273,7 +4275,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
                 Post post = getItem(position);
                 if (post != null) {
-                    if (mAccessToken == null) {
+                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                         Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -4378,7 +4380,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
                 Post post = getItem(position);
                 if (post != null) {
-                    if (mAccessToken == null) {
+                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                         Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -4479,7 +4481,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             commentsCountButton.setOnClickListener(view -> itemView.performClick());
 
             saveButton.setOnClickListener(view -> {
-                if (mAccessToken == null) {
+                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                     Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -5696,7 +5698,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
                 Post post = getItem(position);
                 if (post != null) {
-                    if (mAccessToken == null) {
+                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                         Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -5801,7 +5803,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
                 Post post = getItem(position);
                 if (post != null) {
-                    if (mAccessToken == null) {
+                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                         Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -5909,7 +5911,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
                 Post post = getItem(position);
                 if (post != null) {
-                    if (mAccessToken == null) {
+                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                         Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                         return;
                     }

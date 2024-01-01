@@ -1207,26 +1207,22 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private void initializeAndBindPostViewModel(String accessToken) {
         if (postType == PostPagingSource.TYPE_SEARCH) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
-                    accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
-                    accountName, mSharedPreferences,
+                    mOauthRetrofit, accessToken, accountName, mSharedPreferences,
                     mPostFeedScrolledPositionSharedPreferences, mPostHistorySharedPreferences, subredditName,
                     query, trendingSource, postType, sortType, postFilter, readPosts)).get(PostViewModel.class);
         } else if (postType == PostPagingSource.TYPE_SUBREDDIT) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
-                    accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
-                    accountName, mSharedPreferences, mPostFeedScrolledPositionSharedPreferences,
+                    mOauthRetrofit, accessToken, accountName, mSharedPreferences, mPostFeedScrolledPositionSharedPreferences,
                     mPostHistorySharedPreferences, subredditName, postType, sortType, postFilter, readPosts))
                     .get(PostViewModel.class);
         } else if (postType == PostPagingSource.TYPE_MULTI_REDDIT) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
-                    accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
-                    accountName, mSharedPreferences, mPostFeedScrolledPositionSharedPreferences,
+                    mOauthRetrofit, accessToken, accountName, mSharedPreferences, mPostFeedScrolledPositionSharedPreferences,
                     mPostHistorySharedPreferences, multiRedditPath, postType, sortType, postFilter, readPosts))
                     .get(PostViewModel.class);
         } else if (postType == PostPagingSource.TYPE_USER) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
-                    accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
-                    accountName, mSharedPreferences, mPostFeedScrolledPositionSharedPreferences,
+                    mOauthRetrofit, accessToken, accountName, mSharedPreferences, mPostFeedScrolledPositionSharedPreferences,
                     mPostHistorySharedPreferences, username, postType, sortType, postFilter, where, readPosts))
                     .get(PostViewModel.class);
         } else {
@@ -1340,7 +1336,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         } else if (item.getItemId() == R.id.action_more_options_post_fragment) {
             FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment= new FABMoreOptionsBottomSheetFragment();
             Bundle bundle = new Bundle();
-            bundle.putBoolean(FABMoreOptionsBottomSheetFragment.EXTRA_ANONYMOUS_MODE, accessToken == null);
+            bundle.putBoolean(FABMoreOptionsBottomSheetFragment.EXTRA_ANONYMOUS_MODE, accountName.equals(Account.ANONYMOUS_ACCOUNT));
             fabMoreOptionsBottomSheetFragment.setArguments(bundle);
             fabMoreOptionsBottomSheetFragment.show(activity.getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
             return true;

@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,9 +22,10 @@ import retrofit2.Retrofit;
 public class FavoriteThing {
     public static void favoriteSubreddit(Executor executor, Handler handler, Retrofit oauthRetrofit,
                                          RedditDataRoomDatabase redditDataRoomDatabase,
-                                         String accessToken, SubscribedSubredditData subscribedSubredditData,
+                                         @Nullable String accessToken, @Nullable String accountName,
+                                         SubscribedSubredditData subscribedSubredditData,
                                          FavoriteThingListener favoriteThingListener) {
-        if (accessToken == null) {
+        if (accountName == null) {
             InsertSubscribedThings.insertSubscribedThings(executor, handler, redditDataRoomDatabase, subscribedSubredditData,
                     favoriteThingListener::success);
         } else {
@@ -51,9 +53,10 @@ public class FavoriteThing {
 
     public static void unfavoriteSubreddit(Executor executor, Handler handler, Retrofit oauthRetrofit,
                                            RedditDataRoomDatabase redditDataRoomDatabase,
-                                           String accessToken, SubscribedSubredditData subscribedSubredditData,
+                                           @Nullable String accessToken, @Nullable String accountName,
+                                           SubscribedSubredditData subscribedSubredditData,
                                            FavoriteThingListener favoriteThingListener) {
-        if (accessToken == null) {
+        if (accountName == null) {
             InsertSubscribedThings.insertSubscribedThings(executor, handler, redditDataRoomDatabase,
                     subscribedSubredditData, favoriteThingListener::success);
         } else {
@@ -81,9 +84,10 @@ public class FavoriteThing {
 
     public static void favoriteUser(Executor executor, Handler handler, Retrofit oauthRetrofit,
                                     RedditDataRoomDatabase redditDataRoomDatabase,
-                                    String accessToken, SubscribedUserData subscribedUserData,
+                                    @Nullable String accessToken, @Nullable String accountName,
+                                    SubscribedUserData subscribedUserData,
                                     FavoriteThingListener favoriteThingListener) {
-        if (accessToken == null) {
+        if (accountName == null) {
             InsertSubscribedThings.insertSubscribedThings(executor, handler, redditDataRoomDatabase,
                     subscribedUserData, favoriteThingListener::success);
         } else {
@@ -111,9 +115,10 @@ public class FavoriteThing {
 
     public static void unfavoriteUser(Executor executor, Handler handler, Retrofit oauthRetrofit,
                                       RedditDataRoomDatabase redditDataRoomDatabase,
-                                      String accessToken, SubscribedUserData subscribedUserData,
+                                      @Nullable String accessToken, @Nullable String accountName,
+                                      SubscribedUserData subscribedUserData,
                                       FavoriteThingListener favoriteThingListener) {
-        if (accessToken == null) {
+        if (accountName == null) {
             InsertSubscribedThings.insertSubscribedThings(executor, handler, redditDataRoomDatabase, subscribedUserData,
                     favoriteThingListener::success);
         } else {

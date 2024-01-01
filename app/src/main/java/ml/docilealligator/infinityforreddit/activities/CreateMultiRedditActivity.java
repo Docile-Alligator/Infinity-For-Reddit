@@ -117,7 +117,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
 
-        if (mAccessToken == null) {
+        if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             visibilityLinearLayout.setVisibility(View.GONE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 nameEditText.setImeOptions(nameEditText.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);

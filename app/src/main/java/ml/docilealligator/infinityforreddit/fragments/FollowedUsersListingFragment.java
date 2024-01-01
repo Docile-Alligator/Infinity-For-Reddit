@@ -34,6 +34,7 @@ import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.adapters.FollowedUsersRecyclerViewAdapter;
@@ -109,18 +110,19 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
         mGlide = Glide.with(this);
 
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
-        if (accessToken == null) {
+        String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             mSwipeRefreshLayout.setEnabled(false);
         }
         mLinearLayoutManager = new LinearLayoutManagerBugFixed(mActivity);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         FollowedUsersRecyclerViewAdapter adapter = new FollowedUsersRecyclerViewAdapter(mActivity,
-                mExecutor, mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, accessToken);
+                mExecutor, mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, accessToken, accountName);
         mRecyclerView.setAdapter(adapter);
         new FastScrollerBuilder(mRecyclerView).useMd2Style().build();
 
         mSubscribedUserViewModel = new ViewModelProvider(this,
-                new SubscribedUserViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, getArguments().getString(EXTRA_ACCOUNT_NAME)))
+                new SubscribedUserViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, accountName))
                 .get(SubscribedUserViewModel.class);
 
         mSubscribedUserViewModel.getAllSubscribedUsers().observe(getViewLifecycleOwner(), subscribedUserData -> {

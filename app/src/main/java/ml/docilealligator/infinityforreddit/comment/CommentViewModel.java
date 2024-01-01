@@ -23,10 +23,10 @@ public class CommentViewModel extends ViewModel {
     private LiveData<PagedList<Comment>> comments;
     private MutableLiveData<SortType> sortTypeLiveData;
 
-    public CommentViewModel(Retrofit retrofit, Locale locale, String accessToken, String username, SortType sortType,
-                            boolean areSavedComments) {
-        commentDataSourceFactory = new CommentDataSourceFactory(retrofit, locale, accessToken, username, sortType,
-                areSavedComments);
+    public CommentViewModel(Retrofit retrofit, Locale locale, String accessToken, String accountName,
+                            String username, SortType sortType, boolean areSavedComments) {
+        commentDataSourceFactory = new CommentDataSourceFactory(retrofit, locale, accessToken, accountName,
+                username, sortType, areSavedComments);
 
         initialLoadingState = Transformations.switchMap(commentDataSourceFactory.getCommentDataSourceLiveData(),
                 CommentDataSource::getInitialLoadStateLiveData);
@@ -83,15 +83,17 @@ public class CommentViewModel extends ViewModel {
         private Retrofit retrofit;
         private Locale locale;
         private String accessToken;
+        private String accountName;
         private String username;
         private SortType sortType;
         private boolean areSavedComments;
 
-        public Factory(Retrofit retrofit, Locale locale, String accessToken, String username,
+        public Factory(Retrofit retrofit, Locale locale, String accessToken, String accountName, String username,
                        SortType sortType, boolean areSavedComments) {
             this.retrofit = retrofit;
             this.locale = locale;
             this.accessToken = accessToken;
+            this.accountName = accountName;
             this.username = username;
             this.sortType = sortType;
             this.areSavedComments = areSavedComments;
@@ -100,7 +102,8 @@ public class CommentViewModel extends ViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new CommentViewModel(retrofit, locale, accessToken, username, sortType, areSavedComments);
+            return (T) new CommentViewModel(retrofit, locale, accessToken, accountName, username,
+                    sortType, areSavedComments);
         }
     }
 }

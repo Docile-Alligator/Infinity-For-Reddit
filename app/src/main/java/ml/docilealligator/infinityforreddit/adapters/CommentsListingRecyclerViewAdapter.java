@@ -40,6 +40,7 @@ import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.VoteThing;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewImageOrGifActivity;
@@ -578,7 +579,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             commentMarkdownView.setAdapter(markwonAdapter);
 
             upvoteButton.setOnClickListener(view -> {
-                if (mAccessToken == null) {
+                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                     Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -658,7 +659,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             });
 
             downvoteButton.setOnClickListener(view -> {
-                if (mAccessToken == null) {
+                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                     Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
                 }

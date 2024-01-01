@@ -84,7 +84,7 @@ public class InsertSubscribedThings {
                                               InsertSubscribedThingListener insertSubscribedThingListener) {
         executor.execute(() -> {
             String accountName = singleSubscribedSubredditData.getUsername();
-            if (accountName != null && redditDataRoomDatabase.accountDao().getAccountData(accountName) == null) {
+            if (redditDataRoomDatabase.accountDao().getAccountData(accountName) == null) {
                 handler.post(insertSubscribedThingListener::insertSuccess);
                 return;
             }
@@ -95,16 +95,16 @@ public class InsertSubscribedThings {
     }
 
     public static void insertSubscribedThings(Executor executor, Handler handler, RedditDataRoomDatabase redditDataRoomDatabase,
-                                              SubscribedUserData mSingleSubscribedUserData,
+                                              SubscribedUserData singleSubscribedUserData,
                                               InsertSubscribedThingListener insertSubscribedThingListener) {
         executor.execute(() -> {
-            String accountName = mSingleSubscribedUserData.getUsername();
-            if (accountName != null && redditDataRoomDatabase.accountDao().getAccountData(accountName) == null) {
+            String accountName = singleSubscribedUserData.getUsername();
+            if (redditDataRoomDatabase.accountDao().getAccountData(accountName) == null) {
                 handler.post(insertSubscribedThingListener::insertSuccess);
                 return;
             }
 
-            redditDataRoomDatabase.subscribedUserDao().insert(mSingleSubscribedUserData);
+            redditDataRoomDatabase.subscribedUserDao().insert(singleSubscribedUserData);
             handler.post(insertSubscribedThingListener::insertSuccess);
         });
     }

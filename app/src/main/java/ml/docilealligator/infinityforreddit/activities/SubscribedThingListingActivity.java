@@ -179,7 +179,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
             showMultiReddits = getIntent().getBooleanExtra(EXTRA_SHOW_MULTIREDDITS, false);
         }
 
-        if (mAccessToken == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             searchEditText.setImeOptions(searchEditText.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
         }
 
@@ -402,7 +402,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                 .setMessage(R.string.delete_multi_reddit_dialog_message)
                 .setPositiveButton(R.string.delete, (dialogInterface, i)
                         -> {
-                    if (mAccessToken == null) {
+                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                         DeleteMultiredditInDatabase.deleteMultiredditInDatabase(mExecutor, new Handler(), mRedditDataRoomDatabase, mAccountName, multiReddit.getPath(),
                                 () -> Toast.makeText(SubscribedThingListingActivity.this,
                                         R.string.delete_multi_reddit_success, Toast.LENGTH_SHORT).show());
@@ -490,7 +490,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                 case 1: {
                     FollowedUsersListingFragment fragment = new FollowedUsersListingFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString(FollowedUsersListingFragment.EXTRA_ACCOUNT_NAME, mAccountName == null ? Account.ANONYMOUS_ACCOUNT : mAccountName);
+                    bundle.putString(FollowedUsersListingFragment.EXTRA_ACCOUNT_NAME, mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? Account.ANONYMOUS_ACCOUNT : mAccountName);
                     bundle.putString(FollowedUsersListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                     fragment.setArguments(bundle);
                     return fragment;

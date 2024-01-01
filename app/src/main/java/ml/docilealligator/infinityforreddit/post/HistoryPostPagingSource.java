@@ -81,12 +81,7 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
             ids.deleteCharAt(ids.length() - 1);
         }
 
-        Call<String> historyPosts;
-        if (accessToken != null && !accessToken.isEmpty()) {
-            historyPosts = retrofit.create(RedditAPI.class).getInfoOauth(ids.toString(), APIUtils.getOAuthHeader(accessToken));
-        } else {
-            historyPosts = retrofit.create(RedditAPI.class).getInfo(ids.toString());
-        }
+        Call<String> historyPosts = retrofit.create(RedditAPI.class).getInfoOauth(ids.toString(), APIUtils.getOAuthHeader(accessToken));
 
         try {
             Response<String> response = historyPosts.execute();

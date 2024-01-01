@@ -43,6 +43,7 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.TrendingSearch;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.TrendingSearchRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -101,6 +102,7 @@ public class TrendingActivity extends BaseActivity {
     @Inject
     Executor mExecutor;
     private String mAccessToken;
+    private String mAccountName;
     private boolean isRefreshing = false;
     private ArrayList<TrendingSearch> trendingSearches;
     private TrendingSearchRecyclerViewAdapter adapter;
@@ -150,6 +152,7 @@ public class TrendingActivity extends BaseActivity {
         setToolbarGoToTop(toolbar);
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
 
         mGlide = Glide.with(this);
 
@@ -205,12 +208,8 @@ public class TrendingActivity extends BaseActivity {
         trendingSearches = null;
         adapter.setTrendingSearches(null);
         Handler handler = new Handler();
-        Call<String> trendingCall;
-        if (mAccessToken == null) {
-            trendingCall = mRetrofit.create(RedditAPI.class).getTrendingSearches();
-        } else {
-            trendingCall = mOauthRetrofit.create(RedditAPI.class).getTrendingSearchesOauth(APIUtils.getOAuthHeader(mAccessToken));
-        }
+        Call<String> trendingCall = mOauthRetrofit.create(RedditAPI.class)
+                .getTrendingSearchesOauth(APIUtils.getOAuthHeader(mAccessToken));
         trendingCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

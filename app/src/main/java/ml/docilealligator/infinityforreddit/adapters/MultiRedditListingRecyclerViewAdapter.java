@@ -24,6 +24,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.zhanghai.android.fastscroll.PopupTextProvider;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertMultireddit;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -46,6 +47,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
     private RequestManager mGlide;
 
     private String mAccessToken;
+    private String mAccountName;
     private List<MultiReddit> mMultiReddits;
     private List<MultiReddit> mFavoriteMultiReddits;
     private int mPrimaryTextColor;
@@ -60,13 +62,15 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
     public MultiRedditListingRecyclerViewAdapter(BaseActivity activity, Executor executor, Retrofit oauthRetrofit,
                                                  RedditDataRoomDatabase redditDataRoomDatabase,
                                                  CustomThemeWrapper customThemeWrapper,
-                                                 String accessToken, OnItemClickListener onItemClickListener) {
+                                                 String accessToken, String accountName,
+                                                 OnItemClickListener onItemClickListener) {
         mActivity = activity;
         mExecutor = executor;
         mGlide = Glide.with(activity);
         mOauthRetrofit = oauthRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mAccessToken = accessToken;
+        mAccountName = accountName;
         mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
         mOnItemClickListener = onItemClickListener;
@@ -130,7 +134,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 if(multiReddit.isFavorite()) {
                     ((MultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                     multiReddit.setFavorite(false);
-                    if (mAccessToken == null) {
+                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                         InsertMultireddit.insertMultireddit(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddit,
                                 () -> {
                                     //Do nothing
@@ -163,7 +167,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 } else {
                     ((MultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                     multiReddit.setFavorite(true);
-                    if (mAccessToken == null) {
+                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                         InsertMultireddit.insertMultireddit(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddit,
                                 () -> {
                                     //Do nothing
@@ -230,7 +234,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 if(multiReddit.isFavorite()) {
                     ((FavoriteMultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                     multiReddit.setFavorite(false);
-                    if (mAccessToken == null) {
+                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                         InsertMultireddit.insertMultireddit(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddit,
                                 () -> {
                                     //Do nothing
@@ -263,7 +267,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 } else {
                     ((FavoriteMultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                     multiReddit.setFavorite(true);
-                    if (mAccessToken == null) {
+                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                         InsertMultireddit.insertMultireddit(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddit,
                                 () -> {
                                     //Do nothing

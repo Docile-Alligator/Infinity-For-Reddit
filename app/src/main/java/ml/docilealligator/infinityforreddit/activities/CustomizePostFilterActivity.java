@@ -45,6 +45,7 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.SavePostFilter;
@@ -259,9 +260,8 @@ public class CustomizePostFilterActivity extends BaseActivity {
             onlySpoilerSwitch.performClick();
         });
 
-        String accessToken = currentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         addSubredditsImageView.setOnClickListener(view -> {
-            if (accessToken == null) {
+            if (currentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT).equals(Account.ANONYMOUS_ACCOUNT)) {
                 Intent intent = new Intent(this, SearchActivity.class);
                 intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, true);
                 intent.putExtra(SearchActivity.EXTRA_IS_MULTI_SELECTION, true);

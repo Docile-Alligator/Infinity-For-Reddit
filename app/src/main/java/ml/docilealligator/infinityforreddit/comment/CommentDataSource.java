@@ -31,6 +31,8 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
     private Locale locale;
     @Nullable
     private String accessToken;
+    @Nullable
+    private String accountName;
     private String username;
     private SortType sortType;
     private boolean areSavedComments;
@@ -42,11 +44,13 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
     private LoadParams<String> params;
     private LoadCallback<String, Comment> callback;
 
-    CommentDataSource(Retrofit retrofit, Locale locale, @Nullable String accessToken, String username, SortType sortType,
+    CommentDataSource(Retrofit retrofit, Locale locale, @Nullable String accessToken, @Nullable String accountName,
+                      String username, SortType sortType,
                       boolean areSavedComments) {
         this.retrofit = retrofit;
         this.locale = locale;
         this.accessToken = accessToken;
+        this.accountName = accountName;
         this.username = username;
         this.sortType = sortType;
         this.areSavedComments = areSavedComments;
@@ -82,13 +86,8 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
                     null, sortType.getType(), sortType.getTime(),
                     APIUtils.getOAuthHeader(accessToken));
         } else {
-            if (accessToken == null) {
-                commentsCall = api.getUserComments(username, null, sortType.getType(),
-                        sortType.getTime());
-            } else {
-                commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken), username,
-                        null, sortType.getType(), sortType.getTime());
-            }
+            commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken), username,
+                    null, sortType.getType(), sortType.getTime());
         }
         commentsCall.enqueue(new Callback<String>() {
             @Override
@@ -146,13 +145,8 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
             commentsCall = api.getUserSavedCommentsOauth(username, PostPagingSource.USER_WHERE_SAVED, params.key,
                     sortType.getType(), sortType.getTime(), APIUtils.getOAuthHeader(accessToken));
         } else {
-            if (accessToken == null) {
-                commentsCall = api.getUserComments(username, params.key, sortType.getType(),
-                        sortType.getTime());
-            } else {
-                commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken),
-                        username, params.key, sortType.getType(), sortType.getTime());
-            }
+            commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken),
+                    username, params.key, sortType.getType(), sortType.getTime());
         }
         commentsCall.enqueue(new Callback<String>() {
             @Override

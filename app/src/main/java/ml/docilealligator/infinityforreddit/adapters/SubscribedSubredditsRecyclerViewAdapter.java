@@ -49,6 +49,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
     private ItemClickListener itemClickListener;
 
     private String accessToken;
+    private String accountName;
     private String username;
     private String userIconUrl;
     private boolean hasClearSelectionRow;
@@ -59,13 +60,14 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
     public SubscribedSubredditsRecyclerViewAdapter(BaseActivity activity, Executor executor, Retrofit oauthRetrofit,
                                                    RedditDataRoomDatabase redditDataRoomDatabase,
                                                    CustomThemeWrapper customThemeWrapper,
-                                                   String accessToken) {
+                                                   String accessToken, String accountName) {
         mActivity = activity;
         mExecutor = executor;
         glide = Glide.with(activity);
         mOauthRetrofit = oauthRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         this.accessToken = accessToken;
+        this.accountName = accountName;
         primaryTextColor = customThemeWrapper.getPrimaryTextColor();
         secondaryTextColor = customThemeWrapper.getSecondaryTextColor();
     }
@@ -73,9 +75,9 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
     public SubscribedSubredditsRecyclerViewAdapter(BaseActivity activity, Executor executor, Retrofit oauthRetrofit,
                                                    RedditDataRoomDatabase redditDataRoomDatabase,
                                                    CustomThemeWrapper customThemeWrapper,
-                                                   String accessToken, boolean hasClearSelectionRow,
+                                                   String accessToken, String accountName, boolean hasClearSelectionRow,
                                                    ItemClickListener itemClickListener) {
-        this(activity, executor, oauthRetrofit, redditDataRoomDatabase, customThemeWrapper, accessToken);
+        this(activity, executor, oauthRetrofit, redditDataRoomDatabase, customThemeWrapper, accessToken, accountName);
         this.hasClearSelectionRow = hasClearSelectionRow;
         this.itemClickListener = itemClickListener;
     }
@@ -195,7 +197,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                         ((SubredditViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                         mSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset).setFavorite(false);
                         FavoriteThing.unfavoriteSubreddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
-                                mSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset),
+                                accountName, mSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset),
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override
                                     public void success() {
@@ -220,7 +222,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                         ((SubredditViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                         mSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset).setFavorite(true);
                         FavoriteThing.favoriteSubreddit(mExecutor, new Handler(), mOauthRetrofit,
-                                mRedditDataRoomDatabase, accessToken,
+                                mRedditDataRoomDatabase, accessToken, accountName,
                                 mSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset),
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override
@@ -294,7 +296,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                     ((FavoriteSubredditViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                     mFavoriteSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset).setFavorite(false);
                     FavoriteThing.unfavoriteSubreddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
-                            mFavoriteSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset),
+                            accountName, mFavoriteSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset),
                             new FavoriteThing.FavoriteThingListener() {
                                 @Override
                                 public void success() {
@@ -319,7 +321,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                     ((FavoriteSubredditViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                     mFavoriteSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset).setFavorite(true);
                     FavoriteThing.favoriteSubreddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
-                            mFavoriteSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset),
+                            accountName, mFavoriteSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset),
                             new FavoriteThing.FavoriteThingListener() {
                                 @Override
                                 public void success() {

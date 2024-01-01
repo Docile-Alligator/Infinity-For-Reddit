@@ -112,7 +112,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         boolean isGettingMultiredditInfo = getArguments().getBoolean(EXTRA_IS_GETTING_MULTIREDDIT_INFO, false);
 
-        if (accessToken == null) {
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             mSwipeRefreshLayout.setEnabled(false);
         }
 
@@ -122,7 +122,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         MultiRedditListingRecyclerViewAdapter adapter = new MultiRedditListingRecyclerViewAdapter(mActivity,
                 mExecutor, mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, accessToken,
-                new MultiRedditListingRecyclerViewAdapter.OnItemClickListener() {
+                accountName, new MultiRedditListingRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onClick(MultiReddit multiReddit) {
                 if (mActivity instanceof MultiredditSelectionActivity) {

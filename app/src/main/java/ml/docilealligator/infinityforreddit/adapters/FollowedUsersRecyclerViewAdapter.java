@@ -46,6 +46,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     private Retrofit mOauthRetrofit;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private String mAccessToken;
+    private String mAccountName;
     private RequestManager glide;
     private int mPrimaryTextColor;
     private int mSecondaryTextColor;
@@ -53,12 +54,13 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     public FollowedUsersRecyclerViewAdapter(BaseActivity activity, Executor executor, Retrofit oauthRetrofit,
                                             RedditDataRoomDatabase redditDataRoomDatabase,
                                             CustomThemeWrapper customThemeWrapper,
-                                            String accessToken) {
+                                            String accessToken, String accountName) {
         mActivity = activity;
         mExecutor = executor;
         mOauthRetrofit = oauthRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mAccessToken = accessToken;
+        mAccountName = accountName;
         glide = Glide.with(activity);
         mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
@@ -223,7 +225,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                         favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                         mFavoriteSubscribedUserData.get(position).setFavorite(false);
                         FavoriteThing.unfavoriteUser(mExecutor, new Handler(), mOauthRetrofit,
-                                mRedditDataRoomDatabase, mAccessToken,
+                                mRedditDataRoomDatabase, mAccessToken, mAccountName,
                                 mFavoriteSubscribedUserData.get(position),
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override
@@ -249,7 +251,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                         favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                         mFavoriteSubscribedUserData.get(position).setFavorite(true);
                         FavoriteThing.favoriteUser(mExecutor, new Handler(), mOauthRetrofit,
-                                mRedditDataRoomDatabase, mAccessToken,
+                                mRedditDataRoomDatabase, mAccessToken, mAccountName,
                                 mFavoriteSubscribedUserData.get(position),
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override
@@ -314,7 +316,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                         favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                         mSubscribedUserData.get(position).setFavorite(false);
                         FavoriteThing.unfavoriteUser(mExecutor, new Handler(), mOauthRetrofit,
-                                mRedditDataRoomDatabase, mAccessToken,
+                                mRedditDataRoomDatabase, mAccessToken, mAccountName,
                                 mSubscribedUserData.get(position),
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override
@@ -340,7 +342,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                         favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                         mSubscribedUserData.get(position).setFavorite(true);
                         FavoriteThing.favoriteUser(mExecutor, new Handler(), mOauthRetrofit,
-                                mRedditDataRoomDatabase, mAccessToken,
+                                mRedditDataRoomDatabase, mAccessToken, mAccountName,
                                 mSubscribedUserData.get(position),
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override

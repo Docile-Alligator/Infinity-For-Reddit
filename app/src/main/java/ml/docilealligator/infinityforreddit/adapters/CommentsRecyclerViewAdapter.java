@@ -48,6 +48,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.VoteThing;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
@@ -66,10 +67,10 @@ import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.databinding.ItemCommentBinding;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
-import ml.docilealligator.infinityforreddit.markdown.EvenBetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.markdown.EmoteCloseBracketInlineProcessor;
 import ml.docilealligator.infinityforreddit.markdown.EmotePlugin;
+import ml.docilealligator.infinityforreddit.markdown.EvenBetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
@@ -96,7 +97,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private BaseActivity mActivity;
     private ViewPostDetailFragment mFragment;
     private Executor mExecutor;
-    private Retrofit mRetrofit;
     private Retrofit mOauthRetrofit;
     private EmoteCloseBracketInlineProcessor mEmoteCloseBracketInlineProcessor;
     private EmotePlugin mEmotePlugin;
@@ -164,7 +164,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public CommentsRecyclerViewAdapter(BaseActivity activity, ViewPostDetailFragment fragment,
                                        CustomThemeWrapper customThemeWrapper,
-                                       Executor executor, Retrofit retrofit, Retrofit oauthRetrofit,
+                                       Executor executor, Retrofit oauthRetrofit,
                                        String accessToken, String accountName,
                                        Post post, Locale locale, String singleCommentId,
                                        boolean isSingleCommentThreadMode,
@@ -174,7 +174,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mActivity = activity;
         mFragment = fragment;
         mExecutor = executor;
-        mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
         mGlide = Glide.with(activity);
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
@@ -667,10 +666,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         mVisibleComments.get(commentPosition).setLoadMoreChildrenFailed(false);
                         ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.loading);
 
-                        Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
                         SortType.Type sortType = mCommentRecyclerViewAdapterCallback.getSortType();
-                        FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken,
-                                parentComment.getMoreChildrenIds(),
+                        FetchComment.fetchMoreComment(mExecutor, new Handler(), mOauthRetrofit, mAccessToken,
+                                mAccountName, parentComment.getMoreChildrenIds(),
                                 mExpandChildren, mPost.getFullName(), sortType, new FetchComment.FetchMoreCommentListener() {
                                     @Override
                                     public void onFetchMoreCommentSuccess(ArrayList<Comment> topLevelComments,
@@ -1412,7 +1410,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             });
 
             replyButton.setOnClickListener(view -> {
-                if (mAccessToken == null) {
+                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                     Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -1449,7 +1447,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     return;
                 }
 
-                if (mAccessToken == null) {
+                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                     Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -1540,7 +1538,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     return;
                 }
 
-                if (mAccessToken == null) {
+                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                     Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
                 }

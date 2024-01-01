@@ -1201,11 +1201,11 @@ Nhấn để thử lại."</string>
     <string name="message_remove_avatar_success">"Xoá ảnh đại diện thành công"</string>
     <string name="message_remove_avatar_failed">"Xoá ảnh đại diện %s thất bại"</string>
     <string name="message_remove_banner_success">"Xoá banner thành công"</string>
-    <string name="message_remove_banner_failed">"Gỡ bỏ banner thất bại"</string>
+    <string name="message_remove_banner_failed">Gỡ bỏ banner thất bại %s</string>
     <string name="message_change_avatar_success">"Thay đổi ảnh đại diện thành công"</string>
-    <string name="message_change_avatar_failed">"Thay đổi ảnh đại diện thất bại"</string>
+    <string name="message_change_avatar_failed">Thay đổi ảnh đại diện thất bại %s</string>
     <string name="message_change_banner_success">"Thay đổi banner thành công"</string>
-    <string name="message_change_banner_failed">"Thay đổi banner thất bại"</string>
+    <string name="message_change_banner_failed">Thay đổi banner thất bại %s</string>
     <string name="message_save_profile_success">"Lưu Hồ sơ thành công"</string>
-    <string name="message_save_profile_failed">"Lưu hồ sơ %s thất bại"</string>
+    <string name="message_save_profile_failed">Lưu hồ sơ %s thất bại</string>
 </resources>

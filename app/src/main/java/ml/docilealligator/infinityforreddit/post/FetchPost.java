@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.post;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.concurrent.Executor;
 
@@ -14,14 +15,10 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchPost {
-    public static void fetchPost(Executor executor, Handler handler, Retrofit retrofit, String id, String accessToken,
+    public static void fetchPost(Executor executor, Handler handler, Retrofit retrofit, String id,
+                                 @Nullable String accessToken, String accountName,
                                  FetchPostListener fetchPostListener) {
-        Call<String> postCall;
-        if (accessToken == null) {
-            postCall = retrofit.create(RedditAPI.class).getPost(id);
-        } else {
-            postCall = retrofit.create(RedditAPI.class).getPostOauth(id, APIUtils.getOAuthHeader(accessToken));
-        }
+        Call<String> postCall = retrofit.create(RedditAPI.class).getPostOauth(id, APIUtils.getOAuthHeader(accessToken));
         postCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
