@@ -44,7 +44,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
     private LoadParams<String> params;
     private LoadCallback<String, Comment> callback;
 
-    CommentDataSource(Retrofit retrofit, Locale locale, @Nullable String accessToken, @Nullable String accountName,
+    CommentDataSource(Retrofit retrofit, Locale locale, @Nullable String accessToken, @NonNull String accountName,
                       String username, SortType sortType,
                       boolean areSavedComments) {
         this.retrofit = retrofit;

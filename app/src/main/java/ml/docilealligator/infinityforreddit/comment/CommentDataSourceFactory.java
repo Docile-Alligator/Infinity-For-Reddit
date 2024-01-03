@@ -22,7 +22,7 @@ class CommentDataSourceFactory extends DataSource.Factory {
     private CommentDataSource commentDataSource;
     private MutableLiveData<CommentDataSource> commentDataSourceLiveData;
 
-    CommentDataSourceFactory(Retrofit retrofit, Locale locale, @Nullable String accessToken, String accountName,
+    CommentDataSourceFactory(Retrofit retrofit, Locale locale, @Nullable String accessToken, @NonNull String accountName,
                              String username, SortType sortType,
                              boolean areSavedComments) {
         this.retrofit = retrofit;

@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.post;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -35,7 +36,7 @@ public class HistoryPostViewModel extends ViewModel {
     private MutableLiveData<PostFilter> postFilterLiveData;
 
     public HistoryPostViewModel(Executor executor, Retrofit retrofit, RedditDataRoomDatabase redditDataRoomDatabase,
-                                String accessToken, String accountName, SharedPreferences sharedPreferences,
+                                @Nullable String accessToken, @NonNull String accountName, SharedPreferences sharedPreferences,
                                 int postType, PostFilter postFilter) {
         this.executor = executor;
         this.retrofit = retrofit;
@@ -87,7 +88,7 @@ public class HistoryPostViewModel extends ViewModel {
         private PostFilter postFilter;
 
         public Factory(Executor executor, Retrofit retrofit, RedditDataRoomDatabase redditDataRoomDatabase,
-                       String accessToken, String accountName, SharedPreferences sharedPreferences, int postType,
+                       @Nullable String accessToken, @NonNull String accountName, SharedPreferences sharedPreferences, int postType,
                        PostFilter postFilter) {
             this.executor = executor;
             this.retrofit = retrofit;

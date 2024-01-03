@@ -16,7 +16,7 @@ import retrofit2.Retrofit;
 
 public class FetchPost {
     public static void fetchPost(Executor executor, Handler handler, Retrofit retrofit, String id,
-                                 @Nullable String accessToken, String accountName,
+                                 @Nullable String accessToken,
                                  FetchPostListener fetchPostListener) {
         Call<String> postCall = retrofit.create(RedditAPI.class).getPostOauth(id, APIUtils.getOAuthHeader(accessToken));
         postCall.enqueue(new Callback<>() {

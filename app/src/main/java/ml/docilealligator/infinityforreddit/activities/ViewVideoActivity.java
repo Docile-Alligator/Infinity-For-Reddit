@@ -93,7 +93,6 @@ import ml.docilealligator.infinityforreddit.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.StreamableVideo;
-import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.apis.VReddIt;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBottomSheetFragment;
@@ -793,7 +792,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                     int commentsIndex = segments.lastIndexOf("comments");
                     String postId = segments.get(commentsIndex + 1);
                     FetchPost.fetchPost(mExecutor, new Handler(), retrofit, postId, null,
-                            mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT),
                             new FetchPost.FetchPostListener() {
                                 @Override
                                 public void fetchPostSuccess(Post post) {

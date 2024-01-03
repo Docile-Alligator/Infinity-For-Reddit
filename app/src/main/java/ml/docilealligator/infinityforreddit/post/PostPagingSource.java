@@ -3,13 +3,12 @@ package ml.docilealligator.infinityforreddit.post;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.paging.ListenableFuturePagingSource;
 import androidx.paging.PagingState;
 
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,7 +59,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     private LinkedHashSet<Post> postLinkedHashSet;
     private String previousLastItem;
 
-    PostPagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
+    PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences,
                      SharedPreferences postFeedScrolledPositionSharedPreferences, int postType,
                      SortType sortType, PostFilter postFilter, List<String> readPostList) {
@@ -77,7 +76,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostPagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
+    PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                      String path, int postType, SortType sortType, PostFilter postFilter,
                      List<String> readPostList) {
@@ -115,7 +114,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostPagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
+    PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                      String subredditOrUserName, int postType, SortType sortType, PostFilter postFilter,
                      String where, List<String> readPostList) {
@@ -134,7 +133,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostPagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
+    PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                      String subredditOrUserName, String query, String trendingSource, int postType,
                      SortType sortType, PostFilter postFilter, List<String> readPostList) {

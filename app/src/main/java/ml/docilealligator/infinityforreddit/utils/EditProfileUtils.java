@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.utils;
 import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 
@@ -26,8 +27,8 @@ import retrofit2.Retrofit;
 public final class EditProfileUtils {
 
     public static void updateProfile(Retrofit oauthRetrofit,
-                                     String accessToken,
-                                     String accountName,
+                                     @Nullable String accessToken,
+                                     @NonNull String accountName,
                                      String displayName,
                                      String publicDesc,
                                      EditProfileUtilsListener listener) {
@@ -157,8 +158,8 @@ public final class EditProfileUtils {
     }
 
     public static void uploadAvatar(Retrofit oauthRetrofit,
-                                    String accessToken,
-                                    String accountName,
+                                    @Nullable String accessToken,
+                                    @NonNull String accountName,
                                     Bitmap image,
                                     EditProfileUtilsListener listener) {
         oauthRetrofit.create(RedditAPI.class)
@@ -184,8 +185,8 @@ public final class EditProfileUtils {
     }
 
     public static void uploadBanner(Retrofit oauthRetrofit,
-                                    String accessToken,
-                                    String accountName,
+                                    @Nullable String accessToken,
+                                    @NonNull String accountName,
                                     Bitmap image,
                                     EditProfileUtilsListener listener) {
         oauthRetrofit.create(RedditAPI.class)
@@ -211,8 +212,8 @@ public final class EditProfileUtils {
     }
 
     public static void deleteAvatar(Retrofit oauthRetrofit,
-                                    String accessToken,
-                                    String accountName,
+                                    @Nullable String accessToken,
+                                    @NonNull String accountName,
                                     EditProfileUtilsListener listener) {
         oauthRetrofit.create(RedditAPI.class)
                 .deleteSrIcon(APIUtils.getOAuthHeader(accessToken), "u_" + accountName)
@@ -233,8 +234,8 @@ public final class EditProfileUtils {
     }
 
     public static void deleteBanner(Retrofit oauthRetrofit,
-                                    String accessToken,
-                                    String accountName,
+                                    @Nullable String accessToken,
+                                    @NonNull String accountName,
                                     EditProfileUtilsListener listener) {
         oauthRetrofit.create(RedditAPI.class)
                 .deleteSrBanner(APIUtils.getOAuthHeader(accessToken), "u_" + accountName)

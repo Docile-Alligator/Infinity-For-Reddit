@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.comment;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -23,7 +24,7 @@ public class CommentViewModel extends ViewModel {
     private LiveData<PagedList<Comment>> comments;
     private MutableLiveData<SortType> sortTypeLiveData;
 
-    public CommentViewModel(Retrofit retrofit, Locale locale, String accessToken, String accountName,
+    public CommentViewModel(Retrofit retrofit, Locale locale, @Nullable String accessToken, @NonNull String accountName,
                             String username, SortType sortType, boolean areSavedComments) {
         commentDataSourceFactory = new CommentDataSourceFactory(retrofit, locale, accessToken, accountName,
                 username, sortType, areSavedComments);
@@ -88,7 +89,7 @@ public class CommentViewModel extends ViewModel {
         private SortType sortType;
         private boolean areSavedComments;
 
-        public Factory(Retrofit retrofit, Locale locale, String accessToken, String accountName, String username,
+        public Factory(Retrofit retrofit, Locale locale, @Nullable String accessToken, @NonNull String accountName, String username,
                        SortType sortType, boolean areSavedComments) {
             this.retrofit = retrofit;
             this.locale = locale;

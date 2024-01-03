@@ -1608,7 +1608,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
             if (fetchPost) {
                 FetchPost.fetchPost(mExecutor, new Handler(), mOauthRetrofit, mPost.getId(), mAccessToken,
-                        mAccountName, new FetchPost.FetchPostListener() {
+                        new FetchPost.FetchPostListener() {
                             @Override
                             public void fetchPostSuccess(Post post) {
                                 if (isAdded()) {

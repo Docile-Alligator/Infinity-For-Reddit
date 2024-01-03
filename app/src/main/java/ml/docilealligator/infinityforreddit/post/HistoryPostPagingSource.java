@@ -3,13 +3,12 @@ package ml.docilealligator.infinityforreddit.post;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.paging.ListenableFuturePagingSource;
 import androidx.paging.PagingState;
 
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,7 +40,7 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
     private PostFilter postFilter;
 
     public HistoryPostPagingSource(Retrofit retrofit, Executor executor, RedditDataRoomDatabase redditDataRoomDatabase,
-                                   String accessToken, String accountName, SharedPreferences sharedPreferences,
+                                   @Nullable String accessToken, @NonNull String accountName, SharedPreferences sharedPreferences,
                                    String username, int postType, PostFilter postFilter) {
         this.retrofit = retrofit;
         this.executor = executor;

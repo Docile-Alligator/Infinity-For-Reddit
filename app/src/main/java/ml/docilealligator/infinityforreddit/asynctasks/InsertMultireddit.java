@@ -2,6 +2,8 @@ package ml.docilealligator.infinityforreddit.asynctasks;
 
 import android.os.Handler;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +18,7 @@ import ml.docilealligator.infinityforreddit.multireddit.MultiRedditDao;
 public class InsertMultireddit {
 
     public static void insertMultireddits(Executor executor, Handler handler, RedditDataRoomDatabase redditDataRoomDatabase,
-                                          ArrayList<MultiReddit> multiReddits, String accountName,
+                                          ArrayList<MultiReddit> multiReddits, @NonNull String accountName,
                                           InsertMultiRedditListener insertMultiRedditListener) {
         executor.execute(() -> {
             MultiRedditDao multiRedditDao = redditDataRoomDatabase.multiRedditDao();
