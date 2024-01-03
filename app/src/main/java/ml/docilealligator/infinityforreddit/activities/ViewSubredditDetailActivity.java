@@ -582,7 +582,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     private void fetchSubredditData() {
         if (!mFetchSubredditInfoSuccess) {
-            FetchSubredditData.fetchSubredditData(mOauthRetrofit, mRetrofit, subredditName, mAccessToken, new FetchSubredditData.FetchSubredditDataListener() {
+            FetchSubredditData.fetchSubredditData(mOauthRetrofit, subredditName, mAccessToken, new FetchSubredditData.FetchSubredditDataListener() {
                 @Override
                 public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                     mNCurrentOnlineSubscribers = nCurrentOnlineSubscribers;

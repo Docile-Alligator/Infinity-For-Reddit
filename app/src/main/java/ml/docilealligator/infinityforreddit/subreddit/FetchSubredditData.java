@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit.subreddit;
 
-import android.text.TextUtils;
-
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -16,16 +14,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchSubredditData {
-    public static void fetchSubredditData(Retrofit oauthRetrofit, Retrofit retrofit, String subredditName, String accessToken, final FetchSubredditDataListener fetchSubredditDataListener) {
-        RedditAPI api = retrofit.create(RedditAPI.class);
-
-        Call<String> subredditData;
-        if (oauthRetrofit == null || TextUtils.isEmpty(accessToken)) {
-            subredditData = api.getSubredditData(subredditName);
-        } else {
-            RedditAPI oauthApi = oauthRetrofit.create(RedditAPI.class);
-            subredditData = oauthApi.getSubredditDataOauth(subredditName, APIUtils.getOAuthHeader(accessToken));
-        }
+    public static void fetchSubredditData(Retrofit oauthRetrofit, String subredditName, String accessToken, final FetchSubredditDataListener fetchSubredditDataListener) {
+        RedditAPI oauthApi = oauthRetrofit.create(RedditAPI.class);
+        Call<String> subredditData = oauthApi.getSubredditDataOauth(subredditName, APIUtils.getOAuthHeader(accessToken));
         subredditData.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

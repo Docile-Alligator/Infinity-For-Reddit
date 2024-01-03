@@ -512,7 +512,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
 
     private void loadSubredditIcon() {
         LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditName,
-                mAccessToken, mOauthRetrofit, mRetrofit, iconImageUrl -> {
+                mAccessToken, mAccountName, mOauthRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
             loadSubredditIconSuccessful = true;

@@ -155,6 +155,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
     Executor mExecutor;
     private Account selectedAccount;
     private String mAccessToken;
+    private String mAccountName;
     private Post post;
     private String iconUrl;
     private String subredditName;
@@ -209,6 +210,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
         post = getIntent().getParcelableExtra(EXTRA_POST);
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
 
         if (savedInstanceState != null) {
             selectedAccount = savedInstanceState.getParcelable(SELECTED_ACCOUNT_STATE);
@@ -499,7 +501,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
 
     private void loadSubredditIcon() {
         LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditName,
-                mAccessToken, mOauthRetrofit, mRetrofit, iconImageUrl -> {
+                mAccessToken, mAccountName, mOauthRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
             loadSubredditIconSuccessful = true;

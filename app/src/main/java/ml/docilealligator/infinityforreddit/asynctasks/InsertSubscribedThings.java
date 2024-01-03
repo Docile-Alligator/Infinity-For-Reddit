@@ -2,7 +2,7 @@ package ml.docilealligator.infinityforreddit.asynctasks;
 
 import android.os.Handler;
 
-import androidx.annotation.Nullable;
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,7 +21,7 @@ import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
 public class InsertSubscribedThings {
 
     public static void insertSubscribedThings(Executor executor, Handler handler,
-                                              RedditDataRoomDatabase redditDataRoomDatabase, @Nullable String accountName,
+                                              RedditDataRoomDatabase redditDataRoomDatabase, @NonNull String accountName,
                                               List<SubscribedSubredditData> subscribedSubredditDataList,
                                               List<SubscribedUserData> subscribedUserDataList,
                                               List<SubredditData> subredditDataList,

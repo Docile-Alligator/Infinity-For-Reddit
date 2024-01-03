@@ -161,6 +161,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     Executor mExecutor;
     private Account selectedAccount;
     private String mAccessToken;
+    private String mAccountName;
     private String iconUrl;
     private String subredditName;
     private boolean subredditSelected = false;
@@ -215,6 +216,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
         resources = getResources();
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
 
         if (savedInstanceState != null) {
             selectedAccount = savedInstanceState.getParcelable(SELECTED_ACCOUNT_STATE);
@@ -484,7 +486,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
 
     private void loadSubredditIcon() {
         LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditName,
-                mAccessToken, mOauthRetrofit, mRetrofit, iconImageUrl -> {
+                mAccessToken, mAccountName, mOauthRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
             loadSubredditIconSuccessful = true;

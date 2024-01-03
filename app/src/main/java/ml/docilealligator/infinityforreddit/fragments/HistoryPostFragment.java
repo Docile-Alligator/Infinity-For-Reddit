@@ -73,7 +73,6 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.adapters.HistoryPostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.adapters.Paging3LoadingStateAdapter;
-import ml.docilealligator.infinityforreddit.adapters.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
@@ -932,7 +931,7 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
         } else {
             if (isSubreddit) {
                 LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase,
-                        subredditOrUserName, accessToken, mOauthRetrofit, mRetrofit,
+                        subredditOrUserName, accessToken, accountName, mOauthRetrofit,
                         iconImageUrl -> {
                             subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
                             loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);
