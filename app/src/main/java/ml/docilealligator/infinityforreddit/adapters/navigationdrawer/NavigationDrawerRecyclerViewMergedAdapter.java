@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.adapters.navigationdrawer;
 
 import android.content.SharedPreferences;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ConcatAdapter;
 
 import com.bumptech.glide.Glide;
@@ -30,7 +31,7 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
                                                      SharedPreferences navigationDrawerSharedPreferences,
                                                      SharedPreferences securitySharedPreferences,
                                                      CustomThemeWrapper customThemeWrapper,
-                                                     String accountName,
+                                                     @NonNull String accountName,
                                                      ItemClickListener itemClickListener) {
         RequestManager glide = Glide.with(baseActivity);
 
@@ -142,6 +143,6 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
     public interface ItemClickListener {
         void onMenuClick(int stringId);
         void onSubscribedSubredditClick(String subredditName);
-        void onAccountClick(String accountName);
+        void onAccountClick(@NonNull String accountName);
     }
 }

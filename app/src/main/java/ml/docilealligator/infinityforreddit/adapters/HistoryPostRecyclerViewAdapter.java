@@ -244,7 +244,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
     public HistoryPostRecyclerViewAdapter(BaseActivity activity, HistoryPostFragment fragment, Executor executor, Retrofit oauthRetrofit,
                                           Retrofit gfycatRetrofit, Retrofit redgifsRetrofit, Provider<StreamableAPI> streambleApiProvider,
                                           CustomThemeWrapper customThemeWrapper, Locale locale,
-                                          String accessToken, String accountName, int postType, int postLayout, boolean displaySubredditName,
+                                          @Nullable String accessToken, @NonNull String accountName, int postType, int postLayout, boolean displaySubredditName,
                                           SharedPreferences sharedPreferences, SharedPreferences currentAccountSharedPreferences,
                                           SharedPreferences nsfwAndSpoilerSharedPreferences,
                                           ExoCreator exoCreator, Callback callback) {

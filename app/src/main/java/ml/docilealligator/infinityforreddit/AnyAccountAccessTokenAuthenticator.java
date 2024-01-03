@@ -90,7 +90,7 @@ public class AnyAccountAccessTokenAuthenticator implements Authenticator {
                     mRedditDataRoomDatabase.accountDao().updateAccessTokenAndRefreshToken(account.getAccountName(), newAccessToken, newRefreshToken);
                 }
                 Account currentAccount = mRedditDataRoomDatabase.accountDao().getCurrentAccount();
-                if (currentAccount != null && mAccount.getAccountName().equals(currentAccount.getAccountName()) && mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, "").equals(account.getAccountName())) {
+                if (currentAccount != null && mAccount.getAccountName().equals(currentAccount.getAccountName()) && mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT).equals(account.getAccountName())) {
                     mCurrentAccountSharedPreferences.edit().putString(SharedPreferencesUtils.ACCESS_TOKEN, newAccessToken).apply();
                 }
 

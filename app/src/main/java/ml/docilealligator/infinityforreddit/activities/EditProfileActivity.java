@@ -127,7 +127,7 @@ public class EditProfileActivity extends BaseActivity {
         }
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
 
         changeBanner.setOnClickListener(view -> {
             startPickImage(PICK_IMAGE_BANNER_REQUEST_CODE);

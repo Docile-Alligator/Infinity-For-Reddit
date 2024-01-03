@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
@@ -76,7 +77,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
 
     public SubredditListingRecyclerViewAdapter(BaseActivity activity, Executor executor, Retrofit oauthRetrofit, Retrofit retrofit,
                                                CustomThemeWrapper customThemeWrapper,
-                                               String accessToken, String accountName,
+                                               @Nullable String accessToken, @NonNull String accountName,
                                                RedditDataRoomDatabase redditDataRoomDatabase,
                                                boolean isMultiSelection, Callback callback) {
         super(DIFF_CALLBACK);

@@ -858,7 +858,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     }
 
                     @Override
-                    public void onAccountClick(String accountName) {
+                    public void onAccountClick(@NonNull String accountName) {
                         SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
                                 mExecutor, new Handler(), accountName, newAccount -> {
                             Intent intent = new Intent(MainActivity.this, MainActivity.class);

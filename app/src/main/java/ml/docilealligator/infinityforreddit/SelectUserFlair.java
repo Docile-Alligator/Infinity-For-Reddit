@@ -27,7 +27,7 @@ public class SelectUserFlair {
     }
 
     public static void selectUserFlair(Retrofit oauthRetrofit, String accessToken, @Nullable UserFlair userFlair,
-                                       String subredditName, String accountName, SelectUserFlairListener selectUserFlairListener) {
+                                       String subredditName, @NonNull String accountName, SelectUserFlairListener selectUserFlairListener) {
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.API_TYPE_KEY, APIUtils.API_TYPE_JSON);
         if (userFlair != null) {

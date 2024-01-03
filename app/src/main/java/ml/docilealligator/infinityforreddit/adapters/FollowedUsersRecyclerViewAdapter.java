@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -54,7 +55,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     public FollowedUsersRecyclerViewAdapter(BaseActivity activity, Executor executor, Retrofit oauthRetrofit,
                                             RedditDataRoomDatabase redditDataRoomDatabase,
                                             CustomThemeWrapper customThemeWrapper,
-                                            String accessToken, String accountName) {
+                                            @Nullable String accessToken, @NonNull String accountName) {
         mActivity = activity;
         mExecutor = executor;
         mOauthRetrofit = oauthRetrofit;

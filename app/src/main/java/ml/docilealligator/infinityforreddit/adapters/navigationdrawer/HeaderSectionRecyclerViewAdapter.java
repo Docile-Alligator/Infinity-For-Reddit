@@ -51,7 +51,7 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     private boolean hideKarma;
 
     public HeaderSectionRecyclerViewAdapter(BaseActivity baseActivity, CustomThemeWrapper customThemeWrapper,
-                                            RequestManager glide, String accountName,
+                                            RequestManager glide, @NonNull String accountName,
                                             SharedPreferences sharedPreferences,
                                             SharedPreferences navigationDrawerSharedPreferences,
                                             SharedPreferences securitySharedPreferences,

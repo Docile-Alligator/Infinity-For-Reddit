@@ -37,7 +37,7 @@ public class PreferenceSectionRecyclerViewAdapter extends RecyclerView.Adapter<R
     private NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener itemClickListener;
 
     public PreferenceSectionRecyclerViewAdapter(BaseActivity baseActivity, CustomThemeWrapper customThemeWrapper,
-                                                String accountName, SharedPreferences nsfwAndSpoilerSharedPreferences,
+                                                @NonNull String accountName, SharedPreferences nsfwAndSpoilerSharedPreferences,
                                                 SharedPreferences navigationDrawerSharedPreferences,
                                                 NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener itemClickListener) {
         this.baseActivity = baseActivity;

@@ -257,7 +257,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     public PostRecyclerViewAdapter(BaseActivity activity, PostFragment fragment, Executor executor, Retrofit oauthRetrofit,
                                    Retrofit gfycatRetrofit, Retrofit redgifsRetrofit, Provider<StreamableAPI> streamableApiProvider,
                                    CustomThemeWrapper customThemeWrapper, Locale locale,
-                                   String accessToken, String accountName, int postType, int postLayout, boolean displaySubredditName,
+                                   @Nullable String accessToken, @NonNull String accountName, int postType, int postLayout, boolean displaySubredditName,
                                    SharedPreferences sharedPreferences, SharedPreferences currentAccountSharedPreferences,
                                    SharedPreferences nsfwAndSpoilerSharedPreferences,
                                    SharedPreferences postHistorySharedPreferences,

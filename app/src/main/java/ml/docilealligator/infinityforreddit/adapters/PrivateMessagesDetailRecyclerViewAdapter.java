@@ -70,7 +70,7 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
 
     public PrivateMessagesDetailRecyclerViewAdapter(ViewPrivateMessagesActivity viewPrivateMessagesActivity,
                                                     SharedPreferences sharedPreferences, Locale locale,
-                                                    Message message, String accountName,
+                                                    Message message, @NonNull String accountName,
                                                     CustomThemeWrapper customThemeWrapper) {
         mMessage = message;
         mViewPrivateMessagesActivity = viewPrivateMessagesActivity;

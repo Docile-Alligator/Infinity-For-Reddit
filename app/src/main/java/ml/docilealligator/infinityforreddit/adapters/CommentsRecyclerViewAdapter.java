@@ -165,7 +165,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     public CommentsRecyclerViewAdapter(BaseActivity activity, ViewPostDetailFragment fragment,
                                        CustomThemeWrapper customThemeWrapper,
                                        Executor executor, Retrofit oauthRetrofit,
-                                       String accessToken, String accountName,
+                                       @Nullable String accessToken, @NonNull String accountName,
                                        Post post, Locale locale, String singleCommentId,
                                        boolean isSingleCommentThreadMode,
                                        SharedPreferences sharedPreferences,
@@ -175,6 +175,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mFragment = fragment;
         mExecutor = executor;
         mOauthRetrofit = oauthRetrofit;
+        mAccessToken = accessToken;
+        mAccountName = accountName;
         mGlide = Glide.with(activity);
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
         mCommentTextColor = customThemeWrapper.getCommentColor();
@@ -255,8 +257,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     }
                 });
         recycledViewPool = new RecyclerView.RecycledViewPool();
-        mAccessToken = accessToken;
-        mAccountName = accountName;
         mPost = post;
         mVisibleComments = new ArrayList<>();
         mLocale = locale;

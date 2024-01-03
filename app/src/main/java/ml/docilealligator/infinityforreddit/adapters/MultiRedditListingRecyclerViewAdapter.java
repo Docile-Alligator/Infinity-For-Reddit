@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -62,7 +63,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
     public MultiRedditListingRecyclerViewAdapter(BaseActivity activity, Executor executor, Retrofit oauthRetrofit,
                                                  RedditDataRoomDatabase redditDataRoomDatabase,
                                                  CustomThemeWrapper customThemeWrapper,
-                                                 String accessToken, String accountName,
+                                                 @Nullable String accessToken, @NonNull String accountName,
                                                  OnItemClickListener onItemClickListener) {
         mActivity = activity;
         mExecutor = executor;

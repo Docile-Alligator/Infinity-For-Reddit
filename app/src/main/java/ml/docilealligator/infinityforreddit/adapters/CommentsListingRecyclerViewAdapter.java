@@ -119,7 +119,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     public CommentsListingRecyclerViewAdapter(BaseActivity activity, Retrofit oauthRetrofit,
                                               CustomThemeWrapper customThemeWrapper, Locale locale,
                                               SharedPreferences sharedPreferences, String accessToken,
-                                              String accountName, String username,
+                                              @NonNull String accountName, String username,
                                               RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         mActivity = activity;

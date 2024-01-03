@@ -134,7 +134,7 @@ public class RulesActivity extends BaseActivity {
         mAdapter = new RulesRecyclerViewAdapter(this, mCustomThemeWrapper, sliderPanel, mSubredditName);
         recyclerView.setAdapter(mAdapter);
 
-        FetchRules.fetchRules(mExecutor, new Handler(), mOauthRetrofit, mAccessToken, mAccountName,
+        FetchRules.fetchRules(mExecutor, new Handler(), mOauthRetrofit, mAccessToken,
                 mSubredditName, new FetchRules.FetchRulesListener() {
                     @Override
                     public void success(ArrayList<Rule> rules) {
@@ -183,7 +183,7 @@ public class RulesActivity extends BaseActivity {
         errorTextView.setOnClickListener(view -> {
             progressBar.setVisibility(View.VISIBLE);
             errorTextView.setVisibility(View.GONE);
-            FetchRules.fetchRules(mExecutor, new Handler(), mOauthRetrofit, mAccessToken, mAccountName, mSubredditName, new FetchRules.FetchRulesListener() {
+            FetchRules.fetchRules(mExecutor, new Handler(), mOauthRetrofit, mAccessToken, mSubredditName, new FetchRules.FetchRulesListener() {
                 @Override
                 public void success(ArrayList<Rule> rules) {
                     progressBar.setVisibility(View.GONE);

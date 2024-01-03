@@ -28,7 +28,7 @@ public class FetchRules {
     }
 
     public static void fetchRules(Executor executor, Handler handler, Retrofit retrofit, @Nullable String accessToken,
-                                  String accountName, String subredditName,
+                                  String subredditName,
                                   FetchRulesListener fetchRulesListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> rulesCall = api.getRulesOauth(APIUtils.getOAuthHeader(accessToken), subredditName);

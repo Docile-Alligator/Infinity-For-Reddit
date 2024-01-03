@@ -23,7 +23,7 @@ import retrofit2.Retrofit;
 public class FavoriteThing {
     public static void favoriteSubreddit(Executor executor, Handler handler, Retrofit oauthRetrofit,
                                          RedditDataRoomDatabase redditDataRoomDatabase,
-                                         @Nullable String accessToken, String accountName,
+                                         @Nullable String accessToken, @NonNull String accountName,
                                          SubscribedSubredditData subscribedSubredditData,
                                          FavoriteThingListener favoriteThingListener) {
         if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
@@ -54,7 +54,7 @@ public class FavoriteThing {
 
     public static void unfavoriteSubreddit(Executor executor, Handler handler, Retrofit oauthRetrofit,
                                            RedditDataRoomDatabase redditDataRoomDatabase,
-                                           @Nullable String accessToken, String accountName,
+                                           @Nullable String accessToken, @NonNull String accountName,
                                            SubscribedSubredditData subscribedSubredditData,
                                            FavoriteThingListener favoriteThingListener) {
         if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
@@ -85,7 +85,7 @@ public class FavoriteThing {
 
     public static void favoriteUser(Executor executor, Handler handler, Retrofit oauthRetrofit,
                                     RedditDataRoomDatabase redditDataRoomDatabase,
-                                    @Nullable String accessToken, String accountName,
+                                    @Nullable String accessToken, @NonNull String accountName,
                                     SubscribedUserData subscribedUserData,
                                     FavoriteThingListener favoriteThingListener) {
         if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
@@ -116,7 +116,7 @@ public class FavoriteThing {
 
     public static void unfavoriteUser(Executor executor, Handler handler, Retrofit oauthRetrofit,
                                       RedditDataRoomDatabase redditDataRoomDatabase,
-                                      @Nullable String accessToken, String accountName,
+                                      @Nullable String accessToken, @NonNull String accountName,
                                       SubscribedUserData subscribedUserData,
                                       FavoriteThingListener favoriteThingListener) {
         if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
