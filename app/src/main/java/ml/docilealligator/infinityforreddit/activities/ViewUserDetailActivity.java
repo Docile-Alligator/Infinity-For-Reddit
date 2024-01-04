@@ -1571,9 +1571,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
     private static class InsertUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        private UserDao userDao;
-        private UserData subredditData;
-        private InsertUserDataAsyncTaskListener insertUserDataAsyncTaskListener;
+        private final UserDao userDao;
+        private final UserData subredditData;
+        private final InsertUserDataAsyncTaskListener insertUserDataAsyncTaskListener;
         InsertUserDataAsyncTask(UserDao userDao, UserData userData,
                                 InsertUserDataAsyncTaskListener insertUserDataAsyncTaskListener) {
             this.userDao = userDao;

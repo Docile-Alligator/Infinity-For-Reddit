@@ -15,10 +15,10 @@ import java.util.List;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class SubscribedUserViewModel extends AndroidViewModel {
-    private SubscribedUserRepository mSubscribedUserRepository;
-    private LiveData<List<SubscribedUserData>> mAllSubscribedUsers;
-    private LiveData<List<SubscribedUserData>> mAllFavoriteSubscribedUsers;
-    private MutableLiveData<String> searchQueryLiveData;
+    private final SubscribedUserRepository mSubscribedUserRepository;
+    private final LiveData<List<SubscribedUserData>> mAllSubscribedUsers;
+    private final LiveData<List<SubscribedUserData>> mAllFavoriteSubscribedUsers;
+    private final MutableLiveData<String> searchQueryLiveData;
 
     public SubscribedUserViewModel(Application application, RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
         super(application);
@@ -46,9 +46,9 @@ public class SubscribedUserViewModel extends AndroidViewModel {
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
-        private Application mApplication;
-        private RedditDataRoomDatabase mRedditDataRoomDatabase;
-        private String mAccountName;
+        private final Application mApplication;
+        private final RedditDataRoomDatabase mRedditDataRoomDatabase;
+        private final String mAccountName;
 
         public Factory(Application application, RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
             mApplication = application;

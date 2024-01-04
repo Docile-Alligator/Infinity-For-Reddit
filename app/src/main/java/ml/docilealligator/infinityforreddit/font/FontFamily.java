@@ -21,8 +21,8 @@ public enum FontFamily {
     AtkinsonHyperlegibleBold(R.style.FontFamily_AtkinsonHyperlegibleBold, "AtkinsonHyperlegibleBold"),
     Custom(R.style.FontFamily, "Custom");
 
-    private int resId;
-    private String title;
+    private final int resId;
+    private final String title;
 
     FontFamily(int resId, String title) {
         this.resId = resId;

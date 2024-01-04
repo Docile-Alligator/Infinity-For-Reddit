@@ -17,9 +17,9 @@ import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
 
 public class PostFilterUsageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<PostFilterUsage> postFilterUsages;
-    private BaseActivity activity;
-    private CustomThemeWrapper customThemeWrapper;
-    private OnItemClickListener onItemClickListener;
+    private final BaseActivity activity;
+    private final CustomThemeWrapper customThemeWrapper;
+    private final OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
         void onClick(PostFilterUsage postFilterUsage);

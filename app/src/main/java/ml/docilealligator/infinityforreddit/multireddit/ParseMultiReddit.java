@@ -61,7 +61,7 @@ public class ParseMultiReddit {
         private JSONArray arrayResponse;
         private boolean parseFailed;
         private ArrayList<MultiReddit> multiReddits;
-        private ParseMultiRedditsListListener parseMultiRedditsListListener;
+        private final ParseMultiRedditsListListener parseMultiRedditsListListener;
 
         ParseMultiRedditsListAsyncTask(String response,
                                        ParseMultiRedditsListListener parseMultiRedditsListListener) {
@@ -102,10 +102,10 @@ public class ParseMultiReddit {
     }
 
     private static class ParseAndSaveMultiRedditAsyncTask extends AsyncTask<Void, Void, Void> {
-        private String response;
-        private RedditDataRoomDatabase redditDataRoomDatabase;
+        private final String response;
+        private final RedditDataRoomDatabase redditDataRoomDatabase;
         private MultiReddit multiReddit;
-        private ParseMultiRedditListener parseMultiRedditListener;
+        private final ParseMultiRedditListener parseMultiRedditListener;
 
         ParseAndSaveMultiRedditAsyncTask(String response, RedditDataRoomDatabase redditDataRoomDatabase,
                                          ParseMultiRedditListener parseMultiRedditListener) {

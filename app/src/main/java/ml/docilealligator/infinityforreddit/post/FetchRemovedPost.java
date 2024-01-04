@@ -125,8 +125,8 @@ public class FetchRemovedPost {
 
     private static class ParsePostAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        private String responseBody;
-        private FetchRemovedPostListener listener;
+        private final String responseBody;
+        private final FetchRemovedPostListener listener;
         Post post;
 
         public ParsePostAsyncTask(String responseBody, Post post, FetchRemovedPostListener listener) {

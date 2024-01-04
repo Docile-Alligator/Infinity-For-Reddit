@@ -33,8 +33,8 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
 
     private static final int ITEM_COUNT = 10;
 
-    private CustomThemeWrapper customThemeWrapper;
-    private ItemClickListener itemClickListener;
+    private final CustomThemeWrapper customThemeWrapper;
+    private final ItemClickListener itemClickListener;
 
     public interface ItemClickListener {
         void onClick(int item);

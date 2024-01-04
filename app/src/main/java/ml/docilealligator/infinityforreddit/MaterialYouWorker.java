@@ -33,7 +33,7 @@ public class MaterialYouWorker extends Worker {
     RedditDataRoomDatabase redditDataRoomDatabase;
     @Inject
     CustomThemeWrapper customThemeWrapper;
-    private Context context;
+    private final Context context;
 
     public MaterialYouWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);

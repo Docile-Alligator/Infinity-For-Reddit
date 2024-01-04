@@ -19,10 +19,10 @@ import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 
 public class Paging3LoadingStateAdapter extends LoadStateAdapter<Paging3LoadingStateAdapter.LoadStateViewHolder> {
-    private BaseActivity activity;
-    private CustomThemeWrapper mCustomThemeWrapper;
-    private int mErrorStringId;
-    private View.OnClickListener mRetryCallback;
+    private final BaseActivity activity;
+    private final CustomThemeWrapper mCustomThemeWrapper;
+    private final int mErrorStringId;
+    private final View.OnClickListener mRetryCallback;
 
     public Paging3LoadingStateAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper, int errorStringId, View.OnClickListener retryCallback) {
         this.activity = activity;
@@ -43,10 +43,10 @@ public class Paging3LoadingStateAdapter extends LoadStateAdapter<Paging3LoadingS
     }
 
     class LoadStateViewHolder extends RecyclerView.ViewHolder {
-        private ProgressBar mProgressBar;
-        private RelativeLayout mErrorView;
-        private TextView mErrorMsg;
-        private MaterialButton mRetry;
+        private final ProgressBar mProgressBar;
+        private final RelativeLayout mErrorView;
+        private final TextView mErrorMsg;
+        private final MaterialButton mRetry;
 
         LoadStateViewHolder(@NonNull View itemView, @NonNull View.OnClickListener retryCallback) {
             super(itemView);

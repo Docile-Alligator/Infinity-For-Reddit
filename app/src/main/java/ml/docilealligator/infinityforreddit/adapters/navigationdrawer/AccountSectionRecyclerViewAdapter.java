@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit.adapters.navigationdrawer;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,14 +27,14 @@ public class AccountSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private static final int ACCOUNT_SECTION_ITEMS = 5;
     private static final int ANONYMOUS_ACCOUNT_SECTION_ITEMS = 3;
 
-    private BaseActivity baseActivity;
+    private final BaseActivity baseActivity;
     private int inboxCount;
-    private int primaryTextColor;
-    private int secondaryTextColor;
-    private int primaryIconColor;
+    private final int primaryTextColor;
+    private final int secondaryTextColor;
+    private final int primaryIconColor;
     private boolean collapseAccountSection;
-    private boolean isLoggedIn;
-    private NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener itemClickListener;
+    private final boolean isLoggedIn;
+    private final NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener itemClickListener;
 
     public AccountSectionRecyclerViewAdapter(BaseActivity baseActivity, CustomThemeWrapper customThemeWrapper,
                                              SharedPreferences navigationDrawerSharedPreferences, boolean isLoggedIn,

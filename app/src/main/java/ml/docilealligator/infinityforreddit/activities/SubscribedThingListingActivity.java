@@ -73,8 +73,6 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
-;
-
 public class SubscribedThingListingActivity extends BaseActivity implements ActivityToolbarInterface {
 
     public static final String EXTRA_SHOW_MULTIREDDITS = "ESM";

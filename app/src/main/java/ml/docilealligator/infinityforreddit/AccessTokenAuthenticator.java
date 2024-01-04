@@ -25,9 +25,9 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 
 class AccessTokenAuthenticator implements Authenticator {
-    private Retrofit mRetrofit;
-    private RedditDataRoomDatabase mRedditDataRoomDatabase;
-    private SharedPreferences mCurrentAccountSharedPreferences;
+    private final Retrofit mRetrofit;
+    private final RedditDataRoomDatabase mRedditDataRoomDatabase;
+    private final SharedPreferences mCurrentAccountSharedPreferences;
 
     AccessTokenAuthenticator(Retrofit retrofit, RedditDataRoomDatabase accountRoomDatabase, SharedPreferences currentAccountSharedPreferences) {
         mRetrofit = retrofit;

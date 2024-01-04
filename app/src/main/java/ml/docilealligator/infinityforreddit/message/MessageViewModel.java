@@ -15,12 +15,12 @@ import ml.docilealligator.infinityforreddit.NetworkState;
 import retrofit2.Retrofit;
 
 public class MessageViewModel extends ViewModel {
-    private MessageDataSourceFactory messageDataSourceFactory;
-    private LiveData<NetworkState> paginationNetworkState;
-    private LiveData<NetworkState> initialLoadingState;
-    private LiveData<Boolean> hasMessageLiveData;
-    private LiveData<PagedList<Message>> messages;
-    private MutableLiveData<String> whereLiveData;
+    private final MessageDataSourceFactory messageDataSourceFactory;
+    private final LiveData<NetworkState> paginationNetworkState;
+    private final LiveData<NetworkState> initialLoadingState;
+    private final LiveData<Boolean> hasMessageLiveData;
+    private final LiveData<PagedList<Message>> messages;
+    private final MutableLiveData<String> whereLiveData;
 
     public MessageViewModel(Retrofit retrofit, Locale locale, String accessToken, String where) {
         messageDataSourceFactory = new MessageDataSourceFactory(retrofit, locale, accessToken, where);
@@ -75,10 +75,10 @@ public class MessageViewModel extends ViewModel {
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
-        private Retrofit retrofit;
-        private Locale locale;
-        private String accessToken;
-        private String where;
+        private final Retrofit retrofit;
+        private final Locale locale;
+        private final String accessToken;
+        private final String where;
 
         public Factory(Retrofit retrofit, Locale locale, String accessToken, String where) {
             this.retrofit = retrofit;

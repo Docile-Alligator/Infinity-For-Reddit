@@ -26,16 +26,16 @@ public class Post implements Parcelable {
     public static final int NO_PREVIEW_LINK_TYPE = 5;
     public static final int GALLERY_TYPE = 6;
 
-    private String id;
-    private String fullName;
-    private String subredditName;
-    private String subredditNamePrefixed;
+    private final String id;
+    private final String fullName;
+    private final String subredditName;
+    private final String subredditNamePrefixed;
     private String subredditIconUrl;
     private String author;
     private String authorNamePrefixed;
     private String authorIconUrl;
-    private String authorFlair;
-    private String authorFlairHTML;
+    private final String authorFlair;
+    private final String authorFlairHTML;
     private String title;
     private String selfText;
     private String selfTextPlain;
@@ -50,9 +50,9 @@ public class Post implements Parcelable {
     private boolean isRedgifs;
     private boolean isStreamable;
     private boolean loadGfyOrStreamableVideoSuccess;
-    private String permalink;
+    private final String permalink;
     private String flair;
-    private long postTimeMillis;
+    private final long postTimeMillis;
     private int score;
     private int postType;
     private int voteType;
@@ -61,15 +61,15 @@ public class Post implements Parcelable {
     private boolean hidden;
     private boolean spoiler;
     private boolean nsfw;
-    private boolean stickied;
-    private boolean archived;
-    private boolean locked;
+    private final boolean stickied;
+    private final boolean archived;
+    private final boolean locked;
     private boolean saved;
-    private boolean isCrosspost;
+    private final boolean isCrosspost;
     private boolean isRead;
     private String crosspostParentId;
-    private String distinguished;
-    private String suggestedSort;
+    private final String distinguished;
+    private final String suggestedSort;
     private ArrayList<Preview> previews = new ArrayList<>();
     @Nullable
     private Map<String, MediaMetadata> mediaMetadataMap;

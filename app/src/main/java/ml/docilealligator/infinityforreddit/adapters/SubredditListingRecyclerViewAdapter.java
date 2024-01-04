@@ -56,24 +56,24 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
             return true;
         }
     };
-    private RequestManager glide;
-    private BaseActivity activity;
-    private Executor executor;
-    private Retrofit oauthRetrofit;
-    private Retrofit retrofit;
-    private String accessToken;
-    private String accountName;
-    private RedditDataRoomDatabase redditDataRoomDatabase;
-    private boolean isMultiSelection;
-    private int colorPrimaryLightTheme;
-    private int primaryTextColor;
-    private int secondaryTextColor;
-    private int colorAccent;
-    private int buttonTextColor;
-    private int unsubscribed;
+    private final RequestManager glide;
+    private final BaseActivity activity;
+    private final Executor executor;
+    private final Retrofit oauthRetrofit;
+    private final Retrofit retrofit;
+    private final String accessToken;
+    private final String accountName;
+    private final RedditDataRoomDatabase redditDataRoomDatabase;
+    private final boolean isMultiSelection;
+    private final int colorPrimaryLightTheme;
+    private final int primaryTextColor;
+    private final int secondaryTextColor;
+    private final int colorAccent;
+    private final int buttonTextColor;
+    private final int unsubscribed;
 
     private NetworkState networkState;
-    private Callback callback;
+    private final Callback callback;
 
     public SubredditListingRecyclerViewAdapter(BaseActivity activity, Executor executor, Retrofit oauthRetrofit, Retrofit retrofit,
                                                CustomThemeWrapper customThemeWrapper,

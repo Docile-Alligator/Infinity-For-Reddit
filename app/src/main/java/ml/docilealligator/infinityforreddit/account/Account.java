@@ -15,21 +15,21 @@ public class Account implements Parcelable {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "username")
-    private String accountName;
+    private final String accountName;
     @ColumnInfo(name = "profile_image_url")
-    private String profileImageUrl;
+    private final String profileImageUrl;
     @ColumnInfo(name = "banner_image_url")
-    private String bannerImageUrl;
+    private final String bannerImageUrl;
     @ColumnInfo(name = "karma")
-    private int karma;
+    private final int karma;
     @ColumnInfo(name = "access_token")
     private String accessToken;
     @ColumnInfo(name = "refresh_token")
-    private String refreshToken;
+    private final String refreshToken;
     @ColumnInfo(name = "code")
-    private String code;
+    private final String code;
     @ColumnInfo(name = "is_current_user")
-    private boolean isCurrentUser;
+    private final boolean isCurrentUser;
 
     @Ignore
     protected Account(Parcel in) {

@@ -13,25 +13,25 @@ public class Message implements Parcelable {
     public static final String TYPE_SUBREDDIT = "t5";
     static final String TYPE_AWARD = "t6";
 
-    private String kind;
-    private String subredditName;
-    private String subredditNamePrefixed;
-    private String id;
-    private String fullname;
-    private String subject;
-    private String author;
-    private String destination;
-    private String parentFullName;
-    private String title;
-    private String body;
-    private String context;
-    private String distinguished;
-    private String formattedTime;
-    private boolean wasComment;
+    private final String kind;
+    private final String subredditName;
+    private final String subredditNamePrefixed;
+    private final String id;
+    private final String fullname;
+    private final String subject;
+    private final String author;
+    private final String destination;
+    private final String parentFullName;
+    private final String title;
+    private final String body;
+    private final String context;
+    private final String distinguished;
+    private final String formattedTime;
+    private final boolean wasComment;
     private boolean isNew;
-    private int score;
-    private int nComments;
-    private long timeUTC;
+    private final int score;
+    private final int nComments;
+    private final long timeUTC;
     private ArrayList<Message> replies;
 
     Message(String kind, String subredditName, String subredditNamePrefixed, String id, String fullname,

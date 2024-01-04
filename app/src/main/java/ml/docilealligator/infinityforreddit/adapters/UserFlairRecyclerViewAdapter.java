@@ -20,10 +20,10 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class UserFlairRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private BaseActivity activity;
-    private CustomThemeWrapper customThemeWrapper;
-    private ArrayList<UserFlair> userFlairs;
-    private ItemClickListener itemClickListener;
+    private final BaseActivity activity;
+    private final CustomThemeWrapper customThemeWrapper;
+    private final ArrayList<UserFlair> userFlairs;
+    private final ItemClickListener itemClickListener;
 
     public UserFlairRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper, ArrayList<UserFlair> userFlairs,
                                         ItemClickListener itemClickListener) {

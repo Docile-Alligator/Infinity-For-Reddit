@@ -67,8 +67,8 @@ public class FetchMultiRedditInfo {
 
     private static class ParseMultiRedditInfoAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        private String response;
-        private FetchMultiRedditInfoListener fetchMultiRedditInfoListener;
+        private final String response;
+        private final FetchMultiRedditInfoListener fetchMultiRedditInfoListener;
         private MultiReddit multiReddit;
         private boolean parseFailed = false;
 

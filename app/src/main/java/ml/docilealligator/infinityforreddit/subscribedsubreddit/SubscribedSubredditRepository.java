@@ -9,8 +9,8 @@ import java.util.List;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class SubscribedSubredditRepository {
-    private SubscribedSubredditDao mSubscribedSubredditDao;
-    private String mAccountName;
+    private final SubscribedSubredditDao mSubscribedSubredditDao;
+    private final String mAccountName;
 
     SubscribedSubredditRepository(RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
         mAccountName = accountName;
@@ -31,7 +31,7 @@ public class SubscribedSubredditRepository {
 
     private static class insertAsyncTask extends AsyncTask<SubscribedSubredditData, Void, Void> {
 
-        private SubscribedSubredditDao mAsyncTaskDao;
+        private final SubscribedSubredditDao mAsyncTaskDao;
 
         insertAsyncTask(SubscribedSubredditDao dao) {
             mAsyncTaskDao = dao;

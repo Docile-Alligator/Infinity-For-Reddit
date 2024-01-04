@@ -418,8 +418,8 @@ public class EvenBetterLinkMovementMethod extends LinkMovementMethod {
      * A wrapper to support all {@link ClickableSpan}s that may or may not provide URLs.
      */
     protected static class ClickableSpanWithText {
-        private ClickableSpan span;
-        private String text;
+        private final ClickableSpan span;
+        private final String text;
 
         protected static ClickableSpanWithText ofSpan(TextView textView, ClickableSpan span) {
             Spanned s = (Spanned) textView.getText();

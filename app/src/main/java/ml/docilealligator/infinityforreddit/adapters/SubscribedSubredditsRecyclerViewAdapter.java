@@ -40,23 +40,23 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
     private static final int VIEW_TYPE_SUBREDDIT_DIVIDER = 2;
     private static final int VIEW_TYPE_SUBREDDIT = 3;
 
-    private BaseActivity mActivity;
-    private Executor mExecutor;
-    private Retrofit mOauthRetrofit;
-    private RedditDataRoomDatabase mRedditDataRoomDatabase;
+    private final BaseActivity mActivity;
+    private final Executor mExecutor;
+    private final Retrofit mOauthRetrofit;
+    private final RedditDataRoomDatabase mRedditDataRoomDatabase;
     private List<SubscribedSubredditData> mSubscribedSubredditData;
     private List<SubscribedSubredditData> mFavoriteSubscribedSubredditData;
-    private RequestManager glide;
+    private final RequestManager glide;
     private ItemClickListener itemClickListener;
 
-    private String accessToken;
-    private String accountName;
+    private final String accessToken;
+    private final String accountName;
     private String username;
     private String userIconUrl;
     private boolean hasClearSelectionRow;
 
-    private int primaryTextColor;
-    private int secondaryTextColor;
+    private final int primaryTextColor;
+    private final int secondaryTextColor;
 
     public SubscribedSubredditsRecyclerViewAdapter(BaseActivity activity, Executor executor, Retrofit oauthRetrofit,
                                                    RedditDataRoomDatabase redditDataRoomDatabase,

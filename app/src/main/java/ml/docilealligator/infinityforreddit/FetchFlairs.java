@@ -59,8 +59,8 @@ public class FetchFlairs {
     }
 
     private static class ParseFlairsAsyncTask extends AsyncTask<Void, ArrayList<Flair>, ArrayList<Flair>> {
-        private String response;
-        private ParseFlairsAsyncTaskListener parseFlairsAsyncTaskListener;
+        private final String response;
+        private final ParseFlairsAsyncTaskListener parseFlairsAsyncTaskListener;
         ParseFlairsAsyncTask(String response, ParseFlairsAsyncTaskListener parseFlairsAsyncTaskListener) {
             this.response = response;
             this.parseFlairsAsyncTaskListener = parseFlairsAsyncTaskListener;

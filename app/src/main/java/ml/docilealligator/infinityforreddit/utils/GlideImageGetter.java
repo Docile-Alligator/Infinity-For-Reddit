@@ -23,11 +23,11 @@ import java.lang.ref.WeakReference;
 
 public class GlideImageGetter implements Html.ImageGetter {
 
-    private WeakReference<TextView> container;
+    private final WeakReference<TextView> container;
     private boolean enlargeImage;
-    private HtmlImagesHandler imagesHandler;
+    private final HtmlImagesHandler imagesHandler;
     private float density = 1.0f;
-    private float textSize;
+    private final float textSize;
 
     public GlideImageGetter(TextView textView, boolean enlargeImage) {
         this(textView, false, null);

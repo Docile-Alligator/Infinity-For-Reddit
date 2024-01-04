@@ -29,15 +29,15 @@ import retrofit2.Retrofit;
 public class HistoryPostPagingSource extends ListenableFuturePagingSource<String, Post> {
     public static final int TYPE_READ_POSTS = 100;
 
-    private Retrofit retrofit;
-    private Executor executor;
-    private RedditDataRoomDatabase redditDataRoomDatabase;
-    private String accessToken;
-    private String accountName;
-    private SharedPreferences sharedPreferences;
-    private String username;
-    private int postType;
-    private PostFilter postFilter;
+    private final Retrofit retrofit;
+    private final Executor executor;
+    private final RedditDataRoomDatabase redditDataRoomDatabase;
+    private final String accessToken;
+    private final String accountName;
+    private final SharedPreferences sharedPreferences;
+    private final String username;
+    private final int postType;
+    private final PostFilter postFilter;
 
     public HistoryPostPagingSource(Retrofit retrofit, Executor executor, RedditDataRoomDatabase redditDataRoomDatabase,
                                    @Nullable String accessToken, @NonNull String accountName, SharedPreferences sharedPreferences,

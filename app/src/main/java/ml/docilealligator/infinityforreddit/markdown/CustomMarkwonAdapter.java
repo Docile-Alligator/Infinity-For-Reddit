@@ -204,7 +204,7 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
     public List<Node> getItems() {
         return nodes != null
                 ? Collections.unmodifiableList(nodes)
-                : Collections.<Node>emptyList();
+                : Collections.emptyList();
     }
 
     @Override

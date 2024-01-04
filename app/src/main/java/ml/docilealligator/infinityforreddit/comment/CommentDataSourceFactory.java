@@ -11,16 +11,16 @@ import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 class CommentDataSourceFactory extends DataSource.Factory {
-    private Retrofit retrofit;
-    private Locale locale;
-    private String accessToken;
-    private String accountName;
-    private String username;
+    private final Retrofit retrofit;
+    private final Locale locale;
+    private final String accessToken;
+    private final String accountName;
+    private final String username;
     private SortType sortType;
-    private boolean areSavedComments;
+    private final boolean areSavedComments;
 
     private CommentDataSource commentDataSource;
-    private MutableLiveData<CommentDataSource> commentDataSourceLiveData;
+    private final MutableLiveData<CommentDataSource> commentDataSourceLiveData;
 
     CommentDataSourceFactory(Retrofit retrofit, Locale locale, @Nullable String accessToken, @NonNull String accountName,
                              String username, SortType sortType,
@@ -38,7 +38,7 @@ class CommentDataSourceFactory extends DataSource.Factory {
     @NonNull
     @Override
     public DataSource create() {
-        commentDataSource = new CommentDataSource(retrofit, locale, accessToken, accountName, username,
+        commentDataSource = new CommentDataSource(retrofit, accessToken, accountName, username,
                 sortType, areSavedComments);
         commentDataSourceLiveData.postValue(commentDataSource);
         return commentDataSource;

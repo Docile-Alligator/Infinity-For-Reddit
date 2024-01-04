@@ -27,14 +27,14 @@ public class PreferenceSectionRecyclerViewAdapter extends RecyclerView.Adapter<R
     private static final int VIEW_TYPE_MENU_ITEM = 2;
     private static final int PREFERENCES_SECTION_ITEMS = 3;
 
-    private BaseActivity baseActivity;
-    private Resources resources;
-    private int primaryTextColor;
-    private int secondaryTextColor;
-    private int primaryIconColor;
+    private final BaseActivity baseActivity;
+    private final Resources resources;
+    private final int primaryTextColor;
+    private final int secondaryTextColor;
+    private final int primaryIconColor;
     private boolean isNSFWEnabled;
     private boolean collapsePreferencesSection;
-    private NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener itemClickListener;
+    private final NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener itemClickListener;
 
     public PreferenceSectionRecyclerViewAdapter(BaseActivity baseActivity, CustomThemeWrapper customThemeWrapper,
                                                 @NonNull String accountName, SharedPreferences nsfwAndSpoilerSharedPreferences,

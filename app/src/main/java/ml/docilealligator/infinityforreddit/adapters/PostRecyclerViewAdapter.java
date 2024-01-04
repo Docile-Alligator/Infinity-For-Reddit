@@ -4792,7 +4792,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ImageView noPreviewImageView;
 
         PostGalleryTypeImageRecyclerViewAdapter adapter;
-        private LinearLayoutManagerBugFixed layoutManager;
+        private final LinearLayoutManagerBugFixed layoutManager;
 
         Post post;
         Post.Preview preview;

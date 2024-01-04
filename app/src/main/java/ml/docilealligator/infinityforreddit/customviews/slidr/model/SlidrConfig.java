@@ -238,7 +238,7 @@ public class SlidrConfig {
      */
     public static class Builder{
 
-        private SlidrConfig config;
+        private final SlidrConfig config;
 
         public Builder(){
             config = new SlidrConfig();

@@ -66,7 +66,6 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private LinearLayoutManagerBugFixed mLinearLayoutManager;
-    private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
     private ArrayList<UserFlair> mUserFlairs;

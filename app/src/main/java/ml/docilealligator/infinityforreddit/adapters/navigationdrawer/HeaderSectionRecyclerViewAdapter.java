@@ -35,19 +35,19 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import pl.droidsonroids.gif.GifImageView;
 
 public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private BaseActivity baseActivity;
-    private CustomThemeWrapper customThemeWrapper;
-    private Resources resources;
-    private RequestManager glide;
-    private String accountName;
+    private final BaseActivity baseActivity;
+    private final CustomThemeWrapper customThemeWrapper;
+    private final Resources resources;
+    private final RequestManager glide;
+    private final String accountName;
     private String profileImageUrl;
     private String bannerImageUrl;
     private int karma;
     private boolean requireAuthToAccountSection;
     private boolean showAvatarOnTheRightInTheNavigationDrawer;
-    private boolean isLoggedIn;
+    private final boolean isLoggedIn;
     private boolean isInMainPage = true;
-    private PageToggle pageToggle;
+    private final PageToggle pageToggle;
     private boolean hideKarma;
 
     public HeaderSectionRecyclerViewAdapter(BaseActivity baseActivity, CustomThemeWrapper customThemeWrapper,

@@ -46,7 +46,7 @@ class ParseSubscribedThing {
         private ArrayList<SubscribedSubredditData> newSubscribedSubredditData;
         private ArrayList<SubscribedUserData> newSubscribedUserData;
         private ArrayList<SubredditData> newSubredditData;
-        private ParseSubscribedSubredditsListener parseSubscribedSubredditsListener;
+        private final ParseSubscribedSubredditsListener parseSubscribedSubredditsListener;
 
         ParseSubscribedSubredditsAsyncTask(String response, @NonNull String accountName, ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                            ArrayList<SubscribedUserData> subscribedUserData,

@@ -885,7 +885,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             return;
                         }
                     }
-
                 } else {
                     for (int i = currentSearchIndex - 1; i >= 0; i--) {
                         if (visibleComments.get(i).getCommentRawText() != null &&
@@ -902,9 +901,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             return;
                         }
                     }
-
                 }
-                return;
             }
         }
     }

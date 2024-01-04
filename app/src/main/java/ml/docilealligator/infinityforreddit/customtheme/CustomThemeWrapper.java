@@ -13,9 +13,9 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 
 public class CustomThemeWrapper {
-    private SharedPreferences lightThemeSharedPreferences;
-    private SharedPreferences darkThemeSharedPreferences;
-    private SharedPreferences amoledThemeSharedPreferences;
+    private final SharedPreferences lightThemeSharedPreferences;
+    private final SharedPreferences darkThemeSharedPreferences;
+    private final SharedPreferences amoledThemeSharedPreferences;
     private int themeType;
 
     public CustomThemeWrapper(SharedPreferences lightThemeSharedPreferences,

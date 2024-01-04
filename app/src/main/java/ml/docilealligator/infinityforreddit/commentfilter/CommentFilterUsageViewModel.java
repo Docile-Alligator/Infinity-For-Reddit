@@ -10,7 +10,7 @@ import java.util.List;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class CommentFilterUsageViewModel extends ViewModel {
-    private LiveData<List<CommentFilterUsage>> mCommentFilterUsageListLiveData;
+    private final LiveData<List<CommentFilterUsage>> mCommentFilterUsageListLiveData;
 
     public CommentFilterUsageViewModel(RedditDataRoomDatabase redditDataRoomDatabase, String name) {
         mCommentFilterUsageListLiveData = redditDataRoomDatabase.commentFilterUsageDao().getAllCommentFilterUsageLiveData(name);

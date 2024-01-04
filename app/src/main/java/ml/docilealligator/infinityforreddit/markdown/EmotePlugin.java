@@ -43,8 +43,8 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 public class EmotePlugin extends AbstractMarkwonPlugin {
     private final GlideAsyncDrawableLoader glideAsyncDrawableLoader;
     private boolean dataSavingMode;
-    private boolean disableImagePreview;
-    private OnEmoteClickListener onEmoteClickListener;
+    private final boolean disableImagePreview;
+    private final OnEmoteClickListener onEmoteClickListener;
 
     public interface GlideStore {
 

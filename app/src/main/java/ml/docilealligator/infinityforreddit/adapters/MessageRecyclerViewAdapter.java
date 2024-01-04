@@ -65,21 +65,21 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
             return message.getBody().equals(t1.getBody());
         }
     };
-    private BaseActivity mActivity;
-    private Retrofit mOauthRetrofit;
-    private Markwon mMarkwon;
-    private String mAccessToken;
-    private int mMessageType;
+    private final BaseActivity mActivity;
+    private final Retrofit mOauthRetrofit;
+    private final Markwon mMarkwon;
+    private final String mAccessToken;
+    private final int mMessageType;
     private NetworkState networkState;
-    private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
-    private int mColorAccent;
-    private int mMessageBackgroundColor;
-    private int mUsernameColor;
-    private int mPrimaryTextColor;
-    private int mSecondaryTextColor;
-    private int mUnreadMessageBackgroundColor;
-    private int mColorPrimaryLightTheme;
-    private int mButtonTextColor;
+    private final RetryLoadingMoreCallback mRetryLoadingMoreCallback;
+    private final int mColorAccent;
+    private final int mMessageBackgroundColor;
+    private final int mUsernameColor;
+    private final int mPrimaryTextColor;
+    private final int mSecondaryTextColor;
+    private final int mUnreadMessageBackgroundColor;
+    private final int mColorPrimaryLightTheme;
+    private final int mButtonTextColor;
     private boolean markAllMessagesAsRead = false;
 
     public MessageRecyclerViewAdapter(BaseActivity activity, Retrofit oauthRetrofit,

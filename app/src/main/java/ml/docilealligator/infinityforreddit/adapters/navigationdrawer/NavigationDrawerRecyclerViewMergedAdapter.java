@@ -16,15 +16,15 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 
 public class NavigationDrawerRecyclerViewMergedAdapter {
-    private HeaderSectionRecyclerViewAdapter headerSectionRecyclerViewAdapter;
-    private AccountSectionRecyclerViewAdapter accountSectionRecyclerViewAdapter;
-    private RedditSectionRecyclerViewAdapter redditSectionRecyclerViewAdapter;
-    private PostSectionRecyclerViewAdapter postSectionRecyclerViewAdapter;
-    private PreferenceSectionRecyclerViewAdapter preferenceSectionRecyclerViewAdapter;
-    private FavoriteSubscribedSubredditsSectionRecyclerViewAdapter favoriteSubscribedSubredditsSectionRecyclerViewAdapter;
-    private SubscribedSubredditsRecyclerViewAdapter subscribedSubredditsRecyclerViewAdapter;
-    private AccountManagementSectionRecyclerViewAdapter accountManagementSectionRecyclerViewAdapter;
-    private ConcatAdapter mainPageConcatAdapter;
+    private final HeaderSectionRecyclerViewAdapter headerSectionRecyclerViewAdapter;
+    private final AccountSectionRecyclerViewAdapter accountSectionRecyclerViewAdapter;
+    private final RedditSectionRecyclerViewAdapter redditSectionRecyclerViewAdapter;
+    private final PostSectionRecyclerViewAdapter postSectionRecyclerViewAdapter;
+    private final PreferenceSectionRecyclerViewAdapter preferenceSectionRecyclerViewAdapter;
+    private final FavoriteSubscribedSubredditsSectionRecyclerViewAdapter favoriteSubscribedSubredditsSectionRecyclerViewAdapter;
+    private final SubscribedSubredditsRecyclerViewAdapter subscribedSubredditsRecyclerViewAdapter;
+    private final AccountManagementSectionRecyclerViewAdapter accountManagementSectionRecyclerViewAdapter;
+    private final ConcatAdapter mainPageConcatAdapter;
 
     public NavigationDrawerRecyclerViewMergedAdapter(BaseActivity baseActivity, SharedPreferences sharedPreferences,
                                                      SharedPreferences nsfwAndSpoilerSharedPreferences,

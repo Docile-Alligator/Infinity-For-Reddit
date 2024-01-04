@@ -41,19 +41,19 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
     private static final int VIEW_TYPE_MULTI_REDDIT_DIVIDER = 2;
     private static final int VIEW_TYPE_MULTI_REDDIT = 3;
 
-    private BaseActivity mActivity;
-    private Executor mExecutor;
-    private Retrofit mOauthRetrofit;
-    private RedditDataRoomDatabase mRedditDataRoomDatabase;
-    private RequestManager mGlide;
+    private final BaseActivity mActivity;
+    private final Executor mExecutor;
+    private final Retrofit mOauthRetrofit;
+    private final RedditDataRoomDatabase mRedditDataRoomDatabase;
+    private final RequestManager mGlide;
 
-    private String mAccessToken;
-    private String mAccountName;
+    private final String mAccessToken;
+    private final String mAccountName;
     private List<MultiReddit> mMultiReddits;
     private List<MultiReddit> mFavoriteMultiReddits;
-    private int mPrimaryTextColor;
-    private int mSecondaryTextColor;
-    private OnItemClickListener mOnItemClickListener;
+    private final int mPrimaryTextColor;
+    private final int mSecondaryTextColor;
+    private final OnItemClickListener mOnItemClickListener;
 
     public interface OnItemClickListener {
         void onClick(MultiReddit multiReddit);

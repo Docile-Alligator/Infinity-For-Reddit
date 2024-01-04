@@ -25,11 +25,11 @@ public class PostFilterWithUsageRecyclerViewAdapter extends RecyclerView.Adapter
     private static final int VIEW_TYPE_HEADER = 1;
     private static final int VIEW_TYPE_POST_FILTER = 2;
 
-    private BaseActivity activity;
-    private CustomThemeWrapper customThemeWrapper;
+    private final BaseActivity activity;
+    private final CustomThemeWrapper customThemeWrapper;
     private final OnItemClickListener onItemClickListener;
     private List<PostFilterWithUsage> postFilterWithUsageList;
-    private RecyclerView.RecycledViewPool recycledViewPool;
+    private final RecyclerView.RecycledViewPool recycledViewPool;
 
     public interface OnItemClickListener {
         void onItemClick(PostFilter postFilter);

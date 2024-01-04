@@ -7,8 +7,8 @@ import androidx.lifecycle.LiveData;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class SubredditRepository {
-    private SubredditDao mSubredditDao;
-    private LiveData<SubredditData> mSubredditLiveData;
+    private final SubredditDao mSubredditDao;
+    private final LiveData<SubredditData> mSubredditLiveData;
 
     SubredditRepository(RedditDataRoomDatabase redditDataRoomDatabase, String subredditName) {
         mSubredditDao = redditDataRoomDatabase.subredditDao();
@@ -25,7 +25,7 @@ public class SubredditRepository {
 
     private static class InsertAsyncTask extends AsyncTask<SubredditData, Void, Void> {
 
-        private SubredditDao mAsyncTaskDao;
+        private final SubredditDao mAsyncTaskDao;
 
         InsertAsyncTask(SubredditDao dao) {
             mAsyncTaskDao = dao;

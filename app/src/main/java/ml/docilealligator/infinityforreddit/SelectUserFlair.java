@@ -55,14 +55,10 @@ public class SelectUserFlair {
 
     private static class ParseErrorAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        private String response;
+        private final String response;
         @Nullable
         private String errorMessage;
-        private SelectUserFlairListener selectUserFlairListener;
-
-        interface ParseErrorAsyncTaskListener {
-            void parseFinished(@Nullable String errorMessage);
-        }
+        private final SelectUserFlairListener selectUserFlairListener;
 
         ParseErrorAsyncTask(String response, SelectUserFlairListener selectUserFlairListener) {
             this.response = response;

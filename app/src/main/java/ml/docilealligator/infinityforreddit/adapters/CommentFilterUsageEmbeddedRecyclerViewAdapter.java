@@ -16,7 +16,7 @@ import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterUsage;
 import ml.docilealligator.infinityforreddit.databinding.ItemCommentFilterUsageEmbeddedBinding;
 
 public class CommentFilterUsageEmbeddedRecyclerViewAdapter extends RecyclerView.Adapter<CommentFilterUsageEmbeddedRecyclerViewAdapter.EntryViewHolder> {
-    private BaseActivity baseActivity;
+    private final BaseActivity baseActivity;
     private List<CommentFilterUsage> commentFilterUsageList;
 
     public CommentFilterUsageEmbeddedRecyclerViewAdapter(BaseActivity baseActivity) {
@@ -37,10 +37,8 @@ public class CommentFilterUsageEmbeddedRecyclerViewAdapter extends RecyclerView.
             holder.textView.setText(baseActivity.getString(R.string.comment_filter_usage_embedded_more_count, commentFilterUsageList.size() - 5));
         } else {
             CommentFilterUsage commentFilterUsage = commentFilterUsageList.get(holder.getBindingAdapterPosition());
-            switch (commentFilterUsage.usage) {
-                case CommentFilterUsage.SUBREDDIT_TYPE:
-                    holder.textView.setText("r/" + commentFilterUsage.nameOfUsage);
-                    break;
+            if (commentFilterUsage.usage == CommentFilterUsage.SUBREDDIT_TYPE) {
+                holder.textView.setText("r/" + commentFilterUsage.nameOfUsage);
             }
         }
     }

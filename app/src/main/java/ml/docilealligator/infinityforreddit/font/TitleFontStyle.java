@@ -9,8 +9,8 @@ public enum TitleFontStyle {
     Large(R.style.TitleFontStyle_Large, "Large"),
     XLarge(R.style.TitleFontStyle_XLarge, "XLarge");
 
-    private int resId;
-    private String title;
+    private final int resId;
+    private final String title;
 
     TitleFontStyle(int resId, String title) {
         this.resId = resId;

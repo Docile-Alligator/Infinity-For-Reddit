@@ -121,11 +121,11 @@ public class UserFollowing {
 
     private static class UpdateSubscriptionAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        private SubscribedUserDao subscribedUserDao;
+        private final SubscribedUserDao subscribedUserDao;
         private String username;
-        private String accountName;
+        private final String accountName;
         private SubscribedUserData subscribedUserData;
-        private boolean isSubscribing;
+        private final boolean isSubscribing;
 
         UpdateSubscriptionAsyncTask(SubscribedUserDao subscribedUserDao, String username,
                                     @NonNull String accountName, boolean isSubscribing) {

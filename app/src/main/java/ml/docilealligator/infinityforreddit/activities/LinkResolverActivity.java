@@ -406,7 +406,7 @@ public class LinkResolverActivity extends AppCompatActivity {
             CustomTabsIntent customTabsIntent = builder.build();
             customTabsIntent.intent.setPackage(resolveInfos.get(0).activityInfo.packageName);
             if (uri.getScheme() == null) {
-                uri = Uri.parse("http://" + uri.toString());
+                uri = Uri.parse("http://" + uri);
             }
             try {
                 customTabsIntent.launchUrl(this, uri);

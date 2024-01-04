@@ -22,10 +22,10 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.settings.Translation;
 
 public class TranslationFragmentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private BaseActivity activity;
-    private int primaryTextColor;
-    private int secondaryTextColor;
-    private ArrayList<Translation> translationContributors;
+    private final BaseActivity activity;
+    private final int primaryTextColor;
+    private final int secondaryTextColor;
+    private final ArrayList<Translation> translationContributors;
 
     public TranslationFragmentRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper) {
         this.activity = activity;

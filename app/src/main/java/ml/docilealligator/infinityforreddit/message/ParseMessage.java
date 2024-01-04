@@ -96,12 +96,12 @@ public class ParseMessage {
 
     private static class ParseMessageAsnycTask extends AsyncTask<Void, Void, Void> {
 
-        private String response;
-        private Locale locale;
+        private final String response;
+        private final Locale locale;
         private ArrayList<Message> messages;
         private String after;
-        private int messageType;
-        private ParseMessageAsyncTaskListener parseMessageAsyncTaskListener;
+        private final int messageType;
+        private final ParseMessageAsyncTaskListener parseMessageAsyncTaskListener;
         ParseMessageAsnycTask(String response, Locale locale, int messageType,
                               ParseMessageAsyncTaskListener parseMessageAsnycTaskListener) {
             this.response = response;
@@ -132,12 +132,12 @@ public class ParseMessage {
 
     private static class ParseSentMessageAsnycTask extends AsyncTask<Void, Void, Void> {
 
-        private String response;
-        private Locale locale;
+        private final String response;
+        private final Locale locale;
         private Message message;
         private String errorMessage;
         private boolean parseFailed = false;
-        private ParseSentMessageAsyncTaskListener parseSentMessageAsyncTaskListener;
+        private final ParseSentMessageAsyncTaskListener parseSentMessageAsyncTaskListener;
 
         ParseSentMessageAsnycTask(String response, Locale locale, ParseSentMessageAsyncTaskListener parseSentMessageAsyncTaskListener) {
             this.response = response;
@@ -171,8 +171,8 @@ public class ParseMessage {
     }
 
     private static class ParseComposedMessageErrorAsncTask extends AsyncTask<Void, Void, Void> {
-        private String response;
-        private ParseComposedMessageErrorListener parseComposedMessageErrorListener;
+        private final String response;
+        private final ParseComposedMessageErrorListener parseComposedMessageErrorListener;
         private String errorMessage;
 
         ParseComposedMessageErrorAsncTask(String response, ParseComposedMessageErrorListener parseComposedMessageErrorListener) {

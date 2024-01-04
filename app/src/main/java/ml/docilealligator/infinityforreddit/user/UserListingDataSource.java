@@ -12,14 +12,14 @@ import retrofit2.Retrofit;
 
 public class UserListingDataSource extends PageKeyedDataSource<String, UserData> {
 
-    private Retrofit retrofit;
-    private String query;
-    private SortType sortType;
-    private boolean nsfw;
+    private final Retrofit retrofit;
+    private final String query;
+    private final SortType sortType;
+    private final boolean nsfw;
 
-    private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
-    private MutableLiveData<NetworkState> initialLoadStateLiveData;
-    private MutableLiveData<Boolean> hasUserLiveData;
+    private final MutableLiveData<NetworkState> paginationNetworkStateLiveData;
+    private final MutableLiveData<NetworkState> initialLoadStateLiveData;
+    private final MutableLiveData<Boolean> hasUserLiveData;
 
     private PageKeyedDataSource.LoadParams<String> params;
     private PageKeyedDataSource.LoadCallback<String, UserData> callback;

@@ -45,6 +45,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.customview.view.AbsSavedState;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -330,7 +333,7 @@ public class Container extends RecyclerView {
     Collections.sort(candidates, Common.ORDER_COMPARATOR);
 
     Collection<ToroPlayer> toPlay = playerSelector != null ? playerSelector.select(this, candidates)
-        : Collections.<ToroPlayer>emptyList();
+        : Collections.emptyList();
     for (ToroPlayer player : toPlay) {
       if (!player.isPlaying()) playerManager.play(player, playerDispatcher);
     }
@@ -744,7 +747,7 @@ public class Container extends RecyclerView {
     ToroDataObserver() {
     }
 
-    final void registerAdapter(Adapter adapter) {
+    void registerAdapter(Adapter adapter) {
       if (this.adapter == adapter) return;
       if (this.adapter != null) {
         this.adapter.unregisterAdapterDataObserver(this);

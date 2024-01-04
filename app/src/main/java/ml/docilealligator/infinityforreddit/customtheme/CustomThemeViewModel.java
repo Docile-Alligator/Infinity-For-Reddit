@@ -10,10 +10,10 @@ import java.util.List;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class CustomThemeViewModel extends ViewModel {
-    private LiveData<List<CustomTheme>> mAllCustomThemes;
-    private LiveData<CustomTheme> mCurrentLightTheme;
-    private LiveData<CustomTheme> mCurrentDarkTheme;
-    private LiveData<CustomTheme> mCurrentAmoledTheme;
+    private final LiveData<List<CustomTheme>> mAllCustomThemes;
+    private final LiveData<CustomTheme> mCurrentLightTheme;
+    private final LiveData<CustomTheme> mCurrentDarkTheme;
+    private final LiveData<CustomTheme> mCurrentAmoledTheme;
 
     public CustomThemeViewModel(RedditDataRoomDatabase redditDataRoomDatabase) {
         CustomThemeRepository customThemeRepository = new CustomThemeRepository(redditDataRoomDatabase);
@@ -40,7 +40,7 @@ public class CustomThemeViewModel extends ViewModel {
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
-        private RedditDataRoomDatabase mRedditDataRoomDatabase;
+        private final RedditDataRoomDatabase mRedditDataRoomDatabase;
 
         public Factory(RedditDataRoomDatabase redditDataRoomDatabase) {
             mRedditDataRoomDatabase = redditDataRoomDatabase;

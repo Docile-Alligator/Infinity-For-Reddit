@@ -42,15 +42,15 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
     private List<SubscribedUserData> mSubscribedUserData;
     private List<SubscribedUserData> mFavoriteSubscribedUserData;
-    private BaseActivity mActivity;
-    private Executor mExecutor;
-    private Retrofit mOauthRetrofit;
-    private RedditDataRoomDatabase mRedditDataRoomDatabase;
-    private String mAccessToken;
-    private String mAccountName;
-    private RequestManager glide;
-    private int mPrimaryTextColor;
-    private int mSecondaryTextColor;
+    private final BaseActivity mActivity;
+    private final Executor mExecutor;
+    private final Retrofit mOauthRetrofit;
+    private final RedditDataRoomDatabase mRedditDataRoomDatabase;
+    private final String mAccessToken;
+    private final String mAccountName;
+    private final RequestManager glide;
+    private final int mPrimaryTextColor;
+    private final int mSecondaryTextColor;
 
     public FollowedUsersRecyclerViewAdapter(BaseActivity activity, Executor executor, Retrofit oauthRetrofit,
                                             RedditDataRoomDatabase redditDataRoomDatabase,

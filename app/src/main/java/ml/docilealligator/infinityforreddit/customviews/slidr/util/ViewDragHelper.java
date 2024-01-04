@@ -12,6 +12,7 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 
+import androidx.annotation.Nullable;
 import androidx.core.view.MotionEventCompat;
 import androidx.core.view.VelocityTrackerCompat;
 import androidx.core.view.ViewCompat;
@@ -94,11 +95,11 @@ public class ViewDragHelper {
     private int[] mEdgeDragsLocked;
     private int mPointersDown;
     private VelocityTracker mVelocityTracker;
-    private float mMaxVelocity;
+    private final float mMaxVelocity;
     private float mMinVelocity;
-    private int mEdgeSize;
+    private final int mEdgeSize;
     private int mTrackingEdges;
-    private ScrollerCompat mScroller;
+    private final ScrollerCompat mScroller;
     private final Callback mCallback;
     private View mCapturedView;
     private boolean mReleaseInProgress;
@@ -951,7 +952,7 @@ public class ViewDragHelper {
                     final float dx = x - mInitialMotionX[pointerId];
                     final float dy = y - mInitialMotionY[pointerId];
                     final View toCapture = findTopChildUnder((int) x, (int) y);
-                    final boolean pastSlop = toCapture != null && checkTouchSlop(toCapture, dx, dy);
+                    final boolean pastSlop = checkTouchSlop(toCapture, dx, dy);
                     if (pastSlop) {
                         // check the callback's
                         // getView[Horizontal|Vertical]DragRange methods to know
@@ -1371,6 +1372,7 @@ public class ViewDragHelper {
      * @param y Y position to test in the parent's coordinate system
      * @return The topmost child view under (x, y) or null if none found.
      */
+    @Nullable
     public View findTopChildUnder(int x, int y) {
         final int childCount = mParentView.getChildCount();
         for (int i = childCount - 1; i >= 0; i--) {

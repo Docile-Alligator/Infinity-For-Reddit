@@ -10,7 +10,7 @@ import java.util.List;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class RecentSearchQueryViewModel extends ViewModel {
-    private LiveData<List<RecentSearchQuery>> mAllRecentSearchQueries;
+    private final LiveData<List<RecentSearchQuery>> mAllRecentSearchQueries;
 
     public RecentSearchQueryViewModel(RedditDataRoomDatabase redditDataRoomDatabase, String username) {
         mAllRecentSearchQueries = new RecentSearchQueryRepository(redditDataRoomDatabase, username).getAllRecentSearchQueries();
@@ -21,8 +21,8 @@ public class RecentSearchQueryViewModel extends ViewModel {
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
-        private RedditDataRoomDatabase mRedditDataRoomDatabase;
-        private String mUsername;
+        private final RedditDataRoomDatabase mRedditDataRoomDatabase;
+        private final String mUsername;
 
         public Factory(RedditDataRoomDatabase redditDataRoomDatabase, String username) {
             mRedditDataRoomDatabase = redditDataRoomDatabase;

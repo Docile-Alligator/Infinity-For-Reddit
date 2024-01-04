@@ -71,9 +71,9 @@ public class ParseUserData {
     }
 
     private static class ParseUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
-        private RedditDataRoomDatabase redditDataRoomDatabase;
+        private final RedditDataRoomDatabase redditDataRoomDatabase;
         private JSONObject jsonResponse;
-        private ParseUserDataListener parseUserDataListener;
+        private final ParseUserDataListener parseUserDataListener;
         private boolean parseFailed = false;
 
         private UserData userData;
@@ -120,9 +120,9 @@ public class ParseUserData {
     }
 
     private static class ParseUserListingDataAsyncTask extends AsyncTask<Void, Void, Void> {
-        private String response;
+        private final String response;
         private JSONObject jsonResponse;
-        private ParseUserListingDataListener parseUserListingDataListener;
+        private final ParseUserListingDataListener parseUserListingDataListener;
         private String after;
         private boolean parseFailed;
 

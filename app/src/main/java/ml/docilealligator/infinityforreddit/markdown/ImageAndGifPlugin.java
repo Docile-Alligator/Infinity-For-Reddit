@@ -11,7 +11,7 @@ import ml.docilealligator.infinityforreddit.MediaMetadata;
 
 public class ImageAndGifPlugin extends AbstractMarkwonPlugin {
 
-    private ImageAndGifBlockParser.Factory factory;
+    private final ImageAndGifBlockParser.Factory factory;
 
     public ImageAndGifPlugin() {
         this.factory = new ImageAndGifBlockParser.Factory();

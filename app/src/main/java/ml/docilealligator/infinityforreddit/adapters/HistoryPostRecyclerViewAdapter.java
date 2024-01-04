@@ -4581,7 +4581,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         ImageView noPreviewImageView;
 
         PostGalleryTypeImageRecyclerViewAdapter adapter;
-        private LinearLayoutManagerBugFixed layoutManager;
+        private final LinearLayoutManagerBugFixed layoutManager;
 
         Post post;
         Post.Preview preview;

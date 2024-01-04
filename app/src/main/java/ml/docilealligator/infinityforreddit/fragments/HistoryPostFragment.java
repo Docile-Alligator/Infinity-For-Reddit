@@ -231,7 +231,7 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
     private ItemTouchHelper touchHelper;
     private ArrayList<String> readPosts;
     private Unbinder unbinder;
-    private Map<String, String> subredditOrUserIcons = new HashMap<>();
+    private final Map<String, String> subredditOrUserIcons = new HashMap<>();
     private String accessToken;
     private int historyType;
 
@@ -1394,8 +1394,8 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
 
     private static class StaggeredGridLayoutManagerItemOffsetDecoration extends RecyclerView.ItemDecoration {
 
-        private int mItemOffset;
-        private int mNColumns;
+        private final int mItemOffset;
+        private final int mNColumns;
 
         StaggeredGridLayoutManagerItemOffsetDecoration(int itemOffset, int nColumns) {
             mItemOffset = itemOffset;

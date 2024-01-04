@@ -9,10 +9,10 @@ import java.util.List;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class AccountRepository {
-    private AccountDao mAccountDao;
-    private LiveData<List<Account>> mAccountsExceptCurrentAccountLiveData;
-    private LiveData<Account> mCurrentAccountLiveData;
-    private LiveData<List<Account>> mAllAccountsLiveData;
+    private final AccountDao mAccountDao;
+    private final LiveData<List<Account>> mAccountsExceptCurrentAccountLiveData;
+    private final LiveData<Account> mCurrentAccountLiveData;
+    private final LiveData<List<Account>> mAllAccountsLiveData;
 
     AccountRepository(RedditDataRoomDatabase redditDataRoomDatabase) {
         mAccountDao = redditDataRoomDatabase.accountDao();
@@ -39,7 +39,7 @@ public class AccountRepository {
 
     private static class InsertAsyncTask extends AsyncTask<Account, Void, Void> {
 
-        private AccountDao mAsyncTaskDao;
+        private final AccountDao mAsyncTaskDao;
 
         InsertAsyncTask(AccountDao dao) {
             mAsyncTaskDao = dao;

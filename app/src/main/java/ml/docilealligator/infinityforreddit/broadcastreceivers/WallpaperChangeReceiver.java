@@ -13,7 +13,7 @@ import ml.docilealligator.infinityforreddit.MaterialYouWorker;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class WallpaperChangeReceiver extends BroadcastReceiver {
-    private SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
 
     public WallpaperChangeReceiver(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;

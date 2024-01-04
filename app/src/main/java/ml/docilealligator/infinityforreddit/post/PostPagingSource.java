@@ -41,22 +41,22 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     public static final String USER_WHERE_HIDDEN = "hidden";
     public static final String USER_WHERE_SAVED = "saved";
 
-    private Executor executor;
-    private Retrofit retrofit;
-    private String accessToken;
-    private String accountName;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences postFeedScrolledPositionSharedPreferences;
+    private final Executor executor;
+    private final Retrofit retrofit;
+    private final String accessToken;
+    private final String accountName;
+    private final SharedPreferences sharedPreferences;
+    private final SharedPreferences postFeedScrolledPositionSharedPreferences;
     private String subredditOrUserName;
     private String query;
     private String trendingSource;
-    private int postType;
-    private SortType sortType;
-    private PostFilter postFilter;
-    private List<String> readPostList;
+    private final int postType;
+    private final SortType sortType;
+    private final PostFilter postFilter;
+    private final List<String> readPostList;
     private String userWhere;
     private String multiRedditPath;
-    private LinkedHashSet<Post> postLinkedHashSet;
+    private final LinkedHashSet<Post> postLinkedHashSet;
     private String previousLastItem;
 
     PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,

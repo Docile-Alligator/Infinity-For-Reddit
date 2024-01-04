@@ -61,7 +61,7 @@ public class PullNotificationWorker extends Worker {
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
-    private Context context;
+    private final Context context;
 
     public PullNotificationWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);

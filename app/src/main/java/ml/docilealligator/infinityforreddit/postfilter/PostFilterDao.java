@@ -43,5 +43,5 @@ public interface PostFilterDao {
 
     @Transaction
     @Query("SELECT * FROM post_filter ORDER BY name")
-    public LiveData<List<PostFilterWithUsage>> getAllPostFilterWithUsageLiveData();
+    LiveData<List<PostFilterWithUsage>> getAllPostFilterWithUsageLiveData();
 }

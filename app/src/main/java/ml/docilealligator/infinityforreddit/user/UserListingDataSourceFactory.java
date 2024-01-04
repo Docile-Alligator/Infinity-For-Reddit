@@ -8,13 +8,13 @@ import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 public class UserListingDataSourceFactory extends DataSource.Factory {
-    private Retrofit retrofit;
-    private String query;
+    private final Retrofit retrofit;
+    private final String query;
     private SortType sortType;
-    private boolean nsfw;
+    private final boolean nsfw;
 
     private UserListingDataSource userListingDataSource;
-    private MutableLiveData<UserListingDataSource> userListingDataSourceMutableLiveData;
+    private final MutableLiveData<UserListingDataSource> userListingDataSourceMutableLiveData;
 
     UserListingDataSourceFactory(Retrofit retrofit, String query, SortType sortType, boolean nsfw) {
         this.retrofit = retrofit;

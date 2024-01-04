@@ -7,9 +7,9 @@ public class ImgurMedia implements Parcelable {
     public static final int TYPE_IMAGE = 0;
     public static final int TYPE_VIDEO = 1;
     private String id;
-    private String title;
-    private String description;
-    private String link;
+    private final String title;
+    private final String description;
+    private final String link;
     private int type;
 
     public ImgurMedia(String id, String title, String description, String type, String link) {

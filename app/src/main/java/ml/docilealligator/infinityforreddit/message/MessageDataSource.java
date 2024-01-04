@@ -12,15 +12,15 @@ import ml.docilealligator.infinityforreddit.NetworkState;
 import retrofit2.Retrofit;
 
 class MessageDataSource extends PageKeyedDataSource<String, Message> {
-    private Retrofit oauthRetrofit;
-    private Locale locale;
-    private String accessToken;
-    private String where;
-    private int messageType;
+    private final Retrofit oauthRetrofit;
+    private final Locale locale;
+    private final String accessToken;
+    private final String where;
+    private final int messageType;
 
-    private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
-    private MutableLiveData<NetworkState> initialLoadStateLiveData;
-    private MutableLiveData<Boolean> hasPostLiveData;
+    private final MutableLiveData<NetworkState> paginationNetworkStateLiveData;
+    private final MutableLiveData<NetworkState> initialLoadStateLiveData;
+    private final MutableLiveData<Boolean> hasPostLiveData;
 
     private LoadParams<String> params;
     private LoadCallback<String, Message> callback;

@@ -24,13 +24,13 @@ public class PostSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
     private static final int VIEW_TYPE_MENU_ITEM = 2;
     private static final int POST_SECTION_ITEMS = 4;
 
-    private BaseActivity baseActivity;
-    private int primaryTextColor;
-    private int secondaryTextColor;
-    private int primaryIconColor;
+    private final BaseActivity baseActivity;
+    private final int primaryTextColor;
+    private final int secondaryTextColor;
+    private final int primaryIconColor;
     private boolean collapsePostSection;
-    private boolean isLoggedIn;
-    private NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener itemClickListener;
+    private final boolean isLoggedIn;
+    private final NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener itemClickListener;
 
     public PostSectionRecyclerViewAdapter(BaseActivity baseActivity, CustomThemeWrapper customThemeWrapper,
                                           SharedPreferences navigationDrawerSharedPreferences,

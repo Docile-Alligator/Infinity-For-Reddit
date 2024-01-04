@@ -11,8 +11,8 @@ import java.util.List;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 
 public class SubredditWithSelection implements Parcelable {
-    private String name;
-    private String iconUrl;
+    private final String name;
+    private final String iconUrl;
     private boolean selected;
 
     public SubredditWithSelection(String name, String iconUrl) {

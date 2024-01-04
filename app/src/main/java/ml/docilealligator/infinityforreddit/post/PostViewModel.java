@@ -28,28 +28,28 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 public class PostViewModel extends ViewModel {
-    private Executor executor;
-    private Retrofit retrofit;
-    private String accessToken;
-    private String accountName;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences postFeedScrolledPositionSharedPreferences;
+    private final Executor executor;
+    private final Retrofit retrofit;
+    private final String accessToken;
+    private final String accountName;
+    private final SharedPreferences sharedPreferences;
+    private final SharedPreferences postFeedScrolledPositionSharedPreferences;
     private String name;
     private String query;
     private String trendingSource;
-    private int postType;
+    private final int postType;
     private SortType sortType;
     private PostFilter postFilter;
     private String userWhere;
-    private List<String> readPostList;
-    private MutableLiveData<Boolean> currentlyReadPostIdsLiveData = new MutableLiveData<>();
+    private final List<String> readPostList;
+    private final MutableLiveData<Boolean> currentlyReadPostIdsLiveData = new MutableLiveData<>();
 
-    private LiveData<PagingData<Post>> posts;
-    private LiveData<PagingData<Post>> postsWithReadPostsHidden;
+    private final LiveData<PagingData<Post>> posts;
+    private final LiveData<PagingData<Post>> postsWithReadPostsHidden;
 
-    private MutableLiveData<SortType> sortTypeLiveData;
-    private MutableLiveData<PostFilter> postFilterLiveData;
-    private SortTypeAndPostFilterLiveData sortTypeAndPostFilterLiveData;
+    private final MutableLiveData<SortType> sortTypeLiveData;
+    private final MutableLiveData<PostFilter> postFilterLiveData;
+    private final SortTypeAndPostFilterLiveData sortTypeAndPostFilterLiveData;
 
     public PostViewModel(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                          SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
@@ -268,19 +268,19 @@ public class PostViewModel extends ViewModel {
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
-        private Executor executor;
-        private Retrofit retrofit;
-        private String accessToken;
+        private final Executor executor;
+        private final Retrofit retrofit;
+        private final String accessToken;
         private String accountName;
-        private SharedPreferences sharedPreferences;
+        private final SharedPreferences sharedPreferences;
         private SharedPreferences postFeedScrolledPositionSharedPreferences;
         private SharedPreferences postHistorySharedPreferences;
         private String name;
         private String query;
         private String trendingSource;
-        private int postType;
-        private SortType sortType;
-        private PostFilter postFilter;
+        private final int postType;
+        private final SortType sortType;
+        private final PostFilter postFilter;
         private String userWhere;
         private List<String> readPostList;
 

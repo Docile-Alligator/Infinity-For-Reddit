@@ -69,11 +69,11 @@ final class PlaybackInfoCache extends RecyclerView.AdapterDataObserver {
     this.container = container;
   }
 
-  final void onAttach() {
+  void onAttach() {
     hotCache = new TreeMap<>(ORDER_COMPARATOR_INT);
   }
 
-  final void onDetach() {
+  void onDetach() {
     if (hotCache != null) {
       hotCache.clear();
       hotCache = null;
@@ -81,7 +81,7 @@ final class PlaybackInfoCache extends RecyclerView.AdapterDataObserver {
     coldKeyToOrderMap.clear();
   }
 
-  final void onPlayerAttached(ToroPlayer player) {
+  void onPlayerAttached(ToroPlayer player) {
     int playerOrder = player.getPlayerOrder();
     // [1] Check if there is cold cache for this player
     Object key = getKey(playerOrder);
@@ -105,7 +105,7 @@ final class PlaybackInfoCache extends RecyclerView.AdapterDataObserver {
   // This method will:
   // [1] Take current hot cache entry of the player, and put back to cold cache.
   // [2] Remove the hot cache entry of the player.
-  final void onPlayerDetached(ToroPlayer player) {
+  void onPlayerDetached(ToroPlayer player) {
     int playerOrder = player.getPlayerOrder();
     if (hotCache != null && hotCache.containsKey(playerOrder)) {
       PlaybackInfo cache = hotCache.remove(playerOrder);
@@ -114,7 +114,8 @@ final class PlaybackInfoCache extends RecyclerView.AdapterDataObserver {
     }
   }
 
-  @SuppressWarnings("unused") final void onPlayerRecycled(ToroPlayer player) {
+  @SuppressWarnings("unused")
+  void onPlayerRecycled(ToroPlayer player) {
     // TODO do anything here?
   }
 
@@ -348,7 +349,8 @@ final class PlaybackInfoCache extends RecyclerView.AdapterDataObserver {
   //      : container.getCacheManager().getOrderForKey(key);
   //}
 
-  @NonNull final PlaybackInfo getPlaybackInfo(int position) {
+  @NonNull
+  PlaybackInfo getPlaybackInfo(int position) {
     PlaybackInfo info = hotCache != null ? hotCache.get(position) : null;
     if (info == SCRAP) {  // has hot cache, but was SCRAP.
       info = container.playerInitializer.initPlaybackInfo(position);
@@ -361,7 +363,7 @@ final class PlaybackInfoCache extends RecyclerView.AdapterDataObserver {
   }
 
   // Call by Container#savePlaybackInfo and that method is called right before any pausing.
-  final void savePlaybackInfo(int position, @NonNull PlaybackInfo playbackInfo) {
+  void savePlaybackInfo(int position, @NonNull PlaybackInfo playbackInfo) {
     ToroUtil.checkNotNull(playbackInfo);
     if (hotCache != null) hotCache.put(position, playbackInfo);
     Object key = getKey(position);
@@ -395,7 +397,7 @@ final class PlaybackInfoCache extends RecyclerView.AdapterDataObserver {
     }
   }
 
-  final void clearCache() {
+  void clearCache() {
     coldCache.clear();
     if (hotCache != null) hotCache.clear();
   }
