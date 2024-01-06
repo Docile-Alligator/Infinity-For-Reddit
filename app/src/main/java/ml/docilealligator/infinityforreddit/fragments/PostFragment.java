@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -185,6 +184,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
+    @Inject
+    @Named("application_only_oauth")
+    Retrofit mApplicationOnlyRetrofit;
     @Inject
     @Named("gfycat")
     Retrofit mGfycatRetrofit;
@@ -1743,7 +1745,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         } else {
             if (isSubreddit) {
                 LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase,
-                        subredditOrUserName, accessToken, accountName, mOauthRetrofit,
+                        subredditOrUserName, accessToken, mApplicationOnlyRetrofit,
                         iconImageUrl -> {
                             subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
                             loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);

@@ -68,6 +68,22 @@ abstract class NetworkModule {
     }
 
     @Provides
+    @Named("application_only_oauth")
+    static Retrofit provideApplicationOnlyOAuthRetrofit(@Named("base") Retrofit retrofit,
+                                                        @Named("base") OkHttpClient httpClient,
+                                                        RedditDataRoomDatabase accountRoomDatabase,
+                                                        @Named("current_account") SharedPreferences currentAccountSharedPreferences,
+                                                        ConnectionPool connectionPool) {
+        return retrofit.newBuilder()
+                .baseUrl(APIUtils.OAUTH_API_BASE_URI)
+                .client(httpClient.newBuilder()
+                        .authenticator(new ApplicationOnlyAccessTokenAuthenticator(retrofit, accountRoomDatabase, currentAccountSharedPreferences))
+                        .connectionPool(connectionPool)
+                        .build())
+                .build();
+    }
+
+    @Provides
     @Named("default")
     @Singleton
     static OkHttpClient provideOkHttpClient(@Named("base") OkHttpClient httpClient,

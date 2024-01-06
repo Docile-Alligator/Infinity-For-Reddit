@@ -160,6 +160,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
+    @Named("application_only_oauth")
+    Retrofit mApplicationOnlyRetrofit;
+    @Inject
     @Named("gfycat")
     Retrofit mGfycatRetrofit;
     @Inject
@@ -600,8 +603,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             setupMenu();
 
             mPostAdapter = new PostDetailRecyclerViewAdapter(activity,
-                    this, mExecutor, mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mStreamableApiProvider, mRedditDataRoomDatabase, mGlide,
+                    this, mExecutor, mCustomThemeWrapper, mOauthRetrofit, mApplicationOnlyRetrofit,
+                    mGfycatRetrofit, mRedgifsRetrofit, mStreamableApiProvider, mRedditDataRoomDatabase, mGlide,
                     mSeparatePostAndComments, mAccessToken, mAccountName, mPost, mLocale,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
                     mExoCreator, post -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
@@ -1293,7 +1296,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
                             mPostAdapter = new PostDetailRecyclerViewAdapter(activity,
                                     ViewPostDetailFragment.this, mExecutor, mCustomThemeWrapper,
-                                    mRetrofit, mOauthRetrofit, mGfycatRetrofit, mRedgifsRetrofit,
+                                    mOauthRetrofit, mApplicationOnlyRetrofit, mGfycatRetrofit, mRedgifsRetrofit,
                                     mStreamableApiProvider, mRedditDataRoomDatabase, mGlide, mSeparatePostAndComments,
                                     mAccessToken, mAccountName, mPost, mLocale, mSharedPreferences,
                                     mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences,

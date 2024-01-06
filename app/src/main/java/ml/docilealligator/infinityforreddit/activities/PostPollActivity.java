@@ -154,11 +154,11 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
     @BindView(R.id.option_6_text_input_layout_edit_text_post_poll_activity)
     TextInputEditText option6TextInputEditText;
     @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
-    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
+    @Inject
+    @Named("application_only_oauth")
+    Retrofit mApplicationOnlyRetrofit;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -529,7 +529,7 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
 
     private void loadSubredditIcon() {
         LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditName,
-                mAccessToken, mAccountName, mOauthRetrofit, iconImageUrl -> {
+                mAccessToken, mApplicationOnlyRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
             loadSubredditIconSuccessful = true;

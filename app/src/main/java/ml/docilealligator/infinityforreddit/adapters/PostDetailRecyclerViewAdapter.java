@@ -138,8 +138,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private final BaseActivity mActivity;
     private final ViewPostDetailFragment mFragment;
     private final Executor mExecutor;
-    private final Retrofit mRetrofit;
     private final Retrofit mOauthRetrofit;
+    private final Retrofit mApplicationOnlyRetrofit;
     private final Retrofit mGfycatRetrofit;
     private final Retrofit mRedgifsRetrofit;
     private final Provider<StreamableAPI> mStreamableApiProvider;
@@ -224,7 +224,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
     public PostDetailRecyclerViewAdapter(@NonNull BaseActivity activity, ViewPostDetailFragment fragment,
                                          Executor executor, CustomThemeWrapper customThemeWrapper,
-                                         Retrofit retrofit, Retrofit oauthRetrofit, Retrofit gfycatRetrofit,
+                                         Retrofit oauthRetrofit, Retrofit applicationOnlyRetrofit, Retrofit gfycatRetrofit,
                                          Retrofit redgifsRetrofit, Provider<StreamableAPI> streamableApiProvider,
                                          RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
                                          boolean separatePostAndComments, @Nullable String accessToken,
@@ -238,8 +238,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mActivity = activity;
         mFragment = fragment;
         mExecutor = executor;
-        mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
+        mApplicationOnlyRetrofit = applicationOnlyRetrofit;
         mGfycatRetrofit = gfycatRetrofit;
         mRedgifsRetrofit = redgifsRetrofit;
         mStreamableApiProvider = streamableApiProvider;
@@ -561,7 +561,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 if (mPost.getSubredditIconUrl() == null) {
                     LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(),
                             mRedditDataRoomDatabase, mPost.getSubredditNamePrefixed().substring(2),
-                            mAccessToken, mAccountName, mOauthRetrofit, iconImageUrl -> {
+                            mAccessToken, mApplicationOnlyRetrofit, iconImageUrl -> {
                                 if (iconImageUrl == null || iconImageUrl.equals("")) {
                                     mGlide.load(R.drawable.subreddit_default_icon)
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))

@@ -141,11 +141,11 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     @BindView(R.id.images_recycler_view_post_gallery_activity)
     RecyclerView imagesRecyclerView;
     @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
-    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
+    @Inject
+    @Named("application_only_oauth")
+    Retrofit mApplicationOnlyRetrofit;
     @Inject
     @Named("upload_media")
     Retrofit mUploadMediaRetrofit;
@@ -531,7 +531,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
 
     private void loadSubredditIcon() {
         LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditName,
-                mAccessToken, mAccountName, mOauthRetrofit, iconImageUrl -> {
+                mAccessToken, mApplicationOnlyRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
             loadSubredditIconSuccessful = true;

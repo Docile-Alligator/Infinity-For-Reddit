@@ -139,11 +139,11 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     @BindView(R.id.markdown_bottom_bar_recycler_view_post_text_activity)
     RecyclerView markdownBottomBarRecyclerView;
     @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
-    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
+    @Inject
+    @Named("application_only_oauth")
+    Retrofit mApplicationOnlyRetrofit;
     @Inject
     @Named("upload_media")
     Retrofit mUploadMediaRetrofit;
@@ -486,7 +486,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
 
     private void loadSubredditIcon() {
         LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditName,
-                mAccessToken, mAccountName, mOauthRetrofit, iconImageUrl -> {
+                mAccessToken, mApplicationOnlyRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
             loadSubredditIconSuccessful = true;

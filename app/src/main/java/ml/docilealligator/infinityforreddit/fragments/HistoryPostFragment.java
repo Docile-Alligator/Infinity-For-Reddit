@@ -163,6 +163,9 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
+    @Named("application_only_oauth")
+    Retrofit mApplicationOnlyRetrofit;
+    @Inject
     @Named("gfycat")
     Retrofit mGfycatRetrofit;
     @Inject
@@ -931,7 +934,7 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
         } else {
             if (isSubreddit) {
                 LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase,
-                        subredditOrUserName, accessToken, accountName, mOauthRetrofit,
+                        subredditOrUserName, accessToken, mApplicationOnlyRetrofit,
                         iconImageUrl -> {
                             subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
                             loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);

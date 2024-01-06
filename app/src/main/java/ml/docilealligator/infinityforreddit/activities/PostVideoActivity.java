@@ -139,11 +139,11 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     @BindView(R.id.player_view_post_video_activity)
     PlayerView videoPlayerView;
     @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
-    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
+    @Inject
+    @Named("application_only_oauth")
+    Retrofit mApplicationOnlyRetrofit;
     @Inject
     @Named("upload_media")
     Retrofit mUploadMediaRetrofit;
@@ -512,7 +512,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
 
     private void loadSubredditIcon() {
         LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditName,
-                mAccessToken, mAccountName, mOauthRetrofit, iconImageUrl -> {
+                mAccessToken, mApplicationOnlyRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
             loadSubredditIconSuccessful = true;

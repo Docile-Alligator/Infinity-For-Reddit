@@ -55,7 +55,7 @@ public class FetchPost {
             call = retrofit.create(RedditAPI.class).getRandomPost();
         }
 
-        call.enqueue(new Callback<String>() {
+        call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
