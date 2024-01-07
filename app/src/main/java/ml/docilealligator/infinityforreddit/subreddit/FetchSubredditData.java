@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.subreddit;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import ml.docilealligator.infinityforreddit.SortType;
@@ -17,6 +18,37 @@ public class FetchSubredditData {
     public static void fetchSubredditData(Retrofit oauthRetrofit, String subredditName, String accessToken, final FetchSubredditDataListener fetchSubredditDataListener) {
         RedditAPI oauthApi = oauthRetrofit.create(RedditAPI.class);
         Call<String> subredditData = oauthApi.getSubredditDataOauth(subredditName, APIUtils.getOAuthHeader(accessToken));
+        subredditData.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful()) {
+                    ParseSubredditData.parseSubredditData(response.body(), new ParseSubredditData.ParseSubredditDataListener() {
+                        @Override
+                        public void onParseSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
+                            fetchSubredditDataListener.onFetchSubredditDataSuccess(subredditData, nCurrentOnlineSubscribers);
+                        }
+
+                        @Override
+                        public void onParseSubredditDataFail() {
+                            fetchSubredditDataListener.onFetchSubredditDataFail(false);
+                        }
+                    });
+                } else {
+                    fetchSubredditDataListener.onFetchSubredditDataFail(response.code() == 403);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                fetchSubredditDataListener.onFetchSubredditDataFail(false);
+            }
+        });
+    }
+
+    public static void fetchSubredditData(Retrofit applicationOnlyOauthRetrofit, String subredditName,
+                                          final FetchSubredditDataListener fetchSubredditDataListener) {
+        RedditAPI oauthApi = applicationOnlyOauthRetrofit.create(RedditAPI.class);
+        Call<String> subredditData = oauthApi.getSubredditDataOauth(subredditName, new HashMap<>());
         subredditData.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

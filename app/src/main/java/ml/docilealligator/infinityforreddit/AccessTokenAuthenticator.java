@@ -129,6 +129,7 @@ class AccessTokenAuthenticator implements Authenticator {
                 String newAccessToken = jsonObject.getString(APIUtils.ACCESS_TOKEN_KEY);
                 if (mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT).equals(Account.ANONYMOUS_ACCOUNT)) {
                     mCurrentAccountSharedPreferences.edit().putString(SharedPreferencesUtils.ACCESS_TOKEN, newAccessToken).apply();
+                    mCurrentAccountSharedPreferences.edit().putString(SharedPreferencesUtils.APPLICATION_ONLY_ACCESS_TOKEN, newAccessToken).apply();
                 }
 
                 return newAccessToken;

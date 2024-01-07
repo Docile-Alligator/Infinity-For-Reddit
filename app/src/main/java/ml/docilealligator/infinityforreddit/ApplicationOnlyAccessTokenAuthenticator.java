@@ -80,6 +80,7 @@ class ApplicationOnlyAccessTokenAuthenticator implements Authenticator {
                 JSONObject jsonObject = new JSONObject(response.body());
                 String newAccessToken = jsonObject.getString(APIUtils.ACCESS_TOKEN_KEY);
                 mRedditDataRoomDatabase.accountDao().updateAccessToken(Account.ANONYMOUS_ACCOUNT, newAccessToken);
+                mCurrentAccountSharedPreferences.edit().putString(SharedPreferencesUtils.APPLICATION_ONLY_ACCESS_TOKEN, newAccessToken).apply();
                 if (mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT).equals(Account.ANONYMOUS_ACCOUNT)) {
                     mCurrentAccountSharedPreferences.edit().putString(SharedPreferencesUtils.ACCESS_TOKEN, newAccessToken).apply();
                 }

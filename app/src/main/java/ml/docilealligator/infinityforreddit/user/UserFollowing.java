@@ -21,18 +21,18 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 public class UserFollowing {
-    public static void followUser(Retrofit oauthRetrofit, Retrofit retrofit,
+    public static void followUser(Retrofit oauthRetrofit, Retrofit applicationOnlyOauth,
                                   @Nullable String accessToken, String username, @NonNull String accountName,
                                   RedditDataRoomDatabase redditDataRoomDatabase,
                                   UserFollowingListener userFollowingListener) {
-        userFollowing(oauthRetrofit, retrofit, accessToken, username, accountName, "sub",
+        userFollowing(oauthRetrofit, applicationOnlyOauth, accessToken, username, accountName, "sub",
                 redditDataRoomDatabase.subscribedUserDao(), userFollowingListener);
     }
 
-    public static void anonymousFollowUser(Executor executor, Handler handler, Retrofit retrofit, String username,
-                                           RedditDataRoomDatabase redditDataRoomDatabase,
+    public static void anonymousFollowUser(Executor executor, Handler handler, Retrofit applicationOnlyOauth,
+                                           String username, RedditDataRoomDatabase redditDataRoomDatabase,
                                            UserFollowingListener userFollowingListener) {
-        FetchUserData.fetchUserData(retrofit, username, new FetchUserData.FetchUserDataListener() {
+        FetchUserData.fetchUserData(applicationOnlyOauth, username, new FetchUserData.FetchUserDataListener() {
             @Override
             public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
                 executor.execute(() -> {
@@ -53,11 +53,11 @@ public class UserFollowing {
         });
     }
 
-    public static void unfollowUser(Retrofit oauthRetrofit, Retrofit retrofit,
+    public static void unfollowUser(Retrofit oauthRetrofit, Retrofit applicationOnlyOauth,
                                     @Nullable String accessToken, String username, @NonNull String accountName,
                                     RedditDataRoomDatabase redditDataRoomDatabase,
                                     UserFollowingListener userFollowingListener) {
-        userFollowing(oauthRetrofit, retrofit, accessToken, username, accountName, "unsub",
+        userFollowing(oauthRetrofit, applicationOnlyOauth, accessToken, username, accountName, "unsub",
                 redditDataRoomDatabase.subscribedUserDao(), userFollowingListener);
     }
 
@@ -71,7 +71,7 @@ public class UserFollowing {
         });
     }
 
-    private static void userFollowing(Retrofit oauthRetrofit, Retrofit retrofit, @Nullable String accessToken,
+    private static void userFollowing(Retrofit oauthRetrofit, Retrofit applicationOnlyOauth, @Nullable String accessToken,
                                       String username, @NonNull String accountName, String action, SubscribedUserDao subscribedUserDao,
                                       UserFollowingListener userFollowingListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
@@ -81,12 +81,12 @@ public class UserFollowing {
         params.put(APIUtils.SR_NAME_KEY, "u_" + username);
 
         Call<String> subredditSubscriptionCall = api.subredditSubscription(APIUtils.getOAuthHeader(accessToken), params);
-        subredditSubscriptionCall.enqueue(new Callback<String>() {
+        subredditSubscriptionCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
                     if (action.equals("sub")) {
-                        FetchUserData.fetchUserData(retrofit, username, new FetchUserData.FetchUserDataListener() {
+                        FetchUserData.fetchUserData(applicationOnlyOauth, username, new FetchUserData.FetchUserDataListener() {
                             @Override
                             public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
                                 new UpdateSubscriptionAsyncTask(subscribedUserDao, userData, accountName, true).execute();

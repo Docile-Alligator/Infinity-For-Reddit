@@ -12,9 +12,11 @@ import dagger.Provides;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.network.SortTypeConverterFactory;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import okhttp3.ConnectionPool;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.adapter.guava.GuavaCallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -77,6 +79,18 @@ abstract class NetworkModule {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.OAUTH_API_BASE_URI)
                 .client(httpClient.newBuilder()
+                        .addInterceptor(chain -> {
+                            if (!chain.request().headers().names().contains(APIUtils.AUTHORIZATION_KEY)) {
+                                Request newRequest  = chain.request().newBuilder()
+                                        .addHeader(APIUtils.AUTHORIZATION_KEY,
+                                                APIUtils.AUTHORIZATION_BASE
+                                                        + currentAccountSharedPreferences.getString(SharedPreferencesUtils.APPLICATION_ONLY_ACCESS_TOKEN, null))
+                                        .build();
+                                return chain.proceed(newRequest);
+                            }
+
+                            return chain.proceed(chain.request());
+                        })
                         .authenticator(new ApplicationOnlyAccessTokenAuthenticator(retrofit, accountRoomDatabase, currentAccountSharedPreferences))
                         .connectionPool(connectionPool)
                         .build())

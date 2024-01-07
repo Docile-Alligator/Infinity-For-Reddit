@@ -15,7 +15,7 @@ import retrofit2.Retrofit;
 public class LoadSubredditIcon {
 
     public static void loadSubredditIcon(Executor executor, Handler handler, RedditDataRoomDatabase redditDataRoomDatabase,
-                                         String subredditName, String accessToken, Retrofit applicationOnlyOauthRetrofit,
+                                         String subredditName, Retrofit applicationOnlyOauthRetrofit,
                                          LoadSubredditIconAsyncTaskListener loadSubredditIconAsyncTaskListener) {
         executor.execute(() -> {
             SubredditDao subredditDao = redditDataRoomDatabase.subredditDao();
@@ -25,7 +25,7 @@ public class LoadSubredditIcon {
                 handler.post(() -> loadSubredditIconAsyncTaskListener.loadIconSuccess(iconImageUrl));
             } else {
                 handler.post(() -> FetchSubredditData.fetchSubredditData(applicationOnlyOauthRetrofit,
-                        subredditName, accessToken, new FetchSubredditData.FetchSubredditDataListener() {
+                        subredditName, new FetchSubredditData.FetchSubredditDataListener() {
                             @Override
                             public void onFetchSubredditDataSuccess(SubredditData subredditData1, int nCurrentOnlineSubscribers) {
                                 ArrayList<SubredditData> singleSubredditDataList = new ArrayList<>();

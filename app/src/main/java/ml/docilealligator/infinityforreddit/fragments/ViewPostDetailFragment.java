@@ -920,7 +920,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             loadIconListener.loadIconSuccess(authorName, activity.authorIcons.get(authorName));
         } else {
             LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, authorName,
-                    mRetrofit, iconImageUrl -> {
+                    mApplicationOnlyRetrofit, iconImageUrl -> {
                         activity.authorIcons.put(authorName, iconImageUrl);
                         loadIconListener.loadIconSuccess(authorName, iconImageUrl);
                     });

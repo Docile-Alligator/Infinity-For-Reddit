@@ -77,8 +77,8 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
+    @Named("application_only_oauth")
+    Retrofit mApplicationOnlyOauth;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -249,7 +249,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
             mProvideUserAvatarCallbacks.add(provideUserAvatarCallback);
             if (!isLoadingUserAvatar) {
                 LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase,
-                        username, mRetrofit, iconImageUrl -> {
+                        username, mApplicationOnlyOauth, iconImageUrl -> {
                     isLoadingUserAvatar = false;
                     mUserAvatar = iconImageUrl == null ? "" : iconImageUrl;
                     for (ProvideUserAvatarCallback provideUserAvatarCallbackInArrayList : mProvideUserAvatarCallbacks) {

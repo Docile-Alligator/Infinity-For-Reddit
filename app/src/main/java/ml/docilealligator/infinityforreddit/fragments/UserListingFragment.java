@@ -83,6 +83,9 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
+    @Named("application_only_oauth")
+    Retrofit mApplicationOnlyOauth;
+    @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     @Named("default")
@@ -122,7 +125,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
 
         Resources resources = getResources();
 
-        if ((mActivity instanceof BaseActivity && ((BaseActivity) mActivity).isImmersiveInterface())) {
+        if (((BaseActivity) mActivity).isImmersiveInterface()) {
             mUserListingRecyclerView.setPadding(0, 0, 0, ((BaseActivity) mActivity).getNavBarHeight());
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
@@ -143,7 +146,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
         boolean nsfw = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
 
-        mAdapter = new UserListingRecyclerViewAdapter(mActivity, mExecutor, mOauthRetrofit, mRetrofit,
+        mAdapter = new UserListingRecyclerViewAdapter(mActivity, mExecutor, mOauthRetrofit, mApplicationOnlyOauth,
                 mCustomThemeWrapper, accessToken, accountName, mRedditDataRoomDatabase,
                 getArguments().getBoolean(EXTRA_IS_MULTI_SELECTION, false),
                 new UserListingRecyclerViewAdapter.Callback() {

@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.user;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
@@ -13,11 +14,12 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 public class FetchUserData {
-    public static void fetchUserData(Retrofit retrofit, String userName, FetchUserDataListener fetchUserDataListener) {
-        fetchUserData(null, retrofit, null, userName, fetchUserDataListener);
+    public static void fetchUserData(Retrofit applicationOnlyOauth, String userName,
+                                     FetchUserDataListener fetchUserDataListener) {
+        fetchUserData(null, applicationOnlyOauth, null, userName, fetchUserDataListener);
     }
 
-    public static void fetchUserData(RedditDataRoomDatabase redditDataRoomDatabase, Retrofit retrofit,
+    public static void fetchUserData(@Nullable RedditDataRoomDatabase redditDataRoomDatabase, Retrofit retrofit,
                                      String accessToken, String userName, FetchUserDataListener fetchUserDataListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 

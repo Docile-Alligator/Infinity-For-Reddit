@@ -174,6 +174,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
+    @Named("application_only_oauth")
+    Retrofit mApplicationOnlyOauth;
+    @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     @Named("default")
@@ -442,7 +445,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                             subscriptionReady = false;
                             if (resources.getString(R.string.follow).contentEquals(subscribeUserChip.getText())) {
                                 if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                                    UserFollowing.anonymousFollowUser(mExecutor, new Handler(), mRetrofit,
+                                    UserFollowing.anonymousFollowUser(mExecutor, new Handler(), mApplicationOnlyOauth,
                                             username, mRedditDataRoomDatabase, new UserFollowing.UserFollowingListener() {
                                                 @Override
                                                 public void onUserFollowingSuccess() {
@@ -459,7 +462,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                                                 }
                                             });
                                 } else {
-                                    UserFollowing.followUser(mOauthRetrofit, mRetrofit, mAccessToken,
+                                    UserFollowing.followUser(mOauthRetrofit, mApplicationOnlyOauth, mAccessToken,
                                             username, mAccountName, mRedditDataRoomDatabase, new UserFollowing.UserFollowingListener() {
                                                 @Override
                                                 public void onUserFollowingSuccess() {
@@ -494,7 +497,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                                                 }
                                             });
                                 } else {
-                                    UserFollowing.unfollowUser(mOauthRetrofit, mRetrofit, mAccessToken,
+                                    UserFollowing.unfollowUser(mOauthRetrofit, mApplicationOnlyOauth, mAccessToken,
                                             username, mAccountName, mRedditDataRoomDatabase, new UserFollowing.UserFollowingListener() {
                                                 @Override
                                                 public void onUserFollowingSuccess() {
@@ -1064,7 +1067,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
     private void fetchUserInfo() {
         if (!mFetchUserInfoSuccess) {
-            FetchUserData.fetchUserData(mRetrofit, username, new FetchUserData.FetchUserDataListener() {
+            FetchUserData.fetchUserData(mApplicationOnlyOauth, username, new FetchUserData.FetchUserDataListener() {
                 @Override
                 public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
                     new ViewUserDetailActivity.InsertUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), userData,
