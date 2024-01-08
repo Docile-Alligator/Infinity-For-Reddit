@@ -20,18 +20,18 @@ import retrofit2.Retrofit;
 
 public class SubredditSubscription {
     public static void subscribeToSubreddit(Executor executor, Handler handler, Retrofit oauthRetrofit,
-                                            Retrofit retrofit, @Nullable String accessToken, String subredditName,
+                                            @Nullable String accessToken, String subredditName,
                                             @NonNull String accountName, RedditDataRoomDatabase redditDataRoomDatabase,
                                             SubredditSubscriptionListener subredditSubscriptionListener) {
         subredditSubscription(executor, handler, oauthRetrofit, accessToken, subredditName,
                 accountName, "sub", redditDataRoomDatabase, subredditSubscriptionListener);
     }
 
-    public static void anonymousSubscribeToSubreddit(Executor executor, Handler handler, Retrofit retrofit,
+    public static void anonymousSubscribeToSubreddit(Executor executor, Handler handler, Retrofit applicationOnlyOauth,
                                                      RedditDataRoomDatabase redditDataRoomDatabase,
                                                      String subredditName,
                                                      SubredditSubscriptionListener subredditSubscriptionListener) {
-        FetchSubredditData.fetchSubredditData(null, subredditName, "", new FetchSubredditData.FetchSubredditDataListener() {
+        FetchSubredditData.fetchSubredditData(applicationOnlyOauth, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
             @Override
             public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                 insertSubscription(executor, handler, redditDataRoomDatabase,
@@ -72,7 +72,7 @@ public class SubredditSubscription {
         params.put(APIUtils.SR_NAME_KEY, subredditName);
 
         Call<String> subredditSubscriptionCall = api.subredditSubscription(APIUtils.getOAuthHeader(accessToken), params);
-        subredditSubscriptionCall.enqueue(new Callback<String>() {
+        subredditSubscriptionCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {

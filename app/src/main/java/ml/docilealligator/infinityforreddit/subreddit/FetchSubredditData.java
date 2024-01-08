@@ -15,7 +15,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchSubredditData {
-    public static void fetchSubredditData(Retrofit oauthRetrofit, String subredditName, String accessToken, final FetchSubredditDataListener fetchSubredditDataListener) {
+    public static void fetchSubredditData(Retrofit oauthRetrofit, String subredditName, String accessToken,
+                                          final FetchSubredditDataListener fetchSubredditDataListener) {
         RedditAPI oauthApi = oauthRetrofit.create(RedditAPI.class);
         Call<String> subredditData = oauthApi.getSubredditDataOauth(subredditName, APIUtils.getOAuthHeader(accessToken));
         subredditData.enqueue(new Callback<>() {
@@ -47,8 +48,8 @@ public class FetchSubredditData {
 
     public static void fetchSubredditData(Retrofit applicationOnlyOauthRetrofit, String subredditName,
                                           final FetchSubredditDataListener fetchSubredditDataListener) {
-        RedditAPI oauthApi = applicationOnlyOauthRetrofit.create(RedditAPI.class);
-        Call<String> subredditData = oauthApi.getSubredditDataOauth(subredditName, new HashMap<>());
+        Call<String> subredditData = applicationOnlyOauthRetrofit.create(RedditAPI.class)
+                .getSubredditDataOauth(subredditName, new HashMap<>());
         subredditData.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

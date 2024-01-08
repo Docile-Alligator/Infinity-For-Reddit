@@ -180,6 +180,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
+    @Named("application_only_oauth")
+    Retrofit mApplicationOnlyOauthRetrofit;
+    @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     @Named("default")
@@ -959,7 +962,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     subscriptionReady = false;
                     if (getResources().getString(R.string.subscribe).contentEquals(subscribeSubredditChip.getText())) {
                         SubredditSubscription.anonymousSubscribeToSubreddit(mExecutor, new Handler(),
-                                mRetrofit, mRedditDataRoomDatabase, subredditName,
+                                mApplicationOnlyOauthRetrofit, mRedditDataRoomDatabase, subredditName,
                                 new SubredditSubscription.SubredditSubscriptionListener() {
                                     @Override
                                     public void onSubredditSubscriptionSuccess() {
@@ -1000,7 +1003,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     subscriptionReady = false;
                     if (getResources().getString(R.string.subscribe).contentEquals(subscribeSubredditChip.getText())) {
                         SubredditSubscription.subscribeToSubreddit(mExecutor, new Handler(), mOauthRetrofit,
-                                mRetrofit, mAccessToken, subredditName, mAccountName, mRedditDataRoomDatabase,
+                                mAccessToken, subredditName, mAccountName, mRedditDataRoomDatabase,
                                 new SubredditSubscription.SubredditSubscriptionListener() {
                                     @Override
                                     public void onSubredditSubscriptionSuccess() {

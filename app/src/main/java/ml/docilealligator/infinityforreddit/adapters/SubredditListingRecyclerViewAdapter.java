@@ -60,7 +60,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
     private final BaseActivity activity;
     private final Executor executor;
     private final Retrofit oauthRetrofit;
-    private final Retrofit retrofit;
+    private final Retrofit applicationOnlyOauthRetrofit;
     private final String accessToken;
     private final String accountName;
     private final RedditDataRoomDatabase redditDataRoomDatabase;
@@ -75,7 +75,8 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
     private NetworkState networkState;
     private final Callback callback;
 
-    public SubredditListingRecyclerViewAdapter(BaseActivity activity, Executor executor, Retrofit oauthRetrofit, Retrofit retrofit,
+    public SubredditListingRecyclerViewAdapter(BaseActivity activity, Executor executor, Retrofit oauthRetrofit,
+                                               Retrofit applicationOnlyOauthRetrofit,
                                                CustomThemeWrapper customThemeWrapper,
                                                @Nullable String accessToken, @NonNull String accountName,
                                                RedditDataRoomDatabase redditDataRoomDatabase,
@@ -84,7 +85,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
         this.activity = activity;
         this.executor = executor;
         this.oauthRetrofit = oauthRetrofit;
-        this.retrofit = retrofit;
+        this.applicationOnlyOauthRetrofit = applicationOnlyOauthRetrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.redditDataRoomDatabase = redditDataRoomDatabase;
@@ -160,7 +161,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
                                     ((DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
                                         if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                                             SubredditSubscription.subscribeToSubreddit(executor, new Handler(),
-                                                    oauthRetrofit, retrofit, accessToken, subredditData.getName(),
+                                                    oauthRetrofit, accessToken, subredditData.getName(),
                                                     accountName, redditDataRoomDatabase,
                                                     new SubredditSubscription.SubredditSubscriptionListener() {
                                                         @Override
@@ -176,7 +177,8 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
                                                     });
                                         } else {
                                             SubredditSubscription.anonymousSubscribeToSubreddit(executor, new Handler(),
-                                                    retrofit, redditDataRoomDatabase, subredditData.getName(),
+                                                    applicationOnlyOauthRetrofit, redditDataRoomDatabase,
+                                                    subredditData.getName(),
                                                     new SubredditSubscription.SubredditSubscriptionListener() {
                                                         @Override
                                                         public void onSubredditSubscriptionSuccess() {
