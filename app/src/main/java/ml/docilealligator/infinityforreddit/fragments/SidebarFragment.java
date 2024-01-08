@@ -71,9 +71,6 @@ public class SidebarFragment extends Fragment {
     @BindView(R.id.markdown_recycler_view_sidebar_fragment)
     RecyclerView recyclerView;
     @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
-    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject

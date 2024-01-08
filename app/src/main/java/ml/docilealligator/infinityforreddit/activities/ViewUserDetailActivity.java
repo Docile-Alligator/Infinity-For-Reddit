@@ -168,9 +168,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @BindView(R.id.description_text_view_view_user_detail_activity)
     TextView descriptionTextView;
     @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
-    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject

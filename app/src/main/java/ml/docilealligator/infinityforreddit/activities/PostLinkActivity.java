@@ -363,7 +363,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
             mRetrofit.newBuilder()
                     .baseUrl("http://localhost/")
                     .addConverterFactory(ScalarsConverterFactory.create())
-                    .build().create(TitleSuggestion.class).getHtml(url).enqueue(new Callback<String>() {
+                    .build().create(TitleSuggestion.class).getHtml(url).enqueue(new Callback<>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful()) {

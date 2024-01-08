@@ -99,9 +99,6 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     @BindView(R.id.toolbar_view_multi_reddit_detail_activity)
     Toolbar toolbar;
     @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
-    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject

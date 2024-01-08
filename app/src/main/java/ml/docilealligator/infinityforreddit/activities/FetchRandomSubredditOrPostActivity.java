@@ -28,8 +28,8 @@ public class FetchRandomSubredditOrPostActivity extends BaseActivity {
     @BindView(R.id.relative_layout_fetch_random_subreddit_or_post_activity)
     RelativeLayout relativeLayout;
     @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
+    @Named("application_only_oauth")
+    Retrofit mApplicationOnlyOauthRetrofit;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
@@ -49,7 +49,8 @@ public class FetchRandomSubredditOrPostActivity extends BaseActivity {
 
         int option = getIntent().getIntExtra(EXTRA_RANDOM_OPTION, RandomBottomSheetFragment.RANDOM_SUBREDDIT);
 
-        FetchPost.fetchRandomPost(mExecutor, new Handler(), mRetrofit, option == RandomBottomSheetFragment.RANDOM_NSFW_SUBREDDIT
+        FetchPost.fetchRandomPost(mExecutor, new Handler(), mApplicationOnlyOauthRetrofit,
+                option == RandomBottomSheetFragment.RANDOM_NSFW_SUBREDDIT
                 || option == RandomBottomSheetFragment.RANDOM_NSFW_POST, new FetchPost.FetchRandomPostListener() {
             @Override
             public void fetchRandomPostSuccess(String postId, String subredditName) {

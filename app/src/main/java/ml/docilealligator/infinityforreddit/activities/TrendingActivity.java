@@ -83,9 +83,6 @@ public class TrendingActivity extends BaseActivity {
     @BindView(R.id.fetch_trending_search_text_view_trending_activity)
     TextView errorTextView;
     @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
-    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject

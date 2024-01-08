@@ -174,9 +174,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @BindView(R.id.description_text_view_view_subreddit_detail_activity)
     TextView descriptionTextView;
     @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
-    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject

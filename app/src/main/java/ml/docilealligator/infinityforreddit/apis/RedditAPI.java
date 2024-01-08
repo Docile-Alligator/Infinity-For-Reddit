@@ -206,10 +206,10 @@ public interface RedditAPI {
     Call<String> awardThing(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
     @GET("/r/random/comments.json?limit=1&raw_json=1")
-    Call<String> getRandomPost();
+    Call<String> getRandomPostOauth();
 
     @GET("/r/randnsfw/new.json?sort=new&t=all&limit=1&raw_json=1")
-    Call<String> getRandomNSFWPost();
+    Call<String> getRandomNSFWPostOauth();
 
     @POST("/api/read_all_messages")
     Call<String> readAllMessages(@HeaderMap Map<String, String> headers);

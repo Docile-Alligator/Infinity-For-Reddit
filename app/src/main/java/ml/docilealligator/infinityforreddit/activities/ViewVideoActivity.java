@@ -199,8 +199,8 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     private boolean useBottomAppBar;
 
     @Inject
-    @Named("no_oauth")
-    Retrofit retrofit;
+    @Named("application_only_oauth")
+    Retrofit applicationOnlyOauthRetrofit;
 
     @Inject
     @Named("gfycat")
@@ -782,7 +782,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
     private void loadVReddItVideo(Bundle savedInstanceState) {
         progressBar.setVisibility(View.VISIBLE);
-        vReddItRetrofit.create(VReddIt.class).getRedirectUrl(getIntent().getStringExtra(EXTRA_V_REDD_IT_URL)).enqueue(new Callback<String>() {
+        vReddItRetrofit.create(VReddIt.class).getRedirectUrl(getIntent().getStringExtra(EXTRA_V_REDD_IT_URL)).enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 Uri redirectUri = Uri.parse(response.raw().request().url().toString());
@@ -791,7 +791,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                     List<String> segments = redirectUri.getPathSegments();
                     int commentsIndex = segments.lastIndexOf("comments");
                     String postId = segments.get(commentsIndex + 1);
-                    FetchPost.fetchPost(mExecutor, new Handler(), retrofit, postId, null,
+                    FetchPost.fetchPost(mExecutor, new Handler(), applicationOnlyOauthRetrofit, postId, null,
                             new FetchPost.FetchPostListener() {
                                 @Override
                                 public void fetchPostSuccess(Post post) {

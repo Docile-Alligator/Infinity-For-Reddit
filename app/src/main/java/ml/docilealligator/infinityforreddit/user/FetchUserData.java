@@ -57,9 +57,9 @@ public class FetchUserData {
         });
     }
 
-    public static void fetchUserListingData(Retrofit retrofit, String query, String after, SortType.Type sortType, boolean nsfw,
+    public static void fetchUserListingData(Retrofit applicationOnlyOauthRetrofit, String query, String after, SortType.Type sortType, boolean nsfw,
                                             FetchUserListingDataListener fetchUserListingDataListener) {
-        RedditAPI api = retrofit.create(RedditAPI.class);
+        RedditAPI api = applicationOnlyOauthRetrofit.create(RedditAPI.class);
 
         Call<String> userInfo = api.searchUsers(query, after, sortType, nsfw ? 1 : 0);
         userInfo.enqueue(new Callback<>() {

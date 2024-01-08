@@ -148,9 +148,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @BindView(R.id.fetch_post_info_text_view_view_post_detail_fragment)
     TextView mFetchPostInfoTextView;
     @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
-    @Inject
     @Named("pushshift")
     Retrofit pushshiftRetrofit;
     @Inject

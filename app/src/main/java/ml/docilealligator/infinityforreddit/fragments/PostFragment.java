@@ -179,9 +179,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     TextView mFetchPostInfoTextView;
     PostViewModel mPostViewModel;
     @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
-    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject

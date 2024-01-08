@@ -77,9 +77,6 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
     TextView mFetchUserListingInfoTextView;
     UserListingViewModel mUserListingViewModel;
     @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
-    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
@@ -182,7 +179,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
             });
         }
 
-        UserListingViewModel.Factory factory = new UserListingViewModel.Factory(mRetrofit, mQuery,
+        UserListingViewModel.Factory factory = new UserListingViewModel.Factory(mApplicationOnlyOauth, mQuery,
                 sortType, nsfw);
         mUserListingViewModel = new ViewModelProvider(this, factory).get(UserListingViewModel.class);
         mUserListingViewModel.getUsers().observe(getViewLifecycleOwner(), UserData -> mAdapter.submitList(UserData));

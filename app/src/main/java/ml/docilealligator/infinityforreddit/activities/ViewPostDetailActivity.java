@@ -127,9 +127,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @BindView(R.id.close_search_panel_image_view_view_post_detail_activity)
     ImageView closeSearchPanelImageView;
     @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
-    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
