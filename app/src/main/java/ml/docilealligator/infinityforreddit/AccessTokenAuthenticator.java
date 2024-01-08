@@ -49,6 +49,9 @@ class AccessTokenAuthenticator implements Authenticator {
                 Account account = mRedditDataRoomDatabase.accountDao().getCurrentAccount();
                 if (account == null) {
                     //Anonymous mode
+                    if (mRedditDataRoomDatabase.accountDao().isAnonymousAccountInserted()) {
+                        mRedditDataRoomDatabase.accountDao().insert(Account.getAnonymousAccount());
+                    }
                     String accessTokenFromSharedPreference = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, "");
                     if (accessToken.equals(accessTokenFromSharedPreference) || accessToken.equals("null")) {
                         String newAccessToken = getApplicationOnlyAccessToken();
@@ -127,9 +130,10 @@ class AccessTokenAuthenticator implements Authenticator {
             if (response.isSuccessful() && response.body() != null) {
                 JSONObject jsonObject = new JSONObject(response.body());
                 String newAccessToken = jsonObject.getString(APIUtils.ACCESS_TOKEN_KEY);
+                mRedditDataRoomDatabase.accountDao().updateAccessToken(Account.ANONYMOUS_ACCOUNT, newAccessToken);
+                mCurrentAccountSharedPreferences.edit().putString(SharedPreferencesUtils.APPLICATION_ONLY_ACCESS_TOKEN, newAccessToken).apply();
                 if (mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT).equals(Account.ANONYMOUS_ACCOUNT)) {
                     mCurrentAccountSharedPreferences.edit().putString(SharedPreferencesUtils.ACCESS_TOKEN, newAccessToken).apply();
-                    mCurrentAccountSharedPreferences.edit().putString(SharedPreferencesUtils.APPLICATION_ONLY_ACCESS_TOKEN, newAccessToken).apply();
                 }
 
                 return newAccessToken;
