@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -24,8 +25,8 @@ public class FetchUserData {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> userInfo;
-        if (redditDataRoomDatabase == null) {
-            userInfo = api.getUserData(userName);
+        if (accessToken == null) {
+            userInfo = api.getUserDataOauth(new HashMap<>(), userName);
         } else {
             userInfo = api.getUserDataOauth(APIUtils.getOAuthHeader(accessToken), userName);
         }

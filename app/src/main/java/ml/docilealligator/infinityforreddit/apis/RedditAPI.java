@@ -30,9 +30,6 @@ public interface RedditAPI {
     Call<String> getAccessToken(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
     @GET("r/{subredditName}/about.json?raw_json=1")
-    Call<String> getSubredditData(@Path("subredditName") String subredditName);
-
-    @GET("r/{subredditName}/about.json?raw_json=1")
     Call<String> getSubredditDataOauth(@Path("subredditName") String subredditName, @HeaderMap Map<String, String> headers);
 
     @GET("subreddits/mine/subscriber?raw_json=1")
@@ -47,9 +44,6 @@ public interface RedditAPI {
 
     @GET("comments/{id}.json?raw_json=1")
     Call<String> getPostOauth(@Path("id") String id, @HeaderMap Map<String, String> headers);
-
-    @GET("user/{username}/about.json?raw_json=1")
-    Call<String> getUserData(@Path("username") String username);
 
     @GET("user/{username}/about.json?raw_json=1&limit=100")
     Call<String> getUserDataOauth(@HeaderMap Map<String, String> headers, @Path("username") String username);
