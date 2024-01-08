@@ -59,7 +59,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     private final BaseActivity activity;
     private final Executor executor;
     private final Retrofit oauthRetrofit;
-    private final Retrofit applicationOnlyOauth;
+    private final Retrofit applicationOnlyOauthRetrofit;
     private final String accessToken;
     private final String accountName;
     private final RedditDataRoomDatabase redditDataRoomDatabase;
@@ -74,7 +74,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     private NetworkState networkState;
     private final Callback callback;
 
-    public UserListingRecyclerViewAdapter(BaseActivity activity, Executor executor, Retrofit oauthRetrofit, Retrofit applicationOnlyOauth,
+    public UserListingRecyclerViewAdapter(BaseActivity activity, Executor executor, Retrofit oauthRetrofit, Retrofit applicationOnlyOauthRetrofit,
                                           CustomThemeWrapper customThemeWrapper, @Nullable String accessToken,
                                           @NonNull String accountName, RedditDataRoomDatabase redditDataRoomDatabase,
                                           boolean isMultiSelection, Callback callback) {
@@ -82,7 +82,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
         this.activity = activity;
         this.executor = executor;
         this.oauthRetrofit = oauthRetrofit;
-        this.applicationOnlyOauth = applicationOnlyOauth;
+        this.applicationOnlyOauthRetrofit = applicationOnlyOauthRetrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.redditDataRoomDatabase = redditDataRoomDatabase;
@@ -150,7 +150,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
                                 public void isNotSubscribed() {
                                     ((DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
                                     ((DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
-                                        UserFollowing.followUser(oauthRetrofit, applicationOnlyOauth,
+                                        UserFollowing.followUser(oauthRetrofit, applicationOnlyOauthRetrofit,
                                                 accessToken, userData.getName(), accountName, redditDataRoomDatabase,
                                                 new UserFollowing.UserFollowingListener() {
                                                     @Override

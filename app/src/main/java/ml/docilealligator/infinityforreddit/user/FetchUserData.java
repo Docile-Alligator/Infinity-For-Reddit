@@ -15,9 +15,9 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 public class FetchUserData {
-    public static void fetchUserData(Retrofit applicationOnlyOauth, String userName,
+    public static void fetchUserData(Retrofit applicationOnlyOauthRetrofit, String userName,
                                      FetchUserDataListener fetchUserDataListener) {
-        fetchUserData(null, applicationOnlyOauth, null, userName, fetchUserDataListener);
+        fetchUserData(null, applicationOnlyOauthRetrofit, null, userName, fetchUserDataListener);
     }
 
     public static void fetchUserData(@Nullable RedditDataRoomDatabase redditDataRoomDatabase, Retrofit retrofit,

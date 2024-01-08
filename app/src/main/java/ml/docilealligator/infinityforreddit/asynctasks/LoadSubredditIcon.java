@@ -15,7 +15,7 @@ import retrofit2.Retrofit;
 public class LoadSubredditIcon {
 
     public static void loadSubredditIcon(Executor executor, Handler handler, RedditDataRoomDatabase redditDataRoomDatabase,
-                                         String subredditName, Retrofit applicationOnlyOauthRetrofit,
+                                         Retrofit applicationOnlyOauthRetrofit, String subredditName,
                                          LoadSubredditIconAsyncTaskListener loadSubredditIconAsyncTaskListener) {
         executor.execute(() -> {
             SubredditDao subredditDao = redditDataRoomDatabase.subredditDao();

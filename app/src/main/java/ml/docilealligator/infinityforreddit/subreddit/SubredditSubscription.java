@@ -27,11 +27,11 @@ public class SubredditSubscription {
                 accountName, "sub", redditDataRoomDatabase, subredditSubscriptionListener);
     }
 
-    public static void anonymousSubscribeToSubreddit(Executor executor, Handler handler, Retrofit applicationOnlyOauth,
+    public static void anonymousSubscribeToSubreddit(Executor executor, Handler handler, Retrofit applicationOnlyOauthRetrofit,
                                                      RedditDataRoomDatabase redditDataRoomDatabase,
                                                      String subredditName,
                                                      SubredditSubscriptionListener subredditSubscriptionListener) {
-        FetchSubredditData.fetchSubredditData(applicationOnlyOauth, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
+        FetchSubredditData.fetchSubredditData(applicationOnlyOauthRetrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
             @Override
             public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                 insertSubscription(executor, handler, redditDataRoomDatabase,
