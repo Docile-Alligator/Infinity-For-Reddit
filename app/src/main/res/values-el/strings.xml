@@ -304,7 +304,6 @@
     <string name="settings_volume_keys_navigate_posts_title">"Περιήγηση στις αναρτήσεις με τα κουμπιά έντασης"</string>
     <string name="settings_mute_video_title">"Σίγαση βίντεο"</string>
     <string name="settings_mute_nsfw_video_title">"Σίγαση NSFW βίντεο"</string>
-    <string name="settings_automatically_try_redgifs_title">"Αύτοματη προσπάθεια προσπέλασης στο Redgifs αν τα Βίντεο στο Gfycat έχουν αφαιρεθεί."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Αγνόηση Μπάρας Πλοήγησης κατά την Αναπαραγωγή Βίντεο"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Αποτρέπει τα Χειριστήρια του Βίντεο να έχουν έξτρα περιθώριο"</string>
     <string name="settings_confirm_to_exit">"Επιβεβαίωση για Έξοδο"</string>
@@ -703,7 +702,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="notifications">"Ειδοποιήσεις"</string>
     <string name="messages">"Μηνύματα"</string>
     <string name="message">"Μήνυμα"</string>
-    <string name="fetch_gfycat_video_failed">"Η ανάκτηση του βίντεο Gfycat απέτυχε"</string>
     <string name="fetch_redgifs_video_failed">"Η ανάκτηση του βίντεο Redgifs απέτυχε"</string>
     <string name="fetching_video_info_please_wait">"Ανάκτηση πληροφοριών βίντεο. Παρακαλώ περιμένετε."</string>
     <string name="error_fetching_imgur_media">"Αδυναμία φόρτωσης εικόνων"</string>
@@ -1103,7 +1101,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="action_contact_mods">"Επικοινωνία με Συντονιστές"</string>
     <string name="settings_save_nsfw_media_in_different_folder_title">"Αποθήκευση NSFW Πολυμέσων σε Άλλη Τοποθεσία"</string>
     <string name="settings_nsfw_download_location_title">"Τοποθεσία Λήψης NSFW"</string>
-    <string name="fetch_streamable_video_failed">"Η ανάκτηση του βίντεο Gfycat απέτυχε"</string>
+    <string name="fetch_streamable_video_failed">"Η ανάκτηση του βίντεο Streamable απέτυχε"</string>
 
     <!-- EditProfileService Notification -->
     <string name="submit_change_avatar">"Υποβολή Αλλαγής Άβαταρ"</string>

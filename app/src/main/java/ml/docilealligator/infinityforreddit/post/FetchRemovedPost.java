@@ -77,7 +77,7 @@ public class FetchRemovedPost {
                 try {
                     Uri uri = Uri.parse(url);
                     String authority = uri.getAuthority();
-                    if (authority != null && (authority.contains("gfycat.com") || authority.contains("redgifs.com"))) {
+                    if (authority != null && authority.contains("redgifs.com")) {
                         post.setPostType(Post.LINK_TYPE);
                         post.setUrl(url);
                     }

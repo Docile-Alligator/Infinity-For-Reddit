@@ -337,7 +337,6 @@
     <string name="settings_volume_keys_navigate_posts_title">"Пересуватися дописами клавішами гучності"</string>
     <string name="settings_mute_video_title">"Глушити відео"</string>
     <string name="settings_mute_nsfw_video_title">"Глушити відео НБДР"</string>
-    <string name="settings_automatically_try_redgifs_title">"Автоматично пробувати отримати доступ до Redgifs, якщо відео на Gfycat видалено."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ігнорувати панель пересування у відео-програвачі"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Не дозволяти відеоконтролеру мати додаткове поле"</string>
     <string name="settings_confirm_to_exit">"Підтверджувати вихід"</string>
@@ -753,7 +752,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="notifications">"Сповіщення"</string>
     <string name="messages">"Повідомлення"</string>
     <string name="message">"Повідомлення"</string>
-    <string name="fetch_gfycat_video_failed">"Не вдалося отримати відеозапис Gfycat"</string>
     <string name="fetch_redgifs_video_failed">"Не вдалося отримати відеозапис Redgifs"</string>
     <string name="fetching_video_info_please_wait">"Отримання відомостей про відео. Зачекайте."</string>
     <string name="error_fetching_imgur_media">"Не можливо завантажити зображення"</string>

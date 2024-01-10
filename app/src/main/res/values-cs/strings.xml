@@ -341,7 +341,6 @@
     <string name="settings_volume_keys_navigate_posts_title">"Použít tlačítka hlasitosti pro navigaci v příspěvcích"</string>
     <string name="settings_mute_video_title">"Ztlumit videa"</string>
     <string name="settings_mute_nsfw_video_title">"Ztlumit NSFW videa"</string>
-    <string name="settings_automatically_try_redgifs_title">"Automatický pokus o přístup k Redgifs, pokud jsou videa na Gfycat odstraněna."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignorovat navigační lištu v přehrávači videí"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Zabránit ovládání videa mít dodatečný okraj"</string>
     <string name="settings_confirm_to_exit">"Potvrdit pro odchod"</string>
@@ -757,7 +756,6 @@ Chodí popředu."</string>
     <string name="notifications">"Oznámení"</string>
     <string name="messages">"Zprávy"</string>
     <string name="message">"Zpráva"</string>
-    <string name="fetch_gfycat_video_failed">"Získávání Gfycat videa selhalo"</string>
     <string name="fetch_redgifs_video_failed">"Získávání Redgifs videa selhalo"</string>
     <string name="fetching_video_info_please_wait">"Získávání informací o videu. Čekejte prosím."</string>
     <string name="error_fetching_imgur_media">"Nelze načíst obrázky"</string>

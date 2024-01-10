@@ -334,7 +334,6 @@
     <string name="settings_volume_keys_navigate_posts_title">"볼륨 키로 포스트 스크롤하기"</string>
     <string name="settings_mute_video_title">"둥영상 음소거"</string>
     <string name="settings_mute_nsfw_video_title">"NSFW 둥영상 음소거"</string>
-    <string name="settings_automatically_try_redgifs_title">"Gfycat 비디오가 제거되었을 시 자동으로 Redgifs 접근 시도하기"</string>
     <string name="settings_video_player_ignore_nav_bar_title">"영상에서 내비게이션 바 무시"</string>
     <string name="settings_confirm_to_exit">"나갈 때 확인"</string>
     <string name="settings_category_comment_title">"댓글"</string>

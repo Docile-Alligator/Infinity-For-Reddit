@@ -341,7 +341,6 @@
     <string name="settings_mute_nsfw_video_title">"静音 NSFW 视频"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"如果 Gfycat 上的视频已被删除，则自动尝试访问 Redgifs。"</string>
     <string name="settings_video_player_ignore_nav_bar_title">"视频播放器中忽略导航栏"</string>
 
     <!-- Fuzzy -->
@@ -774,7 +773,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="notifications">"通知"</string>
     <string name="messages">"消息"</string>
     <string name="message">"消息"</string>
-    <string name="fetch_gfycat_video_failed">"获取 Gfycat 视频失败"</string>
     <string name="fetch_redgifs_video_failed">"获取 Redgifs 视频失败"</string>
     <string name="fetching_video_info_please_wait">"正在获取视频信息。请稍候。"</string>
     <string name="error_fetching_imgur_media">"无法加载图像"</string>

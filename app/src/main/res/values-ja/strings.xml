@@ -383,7 +383,6 @@
     <string name="settings_mute_nsfw_video_title">"NSFWの動画をミュート再生"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Gfycatの動画が削除されていた場合、自動的にRedgifsでリトライ"</string>
     <string name="settings_video_player_ignore_nav_bar_title">"動画プレーヤーでナビゲーションバーを無視"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"動画コントローラーが余分な余白を使用することを防止します"</string>
     <string name="settings_confirm_to_exit">"アプリの終了確認を表示"</string>
@@ -836,7 +835,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="notifications">"通知"</string>
     <string name="messages">"メッセージ"</string>
     <string name="message">"メッセージ"</string>
-    <string name="fetch_gfycat_video_failed">"Gfycat動画を取得できませんでした"</string>
     <string name="fetch_redgifs_video_failed">"Redgifs動画を取得できませんでした"</string>
     <string name="fetching_video_info_please_wait">"動画の情報を取得中です。少々お待ちください。"</string>
     <string name="error_fetching_imgur_media">"画像をロードできませんでした"</string>

@@ -340,7 +340,6 @@ Druk om opnieuw te proberen."</string>
     <string name="settings_mute_nsfw_video_title">"NSFW-video's dempen"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Automatisch trachten Redgifs te openen als video's zijn verwijderd van Gfycat"</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Navigatiebalk verbergen in videospeler"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Voorkom dat de navigatiebalk extra opvulling heeft"</string>
     <string name="settings_confirm_to_exit">"Afsluiten bevestigen"</string>
@@ -765,7 +764,6 @@ Ze is niet ziek of zo, maar ze kan zeker beter worden."</string>
     <string name="notifications">"Notificaties"</string>
     <string name="messages">"Berichten"</string>
     <string name="message">"Bericht"</string>
-    <string name="fetch_gfycat_video_failed">"Ophalen van Gfycat video is mislukt"</string>
     <string name="fetch_redgifs_video_failed">"Ophalen van Redgifs video is mislukt"</string>
     <string name="fetching_video_info_please_wait">"Ophalen van videoinfo. Even geduld aub."</string>
     <string name="error_fetching_imgur_media">"Kan afbeeldingen niet laden"</string>

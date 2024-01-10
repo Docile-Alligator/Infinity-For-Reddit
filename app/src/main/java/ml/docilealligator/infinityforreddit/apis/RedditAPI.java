@@ -237,10 +237,6 @@ public interface RedditAPI {
     @GET("/api/trending_searches_v1.json?withAds=0&raw_json=1&gilding_detail=1")
     Call<String> getTrendingSearchesOauth(@HeaderMap Map<String, String> headers);
 
-    default Call<String> getWiki(@Path("subredditName") String subredditName) {
-        return getWikiPage(subredditName, "index");
-    }
-
     @GET("/r/{subredditName}/wiki/{wikiPage}.json?raw_json=1")
     Call<String> getWikiPage(@Path("subredditName") String subredditName, @Path("wikiPage") String wikiPage);
 

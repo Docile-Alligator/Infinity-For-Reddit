@@ -163,9 +163,6 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
     @Named("application_only_oauth")
     Retrofit mApplicationOnlyRetrofit;
     @Inject
-    @Named("gfycat")
-    Retrofit mGfycatRetrofit;
-    @Inject
     @Named("redgifs")
     Retrofit mRedgifsRetrofit;
     @Inject
@@ -378,7 +375,7 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
         if (historyType == HISTORY_TYPE_READ_POSTS) {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.HISTORY_POST_LAYOUT_READ_POST, defaultPostLayout);
 
-            mAdapter = new HistoryPostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
+            mAdapter = new HistoryPostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit,
                     mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences,

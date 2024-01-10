@@ -356,7 +356,6 @@
     <string name="settings_mute_nsfw_video_title">"Isključi ton na NSFW videozapisima"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Automatski pokušaj pristupiti Redgifs ako su videozapisi na Gfycatu uklonjeni."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignoriraj navigacijsku traku u video playeru"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Onemogući dodatnu marginu na video kontroleru"</string>
     <string name="settings_confirm_to_exit">"Potvrdi izlaz"</string>
@@ -791,7 +790,6 @@ Baziraj na Indigo Amoled temi"</string>
     <string name="notifications">"Obavijesti"</string>
     <string name="messages">"Poruke"</string>
     <string name="message">"Poruka"</string>
-    <string name="fetch_gfycat_video_failed">"Dohvaćanje Gfycat videozapisa nije uspjelo"</string>
     <string name="fetch_redgifs_video_failed">"Dohvaćanje Redgifs videozapisa nije uspjelo"</string>
     <string name="fetching_video_info_please_wait">"Dohvaćanje informacija o videozapisu. Molim pričekajte."</string>
     <string name="error_fetching_imgur_media">"Nije moguće učitati slike"</string>

@@ -350,7 +350,6 @@ Nhấn để thử lại."</string>
     <string name="settings_mute_nsfw_video_title">"Tắt tiếng video NSFW"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Tự động thử truy cập Redgifs nếu Video trên Gfycat bị xóa."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Bỏ qua thanh điều hướng trong trình phát video"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Ngăn trình điều khiển video có thêm lề"</string>
     <string name="settings_confirm_to_exit">"Xác nhận để thoát"</string>
@@ -766,7 +765,6 @@ Cô ta không ốm hay gì cả, nhưng cô ấy chắc chắn có thể khá h�
     <string name="notifications">"Thông báo"</string>
     <string name="messages">"Tin nhắn"</string>
     <string name="message">"Tin nhắn"</string>
-    <string name="fetch_gfycat_video_failed">"Lấy video Gfycat thất bại"</string>
     <string name="fetch_redgifs_video_failed">"Lấy video Redgifs thất bại"</string>
     <string name="fetching_video_info_please_wait">"Đang lấy thông tin video. Vui lòng đợi."</string>
     <string name="error_fetching_imgur_media">"Không thể tải hình ảnh"</string>

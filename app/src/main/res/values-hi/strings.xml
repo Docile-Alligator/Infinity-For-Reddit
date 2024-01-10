@@ -384,7 +384,6 @@ Behavior -->
     <string name="settings_mute_nsfw_video_title">"मौन NSFW वीडियोज"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"स्वतः ही Redgifs खोलने का प्रयास यदि Gfycat पर वीडियोज हटा दी गयी  हों "</string>
     <string name="settings_video_player_ignore_nav_bar_title">"वीडियो प्लेयर में नेवीगेशन बार का छिपना"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"वीडियो कंट्रोलर द्वारा अतिरिक्त हाशिया लेने पर रोक "</string>
     <string name="settings_confirm_to_exit">"एप छोड़ने की पुष्टि "</string>
@@ -824,7 +823,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="notifications">"अधिसूचनाएं "</string>
     <string name="messages">"संदेश "</string>
     <string name="message">"संदेश "</string>
-    <string name="fetch_gfycat_video_failed">"Gfycat वीडियो प्राप्ति सफल "</string>
     <string name="fetch_redgifs_video_failed">"Redgifs वीडियो प्राप्ति असफल "</string>
     <string name="fetching_video_info_please_wait">"वीडियो इनफो प्राप्त हो रहा है। कृपया प्रतीक्षा करें। "</string>
     <string name="error_fetching_imgur_media">"चित्र लोड नहीं हो सका "</string>

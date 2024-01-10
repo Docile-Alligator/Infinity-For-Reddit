@@ -388,7 +388,6 @@ peut ne pas fonctionner sur Android 11"</string>
     <string name="settings_mute_nsfw_video_title">"Couper le son des vidéos NSFW"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Essayez d'accéder automatiquement aux Redgifs si les Vidéos sur Gfycat sont supprimées."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignorer la barre de navigation dans le lecteur vidéo"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Empêcher le Contrôleur Vidéo de créer une Marge Supplémentaire"</string>
     <string name="settings_confirm_to_exit">"Confirmer pour quitter"</string>
@@ -844,7 +843,6 @@ Basé sur le thème sombre Indigo"</string>
     <string name="notifications">"Notifications"</string>
     <string name="messages">"Messages"</string>
     <string name="message">"Message"</string>
-    <string name="fetch_gfycat_video_failed">"Échec de la récupération de la vidéo Gfycat"</string>
     <string name="fetch_redgifs_video_failed">"Échec de la récupération de la vidéo Redgifs"</string>
     <string name="fetching_video_info_please_wait">"Récupération des informations vidéo. Veuillez patienter. "</string>
     <string name="error_fetching_imgur_media">"Impossible de charger les images"</string>

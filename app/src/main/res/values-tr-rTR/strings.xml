@@ -338,7 +338,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_mute_nsfw_video_title">"NSFW Videolarını Sessize Al"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Gfycat'teki Videolar Kaldırılmışsa Otomatik Olarak Redgif'lere Erişmeyi Dene."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Video Oynatıcısındaki Navigasyon Çubuğunu Yoksay"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Video Denetleyicisinde Fazladan Kenar Olmasını Önle"</string>
     <string name="settings_confirm_to_exit">"Çıkışı Doğrula"</string>
@@ -757,7 +756,6 @@ Amoled Tema Şablonu Oluştur"</string>
     <string name="notifications">"Bildirimler"</string>
     <string name="messages">"Mesajlar"</string>
     <string name="message">"Mesaj"</string>
-    <string name="fetch_gfycat_video_failed">"Gfycat video'su alınamadı"</string>
     <string name="fetch_redgifs_video_failed">"Redgifs video'su alınamadı"</string>
     <string name="fetching_video_info_please_wait">"Video bilgisi alınıyor. Lütfen bekleyin."</string>
     <string name="error_fetching_imgur_media">"Görüntüler yüklenemedi"</string>

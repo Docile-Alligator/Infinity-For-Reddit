@@ -307,7 +307,6 @@
     <string name="settings_volume_keys_navigate_posts_title">"Hangerőgombok használata a bejegyzések közti navigációra"</string>
     <string name="settings_mute_video_title">"Videók némítása"</string>
     <string name="settings_mute_nsfw_video_title">"NSFW videók némítása"</string>
-    <string name="settings_automatically_try_redgifs_title">"A Redgifek automatikusa elérése, ha a videók el lettek távolítva a Gfycatről."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Navigációs sáv mellőzése a videólejátszóban"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"A videóvezérlő extra margójának megakadályozása"</string>
     <string name="settings_confirm_to_exit">"Kilépés megerősítése"</string>
@@ -730,7 +729,6 @@ Az alap az indigó amoled téma"</string>
     <string name="notifications">"Értesítések"</string>
     <string name="messages">"Üzenetek"</string>
     <string name="message">"Üzenet"</string>
-    <string name="fetch_gfycat_video_failed">"Gfycat videó megszerzése nem sikerült"</string>
     <string name="fetch_redgifs_video_failed">"Redgifs videó megszerzése nem sikerült"</string>
     <string name="fetching_video_info_please_wait">"Videó infó megszerzése. Kérlek várj."</string>
     <string name="error_fetching_imgur_media">"Nem lehet betölteni a képeket"</string>

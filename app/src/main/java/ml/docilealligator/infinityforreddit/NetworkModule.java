@@ -148,15 +148,6 @@ abstract class NetworkModule {
     }
 
     @Provides
-    @Named("gfycat")
-    @Singleton
-    static Retrofit provideGfycatRetrofit(@Named("base") Retrofit retrofit) {
-        return retrofit.newBuilder()
-                .baseUrl(APIUtils.GFYCAT_API_BASE_URI)
-                .build();
-    }
-
-    @Provides
     @Named("RedgifsAccessTokenAuthenticator")
     static Interceptor redgifsAccessTokenAuthenticator(@Named("current_account") SharedPreferences currentAccountSharedPreferences) {
         return new RedgifsAccessTokenAuthenticator(currentAccountSharedPreferences);

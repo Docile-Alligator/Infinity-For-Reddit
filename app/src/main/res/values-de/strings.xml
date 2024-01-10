@@ -343,7 +343,6 @@ Tippen für Neuversuch."</string>
     <string name="settings_mute_nsfw_video_title">"NSFW-Videos stummschalten"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Automatisch versuchen, Redgifs abzurufen, falls Videos auf Gfycat entfernt wurden."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Navigationsleiste im Video-Player ignorieren"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Kein extra Rand beim Video-Controller"</string>
     <string name="settings_confirm_to_exit">"Verlassen bestätigen"</string>
@@ -773,7 +772,6 @@ Sie ist nicht krank oder so, aber sie könnte sich definitiv bessern."</string>
     <string name="notifications">"Benachrichtigungen"</string>
     <string name="messages">"Nachrichten"</string>
     <string name="message">"Nachricht"</string>
-    <string name="fetch_gfycat_video_failed">"Abruf des Gfycat-Videos fehlgeschlagen"</string>
     <string name="fetch_redgifs_video_failed">"Abruf des Redgifs-Videos fehlgeschlagen"</string>
     <string name="fetching_video_info_please_wait">"Lade Video-Info. Bitte warten."</string>
     <string name="error_fetching_imgur_media">"Kann Bilder nicht laden"</string>

@@ -348,7 +348,6 @@
     <string name="settings_mute_nsfw_video_title">"NSFW-видео без звука"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Автопопытка доступа к Redgifs, если видео на Gfycat удалены."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Не использовать панель навигации в видеопроигрывателе"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Предотвращает случайные нажатия"</string>
     <string name="settings_confirm_to_exit">"Подтверждать выход"</string>
@@ -765,7 +764,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="notifications">"Уведомления"</string>
     <string name="messages">"Сообщения"</string>
     <string name="message">"Сообщение"</string>
-    <string name="fetch_gfycat_video_failed">"Невозможно получить видео Gfycat"</string>
     <string name="fetch_redgifs_video_failed">"Невозможно получить видео Redgifs"</string>
     <string name="fetching_video_info_please_wait">"Получение информации о видео. Пожалуйста, подождите."</string>
     <string name="error_fetching_imgur_media">"Невозможно загрузить изображения"</string>
