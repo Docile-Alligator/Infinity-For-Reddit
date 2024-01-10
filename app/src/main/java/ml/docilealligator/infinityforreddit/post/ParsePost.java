@@ -432,6 +432,16 @@ public class ParsePost {
 
                         post.setPreviews(previews);
                         post.setVideoUrl(url);
+
+                        try {
+                            String mp4Variant = data.getJSONObject(JSONUtils.PREVIEW_KEY)
+                                    .getJSONArray(JSONUtils.IMAGES_KEY).getJSONObject(0)
+                                    .getJSONObject(JSONUtils.VARIANTS_KEY).getJSONObject(JSONUtils.MP4_KEY)
+                                    .getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY);
+                            if (!mp4Variant.isEmpty()) {
+                                post.setMp4Variant(mp4Variant);
+                            }
+                        } catch (Exception ignore) {}
                     } else if (uri.getAuthority().contains("imgur.com") && (path.endsWith(".gifv") || path.endsWith(".mp4"))) {
                         // Imgur gifv/mp4
                         int postType = Post.VIDEO_TYPE;

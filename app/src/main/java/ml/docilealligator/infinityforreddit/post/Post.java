@@ -69,6 +69,7 @@ public class Post implements Parcelable {
     private String crosspostParentId;
     private final String distinguished;
     private final String suggestedSort;
+    private String mp4Variant;
     private ArrayList<Preview> previews = new ArrayList<>();
     @Nullable
     private Map<String, MediaMetadata> mediaMetadataMap;
@@ -192,6 +193,7 @@ public class Post implements Parcelable {
         crosspostParentId = in.readString();
         distinguished = in.readString();
         suggestedSort = in.readString();
+        mp4Variant = in.readString();
         previews = in.createTypedArrayList(Preview.CREATOR);
         mediaMetadataMap = (Map<String, MediaMetadata>) in.readValue(getClass().getClassLoader());
         gallery = in.createTypedArrayList(Gallery.CREATOR);
@@ -512,6 +514,7 @@ public class Post implements Parcelable {
         dest.writeString(crosspostParentId);
         dest.writeString(distinguished);
         dest.writeString(suggestedSort);
+        dest.writeString(mp4Variant);
         dest.writeTypedList(previews);
         dest.writeValue(mediaMetadataMap);
         dest.writeTypedList(gallery);
@@ -579,6 +582,14 @@ public class Post implements Parcelable {
 
     public void setGallery(ArrayList<Gallery> gallery) {
         this.gallery = gallery;
+    }
+
+    public String getMp4Variant() {
+        return mp4Variant;
+    }
+
+    public void setMp4Variant(String mp4Variant) {
+        this.mp4Variant = mp4Variant;
     }
 
     @Override
