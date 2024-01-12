@@ -1038,24 +1038,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         }
     }
 
-    public void editComment(Comment fetchedComment, Comment originalComment, int position) {
-        if (position >= mVisibleComments.size() || !mVisibleComments.get(position).equals(originalComment)) {
-            position = mVisibleComments.indexOf(originalComment);
-            if (position < 0) {
-                Toast.makeText(mActivity, R.string.show_removed_comment_failed, Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-        mVisibleComments.get(position).setSubmittedByAuthor(originalComment.isSubmitter());
-        mVisibleComments.get(position).setCommentMarkdown(fetchedComment.getCommentMarkdown());
-
-        if (mIsSingleCommentThreadMode) {
-            notifyItemChanged(position + 1);
-        } else {
-            notifyItemChanged(position);
-        }
-    }
-
     public void deleteComment(int position) {
         if (mVisibleComments != null && position >= 0 && position < mVisibleComments.size()) {
             if (mVisibleComments.get(position).hasReply()) {

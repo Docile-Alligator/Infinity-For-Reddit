@@ -68,7 +68,6 @@
     <string name="action_share">"Delen"</string>
     <string name="action_preview">"Voorvertoning"</string>
     <string name="action_report">"Melden"</string>
-    <string name="action_see_removed">"Zie verwijderd"</string>
     <string name="action_set_wallpaper">"Instellen als startschermachtergrond"</string>
     <string name="action_send_private_message">"Privebericht versturen"</string>
     <string name="parse_json_response_error">"Er is een fout opgetreden bij het verwerken van het json-antwoord"</string>
@@ -271,11 +270,6 @@ Druk om opnieuw te proberen."</string>
     <string name="are_you_sure">"Weet je het zeker?"</string>
     <string name="edit">"Bewerken"</string>
     <string name="delete">"Verwijderen"</string>
-    <string name="see_removed_comment">"Verwijderde reactie bekijken"</string>
-    <string name="fetching_removed_comment">"Bezig met ophalen van verwijderde reactie…"</string>
-    <string name="show_removed_comment_failed">"De verwijderde reactie ontbreekt"</string>
-    <string name="fetching_removed_post">"Bezig met ophalen van verwijderd bericht…"</string>
-    <string name="show_removed_post_failed">"Het verwijderde bericht ontbreekt"</string>
     <string name="cancel">"Annuleren"</string>
     <string name="ok">"Oké"</string>
     <string name="edit_success">"Het bericht is bewerkt"</string>

@@ -68,7 +68,6 @@
     <string name="action_share">"Поширити"</string>
     <string name="action_preview">"Перегляд"</string>
     <string name="action_report">"Повідомити"</string>
-    <string name="action_see_removed">"Переглянути вилучені"</string>
     <string name="action_set_wallpaper">"Зробити шпалерами"</string>
     <string name="action_send_private_message">"Надіслати приватне повідомлення"</string>
     <string name="parse_json_response_error">"Помилка відбулася під час аналізу відповіді JSON"</string>
@@ -270,11 +269,6 @@
     <string name="are_you_sure">"Ви впевнені?"</string>
     <string name="edit">"Змінити"</string>
     <string name="delete">"Видалити"</string>
-    <string name="see_removed_comment">"Показати вилучений коментар"</string>
-    <string name="fetching_removed_comment">"Отримати вилучений коментар"</string>
-    <string name="show_removed_comment_failed">"Не вдалося знайти вилучений коментар"</string>
-    <string name="fetching_removed_post">"Отримати вилучений допис"</string>
-    <string name="show_removed_post_failed">"Не вдалося знайти вилучений допис"</string>
     <string name="cancel">"Скасувати"</string>
     <string name="ok">"Гаразд"</string>
     <string name="edit_success">"Успішно змінено"</string>

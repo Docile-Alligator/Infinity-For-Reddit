@@ -68,7 +68,6 @@
     <string name="action_share">"Chia sẻ"</string>
     <string name="action_preview">"Xem trước"</string>
     <string name="action_report">"Báo cáo"</string>
-    <string name="action_see_removed">"Xem bài đăng đã bị xóa"</string>
     <string name="action_set_wallpaper">"Đặt làm hình nền"</string>
     <string name="action_send_private_message">"Gửi tin nhắn riêng tư"</string>
     <string name="parse_json_response_error">"Lỗi khi phân tích phản hồi JSON"</string>
@@ -271,11 +270,6 @@ Nhấn để thử lại."</string>
     <string name="are_you_sure">"Bạn có chắc không?"</string>
     <string name="edit">"Sửa"</string>
     <string name="delete">"Xóa"</string>
-    <string name="see_removed_comment">"Xem bình luận bị xóa"</string>
-    <string name="fetching_removed_comment">"Đang tìm bình luận bị xóa"</string>
-    <string name="show_removed_comment_failed">"Không thể tìm được bình luận bị xóa"</string>
-    <string name="fetching_removed_post">"Đang tìm bài đăng bị xóa"</string>
-    <string name="show_removed_post_failed">"Không thể tìm được bài đăng bị xóa"</string>
     <string name="cancel">"Hủy"</string>
     <string name="ok">"OK"</string>
 

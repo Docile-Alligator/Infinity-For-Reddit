@@ -58,7 +58,6 @@
     <string name="action_share">"Megosztás"</string>
     <string name="action_preview">"Előnézet"</string>
     <string name="action_report">"Bejelentés"</string>
-    <string name="action_see_removed">"Eltávolítottak megtekintése"</string>
     <string name="action_set_wallpaper">"Beállítás háttérképként"</string>
     <string name="action_send_private_message">"Privát üzenet küldése"</string>
     <string name="parse_json_response_error">"Hiba történt a JSON válasz feldolgozása során"</string>
@@ -246,11 +245,6 @@
     <string name="are_you_sure">"Biztos?"</string>
     <string name="edit">"Szerkesztés"</string>
     <string name="delete">"Törlés"</string>
-    <string name="see_removed_comment">"Az eltávolított hozzászólás megtekintése"</string>
-    <string name="fetching_removed_comment">"Az eltávolított hozzászólás lekérése"</string>
-    <string name="show_removed_comment_failed">"Nem lehet megtalálni az eltávolított hozzászólást"</string>
-    <string name="fetching_removed_post">"Eltávolított bejegyzés lekérése"</string>
-    <string name="show_removed_post_failed">"Az eltávolított bejegyzés nem található"</string>
     <string name="cancel">"Mégse"</string>
     <string name="ok">"OK"</string>
     <string name="edit_success">"A szerkesztés sikeres"</string>

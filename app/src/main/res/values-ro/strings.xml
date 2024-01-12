@@ -68,7 +68,6 @@
     <string name="action_share">"Distribuire"</string>
     <string name="action_preview">"Previzualizare"</string>
     <string name="action_report">"Raportați"</string>
-    <string name="action_see_removed">"Vedeți eliminate"</string>
     <string name="action_set_wallpaper">"Setați ca fundal"</string>
     <string name="action_send_private_message">"Trimiteți mesaj privat"</string>
     <string name="parse_json_response_error">"Eroare la afișarea răspunsului JSON"</string>
@@ -268,11 +267,6 @@ Apăsați pentru reîncărcare."</string>
     <string name="are_you_sure">"Sunteți sigur?"</string>
     <string name="edit">"Editare"</string>
     <string name="delete">"Ștergere"</string>
-    <string name="see_removed_comment">"Vedeți comentariul șters"</string>
-    <string name="fetching_removed_comment">"Se caută comentariul șters"</string>
-    <string name="show_removed_comment_failed">"Nu s-a găsit comentariul șters"</string>
-    <string name="fetching_removed_post">"Se caută postarea ștearsă"</string>
-    <string name="show_removed_post_failed">"Nu s-a găsit postarea ștearsă"</string>
     <string name="cancel">"Anulare"</string>
     <string name="ok">"OK"</string>
     <string name="edit_success">"Editare reușită"</string>

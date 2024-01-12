@@ -68,7 +68,6 @@
     <string name="action_share">"Sdílet"</string>
     <string name="action_preview">"Náhled"</string>
     <string name="action_report">"Nahlásit"</string>
-    <string name="action_see_removed">"Zobrazit odebrané"</string>
     <string name="action_set_wallpaper">"Nastavit jako pozadí"</string>
     <string name="action_send_private_message">"Poslat soukromou zprávu"</string>
     <string name="parse_json_response_error">"Při parsování JSON odpovědi se vyskytla chyba"</string>
@@ -274,11 +273,6 @@
     <string name="are_you_sure">"Opravdu?"</string>
     <string name="edit">"Upravit"</string>
     <string name="delete">"Odstranit"</string>
-    <string name="see_removed_comment">"Zobrazit odstraněný komentář"</string>
-    <string name="fetching_removed_comment">"Získávání odstraněného komentáře"</string>
-    <string name="show_removed_comment_failed">"Nepodařilo se nalézt odstraněný komentář"</string>
-    <string name="fetching_removed_post">"Získávání odstraněného příspěvku"</string>
-    <string name="show_removed_post_failed">"Nepodařilo se nalézt odstraněný příspěvek"</string>
     <string name="cancel">"Zrušit"</string>
     <string name="ok">"OK"</string>
     <string name="edit_success">"Úspěšně upraveno"</string>

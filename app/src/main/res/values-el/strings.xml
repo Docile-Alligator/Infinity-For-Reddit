@@ -58,7 +58,6 @@
     <string name="action_share">"Κοινή χρήση"</string>
     <string name="action_preview">"Προεπισκόπηση"</string>
     <string name="action_report">"Αναφορά"</string>
-    <string name="action_see_removed">"Προβολή διαγραμμένου"</string>
     <string name="action_set_wallpaper">"Ορισμός ως ταπετσαρία"</string>
     <string name="action_send_private_message">"Αποστολή προσωπικού μηνύματος"</string>
     <string name="parse_json_response_error">"Σφάλμα κατά την ανάλυση της απόκρισης JSON"</string>
@@ -243,11 +242,6 @@
     <string name="are_you_sure">"Είστε σίγουρος/η?"</string>
     <string name="edit">"Επεξεργασία"</string>
     <string name="delete">"Διαγραφή"</string>
-    <string name="see_removed_comment">"Δες το διαγραμμένο σχόλιο"</string>
-    <string name="fetching_removed_comment">"Λήψη διαγραμμένου σχολίου"</string>
-    <string name="show_removed_comment_failed">"Δεν μπόρεσε να βρεθεί το διαγραμμένο σχόλιο"</string>
-    <string name="fetching_removed_post">"Λήψη διαγραμμένης ανάρτησης"</string>
-    <string name="show_removed_post_failed">"Δεν μπόρεσε να βρεθεί η διαγραμμένη ανάρτηση"</string>
     <string name="cancel">"Άκυρο"</string>
     <string name="ok">"ΟΚ"</string>
     <string name="edit_success">"Επιτυχής επεξεργασία"</string>

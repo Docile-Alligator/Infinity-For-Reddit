@@ -171,20 +171,6 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
             dismiss();
         });
 
-        if ("[deleted]".equals(comment.getAuthor()) ||
-                "[deleted]".equals(comment.getCommentRawText()) ||
-                "[removed]".equals(comment.getCommentRawText())
-        ) {
-            binding.seeRemovedViewCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
-
-            binding.seeRemovedViewCommentMoreBottomSheetFragment.setOnClickListener(view -> {
-                dismiss();
-                if (activity instanceof ViewPostDetailActivity) {
-                    ((ViewPostDetailActivity) activity).showRemovedComment(comment, bundle.getInt(EXTRA_POSITION));
-                }
-            });
-        }
-
         binding.addToCommentFilterViewCommentMoreBottomSheetFragment.setOnClickListener(view -> {
             Intent intent = new Intent(activity, CommentFilterPreferenceActivity.class);
             intent.putExtra(CommentFilterPreferenceActivity.EXTRA_COMMENT, comment);

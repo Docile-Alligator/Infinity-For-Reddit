@@ -58,7 +58,6 @@
     <string name="action_share">"Condividi"</string>
     <string name="action_preview">"Anteprima"</string>
     <string name="action_report">"Segnala"</string>
-    <string name="action_see_removed">"Visualizza Rimosso"</string>
     <string name="action_set_wallpaper">"Imposta come sfondo del dispositivo"</string>
     <string name="action_send_private_message">"Invia Messaggio privato"</string>
     <string name="parse_json_response_error">"Si è verificato un errore durante l'analisi della risposta JSON"</string>
@@ -250,11 +249,6 @@ Tocca per riprovare."</string>
     <string name="are_you_sure">"Sei sicuro?"</string>
     <string name="edit">"Modifica"</string>
     <string name="delete">"Elimina"</string>
-    <string name="see_removed_comment">"Visualizza commento rimosso"</string>
-    <string name="fetching_removed_comment">"Recupero del commento rimosso"</string>
-    <string name="show_removed_comment_failed">"Impossibile trovare il commento rimosso"</string>
-    <string name="fetching_removed_post">"Recupero post rimosso"</string>
-    <string name="show_removed_post_failed">"Impossibile trovare il post rimosso"</string>
     <string name="cancel">"Cancella"</string>
     <string name="ok">"OK"</string>
     <string name="edit_success">"Modifica eseguita correttamente"</string>

@@ -68,7 +68,6 @@
     <string name="action_share">"Udostępnij"</string>
     <string name="action_preview">"Podgląd"</string>
     <string name="action_report">"Zgłoś"</string>
-    <string name="action_see_removed">"Zobacz usunięte"</string>
     <string name="action_set_wallpaper">"Ustaw jako tapetę"</string>
     <string name="action_send_private_message">"Wyślij wiadomość prywatną"</string>
     <string name="parse_json_response_error">"Wystąpił błąd podczas analizy odpowiedzi JSON"</string>
@@ -263,11 +262,6 @@ Naciśnij, aby spróbować ponownie."</string>
     <string name="are_you_sure">"Jesteś pewien?"</string>
     <string name="edit">"Edytuj"</string>
     <string name="delete">"Usuń"</string>
-    <string name="see_removed_comment">"Zobacz usunięty komentarz"</string>
-    <string name="fetching_removed_comment">"Pobieranie usuniętego komentarza"</string>
-    <string name="show_removed_comment_failed">"Nie można znaleźć usuniętego komentarza"</string>
-    <string name="fetching_removed_post">"Pobieranie usuniętego posta"</string>
-    <string name="show_removed_post_failed">"Nie można znaleźć usuniętego posta"</string>
     <string name="cancel">"Anuluj"</string>
     <string name="ok">"OK"</string>
     <string name="edit_success">"Zedytowano pomyślnie"</string>

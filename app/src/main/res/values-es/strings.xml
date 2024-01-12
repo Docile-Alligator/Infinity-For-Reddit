@@ -70,7 +70,6 @@
     <string name="action_share">"Compartir"</string>
     <string name="action_preview">"Previsualizar"</string>
     <string name="action_report">"Reportar"</string>
-    <string name="action_see_removed">"Ver eliminados"</string>
     <string name="action_set_wallpaper">"Definir como fondo de pantalla"</string>
     <string name="action_send_private_message">"Enviar mensaje privado"</string>
     <string name="parse_json_response_error">"No fue posible procesar la respuesta JSON"</string>
@@ -282,11 +281,6 @@ Toca para reintentar."</string>
     <string name="are_you_sure">"¿Estás seguro?"</string>
     <string name="edit">"Editar"</string>
     <string name="delete">"Borrar"</string>
-    <string name="see_removed_comment">"Ver comentario eliminado"</string>
-    <string name="fetching_removed_comment">"Obteniendo el comentario"</string>
-    <string name="show_removed_comment_failed">"No se encontró el comentario eliminado"</string>
-    <string name="fetching_removed_post">"Obteniendo la publicación eliminada"</string>
-    <string name="show_removed_post_failed">"No se encontró la publicación eliminada"</string>
     <string name="cancel">"Cancelar"</string>
     <string name="ok">"OK"</string>
 

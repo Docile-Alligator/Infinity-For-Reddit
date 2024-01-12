@@ -70,7 +70,6 @@
     <string name="action_share">"Compartilhar"</string>
     <string name="action_preview">"Prévia"</string>
     <string name="action_report">"Reportar"</string>
-    <string name="action_see_removed">"Ver excluído"</string>
     <string name="action_set_wallpaper">"Definir como papel de parede"</string>
     <string name="action_send_private_message">"Enviar mensagem privada"</string>
     <string name="parse_json_response_error">"Erro ao analisar a resposta do JSON"</string>
@@ -266,11 +265,6 @@ Toque para tentar de novo."</string>
     <string name="are_you_sure">"Tem certeza?"</string>
     <string name="edit">"Editar"</string>
     <string name="delete">"Excluir"</string>
-    <string name="see_removed_comment">"Ver comentário excluído"</string>
-    <string name="fetching_removed_comment">"Buscando comentário excluído"</string>
-    <string name="show_removed_comment_failed">"Não pôde achar o comentário excluído"</string>
-    <string name="fetching_removed_post">"Buscando postagem excluída"</string>
-    <string name="show_removed_post_failed">"Não pôde achar a postagem excluída"</string>
     <string name="cancel">"Cancelar"</string>
     <string name="ok">"Ok"</string>
     <string name="edit_success">"Êxito ao editar"</string>

@@ -81,7 +81,6 @@
     <string name="action_share">"Partager"</string>
     <string name="action_preview">"Prévisualiser"</string>
     <string name="action_report">"Reporter"</string>
-    <string name="action_see_removed">"Afficher les publications supprimées"</string>
     <string name="action_set_wallpaper">"Définir comme fond d'écran"</string>
     <string name="action_send_private_message">"Envoyer le message privé"</string>
     <string name="parse_json_response_error">"Une erreur s'est produite lors de l'analyse de la réponse JSON"</string>
@@ -294,13 +293,8 @@ Appuyez pour réessayer."</string>
     <string name="are_you_sure">"Êtes-vous sûr ?"</string>
     <string name="edit">"Éditer"</string>
     <string name="delete">"Supprimer"</string>
-    <string name="see_removed_comment">"Voir le commentaire supprimé"</string>
 
     <!-- Fuzzy -->
-    <string name="fetching_removed_comment">"Récupération du commentaire supprimé"</string>
-    <string name="show_removed_comment_failed">"Impossible de trouver le commentaire supprimé"</string>
-    <string name="fetching_removed_post">"Récupération de la publication supprimée"</string>
-    <string name="show_removed_post_failed">"Impossible de trouver la publication supprimée"</string>
     <string name="cancel">"Annuler"</string>
     <string name="ok">"OK"</string>
 

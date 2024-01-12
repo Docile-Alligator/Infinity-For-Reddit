@@ -78,7 +78,6 @@
     <string name="action_share">Share</string>
     <string name="action_preview">Preview</string>
     <string name="action_report">Report</string>
-    <string name="action_see_removed">See Removed</string>
     <string name="action_crosspost">Crosspost</string>
     <string name="action_set_wallpaper">Set as Wallpaper</string>
     <string name="action_send_private_message">Send Private Message</string>
@@ -332,11 +331,6 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
-    <string name="see_removed_comment">See Removed Comment</string>
-    <string name="fetching_removed_comment">Fetching removed comment</string>
-    <string name="show_removed_comment_failed">Could not find the removed comment</string>
-    <string name="fetching_removed_post">Fetching removed post</string>
-    <string name="show_removed_post_failed">Could not find the removed post</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="edit_success">Edit successfully</string>

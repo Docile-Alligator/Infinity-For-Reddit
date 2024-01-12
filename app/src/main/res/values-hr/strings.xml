@@ -72,7 +72,6 @@
     <string name="action_share">"Podijeli"</string>
     <string name="action_preview">"Pregledaj"</string>
     <string name="action_report">"Prijavi"</string>
-    <string name="action_see_removed">"Vidi uklonjeno"</string>
     <string name="action_set_wallpaper">"Postavi kao pozadinu zaslona"</string>
     <string name="action_send_private_message">"Pošalji privatnu poruku"</string>
     <string name="parse_json_response_error">"Došlo je do pogreške prilikom raščlanjivanja JSON odgovora"</string>
@@ -272,11 +271,6 @@
     <string name="are_you_sure">"Jeste li sigurni?"</string>
     <string name="edit">"Uredi"</string>
     <string name="delete">"Obriši"</string>
-    <string name="see_removed_comment">"Vidi uklonjeni komentar"</string>
-    <string name="fetching_removed_comment">"Dohvaćanje uklonjenog komentara"</string>
-    <string name="show_removed_comment_failed">"Nismo uspjeli pronaći uklonjeni komentar"</string>
-    <string name="fetching_removed_post">"Dohvaćanje uklonjene objave"</string>
-    <string name="show_removed_post_failed">"Nismo uspjeli pronaći uklonjenu objavu"</string>
     <string name="cancel">"Otkaži"</string>
     <string name="ok">"U redu"</string>
 

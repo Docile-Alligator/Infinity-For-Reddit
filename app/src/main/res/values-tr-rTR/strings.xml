@@ -68,7 +68,6 @@
     <string name="action_share">"Paylaş"</string>
     <string name="action_preview">"Önizleme"</string>
     <string name="action_report">"Bildir"</string>
-    <string name="action_see_removed">"Kaldırılanları Göster"</string>
     <string name="action_set_wallpaper">"Duvar Kağıdı Yap"</string>
     <string name="action_send_private_message">"Özel Mesaj Gönder"</string>
     <string name="parse_json_response_error">"JSON yanıtı ayrıştırılırken hata oluştu"</string>
@@ -269,11 +268,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="are_you_sure">"Emin misiniz?"</string>
     <string name="edit">"Düzenle"</string>
     <string name="delete">"Sil"</string>
-    <string name="see_removed_comment">"Kaldırılan Yorumu Gör"</string>
-    <string name="fetching_removed_comment">"Kaldırılan yorum getiriliyor"</string>
-    <string name="show_removed_comment_failed">"Kaldırılan yorum bulunamadı"</string>
-    <string name="fetching_removed_post">"Kaldırılan gönderi getiriliyor"</string>
-    <string name="show_removed_post_failed">"Kaldırılan gönderi bulunamadı"</string>
     <string name="cancel">"İptal"</string>
     <string name="ok">"Tamam"</string>
     <string name="edit_success">"Başarıyla düzenlendi"</string>

@@ -72,7 +72,6 @@
     <string name="action_share">"共有"</string>
     <string name="action_preview">"プレビュー"</string>
     <string name="action_report">"通報"</string>
-    <string name="action_see_removed">"削除済みを見る"</string>
     <string name="action_set_wallpaper">"壁紙に設定"</string>
     <string name="action_send_private_message">"個人メッセージを送信"</string>
     <string name="parse_json_response_error">"JSONの解析中にエラーが発生しました"</string>
@@ -298,11 +297,6 @@
     <string name="are_you_sure">"よろしいですか？"</string>
     <string name="edit">"編集"</string>
     <string name="delete">"削除"</string>
-    <string name="see_removed_comment">"削除済みのコメントを表示"</string>
-    <string name="fetching_removed_comment">"削除済みのコメントを取得中です"</string>
-    <string name="show_removed_comment_failed">"削除済みのコメントを取得できませんでした"</string>
-    <string name="fetching_removed_post">"削除済みの投稿を取得中です"</string>
-    <string name="show_removed_post_failed">"削除済みの投稿を取得できませんでした"</string>
     <string name="cancel">"キャンセル"</string>
     <string name="ok">"OK"</string>
 

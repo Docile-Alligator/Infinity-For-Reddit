@@ -74,7 +74,6 @@
     <string name="action_share">"दूसरो को भेजे"</string>
     <string name="action_preview">"पूर्वदर्शन"</string>
     <string name="action_report">"शिकायत करें"</string>
-    <string name="action_see_removed">"हटाए हुए पोस्ट देखें"</string>
     <string name="action_set_wallpaper">"वालपेपर लगाएं "</string>
     <string name="action_send_private_message">"व्यक्तिगत संदेश भेजें"</string>
     <string name="parse_json_response_error">"JSON प्रतिक्रिया को समझने में त्रुटि"</string>
@@ -297,11 +296,6 @@ Behavior -->
     <string name="are_you_sure">"क्या आप सुनिश्चित हैं? "</string>
     <string name="edit">"संपादन करें "</string>
     <string name="delete">"हटाएं "</string>
-    <string name="see_removed_comment">"हटाई हुई टिप्पणी देखें "</string>
-    <string name="fetching_removed_comment">"हटाई हुई टिप्पणी प्राप्त हो रही है "</string>
-    <string name="show_removed_comment_failed">"हटाई हुई टिप्पणी नहीं खोज सका "</string>
-    <string name="fetching_removed_post">"हटाई हुई पोस्ट प्राप्त हो रही है "</string>
-    <string name="show_removed_post_failed">"हटाई हुई पोस्ट नहीं खोजी जा सकी"</string>
     <string name="cancel">"निरस्त करें "</string>
     <string name="ok">"ठीक है "</string>
 
