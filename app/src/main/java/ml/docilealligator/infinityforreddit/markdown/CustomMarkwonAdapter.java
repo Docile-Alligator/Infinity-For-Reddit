@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.commonmark.node.Node;
 
@@ -35,7 +36,9 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
     private Markwon markwon;
     private List<Node> nodes;
 
+    @Nullable
     private View.OnClickListener onClickListener;
+    @Nullable
     private View.OnLongClickListener onLongClickListener;
 
     @SuppressWarnings("WeakerAccess")
@@ -50,11 +53,11 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
         setHasStableIds(true);
     }
 
-    public void setOnClickListener(View.OnClickListener onClickListener) {
+    public void setOnClickListener(@Nullable View.OnClickListener onClickListener) {
         this.onClickListener = onClickListener;
     }
 
-    public void setOnLongClickListener(View.OnLongClickListener onLongClickListener) {
+    public void setOnLongClickListener(@Nullable View.OnLongClickListener onLongClickListener) {
         this.onLongClickListener = onLongClickListener;
     }
 
@@ -161,25 +164,29 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
         }
 
         if (node instanceof ImageAndGifBlock) {
-            if (!holder.itemView.hasOnClickListeners()) {
+            if (onClickListener != null) {
                 holder.itemView.setOnClickListener(onClickListener);
+            }
+            if (onLongClickListener != null) {
                 holder.itemView.setOnLongClickListener(onLongClickListener);
             }
 
             if (holder instanceof ImageAndGifEntry.Holder) {
-                if (!((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.hasOnClickListeners()) {
-                    ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.setOnClickListener(view -> {
-                        if (onClickListener != null && ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionStart() == -1 && ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionEnd() == -1) {
-                            onClickListener.onClick(view);
-                        }
-                    });
-                    ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.setOnLongClickListener(view -> {
-                        if (onLongClickListener != null && ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionStart() == -1 && ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionEnd() == -1) {
-                            return onLongClickListener.onLongClick(view);
-                        }
-                        return false;
-                    });
-                }
+                ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.setOnClickListener(view -> {
+                    if (onClickListener != null
+                            && ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionStart() == -1
+                            && ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionEnd() == -1) {
+                        onClickListener.onClick(view);
+                    }
+                });
+                ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.setOnLongClickListener(view -> {
+                    if (onLongClickListener != null
+                            && ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionStart() == -1
+                            && ((ImageAndGifEntry.Holder) holder).binding.captionTextViewMarkdownImageAndGifBlock.getSelectionEnd() == -1) {
+                        return onLongClickListener.onLongClick(view);
+                    }
+                    return false;
+                });
             }
         }
     }
