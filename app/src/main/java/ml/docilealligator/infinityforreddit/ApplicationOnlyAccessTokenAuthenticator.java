@@ -46,7 +46,7 @@ class ApplicationOnlyAccessTokenAuthenticator implements Authenticator {
 
             String accessToken = accessTokenHeader.substring(APIUtils.AUTHORIZATION_BASE.length());
             synchronized (this) {
-                if (mRedditDataRoomDatabase.accountDao().isAnonymousAccountInserted()) {
+                if (!mRedditDataRoomDatabase.accountDao().isAnonymousAccountInserted()) {
                     mRedditDataRoomDatabase.accountDao().insert(Account.getAnonymousAccount());
                 }
                 String accessTokenFromSharedPreference = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, "");

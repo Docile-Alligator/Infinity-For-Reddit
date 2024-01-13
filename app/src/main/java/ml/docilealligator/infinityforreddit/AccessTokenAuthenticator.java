@@ -49,7 +49,7 @@ class AccessTokenAuthenticator implements Authenticator {
                 Account account = mRedditDataRoomDatabase.accountDao().getCurrentAccount();
                 if (account == null) {
                     //Anonymous mode
-                    if (mRedditDataRoomDatabase.accountDao().isAnonymousAccountInserted()) {
+                    if (!mRedditDataRoomDatabase.accountDao().isAnonymousAccountInserted()) {
                         mRedditDataRoomDatabase.accountDao().insert(Account.getAnonymousAccount());
                     }
                     String accessTokenFromSharedPreference = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, "");
