@@ -81,7 +81,6 @@
     <string name="action_share">"Partager"</string>
     <string name="action_preview">"Prévisualiser"</string>
     <string name="action_report">"Reporter"</string>
-    <string name="action_see_removed">"Afficher les publications supprimées"</string>
     <string name="action_set_wallpaper">"Définir comme fond d'écran"</string>
     <string name="action_send_private_message">"Envoyer le message privé"</string>
     <string name="parse_json_response_error">"Une erreur s'est produite lors de l'analyse de la réponse JSON"</string>
@@ -294,13 +293,8 @@ Appuyez pour réessayer."</string>
     <string name="are_you_sure">"Êtes-vous sûr ?"</string>
     <string name="edit">"Éditer"</string>
     <string name="delete">"Supprimer"</string>
-    <string name="see_removed_comment">"Voir le commentaire supprimé"</string>
 
     <!-- Fuzzy -->
-    <string name="fetching_removed_comment">"Récupération du commentaire supprimé"</string>
-    <string name="show_removed_comment_failed">"Impossible de trouver le commentaire supprimé"</string>
-    <string name="fetching_removed_post">"Récupération de la publication supprimée"</string>
-    <string name="show_removed_post_failed">"Impossible de trouver la publication supprimée"</string>
     <string name="cancel">"Annuler"</string>
     <string name="ok">"OK"</string>
 
@@ -388,7 +382,6 @@ peut ne pas fonctionner sur Android 11"</string>
     <string name="settings_mute_nsfw_video_title">"Couper le son des vidéos NSFW"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Essayez d'accéder automatiquement aux Redgifs si les Vidéos sur Gfycat sont supprimées."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignorer la barre de navigation dans le lecteur vidéo"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Empêcher le Contrôleur Vidéo de créer une Marge Supplémentaire"</string>
     <string name="settings_confirm_to_exit">"Confirmer pour quitter"</string>
@@ -844,7 +837,6 @@ Basé sur le thème sombre Indigo"</string>
     <string name="notifications">"Notifications"</string>
     <string name="messages">"Messages"</string>
     <string name="message">"Message"</string>
-    <string name="fetch_gfycat_video_failed">"Échec de la récupération de la vidéo Gfycat"</string>
     <string name="fetch_redgifs_video_failed">"Échec de la récupération de la vidéo Redgifs"</string>
     <string name="fetching_video_info_please_wait">"Récupération des informations vidéo. Veuillez patienter. "</string>
     <string name="error_fetching_imgur_media">"Impossible de charger les images"</string>

@@ -72,7 +72,6 @@
     <string name="action_share">"Podijeli"</string>
     <string name="action_preview">"Pregledaj"</string>
     <string name="action_report">"Prijavi"</string>
-    <string name="action_see_removed">"Vidi uklonjeno"</string>
     <string name="action_set_wallpaper">"Postavi kao pozadinu zaslona"</string>
     <string name="action_send_private_message">"Pošalji privatnu poruku"</string>
     <string name="parse_json_response_error">"Došlo je do pogreške prilikom raščlanjivanja JSON odgovora"</string>
@@ -272,11 +271,6 @@
     <string name="are_you_sure">"Jeste li sigurni?"</string>
     <string name="edit">"Uredi"</string>
     <string name="delete">"Obriši"</string>
-    <string name="see_removed_comment">"Vidi uklonjeni komentar"</string>
-    <string name="fetching_removed_comment">"Dohvaćanje uklonjenog komentara"</string>
-    <string name="show_removed_comment_failed">"Nismo uspjeli pronaći uklonjeni komentar"</string>
-    <string name="fetching_removed_post">"Dohvaćanje uklonjene objave"</string>
-    <string name="show_removed_post_failed">"Nismo uspjeli pronaći uklonjenu objavu"</string>
     <string name="cancel">"Otkaži"</string>
     <string name="ok">"U redu"</string>
 
@@ -356,7 +350,6 @@
     <string name="settings_mute_nsfw_video_title">"Isključi ton na NSFW videozapisima"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Automatski pokušaj pristupiti Redgifs ako su videozapisi na Gfycatu uklonjeni."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignoriraj navigacijsku traku u video playeru"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Onemogući dodatnu marginu na video kontroleru"</string>
     <string name="settings_confirm_to_exit">"Potvrdi izlaz"</string>
@@ -791,7 +784,6 @@ Baziraj na Indigo Amoled temi"</string>
     <string name="notifications">"Obavijesti"</string>
     <string name="messages">"Poruke"</string>
     <string name="message">"Poruka"</string>
-    <string name="fetch_gfycat_video_failed">"Dohvaćanje Gfycat videozapisa nije uspjelo"</string>
     <string name="fetch_redgifs_video_failed">"Dohvaćanje Redgifs videozapisa nije uspjelo"</string>
     <string name="fetching_video_info_please_wait">"Dohvaćanje informacija o videozapisu. Molim pričekajte."</string>
     <string name="error_fetching_imgur_media">"Nije moguće učitati slike"</string>

@@ -78,7 +78,6 @@
     <string name="action_share">Share</string>
     <string name="action_preview">Preview</string>
     <string name="action_report">Report</string>
-    <string name="action_see_removed">See Removed</string>
     <string name="action_crosspost">Crosspost</string>
     <string name="action_set_wallpaper">Set as Wallpaper</string>
     <string name="action_send_private_message">Send Private Message</string>
@@ -332,11 +331,6 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
-    <string name="see_removed_comment">See Removed Comment</string>
-    <string name="fetching_removed_comment">Fetching removed comment</string>
-    <string name="show_removed_comment_failed">Could not find the removed comment</string>
-    <string name="fetching_removed_post">Fetching removed post</string>
-    <string name="show_removed_post_failed">Could not find the removed post</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="edit_success">Edit successfully</string>
@@ -403,7 +397,6 @@
     <string name="settings_volume_keys_navigate_posts_title">Use Volume Keys to Navigate Posts</string>
     <string name="settings_mute_video_title">Mute Videos</string>
     <string name="settings_mute_nsfw_video_title">Mute NSFW Videos</string>
-    <string name="settings_automatically_try_redgifs_title">Automatically Try Accessing Redgifs if Videos on Gfycat are Removed.</string>
     <string name="settings_video_player_ignore_nav_bar_title">Ignore Navigation Bar in Video Player</string>
     <string name="settings_video_player_ignore_nav_bar_summary">Prevent the Video Controller Having Extra Margin</string>
     <string name="settings_main_page_back_button_action">Main Page Back Button Action</string>
@@ -1019,7 +1012,6 @@
     <string name="messages">Messages</string>
     <string name="message">Message</string>
 
-    <string name="fetch_gfycat_video_failed">Fetch Gfycat video failed</string>
     <string name="fetch_redgifs_video_failed">Fetch Redgifs video failed</string>
     <string name="fetching_video_info_please_wait">Fetching video info. Please wait.</string>
     <string name="fetch_streamable_video_failed">Fetch Streamable video failed</string>

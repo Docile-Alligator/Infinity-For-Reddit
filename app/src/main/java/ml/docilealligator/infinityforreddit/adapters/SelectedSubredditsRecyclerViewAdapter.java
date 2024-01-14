@@ -18,9 +18,9 @@ import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 
 public class SelectedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private BaseActivity activity;
-    private CustomThemeWrapper customThemeWrapper;
-    private ArrayList<String> subreddits;
+    private final BaseActivity activity;
+    private final CustomThemeWrapper customThemeWrapper;
+    private final ArrayList<String> subreddits;
 
     public SelectedSubredditsRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper, ArrayList<String> subreddits) {
         this.activity = activity;

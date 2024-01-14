@@ -2,6 +2,8 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 
+import androidx.annotation.NonNull;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,7 +17,7 @@ import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 class ParseSubscribedThing {
-    static void parseSubscribedSubreddits(String response, String accountName,
+    static void parseSubscribedSubreddits(String response, @NonNull String accountName,
                                           ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                           ArrayList<SubscribedUserData> subscribedUserData,
                                           ArrayList<SubredditData> subredditData,
@@ -44,9 +46,9 @@ class ParseSubscribedThing {
         private ArrayList<SubscribedSubredditData> newSubscribedSubredditData;
         private ArrayList<SubscribedUserData> newSubscribedUserData;
         private ArrayList<SubredditData> newSubredditData;
-        private ParseSubscribedSubredditsListener parseSubscribedSubredditsListener;
+        private final ParseSubscribedSubredditsListener parseSubscribedSubredditsListener;
 
-        ParseSubscribedSubredditsAsyncTask(String response, String accountName, ArrayList<SubscribedSubredditData> subscribedSubredditData,
+        ParseSubscribedSubredditsAsyncTask(String response, @NonNull String accountName, ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                            ArrayList<SubscribedUserData> subscribedUserData,
                                            ArrayList<SubredditData> subredditData,
                                            ParseSubscribedSubredditsListener parseSubscribedSubredditsListener) {

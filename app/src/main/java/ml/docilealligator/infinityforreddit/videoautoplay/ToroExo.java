@@ -107,7 +107,7 @@ public final class ToroExo {
     /**
      * Utility method to produce {@link ExoCreator} instance from a {@link Config}.
      */
-    public final ExoCreator getCreator(Config config) {
+    public ExoCreator getCreator(Config config) {
         ExoCreator creator = this.creators.get(config);
         if (creator == null) {
             creator = new DefaultExoCreator(this, config);
@@ -118,7 +118,7 @@ public final class ToroExo {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public final Config getDefaultConfig() {
+    public Config getDefaultConfig() {
         if (defaultConfig == null) defaultConfig = new Config.Builder(context).build();
         return defaultConfig;
     }
@@ -126,7 +126,7 @@ public final class ToroExo {
     /**
      * Get the default {@link ExoCreator}. This ExoCreator is configured by {@link #defaultConfig}.
      */
-    public final ExoCreator getDefaultCreator() {
+    public ExoCreator getDefaultCreator() {
         return getCreator(getDefaultConfig());
     }
 
@@ -141,7 +141,7 @@ public final class ToroExo {
      * @return an usable {@link SimpleExoPlayer} instance.
      */
     @NonNull  //
-    public final ToroExoPlayer requestPlayer(@NonNull ExoCreator creator) {
+    public ToroExoPlayer requestPlayer(@NonNull ExoCreator creator) {
         ExoPlayer player = getPool(checkNotNull(creator)).acquire();
         if (player == null) player = creator.createPlayer();
         return new ToroExoPlayer(player);
@@ -155,7 +155,7 @@ public final class ToroExo {
      * @return true if player is released to relevant Pool, false otherwise.
      */
     @SuppressWarnings({"WeakerAccess", "UnusedReturnValue"}) //
-    public final boolean releasePlayer(@NonNull ExoCreator creator, @NonNull ExoPlayer player) {
+    public boolean releasePlayer(@NonNull ExoCreator creator, @NonNull ExoPlayer player) {
         return getPool(checkNotNull(creator)).release(player);
     }
 
@@ -163,7 +163,7 @@ public final class ToroExo {
      * Release and clear all current cached ExoPlayer instances. This should be called when
      * client Application runs out of memory ({@link Application#onTrimMemory(int)} for example).
      */
-    public final void cleanUp() {
+    public void cleanUp() {
         // TODO [2018/03/07] Test this. Ref: https://stackoverflow.com/a/1884916/1553254
         for (Iterator<Map.Entry<ExoCreator, Pools.Pool<ExoPlayer>>> it =
              playerPools.entrySet().iterator(); it.hasNext(); ) {

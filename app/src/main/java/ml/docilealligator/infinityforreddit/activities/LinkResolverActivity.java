@@ -49,7 +49,6 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String MULTIREDDIT_PATTERN = "/user/[\\w-]+/m/\\w+/?";
     private static final String MULTIREDDIT_PATTERN_2 = "/[rR]/(\\w+\\+?)+/?";
     private static final String REDD_IT_POST_PATTERN = "/\\w+/?";
-    private static final String GFYCAT_PATTERN = "(/i?fr)?/[\\w-]+$";
     private static final String REDGIFS_PATTERN = "/watch/[\\w-]+$";
     private static final String IMGUR_GALLERY_PATTERN = "/gallery/\\w+/?";
     private static final String IMGUR_ALBUM_PATTERN = "/(album|a)/\\w+/?";
@@ -283,20 +282,10 @@ public class LinkResolverActivity extends AppCompatActivity {
                             if (path.startsWith("/CL0/")) {
                                 handleUri(Uri.parse(path.substring("/CL0/".length())));
                             }
-                        } else if (authority.contains("gfycat.com")) {
-                            if (path.matches(GFYCAT_PATTERN)) {
-                                Intent intent = new Intent(this, ViewVideoActivity.class);
-                                intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, path.substring(path.lastIndexOf("/") + 1));
-                                intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
-                                intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, getIntent().getBooleanExtra(EXTRA_IS_NSFW, false));
-                                startActivity(intent);
-                            } else {
-                                deepLinkError(uri);
-                            }
                         } else if (authority.contains("redgifs.com")) {
                             if (path.matches(REDGIFS_PATTERN)) {
                                 Intent intent = new Intent(this, ViewVideoActivity.class);
-                                intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, path.substring(path.lastIndexOf("/") + 1));
+                                intent.putExtra(ViewVideoActivity.EXTRA_REDGIFS_ID, path.substring(path.lastIndexOf("/") + 1));
                                 intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_REDGIFS);
                                 intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, true);
                                 startActivity(intent);
@@ -431,7 +420,7 @@ public class LinkResolverActivity extends AppCompatActivity {
             CustomTabsIntent customTabsIntent = builder.build();
             customTabsIntent.intent.setPackage(resolveInfos.get(0).activityInfo.packageName);
             if (uri.getScheme() == null) {
-                uri = Uri.parse("http://" + uri.toString());
+                uri = Uri.parse("http://" + uri);
             }
             try {
                 customTabsIntent.launchUrl(this, uri);

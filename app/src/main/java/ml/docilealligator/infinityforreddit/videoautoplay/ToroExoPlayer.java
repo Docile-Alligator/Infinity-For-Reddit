@@ -41,7 +41,7 @@ import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
 @SuppressWarnings("WeakerAccess") //
 public class ToroExoPlayer {
 
-    private ExoPlayer player;
+    private final ExoPlayer player;
 
     public ToroExoPlayer(Context context, RenderersFactory renderersFactory,
                             TrackSelector trackSelector, LoadControl loadControl, BandwidthMeter bandwidthMeter,

@@ -106,7 +106,6 @@ public class SharedPreferencesUtils {
     public static final String VIDEO_AUTOPLAY_VALUE_NEVER = "0";
     public static final String MUTE_AUTOPLAYING_VIDEOS = "mute_autoplaying_videos";
     public static final String AUTOPLAY_NSFW_VIDEOS = "autoplay_nsfw_videos";
-    public static final String AUTOMATICALLY_TRY_REDGIFS = "automatically_try_redgifs";
     public static final String LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON = "lock_jump_to_next_top_level_comment_button";
     public static final String SWAP_TAP_AND_LONG_COMMENTS = "swap_tap_and_long_in_comments";
     public static final String SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON = "swipe_up_to_hide_jump_to_next_top_level_comments_button";
@@ -339,6 +338,7 @@ public class SharedPreferencesUtils {
     public static final String CURRENT_ACCOUNT_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.current_account";
     public static final String ACCOUNT_NAME = "account_name";
     public static final String ACCESS_TOKEN = "access_token";
+    public static final String APPLICATION_ONLY_ACCESS_TOKEN = "app_only_access_token";
     public static final String ACCOUNT_IMAGE_URL = "account_image_url";
     public static final String REDGIFS_ACCESS_TOKEN = "redgifs_access_token";
 
@@ -391,6 +391,7 @@ public class SharedPreferencesUtils {
     public static final String BLUR_SPOILER_KEY_LEGACY = "blur_spoiler";
     public static final String CONFIRM_TO_EXIT_LEGACY = "confirm_to_exit";
     public static final String OPEN_LINK_IN_APP_LEGACY = "open_link_in_app";
+    public static final String AUTOMATICALLY_TRY_REDGIFS_LEGACY = "automatically_try_redgifs";
 
     public static final String DO_NOT_SHOW_REDDIT_API_INFO_AGAIN_LEGACY = "do_not_show_reddit_api_info_again";
     public static final String HIDE_THE_NUMBER_OF_AWARDS_LEGACY = "hide_the_number_of_awards";

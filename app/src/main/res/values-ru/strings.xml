@@ -72,7 +72,6 @@
     <string name="action_share">"Поделиться"</string>
     <string name="action_preview">"Предпросмотр"</string>
     <string name="action_report">"Пожаловаться"</string>
-    <string name="action_see_removed">"Просмотр удалённого"</string>
     <string name="action_set_wallpaper">"Установить как обои"</string>
     <string name="action_send_private_message">"Отправить личное сообщение"</string>
     <string name="parse_json_response_error">"Произошла ошибка при анализе JSON-ответа"</string>
@@ -279,11 +278,6 @@
     <string name="are_you_sure">"Вы уверены?"</string>
     <string name="edit">"Изменить"</string>
     <string name="delete">"Удалить"</string>
-    <string name="see_removed_comment">"Посмотреть удалённый комментарий"</string>
-    <string name="fetching_removed_comment">"Получение удалённого комментария"</string>
-    <string name="show_removed_comment_failed">"Невозможно найти удалённый комментарий"</string>
-    <string name="fetching_removed_post">"Получение удалённого сообщения"</string>
-    <string name="show_removed_post_failed">"Невозможно найти удалённую запись"</string>
     <string name="cancel">"Отменить"</string>
     <string name="ok">"ОК"</string>
     <string name="edit_success">"Редактирование успешно"</string>
@@ -348,7 +342,6 @@
     <string name="settings_mute_nsfw_video_title">"NSFW-видео без звука"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Автопопытка доступа к Redgifs, если видео на Gfycat удалены."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Не использовать панель навигации в видеопроигрывателе"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Предотвращает случайные нажатия"</string>
     <string name="settings_confirm_to_exit">"Подтверждать выход"</string>
@@ -765,7 +758,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="notifications">"Уведомления"</string>
     <string name="messages">"Сообщения"</string>
     <string name="message">"Сообщение"</string>
-    <string name="fetch_gfycat_video_failed">"Невозможно получить видео Gfycat"</string>
     <string name="fetch_redgifs_video_failed">"Невозможно получить видео Redgifs"</string>
     <string name="fetching_video_info_please_wait">"Получение информации о видео. Пожалуйста, подождите."</string>
     <string name="error_fetching_imgur_media">"Невозможно загрузить изображения"</string>

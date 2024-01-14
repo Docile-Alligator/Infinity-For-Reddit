@@ -42,24 +42,22 @@ import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 
 public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAdapter.RuleViewHolder> {
-    private BaseActivity activity;
-    private EmoteCloseBracketInlineProcessor emoteCloseBracketInlineProcessor;
-    private EmotePlugin emotePlugin;
-    private ImageAndGifPlugin imageAndGifPlugin;
-    private ImageAndGifEntry imageAndGifEntry;
-    private Markwon markwon;
+    private final BaseActivity activity;
+    private final EmoteCloseBracketInlineProcessor emoteCloseBracketInlineProcessor;
+    private final EmotePlugin emotePlugin;
+    private final ImageAndGifPlugin imageAndGifPlugin;
+    private final ImageAndGifEntry imageAndGifEntry;
+    private final Markwon markwon;
     @Nullable
     private final SliderPanel sliderPanel;
-    private String subredditName;
     private ArrayList<Rule> rules;
-    private int mPrimaryTextColor;
+    private final int mPrimaryTextColor;
 
     public RulesRecyclerViewAdapter(@NonNull BaseActivity activity,
                                     @NonNull CustomThemeWrapper customThemeWrapper,
                                     @Nullable SliderPanel sliderPanel, String subredditName) {
         this.activity = activity;
         this.sliderPanel = sliderPanel;
-        this.subredditName = subredditName;
         mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
         int spoilerBackgroundColor = mPrimaryTextColor | 0xFF000000;
         MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {

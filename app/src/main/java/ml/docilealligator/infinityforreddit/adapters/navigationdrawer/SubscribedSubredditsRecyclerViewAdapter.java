@@ -31,14 +31,14 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
     private static final int VIEW_TYPE_MENU_GROUP_TITLE = 1;
     private static final int VIEW_TYPE_SUBSCRIBED_SUBREDDIT = 2;
 
-    private BaseActivity baseActivity;
-    private RequestManager glide;
-    private int primaryTextColor;
-    private int secondaryTextColor;
+    private final BaseActivity baseActivity;
+    private final RequestManager glide;
+    private final int primaryTextColor;
+    private final int secondaryTextColor;
     private boolean collapseSubscribedSubredditsSection;
-    private boolean hideSubscribedSubredditsSection;
+    private final boolean hideSubscribedSubredditsSection;
     private ArrayList<SubscribedSubredditData> subscribedSubreddits = new ArrayList<>();
-    private NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener itemClickListener;
+    private final NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener itemClickListener;
 
     public SubscribedSubredditsRecyclerViewAdapter(BaseActivity baseActivity, RequestManager glide,
                                                    CustomThemeWrapper customThemeWrapper,

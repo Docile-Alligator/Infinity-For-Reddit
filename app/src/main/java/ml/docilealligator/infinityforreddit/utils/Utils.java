@@ -74,9 +74,10 @@ public final class Utils {
             Pattern.compile("((?<=[\\s])|^)[rRuU]/[\\w-]+/{0,1}"),
             Pattern.compile("\\^{2,}"),
             //Sometimes the reddit preview images and gifs have a caption and the markdown will become [caption](image_link)
-            Pattern.compile("(\\[(?:(?!((?<!\\\\)\\[)).)*?]\\()?https://preview.redd.it/\\w+.(jpg|png|jpeg)((\\?+[-a-zA-Z0-9()@:%_+.~#?&/=]*)|)"),
-            //Same reason as above. But this time it only matches [caption](image-link. Notice there is no ) at the end.
-            Pattern.compile("(\\[(?:(?!((?<!\\\\)\\[)).)*?]\\()?https://i.redd.it/\\w+.(jpg|png|jpeg|gif)")
+            //Matches preview.redd.it and i.redd.it media
+            //For i.redd.it media, it only matches [caption](image-link. Notice there is no ) at the end.
+            //i.redd.it: (\\[(?:(?!((?<!\\\\)\\[)).)*?]\\()?https://i.redd.it/\\w+.(jpg|png|jpeg|gif)"
+            Pattern.compile("((?:\\[(?:(?!(?:(?<!\\\\)\\[)).)*?]\\()?https://preview.redd.it/\\w+.(?:jpg|png|jpeg)(?:(?:\\?+[-a-zA-Z0-9()@:%_+.~#?&/=]*)|))|((?:\\[(?:(?!(?:(?<!\\\\)\\[)).)*?]\\()?https://i.redd.it/\\w+.(?:jpg|png|jpeg|gif))"),
     };
 
     public static String modifyMarkdown(String markdown) {
@@ -93,83 +94,82 @@ public final class Utils {
         }
 
         StringBuilder markdownStringBuilder = new StringBuilder(markdown);
-        Pattern previewReddItImagePattern = REGEX_PATTERNS[3];
-        Matcher matcher = previewReddItImagePattern.matcher(markdownStringBuilder);
+        Pattern previewReddItAndIReddItImagePattern = REGEX_PATTERNS[3];
+        Matcher matcher = previewReddItAndIReddItImagePattern.matcher(markdownStringBuilder);
         int start = 0;
         int previewReddItLength = "https://preview.redd.it/".length();
-        while (matcher.find(start)) {
-            String id;
-            String caption = null;
-            if (markdownStringBuilder.charAt(matcher.start()) == '[') {
-                //Has caption
-                int urlStartIndex = markdownStringBuilder.lastIndexOf("https://preview.redd.it/", matcher.end());
-                id = markdownStringBuilder.substring(previewReddItLength + urlStartIndex,
-                        markdownStringBuilder.indexOf(".", previewReddItLength + urlStartIndex));
-                //Minus "](".length()
-                caption = markdownStringBuilder.substring(matcher.start() + 1, urlStartIndex - 2);
-            } else {
-                id = markdownStringBuilder.substring(matcher.start() + previewReddItLength,
-                        markdownStringBuilder.indexOf(".", matcher.start() + previewReddItLength));
-            }
-
-            MediaMetadata mediaMetadata = mediaMetadataMap.get(id);
-            if (mediaMetadata == null) {
-                start = matcher.end();
-                continue;
-            }
-
-            mediaMetadata.caption = caption;
-
-            if (markdownStringBuilder.charAt(matcher.start()) == '[') {
-                //Has caption
-                markdownStringBuilder.insert(matcher.start(), '!');
-                start = matcher.end() + 1;
-            } else {
-                String replacingText = "![](" + markdownStringBuilder.substring(matcher.start(), matcher.end()) + ")";
-                markdownStringBuilder.replace(matcher.start(), matcher.end(), replacingText);
-                start = replacingText.length() + matcher.start();
-            }
-
-            matcher = previewReddItImagePattern.matcher(markdownStringBuilder);
-        }
-
-        start = 0;
-        Pattern iReddItImagePattern = REGEX_PATTERNS[4];
-        matcher = iReddItImagePattern.matcher(markdownStringBuilder);
         int iReddItLength = "https://i.redd.it/".length();
         while (matcher.find(start)) {
-            String id;
-            String caption = null;
-            if (markdownStringBuilder.charAt(matcher.start()) == '[') {
-                //Has caption
-                int urlStartIndex = markdownStringBuilder.lastIndexOf("https://i.redd.it/", matcher.end());
-                id = markdownStringBuilder.substring(iReddItLength + urlStartIndex,
-                        markdownStringBuilder.indexOf(".", iReddItLength + urlStartIndex));
-                //Minus "](".length()
-                caption = markdownStringBuilder.substring(matcher.start() + 1, urlStartIndex - 2);
-            } else {
-                id = markdownStringBuilder.substring(matcher.start() + iReddItLength, markdownStringBuilder.indexOf(".", matcher.start() + iReddItLength));
-            }
+            if (matcher.group(1) != null) {
+                String id;
+                String caption = null;
+                if (markdownStringBuilder.charAt(matcher.start()) == '[') {
+                    //Has caption
+                    int urlStartIndex = markdownStringBuilder.lastIndexOf("https://preview.redd.it/", matcher.end());
+                    id = markdownStringBuilder.substring(previewReddItLength + urlStartIndex,
+                            markdownStringBuilder.indexOf(".", previewReddItLength + urlStartIndex));
+                    //Minus "](".length()
+                    caption = markdownStringBuilder.substring(matcher.start() + 1, urlStartIndex - 2);
+                } else {
+                    id = markdownStringBuilder.substring(matcher.start() + previewReddItLength,
+                            markdownStringBuilder.indexOf(".", matcher.start() + previewReddItLength));
+                }
 
-            MediaMetadata mediaMetadata = mediaMetadataMap.get(id);
-            if (mediaMetadata == null) {
+                MediaMetadata mediaMetadata = mediaMetadataMap.get(id);
+                if (mediaMetadata == null) {
+                    start = matcher.end();
+                    continue;
+                }
+
+                mediaMetadata.caption = caption;
+
+                if (markdownStringBuilder.charAt(matcher.start()) == '[') {
+                    //Has caption
+                    markdownStringBuilder.insert(matcher.start(), '!');
+                    start = matcher.end() + 1;
+                } else {
+                    String replacingText = "![](" + markdownStringBuilder.substring(matcher.start(), matcher.end()) + ")";
+                    markdownStringBuilder.replace(matcher.start(), matcher.end(), replacingText);
+                    start = replacingText.length() + matcher.start();
+                }
+
+                matcher = previewReddItAndIReddItImagePattern.matcher(markdownStringBuilder);
+            } else if (matcher.group(2) != null) {
+                String id;
+                String caption = null;
+                if (markdownStringBuilder.charAt(matcher.start()) == '[') {
+                    //Has caption
+                    int urlStartIndex = markdownStringBuilder.lastIndexOf("https://i.redd.it/", matcher.end());
+                    id = markdownStringBuilder.substring(iReddItLength + urlStartIndex,
+                            markdownStringBuilder.indexOf(".", iReddItLength + urlStartIndex));
+                    //Minus "](".length()
+                    caption = markdownStringBuilder.substring(matcher.start() + 1, urlStartIndex - 2);
+                } else {
+                    id = markdownStringBuilder.substring(matcher.start() + iReddItLength, markdownStringBuilder.indexOf(".", matcher.start() + iReddItLength));
+                }
+
+                MediaMetadata mediaMetadata = mediaMetadataMap.get(id);
+                if (mediaMetadata == null) {
+                    start = matcher.end();
+                    continue;
+                }
+
+                mediaMetadata.caption = caption;
+
+                if (markdownStringBuilder.charAt(matcher.start()) == '[') {
+                    //Has caption
+                    markdownStringBuilder.insert(matcher.start(), '!');
+                    start = matcher.end() + 1;
+                } else {
+                    String replacingText = "![](" + markdownStringBuilder.substring(matcher.start(), matcher.end()) + ")";
+                    markdownStringBuilder.replace(matcher.start(), matcher.end(), replacingText);
+                    start = replacingText.length() + matcher.start();
+                }
+
+                matcher = previewReddItAndIReddItImagePattern.matcher(markdownStringBuilder);
+            } else {
                 start = matcher.end();
-                continue;
             }
-
-            mediaMetadata.caption = caption;
-
-            if (markdownStringBuilder.charAt(matcher.start()) == '[') {
-                //Has caption
-                markdownStringBuilder.insert(matcher.start(), '!');
-                start = matcher.end() + 1;
-            } else {
-                String replacingText = "![](" + markdownStringBuilder.substring(matcher.start(), matcher.end()) + ")";
-                markdownStringBuilder.replace(matcher.start(), matcher.end(), replacingText);
-                start = replacingText.length() + matcher.start();
-            }
-
-            matcher = iReddItImagePattern.matcher(markdownStringBuilder);
         }
 
         return markdownStringBuilder.toString();

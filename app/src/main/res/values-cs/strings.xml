@@ -68,7 +68,6 @@
     <string name="action_share">"Sdílet"</string>
     <string name="action_preview">"Náhled"</string>
     <string name="action_report">"Nahlásit"</string>
-    <string name="action_see_removed">"Zobrazit odebrané"</string>
     <string name="action_set_wallpaper">"Nastavit jako pozadí"</string>
     <string name="action_send_private_message">"Poslat soukromou zprávu"</string>
     <string name="parse_json_response_error">"Při parsování JSON odpovědi se vyskytla chyba"</string>
@@ -274,11 +273,6 @@
     <string name="are_you_sure">"Opravdu?"</string>
     <string name="edit">"Upravit"</string>
     <string name="delete">"Odstranit"</string>
-    <string name="see_removed_comment">"Zobrazit odstraněný komentář"</string>
-    <string name="fetching_removed_comment">"Získávání odstraněného komentáře"</string>
-    <string name="show_removed_comment_failed">"Nepodařilo se nalézt odstraněný komentář"</string>
-    <string name="fetching_removed_post">"Získávání odstraněného příspěvku"</string>
-    <string name="show_removed_post_failed">"Nepodařilo se nalézt odstraněný příspěvek"</string>
     <string name="cancel">"Zrušit"</string>
     <string name="ok">"OK"</string>
     <string name="edit_success">"Úspěšně upraveno"</string>
@@ -341,7 +335,6 @@
     <string name="settings_volume_keys_navigate_posts_title">"Použít tlačítka hlasitosti pro navigaci v příspěvcích"</string>
     <string name="settings_mute_video_title">"Ztlumit videa"</string>
     <string name="settings_mute_nsfw_video_title">"Ztlumit NSFW videa"</string>
-    <string name="settings_automatically_try_redgifs_title">"Automatický pokus o přístup k Redgifs, pokud jsou videa na Gfycat odstraněna."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignorovat navigační lištu v přehrávači videí"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Zabránit ovládání videa mít dodatečný okraj"</string>
     <string name="settings_confirm_to_exit">"Potvrdit pro odchod"</string>
@@ -757,7 +750,6 @@ Chodí popředu."</string>
     <string name="notifications">"Oznámení"</string>
     <string name="messages">"Zprávy"</string>
     <string name="message">"Zpráva"</string>
-    <string name="fetch_gfycat_video_failed">"Získávání Gfycat videa selhalo"</string>
     <string name="fetch_redgifs_video_failed">"Získávání Redgifs videa selhalo"</string>
     <string name="fetching_video_info_please_wait">"Získávání informací o videu. Čekejte prosím."</string>
     <string name="error_fetching_imgur_media">"Nelze načíst obrázky"</string>

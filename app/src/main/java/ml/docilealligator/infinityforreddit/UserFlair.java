@@ -4,11 +4,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class UserFlair implements Parcelable {
-    private String id;
+    private final String id;
     private String text;
-    private String htmlText;
-    private boolean editable;
-    private int maxEmojis;
+    private final String htmlText;
+    private final boolean editable;
+    private final int maxEmojis;
 
     public UserFlair(String id, String text, String htmlText, boolean editable, int maxEmojis) {
         this.id = id;

@@ -14,8 +14,8 @@ public class ReportReason implements Parcelable {
     public static final String REASON_RULE_REASON_SELECTED = "rule_reason_selected";
     public static final String REASON_OTHER = "other";
 
-    private String reportReason;
-    private String reasonType;
+    private final String reportReason;
+    private final String reasonType;
     private boolean isSelected;
 
     public ReportReason(String reportReason, String reasonType) {

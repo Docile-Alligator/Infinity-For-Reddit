@@ -34,15 +34,15 @@ import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.post.Post;
 
 public class TrendingSearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private BaseActivity activity;
+    private final BaseActivity activity;
     private ArrayList<TrendingSearch> trendingSearches;
-    private CustomThemeWrapper customThemeWrapper;
-    private RequestManager glide;
-    private int imageViewWidth;
-    private boolean dataSavingMode;
-    private boolean disableImagePreview;
-    private float mScale;
-    private ItemClickListener itemClickListener;
+    private final CustomThemeWrapper customThemeWrapper;
+    private final RequestManager glide;
+    private final int imageViewWidth;
+    private final boolean dataSavingMode;
+    private final boolean disableImagePreview;
+    private final float mScale;
+    private final ItemClickListener itemClickListener;
 
     public TrendingSearchRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper,
                                              int imageViewWidth, boolean dataSavingMode, boolean disableImagePreview,

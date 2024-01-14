@@ -30,13 +30,13 @@ public class AccountManagementSectionRecyclerViewAdapter extends RecyclerView.Ad
     private static final int VIEW_TYPE_ACCOUNT = 1;
     private static final int VIEW_TYPE_MENU_ITEM = 2;
 
-    private BaseActivity baseActivity;
+    private final BaseActivity baseActivity;
     private ArrayList<Account> accounts;
-    private RequestManager glide;
-    private int primaryTextColor;
-    private int primaryIconColor;
-    private boolean isLoggedIn;
-    private NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener itemClickListener;
+    private final RequestManager glide;
+    private final int primaryTextColor;
+    private final int primaryIconColor;
+    private final boolean isLoggedIn;
+    private final NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener itemClickListener;
 
     public AccountManagementSectionRecyclerViewAdapter(BaseActivity baseActivity, CustomThemeWrapper customThemeWrapper,
                                                        RequestManager glide, boolean isLoggedIn,

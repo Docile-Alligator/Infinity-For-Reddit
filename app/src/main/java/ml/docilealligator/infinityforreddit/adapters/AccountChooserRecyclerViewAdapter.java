@@ -25,11 +25,11 @@ import pl.droidsonroids.gif.GifImageView;
 
 public class AccountChooserRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private BaseActivity baseActivity;
+    private final BaseActivity baseActivity;
     private ArrayList<Account> accounts;
-    private RequestManager glide;
-    private int primaryTextColor;
-    private ItemClickListener itemClickListener;
+    private final RequestManager glide;
+    private final int primaryTextColor;
+    private final ItemClickListener itemClickListener;
 
     public AccountChooserRecyclerViewAdapter(BaseActivity baseActivity, CustomThemeWrapper customThemeWrapper,
                                              RequestManager glide, ItemClickListener itemClickListener) {

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 public class NetworkWifiStatusReceiver extends BroadcastReceiver {
-    private NetworkWifiStatusReceiverListener networkWifiStatusReceiverListener;
+    private final NetworkWifiStatusReceiverListener networkWifiStatusReceiverListener;
 
     public interface NetworkWifiStatusReceiverListener {
         void networkStatusChange();

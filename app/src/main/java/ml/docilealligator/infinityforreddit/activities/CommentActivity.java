@@ -162,7 +162,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         mGlide = Glide.with(this);
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        if (mAccessToken == null) {
+        if (mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT).equals(Account.ANONYMOUS_ACCOUNT)) {
             finish();
             return;
         }

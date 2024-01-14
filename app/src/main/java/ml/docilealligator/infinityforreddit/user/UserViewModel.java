@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class UserViewModel extends AndroidViewModel {
-    private UserRepository mSubredditRepository;
-    private LiveData<UserData> mUserLiveData;
+    private final UserRepository mSubredditRepository;
+    private final LiveData<UserData> mUserLiveData;
 
     public UserViewModel(Application application, RedditDataRoomDatabase redditDataRoomDatabase, String id) {
         super(application);

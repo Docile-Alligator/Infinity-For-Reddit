@@ -70,7 +70,6 @@
     <string name="action_share">"Compartilhar"</string>
     <string name="action_preview">"Prévia"</string>
     <string name="action_report">"Reportar"</string>
-    <string name="action_see_removed">"Ver excluído"</string>
     <string name="action_set_wallpaper">"Definir como papel de parede"</string>
     <string name="action_send_private_message">"Enviar mensagem privada"</string>
     <string name="parse_json_response_error">"Erro ao analisar a resposta do JSON"</string>
@@ -266,11 +265,6 @@ Toque para tentar de novo."</string>
     <string name="are_you_sure">"Tem certeza?"</string>
     <string name="edit">"Editar"</string>
     <string name="delete">"Excluir"</string>
-    <string name="see_removed_comment">"Ver comentário excluído"</string>
-    <string name="fetching_removed_comment">"Buscando comentário excluído"</string>
-    <string name="show_removed_comment_failed">"Não pôde achar o comentário excluído"</string>
-    <string name="fetching_removed_post">"Buscando postagem excluída"</string>
-    <string name="show_removed_post_failed">"Não pôde achar a postagem excluída"</string>
     <string name="cancel">"Cancelar"</string>
     <string name="ok">"Ok"</string>
     <string name="edit_success">"Êxito ao editar"</string>
@@ -333,7 +327,6 @@ Toque para tentar de novo."</string>
     <string name="settings_volume_keys_navigate_posts_title">"Usar as teclas de volume para navegar em posagens"</string>
     <string name="settings_mute_video_title">"Silenciar Vídeos"</string>
     <string name="settings_mute_nsfw_video_title">"Silenciar Vídeos NSFW"</string>
-    <string name="settings_automatically_try_redgifs_title">"Tentar acessar automaticamente o Redgifs se os vídeos do Gfycat forem excluídos."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignorar barra de navegação no reprodutor de vídeos"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Evitar que o Controle de Vídeo Tenha Margens Largas"</string>
     <string name="settings_confirm_to_exit">"Confirmar para Sair"</string>
@@ -743,7 +736,6 @@ Ela não está doente ou algo assim, mas definitivamente poderia melhorar."</str
     <string name="notifications">"Notificações"</string>
     <string name="messages">"Mensagens"</string>
     <string name="message">"Mensagem"</string>
-    <string name="fetch_gfycat_video_failed">"Erro ao buscar vídeos do Gfycat"</string>
     <string name="fetch_redgifs_video_failed">"Erro ao buscar vídeos do Redgifs"</string>
     <string name="fetching_video_info_please_wait">"Obtendo informações do vídeo. Por favor, espere."</string>
     <string name="error_fetching_imgur_media">"Não pode carregar as imagens"</string>

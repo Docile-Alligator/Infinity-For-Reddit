@@ -27,7 +27,7 @@ public class SelectUserFlair {
     }
 
     public static void selectUserFlair(Retrofit oauthRetrofit, String accessToken, @Nullable UserFlair userFlair,
-                                       String subredditName, String accountName, SelectUserFlairListener selectUserFlairListener) {
+                                       String subredditName, @NonNull String accountName, SelectUserFlairListener selectUserFlairListener) {
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.API_TYPE_KEY, APIUtils.API_TYPE_JSON);
         if (userFlair != null) {
@@ -55,14 +55,10 @@ public class SelectUserFlair {
 
     private static class ParseErrorAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        private String response;
+        private final String response;
         @Nullable
         private String errorMessage;
-        private SelectUserFlairListener selectUserFlairListener;
-
-        interface ParseErrorAsyncTaskListener {
-            void parseFinished(@Nullable String errorMessage);
-        }
+        private final SelectUserFlairListener selectUserFlairListener;
 
         ParseErrorAsyncTask(String response, SelectUserFlairListener selectUserFlairListener) {
             this.response = response;

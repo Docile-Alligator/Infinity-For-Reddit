@@ -9,13 +9,13 @@ import java.util.Locale;
 import retrofit2.Retrofit;
 
 class MessageDataSourceFactory extends DataSource.Factory {
-    private Retrofit oauthRetrofit;
-    private Locale locale;
-    private String accessToken;
+    private final Retrofit oauthRetrofit;
+    private final Locale locale;
+    private final String accessToken;
     private String where;
 
     private MessageDataSource messageDataSource;
-    private MutableLiveData<MessageDataSource> messageDataSourceLiveData;
+    private final MutableLiveData<MessageDataSource> messageDataSourceLiveData;
 
     MessageDataSourceFactory(Retrofit oauthRetrofit, Locale locale, String accessToken, String where) {
         this.oauthRetrofit = oauthRetrofit;

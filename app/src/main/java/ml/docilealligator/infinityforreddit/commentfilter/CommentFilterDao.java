@@ -43,5 +43,5 @@ public interface CommentFilterDao {
 
     @Transaction
     @Query("SELECT * FROM comment_filter ORDER BY name")
-    public LiveData<List<CommentFilterWithUsage>> getAllCommentFilterWithUsageLiveData();
+    LiveData<List<CommentFilterWithUsage>> getAllCommentFilterWithUsageLiveData();
 }

@@ -89,21 +89,14 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_see_removed_view_post_detail_fragment"
-        android:orderInCategory="14"
-        android:title="@string/action_see_removed"
-        app:showAsAction="never"
-        android:visible="false" />
-
-    <item
         android:id="@+id/action_crosspost_view_post_detail_fragment"
-        android:orderInCategory="15"
+        android:orderInCategory="14"
         android:title="@string/action_crosspost"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_add_to_post_filter_view_post_detail_fragment"
-        android:orderInCategory="16"
+        android:orderInCategory="15"
         android:title="@string/action_add_to_post_filter"
         app:showAsAction="never" />
 </menu>

@@ -58,7 +58,6 @@
     <string name="action_share">"Κοινή χρήση"</string>
     <string name="action_preview">"Προεπισκόπηση"</string>
     <string name="action_report">"Αναφορά"</string>
-    <string name="action_see_removed">"Προβολή διαγραμμένου"</string>
     <string name="action_set_wallpaper">"Ορισμός ως ταπετσαρία"</string>
     <string name="action_send_private_message">"Αποστολή προσωπικού μηνύματος"</string>
     <string name="parse_json_response_error">"Σφάλμα κατά την ανάλυση της απόκρισης JSON"</string>
@@ -243,11 +242,6 @@
     <string name="are_you_sure">"Είστε σίγουρος/η?"</string>
     <string name="edit">"Επεξεργασία"</string>
     <string name="delete">"Διαγραφή"</string>
-    <string name="see_removed_comment">"Δες το διαγραμμένο σχόλιο"</string>
-    <string name="fetching_removed_comment">"Λήψη διαγραμμένου σχολίου"</string>
-    <string name="show_removed_comment_failed">"Δεν μπόρεσε να βρεθεί το διαγραμμένο σχόλιο"</string>
-    <string name="fetching_removed_post">"Λήψη διαγραμμένης ανάρτησης"</string>
-    <string name="show_removed_post_failed">"Δεν μπόρεσε να βρεθεί η διαγραμμένη ανάρτηση"</string>
     <string name="cancel">"Άκυρο"</string>
     <string name="ok">"ΟΚ"</string>
     <string name="edit_success">"Επιτυχής επεξεργασία"</string>
@@ -304,7 +298,6 @@
     <string name="settings_volume_keys_navigate_posts_title">"Περιήγηση στις αναρτήσεις με τα κουμπιά έντασης"</string>
     <string name="settings_mute_video_title">"Σίγαση βίντεο"</string>
     <string name="settings_mute_nsfw_video_title">"Σίγαση NSFW βίντεο"</string>
-    <string name="settings_automatically_try_redgifs_title">"Αύτοματη προσπάθεια προσπέλασης στο Redgifs αν τα Βίντεο στο Gfycat έχουν αφαιρεθεί."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Αγνόηση Μπάρας Πλοήγησης κατά την Αναπαραγωγή Βίντεο"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Αποτρέπει τα Χειριστήρια του Βίντεο να έχουν έξτρα περιθώριο"</string>
     <string name="settings_confirm_to_exit">"Επιβεβαίωση για Έξοδο"</string>
@@ -703,7 +696,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="notifications">"Ειδοποιήσεις"</string>
     <string name="messages">"Μηνύματα"</string>
     <string name="message">"Μήνυμα"</string>
-    <string name="fetch_gfycat_video_failed">"Η ανάκτηση του βίντεο Gfycat απέτυχε"</string>
     <string name="fetch_redgifs_video_failed">"Η ανάκτηση του βίντεο Redgifs απέτυχε"</string>
     <string name="fetching_video_info_please_wait">"Ανάκτηση πληροφοριών βίντεο. Παρακαλώ περιμένετε."</string>
     <string name="error_fetching_imgur_media">"Αδυναμία φόρτωσης εικόνων"</string>
@@ -1103,7 +1095,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="action_contact_mods">"Επικοινωνία με Συντονιστές"</string>
     <string name="settings_save_nsfw_media_in_different_folder_title">"Αποθήκευση NSFW Πολυμέσων σε Άλλη Τοποθεσία"</string>
     <string name="settings_nsfw_download_location_title">"Τοποθεσία Λήψης NSFW"</string>
-    <string name="fetch_streamable_video_failed">"Η ανάκτηση του βίντεο Gfycat απέτυχε"</string>
+    <string name="fetch_streamable_video_failed">"Η ανάκτηση του βίντεο Streamable απέτυχε"</string>
 
     <!-- EditProfileService Notification -->
     <string name="submit_change_avatar">"Υποβολή Αλλαγής Άβαταρ"</string>

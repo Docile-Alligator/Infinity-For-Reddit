@@ -1,8 +1,8 @@
 package ml.docilealligator.infinityforreddit;
 
 public class Rule {
-    private String shortName;
-    private String descriptionHtml;
+    private final String shortName;
+    private final String descriptionHtml;
 
     public Rule(String shortName, String descriptionHtml) {
         this.shortName = shortName;

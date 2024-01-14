@@ -15,14 +15,14 @@ import androidx.appcompat.app.AlertDialog;
 import ml.docilealligator.infinityforreddit.R;
 
 public class ColorPickerDialog extends AlertDialog {
-    private View colorView;
-    private EditText colorValueEditText;
-    private SeekBar seekBarA;
-    private SeekBar seekBarR;
-    private SeekBar seekBarG;
-    private SeekBar seekBarB;
-    private Button cancelButton;
-    private Button okButton;
+    private final View colorView;
+    private final EditText colorValueEditText;
+    private final SeekBar seekBarA;
+    private final SeekBar seekBarR;
+    private final SeekBar seekBarG;
+    private final SeekBar seekBarB;
+    private final Button cancelButton;
+    private final Button okButton;
     private int colorValue;
     private boolean changeColorValueEditText = true;
     private ColorPickerListener colorPickerListener;

@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
@@ -15,7 +16,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchSubscribedThing {
-    public static void fetchSubscribedThing(final Retrofit oauthRetrofit, String accessToken, String accountName,
+    public static void fetchSubscribedThing(final Retrofit oauthRetrofit, @Nullable String accessToken, @NonNull String accountName,
                                             final String lastItem, final ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                             final ArrayList<SubscribedUserData> subscribedUserData,
                                             final ArrayList<SubredditData> subredditData,

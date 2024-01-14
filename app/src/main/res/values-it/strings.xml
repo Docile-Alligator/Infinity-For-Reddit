@@ -58,7 +58,6 @@
     <string name="action_share">"Condividi"</string>
     <string name="action_preview">"Anteprima"</string>
     <string name="action_report">"Segnala"</string>
-    <string name="action_see_removed">"Visualizza Rimosso"</string>
     <string name="action_set_wallpaper">"Imposta come sfondo del dispositivo"</string>
     <string name="action_send_private_message">"Invia Messaggio privato"</string>
     <string name="parse_json_response_error">"Si è verificato un errore durante l'analisi della risposta JSON"</string>
@@ -250,11 +249,6 @@ Tocca per riprovare."</string>
     <string name="are_you_sure">"Sei sicuro?"</string>
     <string name="edit">"Modifica"</string>
     <string name="delete">"Elimina"</string>
-    <string name="see_removed_comment">"Visualizza commento rimosso"</string>
-    <string name="fetching_removed_comment">"Recupero del commento rimosso"</string>
-    <string name="show_removed_comment_failed">"Impossibile trovare il commento rimosso"</string>
-    <string name="fetching_removed_post">"Recupero post rimosso"</string>
-    <string name="show_removed_post_failed">"Impossibile trovare il post rimosso"</string>
     <string name="cancel">"Cancella"</string>
     <string name="ok">"OK"</string>
     <string name="edit_success">"Modifica eseguita correttamente"</string>
@@ -311,7 +305,6 @@ Tocca per riprovare."</string>
     <string name="settings_volume_keys_navigate_posts_title">"Usa i Tasti del Volume per Navigare i Post"</string>
     <string name="settings_mute_video_title">"Muta i video"</string>
     <string name="settings_mute_nsfw_video_title">"Metti in muto i video NSFW"</string>
-    <string name="settings_automatically_try_redgifs_title">"Prova automaticamente ad accedere a Redgifs se i video su Gfycat vengono rimossi."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignora la Barra di Navigazione nel Lettore Video"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Impedisci ai controlli video di avere margine aggiuntivo"</string>
     <string name="settings_confirm_to_exit">"Conferma per uscire"</string>
@@ -707,7 +700,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="notifications">"Notifiche"</string>
     <string name="messages">"Messaggi"</string>
     <string name="message">"Messaggio"</string>
-    <string name="fetch_gfycat_video_failed">"Impossibile recuperare il video da Gfycat"</string>
     <string name="fetch_redgifs_video_failed">"Impossibile recuperare il video da Redgifs"</string>
     <string name="fetching_video_info_please_wait">"Recupero delle informazioni sul video. Attendere prego."</string>
     <string name="error_fetching_imgur_media">"Impossibile caricare immagini"</string>

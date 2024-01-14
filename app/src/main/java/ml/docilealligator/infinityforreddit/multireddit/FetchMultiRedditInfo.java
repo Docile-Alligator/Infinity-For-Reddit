@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -52,7 +53,7 @@ public class FetchMultiRedditInfo {
                                                      String multipath,
                                                      FetchMultiRedditInfoListener fetchMultiRedditInfoListener) {
         executor.execute(() -> {
-            MultiReddit multiReddit = redditDataRoomDatabase.multiRedditDao().getMultiReddit(multipath, "-");
+            MultiReddit multiReddit = redditDataRoomDatabase.multiRedditDao().getMultiReddit(multipath, Account.ANONYMOUS_ACCOUNT);
             ArrayList<AnonymousMultiredditSubreddit> anonymousMultiredditSubreddits =
                     (ArrayList<AnonymousMultiredditSubreddit>) redditDataRoomDatabase.anonymousMultiredditSubredditDao().getAllAnonymousMultiRedditSubreddits(multipath);
             ArrayList<String> subredditNames = new ArrayList<>();
@@ -66,8 +67,8 @@ public class FetchMultiRedditInfo {
 
     private static class ParseMultiRedditInfoAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        private String response;
-        private FetchMultiRedditInfoListener fetchMultiRedditInfoListener;
+        private final String response;
+        private final FetchMultiRedditInfoListener fetchMultiRedditInfoListener;
         private MultiReddit multiReddit;
         private boolean parseFailed = false;
 

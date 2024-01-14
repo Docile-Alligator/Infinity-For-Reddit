@@ -144,26 +144,6 @@
             app:drawableStartCompat="@drawable/ic_report_24dp" />
 
         <TextView
-            android:id="@+id/see_removed_view_comment_more_bottom_sheet_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:drawablePadding="48dp"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:paddingStart="32dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="32dp"
-            android:paddingBottom="16dp"
-            android:text="@string/see_removed_comment"
-            android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family"
-            android:visibility="gone"
-            app:drawableStartCompat="@drawable/ic_preview_24dp" />
-
-        <TextView
             android:id="@+id/add_to_comment_filter_view_comment_more_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

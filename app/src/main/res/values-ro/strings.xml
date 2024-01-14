@@ -68,7 +68,6 @@
     <string name="action_share">"Distribuire"</string>
     <string name="action_preview">"Previzualizare"</string>
     <string name="action_report">"Raportați"</string>
-    <string name="action_see_removed">"Vedeți eliminate"</string>
     <string name="action_set_wallpaper">"Setați ca fundal"</string>
     <string name="action_send_private_message">"Trimiteți mesaj privat"</string>
     <string name="parse_json_response_error">"Eroare la afișarea răspunsului JSON"</string>
@@ -268,11 +267,6 @@ Apăsați pentru reîncărcare."</string>
     <string name="are_you_sure">"Sunteți sigur?"</string>
     <string name="edit">"Editare"</string>
     <string name="delete">"Ștergere"</string>
-    <string name="see_removed_comment">"Vedeți comentariul șters"</string>
-    <string name="fetching_removed_comment">"Se caută comentariul șters"</string>
-    <string name="show_removed_comment_failed">"Nu s-a găsit comentariul șters"</string>
-    <string name="fetching_removed_post">"Se caută postarea ștearsă"</string>
-    <string name="show_removed_post_failed">"Nu s-a găsit postarea ștearsă"</string>
     <string name="cancel">"Anulare"</string>
     <string name="ok">"OK"</string>
     <string name="edit_success">"Editare reușită"</string>
@@ -335,7 +329,6 @@ Apăsați pentru reîncărcare."</string>
     <string name="settings_volume_keys_navigate_posts_title">"Utilizați tastele de volum pentru a naviga postările"</string>
     <string name="settings_mute_video_title">"Oprire sunet videoclipuri"</string>
     <string name="settings_mute_nsfw_video_title">"Oprire sunet videoclipuri NSFW"</string>
-    <string name="settings_automatically_try_redgifs_title">"Încercați să accesați Redgifs dacă videourile de pe Gfycat sunt șterse."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignorați bara de navigare în player-ul video"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Împiedicați player-ul video din a avea margine suplimentară"</string>
     <string name="settings_confirm_to_exit">"Confirmare ieșire"</string>
@@ -749,7 +742,6 @@ Nu e bolnavă sau ceva de genul, dar cu siguranță ar putea să se facă bine."
     <string name="notifications">"Notificări"</string>
     <string name="messages">"Mesaje"</string>
     <string name="message">"Mesaj"</string>
-    <string name="fetch_gfycat_video_failed">"Obținerea videoclipului Gfycat a eșuat"</string>
     <string name="fetch_redgifs_video_failed">"Obținerea videoclipului Redgifs a eșuat"</string>
     <string name="fetching_video_info_please_wait">"Se obțin informații despre video. Te rugăm să aștepți."</string>
     <string name="error_fetching_imgur_media">"Nu s-au putut încărca imaginile"</string>

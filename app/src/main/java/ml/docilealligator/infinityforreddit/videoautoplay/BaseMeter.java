@@ -37,8 +37,10 @@ import com.google.android.exoplayer2.upstream.TransferListener;
 @SuppressWarnings("WeakerAccess") //
 public final class BaseMeter<T extends BandwidthMeter> implements BandwidthMeter, TransferListener {
 
-  @NonNull protected final T bandwidthMeter;
-  @NonNull protected final TransferListener transferListener;
+  @NonNull
+  private final T bandwidthMeter;
+  @NonNull
+  private final TransferListener transferListener;
 
   /**
    * @deprecated use {@link #BaseMeter(BandwidthMeter)} instead.

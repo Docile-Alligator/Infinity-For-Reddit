@@ -68,7 +68,6 @@
     <string name="action_share">"Partilhar"</string>
     <string name="action_preview">"Pré-visualizar"</string>
     <string name="action_report">"Denunciar"</string>
-    <string name="action_see_removed">"Ver Removido"</string>
     <string name="action_set_wallpaper">"Definir como Imagem de Fundo"</string>
     <string name="action_send_private_message">"Enviar Mensagem Privada"</string>
     <string name="parse_json_response_error">"Ocorreu um erro ao analisar a resposta do JSON"</string>
@@ -278,11 +277,6 @@ Toque para tentar novamente."</string>
     <string name="are_you_sure">"Tem a certeza?"</string>
     <string name="edit">"Editar"</string>
     <string name="delete">"Eliminar"</string>
-    <string name="see_removed_comment">"Ver Comentário Removido"</string>
-    <string name="fetching_removed_comment">"A obter comentário removido"</string>
-    <string name="show_removed_comment_failed">"Comentário removido não encontrado"</string>
-    <string name="fetching_removed_post">"A obter publicação removido"</string>
-    <string name="show_removed_post_failed">"Publicação removida não encontrada"</string>
     <string name="cancel">"Cancelar"</string>
     <string name="ok">"OK"</string>
 
@@ -349,7 +343,6 @@ Toque para tentar novamente."</string>
     <string name="settings_mute_nsfw_video_title">"Vídeos 18+ Sem Som"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Tentar aceder ao Redgifs automaticamente caso os vídeos no Gfycat tenham sido removidos."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignorar Barra de Navegação no Reprodutor de Vídeo"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Impedir que o Controlador de Vídeo Tenha Margem Extra"</string>
     <string name="settings_confirm_to_exit">"Confirmar para Sair"</string>
@@ -754,7 +747,6 @@ Ela não está doente nem nada, mas certamente poderá melhorar."</string>
     <string name="notifications">"Notificações"</string>
     <string name="messages">"Mensagens"</string>
     <string name="message">"Mensagem"</string>
-    <string name="fetch_gfycat_video_failed">"Falha ao obter vídeo do Gfycat"</string>
     <string name="fetch_redgifs_video_failed">"Falha ao obter vídeo do Redgifs"</string>
     <string name="fetching_video_info_please_wait">"A obter informações do vídeo. Aguarde."</string>
     <string name="error_fetching_imgur_media">"Impossível carregar imagens"</string>

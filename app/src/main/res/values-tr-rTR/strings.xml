@@ -68,7 +68,6 @@
     <string name="action_share">"Paylaş"</string>
     <string name="action_preview">"Önizleme"</string>
     <string name="action_report">"Bildir"</string>
-    <string name="action_see_removed">"Kaldırılanları Göster"</string>
     <string name="action_set_wallpaper">"Duvar Kağıdı Yap"</string>
     <string name="action_send_private_message">"Özel Mesaj Gönder"</string>
     <string name="parse_json_response_error">"JSON yanıtı ayrıştırılırken hata oluştu"</string>
@@ -269,11 +268,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="are_you_sure">"Emin misiniz?"</string>
     <string name="edit">"Düzenle"</string>
     <string name="delete">"Sil"</string>
-    <string name="see_removed_comment">"Kaldırılan Yorumu Gör"</string>
-    <string name="fetching_removed_comment">"Kaldırılan yorum getiriliyor"</string>
-    <string name="show_removed_comment_failed">"Kaldırılan yorum bulunamadı"</string>
-    <string name="fetching_removed_post">"Kaldırılan gönderi getiriliyor"</string>
-    <string name="show_removed_post_failed">"Kaldırılan gönderi bulunamadı"</string>
     <string name="cancel">"İptal"</string>
     <string name="ok">"Tamam"</string>
     <string name="edit_success">"Başarıyla düzenlendi"</string>
@@ -338,7 +332,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_mute_nsfw_video_title">"NSFW Videolarını Sessize Al"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Gfycat'teki Videolar Kaldırılmışsa Otomatik Olarak Redgif'lere Erişmeyi Dene."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Video Oynatıcısındaki Navigasyon Çubuğunu Yoksay"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Video Denetleyicisinde Fazladan Kenar Olmasını Önle"</string>
     <string name="settings_confirm_to_exit">"Çıkışı Doğrula"</string>
@@ -757,7 +750,6 @@ Amoled Tema Şablonu Oluştur"</string>
     <string name="notifications">"Bildirimler"</string>
     <string name="messages">"Mesajlar"</string>
     <string name="message">"Mesaj"</string>
-    <string name="fetch_gfycat_video_failed">"Gfycat video'su alınamadı"</string>
     <string name="fetch_redgifs_video_failed">"Redgifs video'su alınamadı"</string>
     <string name="fetching_video_info_please_wait">"Video bilgisi alınıyor. Lütfen bekleyin."</string>
     <string name="error_fetching_imgur_media">"Görüntüler yüklenemedi"</string>

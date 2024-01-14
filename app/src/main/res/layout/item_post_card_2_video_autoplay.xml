@@ -42,7 +42,7 @@
                 android:visibility="gone" />
 
             <ImageView
-                android:id="@+id/error_loading_gfycat_image_view_item_post_card_2_video_autoplay"
+                android:id="@+id/error_loading_video_image_view_item_post_card_2_video_autoplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"

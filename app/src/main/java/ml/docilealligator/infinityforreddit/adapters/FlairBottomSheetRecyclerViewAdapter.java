@@ -24,10 +24,10 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<FlairBottomSheetRecyclerViewAdapter.FlairViewHolder> {
-    private BaseActivity activity;
+    private final BaseActivity activity;
     private ArrayList<Flair> flairs;
-    private int flairTextColor;
-    private ItemClickListener itemClickListener;
+    private final int flairTextColor;
+    private final ItemClickListener itemClickListener;
 
     public FlairBottomSheetRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper,
                                                ItemClickListener itemClickListener) {

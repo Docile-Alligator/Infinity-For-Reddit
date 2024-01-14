@@ -43,11 +43,11 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
     private static final int VIEW_TYPE_IMAGE = 1;
     private static final int VIEW_TYPE_ADD_IMAGE = 2;
 
-    private PostGalleryActivity activity;
+    private final PostGalleryActivity activity;
     private ArrayList<RedditGalleryImageInfo> redditGalleryImageInfoList;
-    private CustomThemeWrapper customThemeWrapper;
-    private ItemClickListener itemClickListener;
-    private RequestManager glide;
+    private final CustomThemeWrapper customThemeWrapper;
+    private final ItemClickListener itemClickListener;
+    private final RequestManager glide;
 
     public RedditGallerySubmissionRecyclerViewAdapter(PostGalleryActivity activity, CustomThemeWrapper customThemeWrapper,
                                                       ItemClickListener itemClickListener) {

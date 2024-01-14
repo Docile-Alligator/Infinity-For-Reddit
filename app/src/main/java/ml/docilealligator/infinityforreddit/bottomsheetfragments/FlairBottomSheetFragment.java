@@ -55,9 +55,6 @@ public class FlairBottomSheetFragment extends LandscapeExpandedBottomSheetDialog
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
-    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private String mAccessToken;
     private String mSubredditName;

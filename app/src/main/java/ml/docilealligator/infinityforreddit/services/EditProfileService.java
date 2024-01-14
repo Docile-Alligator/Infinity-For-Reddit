@@ -13,12 +13,24 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+
 import com.bumptech.glide.Glide;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.FileNotFoundException;
+import java.util.Random;
+import java.util.concurrent.ExecutionException;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import jp.wasabeef.glide.transformations.CropTransformation;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
@@ -28,14 +40,7 @@ import ml.docilealligator.infinityforreddit.events.SubmitChangeBannerEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitSaveProfileEvent;
 import ml.docilealligator.infinityforreddit.utils.EditProfileUtils;
 import ml.docilealligator.infinityforreddit.utils.NotificationUtils;
-import org.greenrobot.eventbus.EventBus;
 import retrofit2.Retrofit;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.io.FileNotFoundException;
-import java.util.Random;
-import java.util.concurrent.ExecutionException;
 
 public class EditProfileService extends Service {
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
@@ -172,8 +177,8 @@ public class EditProfileService extends Service {
         }
     }
 
-    private void submitSaveEditProfile(String accessToken,
-                                       String accountName,
+    private void submitSaveEditProfile(@Nullable String accessToken,
+                                       @NonNull String accountName,
                                        String displayName,
                                        String publicDesc
     ) {

@@ -12,7 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -27,26 +26,28 @@ import retrofit2.Retrofit;
 
 public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
 
-    private Retrofit retrofit;
-    private Locale locale;
+    private final Retrofit retrofit;
     @Nullable
-    private String accessToken;
-    private String username;
-    private SortType sortType;
-    private boolean areSavedComments;
+    private final String accessToken;
+    @Nullable
+    private final String accountName;
+    private final String username;
+    private final SortType sortType;
+    private final boolean areSavedComments;
 
-    private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
-    private MutableLiveData<NetworkState> initialLoadStateLiveData;
-    private MutableLiveData<Boolean> hasPostLiveData;
+    private final MutableLiveData<NetworkState> paginationNetworkStateLiveData;
+    private final MutableLiveData<NetworkState> initialLoadStateLiveData;
+    private final MutableLiveData<Boolean> hasPostLiveData;
 
     private LoadParams<String> params;
     private LoadCallback<String, Comment> callback;
 
-    CommentDataSource(Retrofit retrofit, Locale locale, @Nullable String accessToken, String username, SortType sortType,
+    CommentDataSource(Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
+                      String username, SortType sortType,
                       boolean areSavedComments) {
         this.retrofit = retrofit;
-        this.locale = locale;
         this.accessToken = accessToken;
+        this.accountName = accountName;
         this.username = username;
         this.sortType = sortType;
         this.areSavedComments = areSavedComments;
@@ -82,19 +83,14 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
                     null, sortType.getType(), sortType.getTime(),
                     APIUtils.getOAuthHeader(accessToken));
         } else {
-            if (accessToken == null) {
-                commentsCall = api.getUserComments(username, null, sortType.getType(),
-                        sortType.getTime());
-            } else {
-                commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken), username,
-                        null, sortType.getType(), sortType.getTime());
-            }
+            commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken), username,
+                    null, sortType.getType(), sortType.getTime());
         }
         commentsCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    new ParseCommentAsyncTask(response.body(), locale, new ParseCommentAsyncTask.ParseCommentAsyncTaskListener() {
+                    new ParseCommentAsyncTask(response.body(), new ParseCommentAsyncTask.ParseCommentAsyncTaskListener() {
                         @Override
                         public void parseSuccessful(ArrayList<Comment> comments, String after) {
                             if (comments.size() == 0) {
@@ -146,19 +142,14 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
             commentsCall = api.getUserSavedCommentsOauth(username, PostPagingSource.USER_WHERE_SAVED, params.key,
                     sortType.getType(), sortType.getTime(), APIUtils.getOAuthHeader(accessToken));
         } else {
-            if (accessToken == null) {
-                commentsCall = api.getUserComments(username, params.key, sortType.getType(),
-                        sortType.getTime());
-            } else {
-                commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken),
-                        username, params.key, sortType.getType(), sortType.getTime());
-            }
+            commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken),
+                    username, params.key, sortType.getType(), sortType.getTime());
         }
         commentsCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    new ParseCommentAsyncTask(response.body(), locale, new ParseCommentAsyncTask.ParseCommentAsyncTaskListener() {
+                    new ParseCommentAsyncTask(response.body(), new ParseCommentAsyncTask.ParseCommentAsyncTaskListener() {
                         @Override
                         public void parseSuccessful(ArrayList<Comment> comments, String after) {
                             if (after == null || after.equals("") || after.equals("null")) {
@@ -188,13 +179,11 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
 
     private static class ParseCommentAsyncTask extends AsyncTask<Void, ArrayList<Comment>, ArrayList<Comment>> {
         private String after;
-        private Locale locale;
         private JSONArray commentsJSONArray;
         private boolean parseFailed;
-        private ParseCommentAsyncTaskListener parseCommentAsyncTaskListener;
+        private final ParseCommentAsyncTaskListener parseCommentAsyncTaskListener;
 
-        ParseCommentAsyncTask(String response, Locale locale, ParseCommentAsyncTaskListener parseCommentAsyncTaskListener) {
-            this.locale = locale;
+        ParseCommentAsyncTask(String response, ParseCommentAsyncTaskListener parseCommentAsyncTaskListener) {
             this.parseCommentAsyncTaskListener = parseCommentAsyncTaskListener;
             try {
                 JSONObject data = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY);

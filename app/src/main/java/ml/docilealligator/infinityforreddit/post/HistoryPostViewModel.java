@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.post;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -21,21 +22,21 @@ import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import retrofit2.Retrofit;
 
 public class HistoryPostViewModel extends ViewModel {
-    private Executor executor;
-    private Retrofit retrofit;
-    private RedditDataRoomDatabase redditDataRoomDatabase;
-    private String accessToken;
-    private String accountName;
-    private SharedPreferences sharedPreferences;
-    private int postType;
-    private PostFilter postFilter;
+    private final Executor executor;
+    private final Retrofit retrofit;
+    private final RedditDataRoomDatabase redditDataRoomDatabase;
+    private final String accessToken;
+    private final String accountName;
+    private final SharedPreferences sharedPreferences;
+    private final int postType;
+    private final PostFilter postFilter;
 
-    private LiveData<PagingData<Post>> posts;
+    private final LiveData<PagingData<Post>> posts;
 
-    private MutableLiveData<PostFilter> postFilterLiveData;
+    private final MutableLiveData<PostFilter> postFilterLiveData;
 
     public HistoryPostViewModel(Executor executor, Retrofit retrofit, RedditDataRoomDatabase redditDataRoomDatabase,
-                                String accessToken, String accountName, SharedPreferences sharedPreferences,
+                                @Nullable String accessToken, @NonNull String accountName, SharedPreferences sharedPreferences,
                                 int postType, PostFilter postFilter) {
         this.executor = executor;
         this.retrofit = retrofit;
@@ -77,17 +78,17 @@ public class HistoryPostViewModel extends ViewModel {
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
-        private Executor executor;
-        private Retrofit retrofit;
-        private RedditDataRoomDatabase redditDataRoomDatabase;
-        private String accessToken;
-        private String accountName;
-        private SharedPreferences sharedPreferences;
-        private int postType;
-        private PostFilter postFilter;
+        private final Executor executor;
+        private final Retrofit retrofit;
+        private final RedditDataRoomDatabase redditDataRoomDatabase;
+        private final String accessToken;
+        private final String accountName;
+        private final SharedPreferences sharedPreferences;
+        private final int postType;
+        private final PostFilter postFilter;
 
         public Factory(Executor executor, Retrofit retrofit, RedditDataRoomDatabase redditDataRoomDatabase,
-                       String accessToken, String accountName, SharedPreferences sharedPreferences, int postType,
+                       @Nullable String accessToken, @NonNull String accountName, SharedPreferences sharedPreferences, int postType,
                        PostFilter postFilter) {
             this.executor = executor;
             this.retrofit = retrofit;

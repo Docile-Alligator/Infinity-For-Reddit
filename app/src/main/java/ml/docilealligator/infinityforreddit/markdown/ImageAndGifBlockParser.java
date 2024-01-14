@@ -18,7 +18,7 @@ import ml.docilealligator.infinityforreddit.MediaMetadata;
 
 public class ImageAndGifBlockParser extends AbstractBlockParser {
 
-    private ImageAndGifBlock imageAndGifBlock;
+    private final ImageAndGifBlock imageAndGifBlock;
 
     ImageAndGifBlockParser(MediaMetadata mediaMetadata) {
         this.imageAndGifBlock = new ImageAndGifBlock(mediaMetadata);

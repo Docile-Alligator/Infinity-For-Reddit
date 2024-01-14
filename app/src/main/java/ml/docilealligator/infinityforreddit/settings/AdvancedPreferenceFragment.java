@@ -227,6 +227,10 @@ public class AdvancedPreferenceFragment extends CustomFontPreferenceFragmentComp
                             editor.remove(SharedPreferencesUtils.BLUR_SPOILER_KEY_LEGACY);
                             editor.remove(SharedPreferencesUtils.CONFIRM_TO_EXIT_LEGACY);
                             editor.remove(SharedPreferencesUtils.OPEN_LINK_IN_APP_LEGACY);
+                            editor.remove(SharedPreferencesUtils.AUTOMATICALLY_TRY_REDGIFS_LEGACY);
+                            editor.remove(SharedPreferencesUtils.DO_NOT_SHOW_REDDIT_API_INFO_AGAIN_LEGACY);
+                            editor.remove(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_AWARDS_LEGACY);
+                            editor.remove(SharedPreferencesUtils.HIDE_COMMENT_AWARDS_LEGACY);
 
                             SharedPreferences.Editor sortTypeEditor = mSortTypeSharedPreferences.edit();
                             sortTypeEditor.remove(SharedPreferencesUtils.SORT_TYPE_ALL_POST_LEGACY);

@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.comment;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -16,17 +17,17 @@ import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 public class CommentViewModel extends ViewModel {
-    private CommentDataSourceFactory commentDataSourceFactory;
-    private LiveData<NetworkState> paginationNetworkState;
-    private LiveData<NetworkState> initialLoadingState;
-    private LiveData<Boolean> hasCommentLiveData;
-    private LiveData<PagedList<Comment>> comments;
-    private MutableLiveData<SortType> sortTypeLiveData;
+    private final CommentDataSourceFactory commentDataSourceFactory;
+    private final LiveData<NetworkState> paginationNetworkState;
+    private final LiveData<NetworkState> initialLoadingState;
+    private final LiveData<Boolean> hasCommentLiveData;
+    private final LiveData<PagedList<Comment>> comments;
+    private final MutableLiveData<SortType> sortTypeLiveData;
 
-    public CommentViewModel(Retrofit retrofit, Locale locale, String accessToken, String username, SortType sortType,
-                            boolean areSavedComments) {
-        commentDataSourceFactory = new CommentDataSourceFactory(retrofit, locale, accessToken, username, sortType,
-                areSavedComments);
+    public CommentViewModel(Retrofit retrofit, Locale locale, @Nullable String accessToken, @NonNull String accountName,
+                            String username, SortType sortType, boolean areSavedComments) {
+        commentDataSourceFactory = new CommentDataSourceFactory(retrofit, locale, accessToken, accountName,
+                username, sortType, areSavedComments);
 
         initialLoadingState = Transformations.switchMap(commentDataSourceFactory.getCommentDataSourceLiveData(),
                 CommentDataSource::getInitialLoadStateLiveData);
@@ -80,18 +81,20 @@ public class CommentViewModel extends ViewModel {
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
-        private Retrofit retrofit;
-        private Locale locale;
-        private String accessToken;
-        private String username;
-        private SortType sortType;
-        private boolean areSavedComments;
+        private final Retrofit retrofit;
+        private final Locale locale;
+        private final String accessToken;
+        private final String accountName;
+        private final String username;
+        private final SortType sortType;
+        private final boolean areSavedComments;
 
-        public Factory(Retrofit retrofit, Locale locale, String accessToken, String username,
+        public Factory(Retrofit retrofit, Locale locale, @Nullable String accessToken, @NonNull String accountName, String username,
                        SortType sortType, boolean areSavedComments) {
             this.retrofit = retrofit;
             this.locale = locale;
             this.accessToken = accessToken;
+            this.accountName = accountName;
             this.username = username;
             this.sortType = sortType;
             this.areSavedComments = areSavedComments;
@@ -100,7 +103,8 @@ public class CommentViewModel extends ViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new CommentViewModel(retrofit, locale, accessToken, username, sortType, areSavedComments);
+            return (T) new CommentViewModel(retrofit, locale, accessToken, accountName, username,
+                    sortType, areSavedComments);
         }
     }
 }

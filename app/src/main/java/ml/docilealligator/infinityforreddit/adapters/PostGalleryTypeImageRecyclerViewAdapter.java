@@ -31,19 +31,19 @@ import ml.docilealligator.infinityforreddit.databinding.ItemGalleryImageInPostFe
 import ml.docilealligator.infinityforreddit.post.Post;
 
 public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapter<PostGalleryTypeImageRecyclerViewAdapter.ImageViewHolder> {
-    private RequestManager glide;
-    private Typeface typeface;
+    private final RequestManager glide;
+    private final Typeface typeface;
     private Markwon mPostDetailMarkwon;
-    private SaveMemoryCenterInisdeDownsampleStrategy saveMemoryCenterInisdeDownsampleStrategy;
-    private int mColorAccent;
-    private int mPrimaryTextColor;
+    private final SaveMemoryCenterInisdeDownsampleStrategy saveMemoryCenterInisdeDownsampleStrategy;
+    private final int mColorAccent;
+    private final int mPrimaryTextColor;
     private int mCardViewColor;
     private int mCommentColor;
-    private float mScale;
+    private final float mScale;
     private ArrayList<Post.Gallery> galleryImages;
     private boolean blurImage;
     private float ratio;
-    private boolean showCaption;
+    private final boolean showCaption;
 
     public PostGalleryTypeImageRecyclerViewAdapter(RequestManager glide, Typeface typeface,
                                                    SaveMemoryCenterInisdeDownsampleStrategy saveMemoryCenterInisdeDownsampleStrategy,

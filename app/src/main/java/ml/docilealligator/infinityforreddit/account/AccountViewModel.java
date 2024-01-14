@@ -9,10 +9,10 @@ import java.util.List;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class AccountViewModel extends ViewModel {
-    private AccountRepository mAccountRepository;
-    private LiveData<List<Account>> mAccountsExceptCurrentAccountLiveData;
-    private LiveData<Account> mCurrentAccountLiveData;
-    private LiveData<List<Account>> mAllAccountsLiveData;
+    private final AccountRepository mAccountRepository;
+    private final LiveData<List<Account>> mAccountsExceptCurrentAccountLiveData;
+    private final LiveData<Account> mCurrentAccountLiveData;
+    private final LiveData<List<Account>> mAllAccountsLiveData;
 
     public AccountViewModel(RedditDataRoomDatabase redditDataRoomDatabase) {
         mAccountRepository = new AccountRepository(redditDataRoomDatabase);

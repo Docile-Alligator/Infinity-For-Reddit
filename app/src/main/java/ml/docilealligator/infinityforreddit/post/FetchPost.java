@@ -3,7 +3,9 @@ package ml.docilealligator.infinityforreddit.post;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import java.util.HashMap;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
@@ -14,14 +16,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchPost {
-    public static void fetchPost(Executor executor, Handler handler, Retrofit retrofit, String id, String accessToken,
+    public static void fetchPost(Executor executor, Handler handler, Retrofit oauthRetrofit, String id,
+                                 @Nullable String accessToken,
                                  FetchPostListener fetchPostListener) {
-        Call<String> postCall;
-        if (accessToken == null) {
-            postCall = retrofit.create(RedditAPI.class).getPost(id);
-        } else {
-            postCall = retrofit.create(RedditAPI.class).getPostOauth(id, APIUtils.getOAuthHeader(accessToken));
-        }
+        Call<String> postCall = oauthRetrofit.create(RedditAPI.class).getPostOauth(id,
+                accessToken == null ? new HashMap<>() : APIUtils.getOAuthHeader(accessToken));
         postCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -49,16 +48,16 @@ public class FetchPost {
         });
     }
 
-    public static void fetchRandomPost(Executor executor, Handler handler, Retrofit retrofit, boolean isNSFW,
-                                       FetchRandomPostListener fetchRandomPostListener) {
+    public static void fetchRandomPost(Executor executor, Handler handler, Retrofit applicationOnlyOauthRetrofit,
+                                       boolean isNSFW, FetchRandomPostListener fetchRandomPostListener) {
         Call<String> call;
         if (isNSFW) {
-            call = retrofit.create(RedditAPI.class).getRandomNSFWPost();
+            call = applicationOnlyOauthRetrofit.create(RedditAPI.class).getRandomNSFWPostOauth();
         } else {
-            call = retrofit.create(RedditAPI.class).getRandomPost();
+            call = applicationOnlyOauthRetrofit.create(RedditAPI.class).getRandomPostOauth();
         }
 
-        call.enqueue(new Callback<String>() {
+        call.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {

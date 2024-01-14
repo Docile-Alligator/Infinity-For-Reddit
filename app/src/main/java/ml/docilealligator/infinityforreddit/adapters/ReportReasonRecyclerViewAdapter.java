@@ -21,11 +21,11 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 
 public class ReportReasonRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private BaseActivity activity;
-    private ArrayList<ReportReason> generalReasons;
+    private final BaseActivity activity;
+    private final ArrayList<ReportReason> generalReasons;
     private ArrayList<ReportReason> rules;
-    private int primaryTextColor;
-    private int colorAccent;
+    private final int primaryTextColor;
+    private final int colorAccent;
 
     public ReportReasonRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper, ArrayList<ReportReason> generalReasons) {
         this.activity = activity;

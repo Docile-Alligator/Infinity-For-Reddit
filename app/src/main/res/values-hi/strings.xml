@@ -74,7 +74,6 @@
     <string name="action_share">"दूसरो को भेजे"</string>
     <string name="action_preview">"पूर्वदर्शन"</string>
     <string name="action_report">"शिकायत करें"</string>
-    <string name="action_see_removed">"हटाए हुए पोस्ट देखें"</string>
     <string name="action_set_wallpaper">"वालपेपर लगाएं "</string>
     <string name="action_send_private_message">"व्यक्तिगत संदेश भेजें"</string>
     <string name="parse_json_response_error">"JSON प्रतिक्रिया को समझने में त्रुटि"</string>
@@ -297,11 +296,6 @@ Behavior -->
     <string name="are_you_sure">"क्या आप सुनिश्चित हैं? "</string>
     <string name="edit">"संपादन करें "</string>
     <string name="delete">"हटाएं "</string>
-    <string name="see_removed_comment">"हटाई हुई टिप्पणी देखें "</string>
-    <string name="fetching_removed_comment">"हटाई हुई टिप्पणी प्राप्त हो रही है "</string>
-    <string name="show_removed_comment_failed">"हटाई हुई टिप्पणी नहीं खोज सका "</string>
-    <string name="fetching_removed_post">"हटाई हुई पोस्ट प्राप्त हो रही है "</string>
-    <string name="show_removed_post_failed">"हटाई हुई पोस्ट नहीं खोजी जा सकी"</string>
     <string name="cancel">"निरस्त करें "</string>
     <string name="ok">"ठीक है "</string>
 
@@ -384,7 +378,6 @@ Behavior -->
     <string name="settings_mute_nsfw_video_title">"मौन NSFW वीडियोज"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"स्वतः ही Redgifs खोलने का प्रयास यदि Gfycat पर वीडियोज हटा दी गयी  हों "</string>
     <string name="settings_video_player_ignore_nav_bar_title">"वीडियो प्लेयर में नेवीगेशन बार का छिपना"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"वीडियो कंट्रोलर द्वारा अतिरिक्त हाशिया लेने पर रोक "</string>
     <string name="settings_confirm_to_exit">"एप छोड़ने की पुष्टि "</string>
@@ -824,7 +817,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="notifications">"अधिसूचनाएं "</string>
     <string name="messages">"संदेश "</string>
     <string name="message">"संदेश "</string>
-    <string name="fetch_gfycat_video_failed">"Gfycat वीडियो प्राप्ति सफल "</string>
     <string name="fetch_redgifs_video_failed">"Redgifs वीडियो प्राप्ति असफल "</string>
     <string name="fetching_video_info_please_wait">"वीडियो इनफो प्राप्त हो रहा है। कृपया प्रतीक्षा करें। "</string>
     <string name="error_fetching_imgur_media">"चित्र लोड नहीं हो सका "</string>

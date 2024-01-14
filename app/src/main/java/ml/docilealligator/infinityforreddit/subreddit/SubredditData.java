@@ -11,25 +11,25 @@ public class SubredditData {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "id")
-    private String id;
+    private final String id;
     @ColumnInfo(name = "name")
-    private String name;
+    private final String name;
     @ColumnInfo(name = "icon")
-    private String iconUrl;
+    private final String iconUrl;
     @ColumnInfo(name = "banner")
-    private String bannerUrl;
+    private final String bannerUrl;
     @ColumnInfo(name = "description")
-    private String description;
+    private final String description;
     @ColumnInfo(name = "sidebar_description")
-    private String sidebarDescription;
+    private final String sidebarDescription;
     @ColumnInfo(name = "subscribers_count")
-    private int nSubscribers;
+    private final int nSubscribers;
     @ColumnInfo(name = "created_utc")
-    private long createdUTC;
+    private final long createdUTC;
     @ColumnInfo(name = "suggested_comment_sort")
-    private String suggestedCommentSort;
+    private final String suggestedCommentSort;
     @ColumnInfo(name = "over18")
-    private boolean isNSFW;
+    private final boolean isNSFW;
     @Ignore
     private boolean isSelected;
 

@@ -64,7 +64,6 @@
     <string name="action_share">"分享"</string>
     <string name="action_preview">"预览"</string>
     <string name="action_report">"举报"</string>
-    <string name="action_see_removed">"查看已删除"</string>
     <string name="action_set_wallpaper">"设为壁纸"</string>
     <string name="action_send_private_message">"发送私信"</string>
     <string name="parse_json_response_error">"解析 JSON 响应错误"</string>
@@ -272,11 +271,6 @@
     <string name="are_you_sure">"确定吗？"</string>
     <string name="edit">"编辑"</string>
     <string name="delete">"删除"</string>
-    <string name="see_removed_comment">"查看已删除的评论"</string>
-    <string name="fetching_removed_comment">"正在获取已删除的评论"</string>
-    <string name="show_removed_comment_failed">"无法找到已删除的评论"</string>
-    <string name="fetching_removed_post">"正在获取已删除的帖子"</string>
-    <string name="show_removed_post_failed">"无法找到已删除的帖子"</string>
     <string name="cancel">"取消"</string>
     <string name="ok">"确定"</string>
     <string name="edit_success">"编辑成功"</string>
@@ -341,7 +335,6 @@
     <string name="settings_mute_nsfw_video_title">"静音 NSFW 视频"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"如果 Gfycat 上的视频已被删除，则自动尝试访问 Redgifs。"</string>
     <string name="settings_video_player_ignore_nav_bar_title">"视频播放器中忽略导航栏"</string>
 
     <!-- Fuzzy -->
@@ -774,7 +767,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="notifications">"通知"</string>
     <string name="messages">"消息"</string>
     <string name="message">"消息"</string>
-    <string name="fetch_gfycat_video_failed">"获取 Gfycat 视频失败"</string>
     <string name="fetch_redgifs_video_failed">"获取 Redgifs 视频失败"</string>
     <string name="fetching_video_info_please_wait">"正在获取视频信息。请稍候。"</string>
     <string name="error_fetching_imgur_media">"无法加载图像"</string>

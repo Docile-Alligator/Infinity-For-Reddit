@@ -68,7 +68,6 @@
     <string name="action_share">"Chia sẻ"</string>
     <string name="action_preview">"Xem trước"</string>
     <string name="action_report">"Báo cáo"</string>
-    <string name="action_see_removed">"Xem bài đăng đã bị xóa"</string>
     <string name="action_set_wallpaper">"Đặt làm hình nền"</string>
     <string name="action_send_private_message">"Gửi tin nhắn riêng tư"</string>
     <string name="parse_json_response_error">"Lỗi khi phân tích phản hồi JSON"</string>
@@ -271,11 +270,6 @@ Nhấn để thử lại."</string>
     <string name="are_you_sure">"Bạn có chắc không?"</string>
     <string name="edit">"Sửa"</string>
     <string name="delete">"Xóa"</string>
-    <string name="see_removed_comment">"Xem bình luận bị xóa"</string>
-    <string name="fetching_removed_comment">"Đang tìm bình luận bị xóa"</string>
-    <string name="show_removed_comment_failed">"Không thể tìm được bình luận bị xóa"</string>
-    <string name="fetching_removed_post">"Đang tìm bài đăng bị xóa"</string>
-    <string name="show_removed_post_failed">"Không thể tìm được bài đăng bị xóa"</string>
     <string name="cancel">"Hủy"</string>
     <string name="ok">"OK"</string>
 
@@ -350,7 +344,6 @@ Nhấn để thử lại."</string>
     <string name="settings_mute_nsfw_video_title">"Tắt tiếng video NSFW"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Tự động thử truy cập Redgifs nếu Video trên Gfycat bị xóa."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Bỏ qua thanh điều hướng trong trình phát video"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Ngăn trình điều khiển video có thêm lề"</string>
     <string name="settings_confirm_to_exit">"Xác nhận để thoát"</string>
@@ -766,7 +759,6 @@ Cô ta không ốm hay gì cả, nhưng cô ấy chắc chắn có thể khá h�
     <string name="notifications">"Thông báo"</string>
     <string name="messages">"Tin nhắn"</string>
     <string name="message">"Tin nhắn"</string>
-    <string name="fetch_gfycat_video_failed">"Lấy video Gfycat thất bại"</string>
     <string name="fetch_redgifs_video_failed">"Lấy video Redgifs thất bại"</string>
     <string name="fetching_video_info_please_wait">"Đang lấy thông tin video. Vui lòng đợi."</string>
     <string name="error_fetching_imgur_media">"Không thể tải hình ảnh"</string>
@@ -1201,11 +1193,11 @@ Nhấn để thử lại."</string>
     <string name="message_remove_avatar_success">"Xoá ảnh đại diện thành công"</string>
     <string name="message_remove_avatar_failed">"Xoá ảnh đại diện %s thất bại"</string>
     <string name="message_remove_banner_success">"Xoá banner thành công"</string>
-    <string name="message_remove_banner_failed">"Gỡ bỏ banner thất bại"</string>
+    <string name="message_remove_banner_failed">Gỡ bỏ banner thất bại %s</string>
     <string name="message_change_avatar_success">"Thay đổi ảnh đại diện thành công"</string>
-    <string name="message_change_avatar_failed">"Thay đổi ảnh đại diện thất bại"</string>
+    <string name="message_change_avatar_failed">Thay đổi ảnh đại diện thất bại %s</string>
     <string name="message_change_banner_success">"Thay đổi banner thành công"</string>
-    <string name="message_change_banner_failed">"Thay đổi banner thất bại"</string>
+    <string name="message_change_banner_failed">Thay đổi banner thất bại %s</string>
     <string name="message_save_profile_success">"Lưu Hồ sơ thành công"</string>
-    <string name="message_save_profile_failed">"Lưu hồ sơ %s thất bại"</string>
+    <string name="message_save_profile_failed">Lưu hồ sơ %s thất bại</string>
 </resources>

@@ -15,10 +15,10 @@ import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFi
 import ml.docilealligator.infinityforreddit.databinding.ItemCommentFilterWithUsageBinding;
 
 public class CommentFilterWithUsageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private BaseActivity activity;
+    private final BaseActivity activity;
     private final OnItemClickListener onItemClickListener;
     private List<CommentFilterWithUsage> commentFilterWithUsageList;
-    private RecyclerView.RecycledViewPool recycledViewPool;
+    private final RecyclerView.RecycledViewPool recycledViewPool;
 
     public interface OnItemClickListener {
         void onItemClick(CommentFilter commentFilter);

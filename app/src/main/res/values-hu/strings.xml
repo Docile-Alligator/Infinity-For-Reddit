@@ -58,7 +58,6 @@
     <string name="action_share">"Megosztás"</string>
     <string name="action_preview">"Előnézet"</string>
     <string name="action_report">"Bejelentés"</string>
-    <string name="action_see_removed">"Eltávolítottak megtekintése"</string>
     <string name="action_set_wallpaper">"Beállítás háttérképként"</string>
     <string name="action_send_private_message">"Privát üzenet küldése"</string>
     <string name="parse_json_response_error">"Hiba történt a JSON válasz feldolgozása során"</string>
@@ -246,11 +245,6 @@
     <string name="are_you_sure">"Biztos?"</string>
     <string name="edit">"Szerkesztés"</string>
     <string name="delete">"Törlés"</string>
-    <string name="see_removed_comment">"Az eltávolított hozzászólás megtekintése"</string>
-    <string name="fetching_removed_comment">"Az eltávolított hozzászólás lekérése"</string>
-    <string name="show_removed_comment_failed">"Nem lehet megtalálni az eltávolított hozzászólást"</string>
-    <string name="fetching_removed_post">"Eltávolított bejegyzés lekérése"</string>
-    <string name="show_removed_post_failed">"Az eltávolított bejegyzés nem található"</string>
     <string name="cancel">"Mégse"</string>
     <string name="ok">"OK"</string>
     <string name="edit_success">"A szerkesztés sikeres"</string>
@@ -307,7 +301,6 @@
     <string name="settings_volume_keys_navigate_posts_title">"Hangerőgombok használata a bejegyzések közti navigációra"</string>
     <string name="settings_mute_video_title">"Videók némítása"</string>
     <string name="settings_mute_nsfw_video_title">"NSFW videók némítása"</string>
-    <string name="settings_automatically_try_redgifs_title">"A Redgifek automatikusa elérése, ha a videók el lettek távolítva a Gfycatről."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Navigációs sáv mellőzése a videólejátszóban"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"A videóvezérlő extra margójának megakadályozása"</string>
     <string name="settings_confirm_to_exit">"Kilépés megerősítése"</string>
@@ -730,7 +723,6 @@ Az alap az indigó amoled téma"</string>
     <string name="notifications">"Értesítések"</string>
     <string name="messages">"Üzenetek"</string>
     <string name="message">"Üzenet"</string>
-    <string name="fetch_gfycat_video_failed">"Gfycat videó megszerzése nem sikerült"</string>
     <string name="fetch_redgifs_video_failed">"Redgifs videó megszerzése nem sikerült"</string>
     <string name="fetching_video_info_please_wait">"Videó infó megszerzése. Kérlek várj."</string>
     <string name="error_fetching_imgur_media">"Nem lehet betölteni a képeket"</string>

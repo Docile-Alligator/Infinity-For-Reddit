@@ -31,13 +31,13 @@ public class FavoriteSubscribedSubredditsSectionRecyclerViewAdapter extends Recy
     private static final int VIEW_TYPE_MENU_GROUP_TITLE = 1;
     private static final int VIEW_TYPE_FAVORITE_SUBSCRIBED_SUBREDDIT = 2;
 
-    private BaseActivity baseActivity;
-    private RequestManager glide;
-    private int primaryTextColor;
-    private int secondaryTextColor;
+    private final BaseActivity baseActivity;
+    private final RequestManager glide;
+    private final int primaryTextColor;
+    private final int secondaryTextColor;
     private boolean collapseFavoriteSubredditsSection;
-    private boolean hideFavoriteSubredditsSection;
-    private NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener itemClickListener;
+    private final boolean hideFavoriteSubredditsSection;
+    private final NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener itemClickListener;
     private ArrayList<SubscribedSubredditData> favoriteSubscribedSubreddits = new ArrayList<>();
 
     public FavoriteSubscribedSubredditsSectionRecyclerViewAdapter(BaseActivity baseActivity, RequestManager glide,

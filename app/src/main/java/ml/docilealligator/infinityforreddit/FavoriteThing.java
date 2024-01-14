@@ -3,11 +3,13 @@ package ml.docilealligator.infinityforreddit;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThings;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
@@ -21,9 +23,10 @@ import retrofit2.Retrofit;
 public class FavoriteThing {
     public static void favoriteSubreddit(Executor executor, Handler handler, Retrofit oauthRetrofit,
                                          RedditDataRoomDatabase redditDataRoomDatabase,
-                                         String accessToken, SubscribedSubredditData subscribedSubredditData,
+                                         @Nullable String accessToken, @NonNull String accountName,
+                                         SubscribedSubredditData subscribedSubredditData,
                                          FavoriteThingListener favoriteThingListener) {
-        if (accessToken == null) {
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             InsertSubscribedThings.insertSubscribedThings(executor, handler, redditDataRoomDatabase, subscribedSubredditData,
                     favoriteThingListener::success);
         } else {
@@ -51,9 +54,10 @@ public class FavoriteThing {
 
     public static void unfavoriteSubreddit(Executor executor, Handler handler, Retrofit oauthRetrofit,
                                            RedditDataRoomDatabase redditDataRoomDatabase,
-                                           String accessToken, SubscribedSubredditData subscribedSubredditData,
+                                           @Nullable String accessToken, @NonNull String accountName,
+                                           SubscribedSubredditData subscribedSubredditData,
                                            FavoriteThingListener favoriteThingListener) {
-        if (accessToken == null) {
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             InsertSubscribedThings.insertSubscribedThings(executor, handler, redditDataRoomDatabase,
                     subscribedSubredditData, favoriteThingListener::success);
         } else {
@@ -81,9 +85,10 @@ public class FavoriteThing {
 
     public static void favoriteUser(Executor executor, Handler handler, Retrofit oauthRetrofit,
                                     RedditDataRoomDatabase redditDataRoomDatabase,
-                                    String accessToken, SubscribedUserData subscribedUserData,
+                                    @Nullable String accessToken, @NonNull String accountName,
+                                    SubscribedUserData subscribedUserData,
                                     FavoriteThingListener favoriteThingListener) {
-        if (accessToken == null) {
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             InsertSubscribedThings.insertSubscribedThings(executor, handler, redditDataRoomDatabase,
                     subscribedUserData, favoriteThingListener::success);
         } else {
@@ -111,9 +116,10 @@ public class FavoriteThing {
 
     public static void unfavoriteUser(Executor executor, Handler handler, Retrofit oauthRetrofit,
                                       RedditDataRoomDatabase redditDataRoomDatabase,
-                                      String accessToken, SubscribedUserData subscribedUserData,
+                                      @Nullable String accessToken, @NonNull String accountName,
+                                      SubscribedUserData subscribedUserData,
                                       FavoriteThingListener favoriteThingListener) {
-        if (accessToken == null) {
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             InsertSubscribedThings.insertSubscribedThings(executor, handler, redditDataRoomDatabase, subscribedUserData,
                     favoriteThingListener::success);
         } else {

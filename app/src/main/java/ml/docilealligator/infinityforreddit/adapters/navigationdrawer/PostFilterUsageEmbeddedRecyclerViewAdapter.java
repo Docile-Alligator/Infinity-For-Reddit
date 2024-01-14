@@ -17,7 +17,7 @@ import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
 
 public class PostFilterUsageEmbeddedRecyclerViewAdapter extends RecyclerView.Adapter<PostFilterUsageEmbeddedRecyclerViewAdapter.EntryViewHolder> {
 
-    private BaseActivity baseActivity;
+    private final BaseActivity baseActivity;
     private List<PostFilterUsage> postFilterUsageList;
 
     public PostFilterUsageEmbeddedRecyclerViewAdapter(BaseActivity baseActivity) {

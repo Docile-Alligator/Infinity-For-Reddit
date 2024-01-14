@@ -42,6 +42,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.events.SubmitChangeAvatarEvent;
@@ -126,7 +127,7 @@ public class EditProfileActivity extends BaseActivity {
         }
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
 
         changeBanner.setOnClickListener(view -> {
             startPickImage(PICK_IMAGE_BANNER_REQUEST_CODE);
@@ -159,7 +160,7 @@ public class EditProfileActivity extends BaseActivity {
                 changeBanner.setLayoutParams(cBannerLp);
                 glide.load(userBanner).into(bannerImageView);
                 changeBanner.setOnLongClickListener(view -> {
-                    if (mAccessToken == null) {
+                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                         return false;
                     }
                     new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
@@ -202,7 +203,7 @@ public class EditProfileActivity extends BaseActivity {
             } else {
                 changeAvatar.setLongClickable(true);
                 changeAvatar.setOnLongClickListener(view -> {
-                    if (mAccessToken == null) {
+                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                         return false;
                     }
                     new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
@@ -241,8 +242,9 @@ public class EditProfileActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != RESULT_OK || data == null) return; //
-        if (mAccessToken == null || mAccountName == null) return; //
+        if (resultCode != RESULT_OK || data == null || mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            return;
+        }
         Intent intent = new Intent(this, EditProfileService.class);
         intent.setData(data.getData());
         intent.putExtra(EditProfileService.EXTRA_ACCOUNT_NAME, mAccountName);

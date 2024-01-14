@@ -68,7 +68,6 @@
     <string name="action_share">"Udostępnij"</string>
     <string name="action_preview">"Podgląd"</string>
     <string name="action_report">"Zgłoś"</string>
-    <string name="action_see_removed">"Zobacz usunięte"</string>
     <string name="action_set_wallpaper">"Ustaw jako tapetę"</string>
     <string name="action_send_private_message">"Wyślij wiadomość prywatną"</string>
     <string name="parse_json_response_error">"Wystąpił błąd podczas analizy odpowiedzi JSON"</string>
@@ -263,11 +262,6 @@ Naciśnij, aby spróbować ponownie."</string>
     <string name="are_you_sure">"Jesteś pewien?"</string>
     <string name="edit">"Edytuj"</string>
     <string name="delete">"Usuń"</string>
-    <string name="see_removed_comment">"Zobacz usunięty komentarz"</string>
-    <string name="fetching_removed_comment">"Pobieranie usuniętego komentarza"</string>
-    <string name="show_removed_comment_failed">"Nie można znaleźć usuniętego komentarza"</string>
-    <string name="fetching_removed_post">"Pobieranie usuniętego posta"</string>
-    <string name="show_removed_post_failed">"Nie można znaleźć usuniętego posta"</string>
     <string name="cancel">"Anuluj"</string>
     <string name="ok">"OK"</string>
     <string name="edit_success">"Zedytowano pomyślnie"</string>
@@ -332,7 +326,6 @@ Naciśnij, aby spróbować ponownie."</string>
     <string name="settings_mute_nsfw_video_title">"Wycisz filmy NSFW"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Automatycznie próbuj uzyskać filmy z Redgifs, gdy są usunięte z Gfycat."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignoruj pasek nawigacji w odtwarzaczu wideo"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Zapobiegaj posiadaniu dodatkowego marginesu przez kontroler wideo"</string>
     <string name="settings_confirm_to_exit">"Potwierdź aby wyjść"</string>
@@ -757,7 +750,6 @@ Nie jest chora ani nic, ale na pewno może stać się lepsza."</string>
     <string name="notifications">"Powiadomienia"</string>
     <string name="messages">"Wiadomości"</string>
     <string name="message">"Wiadomość"</string>
-    <string name="fetch_gfycat_video_failed">"Nie udało się pobrać filmu z Gfycat"</string>
     <string name="fetch_redgifs_video_failed">"Nie udało się pobrać filmu z Redgifs"</string>
     <string name="fetching_video_info_please_wait">"Pobieranie informacji o filmie. Proszę czekać."</string>
     <string name="error_fetching_imgur_media">"Nie można załadować obrazów"</string>

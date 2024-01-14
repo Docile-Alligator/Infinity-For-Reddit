@@ -14,8 +14,8 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 
 public class CrashReportsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private SettingsActivity activity;
-    private List<String> crashReports;
+    private final SettingsActivity activity;
+    private final List<String> crashReports;
 
     public CrashReportsRecyclerViewAdapter(SettingsActivity activity, List<String> crashReports) {
         this.activity = activity;

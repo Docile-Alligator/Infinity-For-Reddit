@@ -3,13 +3,12 @@ package ml.docilealligator.infinityforreddit.post;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.paging.ListenableFuturePagingSource;
 import androidx.paging.PagingState;
 
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,18 +29,18 @@ import retrofit2.Retrofit;
 public class HistoryPostPagingSource extends ListenableFuturePagingSource<String, Post> {
     public static final int TYPE_READ_POSTS = 100;
 
-    private Retrofit retrofit;
-    private Executor executor;
-    private RedditDataRoomDatabase redditDataRoomDatabase;
-    private String accessToken;
-    private String accountName;
-    private SharedPreferences sharedPreferences;
-    private String username;
-    private int postType;
-    private PostFilter postFilter;
+    private final Retrofit retrofit;
+    private final Executor executor;
+    private final RedditDataRoomDatabase redditDataRoomDatabase;
+    private final String accessToken;
+    private final String accountName;
+    private final SharedPreferences sharedPreferences;
+    private final String username;
+    private final int postType;
+    private final PostFilter postFilter;
 
     public HistoryPostPagingSource(Retrofit retrofit, Executor executor, RedditDataRoomDatabase redditDataRoomDatabase,
-                                   String accessToken, String accountName, SharedPreferences sharedPreferences,
+                                   @Nullable String accessToken, @NonNull String accountName, SharedPreferences sharedPreferences,
                                    String username, int postType, PostFilter postFilter) {
         this.retrofit = retrofit;
         this.executor = executor;
@@ -81,12 +80,7 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
             ids.deleteCharAt(ids.length() - 1);
         }
 
-        Call<String> historyPosts;
-        if (accessToken != null && !accessToken.isEmpty()) {
-            historyPosts = retrofit.create(RedditAPI.class).getInfoOauth(ids.toString(), APIUtils.getOAuthHeader(accessToken));
-        } else {
-            historyPosts = retrofit.create(RedditAPI.class).getInfo(ids.toString());
-        }
+        Call<String> historyPosts = retrofit.create(RedditAPI.class).getInfoOauth(ids.toString(), APIUtils.getOAuthHeader(accessToken));
 
         try {
             Response<String> response = historyPosts.execute();

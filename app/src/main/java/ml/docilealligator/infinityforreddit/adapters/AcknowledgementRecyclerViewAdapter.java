@@ -19,8 +19,8 @@ import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.settings.Acknowledgement;
 
 public class AcknowledgementRecyclerViewAdapter extends RecyclerView.Adapter<AcknowledgementRecyclerViewAdapter.AcknowledgementViewHolder> {
-    private ArrayList<Acknowledgement> acknowledgements;
-    private SettingsActivity activity;
+    private final ArrayList<Acknowledgement> acknowledgements;
+    private final SettingsActivity activity;
 
     public AcknowledgementRecyclerViewAdapter(SettingsActivity activity, ArrayList<Acknowledgement> acknowledgements) {
         this.activity = activity;

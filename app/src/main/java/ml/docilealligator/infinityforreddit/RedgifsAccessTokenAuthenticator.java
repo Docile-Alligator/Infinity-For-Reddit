@@ -22,7 +22,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RedgifsAccessTokenAuthenticator implements Interceptor {
-    private SharedPreferences mCurrentAccountSharedPreferences;
+    private final SharedPreferences mCurrentAccountSharedPreferences;
 
     public RedgifsAccessTokenAuthenticator(SharedPreferences currentAccountSharedPreferences) {
         this.mCurrentAccountSharedPreferences = currentAccountSharedPreferences;

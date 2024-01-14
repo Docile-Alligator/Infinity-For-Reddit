@@ -48,6 +48,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.VoteThing;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
@@ -66,10 +67,10 @@ import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.databinding.ItemCommentBinding;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
-import ml.docilealligator.infinityforreddit.markdown.EvenBetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.markdown.EmoteCloseBracketInlineProcessor;
 import ml.docilealligator.infinityforreddit.markdown.EmotePlugin;
+import ml.docilealligator.infinityforreddit.markdown.EvenBetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
@@ -93,70 +94,69 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private static final int VIEW_TYPE_LOAD_MORE_COMMENTS_FAILED = 16;
     private static final int VIEW_TYPE_VIEW_ALL_COMMENTS = 17;
 
-    private BaseActivity mActivity;
-    private ViewPostDetailFragment mFragment;
-    private Executor mExecutor;
-    private Retrofit mRetrofit;
-    private Retrofit mOauthRetrofit;
-    private EmoteCloseBracketInlineProcessor mEmoteCloseBracketInlineProcessor;
-    private EmotePlugin mEmotePlugin;
-    private ImageAndGifPlugin mImageAndGifPlugin;
-    private Markwon mCommentMarkwon;
-    private ImageAndGifEntry mImageAndGifEntry;
-    private String mAccessToken;
-    private String mAccountName;
-    private Post mPost;
-    private ArrayList<Comment> mVisibleComments;
-    private Locale mLocale;
-    private RequestManager mGlide;
-    private RecyclerView.RecycledViewPool recycledViewPool;
+    private final BaseActivity mActivity;
+    private final ViewPostDetailFragment mFragment;
+    private final Executor mExecutor;
+    private final Retrofit mOauthRetrofit;
+    private final EmoteCloseBracketInlineProcessor mEmoteCloseBracketInlineProcessor;
+    private final EmotePlugin mEmotePlugin;
+    private final ImageAndGifPlugin mImageAndGifPlugin;
+    private final Markwon mCommentMarkwon;
+    private final ImageAndGifEntry mImageAndGifEntry;
+    private final String mAccessToken;
+    private final String mAccountName;
+    private final Post mPost;
+    private final ArrayList<Comment> mVisibleComments;
+    private final Locale mLocale;
+    private final RequestManager mGlide;
+    private final RecyclerView.RecycledViewPool recycledViewPool;
     private String mSingleCommentId;
     private boolean mIsSingleCommentThreadMode;
-    private boolean mVoteButtonsOnTheRight;
-    private boolean mShowElapsedTime;
-    private String mTimeFormatPattern;
-    private boolean mExpandChildren;
-    private boolean mCommentToolbarHidden;
-    private boolean mCommentToolbarHideOnClick;
-    private boolean mSwapTapAndLong;
-    private boolean mShowCommentDivider;
-    private int mDividerType;
-    private boolean mShowAbsoluteNumberOfVotes;
-    private boolean mFullyCollapseComment;
-    private boolean mShowOnlyOneCommentLevelIndicator;
-    private boolean mShowAuthorAvatar;
-    private boolean mAlwaysShowChildCommentCount;
-    private boolean mHideTheNumberOfVotes;
-    private int mDepthThreshold;
-    private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
+    private final boolean mVoteButtonsOnTheRight;
+    private final boolean mShowElapsedTime;
+    private final String mTimeFormatPattern;
+    private final boolean mExpandChildren;
+    private final boolean mCommentToolbarHidden;
+    private final boolean mCommentToolbarHideOnClick;
+    private final boolean mSwapTapAndLong;
+    private final boolean mShowCommentDivider;
+    private final int mDividerType;
+    private final boolean mShowAbsoluteNumberOfVotes;
+    private final boolean mFullyCollapseComment;
+    private final boolean mShowOnlyOneCommentLevelIndicator;
+    private final boolean mShowAuthorAvatar;
+    private final boolean mAlwaysShowChildCommentCount;
+    private final boolean mHideTheNumberOfVotes;
+    private final int mDepthThreshold;
+    private final CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
     private boolean mHasMoreComments;
     private boolean loadMoreCommentsFailed;
-    private Drawable expandDrawable;
-    private Drawable collapseDrawable;
+    private final Drawable expandDrawable;
+    private final Drawable collapseDrawable;
 
-    private int mColorPrimaryLightTheme;
-    private int mColorAccent;
-    private int mCircularProgressBarBackgroundColor;
-    private int mSecondaryTextColor;
-    private int mPrimaryTextColor;
-    private int mCommentTextColor;
-    private int mCommentBackgroundColor;
-    private int mDividerColor;
-    private int mUsernameColor;
-    private int mSubmitterColor;
-    private int mModeratorColor;
-    private int mCurrentUserColor;
-    private int mAuthorFlairTextColor;
-    private int mUpvotedColor;
-    private int mDownvotedColor;
-    private int mSingleCommentThreadBackgroundColor;
-    private int mVoteAndReplyUnavailableVoteButtonColor;
-    private int mButtonTextColor;
-    private int mCommentIconAndInfoColor;
-    private int mFullyCollapsedCommentBackgroundColor;
-    private int[] verticalBlockColors;
+    private final int mColorPrimaryLightTheme;
+    private final int mColorAccent;
+    private final int mCircularProgressBarBackgroundColor;
+    private final int mSecondaryTextColor;
+    private final int mPrimaryTextColor;
+    private final int mCommentTextColor;
+    private final int mCommentBackgroundColor;
+    private final int mDividerColor;
+    private final int mUsernameColor;
+    private final int mSubmitterColor;
+    private final int mModeratorColor;
+    private final int mCurrentUserColor;
+    private final int mAuthorFlairTextColor;
+    private final int mUpvotedColor;
+    private final int mDownvotedColor;
+    private final int mSingleCommentThreadBackgroundColor;
+    private final int mVoteAndReplyUnavailableVoteButtonColor;
+    private final int mButtonTextColor;
+    private final int mCommentIconAndInfoColor;
+    private final int mFullyCollapsedCommentBackgroundColor;
+    private final int[] verticalBlockColors;
 
     private int mSearchCommentIndex = -1;
 
@@ -164,8 +164,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public CommentsRecyclerViewAdapter(BaseActivity activity, ViewPostDetailFragment fragment,
                                        CustomThemeWrapper customThemeWrapper,
-                                       Executor executor, Retrofit retrofit, Retrofit oauthRetrofit,
-                                       String accessToken, String accountName,
+                                       Executor executor, Retrofit oauthRetrofit,
+                                       @Nullable String accessToken, @NonNull String accountName,
                                        Post post, Locale locale, String singleCommentId,
                                        boolean isSingleCommentThreadMode,
                                        SharedPreferences sharedPreferences,
@@ -174,8 +174,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mActivity = activity;
         mFragment = fragment;
         mExecutor = executor;
-        mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
+        mAccessToken = accessToken;
+        mAccountName = accountName;
         mGlide = Glide.with(activity);
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
         mCommentTextColor = customThemeWrapper.getCommentColor();
@@ -235,9 +236,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 miscPlugin, mEmoteCloseBracketInlineProcessor, mEmotePlugin, mImageAndGifPlugin, mCommentTextColor,
                 commentSpoilerBackgroundColor, onLinkLongClickListener);
 
-        boolean needBlurNsfw = nsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.BLUR_NSFW_BASE, true);
-        boolean doNotBlurNsfwInNsfwSubreddits = nsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.DO_NOT_BLUR_NSFW_IN_NSFW_SUBREDDITS, false);
-        boolean needBlurSpoiler = nsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.BLUR_SPOILER_BASE, false);
+        boolean needBlurNsfw = nsfwAndSpoilerSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.BLUR_NSFW_BASE, true);
+        boolean doNotBlurNsfwInNsfwSubreddits = nsfwAndSpoilerSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.DO_NOT_BLUR_NSFW_IN_NSFW_SUBREDDITS, false);
+        boolean needBlurSpoiler = nsfwAndSpoilerSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.BLUR_SPOILER_BASE, false);
         boolean blurImage = (post.isNSFW() && needBlurNsfw && !(doNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit())) || (post.isSpoiler() && needBlurSpoiler);
         mImageAndGifEntry = new ImageAndGifEntry(activity, mGlide, blurImage,
                 mediaMetadata -> {
@@ -256,8 +257,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     }
                 });
         recycledViewPool = new RecyclerView.RecycledViewPool();
-        mAccessToken = accessToken;
-        mAccountName = accountName;
         mPost = post;
         mVisibleComments = new ArrayList<>();
         mLocale = locale;
@@ -667,10 +666,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         mVisibleComments.get(commentPosition).setLoadMoreChildrenFailed(false);
                         ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.loading);
 
-                        Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
                         SortType.Type sortType = mCommentRecyclerViewAdapterCallback.getSortType();
-                        FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken,
-                                parentComment.getMoreChildrenIds(),
+                        FetchComment.fetchMoreComment(mExecutor, new Handler(), mOauthRetrofit, mAccessToken,
+                                mAccountName, parentComment.getMoreChildrenIds(),
                                 mExpandChildren, mPost.getFullName(), sortType, new FetchComment.FetchMoreCommentListener() {
                                     @Override
                                     public void onFetchMoreCommentSuccess(ArrayList<Comment> topLevelComments,
@@ -1040,24 +1038,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         }
     }
 
-    public void editComment(Comment fetchedComment, Comment originalComment, int position) {
-        if (position >= mVisibleComments.size() || !mVisibleComments.get(position).equals(originalComment)) {
-            position = mVisibleComments.indexOf(originalComment);
-            if (position < 0) {
-                Toast.makeText(mActivity, R.string.show_removed_comment_failed, Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-        mVisibleComments.get(position).setSubmittedByAuthor(originalComment.isSubmitter());
-        mVisibleComments.get(position).setCommentMarkdown(fetchedComment.getCommentMarkdown());
-
-        if (mIsSingleCommentThreadMode) {
-            notifyItemChanged(position + 1);
-        } else {
-            notifyItemChanged(position);
-        }
-    }
-
     public void deleteComment(int position) {
         if (mVisibleComments != null && position >= 0 && position < mVisibleComments.size()) {
             if (mVisibleComments.get(position).hasReply()) {
@@ -1395,6 +1375,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         bundle.putBoolean(CommentMoreBottomSheetFragment.EXTRA_EDIT_AND_DELETE_AVAILABLE, true);
                     }
                     bundle.putString(CommentMoreBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                    bundle.putString(CommentMoreBottomSheetFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                     bundle.putParcelable(CommentMoreBottomSheetFragment.EXTRA_COMMENT, comment);
                     if (mIsSingleCommentThreadMode) {
                         bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getBindingAdapterPosition() - 1);
@@ -1412,7 +1393,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             });
 
             replyButton.setOnClickListener(view -> {
-                if (mAccessToken == null) {
+                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                     Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -1449,7 +1430,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     return;
                 }
 
-                if (mAccessToken == null) {
+                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                     Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -1540,7 +1521,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     return;
                 }
 
-                if (mAccessToken == null) {
+                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                     Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
                 }

@@ -17,9 +17,9 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 
 public class CommentFilterUsageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<CommentFilterUsage> commentFilterUsages;
-    private BaseActivity activity;
-    private CustomThemeWrapper customThemeWrapper;
-    private CommentFilterUsageRecyclerViewAdapter.OnItemClickListener onItemClickListener;
+    private final BaseActivity activity;
+    private final CustomThemeWrapper customThemeWrapper;
+    private final CommentFilterUsageRecyclerViewAdapter.OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
         void onClick(CommentFilterUsage commentFilterUsage);
@@ -41,10 +41,8 @@ public class CommentFilterUsageRecyclerViewAdapter extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         CommentFilterUsage commentFilterUsage = commentFilterUsages.get(position);
-        switch (commentFilterUsage.usage) {
-            case CommentFilterUsage.SUBREDDIT_TYPE:
-                ((CommentFilterUsageRecyclerViewAdapter.CommentFilterUsageViewHolder) holder).usageTextView.setText(activity.getString(R.string.post_filter_usage_subreddit, commentFilterUsage.nameOfUsage));
-                break;
+        if (commentFilterUsage.usage == CommentFilterUsage.SUBREDDIT_TYPE) {
+            ((CommentFilterUsageViewHolder) holder).usageTextView.setText(activity.getString(R.string.post_filter_usage_subreddit, commentFilterUsage.nameOfUsage));
         }
     }
 

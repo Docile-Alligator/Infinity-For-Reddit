@@ -64,7 +64,6 @@
     <string name="action_share">"பகிர்"</string>
     <string name="action_preview">"முன்னோட்டம்"</string>
     <string name="action_report">"புகாரளி"</string>
-    <string name="action_see_removed">"நீக்கியவற்றைப் பார்"</string>
     <string name="action_set_wallpaper">"சுவரொட்டியாக அமை"</string>
     <string name="action_send_private_message">"தனித் தகவல் அனுப்பு"</string>
     <string name="parse_json_response_error">"JSON பதிலைக் கூறாக்கும்போது பிழை ஏற்பட்டது"</string>
@@ -259,11 +258,6 @@
     <string name="are_you_sure">"நீங்கள் உறுதியா?"</string>
     <string name="edit">"திருத்து"</string>
     <string name="delete">"அழி"</string>
-    <string name="see_removed_comment">"நீக்கப்பட்ட கருத்தைப் பார்"</string>
-    <string name="fetching_removed_comment">"நீக்கப்பட்ட கருத்தைப் பெறுகிறது"</string>
-    <string name="show_removed_comment_failed">"நீக்கப்பட்ட கருத்தைக் கண்டறிய முடியவில்லை"</string>
-    <string name="fetching_removed_post">"நீக்கப்பட்ட இடுகையைப் பெறுகிறது"</string>
-    <string name="show_removed_post_failed">"நீக்கப்பட்ட இடுகையைப் பெற முடியவில்லை"</string>
     <string name="cancel">"ரத்துசெய்"</string>
     <string name="ok">"சரி"</string>
     <string name="edit_success">"திருத்தம் வெற்றி"</string>

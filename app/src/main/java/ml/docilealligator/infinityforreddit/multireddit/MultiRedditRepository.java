@@ -7,8 +7,8 @@ import java.util.List;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class MultiRedditRepository {
-    private MultiRedditDao mMultiRedditDao;
-    private String mAccountName;
+    private final MultiRedditDao mMultiRedditDao;
+    private final String mAccountName;
 
     MultiRedditRepository(RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
         mMultiRedditDao = redditDataRoomDatabase.multiRedditDao();

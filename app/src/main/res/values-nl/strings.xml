@@ -68,7 +68,6 @@
     <string name="action_share">"Delen"</string>
     <string name="action_preview">"Voorvertoning"</string>
     <string name="action_report">"Melden"</string>
-    <string name="action_see_removed">"Zie verwijderd"</string>
     <string name="action_set_wallpaper">"Instellen als startschermachtergrond"</string>
     <string name="action_send_private_message">"Privebericht versturen"</string>
     <string name="parse_json_response_error">"Er is een fout opgetreden bij het verwerken van het json-antwoord"</string>
@@ -271,11 +270,6 @@ Druk om opnieuw te proberen."</string>
     <string name="are_you_sure">"Weet je het zeker?"</string>
     <string name="edit">"Bewerken"</string>
     <string name="delete">"Verwijderen"</string>
-    <string name="see_removed_comment">"Verwijderde reactie bekijken"</string>
-    <string name="fetching_removed_comment">"Bezig met ophalen van verwijderde reactie…"</string>
-    <string name="show_removed_comment_failed">"De verwijderde reactie ontbreekt"</string>
-    <string name="fetching_removed_post">"Bezig met ophalen van verwijderd bericht…"</string>
-    <string name="show_removed_post_failed">"Het verwijderde bericht ontbreekt"</string>
     <string name="cancel">"Annuleren"</string>
     <string name="ok">"Oké"</string>
     <string name="edit_success">"Het bericht is bewerkt"</string>
@@ -340,7 +334,6 @@ Druk om opnieuw te proberen."</string>
     <string name="settings_mute_nsfw_video_title">"NSFW-video's dempen"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Automatisch trachten Redgifs te openen als video's zijn verwijderd van Gfycat"</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Navigatiebalk verbergen in videospeler"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Voorkom dat de navigatiebalk extra opvulling heeft"</string>
     <string name="settings_confirm_to_exit">"Afsluiten bevestigen"</string>
@@ -765,7 +758,6 @@ Ze is niet ziek of zo, maar ze kan zeker beter worden."</string>
     <string name="notifications">"Notificaties"</string>
     <string name="messages">"Berichten"</string>
     <string name="message">"Bericht"</string>
-    <string name="fetch_gfycat_video_failed">"Ophalen van Gfycat video is mislukt"</string>
     <string name="fetch_redgifs_video_failed">"Ophalen van Redgifs video is mislukt"</string>
     <string name="fetching_video_info_please_wait">"Ophalen van videoinfo. Even geduld aub."</string>
     <string name="error_fetching_imgur_media">"Kan afbeeldingen niet laden"</string>

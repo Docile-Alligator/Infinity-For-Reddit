@@ -25,19 +25,11 @@ public class FetchComment {
                                      FetchCommentListener fetchCommentListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> comments;
-        if (accessToken == null) {
-            if (commentId == null) {
-                comments = api.getPostAndCommentsById(article, sortType);
-            } else {
-                comments = api.getPostAndCommentsSingleThreadById(article, commentId, sortType, contextNumber);
-            }
+        if (commentId == null) {
+            comments = api.getPostAndCommentsByIdOauth(article, sortType, APIUtils.getOAuthHeader(accessToken));
         } else {
-            if (commentId == null) {
-                comments = api.getPostAndCommentsByIdOauth(article, sortType, APIUtils.getOAuthHeader(accessToken));
-            } else {
-                comments = api.getPostAndCommentsSingleThreadByIdOauth(article, commentId, sortType, contextNumber,
-                        APIUtils.getOAuthHeader(accessToken));
-            }
+            comments = api.getPostAndCommentsSingleThreadByIdOauth(article, commentId, sortType, contextNumber,
+                    APIUtils.getOAuthHeader(accessToken));
         }
 
         comments.enqueue(new Callback<>() {
@@ -73,7 +65,7 @@ public class FetchComment {
     }
 
     public static void fetchMoreComment(Executor executor, Handler handler, Retrofit retrofit,
-                                        @Nullable String accessToken,
+                                        @Nullable String accessToken, String accountName,
                                         ArrayList<String> allChildren,
                                         boolean expandChildren, String postFullName,
                                         SortType.Type sortType,
@@ -89,13 +81,8 @@ public class FetchComment {
         }
 
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> moreComments;
-        if (accessToken == null) {
-            moreComments = api.moreChildren(postFullName, childrenIds, sortType);
-        } else {
-            moreComments = api.moreChildrenOauth(postFullName, childrenIds,
-                    sortType, APIUtils.getOAuthHeader(accessToken));
-        }
+        Call<String> moreComments = api.moreChildrenOauth(postFullName, childrenIds,
+                sortType, APIUtils.getOAuthHeader(accessToken));
 
         moreComments.enqueue(new Callback<>() {
             @Override

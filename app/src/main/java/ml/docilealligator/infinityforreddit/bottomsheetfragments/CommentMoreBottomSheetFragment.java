@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentFilterPreferenceActivity;
@@ -37,6 +38,7 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
 
     public static final String EXTRA_COMMENT = "ECF";
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
+    public static final String EXTRA_ACCOUNT_NAME = "EAN";
     public static final String EXTRA_EDIT_AND_DELETE_AVAILABLE = "EEADA";
     public static final String EXTRA_POSITION = "EP";
     public static final String EXTRA_SHOW_REPLY_AND_SAVE_OPTION = "ESSARO";
@@ -70,10 +72,11 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
             return binding.getRoot();
         }
         String accessToken = bundle.getString(EXTRA_ACCESS_TOKEN);
+        String accountName = bundle.getString(EXTRA_ACCOUNT_NAME);
         boolean editAndDeleteAvailable = bundle.getBoolean(EXTRA_EDIT_AND_DELETE_AVAILABLE, false);
         boolean showReplyAndSaveOption = bundle.getBoolean(EXTRA_SHOW_REPLY_AND_SAVE_OPTION, false);
 
-        if (accessToken != null && !accessToken.equals("")) {
+        if (!accountName.equals(Account.ANONYMOUS_ACCOUNT) && !accessToken.equals("")) {
             if (editAndDeleteAvailable) {
                 binding.editTextViewCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
                 binding.deleteTextViewCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
@@ -167,20 +170,6 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
 
             dismiss();
         });
-
-        if ("[deleted]".equals(comment.getAuthor()) ||
-                "[deleted]".equals(comment.getCommentRawText()) ||
-                "[removed]".equals(comment.getCommentRawText())
-        ) {
-            binding.seeRemovedViewCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
-
-            binding.seeRemovedViewCommentMoreBottomSheetFragment.setOnClickListener(view -> {
-                dismiss();
-                if (activity instanceof ViewPostDetailActivity) {
-                    ((ViewPostDetailActivity) activity).showRemovedComment(comment, bundle.getInt(EXTRA_POSITION));
-                }
-            });
-        }
 
         binding.addToCommentFilterViewCommentMoreBottomSheetFragment.setOnClickListener(view -> {
             Intent intent = new Intent(activity, CommentFilterPreferenceActivity.class);

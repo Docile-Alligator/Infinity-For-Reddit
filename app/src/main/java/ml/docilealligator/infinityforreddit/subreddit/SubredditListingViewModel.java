@@ -14,12 +14,12 @@ import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 public class SubredditListingViewModel extends ViewModel {
-    private SubredditListingDataSourceFactory subredditListingDataSourceFactory;
-    private LiveData<NetworkState> paginationNetworkState;
-    private LiveData<NetworkState> initialLoadingState;
-    private LiveData<Boolean> hasSubredditLiveData;
-    private LiveData<PagedList<SubredditData>> subreddits;
-    private MutableLiveData<SortType> sortTypeLiveData;
+    private final SubredditListingDataSourceFactory subredditListingDataSourceFactory;
+    private final LiveData<NetworkState> paginationNetworkState;
+    private final LiveData<NetworkState> initialLoadingState;
+    private final LiveData<Boolean> hasSubredditLiveData;
+    private final LiveData<PagedList<SubredditData>> subreddits;
+    private final MutableLiveData<SortType> sortTypeLiveData;
 
     public SubredditListingViewModel(Retrofit retrofit, String query, SortType sortType, String accessToken, boolean nsfw) {
         subredditListingDataSourceFactory = new SubredditListingDataSourceFactory(retrofit, query, sortType, accessToken, nsfw);
@@ -74,11 +74,11 @@ public class SubredditListingViewModel extends ViewModel {
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
-        private Retrofit retrofit;
-        private String query;
-        private SortType sortType;
-        private String accessToken;
-        private boolean nsfw;
+        private final Retrofit retrofit;
+        private final String query;
+        private final SortType sortType;
+        private final String accessToken;
+        private final boolean nsfw;
 
         public Factory(Retrofit retrofit, String query, SortType sortType, String accessToken, boolean nsfw) {
             this.retrofit = retrofit;

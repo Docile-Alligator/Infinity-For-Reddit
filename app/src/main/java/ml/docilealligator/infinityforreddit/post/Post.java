@@ -26,16 +26,16 @@ public class Post implements Parcelable {
     public static final int NO_PREVIEW_LINK_TYPE = 5;
     public static final int GALLERY_TYPE = 6;
 
-    private String id;
-    private String fullName;
-    private String subredditName;
-    private String subredditNamePrefixed;
+    private final String id;
+    private final String fullName;
+    private final String subredditName;
+    private final String subredditNamePrefixed;
     private String subredditIconUrl;
     private String author;
     private String authorNamePrefixed;
     private String authorIconUrl;
-    private String authorFlair;
-    private String authorFlairHTML;
+    private final String authorFlair;
+    private final String authorFlairHTML;
     private String title;
     private String selfText;
     private String selfTextPlain;
@@ -43,16 +43,15 @@ public class Post implements Parcelable {
     private String url;
     private String videoUrl;
     private String videoDownloadUrl;
-    private String gfycatId;
+    private String redgifsId;
     private String streamableShortCode;
     private boolean isImgur;
-    private boolean isGfycat;
     private boolean isRedgifs;
     private boolean isStreamable;
-    private boolean loadGfyOrStreamableVideoSuccess;
-    private String permalink;
+    private boolean loadRedgifsOrStreamableVideoSuccess;
+    private final String permalink;
     private String flair;
-    private long postTimeMillis;
+    private final long postTimeMillis;
     private int score;
     private int postType;
     private int voteType;
@@ -61,15 +60,16 @@ public class Post implements Parcelable {
     private boolean hidden;
     private boolean spoiler;
     private boolean nsfw;
-    private boolean stickied;
-    private boolean archived;
-    private boolean locked;
+    private final boolean stickied;
+    private final boolean archived;
+    private final boolean locked;
     private boolean saved;
-    private boolean isCrosspost;
+    private final boolean isCrosspost;
     private boolean isRead;
     private String crosspostParentId;
-    private String distinguished;
-    private String suggestedSort;
+    private final String distinguished;
+    private final String suggestedSort;
+    private String mp4Variant;
     private ArrayList<Preview> previews = new ArrayList<>();
     @Nullable
     private Map<String, MediaMetadata> mediaMetadataMap;
@@ -167,13 +167,12 @@ public class Post implements Parcelable {
         url = in.readString();
         videoUrl = in.readString();
         videoDownloadUrl = in.readString();
-        gfycatId = in.readString();
+        redgifsId = in.readString();
         streamableShortCode = in.readString();
         isImgur = in.readByte() != 0;
-        isGfycat = in.readByte() != 0;
         isRedgifs = in.readByte() != 0;
         isStreamable = in.readByte() != 0;
-        loadGfyOrStreamableVideoSuccess = in.readByte() != 0;
+        loadRedgifsOrStreamableVideoSuccess = in.readByte() != 0;
         permalink = in.readString();
         flair = in.readString();
         postTimeMillis = in.readLong();
@@ -194,6 +193,7 @@ public class Post implements Parcelable {
         crosspostParentId = in.readString();
         distinguished = in.readString();
         suggestedSort = in.readString();
+        mp4Variant = in.readString();
         previews = in.createTypedArrayList(Preview.CREATOR);
         mediaMetadataMap = (Map<String, MediaMetadata>) in.readValue(getClass().getClassLoader());
         gallery = in.createTypedArrayList(Gallery.CREATOR);
@@ -328,12 +328,12 @@ public class Post implements Parcelable {
         this.videoDownloadUrl = videoDownloadUrl;
     }
 
-    public String getGfycatId() {
-        return gfycatId;
+    public String getRedgifsId() {
+        return redgifsId;
     }
 
-    public void setGfycatId(String gfycatId) {
-        this.gfycatId = gfycatId;
+    public void setRedgifsId(String redgifsId) {
+        this.redgifsId = redgifsId;
     }
 
     public String getStreamableShortCode() {
@@ -352,14 +352,6 @@ public class Post implements Parcelable {
         return isImgur;
     }
 
-    public boolean isGfycat() {
-        return isGfycat;
-    }
-
-    public void setIsGfycat(boolean isGfycat) {
-        this.isGfycat = isGfycat;
-    }
-
     public boolean isRedgifs() {
         return isRedgifs;
     }
@@ -376,12 +368,12 @@ public class Post implements Parcelable {
         this.isStreamable = isStreamable;
     }
 
-    public boolean isLoadGfycatOrStreamableVideoSuccess() {
-        return loadGfyOrStreamableVideoSuccess;
+    public boolean isLoadRedgifsOrStreamableVideoSuccess() {
+        return loadRedgifsOrStreamableVideoSuccess;
     }
 
-    public void setLoadGfyOrStreamableVideoSuccess(boolean loadGfyOrStreamableVideoSuccess) {
-        this.loadGfyOrStreamableVideoSuccess = loadGfyOrStreamableVideoSuccess;
+    public void setLoadRedgifsOrStreamableVideoSuccess(boolean loadRedgifsOrStreamableVideoSuccess) {
+        this.loadRedgifsOrStreamableVideoSuccess = loadRedgifsOrStreamableVideoSuccess;
     }
 
     public String getPermalink() {
@@ -496,13 +488,12 @@ public class Post implements Parcelable {
         dest.writeString(url);
         dest.writeString(videoUrl);
         dest.writeString(videoDownloadUrl);
-        dest.writeString(gfycatId);
+        dest.writeString(redgifsId);
         dest.writeString(streamableShortCode);
         dest.writeByte((byte) (isImgur ? 1 : 0));
-        dest.writeByte((byte) (isGfycat ? 1 : 0));
         dest.writeByte((byte) (isRedgifs ? 1 : 0));
         dest.writeByte((byte) (isStreamable ? 1 : 0));
-        dest.writeByte((byte) (loadGfyOrStreamableVideoSuccess ? 1 : 0));
+        dest.writeByte((byte) (loadRedgifsOrStreamableVideoSuccess ? 1 : 0));
         dest.writeString(permalink);
         dest.writeString(flair);
         dest.writeLong(postTimeMillis);
@@ -523,6 +514,7 @@ public class Post implements Parcelable {
         dest.writeString(crosspostParentId);
         dest.writeString(distinguished);
         dest.writeString(suggestedSort);
+        dest.writeString(mp4Variant);
         dest.writeTypedList(previews);
         dest.writeValue(mediaMetadataMap);
         dest.writeTypedList(gallery);
@@ -590,6 +582,14 @@ public class Post implements Parcelable {
 
     public void setGallery(ArrayList<Gallery> gallery) {
         this.gallery = gallery;
+    }
+
+    public String getMp4Variant() {
+        return mp4Variant;
+    }
+
+    public void setMp4Variant(String mp4Variant) {
+        this.mp4Variant = mp4Variant;
     }
 
     @Override

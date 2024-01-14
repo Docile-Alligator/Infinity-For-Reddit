@@ -24,11 +24,11 @@ import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import pl.droidsonroids.gif.GifImageView;
 
 public class SubredditAutocompleteRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private BaseActivity activity;
+    private final BaseActivity activity;
     private List<SubredditData> subreddits;
-    private RequestManager glide;
-    private CustomThemeWrapper customThemeWrapper;
-    private ItemOnClickListener itemOnClickListener;
+    private final RequestManager glide;
+    private final CustomThemeWrapper customThemeWrapper;
+    private final ItemOnClickListener itemOnClickListener;
 
     public SubredditAutocompleteRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper,
                                                     ItemOnClickListener itemOnClickListener) {

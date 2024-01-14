@@ -14,15 +14,15 @@ import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 public class UserListingViewModel extends ViewModel {
-    private UserListingDataSourceFactory userListingDataSourceFactory;
-    private LiveData<NetworkState> paginationNetworkState;
-    private LiveData<NetworkState> initialLoadingState;
-    private LiveData<Boolean> hasUserLiveData;
-    private LiveData<PagedList<UserData>> users;
-    private MutableLiveData<SortType> sortTypeLiveData;
+    private final UserListingDataSourceFactory userListingDataSourceFactory;
+    private final LiveData<NetworkState> paginationNetworkState;
+    private final LiveData<NetworkState> initialLoadingState;
+    private final LiveData<Boolean> hasUserLiveData;
+    private final LiveData<PagedList<UserData>> users;
+    private final MutableLiveData<SortType> sortTypeLiveData;
 
-    public UserListingViewModel(Retrofit retrofit, String query, SortType sortType, boolean nsfw) {
-        userListingDataSourceFactory = new UserListingDataSourceFactory(retrofit, query, sortType, nsfw);
+    public UserListingViewModel(Retrofit appliationOnlyOauthRetrofit, String query, SortType sortType, boolean nsfw) {
+        userListingDataSourceFactory = new UserListingDataSourceFactory(appliationOnlyOauthRetrofit, query, sortType, nsfw);
 
         initialLoadingState = Transformations.switchMap(userListingDataSourceFactory.getUserListingDataSourceMutableLiveData(),
                 UserListingDataSource::getInitialLoadStateLiveData);
@@ -74,13 +74,13 @@ public class UserListingViewModel extends ViewModel {
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
-        private Retrofit retrofit;
-        private String query;
-        private SortType sortType;
-        private boolean nsfw;
+        private final Retrofit applicationOnlyOauthRetrofit;
+        private final String query;
+        private final SortType sortType;
+        private final boolean nsfw;
 
-        public Factory(Retrofit retrofit, String query, SortType sortType, boolean nsfw) {
-            this.retrofit = retrofit;
+        public Factory(Retrofit applicationOnlyOauthRetrofit, String query, SortType sortType, boolean nsfw) {
+            this.applicationOnlyOauthRetrofit = applicationOnlyOauthRetrofit;
             this.query = query;
             this.sortType = sortType;
             this.nsfw = nsfw;
@@ -89,7 +89,7 @@ public class UserListingViewModel extends ViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new UserListingViewModel(retrofit, query, sortType, nsfw);
+            return (T) new UserListingViewModel(applicationOnlyOauthRetrofit, query, sortType, nsfw);
         }
     }
 }

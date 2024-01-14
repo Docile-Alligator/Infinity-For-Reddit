@@ -125,10 +125,8 @@ public class CommentFilterPreferenceActivity extends BaseActivity {
                     intent.putExtra(CustomizeCommentFilterActivity.EXTRA_FROM_SETTINGS, true);
                     for (int j = 0; j < selectedOptions.length; j++) {
                         if (selectedOptions[j]) {
-                            switch (j) {
-                                case 0:
-                                    intent.putExtra(CustomizeCommentFilterActivity.EXTRA_EXCLUDE_USER, comment.getAuthor());
-                                    break;
+                            if (j == 0) {
+                                intent.putExtra(CustomizeCommentFilterActivity.EXTRA_EXCLUDE_USER, comment.getAuthor());
                             }
                         }
                     }

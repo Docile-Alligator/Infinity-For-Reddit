@@ -32,6 +32,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SelectUserFlair;
 import ml.docilealligator.infinityforreddit.UserFlair;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.UserFlairRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
@@ -65,7 +66,6 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private LinearLayoutManagerBugFixed mLinearLayoutManager;
-    private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
     private ArrayList<UserFlair> mUserFlairs;
@@ -101,7 +101,7 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
         setTitle(mSubredditName);
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
 
         if (savedInstanceState != null) {
             mUserFlairs = savedInstanceState.getParcelableArrayList(USER_FLAIRS_STATE);

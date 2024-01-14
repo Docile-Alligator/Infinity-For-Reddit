@@ -12,20 +12,20 @@ import retrofit2.Retrofit;
 
 public class UserListingDataSource extends PageKeyedDataSource<String, UserData> {
 
-    private Retrofit retrofit;
-    private String query;
-    private SortType sortType;
-    private boolean nsfw;
+    private final Retrofit applicationOnlyOauthRetrofit;
+    private final String query;
+    private final SortType sortType;
+    private final boolean nsfw;
 
-    private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
-    private MutableLiveData<NetworkState> initialLoadStateLiveData;
-    private MutableLiveData<Boolean> hasUserLiveData;
+    private final MutableLiveData<NetworkState> paginationNetworkStateLiveData;
+    private final MutableLiveData<NetworkState> initialLoadStateLiveData;
+    private final MutableLiveData<Boolean> hasUserLiveData;
 
     private PageKeyedDataSource.LoadParams<String> params;
     private PageKeyedDataSource.LoadCallback<String, UserData> callback;
 
-    UserListingDataSource(Retrofit retrofit, String query, SortType sortType, boolean nsfw) {
-        this.retrofit = retrofit;
+    UserListingDataSource(Retrofit applicationOnlyOauthRetrofit, String query, SortType sortType, boolean nsfw) {
+        this.applicationOnlyOauthRetrofit = applicationOnlyOauthRetrofit;
         this.query = query;
         this.sortType = sortType;
         this.nsfw = nsfw;
@@ -50,7 +50,7 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
     public void loadInitial(@NonNull PageKeyedDataSource.LoadInitialParams<String> params, @NonNull PageKeyedDataSource.LoadInitialCallback<String, UserData> callback) {
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
-        FetchUserData.fetchUserListingData(retrofit, query, null, sortType.getType(), nsfw,
+        FetchUserData.fetchUserListingData(applicationOnlyOauthRetrofit, query, null, sortType.getType(), nsfw,
                 new FetchUserData.FetchUserListingDataListener() {
                     @Override
                     public void onFetchUserListingDataSuccess(ArrayList<UserData> UserData, String after) {
@@ -81,7 +81,7 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
             return;
         }
 
-        FetchUserData.fetchUserListingData(retrofit, query, params.key, sortType.getType(), nsfw,
+        FetchUserData.fetchUserListingData(applicationOnlyOauthRetrofit, query, params.key, sortType.getType(), nsfw,
                 new FetchUserData.FetchUserListingDataListener() {
                     @Override
                     public void onFetchUserListingDataSuccess(ArrayList<UserData> UserData, String after) {

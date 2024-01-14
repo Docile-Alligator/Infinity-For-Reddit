@@ -40,6 +40,7 @@ import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.VoteThing;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewImageOrGifActivity;
@@ -82,43 +83,43 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             return comment.getCommentMarkdown().equals(t1.getCommentMarkdown());
         }
     };
-    private BaseActivity mActivity;
-    private Retrofit mOauthRetrofit;
-    private Locale mLocale;
-    private EmoteCloseBracketInlineProcessor mEmoteCloseBracketInlineProcessor;
-    private EmotePlugin mEmotePlugin;
-    private ImageAndGifPlugin mImageAndGifPlugin;
-    private Markwon mMarkwon;
-    private ImageAndGifEntry mImageAndGifEntry;
-    private RecyclerView.RecycledViewPool recycledViewPool;
-    private String mAccessToken;
-    private String mAccountName;
-    private int mColorPrimaryLightTheme;
-    private int mSecondaryTextColor;
-    private int mCommentBackgroundColor;
+    private final BaseActivity mActivity;
+    private final Retrofit mOauthRetrofit;
+    private final Locale mLocale;
+    private final EmoteCloseBracketInlineProcessor mEmoteCloseBracketInlineProcessor;
+    private final EmotePlugin mEmotePlugin;
+    private final ImageAndGifPlugin mImageAndGifPlugin;
+    private final Markwon mMarkwon;
+    private final ImageAndGifEntry mImageAndGifEntry;
+    private final RecyclerView.RecycledViewPool recycledViewPool;
+    private final String mAccessToken;
+    private final String mAccountName;
+    private final int mColorPrimaryLightTheme;
+    private final int mSecondaryTextColor;
+    private final int mCommentBackgroundColor;
     private int mCommentColor;
-    private int mDividerColor;
-    private int mUsernameColor;
-    private int mAuthorFlairColor;
-    private int mSubredditColor;
-    private int mUpvotedColor;
-    private int mDownvotedColor;
-    private int mButtonTextColor;
-    private int mColorAccent;
-    private int mCommentIconAndInfoColor;
-    private boolean mVoteButtonsOnTheRight;
-    private boolean mShowElapsedTime;
-    private String mTimeFormatPattern;
-    private boolean mShowCommentDivider;
-    private boolean mShowAbsoluteNumberOfVotes;
+    private final int mDividerColor;
+    private final int mUsernameColor;
+    private final int mAuthorFlairColor;
+    private final int mSubredditColor;
+    private final int mUpvotedColor;
+    private final int mDownvotedColor;
+    private final int mButtonTextColor;
+    private final int mColorAccent;
+    private final int mCommentIconAndInfoColor;
+    private final boolean mVoteButtonsOnTheRight;
+    private final boolean mShowElapsedTime;
+    private final String mTimeFormatPattern;
+    private final boolean mShowCommentDivider;
+    private final boolean mShowAbsoluteNumberOfVotes;
     private boolean canStartActivity = true;
     private NetworkState networkState;
-    private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
+    private final RetryLoadingMoreCallback mRetryLoadingMoreCallback;
 
     public CommentsListingRecyclerViewAdapter(BaseActivity activity, Retrofit oauthRetrofit,
                                               CustomThemeWrapper customThemeWrapper, Locale locale,
                                               SharedPreferences sharedPreferences, String accessToken,
-                                              String accountName, String username,
+                                              @NonNull String accountName, String username,
                                               RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         mActivity = activity;
@@ -527,6 +528,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         bundle.putBoolean(CommentMoreBottomSheetFragment.EXTRA_EDIT_AND_DELETE_AVAILABLE, true);
                     }
                     bundle.putString(CommentMoreBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                    bundle.putString(CommentMoreBottomSheetFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                     bundle.putParcelable(CommentMoreBottomSheetFragment.EXTRA_COMMENT, comment);
                     bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getBindingAdapterPosition());
                     CommentMoreBottomSheetFragment commentMoreBottomSheetFragment = new CommentMoreBottomSheetFragment();
@@ -578,7 +580,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             commentMarkdownView.setAdapter(markwonAdapter);
 
             upvoteButton.setOnClickListener(view -> {
-                if (mAccessToken == null) {
+                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                     Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -658,7 +660,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             });
 
             downvoteButton.setOnClickListener(view -> {
-                if (mAccessToken == null) {
+                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                     Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
                 }

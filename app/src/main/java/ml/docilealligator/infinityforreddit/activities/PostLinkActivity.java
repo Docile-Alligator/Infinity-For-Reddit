@@ -131,6 +131,9 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
+    @Named("application_only_oauth")
+    Retrofit mApplicationOnlyRetrofit;
+    @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     @Named("default")
@@ -144,6 +147,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
     Executor mExecutor;
     private Account selectedAccount;
     private String mAccessToken;
+    private String mAccountName;
     private String iconUrl;
     private String subredditName;
     private boolean subredditSelected = false;
@@ -196,6 +200,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         resources = getResources();
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
 
         if (savedInstanceState != null) {
             selectedAccount = savedInstanceState.getParcelable(SELECTED_ACCOUNT_STATE);
@@ -358,11 +363,23 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
             mRetrofit.newBuilder()
                     .baseUrl("http://localhost/")
                     .addConverterFactory(ScalarsConverterFactory.create())
-                    .build().create(TitleSuggestion.class).getHtml(url).enqueue(new Callback<String>() {
+                    .build().create(TitleSuggestion.class).getHtml(url).enqueue(new Callback<>() {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                     if (response.isSuccessful()) {
-                        titleEditText.setText(response.body().substring(response.body().indexOf("<title>") + 7, response.body().indexOf("</title>")));
+                        String body = response.body();
+                        if (body != null) {
+                            int start = body.indexOf("<title>");
+                            if (start >= 0) {
+                                int end = body.indexOf("</title>");
+                                if (end > start) {
+                                    titleEditText.setText(body.substring(start + 7, end));
+                                    return;
+                                }
+                            }
+                        }
+
+                        Toast.makeText(PostLinkActivity.this, R.string.suggest_title_failed, Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(PostLinkActivity.this, R.string.suggest_title_failed, Toast.LENGTH_SHORT).show();
                     }
@@ -464,8 +481,8 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
     }
 
     private void loadSubredditIcon() {
-        LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditName,
-                mAccessToken, mOauthRetrofit, mRetrofit, iconImageUrl -> {
+        LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, mApplicationOnlyRetrofit, subredditName,
+                iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
             loadSubredditIconSuccessful = true;

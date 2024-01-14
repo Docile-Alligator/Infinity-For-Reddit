@@ -34,6 +34,7 @@ import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.MultiredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
@@ -107,11 +108,11 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
             }
         }
 
-        String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME, "-");
+        String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         boolean isGettingMultiredditInfo = getArguments().getBoolean(EXTRA_IS_GETTING_MULTIREDDIT_INFO, false);
 
-        if (accessToken == null) {
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             mSwipeRefreshLayout.setEnabled(false);
         }
 
@@ -121,7 +122,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         MultiRedditListingRecyclerViewAdapter adapter = new MultiRedditListingRecyclerViewAdapter(mActivity,
                 mExecutor, mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, accessToken,
-                new MultiRedditListingRecyclerViewAdapter.OnItemClickListener() {
+                accountName, new MultiRedditListingRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onClick(MultiReddit multiReddit) {
                 if (mActivity instanceof MultiredditSelectionActivity) {

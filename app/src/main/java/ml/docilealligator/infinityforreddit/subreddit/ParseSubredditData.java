@@ -79,7 +79,7 @@ public class ParseSubredditData {
     private static class ParseSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {
         private JSONObject jsonResponse;
         private boolean parseFailed;
-        private ParseSubredditDataListener parseSubredditDataListener;
+        private final ParseSubredditDataListener parseSubredditDataListener;
         private SubredditData subredditData;
         private int mNCurrentOnlineSubscribers;
 
@@ -121,7 +121,7 @@ public class ParseSubredditData {
         private JSONObject jsonResponse;
         private boolean nsfw;
         private boolean parseFailed;
-        private ParseSubredditListingDataListener parseSubredditListingDataListener;
+        private final ParseSubredditListingDataListener parseSubredditListingDataListener;
         private ArrayList<SubredditData> subredditListingData;
         private String after;
 

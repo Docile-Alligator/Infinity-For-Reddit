@@ -12,15 +12,15 @@ import retrofit2.Retrofit;
 
 public class SubredditListingDataSource extends PageKeyedDataSource<String, SubredditData> {
 
-    private Retrofit retrofit;
-    private String query;
-    private SortType sortType;
-    private String accessToken;
-    private boolean nsfw;
+    private final Retrofit retrofit;
+    private final String query;
+    private final SortType sortType;
+    private final String accessToken;
+    private final boolean nsfw;
 
-    private MutableLiveData<NetworkState> paginationNetworkStateLiveData;
-    private MutableLiveData<NetworkState> initialLoadStateLiveData;
-    private MutableLiveData<Boolean> hasSubredditLiveData;
+    private final MutableLiveData<NetworkState> paginationNetworkStateLiveData;
+    private final MutableLiveData<NetworkState> initialLoadStateLiveData;
+    private final MutableLiveData<Boolean> hasSubredditLiveData;
 
     private LoadParams<String> params;
     private LoadCallback<String, SubredditData> callback;
