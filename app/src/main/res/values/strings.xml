@@ -761,9 +761,9 @@
     <string name="theme_item_color_primary_dark">Color Primary Dark</string>
     <string name="theme_item_color_primary_dark_detail">Applied to: Status Bar</string>
     <string name="theme_item_color_accent">Color Accent</string>
-    <string name="theme_item_color_accent_detail">Applied to: Progress Bar, etc</string>
+    <string name="theme_item_color_accent_detail">Applied to: Progress Bar and background of Floating Action Button, etc</string>
     <string name="theme_item_color_primary_light_theme">Color Primary Light Theme</string>
-    <string name="theme_item_color_primary_light_theme_detail">Applied to: background of Floating Action Button and Button</string>
+    <string name="theme_item_color_primary_light_theme_detail">Applied to: Button</string>
     <string name="theme_item_primary_text_color">Primary Text Color</string>
     <string name="theme_item_primary_text_color_detail">Applied to: Primary text</string>
     <string name="theme_item_secondary_text_color">Secondary Text Color</string>
