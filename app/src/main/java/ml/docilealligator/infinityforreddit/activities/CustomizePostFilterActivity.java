@@ -63,6 +63,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
     public static final String EXTRA_CONTAIN_FLAIR = "ECF";
     public static final String EXTRA_EXCLUDE_DOMAIN = "EED";
     public static final String EXTRA_CONTAIN_DOMAIN = "ECD";
+    public static final String EXTRA_START_FILTERED_POSTS_WHEN_FINISH = "ESFPWF";
     public static final String RETURN_EXTRA_POST_FILTER = "REPF";
     private static final String POST_FILTER_STATE = "PFS";
     private static final String ORIGINAL_NAME_STATE = "ONS";
@@ -399,9 +400,16 @@ public class CustomizePostFilterActivity extends BaseActivity {
         } else if (item.getItemId() == R.id.action_save_customize_post_filter_activity) {
             try {
                 constructPostFilter();
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra(RETURN_EXTRA_POST_FILTER, postFilter);
-                setResult(Activity.RESULT_OK, returnIntent);
+                if (getIntent().getBooleanExtra(EXTRA_START_FILTERED_POSTS_WHEN_FINISH, false)) {
+                    Intent intent = new Intent(this, FilteredPostsActivity.class);
+                    intent.putExtras(getIntent());
+                    intent.putExtra(FilteredPostsActivity.EXTRA_CONSTRUCTED_POST_FILTER, postFilter);
+                    startActivity(intent);
+                } else {
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra(RETURN_EXTRA_POST_FILTER, postFilter);
+                    setResult(Activity.RESULT_OK, returnIntent);
+                }
                 finish();
             } catch (PatternSyntaxException e) {
                 Toast.makeText(this, R.string.invalid_regex, Toast.LENGTH_SHORT).show();
@@ -429,9 +437,16 @@ public class CustomizePostFilterActivity extends BaseActivity {
                 new SavePostFilter.SavePostFilterListener() {
                     @Override
                     public void success() {
-                        Intent returnIntent = new Intent();
-                        returnIntent.putExtra(RETURN_EXTRA_POST_FILTER, postFilter);
-                        setResult(Activity.RESULT_OK, returnIntent);
+                        if (getIntent().getBooleanExtra(EXTRA_START_FILTERED_POSTS_WHEN_FINISH, false)) {
+                            Intent intent = new Intent(CustomizePostFilterActivity.this, FilteredPostsActivity.class);
+                            intent.putExtras(getIntent());
+                            intent.putExtra(FilteredPostsActivity.EXTRA_CONSTRUCTED_POST_FILTER, postFilter);
+                            startActivity(intent);
+                        } else {
+                            Intent returnIntent = new Intent();
+                            returnIntent.putExtra(RETURN_EXTRA_POST_FILTER, postFilter);
+                            setResult(Activity.RESULT_OK, returnIntent);
+                        }
                         finish();
                     }
 
