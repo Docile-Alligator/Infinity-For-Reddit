@@ -5,14 +5,11 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
 
-import java.util.Locale;
-
 import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 class CommentDataSourceFactory extends DataSource.Factory {
     private final Retrofit retrofit;
-    private final Locale locale;
     private final String accessToken;
     private final String accountName;
     private final String username;
@@ -22,11 +19,10 @@ class CommentDataSourceFactory extends DataSource.Factory {
     private CommentDataSource commentDataSource;
     private final MutableLiveData<CommentDataSource> commentDataSourceLiveData;
 
-    CommentDataSourceFactory(Retrofit retrofit, Locale locale, @Nullable String accessToken, @NonNull String accountName,
+    CommentDataSourceFactory(Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                              String username, SortType sortType,
                              boolean areSavedComments) {
         this.retrofit = retrofit;
-        this.locale = locale;
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.username = username;

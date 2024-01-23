@@ -83,6 +83,9 @@ public class TrendingActivity extends BaseActivity {
     @BindView(R.id.fetch_trending_search_text_view_trending_activity)
     TextView errorTextView;
     @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
@@ -205,8 +208,12 @@ public class TrendingActivity extends BaseActivity {
         trendingSearches = null;
         adapter.setTrendingSearches(null);
         Handler handler = new Handler();
-        Call<String> trendingCall = mOauthRetrofit.create(RedditAPI.class)
-                .getTrendingSearchesOauth(APIUtils.getOAuthHeader(mAccessToken));
+        Call<String> trendingCall;
+        if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            trendingCall = mRetrofit.create(RedditAPI.class).getTrendingSearches();
+        } else {
+            trendingCall = mOauthRetrofit.create(RedditAPI.class).getTrendingSearchesOauth(APIUtils.getOAuthHeader(mAccessToken));
+        }
         trendingCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

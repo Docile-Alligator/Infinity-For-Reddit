@@ -62,9 +62,8 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String STREAMABLE_PATTERN = "/\\w+/?";
     
     @Inject
-    @Named("application_only_oauth")
-    Retrofit mApplicationOnlyRetrofit;
-    
+    @Named("no_oauth")
+    Retrofit mRetrofit;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
@@ -266,7 +265,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 startActivity(intent);
                             } else if (uri.getPath().matches(SHARELINK_SUBREDDIT_PATTERN)
                                     || uri.getPath().matches(SHARELINK_USER_PATTERN)) {
-                                mApplicationOnlyRetrofit.callFactory().newCall(new Request.Builder().url(uri.toString()).build()).enqueue(new Callback() {
+                                mRetrofit.callFactory().newCall(new Request.Builder().url(uri.toString()).build()).enqueue(new Callback() {
                                     @Override
                                     public void onResponse(@NonNull Call call, @NonNull Response response) {
                                         if (response.isSuccessful()) {

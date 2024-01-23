@@ -136,11 +136,11 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
     @BindView(R.id.play_button_image_view_submit_crosspost_activity)
     ImageView playButton;
     @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
-    @Inject
-    @Named("application_only_oauth")
-    Retrofit mApplicationOnlyRetrofit;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -500,8 +500,8 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
     }
 
     private void loadSubredditIcon() {
-        LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, mApplicationOnlyRetrofit, subredditName,
-                iconImageUrl -> {
+        LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditName,
+                mAccessToken, mAccountName, mOauthRetrofit, mRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
             loadSubredditIconSuccessful = true;

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -29,7 +30,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
     private final Retrofit retrofit;
     @Nullable
     private final String accessToken;
-    @Nullable
+    @NonNull
     private final String accountName;
     private final String username;
     private final SortType sortType;
@@ -83,10 +84,15 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
                     null, sortType.getType(), sortType.getTime(),
                     APIUtils.getOAuthHeader(accessToken));
         } else {
-            commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken), username,
-                    null, sortType.getType(), sortType.getTime());
+            if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                commentsCall = api.getUserComments(username, null, sortType.getType(),
+                        sortType.getTime());
+            } else {
+                commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken), username,
+                        null, sortType.getType(), sortType.getTime());
+            }
         }
-        commentsCall.enqueue(new Callback<String>() {
+        commentsCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
@@ -142,10 +148,15 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
             commentsCall = api.getUserSavedCommentsOauth(username, PostPagingSource.USER_WHERE_SAVED, params.key,
                     sortType.getType(), sortType.getTime(), APIUtils.getOAuthHeader(accessToken));
         } else {
-            commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken),
-                    username, params.key, sortType.getType(), sortType.getTime());
+            if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                commentsCall = api.getUserComments(username, params.key, sortType.getType(),
+                        sortType.getTime());
+            } else {
+                commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken),
+                        username, params.key, sortType.getType(), sortType.getTime());
+            }
         }
-        commentsCall.enqueue(new Callback<String>() {
+        commentsCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {

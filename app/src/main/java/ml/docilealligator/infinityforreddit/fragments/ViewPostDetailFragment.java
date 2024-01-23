@@ -151,11 +151,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Named("reveddit")
     Retrofit revedditRetrofit;
     @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
-    @Inject
-    @Named("application_only_oauth")
-    Retrofit mApplicationOnlyRetrofit;
     @Inject
     @Named("redgifs")
     Retrofit mRedgifsRetrofit;
@@ -594,13 +594,13 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             setupMenu();
 
             mPostAdapter = new PostDetailRecyclerViewAdapter(activity,
-                    this, mExecutor, mCustomThemeWrapper, mOauthRetrofit, mApplicationOnlyRetrofit,
+                    this, mExecutor, mCustomThemeWrapper, mOauthRetrofit, mRetrofit,
                     mRedgifsRetrofit, mStreamableApiProvider, mRedditDataRoomDatabase, mGlide,
                     mSeparatePostAndComments, mAccessToken, mAccountName, mPost, mLocale,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
                     mExoCreator, post -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
             mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,
-                    this, mCustomThemeWrapper, mExecutor, mOauthRetrofit,
+                    this, mCustomThemeWrapper, mExecutor, mRetrofit, mOauthRetrofit,
                     mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
                     isSingleCommentThreadMode, mSharedPreferences, mNsfwAndSpoilerSharedPreferences,
                     new CommentsRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
@@ -904,7 +904,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             loadIconListener.loadIconSuccess(authorName, activity.authorIcons.get(authorName));
         } else {
             LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, authorName,
-                    mApplicationOnlyRetrofit, iconImageUrl -> {
+                    mRetrofit, iconImageUrl -> {
                         activity.authorIcons.put(authorName, iconImageUrl);
                         loadIconListener.loadIconSuccess(authorName, iconImageUrl);
                     });
@@ -1251,12 +1251,22 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         mGlide.clear(mFetchPostInfoImageView);
 
         Call<String> postAndComments;
-        if (isSingleCommentThreadMode && mSingleCommentId != null) {
-            postAndComments = mOauthRetrofit.create(RedditAPI.class).getPostAndCommentsSingleThreadByIdOauth(subredditId,
-                    mSingleCommentId, sortType, mContextNumber, APIUtils.getOAuthHeader(mAccessToken));
+        if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            if (isSingleCommentThreadMode && mSingleCommentId != null) {
+                postAndComments = mRetrofit.create(RedditAPI.class).getPostAndCommentsSingleThreadById(
+                        subredditId, mSingleCommentId, sortType, mContextNumber);
+            } else {
+                postAndComments = mRetrofit.create(RedditAPI.class).getPostAndCommentsById(subredditId,
+                        sortType);
+            }
         } else {
-            postAndComments = mOauthRetrofit.create(RedditAPI.class).getPostAndCommentsByIdOauth(subredditId,
-                    sortType, APIUtils.getOAuthHeader(mAccessToken));
+            if (isSingleCommentThreadMode && mSingleCommentId != null) {
+                postAndComments = mOauthRetrofit.create(RedditAPI.class).getPostAndCommentsSingleThreadByIdOauth(subredditId,
+                        mSingleCommentId, sortType, mContextNumber, APIUtils.getOAuthHeader(mAccessToken));
+            } else {
+                postAndComments = mOauthRetrofit.create(RedditAPI.class).getPostAndCommentsByIdOauth(subredditId,
+                        sortType, APIUtils.getOAuthHeader(mAccessToken));
+            }
         }
         postAndComments.enqueue(new Callback<>() {
             @Override
@@ -1277,7 +1287,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
                             mPostAdapter = new PostDetailRecyclerViewAdapter(activity,
                                     ViewPostDetailFragment.this, mExecutor, mCustomThemeWrapper,
-                                    mOauthRetrofit, mApplicationOnlyRetrofit, mRedgifsRetrofit,
+                                    mOauthRetrofit, mRetrofit, mRedgifsRetrofit,
                                     mStreamableApiProvider, mRedditDataRoomDatabase, mGlide, mSeparatePostAndComments,
                                     mAccessToken, mAccountName, mPost, mLocale, mSharedPreferences,
                                     mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences,
@@ -1286,7 +1296,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
                             mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,
                                     ViewPostDetailFragment.this, mCustomThemeWrapper, mExecutor,
-                                    mOauthRetrofit, mAccessToken, mAccountName, mPost, mLocale,
+                                    mRetrofit, mOauthRetrofit, mAccessToken, mAccountName, mPost, mLocale,
                                     mSingleCommentId, isSingleCommentThreadMode, mSharedPreferences,
                                     mNsfwAndSpoilerSharedPreferences,
                                     new CommentsRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
@@ -1424,7 +1434,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     e.printStackTrace();
                 }
             }
-            FetchSubredditData.fetchSubredditData(mOauthRetrofit, mPost.getSubredditName(), mAccessToken,
+            FetchSubredditData.fetchSubredditData(mOauthRetrofit, mRetrofit, mPost.getSubredditName(), mAccessToken,
                     new FetchSubredditData.FetchSubredditDataListener() {
                         @Override
                         public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
@@ -1468,7 +1478,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             commentId = mSingleCommentId;
         }
 
-        FetchComment.fetchComments(mExecutor, new Handler(), mOauthRetrofit, mAccessToken, mPost.getId(), commentId, sortType,
+        Retrofit retrofit = mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit;
+        FetchComment.fetchComments(mExecutor, new Handler(), retrofit, mAccessToken, mAccountName, mPost.getId(), commentId, sortType,
                 mContextNumber, mExpandChildren, mCommentFilter, new FetchComment.FetchCommentListener() {
                     @Override
                     public void onFetchCommentSuccess(ArrayList<Comment> expandedComments,
@@ -1554,7 +1565,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
         isLoadingMoreChildren = true;
 
-        FetchComment.fetchMoreComment(mExecutor, new Handler(), mOauthRetrofit, mAccessToken, mAccountName,
+        Retrofit retrofit = mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit;
+        FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken, mAccountName,
                 children, mExpandChildren, mPost.getFullName(), sortType, new FetchComment.FetchMoreCommentListener() {
                     @Override
                     public void onFetchMoreCommentSuccess(ArrayList<Comment> topLevelComments,
@@ -1588,7 +1600,13 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             }
 
             if (fetchPost) {
-                FetchPost.fetchPost(mExecutor, new Handler(), mOauthRetrofit, mPost.getId(), mAccessToken,
+                Retrofit retrofit;
+                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                    retrofit = mRetrofit;
+                } else {
+                    retrofit = mOauthRetrofit;
+                }
+                FetchPost.fetchPost(mExecutor, new Handler(), retrofit, mPost.getId(), mAccessToken, mAccountName,
                         new FetchPost.FetchPostListener() {
                             @Override
                             public void fetchPostSuccess(Post post) {

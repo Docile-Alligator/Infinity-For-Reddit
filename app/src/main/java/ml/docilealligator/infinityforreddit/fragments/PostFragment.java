@@ -180,11 +180,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     TextView mFetchPostInfoTextView;
     PostViewModel mPostViewModel;
     @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
-    @Inject
-    @Named("application_only_oauth")
-    Retrofit mApplicationOnlyRetrofit;
     @Inject
     @Named("redgifs")
     Retrofit mRedgifsRetrofit;
@@ -1204,22 +1204,22 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private void initializeAndBindPostViewModel(String accessToken) {
         if (postType == PostPagingSource.TYPE_SEARCH) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
-                    mOauthRetrofit, accessToken, accountName, mSharedPreferences,
+                    accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, accessToken, accountName, mSharedPreferences,
                     mPostFeedScrolledPositionSharedPreferences, mPostHistorySharedPreferences, subredditName,
                     query, trendingSource, postType, sortType, postFilter, readPosts)).get(PostViewModel.class);
         } else if (postType == PostPagingSource.TYPE_SUBREDDIT) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
-                    mOauthRetrofit, accessToken, accountName, mSharedPreferences, mPostFeedScrolledPositionSharedPreferences,
+                    accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, accessToken, accountName, mSharedPreferences, mPostFeedScrolledPositionSharedPreferences,
                     mPostHistorySharedPreferences, subredditName, postType, sortType, postFilter, readPosts))
                     .get(PostViewModel.class);
         } else if (postType == PostPagingSource.TYPE_MULTI_REDDIT) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
-                    mOauthRetrofit, accessToken, accountName, mSharedPreferences, mPostFeedScrolledPositionSharedPreferences,
+                    accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, accessToken, accountName, mSharedPreferences, mPostFeedScrolledPositionSharedPreferences,
                     mPostHistorySharedPreferences, multiRedditPath, postType, sortType, postFilter, readPosts))
                     .get(PostViewModel.class);
         } else if (postType == PostPagingSource.TYPE_USER) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
-                    mOauthRetrofit, accessToken, accountName, mSharedPreferences, mPostFeedScrolledPositionSharedPreferences,
+                    accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, accessToken, accountName, mSharedPreferences, mPostFeedScrolledPositionSharedPreferences,
                     mPostHistorySharedPreferences, username, postType, sortType, postFilter, where, readPosts))
                     .get(PostViewModel.class);
         } else {
@@ -1236,28 +1236,28 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         //For anonymous user
         if (postType == PostPagingSource.TYPE_SEARCH) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
-                    mOauthRetrofit, accessToken, accountName, mSharedPreferences,
+                    mRetrofit, null, accountName, mSharedPreferences,
                     mPostFeedScrolledPositionSharedPreferences, null, subredditName, query, trendingSource,
                     postType, sortType, postFilter, readPosts)).get(PostViewModel.class);
         } else if (postType == PostPagingSource.TYPE_SUBREDDIT) {
             mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(mExecutor,
-                    mOauthRetrofit, accessToken, accountName, mSharedPreferences,
+                    mRetrofit, null, accountName, mSharedPreferences,
                     mPostFeedScrolledPositionSharedPreferences, null, subredditName, postType, sortType,
                     postFilter, readPosts)).get(PostViewModel.class);
         } else if (postType == PostPagingSource.TYPE_MULTI_REDDIT) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
-                    mOauthRetrofit, accessToken, accountName, mSharedPreferences,
+                    mRetrofit, null, accountName, mSharedPreferences,
                     mPostFeedScrolledPositionSharedPreferences, null, multiRedditPath,
                     postType, sortType, postFilter, readPosts)).get(PostViewModel.class);
         } else if (postType == PostPagingSource.TYPE_USER) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
-                    mOauthRetrofit, accessToken, accountName, mSharedPreferences,
+                    mRetrofit, null, accountName, mSharedPreferences,
                     mPostFeedScrolledPositionSharedPreferences, null, username, postType, sortType, postFilter,
                     where, readPosts)).get(PostViewModel.class);
         } else {
             //Anonymous Front Page
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
-                    mOauthRetrofit, accessToken, mSharedPreferences, concatenatedSubredditNames, postType, sortType, postFilter))
+                    mRetrofit, mSharedPreferences, concatenatedSubredditNames, postType, sortType, postFilter))
                     .get(PostViewModel.class);
         }
 
@@ -1745,14 +1745,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         } else {
             if (isSubreddit) {
                 LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase,
-                        mApplicationOnlyRetrofit, subredditOrUserName,
+                        subredditOrUserName, accessToken, accountName, mOauthRetrofit, mRetrofit,
                         iconImageUrl -> {
                             subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
                             loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);
                         });
             } else {
                 LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditOrUserName,
-                        mApplicationOnlyRetrofit, iconImageUrl -> {
+                        mRetrofit, iconImageUrl -> {
                             subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
                             loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);
                         });

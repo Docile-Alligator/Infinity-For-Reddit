@@ -74,11 +74,11 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     @BindView(R.id.edit_text_wrapper_linear_layout_view_private_messages_activity)
     LinearLayout mEditTextLinearLayout;
     @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
-    @Inject
-    @Named("application_only_oauth")
-    Retrofit mApplicationOnlyOauthRetrofit;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -249,7 +249,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
             mProvideUserAvatarCallbacks.add(provideUserAvatarCallback);
             if (!isLoadingUserAvatar) {
                 LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase,
-                        username, mApplicationOnlyOauthRetrofit, iconImageUrl -> {
+                        username, mRetrofit, iconImageUrl -> {
                     isLoadingUserAvatar = false;
                     mUserAvatar = iconImageUrl == null ? "" : iconImageUrl;
                     for (ProvideUserAvatarCallback provideUserAvatarCallbackInArrayList : mProvideUserAvatarCallbacks) {

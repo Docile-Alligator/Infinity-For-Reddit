@@ -65,6 +65,9 @@ public class RulesActivity extends BaseActivity {
     @BindView(R.id.error_text_view_rules_activity)
     TextView errorTextView;
     @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
@@ -134,8 +137,9 @@ public class RulesActivity extends BaseActivity {
         mAdapter = new RulesRecyclerViewAdapter(this, mCustomThemeWrapper, sliderPanel, mSubredditName);
         recyclerView.setAdapter(mAdapter);
 
-        FetchRules.fetchRules(mExecutor, new Handler(), mOauthRetrofit, mAccessToken,
-                mSubredditName, new FetchRules.FetchRulesListener() {
+        FetchRules.fetchRules(mExecutor, new Handler(),
+                mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit,
+                mAccessToken, mAccountName, mSubredditName, new FetchRules.FetchRulesListener() {
                     @Override
                     public void success(ArrayList<Rule> rules) {
                         progressBar.setVisibility(View.GONE);
@@ -183,7 +187,9 @@ public class RulesActivity extends BaseActivity {
         errorTextView.setOnClickListener(view -> {
             progressBar.setVisibility(View.VISIBLE);
             errorTextView.setVisibility(View.GONE);
-            FetchRules.fetchRules(mExecutor, new Handler(), mOauthRetrofit, mAccessToken, mSubredditName, new FetchRules.FetchRulesListener() {
+            FetchRules.fetchRules(mExecutor, new Handler(),
+                    mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit,
+                    mAccessToken, mAccountName, mSubredditName, new FetchRules.FetchRulesListener() {
                 @Override
                 public void success(ArrayList<Rule> rules) {
                     progressBar.setVisibility(View.GONE);

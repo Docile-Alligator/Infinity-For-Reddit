@@ -131,9 +131,6 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
-    @Named("application_only_oauth")
-    Retrofit mApplicationOnlyRetrofit;
-    @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     @Named("default")
@@ -481,8 +478,8 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
     }
 
     private void loadSubredditIcon() {
-        LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, mApplicationOnlyRetrofit, subredditName,
-                iconImageUrl -> {
+        LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditName,
+                mAccessToken, mAccountName, mOauthRetrofit, mRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
             loadSubredditIconSuccessful = true;

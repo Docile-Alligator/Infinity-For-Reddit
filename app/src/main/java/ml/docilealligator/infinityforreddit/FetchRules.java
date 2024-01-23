@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
@@ -28,10 +29,12 @@ public class FetchRules {
     }
 
     public static void fetchRules(Executor executor, Handler handler, Retrofit retrofit, @Nullable String accessToken,
-                                  String subredditName,
+                                  @NonNull String accountName, String subredditName,
                                   FetchRulesListener fetchRulesListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> rulesCall = api.getRulesOauth(APIUtils.getOAuthHeader(accessToken), subredditName);
+        Call<String> rulesCall = accountName.equals(Account.ANONYMOUS_ACCOUNT)
+                ? api.getRules(subredditName)
+                : api.getRulesOauth(APIUtils.getOAuthHeader(accessToken), subredditName);
         rulesCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

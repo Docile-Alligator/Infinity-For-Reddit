@@ -12,7 +12,7 @@ import retrofit2.Retrofit;
 
 public class UserListingDataSource extends PageKeyedDataSource<String, UserData> {
 
-    private final Retrofit applicationOnlyOauthRetrofit;
+    private final Retrofit retrofit;
     private final String query;
     private final SortType sortType;
     private final boolean nsfw;
@@ -24,8 +24,8 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
     private PageKeyedDataSource.LoadParams<String> params;
     private PageKeyedDataSource.LoadCallback<String, UserData> callback;
 
-    UserListingDataSource(Retrofit applicationOnlyOauthRetrofit, String query, SortType sortType, boolean nsfw) {
-        this.applicationOnlyOauthRetrofit = applicationOnlyOauthRetrofit;
+    UserListingDataSource(Retrofit retrofit, String query, SortType sortType, boolean nsfw) {
+        this.retrofit = retrofit;
         this.query = query;
         this.sortType = sortType;
         this.nsfw = nsfw;
@@ -50,7 +50,7 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
     public void loadInitial(@NonNull PageKeyedDataSource.LoadInitialParams<String> params, @NonNull PageKeyedDataSource.LoadInitialCallback<String, UserData> callback) {
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
-        FetchUserData.fetchUserListingData(applicationOnlyOauthRetrofit, query, null, sortType.getType(), nsfw,
+        FetchUserData.fetchUserListingData(retrofit, query, null, sortType.getType(), nsfw,
                 new FetchUserData.FetchUserListingDataListener() {
                     @Override
                     public void onFetchUserListingDataSuccess(ArrayList<UserData> UserData, String after) {
@@ -81,7 +81,7 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
             return;
         }
 
-        FetchUserData.fetchUserListingData(applicationOnlyOauthRetrofit, query, params.key, sortType.getType(), nsfw,
+        FetchUserData.fetchUserListingData(retrofit, query, params.key, sortType.getType(), nsfw,
                 new FetchUserData.FetchUserListingDataListener() {
                     @Override
                     public void onFetchUserListingDataSuccess(ArrayList<UserData> UserData, String after) {

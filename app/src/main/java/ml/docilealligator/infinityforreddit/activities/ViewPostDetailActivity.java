@@ -127,6 +127,9 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @BindView(R.id.close_search_panel_image_view_view_post_detail_activity)
     ImageView closeSearchPanelImageView;
     @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
@@ -507,18 +510,21 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         if (postType != HistoryPostPagingSource.TYPE_READ_POSTS) {
             mExecutor.execute(() -> {
-                RedditAPI api = mOauthRetrofit.create(RedditAPI.class);
+                RedditAPI api = (mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit).create(RedditAPI.class);
                 Call<String> call;
                 String afterKey = posts.isEmpty() ? null : posts.get(posts.size() - 1).getFullName();
                 switch (postType) {
                     case PostPagingSource.TYPE_SUBREDDIT:
-                        call = api.getSubredditBestPostsOauth(subredditName, sortType,
-                                sortTime, afterKey, APIUtils.getOAuthHeader(mAccessToken));
+                        if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                            call = api.getSubredditBestPosts(subredditName, sortType, sortTime, afterKey);
+                        } else {
+                            call = api.getSubredditBestPostsOauth(subredditName, sortType,
+                                    sortTime, afterKey, APIUtils.getOAuthHeader(mAccessToken));
+                        }
                         break;
                     case PostPagingSource.TYPE_USER:
                         if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                            call = api.getUserPostsOauth(username, PostPagingSource.USER_WHERE_SUBMITTED,
-                                    afterKey, sortType, sortTime, APIUtils.getOAuthHeader(mAccessToken));
+                            call = api.getUserPosts(username, afterKey, sortType, sortTime);
                         } else {
                             call = api.getUserPostsOauth(username, userWhere, afterKey, sortType,
                                     sortTime, APIUtils.getOAuthHeader(mAccessToken));
@@ -526,22 +532,35 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                         break;
                     case PostPagingSource.TYPE_SEARCH:
                         if (subredditName == null) {
-                            call = api.searchPostsOauth(query, afterKey, sortType,
-                                    sortTime, trendingSource, APIUtils.getOAuthHeader(mAccessToken));
+                            if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                                call = api.searchPosts(query, afterKey, sortType, sortTime,
+                                        trendingSource);
+                            } else {
+                                call = api.searchPostsOauth(query, afterKey, sortType,
+                                        sortTime, trendingSource, APIUtils.getOAuthHeader(mAccessToken));
+                            }
                         } else {
-                            call = api.searchPostsInSpecificSubredditOauth(subredditName, query,
-                                    sortType, sortTime, afterKey,
-                                    APIUtils.getOAuthHeader(mAccessToken));
+                            if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                                call = api.searchPostsInSpecificSubreddit(subredditName, query,
+                                        sortType, sortTime, afterKey);
+                            } else {
+                                call = api.searchPostsInSpecificSubredditOauth(subredditName, query,
+                                        sortType, sortTime, afterKey,
+                                        APIUtils.getOAuthHeader(mAccessToken));
+                            }
                         }
                         break;
                     case PostPagingSource.TYPE_MULTI_REDDIT:
-                        call = api.getMultiRedditPostsOauth(multiPath, afterKey,
-                                sortTime, APIUtils.getOAuthHeader(mAccessToken));
+                        if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                            call = api.getMultiRedditPosts(multiPath, afterKey, sortTime);
+                        } else {
+                            call = api.getMultiRedditPostsOauth(multiPath, afterKey,
+                                    sortTime, APIUtils.getOAuthHeader(mAccessToken));
+                        }
                         break;
                     case PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE:
                         //case PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT
-                        call = api.getSubredditBestPostsOauth(subredditName, sortType, sortTime, afterKey,
-                                APIUtils.getOAuthHeader(mAccessToken));
+                        call = api.getSubredditBestPosts(subredditName, sortType, sortTime, afterKey);
                         break;
                     default:
                         call = api.getBestPosts(sortType, sortTime, afterKey,
@@ -609,7 +628,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                 }
             });
         } else {
-            mExecutor.execute((Runnable) () -> {
+            mExecutor.execute(() -> {
                 long lastItem = 0;
                 if (!posts.isEmpty()) {
                     lastItem = mRedditDataRoomDatabase.readPostDao().getReadPost(posts.get(posts.size() - 1).getId()).getTime();
@@ -623,8 +642,12 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                     ids.deleteCharAt(ids.length() - 1);
                 }
 
-                Call<String> historyPosts = mOauthRetrofit.create(RedditAPI.class).getInfoOauth(ids.toString(),
-                        APIUtils.getOAuthHeader(mAccessToken));
+                Call<String> historyPosts;
+                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                    historyPosts = mOauthRetrofit.create(RedditAPI.class).getInfoOauth(ids.toString(), APIUtils.getOAuthHeader(mAccessToken));
+                } else {
+                    historyPosts = mRetrofit.create(RedditAPI.class).getInfo(ids.toString());
+                }
 
                 try {
                     Response<String> response = historyPosts.execute();

@@ -70,6 +70,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.adapters.HistoryPostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.adapters.Paging3LoadingStateAdapter;
@@ -157,11 +158,11 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
     TextView mFetchPostInfoTextView;
     HistoryPostViewModel mHistoryPostViewModel;
     @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
-    @Inject
-    @Named("application_only_oauth")
-    Retrofit mApplicationOnlyRetrofit;
     @Inject
     @Named("redgifs")
     Retrofit mRedgifsRetrofit;
@@ -651,11 +652,11 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
     private void initializeAndBindPostViewModel(String accessToken) {
         if (postType == HistoryPostPagingSource.TYPE_READ_POSTS) {
             mHistoryPostViewModel = new ViewModelProvider(HistoryPostFragment.this, new HistoryPostViewModel.Factory(mExecutor,
-                    mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
+                    accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
                     accountName, mSharedPreferences, HistoryPostPagingSource.TYPE_READ_POSTS, postFilter)).get(HistoryPostViewModel.class);
         } else {
             mHistoryPostViewModel = new ViewModelProvider(HistoryPostFragment.this, new HistoryPostViewModel.Factory(mExecutor,
-                    mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
+                    accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
                     accountName, mSharedPreferences, HistoryPostPagingSource.TYPE_READ_POSTS, postFilter)).get(HistoryPostViewModel.class);
         }
 
@@ -928,14 +929,14 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
         } else {
             if (isSubreddit) {
                 LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase,
-                        mApplicationOnlyRetrofit, subredditOrUserName,
+                        subredditOrUserName, accessToken, accountName, mOauthRetrofit, mRetrofit,
                         iconImageUrl -> {
                             subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
                             loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);
                         });
             } else {
                 LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditOrUserName,
-                        mApplicationOnlyRetrofit, iconImageUrl -> {
+                        mRetrofit, iconImageUrl -> {
                             subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
                             loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);
                         });

@@ -51,6 +51,9 @@ public class AdvancedPreferenceFragment extends CustomFontPreferenceFragmentComp
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
+    @Inject
     @Named("sort_type")
     SharedPreferences mSortTypeSharedPreferences;
     @Inject
@@ -242,9 +245,13 @@ public class AdvancedPreferenceFragment extends CustomFontPreferenceFragmentComp
                             postLayoutEditor.remove(SharedPreferencesUtils.POST_LAYOUT_ALL_POST_LEGACY);
                             postLayoutEditor.remove(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST_LEGACY);
 
+                            SharedPreferences.Editor currentAccountEditor = mCurrentAccountSharedPreferences.edit();
+                            currentAccountEditor.remove(SharedPreferencesUtils.APPLICATION_ONLY_ACCESS_TOKEN_LEGACY);
+
                             editor.apply();
                             sortTypeEditor.apply();
                             postLayoutEditor.apply();
+                            currentAccountEditor.apply();
                             Toast.makeText(activity, R.string.delete_all_legacy_settings_success, Toast.LENGTH_SHORT).show();
                         })
                         .setNegativeButton(R.string.no, null)

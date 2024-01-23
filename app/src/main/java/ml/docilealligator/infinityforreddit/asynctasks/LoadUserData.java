@@ -13,14 +13,14 @@ import retrofit2.Retrofit;
 public class LoadUserData {
 
     public static void loadUserData(Executor executor, Handler handler, RedditDataRoomDatabase redditDataRoomDatabase, String userName,
-                                    Retrofit applicationOnlyOauthRetrofit, LoadUserDataAsyncTaskListener loadUserDataAsyncTaskListener) {
+                                    Retrofit retrofit, LoadUserDataAsyncTaskListener loadUserDataAsyncTaskListener) {
         executor.execute(() -> {
             UserDao userDao = redditDataRoomDatabase.userDao();
             if (userDao.getUserData(userName) != null) {
                 String iconImageUrl = userDao.getUserData(userName).getIconUrl();
                 handler.post(() -> loadUserDataAsyncTaskListener.loadUserDataSuccess(iconImageUrl));
             } else {
-                handler.post(() -> FetchUserData.fetchUserData(applicationOnlyOauthRetrofit, userName, new FetchUserData.FetchUserDataListener() {
+                handler.post(() -> FetchUserData.fetchUserData(retrofit, userName, new FetchUserData.FetchUserDataListener() {
                     @Override
                     public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
                         InsertUserData.insertUserData(executor, handler, redditDataRoomDatabase, userData,

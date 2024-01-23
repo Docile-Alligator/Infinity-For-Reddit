@@ -338,7 +338,6 @@ public class SharedPreferencesUtils {
     public static final String CURRENT_ACCOUNT_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.current_account";
     public static final String ACCOUNT_NAME = "account_name";
     public static final String ACCESS_TOKEN = "access_token";
-    public static final String APPLICATION_ONLY_ACCESS_TOKEN = "app_only_access_token";
     public static final String ACCOUNT_IMAGE_URL = "account_image_url";
     public static final String REDGIFS_ACCESS_TOKEN = "redgifs_access_token";
 
@@ -396,4 +395,7 @@ public class SharedPreferencesUtils {
     public static final String DO_NOT_SHOW_REDDIT_API_INFO_AGAIN_LEGACY = "do_not_show_reddit_api_info_again";
     public static final String HIDE_THE_NUMBER_OF_AWARDS_LEGACY = "hide_the_number_of_awards";
     public static final String HIDE_COMMENT_AWARDS_LEGACY = "hide_comment_awards";
+
+    //Current account
+    public static final String APPLICATION_ONLY_ACCESS_TOKEN_LEGACY = "app_only_access_token";
 }

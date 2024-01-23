@@ -10,8 +10,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
-import java.util.Locale;
-
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
@@ -24,9 +22,9 @@ public class CommentViewModel extends ViewModel {
     private final LiveData<PagedList<Comment>> comments;
     private final MutableLiveData<SortType> sortTypeLiveData;
 
-    public CommentViewModel(Retrofit retrofit, Locale locale, @Nullable String accessToken, @NonNull String accountName,
+    public CommentViewModel(Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                             String username, SortType sortType, boolean areSavedComments) {
-        commentDataSourceFactory = new CommentDataSourceFactory(retrofit, locale, accessToken, accountName,
+        commentDataSourceFactory = new CommentDataSourceFactory(retrofit, accessToken, accountName,
                 username, sortType, areSavedComments);
 
         initialLoadingState = Transformations.switchMap(commentDataSourceFactory.getCommentDataSourceLiveData(),
@@ -82,17 +80,15 @@ public class CommentViewModel extends ViewModel {
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
         private final Retrofit retrofit;
-        private final Locale locale;
         private final String accessToken;
         private final String accountName;
         private final String username;
         private final SortType sortType;
         private final boolean areSavedComments;
 
-        public Factory(Retrofit retrofit, Locale locale, @Nullable String accessToken, @NonNull String accountName, String username,
+        public Factory(Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName, String username,
                        SortType sortType, boolean areSavedComments) {
             this.retrofit = retrofit;
-            this.locale = locale;
             this.accessToken = accessToken;
             this.accountName = accountName;
             this.username = username;
@@ -103,7 +99,7 @@ public class CommentViewModel extends ViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new CommentViewModel(retrofit, locale, accessToken, accountName, username,
+            return (T) new CommentViewModel(retrofit, accessToken, accountName, username,
                     sortType, areSavedComments);
         }
     }

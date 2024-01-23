@@ -270,7 +270,7 @@ public class PostViewModel extends ViewModel {
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
         private final Executor executor;
         private final Retrofit retrofit;
-        private final String accessToken;
+        private String accessToken;
         private String accountName;
         private final SharedPreferences sharedPreferences;
         private SharedPreferences postFeedScrolledPositionSharedPreferences;
@@ -360,11 +360,10 @@ public class PostViewModel extends ViewModel {
         }
 
         //Anonymous Front Page
-        public Factory(Executor executor, Retrofit retrofit, String accessToken, SharedPreferences sharedPreferences,
+        public Factory(Executor executor, Retrofit retrofit, SharedPreferences sharedPreferences,
                        String concatenatedSubredditNames, int postType, SortType sortType, PostFilter postFilter) {
             this.executor = executor;
             this.retrofit = retrofit;
-            this.accessToken = accessToken;
             this.sharedPreferences = sharedPreferences;
             this.name = concatenatedSubredditNames;
             this.postType = postType;
@@ -388,7 +387,7 @@ public class PostViewModel extends ViewModel {
                         postFeedScrolledPositionSharedPreferences, postHistorySharedPreferences, name,
                         postType, sortType, postFilter, readPostList);
             } else if (postType == PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE) {
-                return (T) new PostViewModel(executor, retrofit, accessToken, null, sharedPreferences,
+                return (T) new PostViewModel(executor, retrofit, null, null, sharedPreferences,
                         null, null, name, postType, sortType,
                         postFilter, null);
             } else {

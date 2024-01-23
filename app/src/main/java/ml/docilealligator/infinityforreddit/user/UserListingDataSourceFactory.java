@@ -8,7 +8,7 @@ import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 public class UserListingDataSourceFactory extends DataSource.Factory {
-    private final Retrofit applicationOnlyOauthRetrofit;
+    private final Retrofit retrofit;
     private final String query;
     private SortType sortType;
     private final boolean nsfw;
@@ -16,8 +16,8 @@ public class UserListingDataSourceFactory extends DataSource.Factory {
     private UserListingDataSource userListingDataSource;
     private final MutableLiveData<UserListingDataSource> userListingDataSourceMutableLiveData;
 
-    UserListingDataSourceFactory(Retrofit applicationOnlyOauthRetrofit, String query, SortType sortType, boolean nsfw) {
-        this.applicationOnlyOauthRetrofit = applicationOnlyOauthRetrofit;
+    UserListingDataSourceFactory(Retrofit retrofit, String query, SortType sortType, boolean nsfw) {
+        this.retrofit = retrofit;
         this.query = query;
         this.sortType = sortType;
         this.nsfw = nsfw;
@@ -27,7 +27,7 @@ public class UserListingDataSourceFactory extends DataSource.Factory {
     @NonNull
     @Override
     public DataSource create() {
-        userListingDataSource = new UserListingDataSource(applicationOnlyOauthRetrofit, query, sortType, nsfw);
+        userListingDataSource = new UserListingDataSource(retrofit, query, sortType, nsfw);
         userListingDataSourceMutableLiveData.postValue(userListingDataSource);
         return userListingDataSource;
     }

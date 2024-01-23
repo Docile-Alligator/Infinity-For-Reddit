@@ -1,10 +1,8 @@
 package ml.docilealligator.infinityforreddit.user;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -15,18 +13,17 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 public class FetchUserData {
-    public static void fetchUserData(Retrofit applicationOnlyOauthRetrofit, String userName,
-                                     FetchUserDataListener fetchUserDataListener) {
-        fetchUserData(null, applicationOnlyOauthRetrofit, null, userName, fetchUserDataListener);
+    public static void fetchUserData(Retrofit retrofit, String userName, FetchUserDataListener fetchUserDataListener) {
+        fetchUserData(null, retrofit, null, userName, fetchUserDataListener);
     }
 
-    public static void fetchUserData(@Nullable RedditDataRoomDatabase redditDataRoomDatabase, Retrofit retrofit,
+    public static void fetchUserData(RedditDataRoomDatabase redditDataRoomDatabase, Retrofit retrofit,
                                      String accessToken, String userName, FetchUserDataListener fetchUserDataListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> userInfo;
-        if (accessToken == null) {
-            userInfo = api.getUserDataOauth(new HashMap<>(), userName);
+        if (redditDataRoomDatabase == null) {
+            userInfo = api.getUserData(userName);
         } else {
             userInfo = api.getUserDataOauth(APIUtils.getOAuthHeader(accessToken), userName);
         }
@@ -57,9 +54,9 @@ public class FetchUserData {
         });
     }
 
-    public static void fetchUserListingData(Retrofit applicationOnlyOauthRetrofit, String query, String after, SortType.Type sortType, boolean nsfw,
+    public static void fetchUserListingData(Retrofit retrofit, String query, String after, SortType.Type sortType, boolean nsfw,
                                             FetchUserListingDataListener fetchUserListingDataListener) {
-        RedditAPI api = applicationOnlyOauthRetrofit.create(RedditAPI.class);
+        RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> userInfo = api.searchUsers(query, after, sortType, nsfw ? 1 : 0);
         userInfo.enqueue(new Callback<>() {

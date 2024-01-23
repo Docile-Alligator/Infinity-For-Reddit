@@ -97,6 +97,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private final BaseActivity mActivity;
     private final ViewPostDetailFragment mFragment;
     private final Executor mExecutor;
+    private final Retrofit mRetrofit;
     private final Retrofit mOauthRetrofit;
     private final EmoteCloseBracketInlineProcessor mEmoteCloseBracketInlineProcessor;
     private final EmotePlugin mEmotePlugin;
@@ -164,7 +165,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public CommentsRecyclerViewAdapter(BaseActivity activity, ViewPostDetailFragment fragment,
                                        CustomThemeWrapper customThemeWrapper,
-                                       Executor executor, Retrofit oauthRetrofit,
+                                       Executor executor, Retrofit retrofit, Retrofit oauthRetrofit,
                                        @Nullable String accessToken, @NonNull String accountName,
                                        Post post, Locale locale, String singleCommentId,
                                        boolean isSingleCommentThreadMode,
@@ -174,6 +175,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mActivity = activity;
         mFragment = fragment;
         mExecutor = executor;
+        mRetrofit =
         mOauthRetrofit = oauthRetrofit;
         mAccessToken = accessToken;
         mAccountName = accountName;
@@ -666,8 +668,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         mVisibleComments.get(commentPosition).setLoadMoreChildrenFailed(false);
                         ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.loading);
 
+                        Retrofit retrofit = mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit;
                         SortType.Type sortType = mCommentRecyclerViewAdapterCallback.getSortType();
-                        FetchComment.fetchMoreComment(mExecutor, new Handler(), mOauthRetrofit, mAccessToken,
+                        FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken,
                                 mAccountName, parentComment.getMoreChildrenIds(),
                                 mExpandChildren, mPost.getFullName(), sortType, new FetchComment.FetchMoreCommentListener() {
                                     @Override

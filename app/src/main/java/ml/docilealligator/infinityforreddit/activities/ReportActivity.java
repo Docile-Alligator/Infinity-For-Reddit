@@ -54,6 +54,9 @@ public class ReportActivity extends BaseActivity {
     @BindView(R.id.recycler_view_report_activity)
     RecyclerView recyclerView;
     @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
@@ -119,7 +122,9 @@ public class ReportActivity extends BaseActivity {
         recyclerView.setAdapter(mAdapter);
 
         if (rulesReasons == null) {
-            FetchRules.fetchRules(mExecutor, new Handler(), mOauthRetrofit, mAccessToken, mSubredditName, new FetchRules.FetchRulesListener() {
+            FetchRules.fetchRules(mExecutor, new Handler(),
+                    mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit,
+                    mAccessToken, mAccountName, mSubredditName, new FetchRules.FetchRulesListener() {
                 @Override
                 public void success(ArrayList<Rule> rules) {
                     mAdapter.setRules(ReportReason.convertRulesToReasons(rules));

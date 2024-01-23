@@ -85,6 +85,9 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     TextView mFetchCommentInfoTextView;
     CommentViewModel mCommentViewModel;
     @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
@@ -301,9 +304,14 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
             CommentViewModel.Factory factory;
 
-            factory = new CommentViewModel.Factory(mOauthRetrofit,
-                    resources.getConfiguration().locale, mAccessToken, mAccountName, username, sortType,
-                    getArguments().getBoolean(EXTRA_ARE_SAVED_COMMENTS));
+            if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                factory = new CommentViewModel.Factory(mRetrofit, null, mAccountName, username, sortType,
+                        getArguments().getBoolean(EXTRA_ARE_SAVED_COMMENTS));
+            } else {
+                factory = new CommentViewModel.Factory(mOauthRetrofit,
+                        mAccessToken, mAccountName, username, sortType,
+                        getArguments().getBoolean(EXTRA_ARE_SAVED_COMMENTS));
+            }
 
             mCommentViewModel = new ViewModelProvider(this, factory).get(CommentViewModel.class);
             mCommentViewModel.getComments().observe(getViewLifecycleOwner(), comments -> mAdapter.submitList(comments));

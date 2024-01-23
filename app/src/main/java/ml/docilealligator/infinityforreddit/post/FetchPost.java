@@ -5,9 +5,9 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.HashMap;
 import java.util.concurrent.Executor;
 
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import retrofit2.Call;
@@ -16,11 +16,15 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchPost {
-    public static void fetchPost(Executor executor, Handler handler, Retrofit oauthRetrofit, String id,
-                                 @Nullable String accessToken,
+    public static void fetchPost(Executor executor, Handler handler, Retrofit retrofit, String id, @Nullable String accessToken,
+                                 @NonNull String accountName,
                                  FetchPostListener fetchPostListener) {
-        Call<String> postCall = oauthRetrofit.create(RedditAPI.class).getPostOauth(id,
-                accessToken == null ? new HashMap<>() : APIUtils.getOAuthHeader(accessToken));
+        Call<String> postCall;
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            postCall = retrofit.create(RedditAPI.class).getPost(id);
+        } else {
+            postCall = retrofit.create(RedditAPI.class).getPostOauth(id, APIUtils.getOAuthHeader(accessToken));
+        }
         postCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -48,13 +52,13 @@ public class FetchPost {
         });
     }
 
-    public static void fetchRandomPost(Executor executor, Handler handler, Retrofit applicationOnlyOauthRetrofit,
-                                       boolean isNSFW, FetchRandomPostListener fetchRandomPostListener) {
+    public static void fetchRandomPost(Executor executor, Handler handler, Retrofit retrofit, boolean isNSFW,
+                                       FetchRandomPostListener fetchRandomPostListener) {
         Call<String> call;
         if (isNSFW) {
-            call = applicationOnlyOauthRetrofit.create(RedditAPI.class).getRandomNSFWPostOauth();
+            call = retrofit.create(RedditAPI.class).getRandomNSFWPost();
         } else {
-            call = applicationOnlyOauthRetrofit.create(RedditAPI.class).getRandomPostOauth();
+            call = retrofit.create(RedditAPI.class).getRandomPost();
         }
 
         call.enqueue(new Callback<>() {

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
@@ -80,7 +81,12 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
             ids.deleteCharAt(ids.length() - 1);
         }
 
-        Call<String> historyPosts = retrofit.create(RedditAPI.class).getInfoOauth(ids.toString(), APIUtils.getOAuthHeader(accessToken));
+        Call<String> historyPosts;
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            historyPosts = retrofit.create(RedditAPI.class).getInfo(ids.toString());
+        } else {
+            historyPosts = retrofit.create(RedditAPI.class).getInfoOauth(ids.toString(), APIUtils.getOAuthHeader(accessToken));
+        }
 
         try {
             Response<String> response = historyPosts.execute();

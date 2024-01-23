@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -19,17 +20,25 @@ import retrofit2.Retrofit;
 
 public class FetchComment {
     public static void fetchComments(Executor executor, Handler handler, Retrofit retrofit,
-                                     @Nullable String accessToken, String article,
+                                     @Nullable String accessToken, @NonNull String accountName, String article,
                                      String commentId, SortType.Type sortType, String contextNumber,
                                      boolean expandChildren, CommentFilter commentFilter,
                                      FetchCommentListener fetchCommentListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> comments;
-        if (commentId == null) {
-            comments = api.getPostAndCommentsByIdOauth(article, sortType, APIUtils.getOAuthHeader(accessToken));
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            if (commentId == null) {
+                comments = api.getPostAndCommentsById(article, sortType);
+            } else {
+                comments = api.getPostAndCommentsSingleThreadById(article, commentId, sortType, contextNumber);
+            }
         } else {
-            comments = api.getPostAndCommentsSingleThreadByIdOauth(article, commentId, sortType, contextNumber,
-                    APIUtils.getOAuthHeader(accessToken));
+            if (commentId == null) {
+                comments = api.getPostAndCommentsByIdOauth(article, sortType, APIUtils.getOAuthHeader(accessToken));
+            } else {
+                comments = api.getPostAndCommentsSingleThreadByIdOauth(article, commentId, sortType, contextNumber,
+                        APIUtils.getOAuthHeader(accessToken));
+            }
         }
 
         comments.enqueue(new Callback<>() {
@@ -65,7 +74,7 @@ public class FetchComment {
     }
 
     public static void fetchMoreComment(Executor executor, Handler handler, Retrofit retrofit,
-                                        @Nullable String accessToken, String accountName,
+                                        @Nullable String accessToken, @NonNull String accountName,
                                         ArrayList<String> allChildren,
                                         boolean expandChildren, String postFullName,
                                         SortType.Type sortType,
@@ -81,8 +90,13 @@ public class FetchComment {
         }
 
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> moreComments = api.moreChildrenOauth(postFullName, childrenIds,
-                sortType, APIUtils.getOAuthHeader(accessToken));
+        Call<String> moreComments;
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            moreComments = api.moreChildren(postFullName, childrenIds, sortType);
+        } else {
+            moreComments = api.moreChildrenOauth(postFullName, childrenIds,
+                    sortType, APIUtils.getOAuthHeader(accessToken));
+        }
 
         moreComments.enqueue(new Callback<>() {
             @Override

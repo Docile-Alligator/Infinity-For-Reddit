@@ -92,6 +92,7 @@ import ml.docilealligator.infinityforreddit.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.StreamableVideo;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.apis.VReddIt;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBottomSheetFragment;
@@ -197,19 +198,19 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     private boolean useBottomAppBar;
 
     @Inject
-    @Named("application_only_oauth")
-    Retrofit applicationOnlyOauthRetrofit;
+    @Named("no_oauth")
+    Retrofit mRetrofit;
 
     @Inject
     @Named("redgifs")
-    Retrofit redgifsRetrofit;
+    Retrofit mRedgifsRetrofit;
 
     @Inject
     @Named("vReddIt")
-    Retrofit vReddItRetrofit;
+    Retrofit mVReddItRetrofit;
 
     @Inject
-    Provider<StreamableAPI> streamableApiProvider;
+    Provider<StreamableAPI> mStreamableApiProvider;
 
     @Inject
     @Named("default")
@@ -711,7 +712,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
     private void loadRedgifsVideo(String redgifsId, Bundle savedInstanceState) {
         progressBar.setVisibility(View.VISIBLE);
-        FetchRedgifsVideoLinks.fetchRedgifsVideoLinks(mExecutor, new Handler(), redgifsRetrofit,
+        FetchRedgifsVideoLinks.fetchRedgifsVideoLinks(mExecutor, new Handler(), mRedgifsRetrofit,
                 mCurrentAccountSharedPreferences, redgifsId, new FetchRedgifsVideoLinks.FetchRedgifsVideoLinksListener() {
                     @Override
                     public void success(String webm, String mp4) {
@@ -735,7 +736,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
     private void loadVReddItVideo(Bundle savedInstanceState) {
         progressBar.setVisibility(View.VISIBLE);
-        vReddItRetrofit.create(VReddIt.class).getRedirectUrl(getIntent().getStringExtra(EXTRA_V_REDD_IT_URL)).enqueue(new Callback<>() {
+        mVReddItRetrofit.create(VReddIt.class).getRedirectUrl(getIntent().getStringExtra(EXTRA_V_REDD_IT_URL)).enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 Uri redirectUri = Uri.parse(response.raw().request().url().toString());
@@ -744,7 +745,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                     List<String> segments = redirectUri.getPathSegments();
                     int commentsIndex = segments.lastIndexOf("comments");
                     String postId = segments.get(commentsIndex + 1);
-                    FetchPost.fetchPost(mExecutor, new Handler(), applicationOnlyOauthRetrofit, postId, null,
+                    FetchPost.fetchPost(mExecutor, new Handler(), mRetrofit, postId, null, Account.ANONYMOUS_ACCOUNT,
                             new FetchPost.FetchPostListener() {
                                 @Override
                                 public void fetchPostSuccess(Post post) {
@@ -814,7 +815,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
     private void loadStreamableVideo(String shortCode, Bundle savedInstanceState) {
         progressBar.setVisibility(View.VISIBLE);
-        FetchStreamableVideo.fetchStreamableVideo(mExecutor, new Handler(), streamableApiProvider, shortCode,
+        FetchStreamableVideo.fetchStreamableVideo(mExecutor, new Handler(), mStreamableApiProvider, shortCode,
                 new FetchStreamableVideo.FetchStreamableVideoListener() {
                     @Override
                     public void success(StreamableVideo streamableVideo) {

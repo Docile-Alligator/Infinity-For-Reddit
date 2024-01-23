@@ -137,8 +137,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private final BaseActivity mActivity;
     private final ViewPostDetailFragment mFragment;
     private final Executor mExecutor;
+    private final Retrofit mRetrofit;
     private final Retrofit mOauthRetrofit;
-    private final Retrofit mApplicationOnlyRetrofit;
     private final Retrofit mRedgifsRetrofit;
     private final Provider<StreamableAPI> mStreamableApiProvider;
     private final RedditDataRoomDatabase mRedditDataRoomDatabase;
@@ -221,7 +221,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
     public PostDetailRecyclerViewAdapter(@NonNull BaseActivity activity, ViewPostDetailFragment fragment,
                                          Executor executor, CustomThemeWrapper customThemeWrapper,
-                                         Retrofit oauthRetrofit, Retrofit applicationOnlyRetrofit,
+                                         Retrofit oauthRetrofit, Retrofit retrofit,
                                          Retrofit redgifsRetrofit, Provider<StreamableAPI> streamableApiProvider,
                                          RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
                                          boolean separatePostAndComments, @Nullable String accessToken,
@@ -235,8 +235,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mActivity = activity;
         mFragment = fragment;
         mExecutor = executor;
+        mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
-        mApplicationOnlyRetrofit = applicationOnlyRetrofit;
         mRedgifsRetrofit = redgifsRetrofit;
         mStreamableApiProvider = streamableApiProvider;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
@@ -523,7 +523,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 if (mPost.getAuthorIconUrl() == null) {
                     String authorName = mPost.isAuthorDeleted() ? mPost.getSubredditNamePrefixed().substring(2) : mPost.getAuthor();
                     LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase,
-                            authorName, mApplicationOnlyRetrofit, iconImageUrl -> {
+                            authorName, mRetrofit, iconImageUrl -> {
                         if (mActivity != null && getItemCount() > 0) {
                             if (iconImageUrl == null || iconImageUrl.equals("")) {
                                 mGlide.load(R.drawable.subreddit_default_icon)
@@ -556,7 +556,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             } else {
                 if (mPost.getSubredditIconUrl() == null) {
                     LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(),
-                            mRedditDataRoomDatabase, mApplicationOnlyRetrofit, mPost.getSubredditNamePrefixed().substring(2),
+                            mRedditDataRoomDatabase, mPost.getSubredditNamePrefixed().substring(2),
+                            mAccessToken, mAccountName, mOauthRetrofit, mRetrofit,
                             iconImageUrl -> {
                                 if (iconImageUrl == null || iconImageUrl.equals("")) {
                                     mGlide.load(R.drawable.subreddit_default_icon)
