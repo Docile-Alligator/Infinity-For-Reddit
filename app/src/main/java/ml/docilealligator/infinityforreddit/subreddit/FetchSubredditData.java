@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit.subreddit;
 
-import android.text.TextUtils;
-
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ public class FetchSubredditData {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Call<String> subredditData;
-        if (oauthRetrofit == null || TextUtils.isEmpty(accessToken)) {
+        if (oauthRetrofit == null) {
             subredditData = api.getSubredditData(subredditName);
         } else {
             RedditAPI oauthApi = oauthRetrofit.create(RedditAPI.class);

@@ -1430,7 +1430,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 }
                 subredditAutocompleteCall = mOauthRetrofit.create(RedditAPI.class).subredditAutocomplete(APIUtils.getOAuthHeader(mAccessToken),
                         editable.toString(), nsfw);
-                subredditAutocompleteCall.enqueue(new Callback<String>() {
+                subredditAutocompleteCall.enqueue(new Callback<>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if (response.isSuccessful()) {

@@ -582,7 +582,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     private void fetchSubredditData() {
         if (!mFetchSubredditInfoSuccess) {
-            FetchSubredditData.fetchSubredditData(mOauthRetrofit, mRetrofit, subredditName, mAccessToken, new FetchSubredditData.FetchSubredditDataListener() {
+            FetchSubredditData.fetchSubredditData(mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? null : mOauthRetrofit, mRetrofit, subredditName, mAccessToken, new FetchSubredditData.FetchSubredditDataListener() {
                 @Override
                 public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                     mNCurrentOnlineSubscribers = nCurrentOnlineSubscribers;
@@ -1587,6 +1587,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             SidebarFragment fragment = new SidebarFragment();
             Bundle bundle = new Bundle();
             bundle.putString(SidebarFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+            bundle.putString(SidebarFragment.EXTRA_ACCOUNT_NAME, mAccountName);
             bundle.putString(SidebarFragment.EXTRA_SUBREDDIT_NAME, subredditName);
             fragment.setArguments(bundle);
             return fragment;
