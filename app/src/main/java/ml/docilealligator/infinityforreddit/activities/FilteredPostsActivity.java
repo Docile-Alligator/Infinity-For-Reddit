@@ -167,7 +167,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         PostFilter postFilter = getIntent().getParcelableExtra(EXTRA_CONSTRUCTED_POST_FILTER);
         if (postFilter == null) {
             postFilter = new PostFilter();
-            postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
             switch (filter) {
                 case Post.NSFW_TYPE:
                     postFilter.onlyNSFW = true;
@@ -227,6 +226,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                 postFilter.containFlairs = flair;
             }
         }
+        postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
 
         if (postType == PostPagingSource.TYPE_USER) {
             userWhere = getIntent().getStringExtra(EXTRA_USER_WHERE);
