@@ -3,14 +3,12 @@ package ml.docilealligator.infinityforreddit.fragments;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -77,11 +75,7 @@ public class ThemePreviewPostsFragment extends Fragment {
         binding.upvoteButtonThemePreviewPostsFragment.setTextColor(customTheme.postIconAndInfoColor);
         binding.downvoteButtonThemePreviewPostsFragment.setIconTint(ColorStateList.valueOf(customTheme.postIconAndInfoColor));
         binding.commentsCountButtonThemePreviewPostsFragment.setTextColor(customTheme.postIconAndInfoColor);
-        Drawable commentIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_comment_grey_24dp);
-        if (commentIcon != null) {
-            commentIcon.setTint(customTheme.postIconAndInfoColor);
-        }
-        binding.commentsCountButtonThemePreviewPostsFragment.setCompoundDrawablesWithIntrinsicBounds(commentIcon, null, null, null);
+        binding.commentsCountButtonThemePreviewPostsFragment.setIconTint(ColorStateList.valueOf(customTheme.postIconAndInfoColor));
         binding.saveButtonThemePreviewPostsFragment.setIconTint(ColorStateList.valueOf(customTheme.postIconAndInfoColor));
         binding.shareButtonThemePreviewPostsFragment.setIconTint(ColorStateList.valueOf(customTheme.postIconAndInfoColor));
 

@@ -245,7 +245,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private boolean mFixedHeightPreviewInCard;
     private boolean mHideTextPostContent;
     private boolean mEasierToWatchInFullScreen;
-    private Drawable mCommentIcon;
     private ExoCreator mExoCreator;
     private Callback mCallback;
     private boolean canPlayVideo = true;
@@ -365,11 +364,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mVoteAndReplyUnavailableVoteButtonColor = customThemeWrapper.getVoteAndReplyUnavailableButtonColor();
             mPostIconAndInfoColor = customThemeWrapper.getPostIconAndInfoColor();
             mDividerColor = customThemeWrapper.getDividerColor();
-
-            mCommentIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_comment_grey_24dp);
-            if (mCommentIcon != null) {
-                mCommentIcon.setTint(mPostIconAndInfoColor);
-            }
 
             mScale = resources.getDisplayMetrics().density;
             mGlide = Glide.with(mActivity);
@@ -2807,7 +2801,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             scoreTextView.setTextColor(mPostIconAndInfoColor);
             downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             commentsCountButton.setTextColor(mPostIconAndInfoColor);
-            commentsCountButton.setIcon(mCommentIcon);
+            commentsCountButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             saveButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             shareButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
 
@@ -4146,7 +4140,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             scoreTextView.setTextColor(mPostIconAndInfoColor);
             downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             commentsCountButton.setTextColor(mPostIconAndInfoColor);
-            commentsCountButton.setIcon(mCommentIcon);
+            commentsCountButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             saveButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             shareButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             divider.setBackgroundColor(mDividerColor);
@@ -5597,7 +5591,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             scoreTextView.setTextColor(mPostIconAndInfoColor);
             downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             commentsCountButton.setTextColor(mPostIconAndInfoColor);
-            commentsCountButton.setIcon(mCommentIcon);
+            commentsCountButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             saveButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             shareButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
 

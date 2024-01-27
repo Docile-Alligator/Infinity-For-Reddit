@@ -25,7 +25,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -213,7 +212,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private final int mPostIconAndInfoColor;
     private final int mCommentColor;
 
-    private final Drawable mCommentIcon;
     private final float mScale;
     private final ExoCreator mExoCreator;
     private boolean canStartActivity = true;
@@ -330,11 +328,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mVoteAndReplyUnavailableVoteButtonColor = customThemeWrapper.getVoteAndReplyUnavailableButtonColor();
         mPostIconAndInfoColor = customThemeWrapper.getPostIconAndInfoColor();
         mCommentColor = customThemeWrapper.getCommentColor();
-
-        mCommentIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_comment_grey_24dp);
-        if (mCommentIcon != null) {
-            mCommentIcon.setTint(mPostIconAndInfoColor);
-        }
 
         mExoCreator = exoCreator;
 
@@ -1593,7 +1586,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             scoreTextView.setTextColor(mPostIconAndInfoColor);
             downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             commentsCountButton.setTextColor(mPostIconAndInfoColor);
-            commentsCountButton.setIcon(mCommentIcon);
+            commentsCountButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             saveButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             shareButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
         }
