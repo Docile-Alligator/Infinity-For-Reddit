@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.subreddit;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
 
@@ -11,17 +12,22 @@ public class SubredditListingDataSourceFactory extends DataSource.Factory {
     private final Retrofit retrofit;
     private final String query;
     private SortType sortType;
+    @Nullable
     private final String accessToken;
+    @NonNull
+    private final String accountName;
     private final boolean nsfw;
 
     private SubredditListingDataSource subredditListingDataSource;
     private final MutableLiveData<SubredditListingDataSource> subredditListingDataSourceMutableLiveData;
 
-    SubredditListingDataSourceFactory(Retrofit retrofit, String query, SortType sortType, String accessToken, boolean nsfw) {
+    SubredditListingDataSourceFactory(Retrofit retrofit, String query, SortType sortType, @Nullable String accessToken,
+                                      @NonNull String accountName, boolean nsfw) {
         this.retrofit = retrofit;
         this.query = query;
         this.sortType = sortType;
         this.accessToken = accessToken;
+        this.accountName = accountName;
         this.nsfw = nsfw;
         subredditListingDataSourceMutableLiveData = new MutableLiveData<>();
     }
@@ -29,7 +35,8 @@ public class SubredditListingDataSourceFactory extends DataSource.Factory {
     @NonNull
     @Override
     public DataSource create() {
-        subredditListingDataSource = new SubredditListingDataSource(retrofit, query, sortType, accessToken, nsfw);
+        subredditListingDataSource = new SubredditListingDataSource(retrofit, query, sortType, accessToken,
+                accountName, nsfw);
         subredditListingDataSourceMutableLiveData.postValue(subredditListingDataSource);
         return subredditListingDataSource;
     }

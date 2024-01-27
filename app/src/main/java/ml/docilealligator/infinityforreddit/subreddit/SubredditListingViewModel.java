@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.subreddit;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -21,8 +22,8 @@ public class SubredditListingViewModel extends ViewModel {
     private final LiveData<PagedList<SubredditData>> subreddits;
     private final MutableLiveData<SortType> sortTypeLiveData;
 
-    public SubredditListingViewModel(Retrofit retrofit, String query, SortType sortType, String accessToken, boolean nsfw) {
-        subredditListingDataSourceFactory = new SubredditListingDataSourceFactory(retrofit, query, sortType, accessToken, nsfw);
+    public SubredditListingViewModel(Retrofit retrofit, String query, SortType sortType, @Nullable String accessToken, @NonNull String accountName, boolean nsfw) {
+        subredditListingDataSourceFactory = new SubredditListingDataSourceFactory(retrofit, query, sortType, accessToken, accountName, nsfw);
 
         initialLoadingState = Transformations.switchMap(subredditListingDataSourceFactory.getSubredditListingDataSourceMutableLiveData(),
                 SubredditListingDataSource::getInitialLoadStateLiveData);
@@ -77,21 +78,26 @@ public class SubredditListingViewModel extends ViewModel {
         private final Retrofit retrofit;
         private final String query;
         private final SortType sortType;
+        @Nullable
         private final String accessToken;
+        @NonNull
+        private final String accountName;
         private final boolean nsfw;
 
-        public Factory(Retrofit retrofit, String query, SortType sortType, String accessToken, boolean nsfw) {
+        public Factory(Retrofit retrofit, String query, SortType sortType, @Nullable String accessToken,
+                       @NonNull String accountName, boolean nsfw) {
             this.retrofit = retrofit;
             this.query = query;
             this.sortType = sortType;
             this.accessToken = accessToken;
+            this.accountName = accountName;
             this.nsfw = nsfw;
         }
 
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new SubredditListingViewModel(retrofit, query, sortType, accessToken, nsfw);
+            return (T) new SubredditListingViewModel(retrofit, query, sortType, accessToken, accountName, nsfw);
         }
     }
 }

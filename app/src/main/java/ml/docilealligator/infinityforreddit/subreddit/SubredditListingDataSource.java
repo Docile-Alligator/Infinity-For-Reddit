@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.subreddit;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
 
@@ -15,7 +16,10 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
     private final Retrofit retrofit;
     private final String query;
     private final SortType sortType;
+    @Nullable
     private final String accessToken;
+    @NonNull
+    private final String accountName;
     private final boolean nsfw;
 
     private final MutableLiveData<NetworkState> paginationNetworkStateLiveData;
@@ -25,11 +29,13 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
     private LoadParams<String> params;
     private LoadCallback<String, SubredditData> callback;
 
-    SubredditListingDataSource(Retrofit retrofit, String query, SortType sortType, String accessToken, boolean nsfw) {
+    SubredditListingDataSource(Retrofit retrofit, String query, SortType sortType, @Nullable String accessToken,
+                               @NonNull String accountName, boolean nsfw) {
         this.retrofit = retrofit;
         this.query = query;
         this.sortType = sortType;
         this.accessToken = accessToken;
+        this.accountName = accountName;
         this.nsfw = nsfw;
         paginationNetworkStateLiveData = new MutableLiveData<>();
         initialLoadStateLiveData = new MutableLiveData<>();
@@ -52,8 +58,8 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, SubredditData> callback) {
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
-        FetchSubredditData.fetchSubredditListingData(retrofit, query, null, sortType.getType(), accessToken, nsfw,
-                new FetchSubredditData.FetchSubredditListingDataListener() {
+        FetchSubredditData.fetchSubredditListingData(retrofit, query, null, sortType.getType(), accessToken,
+                accountName, nsfw, new FetchSubredditData.FetchSubredditListingDataListener() {
                     @Override
                     public void onFetchSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
                         if (subredditData.size() == 0) {
@@ -87,8 +93,8 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
             return;
         }
 
-        FetchSubredditData.fetchSubredditListingData(retrofit, query, params.key, sortType.getType(), accessToken, nsfw,
-                new FetchSubredditData.FetchSubredditListingDataListener() {
+        FetchSubredditData.fetchSubredditListingData(retrofit, query, params.key, sortType.getType(), accessToken,
+                accountName, nsfw, new FetchSubredditData.FetchSubredditListingDataListener() {
                     @Override
                     public void onFetchSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
                         callback.onResult(subredditData, after);
