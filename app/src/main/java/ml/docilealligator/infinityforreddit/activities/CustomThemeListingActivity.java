@@ -161,6 +161,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
 
     @Override
     protected void applyCustomTheme() {
+        coordinatorLayout.setBackgroundColor(customThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
         applyFABTheme(fab);
     }
