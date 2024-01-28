@@ -62,8 +62,6 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
-    private String mAccessToken;
-    private String mAccountName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,16 +103,11 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
 
         String query = getIntent().getExtras().getString(EXTRA_QUERY);
 
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
-
         if (savedInstanceState == null) {
             mFragment = new UserListingFragment();
             Bundle bundle = new Bundle();
             bundle.putString(UserListingFragment.EXTRA_QUERY, query);
             bundle.putBoolean(UserListingFragment.EXTRA_IS_GETTING_USER_INFO, true);
-            bundle.putString(UserListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-            bundle.putString(UserListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
             bundle.putBoolean(UserListingFragment.EXTRA_IS_MULTI_SELECTION, getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false));
             mFragment.setArguments(bundle);
         } else {
@@ -128,6 +121,11 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
     @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
     }
 
     @Override

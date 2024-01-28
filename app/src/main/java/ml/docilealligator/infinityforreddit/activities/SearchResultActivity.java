@@ -134,8 +134,6 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     @Inject
     Executor executor;
     private Call<String> subredditAutocompleteCall;
-    private String mAccessToken;
-    private String mAccountName;
     private String mQuery;
     private String mSubredditName;
     private boolean mInsertSearchQuerySuccess;
@@ -204,9 +202,6 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
         fragmentManager = getSupportFragmentManager();
 
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
-
         if (savedInstanceState != null) {
             mInsertSearchQuerySuccess = savedInstanceState.getBoolean(INSERT_SEARCH_QUERY_SUCCESS_STATE);
         }
@@ -224,6 +219,11 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
     }
 
     @Override
@@ -299,7 +299,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 fab.setImageResource(R.drawable.ic_random_24dp);
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
-                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                     fab.setImageResource(R.drawable.ic_filter_24dp);
                     fabOption = SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS;
                 } else {
@@ -313,7 +313,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 fab.setImageResource(R.drawable.ic_keyboard_double_arrow_up_24);
                 break;
             default:
-                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                     fab.setImageResource(R.drawable.ic_filter_24dp);
                     fabOption = SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS;
                 } else {
@@ -383,15 +383,15 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         fab.setOnLongClickListener(view -> {
             FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment = new FABMoreOptionsBottomSheetFragment();
             Bundle bundle = new Bundle();
-            bundle.putBoolean(FABMoreOptionsBottomSheetFragment.EXTRA_ANONYMOUS_MODE, mAccountName.equals(Account.ANONYMOUS_ACCOUNT));
+            bundle.putBoolean(FABMoreOptionsBottomSheetFragment.EXTRA_ANONYMOUS_MODE, accountName.equals(Account.ANONYMOUS_ACCOUNT));
             fabMoreOptionsBottomSheetFragment.setArguments(bundle);
             fabMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
             return true;
         });
 
-        if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT)&& mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SEARCH_HISTORY, true) && !mInsertSearchQuerySuccess && mQuery != null) {
+        if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)&& mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SEARCH_HISTORY, true) && !mInsertSearchQuerySuccess && mQuery != null) {
             InsertRecentSearchQuery.insertRecentSearchQueryListener(executor, new Handler(getMainLooper()),
-                    mRedditDataRoomDatabase, mAccountName, mQuery, () -> mInsertSearchQuerySuccess = true);
+                    mRedditDataRoomDatabase, accountName, mQuery, () -> mInsertSearchQuerySuccess = true);
         }
     }
 
@@ -606,7 +606,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             return false;
         });
 
-        boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
+        boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
         thingEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -623,7 +623,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 if (subredditAutocompleteCall != null) {
                     subredditAutocompleteCall.cancel();
                 }
-                subredditAutocompleteCall = mOauthRetrofit.create(RedditAPI.class).subredditAutocomplete(APIUtils.getOAuthHeader(mAccessToken),
+                subredditAutocompleteCall = mOauthRetrofit.create(RedditAPI.class).subredditAutocomplete(APIUtils.getOAuthHeader(accessToken),
                         editable.toString(), nsfw);
                 subredditAutocompleteCall.enqueue(new Callback<String>() {
                     @Override
@@ -706,7 +706,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     private void random() {
         RandomBottomSheetFragment randomBottomSheetFragment = new RandomBottomSheetFragment();
         Bundle bundle = new Bundle();
-        bundle.putBoolean(RandomBottomSheetFragment.EXTRA_IS_NSFW, !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false));
+        bundle.putBoolean(RandomBottomSheetFragment.EXTRA_IS_NSFW, !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false));
         randomBottomSheetFragment.setArguments(bundle);
         randomBottomSheetFragment.show(getSupportFragmentManager(), randomBottomSheetFragment.getTag());
     }
@@ -775,8 +775,6 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     bundle.putString(PostFragment.EXTRA_NAME, mSubredditName);
                     bundle.putString(PostFragment.EXTRA_QUERY, mQuery);
                     bundle.putString(PostFragment.EXTRA_TRENDING_SOURCE, getIntent().getStringExtra(EXTRA_TRENDING_SOURCE));
-                    bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-                    bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                     mFragment.setArguments(bundle);
                     return mFragment;
                 }
@@ -785,8 +783,6 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     Bundle bundle = new Bundle();
                     bundle.putString(SubredditListingFragment.EXTRA_QUERY, mQuery);
                     bundle.putBoolean(SubredditListingFragment.EXTRA_IS_GETTING_SUBREDDIT_INFO, false);
-                    bundle.putString(SubredditListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-                    bundle.putString(SubredditListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                     mFragment.setArguments(bundle);
                     return mFragment;
                 }
@@ -795,8 +791,6 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     Bundle bundle = new Bundle();
                     bundle.putString(UserListingFragment.EXTRA_QUERY, mQuery);
                     bundle.putBoolean(UserListingFragment.EXTRA_IS_GETTING_USER_INFO, false);
-                    bundle.putString(UserListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-                    bundle.putString(UserListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                     mFragment.setArguments(bundle);
                     return mFragment;
                 }

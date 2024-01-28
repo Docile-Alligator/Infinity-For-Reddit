@@ -59,8 +59,6 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
     public static final String EXTRA_QUERY = "EQ";
     public static final String EXTRA_IS_GETTING_SUBREDDIT_INFO = "EIGSI";
-    public static final String EXTRA_ACCESS_TOKEN = "EAT";
-    public static final String EXTRA_ACCOUNT_NAME = "EAN";
     public static final String EXTRA_IS_MULTI_SELECTION = "EIMS";
 
     @BindView(R.id.coordinator_layout_subreddit_listing_fragment)
@@ -136,15 +134,13 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
         String query = getArguments().getString(EXTRA_QUERY);
         boolean isGettingSubredditInfo = getArguments().getBoolean(EXTRA_IS_GETTING_SUBREDDIT_INFO);
-        String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
-        String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
 
         String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_SUBREDDIT, SortType.Type.RELEVANCE.value);
         sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
-        boolean nsfw = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
+        boolean nsfw = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.NSFW_BASE, false);
 
         mAdapter = new SubredditListingRecyclerViewAdapter(mActivity, mExecutor, mOauthRetrofit, mRetrofit,
-                mCustomThemeWrapper, accessToken, accountName,
+                mCustomThemeWrapper, mActivity.accessToken, mActivity.accountName,
                 mRedditDataRoomDatabase, getArguments().getBoolean(EXTRA_IS_MULTI_SELECTION, false),
                 new SubredditListingRecyclerViewAdapter.Callback() {
                     @Override
@@ -180,7 +176,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         }
 
         SubredditListingViewModel.Factory factory = new SubredditListingViewModel.Factory(
-                mOauthRetrofit, query, sortType, accessToken, accountName, nsfw);
+                mOauthRetrofit, query, sortType, mActivity.accessToken, mActivity.accountName, nsfw);
         mSubredditListingViewModel = new ViewModelProvider(this, factory).get(SubredditListingViewModel.class);
         mSubredditListingViewModel.getSubreddits().observe(getViewLifecycleOwner(), subredditData -> mAdapter.submitList(subredditData));
 

@@ -221,8 +221,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private RequestManager mGlide;
     private Locale mLocale;
     private Menu mMenu;
-    private String mAccessToken;
-    private String mAccountName;
     private int postListPosition = -1;
     private String mSingleCommentId;
     private String mContextNumber;
@@ -273,9 +271,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
         mRecyclerView.addOnWindowFocusChangedListener(this::onWindowFocusChanged);
 
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
-
         mSavedIcon = getMenuItemIcon(R.drawable.ic_bookmark_toolbar_24dp);
         mUnsavedIcon = getMenuItemIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
 
@@ -305,7 +300,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         mLockFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
         mSwipeUpToHideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
         mExpandChildren = !mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_TOP_LEVEL_COMMENTS_FIRST, false);
-        mMarkPostsAsRead = mPostHistorySharedPreferences.getBoolean(mAccountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false);
+        mMarkPostsAsRead = mPostHistorySharedPreferences.getBoolean(activity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false);
         if (savedInstanceState == null) {
             mRespectSubredditRecommendedSortType = mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false);
             viewPostDetailFragmentId = System.currentTimeMillis();
@@ -570,8 +565,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     }
 
     private void bindView() {
-        if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && mMessageFullname != null) {
-            ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
+        if (!activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) && mMessageFullname != null) {
+            ReadMessage.readMessage(mOauthRetrofit, activity.accessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
                 @Override
                 public void readSuccess() {
                     mMessageFullname = null;
@@ -596,12 +591,12 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mPostAdapter = new PostDetailRecyclerViewAdapter(activity,
                     this, mExecutor, mCustomThemeWrapper, mOauthRetrofit, mRetrofit,
                     mRedgifsRetrofit, mStreamableApiProvider, mRedditDataRoomDatabase, mGlide,
-                    mSeparatePostAndComments, mAccessToken, mAccountName, mPost, mLocale,
+                    mSeparatePostAndComments, activity.accessToken, activity.accountName, mPost, mLocale,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
                     mExoCreator, post -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
             mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,
                     this, mCustomThemeWrapper, mExecutor, mRetrofit, mOauthRetrofit,
-                    mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
+                    activity.accessToken, activity.accountName, mPost, mLocale, mSingleCommentId,
                     isSingleCommentThreadMode, mSharedPreferences, mNsfwAndSpoilerSharedPreferences,
                     new CommentsRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                         @Override
@@ -676,7 +671,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mMenu.findItem(R.id.action_comment_view_post_detail_fragment).setVisible(true);
             mMenu.findItem(R.id.action_sort_view_post_detail_fragment).setVisible(true);
 
-            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            if (!activity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 if (mPost.isSaved()) {
                     saveItem.setVisible(true);
                     saveItem.setIcon(mSavedIcon);
@@ -697,7 +692,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 hideItem.setVisible(false);
             }
 
-            if (mPost.getAuthor().equals(mAccountName)) {
+            if (mPost.getAuthor().equals(activity.accountName)) {
                 if (mPost.getPostType() == Post.TEXT_TYPE) {
                     mMenu.findItem(R.id.action_edit_view_post_detail_fragment).setVisible(true);
                 }
@@ -789,7 +784,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         params.put(APIUtils.TEXT_KEY, flair.getText());
 
         mOauthRetrofit.create(RedditAPI.class).selectFlair(mPost.getSubredditNamePrefixed(),
-                APIUtils.getOAuthHeader(mAccessToken), params).enqueue(new Callback<String>() {
+                APIUtils.getOAuthHeader(activity.accessToken), params).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
@@ -943,7 +938,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     return true;
                 }
 
-                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                if (activity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                     showMessage(R.string.login_first);
                     return true;
                 }
@@ -960,10 +955,10 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             }
             return true;
         } else if (itemId == R.id.action_save_view_post_detail_fragment) {
-            if (mPost != null && !mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            if (mPost != null && !activity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 if (mPost.isSaved()) {
                     item.setIcon(mUnsavedIcon);
-                    SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
+                    SaveThing.unsaveThing(mOauthRetrofit, activity.accessToken, mPost.getFullName(),
                             new SaveThing.SaveThingListener() {
                                 @Override
                                 public void success() {
@@ -987,7 +982,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             });
                 } else {
                     item.setIcon(mSavedIcon);
-                    SaveThing.saveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
+                    SaveThing.saveThing(mOauthRetrofit, activity.accessToken, mPost.getFullName(),
                             new SaveThing.SaveThingListener() {
                                 @Override
                                 public void success() {
@@ -1024,11 +1019,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             startActivity(crosspostIntent);
             return true;
         } else if (itemId == R.id.action_hide_view_post_detail_fragment) {
-            if (mPost != null && !mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            if (mPost != null && !activity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 if (mPost.isHidden()) {
                     Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, getString(R.string.action_hide_post));
 
-                    HidePost.unhidePost(mOauthRetrofit, mAccessToken, mPost.getFullName(), new HidePost.HidePostListener() {
+                    HidePost.unhidePost(mOauthRetrofit, activity.accessToken, mPost.getFullName(), new HidePost.HidePostListener() {
                         @Override
                         public void success() {
                             mPost.setHidden(false);
@@ -1048,7 +1043,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 } else {
                     Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, getString(R.string.action_unhide_post));
 
-                    HidePost.hidePost(mOauthRetrofit, mAccessToken, mPost.getFullName(), new HidePost.HidePostListener() {
+                    HidePost.hidePost(mOauthRetrofit, activity.accessToken, mPost.getFullName(), new HidePost.HidePostListener() {
                         @Override
                         public void success() {
                             mPost.setHidden(true);
@@ -1080,7 +1075,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     .setTitle(R.string.delete_this_post)
                     .setMessage(R.string.are_you_sure)
                     .setPositiveButton(R.string.delete, (dialogInterface, i)
-                            -> DeleteThing.delete(mOauthRetrofit, mPost.getFullName(), mAccessToken, new DeleteThing.DeleteThingListener() {
+                            -> DeleteThing.delete(mOauthRetrofit, mPost.getFullName(), activity.accessToken, new DeleteThing.DeleteThingListener() {
                         @Override
                         public void deleteSuccess() {
                             Toast.makeText(activity, R.string.delete_post_success, Toast.LENGTH_SHORT).show();
@@ -1112,14 +1107,13 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         } else if (itemId == R.id.action_edit_flair_view_post_detail_fragment) {
             FlairBottomSheetFragment flairBottomSheetFragment = new FlairBottomSheetFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(FlairBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
             bundle.putString(FlairBottomSheetFragment.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
             bundle.putLong(FlairBottomSheetFragment.EXTRA_VIEW_POST_DETAIL_FRAGMENT_ID, viewPostDetailFragmentId);
             flairBottomSheetFragment.setArguments(bundle);
             flairBottomSheetFragment.show(activity.getSupportFragmentManager(), flairBottomSheetFragment.getTag());
             return true;
         } else if (itemId == R.id.action_report_view_post_detail_fragment) {
-            if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            if (activity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 Toast.makeText(activity, R.string.login_first, Toast.LENGTH_SHORT).show();
                 return true;
             }
@@ -1171,7 +1165,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private void tryMarkingPostAsRead() {
         if (mMarkPostsAsRead && mPost != null && !mPost.isRead()) {
             mPost.markAsRead();
-            InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, mPost.getId());
+            InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, activity.accountName, mPost.getId());
             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
         }
     }
@@ -1251,7 +1245,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         mGlide.clear(mFetchPostInfoImageView);
 
         Call<String> postAndComments;
-        if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+        if (activity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             if (isSingleCommentThreadMode && mSingleCommentId != null) {
                 postAndComments = mRetrofit.create(RedditAPI.class).getPostAndCommentsSingleThreadById(
                         subredditId, mSingleCommentId, sortType, mContextNumber);
@@ -1262,10 +1256,10 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         } else {
             if (isSingleCommentThreadMode && mSingleCommentId != null) {
                 postAndComments = mOauthRetrofit.create(RedditAPI.class).getPostAndCommentsSingleThreadByIdOauth(subredditId,
-                        mSingleCommentId, sortType, mContextNumber, APIUtils.getOAuthHeader(mAccessToken));
+                        mSingleCommentId, sortType, mContextNumber, APIUtils.getOAuthHeader(activity.accessToken));
             } else {
                 postAndComments = mOauthRetrofit.create(RedditAPI.class).getPostAndCommentsByIdOauth(subredditId,
-                        sortType, APIUtils.getOAuthHeader(mAccessToken));
+                        sortType, APIUtils.getOAuthHeader(activity.accessToken));
             }
         }
         postAndComments.enqueue(new Callback<>() {
@@ -1289,14 +1283,14 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                     ViewPostDetailFragment.this, mExecutor, mCustomThemeWrapper,
                                     mOauthRetrofit, mRetrofit, mRedgifsRetrofit,
                                     mStreamableApiProvider, mRedditDataRoomDatabase, mGlide, mSeparatePostAndComments,
-                                    mAccessToken, mAccountName, mPost, mLocale, mSharedPreferences,
+                                    activity.accessToken, activity.accountName, mPost, mLocale, mSharedPreferences,
                                     mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences,
                                     mPostDetailsSharedPreferences, mExoCreator,
                                     post1 -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
 
                             mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,
                                     ViewPostDetailFragment.this, mCustomThemeWrapper, mExecutor,
-                                    mRetrofit, mOauthRetrofit, mAccessToken, mAccountName, mPost, mLocale,
+                                    mRetrofit, mOauthRetrofit, activity.accessToken, activity.accountName, mPost, mLocale,
                                     mSingleCommentId, isSingleCommentThreadMode, mSharedPreferences,
                                     mNsfwAndSpoilerSharedPreferences,
                                     new CommentsRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
@@ -1434,7 +1428,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     e.printStackTrace();
                 }
             }
-            FetchSubredditData.fetchSubredditData(mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? null : mOauthRetrofit, mRetrofit, mPost.getSubredditName(), mAccessToken,
+            FetchSubredditData.fetchSubredditData(activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? null : mOauthRetrofit, mRetrofit, mPost.getSubredditName(), activity.accessToken,
                     new FetchSubredditData.FetchSubredditDataListener() {
                         @Override
                         public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
@@ -1478,8 +1472,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             commentId = mSingleCommentId;
         }
 
-        Retrofit retrofit = mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit;
-        FetchComment.fetchComments(mExecutor, new Handler(), retrofit, mAccessToken, mAccountName, mPost.getId(), commentId, sortType,
+        Retrofit retrofit = activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit;
+        FetchComment.fetchComments(mExecutor, new Handler(), retrofit, activity.accessToken, activity.accountName, mPost.getId(), commentId, sortType,
                 mContextNumber, mExpandChildren, mCommentFilter, new FetchComment.FetchCommentListener() {
                     @Override
                     public void onFetchCommentSuccess(ArrayList<Comment> expandedComments,
@@ -1565,8 +1559,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
         isLoadingMoreChildren = true;
 
-        Retrofit retrofit = mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit;
-        FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken, mAccountName,
+        Retrofit retrofit = activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit;
+        FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, activity.accessToken, activity.accountName,
                 children, mExpandChildren, mPost.getFullName(), sortType, new FetchComment.FetchMoreCommentListener() {
                     @Override
                     public void onFetchMoreCommentSuccess(ArrayList<Comment> topLevelComments,
@@ -1601,12 +1595,12 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
             if (fetchPost) {
                 Retrofit retrofit;
-                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                if (activity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                     retrofit = mRetrofit;
                 } else {
                     retrofit = mOauthRetrofit;
                 }
-                FetchPost.fetchPost(mExecutor, new Handler(), retrofit, mPost.getId(), mAccessToken, mAccountName,
+                FetchPost.fetchPost(mExecutor, new Handler(), retrofit, mPost.getId(), activity.accessToken, activity.accountName,
                         new FetchPost.FetchPostListener() {
                             @Override
                             public void fetchPostSuccess(Post post) {
@@ -1660,7 +1654,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.ID_KEY, mPost.getFullName());
-        mOauthRetrofit.create(RedditAPI.class).markNSFW(APIUtils.getOAuthHeader(mAccessToken), params)
+        mOauthRetrofit.create(RedditAPI.class).markNSFW(APIUtils.getOAuthHeader(activity.accessToken), params)
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -1698,7 +1692,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.ID_KEY, mPost.getFullName());
-        mOauthRetrofit.create(RedditAPI.class).unmarkNSFW(APIUtils.getOAuthHeader(mAccessToken), params)
+        mOauthRetrofit.create(RedditAPI.class).unmarkNSFW(APIUtils.getOAuthHeader(activity.accessToken), params)
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -1736,7 +1730,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.ID_KEY, mPost.getFullName());
-        mOauthRetrofit.create(RedditAPI.class).markSpoiler(APIUtils.getOAuthHeader(mAccessToken), params)
+        mOauthRetrofit.create(RedditAPI.class).markSpoiler(APIUtils.getOAuthHeader(activity.accessToken), params)
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -1774,7 +1768,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.ID_KEY, mPost.getFullName());
-        mOauthRetrofit.create(RedditAPI.class).unmarkSpoiler(APIUtils.getOAuthHeader(mAccessToken), params)
+        mOauthRetrofit.create(RedditAPI.class).unmarkSpoiler(APIUtils.getOAuthHeader(activity.accessToken), params)
                 .enqueue(new Callback<String>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -1810,7 +1804,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 .setTitle(R.string.delete_this_comment)
                 .setMessage(R.string.are_you_sure)
                 .setPositiveButton(R.string.delete, (dialogInterface, i)
-                        -> DeleteThing.delete(mOauthRetrofit, fullName, mAccessToken, new DeleteThing.DeleteThingListener() {
+                        -> DeleteThing.delete(mOauthRetrofit, fullName, activity.accessToken, new DeleteThing.DeleteThingListener() {
                     @Override
                     public void deleteSuccess() {
                         Toast.makeText(activity, R.string.delete_post_success, Toast.LENGTH_SHORT).show();

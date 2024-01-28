@@ -60,6 +60,9 @@ public class PostFilterUsageListingActivity extends BaseActivity {
     @Named("default")
     SharedPreferences sharedPreferences;
     @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
+    @Inject
     RedditDataRoomDatabase redditDataRoomDatabase;
     @Inject
     CustomThemeWrapper customThemeWrapper;
@@ -196,6 +199,11 @@ public class PostFilterUsageListingActivity extends BaseActivity {
     @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return sharedPreferences;
+    }
+
+    @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
     }
 
     @Override

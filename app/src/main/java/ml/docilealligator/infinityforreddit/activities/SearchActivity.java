@@ -129,8 +129,6 @@ public class SearchActivity extends BaseActivity {
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor executor;
-    private String mAccountName;
-    private String mAccessToken;
     private String query;
     private String subredditName;
     private boolean subredditIsUser;
@@ -175,9 +173,7 @@ public class SearchActivity extends BaseActivity {
             searchEditText.setHint(getText(R.string.search_only_users_hint));
         }
 
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
+        boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
 
         subredditAutocompleteRecyclerViewAdapter = new SubredditAutocompleteRecyclerViewAdapter(this,
                 mCustomThemeWrapper, subredditData -> {
@@ -200,7 +196,7 @@ public class SearchActivity extends BaseActivity {
             finish();
         });
 
-        if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             searchEditText.setImeOptions(searchEditText.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
         }
 
@@ -222,7 +218,7 @@ public class SearchActivity extends BaseActivity {
                         subredditAutocompleteCall.cancel();
                     }
 
-                    subredditAutocompleteCall = mOauthRetrofit.create(RedditAPI.class).subredditAutocomplete(APIUtils.getOAuthHeader(mAccessToken),
+                    subredditAutocompleteCall = mOauthRetrofit.create(RedditAPI.class).subredditAutocomplete(APIUtils.getOAuthHeader(accessToken),
                             s.toString(), nsfw);
                     subredditAutocompleteCall.enqueue(new Callback<>() {
                         @Override
@@ -283,7 +279,7 @@ public class SearchActivity extends BaseActivity {
                     .setTitle(R.string.confirm)
                     .setMessage(R.string.confirm_delete_all_recent_searches)
                     .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-                        executor.execute(() -> mRedditDataRoomDatabase.recentSearchQueryDao().deleteAllRecentSearchQueries(mAccountName));
+                        executor.execute(() -> mRedditDataRoomDatabase.recentSearchQueryDao().deleteAllRecentSearchQueries(accountName));
                     })
                     .setNegativeButton(R.string.no, null)
                     .show();
@@ -322,7 +318,7 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void bindView() {
-        if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+        if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             adapter = new SearchActivityRecyclerViewAdapter(this, mCustomThemeWrapper, new SearchActivityRecyclerViewAdapter.ItemOnClickListener() {
                 @Override
                 public void onClick(String query) {
@@ -340,7 +336,7 @@ public class SearchActivity extends BaseActivity {
 
             if (mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SEARCH_HISTORY, true)) {
                 mRecentSearchQueryViewModel = new ViewModelProvider(this,
-                        new RecentSearchQueryViewModel.Factory(mRedditDataRoomDatabase, mAccountName))
+                        new RecentSearchQueryViewModel.Factory(mRedditDataRoomDatabase, accountName))
                         .get(RecentSearchQueryViewModel.class);
 
                 mRecentSearchQueryViewModel.getAllRecentSearchQueries().observe(this, recentSearchQueries -> {
@@ -396,6 +392,11 @@ public class SearchActivity extends BaseActivity {
     @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
     }
 
     @Override

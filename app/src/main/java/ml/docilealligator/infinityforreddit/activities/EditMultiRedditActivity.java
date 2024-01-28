@@ -94,8 +94,6 @@ public class EditMultiRedditActivity extends BaseActivity {
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private String mAccessToken;
-    private String mAccountName;
     private MultiReddit multiReddit;
     private String multipath;
 
@@ -123,10 +121,7 @@ public class EditMultiRedditActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
-
-        if (mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT).equals(Account.ANONYMOUS_ACCOUNT)) {
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             visibilityLinearLayout.setVisibility(View.GONE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 nameEditText.setImeOptions(nameEditText.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
@@ -146,7 +141,7 @@ public class EditMultiRedditActivity extends BaseActivity {
 
     private void bindView() {
         if (multiReddit == null) {
-            if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 FetchMultiRedditInfo.anonymousFetchMultiRedditInfo(mExecutor, new Handler(),
                         mRedditDataRoomDatabase, multipath, new FetchMultiRedditInfo.FetchMultiRedditInfoListener() {
                             @Override
@@ -164,7 +159,7 @@ public class EditMultiRedditActivity extends BaseActivity {
                             }
                         });
             } else {
-                FetchMultiRedditInfo.fetchMultiRedditInfo(mRetrofit, mAccessToken, multipath, new FetchMultiRedditInfo.FetchMultiRedditInfoListener() {
+                FetchMultiRedditInfo.fetchMultiRedditInfo(mRetrofit, accessToken, multipath, new FetchMultiRedditInfo.FetchMultiRedditInfoListener() {
                     @Override
                     public void success(MultiReddit multiReddit) {
                         EditMultiRedditActivity.this.multiReddit = multiReddit;
@@ -217,7 +212,7 @@ public class EditMultiRedditActivity extends BaseActivity {
                 return true;
             }
 
-            if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 String name = nameEditText.getText().toString();
                 multiReddit.setDisplayName(name);
                 multiReddit.setName(name);
@@ -237,7 +232,7 @@ public class EditMultiRedditActivity extends BaseActivity {
             } else {
                 String jsonModel = new MultiRedditJSONModel(nameEditText.getText().toString(), descriptionEditText.getText().toString(),
                         visibilitySwitch.isChecked(), multiReddit.getSubreddits()).createJSONModel();
-                EditMultiReddit.editMultiReddit(mRetrofit, mAccessToken, multiReddit.getPath(),
+                EditMultiReddit.editMultiReddit(mRetrofit, accessToken, multiReddit.getPath(),
                         jsonModel, new EditMultiReddit.EditMultiRedditListener() {
                             @Override
                             public void success() {
@@ -276,6 +271,11 @@ public class EditMultiRedditActivity extends BaseActivity {
     @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
     }
 
     @Override

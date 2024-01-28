@@ -103,8 +103,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     @Inject
     Executor mExecutor;
     public SubredditViewModel mSubredditViewModel;
-    private String mAccessToken;
-    private String mAccountName;
     private String name;
     private String userWhere;
     private int postType;
@@ -158,8 +156,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setToolbarGoToTop(toolbar);
 
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
         name = getIntent().getStringExtra(EXTRA_NAME);
         postType = getIntent().getIntExtra(EXTRA_POST_TYPE, PostPagingSource.TYPE_FRONT_PAGE);
 
@@ -226,7 +222,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                 postFilter.containFlairs = flair;
             }
         }
-        postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
+        postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
 
         if (postType == PostPagingSource.TYPE_USER) {
             userWhere = getIntent().getStringExtra(EXTRA_USER_WHERE);
@@ -256,6 +252,11 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
     }
 
     @Override
@@ -318,8 +319,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
             Bundle bundle = new Bundle();
             bundle.putInt(PostFragment.EXTRA_POST_TYPE, postType);
             bundle.putParcelable(PostFragment.EXTRA_FILTER, postFilter);
-            bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-            bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
             if (postType == PostPagingSource.TYPE_USER) {
                 bundle.putString(PostFragment.EXTRA_USER_NAME, name);
                 bundle.putString(PostFragment.EXTRA_USER_WHERE, userWhere);
@@ -343,7 +342,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
             startActivityForResult(intent, CUSTOMIZE_POST_FILTER_ACTIVITY_REQUEST_CODE);
         });
 
-        if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+        if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             fab.setOnLongClickListener(view -> {
                 FilteredThingFABMoreOptionsBottomSheetFragment filteredThingFABMoreOptionsBottomSheetFragment
                         = new FilteredThingFABMoreOptionsBottomSheetFragment();
@@ -475,7 +474,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
 
     @Override
     public void markPostAsRead(Post post) {
-        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
+        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, accountName, post.getId());
     }
 
     @Override

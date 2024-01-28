@@ -118,7 +118,6 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     Executor mExecutor;
     private RequestManager mGlide;
     private Account selectedAccount;
-    private String mAccessToken;
     private String parentFullname;
     private int parentDepth;
     private int parentPosition;
@@ -161,8 +160,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
 
         mGlide = Glide.with(this);
 
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        if (mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT).equals(Account.ANONYMOUS_ACCOUNT)) {
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             finish();
             return;
         }
@@ -348,6 +346,11 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     }
 
     @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
+    }
+
+    @Override
     public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
@@ -493,10 +496,10 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     return;
                 }
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
-                        mAccessToken, binding.commentCommentEditText, binding.commentCoordinatorLayout, data.getData(), uploadedImages);
+                        accessToken, binding.commentCommentEditText, binding.commentCoordinatorLayout, data.getData(), uploadedImages);
             } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
-                        mAccessToken, binding.commentCommentEditText, binding.commentCoordinatorLayout, capturedImageUri, uploadedImages);
+                        accessToken, binding.commentCommentEditText, binding.commentCoordinatorLayout, capturedImageUri, uploadedImages);
             } else if (requestCode == MARKDOWN_PREVIEW_REQUEST_CODE) {
                 sendComment(mMenu == null ? null : mMenu.findItem(R.id.action_send_comment_activity));
             }

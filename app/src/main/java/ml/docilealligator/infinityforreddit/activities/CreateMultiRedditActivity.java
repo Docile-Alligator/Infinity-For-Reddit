@@ -54,8 +54,6 @@ public class CreateMultiRedditActivity extends BaseActivity {
     @Inject
     Executor mExecutor;
     private ActivityCreateMultiRedditBinding binding;
-    private String mAccessToken;
-    private String mAccountName;
     private ArrayList<String> mSubreddits;
 
     @Override
@@ -81,10 +79,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
         setSupportActionBar(binding.toolbarCreateMultiRedditActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
-
-        if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             binding.visibilityWrapperLinearLayoutCreateMultiRedditActivity.setVisibility(View.GONE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 binding.multiRedditNameEditTextCreateMultiRedditActivity.setImeOptions(binding.multiRedditNameEditTextCreateMultiRedditActivity.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
@@ -127,11 +122,11 @@ public class CreateMultiRedditActivity extends BaseActivity {
                 return true;
             }
 
-            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 String jsonModel = new MultiRedditJSONModel(binding.multiRedditNameEditTextCreateMultiRedditActivity.getText().toString(), binding.descriptionEditTextCreateMultiRedditActivity.getText().toString(),
                         binding.visibilitySwitchCreateMultiRedditActivity.isChecked(), mSubreddits).createJSONModel();
-                CreateMultiReddit.createMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
-                        "/user/" + mAccountName + "/m/" + binding.multiRedditNameEditTextCreateMultiRedditActivity.getText().toString(),
+                CreateMultiReddit.createMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
+                        "/user/" + accountName + "/m/" + binding.multiRedditNameEditTextCreateMultiRedditActivity.getText().toString(),
                         jsonModel, new CreateMultiReddit.CreateMultiRedditListener() {
                             @Override
                             public void success() {
@@ -187,6 +182,11 @@ public class CreateMultiRedditActivity extends BaseActivity {
     @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
     }
 
     @Override

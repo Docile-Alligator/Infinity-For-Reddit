@@ -110,8 +110,6 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private String mAccessToken;
-    private String mAccountName;
     private boolean mInsertSuccess = false;
     private boolean mInsertMultiredditSuccess = false;
     private boolean showMultiReddits = false;
@@ -164,9 +162,6 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setToolbarGoToTop(toolbar);
 
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
-
         if (savedInstanceState != null) {
             mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
             mInsertMultiredditSuccess = savedInstanceState.getBoolean(INSERT_MULTIREDDIT_STATE);
@@ -174,7 +169,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
             showMultiReddits = getIntent().getBooleanExtra(EXTRA_SHOW_MULTIREDDITS, false);
         }
 
-        if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             searchEditText.setImeOptions(searchEditText.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
         }
 
@@ -200,6 +195,11 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
     }
 
     @Override
@@ -319,8 +319,8 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
             return;
         }
 
-        if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !(!forceLoad && mInsertSuccess)) {
-            FetchSubscribedThing.fetchSubscribedThing(mOauthRetrofit, mAccessToken, mAccountName, null,
+        if (!accountName.equals(Account.ANONYMOUS_ACCOUNT) && !(!forceLoad && mInsertSuccess)) {
+            FetchSubscribedThing.fetchSubscribedThing(mOauthRetrofit, accessToken, accountName, null,
                     new ArrayList<>(), new ArrayList<>(),
                     new ArrayList<>(),
                     new FetchSubscribedThing.FetchSubscribedThingListener() {
@@ -333,7 +333,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                                     mExecutor,
                                     new Handler(),
                                     mRedditDataRoomDatabase,
-                                    mAccountName,
+                                    accountName,
                                     subscribedSubredditData,
                                     subscribedUserData,
                                     subredditData,
@@ -371,11 +371,11 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     }
 
     private void loadMultiReddits() {
-        if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-            FetchMyMultiReddits.fetchMyMultiReddits(mOauthRetrofit, mAccessToken, new FetchMyMultiReddits.FetchMyMultiRedditsListener() {
+        if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            FetchMyMultiReddits.fetchMyMultiReddits(mOauthRetrofit, accessToken, new FetchMyMultiReddits.FetchMyMultiRedditsListener() {
                 @Override
                 public void success(ArrayList<MultiReddit> multiReddits) {
-                    InsertMultireddit.insertMultireddits(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddits, mAccountName, () -> {
+                    InsertMultireddit.insertMultireddits(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddits, accountName, () -> {
                         mInsertMultiredditSuccess = true;
                         sectionsPagerAdapter.stopMultiRedditRefreshProgressbar();
                     });
@@ -397,13 +397,13 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                 .setMessage(R.string.delete_multi_reddit_dialog_message)
                 .setPositiveButton(R.string.delete, (dialogInterface, i)
                         -> {
-                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                        DeleteMultiredditInDatabase.deleteMultiredditInDatabase(mExecutor, new Handler(), mRedditDataRoomDatabase, mAccountName, multiReddit.getPath(),
+                    if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                        DeleteMultiredditInDatabase.deleteMultiredditInDatabase(mExecutor, new Handler(), mRedditDataRoomDatabase, accountName, multiReddit.getPath(),
                                 () -> Toast.makeText(SubscribedThingListingActivity.this,
                                         R.string.delete_multi_reddit_success, Toast.LENGTH_SHORT).show());
                     } else {
                         DeleteMultiReddit.deleteMultiReddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase,
-                                mAccessToken, mAccountName, multiReddit.getPath(), new DeleteMultiReddit.DeleteMultiRedditListener() {
+                                accessToken, accountName, multiReddit.getPath(), new DeleteMultiReddit.DeleteMultiRedditListener() {
                                     @Override
                                     public void success() {
                                         Toast.makeText(SubscribedThingListingActivity.this,
@@ -477,24 +477,18 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                     SubscribedSubredditsListingFragment fragment = new SubscribedSubredditsListingFragment();
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, false);
-                    bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
-                    bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                     fragment.setArguments(bundle);
                     return fragment;
                 }
                 case 1: {
                     FollowedUsersListingFragment fragment = new FollowedUsersListingFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString(FollowedUsersListingFragment.EXTRA_ACCOUNT_NAME, mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? Account.ANONYMOUS_ACCOUNT : mAccountName);
-                    bundle.putString(FollowedUsersListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                     fragment.setArguments(bundle);
                     return fragment;
                 }
                 default: {
                     MultiRedditListingFragment fragment = new MultiRedditListingFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString(MultiRedditListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-                    bundle.putString(MultiRedditListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                     fragment.setArguments(bundle);
                     return fragment;
                 }

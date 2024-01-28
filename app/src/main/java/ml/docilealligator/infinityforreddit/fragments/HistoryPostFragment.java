@@ -134,8 +134,6 @@ import retrofit2.Retrofit;
 
 public class HistoryPostFragment extends Fragment implements FragmentCommunicator {
 
-    public static final String EXTRA_ACCESS_TOKEN = "EAT";
-    public static final String EXTRA_ACCOUNT_NAME = "EAN";
     public static final String EXTRA_HISTORY_TYPE = "EHT";
     public static final String EXTRA_FILTER = "EF";
     public static final int HISTORY_TYPE_READ_POSTS = 1;
@@ -214,7 +212,6 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
     private LazyModeRunnable lazyModeRunnable;
     private CountDownTimer resumeLazyModeCountDownTimer;
     private float lazyModeInterval;
-    private String accountName;
     private int maxPosition = -1;
     private int postLayout;
     private PostFilter postFilter;
@@ -230,7 +227,6 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
     private ArrayList<String> readPosts;
     private Unbinder unbinder;
     private final Map<String, String> subredditOrUserIcons = new HashMap<>();
-    private String accessToken;
     private int historyType;
 
     public HistoryPostFragment() {
@@ -366,8 +362,6 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
             });
         }
 
-        accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
-        accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
         historyType = getArguments().getInt(EXTRA_HISTORY_TYPE, HISTORY_TYPE_READ_POSTS);
         int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
         rememberMutingOptionInPostFeed = mSharedPreferences.getBoolean(SharedPreferencesUtils.REMEMBER_MUTING_OPTION_IN_POST_FEED, false);
@@ -378,7 +372,7 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
 
             mAdapter = new HistoryPostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit,
                     mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
-                    accessToken, accountName, postType, postLayout, true,
+                    activity.accessToken, activity.accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences,
                     mExoCreator, new HistoryPostRecyclerViewAdapter.Callback() {
                 @Override
@@ -443,15 +437,15 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
 
         if (postFilter == null) {
             FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndReadPosts(mRedditDataRoomDatabase, mExecutor,
-                    new Handler(), accountName, PostFilterUsage.HISTORY_TYPE, PostFilterUsage.HISTORY_TYPE_USAGE_READ_POSTS, (postFilter, readPostList) -> {
+                    new Handler(), activity.accountName, PostFilterUsage.HISTORY_TYPE, PostFilterUsage.HISTORY_TYPE_USAGE_READ_POSTS, (postFilter, readPostList) -> {
                         if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                             this.postFilter = postFilter;
-                            postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.NSFW_BASE, false);
-                            initializeAndBindPostViewModel(accessToken);
+                            postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(activity.accountName + SharedPreferencesUtils.NSFW_BASE, false);
+                            initializeAndBindPostViewModel();
                         }
                     });
         } else {
-            initializeAndBindPostViewModel(accessToken);
+            initializeAndBindPostViewModel();
         }
 
         vibrateWhenActionTriggered = mSharedPreferences.getBoolean(SharedPreferencesUtils.VIBRATE_WHEN_ACTION_TRIGGERED, true);
@@ -649,15 +643,15 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
         }
     }
 
-    private void initializeAndBindPostViewModel(String accessToken) {
+    private void initializeAndBindPostViewModel() {
         if (postType == HistoryPostPagingSource.TYPE_READ_POSTS) {
             mHistoryPostViewModel = new ViewModelProvider(HistoryPostFragment.this, new HistoryPostViewModel.Factory(mExecutor,
-                    accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
-                    accountName, mSharedPreferences, HistoryPostPagingSource.TYPE_READ_POSTS, postFilter)).get(HistoryPostViewModel.class);
+                    activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, activity.accessToken,
+                    activity.accountName, mSharedPreferences, HistoryPostPagingSource.TYPE_READ_POSTS, postFilter)).get(HistoryPostViewModel.class);
         } else {
             mHistoryPostViewModel = new ViewModelProvider(HistoryPostFragment.this, new HistoryPostViewModel.Factory(mExecutor,
-                    accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
-                    accountName, mSharedPreferences, HistoryPostPagingSource.TYPE_READ_POSTS, postFilter)).get(HistoryPostViewModel.class);
+                    activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, activity.accessToken,
+                    activity.accountName, mSharedPreferences, HistoryPostPagingSource.TYPE_READ_POSTS, postFilter)).get(HistoryPostViewModel.class);
         }
 
         bindPostViewModel();
@@ -929,7 +923,7 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
         } else {
             if (isSubreddit) {
                 LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase,
-                        subredditOrUserName, accessToken, accountName, mOauthRetrofit, mRetrofit,
+                        subredditOrUserName, activity.accessToken, activity.accountName, mOauthRetrofit, mRetrofit,
                         iconImageUrl -> {
                             subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
                             loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);

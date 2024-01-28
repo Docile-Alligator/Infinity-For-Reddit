@@ -29,8 +29,6 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class PostHistoryFragment extends Fragment {
 
-    public static final String EXTRA_ACCOUNT_NAME = "EAN";
-
     @BindView(R.id.info_text_view_post_history_fragment)
     TextView infoTextView;
     @BindView(R.id.mark_posts_as_read_linear_layout_post_history_fragment)
@@ -83,8 +81,7 @@ public class PostHistoryFragment extends Fragment {
             Utils.setFontToAllTextViews(rootView, activity.typeface);
         }
 
-        String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
-        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+        if (activity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             infoTextView.setText(R.string.only_for_logged_in_user);
             markPostsAsReadLinearLayout.setVisibility(View.GONE);
             markPostsAsReadAfterVotingLinearLayout.setVisibility(View.GONE);
@@ -94,33 +91,33 @@ public class PostHistoryFragment extends Fragment {
         }
 
         markPostsAsReadSwitch.setChecked(postHistorySharedPreferences.getBoolean(
-                accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false));
+                activity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false));
         markPostsAsReadAfterVotingSwitch.setChecked(postHistorySharedPreferences.getBoolean(
-                accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false));
+                activity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false));
         markPostsAsReadOnScrollSwitch.setChecked(postHistorySharedPreferences.getBoolean(
-                accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_ON_SCROLL_BASE, false));
+                activity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_ON_SCROLL_BASE, false));
         hideReadPostsAutomaticallySwitch.setChecked(postHistorySharedPreferences.getBoolean(
-                accountName + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));
+                activity.accountName + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));
 
         markPostsAsReadLinearLayout.setOnClickListener(view -> {
             markPostsAsReadSwitch.performClick();
         });
 
         markPostsAsReadSwitch.setOnCheckedChangeListener((compoundButton, b) ->
-                postHistorySharedPreferences.edit().putBoolean(accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, b).apply());
+                postHistorySharedPreferences.edit().putBoolean(activity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, b).apply());
 
         markPostsAsReadAfterVotingLinearLayout.setOnClickListener(view -> markPostsAsReadAfterVotingSwitch.performClick());
 
         markPostsAsReadAfterVotingSwitch.setOnCheckedChangeListener((compoundButton, b) ->
-                postHistorySharedPreferences.edit().putBoolean(accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, b).apply());
+                postHistorySharedPreferences.edit().putBoolean(activity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, b).apply());
 
         markPostsAsReadOnScrollLinearLayout.setOnClickListener(view -> markPostsAsReadOnScrollSwitch.performClick());
 
-        markPostsAsReadOnScrollSwitch.setOnCheckedChangeListener((compoundButton, b) -> postHistorySharedPreferences.edit().putBoolean(accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_ON_SCROLL_BASE, b).apply());
+        markPostsAsReadOnScrollSwitch.setOnCheckedChangeListener((compoundButton, b) -> postHistorySharedPreferences.edit().putBoolean(activity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_ON_SCROLL_BASE, b).apply());
 
         hideReadPostsAutomaticallyLinearLayout.setOnClickListener(view -> hideReadPostsAutomaticallySwitch.performClick());
 
-        hideReadPostsAutomaticallySwitch.setOnCheckedChangeListener((compoundButton, b) -> postHistorySharedPreferences.edit().putBoolean(accountName + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, b).apply());
+        hideReadPostsAutomaticallySwitch.setOnCheckedChangeListener((compoundButton, b) -> postHistorySharedPreferences.edit().putBoolean(activity.accountName + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, b).apply());
 
         return rootView;
     }

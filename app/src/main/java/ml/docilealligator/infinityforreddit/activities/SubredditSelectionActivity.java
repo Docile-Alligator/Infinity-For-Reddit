@@ -90,8 +90,6 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private String mAccessToken;
-    private String mAccountName;
     private String mAccountProfileImageUrl;
     private boolean mInsertSuccess = false;
     private Fragment mFragment;
@@ -137,8 +135,8 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
         if (getIntent().hasExtra(EXTRA_SPECIFIED_ACCOUNT)) {
             Account specifiedAccount = getIntent().getParcelableExtra(EXTRA_SPECIFIED_ACCOUNT);
             if (specifiedAccount != null) {
-                mAccessToken = specifiedAccount.getAccessToken();
-                mAccountName = specifiedAccount.getAccountName();
+                accessToken = specifiedAccount.getAccessToken();
+                accountName = specifiedAccount.getAccountName();
                 mAccountProfileImageUrl = specifiedAccount.getProfileImageUrl();
 
                 mOauthRetrofit = mOauthRetrofit.newBuilder().client(new OkHttpClient.Builder().authenticator(new AnyAccountAccessTokenAuthenticator(mRetrofit, mRedditDataRoomDatabase, specifiedAccount, mCurrentAccountSharedPreferences))
@@ -149,13 +147,9 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
                         .build())
                         .build();
             } else {
-                mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-                mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
                 mAccountProfileImageUrl = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_IMAGE_URL, null);
             }
         } else {
-            mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-            mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
             mAccountProfileImageUrl = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_IMAGE_URL, null);
         }
 
@@ -173,6 +167,11 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
     @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
     }
 
     @Override
@@ -196,8 +195,6 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
         if (initializeFragment) {
             mFragment = new SubscribedSubredditsListingFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
-            bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
             bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_PROFILE_IMAGE_URL, mAccountProfileImageUrl);
             bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, true);
             if (getIntent().hasExtra(EXTRA_EXTRA_CLEAR_SELECTION)) {
@@ -211,7 +208,7 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
 
     private void loadSubscriptions() {
         if (!mInsertSuccess) {
-            FetchSubscribedThing.fetchSubscribedThing(mOauthRetrofit, mAccessToken, mAccountName, null,
+            FetchSubscribedThing.fetchSubscribedThing(mOauthRetrofit, accessToken, accountName, null,
                     new ArrayList<>(), new ArrayList<>(),
                     new ArrayList<>(),
                     new FetchSubscribedThing.FetchSubscribedThingListener() {
@@ -223,7 +220,7 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
                                     mExecutor,
                                     new Handler(),
                                     mRedditDataRoomDatabase,
-                                    mAccountName,
+                                    accountName,
                                     subscribedSubredditData,
                                     subscribedUserData,
                                     subredditData,

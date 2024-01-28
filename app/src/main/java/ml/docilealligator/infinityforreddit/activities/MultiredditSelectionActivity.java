@@ -75,8 +75,6 @@ public class MultiredditSelectionActivity extends BaseActivity implements Activi
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private String mAccessToken;
-    private String mAccountName;
     private boolean mInsertSuccess = false;
     private Fragment mFragment;
 
@@ -117,9 +115,6 @@ public class MultiredditSelectionActivity extends BaseActivity implements Activi
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
-
         if (savedInstanceState == null) {
             bindView(true);
         } else {
@@ -133,6 +128,11 @@ public class MultiredditSelectionActivity extends BaseActivity implements Activi
     @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
     }
 
     @Override
@@ -151,15 +151,13 @@ public class MultiredditSelectionActivity extends BaseActivity implements Activi
             return;
         }
 
-        if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+        if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             loadMultiReddits();
         }
 
         if (initializeFragment) {
             mFragment = new MultiRedditListingFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(MultiRedditListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
-            bundle.putString(MultiRedditListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
             bundle.putBoolean(MultiRedditListingFragment.EXTRA_IS_GETTING_MULTIREDDIT_INFO, true);
             mFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_multireddit_selection_activity, mFragment).commit();
@@ -168,11 +166,11 @@ public class MultiredditSelectionActivity extends BaseActivity implements Activi
 
     private void loadMultiReddits() {
         if (!mInsertSuccess) {
-            FetchMyMultiReddits.fetchMyMultiReddits(mOauthRetrofit, mAccessToken, new FetchMyMultiReddits.FetchMyMultiRedditsListener() {
+            FetchMyMultiReddits.fetchMyMultiReddits(mOauthRetrofit, accessToken, new FetchMyMultiReddits.FetchMyMultiRedditsListener() {
                 @Override
                 public void success(ArrayList<MultiReddit> multiReddits) {
                     InsertMultireddit.insertMultireddits(mExecutor, new Handler(), mRedditDataRoomDatabase,
-                            multiReddits, mAccountName, () -> {
+                            multiReddits, accountName, () -> {
                         mInsertSuccess = true;
                         ((MultiRedditListingFragment) mFragment).stopRefreshProgressbar();
                     });

@@ -163,8 +163,6 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     @Inject
     Executor mExecutor;
     private Account selectedAccount;
-    private String mAccessToken;
-    private String mAccountName;
     private String iconUrl;
     private String subredditName;
     private boolean subredditSelected = false;
@@ -229,9 +227,6 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
 
         resources = getResources();
-
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
 
         if (savedInstanceState != null) {
             selectedAccount = savedInstanceState.getParcelable(SELECTED_ACCOUNT_STATE);
@@ -350,7 +345,6 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
             if (flair == null) {
                 mFlairSelectionBottomSheetFragment = new FlairBottomSheetFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(FlairBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 bundle.putString(FlairBottomSheetFragment.EXTRA_SUBREDDIT_NAME, subredditName);
                 mFlairSelectionBottomSheetFragment.setArguments(bundle);
                 mFlairSelectionBottomSheetFragment.show(getSupportFragmentManager(), mFlairSelectionBottomSheetFragment.getTag());
@@ -443,6 +437,11 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     }
 
     @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
+    }
+
+    @Override
     public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
@@ -512,7 +511,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
 
     private void loadSubredditIcon() {
         LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditName,
-                mAccessToken, mAccountName, mOauthRetrofit, mRetrofit, iconImageUrl -> {
+                accessToken, accountName, mOauthRetrofit, mRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
             loadSubredditIconSuccessful = true;
@@ -742,7 +741,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         if (submitVideoOrGifPostEvent.postSuccess) {
             Intent intent = new Intent(this, ViewUserDetailActivity.class);
             intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
-                    mAccountName);
+                    accountName);
             startActivity(intent);
             finish();
         } else if (submitVideoOrGifPostEvent.errorProcessingVideoOrGif) {

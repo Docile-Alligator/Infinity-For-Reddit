@@ -105,8 +105,6 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     Executor mExecutor;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private FragmentManager fragmentManager;
-    private String mAccessToken;
-    private String mAccountName;
     private String mNewAccountName;
 
     @Override
@@ -156,9 +154,6 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         setToolbarGoToTop(mToolbar);
 
         fragmentManager = getSupportFragmentManager();
-
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
 
         if (savedInstanceState != null) {
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
@@ -219,6 +214,11 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     }
 
     @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
+    }
+
+    @Override
     public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
@@ -233,7 +233,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
 
     private void getCurrentAccountAndFetchMessage(Bundle savedInstanceState) {
         if (mNewAccountName != null) {
-            if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT) || !mAccountName.equals(mNewAccountName)) {
+            if (accountName.equals(Account.ANONYMOUS_ACCOUNT) || !accountName.equals(mNewAccountName)) {
                 SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
                         mExecutor, new Handler(), mNewAccountName, newAccount -> {
                             EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
@@ -241,7 +241,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
 
                             mNewAccountName = null;
                             if (newAccount != null) {
-                                mAccessToken = newAccount.getAccessToken();
+                                accessToken = newAccount.getAccessToken();
                             }
 
                             bindView(savedInstanceState);
@@ -300,9 +300,9 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             }
             return true;
         } else if (item.getItemId() == R.id.action_read_all_messages_inbox_activity) {
-            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 Toast.makeText(this, R.string.please_wait, Toast.LENGTH_SHORT).show();
-                mOauthRetrofit.create(RedditAPI.class).readAllMessages(APIUtils.getOAuthHeader(mAccessToken))
+                mOauthRetrofit.create(RedditAPI.class).readAllMessages(APIUtils.getOAuthHeader(accessToken))
                         .enqueue(new Callback<>() {
                             @Override
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -454,14 +454,12 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             if (position == 0) {
                 InboxFragment fragment = new InboxFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(InboxFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 bundle.putString(InboxFragment.EXTRA_MESSAGE_WHERE, FetchMessage.WHERE_INBOX);
                 fragment.setArguments(bundle);
                 return fragment;
             } else {
                 InboxFragment fragment = new InboxFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(InboxFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 bundle.putString(InboxFragment.EXTRA_MESSAGE_WHERE, FetchMessage.WHERE_MESSAGES);
                 fragment.setArguments(bundle);
                 return fragment;

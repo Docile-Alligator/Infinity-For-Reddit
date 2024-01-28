@@ -26,6 +26,7 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -47,6 +48,7 @@ import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
@@ -75,6 +77,10 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
     public SliderPanel mSliderPanel;
     @Nullable
     public ViewPager2 mViewPager2;
+    @Nullable
+    public String accessToken;
+    @NonNull
+    public String accountName = Account.ANONYMOUS_ACCOUNT;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -223,9 +229,14 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
                 systemVisibilityToolbarCollapsed = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             }
         }
+
+        accessToken = getCurrentAccountSharedPreferences().getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        accountName = getCurrentAccountSharedPreferences().getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
     }
 
     public abstract SharedPreferences getDefaultSharedPreferences();
+
+    public abstract SharedPreferences getCurrentAccountSharedPreferences();
 
     public abstract CustomThemeWrapper getCustomThemeWrapper();
 

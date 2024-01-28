@@ -80,8 +80,6 @@ public class RulesActivity extends BaseActivity {
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private String mAccessToken;
-    private String mAccountName;
     private String mSubredditName;
     private RulesRecyclerViewAdapter mAdapter;
 
@@ -125,8 +123,6 @@ public class RulesActivity extends BaseActivity {
                 }
             }
         }
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
 
         appBarLayout.setBackgroundColor(mCustomThemeWrapper.getColorPrimary());
         setSupportActionBar(toolbar);
@@ -138,8 +134,8 @@ public class RulesActivity extends BaseActivity {
         recyclerView.setAdapter(mAdapter);
 
         FetchRules.fetchRules(mExecutor, new Handler(),
-                mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit,
-                mAccessToken, mAccountName, mSubredditName, new FetchRules.FetchRulesListener() {
+                accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit,
+                accessToken, accountName, mSubredditName, new FetchRules.FetchRulesListener() {
                     @Override
                     public void success(ArrayList<Rule> rules) {
                         progressBar.setVisibility(View.GONE);
@@ -162,6 +158,11 @@ public class RulesActivity extends BaseActivity {
     @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
     }
 
     @Override
@@ -188,8 +189,8 @@ public class RulesActivity extends BaseActivity {
             progressBar.setVisibility(View.VISIBLE);
             errorTextView.setVisibility(View.GONE);
             FetchRules.fetchRules(mExecutor, new Handler(),
-                    mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit,
-                    mAccessToken, mAccountName, mSubredditName, new FetchRules.FetchRulesListener() {
+                    accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit,
+                    accessToken, accountName, mSubredditName, new FetchRules.FetchRulesListener() {
                 @Override
                 public void success(ArrayList<Rule> rules) {
                     progressBar.setVisibility(View.GONE);

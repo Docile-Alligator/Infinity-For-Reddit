@@ -65,8 +65,6 @@ import retrofit2.Retrofit;
 public class SidebarFragment extends Fragment {
 
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
-    public static final String EXTRA_ACCESS_TOKEN = "EAT";
-    public static final String EXTRA_ACCOUNT_NAME = "EAN";
     public SubredditViewModel mSubredditViewModel;
     @BindView(R.id.swipe_refresh_layout_sidebar_fragment)
     SwipeRefreshLayout swipeRefreshLayout;
@@ -85,8 +83,6 @@ public class SidebarFragment extends Fragment {
     @Inject
     Executor mExecutor;
     private ViewSubredditDetailActivity activity;
-    private String mAccessToken;
-    private String mAccountName;
     private String subredditName;
     private LinearLayoutManagerBugFixed linearLayoutManager;
     private int markdownColor;
@@ -110,8 +106,6 @@ public class SidebarFragment extends Fragment {
 
         EventBus.getDefault().register(this);
 
-        mAccessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
-        mAccountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
         subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
         if (subredditName == null) {
             Toast.makeText(activity, R.string.error_getting_subreddit_name, Toast.LENGTH_SHORT).show();
@@ -250,7 +244,7 @@ public class SidebarFragment extends Fragment {
 
     public void fetchSubredditData() {
         swipeRefreshLayout.setRefreshing(true);
-        FetchSubredditData.fetchSubredditData(mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? null : mOauthRetrofit, mRetrofit, subredditName, mAccessToken, new FetchSubredditData.FetchSubredditDataListener() {
+        FetchSubredditData.fetchSubredditData(activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? null : mOauthRetrofit, mRetrofit, subredditName, activity.accessToken, new FetchSubredditData.FetchSubredditDataListener() {
             @Override
             public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                 swipeRefreshLayout.setRefreshing(false);

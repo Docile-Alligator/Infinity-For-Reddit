@@ -50,9 +50,6 @@ import retrofit2.Retrofit;
  */
 public class FollowedUsersListingFragment extends Fragment implements FragmentCommunicator {
 
-    public static final String EXTRA_ACCOUNT_NAME = "EAN";
-    public static final String EXTRA_ACCESS_TOKEN = "EAT";
-
     @BindView(R.id.swipe_refresh_layout_followed_users_listing_fragment)
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view_followed_users_listing_fragment)
@@ -109,20 +106,18 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
 
         mGlide = Glide.with(this);
 
-        String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
-        String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
-        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+        if (mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             mSwipeRefreshLayout.setEnabled(false);
         }
         mLinearLayoutManager = new LinearLayoutManagerBugFixed(mActivity);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         FollowedUsersRecyclerViewAdapter adapter = new FollowedUsersRecyclerViewAdapter(mActivity,
-                mExecutor, mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, accessToken, accountName);
+                mExecutor, mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, mActivity.accessToken, mActivity.accountName);
         mRecyclerView.setAdapter(adapter);
         new FastScrollerBuilder(mRecyclerView).useMd2Style().build();
 
         mSubscribedUserViewModel = new ViewModelProvider(this,
-                new SubscribedUserViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, accountName))
+                new SubscribedUserViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, mActivity.accountName))
                 .get(SubscribedUserViewModel.class);
 
         mSubscribedUserViewModel.getAllSubscribedUsers().observe(getViewLifecycleOwner(), subscribedUserData -> {

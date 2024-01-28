@@ -73,6 +73,9 @@ public class CustomThemeListingActivity extends BaseActivity implements
     @Named("default")
     SharedPreferences sharedPreferences;
     @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
+    @Inject
     RedditDataRoomDatabase redditDataRoomDatabase;
     @Inject
     CustomThemeWrapper customThemeWrapper;
@@ -144,6 +147,11 @@ public class CustomThemeListingActivity extends BaseActivity implements
     @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return sharedPreferences;
+    }
+
+    @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
     }
 
     @Override

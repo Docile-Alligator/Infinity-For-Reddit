@@ -101,8 +101,6 @@ public class TrendingActivity extends BaseActivity {
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private String mAccessToken;
-    private String mAccountName;
     private boolean isRefreshing = false;
     private ArrayList<TrendingSearch> trendingSearches;
     private TrendingSearchRecyclerViewAdapter adapter;
@@ -150,9 +148,6 @@ public class TrendingActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setToolbarGoToTop(toolbar);
-
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
 
         mGlide = Glide.with(this);
 
@@ -209,10 +204,10 @@ public class TrendingActivity extends BaseActivity {
         adapter.setTrendingSearches(null);
         Handler handler = new Handler();
         Call<String> trendingCall;
-        if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             trendingCall = mRetrofit.create(RedditAPI.class).getTrendingSearches();
         } else {
-            trendingCall = mOauthRetrofit.create(RedditAPI.class).getTrendingSearchesOauth(APIUtils.getOAuthHeader(mAccessToken));
+            trendingCall = mOauthRetrofit.create(RedditAPI.class).getTrendingSearchesOauth(APIUtils.getOAuthHeader(accessToken));
         }
         trendingCall.enqueue(new Callback<>() {
             @Override
@@ -319,6 +314,11 @@ public class TrendingActivity extends BaseActivity {
     @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
     }
 
     @Override

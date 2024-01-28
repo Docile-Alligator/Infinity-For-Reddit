@@ -50,8 +50,6 @@ import retrofit2.Retrofit;
 
 public class MultiRedditListingFragment extends Fragment implements FragmentCommunicator {
 
-    public static final String EXTRA_ACCOUNT_NAME = "EAN";
-    public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_IS_GETTING_MULTIREDDIT_INFO = "EIGMI";
 
     @BindView(R.id.swipe_refresh_layout_multi_reddit_listing_fragment)
@@ -108,11 +106,9 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
             }
         }
 
-        String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
-        String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         boolean isGettingMultiredditInfo = getArguments().getBoolean(EXTRA_IS_GETTING_MULTIREDDIT_INFO, false);
 
-        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+        if (mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             mSwipeRefreshLayout.setEnabled(false);
         }
 
@@ -121,8 +117,8 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
         mLinearLayoutManager = new LinearLayoutManagerBugFixed(mActivity);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         MultiRedditListingRecyclerViewAdapter adapter = new MultiRedditListingRecyclerViewAdapter(mActivity,
-                mExecutor, mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, accessToken,
-                accountName, new MultiRedditListingRecyclerViewAdapter.OnItemClickListener() {
+                mExecutor, mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, mActivity.accessToken,
+                mActivity.accountName, new MultiRedditListingRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onClick(MultiReddit multiReddit) {
                 if (mActivity instanceof MultiredditSelectionActivity) {
@@ -158,7 +154,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
         new FastScrollerBuilder(mRecyclerView).useMd2Style().build();
 
         mMultiRedditViewModel = new ViewModelProvider(this,
-                new MultiRedditViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, accountName))
+                new MultiRedditViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, mActivity.accountName))
                 .get(MultiRedditViewModel.class);
 
         mMultiRedditViewModel.getAllMultiReddits().observe(getViewLifecycleOwner(), subscribedUserData -> {

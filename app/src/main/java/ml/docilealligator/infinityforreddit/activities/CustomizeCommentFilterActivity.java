@@ -53,6 +53,9 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
     SharedPreferences mSharedPreferences;
     @Inject
     @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
+    @Inject
+    @Named("current_account")
     SharedPreferences currentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
@@ -154,6 +157,11 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
     @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
+    }
+
+    @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
     }
 
     @Override

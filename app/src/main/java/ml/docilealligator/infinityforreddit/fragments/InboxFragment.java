@@ -47,7 +47,6 @@ import retrofit2.Retrofit;
 
 public class InboxFragment extends Fragment implements FragmentCommunicator {
 
-    public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_MESSAGE_WHERE = "EMT";
     @BindView(R.id.swipe_refresh_layout_inbox_fragment)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -70,7 +69,6 @@ public class InboxFragment extends Fragment implements FragmentCommunicator {
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
-    private String mAccessToken;
     private String mWhere;
     private MessageRecyclerViewAdapter mAdapter;
     private RequestManager mGlide;
@@ -98,7 +96,6 @@ public class InboxFragment extends Fragment implements FragmentCommunicator {
         if (arguments == null) {
             return rootView;
         }
-        mAccessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         mGlide = Glide.with(this);
 
         if (mActivity.isImmersiveInterface()) {
@@ -107,7 +104,7 @@ public class InboxFragment extends Fragment implements FragmentCommunicator {
 
         mWhere = arguments.getString(EXTRA_MESSAGE_WHERE, FetchMessage.WHERE_INBOX);
         mAdapter = new MessageRecyclerViewAdapter(mActivity, mOauthRetrofit, mCustomThemeWrapper,
-                mAccessToken, mWhere, () -> mMessageViewModel.retryLoadingMore());
+                mActivity.accessToken, mWhere, () -> mMessageViewModel.retryLoadingMore());
         mLinearLayoutManager = new LinearLayoutManagerBugFixed(mActivity);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
@@ -128,7 +125,7 @@ public class InboxFragment extends Fragment implements FragmentCommunicator {
         }
 
         MessageViewModel.Factory factory = new MessageViewModel.Factory(mOauthRetrofit,
-                getResources().getConfiguration().locale, mAccessToken, mWhere);
+                getResources().getConfiguration().locale, mActivity.accessToken, mWhere);
         mMessageViewModel = new ViewModelProvider(this, factory).get(MessageViewModel.class);
         mMessageViewModel.getMessages().observe(getViewLifecycleOwner(), messages -> mAdapter.submitList(messages));
 

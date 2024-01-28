@@ -38,7 +38,6 @@ import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.PrivateMessagesDetailRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -49,7 +48,6 @@ import ml.docilealligator.infinityforreddit.events.RepliedToPrivateMessageEvent;
 import ml.docilealligator.infinityforreddit.message.Message;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
 import ml.docilealligator.infinityforreddit.message.ReplyMessage;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 public class ViewPrivateMessagesActivity extends BaseActivity implements ActivityToolbarInterface {
@@ -97,8 +95,6 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     Message privateMessage;
     @State
     Message replyTo;
-    private String mAccessToken;
-    private String mAccountName;
     private String mUserAvatar;
     private ArrayList<ProvideUserAvatarCallback> mProvideUserAvatarCallbacks;
     private boolean isLoadingUserAvatar = false;
@@ -133,9 +129,6 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
 
         mProvideUserAvatarCallbacks = new ArrayList<>();
 
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
-
         if (savedInstanceState != null) {
             mUserAvatar = savedInstanceState.getString(USER_AVATAR_STATE);
             if (privateMessage == null) {
@@ -150,7 +143,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
 
     private void bindView() {
         if (privateMessage != null) {
-            if (privateMessage.getAuthor().equals(mAccountName)) {
+            if (privateMessage.getAuthor().equals(accountName)) {
                 setTitle(privateMessage.getDestination());
                 mToolbar.setOnClickListener(view -> {
                     if (privateMessage.isDestinationDeleted()) {
@@ -173,7 +166,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
             }
         }
         mAdapter = new PrivateMessagesDetailRecyclerViewAdapter(this, mSharedPreferences,
-                getResources().getConfiguration().locale, privateMessage, mAccountName, mCustomThemeWrapper);
+                getResources().getConfiguration().locale, privateMessage, accountName, mCustomThemeWrapper);
         mLinearLayoutManager = new LinearLayoutManagerBugFixed(this);
         mLinearLayoutManager.setStackFromEnd(true);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -191,7 +184,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
                         isSendingMessage = true;
                         mSendImageView.setColorFilter(mSecondaryTextColor, android.graphics.PorterDuff.Mode.SRC_IN);
                         ReplyMessage.replyMessage(mEditText.getText().toString(), replyTo.getFullname(),
-                                getResources().getConfiguration().locale, mOauthRetrofit, mAccessToken,
+                                getResources().getConfiguration().locale, mOauthRetrofit, accessToken,
                                 new ReplyMessage.ReplyMessageListener() {
                                     @Override
                                     public void replyMessageSuccess(Message message) {
@@ -229,7 +222,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
                         }
                         if (fullnames.length() > 0) {
                             fullnames.deleteCharAt(fullnames.length() - 1);
-                            ReadMessage.readMessage(mOauthRetrofit, mAccessToken, fullnames.toString(),
+                            ReadMessage.readMessage(mOauthRetrofit, accessToken, fullnames.toString(),
                                     new ReadMessage.ReadMessageListener() {
                                         @Override
                                         public void readSuccess() {}
@@ -303,6 +296,11 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     }
 
     @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
+    }
+
+    @Override
     public CustomThemeWrapper getCustomThemeWrapper() {
         return mCustomThemeWrapper;
     }
@@ -334,10 +332,10 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     public void onPassPrivateMessageEvent(PassPrivateMessageEvent passPrivateMessageEvent) {
         privateMessage = passPrivateMessageEvent.message;
         if (privateMessage != null) {
-            if (privateMessage.getAuthor().equals(mAccountName)) {
+            if (privateMessage.getAuthor().equals(accountName)) {
                 if (privateMessage.getReplies() != null) {
                     for (int i = privateMessage.getReplies().size() - 1; i >= 0; i--) {
-                        if (!privateMessage.getReplies().get(i).getAuthor().equals(mAccountName)) {
+                        if (!privateMessage.getReplies().get(i).getAuthor().equals(accountName)) {
                             replyTo = privateMessage.getReplies().get(i);
                             break;
                         }
