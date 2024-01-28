@@ -802,7 +802,7 @@ public class CustomThemeWrapper {
         customTheme.colorPrimary = Color.parseColor("#FFFFFF");
         customTheme.colorPrimaryDark = Color.parseColor("#FFFFFF");
         customTheme.colorAccent = Color.parseColor("#000000");
-        customTheme.colorPrimaryLightTheme = Color.parseColor("#FFFFFF");
+        customTheme.colorPrimaryLightTheme = Color.parseColor("#000000");
         customTheme.primaryTextColor = Color.parseColor("#000000");
         customTheme.secondaryTextColor = Color.parseColor("#8A000000");
         customTheme.postTitleColor = Color.parseColor("#000000");
@@ -810,7 +810,7 @@ public class CustomThemeWrapper {
         customTheme.readPostTitleColor = Color.parseColor("#9D9D9D");
         customTheme.readPostContentColor = Color.parseColor("#9D9D9D");
         customTheme.commentColor = Color.parseColor("#000000");
-        customTheme.buttonTextColor = Color.parseColor("#000000");
+        customTheme.buttonTextColor = Color.parseColor("#FFFFFF");
         customTheme.backgroundColor = Color.parseColor("#FFFFFF");
         customTheme.cardViewBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.readPostCardViewBackgroundColor = Color.parseColor("#F5F5F5");
