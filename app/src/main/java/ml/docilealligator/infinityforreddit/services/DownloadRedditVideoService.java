@@ -662,6 +662,9 @@ public class DownloadRedditVideoService extends Service {
                 deleteIntent.putExtra(DownloadedMediaDeleteActionBroadcastReceiver.EXTRA_NOTIFICATION_ID, NotificationUtils.DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID + randomNotificationIdOffset);
                 PendingIntent deleteActionPendingIntent = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.getBroadcast(this, 2, deleteIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE) : PendingIntent.getBroadcast(this, 2, deleteIntent, PendingIntent.FLAG_CANCEL_CURRENT);
                 builder.addAction(new NotificationCompat.Action(R.drawable.ic_notification, getString(R.string.delete), deleteActionPendingIntent));
+            } else {
+                builder.setContentIntent(null);
+                builder.clearActions();
             }
             notificationManager.notify(NotificationUtils.DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID + randomNotificationIdOffset, builder.build());
         }
