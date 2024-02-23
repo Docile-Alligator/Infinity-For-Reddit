@@ -329,6 +329,7 @@
             android:textStyle="bold"
             android:fontFamily="?attr/font_family"
             app:strokeWidth="0dp"
+            app:icon="@drawable/ic_comment_grey_24dp"
             app:iconTint="@null"
             app:iconSize="24dp"
             app:iconPadding="12dp"
