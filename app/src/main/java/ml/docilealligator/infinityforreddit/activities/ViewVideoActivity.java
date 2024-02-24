@@ -50,6 +50,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Tracks;
@@ -183,6 +184,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
     private String videoDownloadUrl;
     private String videoFileName;
+    private String videoFallbackHLSUrl;
     private String subredditName;
     private String id;
     private boolean wasPlaying;
@@ -409,6 +411,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         Post post = intent.getParcelableExtra(EXTRA_POST);
         if (post != null) {
             titleTextView.setText(post.getTitle());
+            videoFallbackHLSUrl = post.getVideoFallBackHLSUrl();
         }
 
         trackSelector = new DefaultTrackSelector(this);
@@ -505,6 +508,68 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 }
             });
         }
+
+        player.addListener(new Player.Listener() {
+            @Override
+            public void onTracksChanged(@NonNull Tracks tracks) {
+                ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
+                if (!trackGroups.isEmpty()) {
+                    if (videoType == VIDEO_TYPE_NORMAL) {
+                        hdButton.setVisibility(View.VISIBLE);
+                        hdButton.setOnClickListener(view -> {
+                            TrackSelectionDialogBuilder builder = new TrackSelectionDialogBuilder(ViewVideoActivity.this, getString(R.string.select_video_quality), player, C.TRACK_TYPE_VIDEO);
+                            builder.setShowDisableOption(true);
+                            builder.setAllowAdaptiveSelections(false);
+                            Dialog dialog = builder.setTheme(R.style.MaterialAlertDialogTheme).build();
+                            dialog.show();
+                            if (dialog instanceof AlertDialog) {
+                                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+                                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+                            }
+                        });
+                    }
+
+                    for (Tracks.Group trackGroup : tracks.getGroups()) {
+                        if (trackGroup.getType() == C.TRACK_TYPE_AUDIO) {
+                            if (videoType == VIDEO_TYPE_NORMAL && trackGroup.length > 1) {
+                                // Reddit video HLS usually has two audio tracks. The first is mono.
+                                // The second (index 1) is stereo.
+                                // Select the stereo audio track if possible.
+                                trackSelector.setParameters(
+                                        trackSelector.buildUponParameters()
+                                                .setOverrideForType(new TrackSelectionOverride(
+                                                                trackGroup.getMediaTrackGroup(),
+                                                                1
+                                                        )
+                                                )
+                                );
+                            }
+                            if (muteButton.getVisibility() != View.VISIBLE) {
+                                muteButton.setVisibility(View.VISIBLE);
+                                muteButton.setOnClickListener(view -> {
+                                    if (isMute) {
+                                        isMute = false;
+                                        player.setVolume(1f);
+                                        muteButton.setIconResource(R.drawable.ic_unmute_24dp);
+                                    } else {
+                                        isMute = true;
+                                        player.setVolume(0f);
+                                        muteButton.setIconResource(R.drawable.ic_mute_24dp);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                } else {
+                    muteButton.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onPlayerError(@NonNull PlaybackException error) {
+                loadFallbackVideo(savedInstanceState);
+            }
+        });
 
         if (savedInstanceState == null) {
             mVideoUri = intent.getData();
@@ -623,63 +688,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         } else {
             muteButton.setIconResource(R.drawable.ic_unmute_24dp);
         }
-
-        player.addListener(new Player.Listener() {
-            @Override
-            public void onTracksChanged(@NonNull Tracks tracks) {
-                ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
-                if (!trackGroups.isEmpty()) {
-                    if (videoType == VIDEO_TYPE_NORMAL) {
-                        hdButton.setVisibility(View.VISIBLE);
-                        hdButton.setOnClickListener(view -> {
-                            TrackSelectionDialogBuilder builder = new TrackSelectionDialogBuilder(ViewVideoActivity.this, getString(R.string.select_video_quality), player, C.TRACK_TYPE_VIDEO);
-                            builder.setShowDisableOption(true);
-                            builder.setAllowAdaptiveSelections(false);
-                            Dialog dialog = builder.setTheme(R.style.MaterialAlertDialogTheme).build();
-                            dialog.show();
-                            if (dialog instanceof AlertDialog) {
-                                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
-                                ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
-                            }
-                        });
-                    }
-
-                    for (Tracks.Group trackGroup : tracks.getGroups()) {
-                        if (trackGroup.getType() == C.TRACK_TYPE_AUDIO) {
-                            if (videoType == VIDEO_TYPE_NORMAL && trackGroup.length > 1) {
-                                // Reddit video HLS usually has two audio tracks. The first is mono.
-                                // The second (index 1) is stereo.
-                                // Select the stereo audio track if possible.
-                                trackSelector.setParameters(
-                                        trackSelector.buildUponParameters()
-                                                .setOverrideForType(new TrackSelectionOverride(
-                                                                trackGroup.getMediaTrackGroup(),
-                                                                1
-                                                        )
-                                                )
-                                );
-                            }
-                            if (muteButton.getVisibility() != View.VISIBLE) {
-                                muteButton.setVisibility(View.VISIBLE);
-                                muteButton.setOnClickListener(view -> {
-                                    if (isMute) {
-                                        isMute = false;
-                                        player.setVolume(1f);
-                                        muteButton.setIconResource(R.drawable.ic_unmute_24dp);
-                                    } else {
-                                        isMute = true;
-                                        player.setVolume(0f);
-                                        muteButton.setIconResource(R.drawable.ic_mute_24dp);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                } else {
-                    muteButton.setVisibility(View.GONE);
-                }
-            }
-        });
     }
 
     private void changePlaybackSpeed() {
@@ -749,6 +757,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                             new FetchPost.FetchPostListener() {
                                 @Override
                                 public void fetchPostSuccess(Post post) {
+                                    videoFallbackHLSUrl = post.getVideoFallBackHLSUrl();
                                     if (post.isRedgifs()) {
                                         videoType = VIDEO_TYPE_REDGIFS;
                                         String redgifsId = post.getRedgifsId();
@@ -839,6 +848,18 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                         Toast.makeText(ViewVideoActivity.this, R.string.fetch_streamable_video_failed, Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private void loadFallbackVideo(Bundle savedInstanceState) {
+        if (videoFallbackHLSUrl != null) {
+            MediaItem mediaItem = player.getCurrentMediaItem();
+            if (mediaItem == null || mediaItem.localConfiguration != null && !videoFallbackHLSUrl.equals(mediaItem.localConfiguration.uri.toString())) {
+                videoType = VIDEO_TYPE_NORMAL;
+                player.prepare();
+                player.setMediaSource(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(videoFallbackHLSUrl)));
+                preparePlayer(savedInstanceState);
+            }
+        }
     }
 
     @Override
