@@ -184,7 +184,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
     private String videoDownloadUrl;
     private String videoFileName;
-    private String videoFallbackHLSUrl;
+    private String videoFallbackDirectUrl;
     private String subredditName;
     private String id;
     private boolean wasPlaying;
@@ -411,7 +411,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         Post post = intent.getParcelableExtra(EXTRA_POST);
         if (post != null) {
             titleTextView.setText(post.getTitle());
-            videoFallbackHLSUrl = post.getVideoFallBackHLSUrl();
+            videoFallbackDirectUrl = post.getVideoFallBackDirectUrl();
         }
 
         trackSelector = new DefaultTrackSelector(this);
@@ -757,7 +757,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                             new FetchPost.FetchPostListener() {
                                 @Override
                                 public void fetchPostSuccess(Post post) {
-                                    videoFallbackHLSUrl = post.getVideoFallBackHLSUrl();
+                                    videoFallbackDirectUrl = post.getVideoFallBackDirectUrl();
                                     if (post.isRedgifs()) {
                                         videoType = VIDEO_TYPE_REDGIFS;
                                         String redgifsId = post.getRedgifsId();
@@ -851,12 +851,15 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     }
 
     private void loadFallbackVideo(Bundle savedInstanceState) {
-        if (videoFallbackHLSUrl != null) {
+        if (videoFallbackDirectUrl != null) {
             MediaItem mediaItem = player.getCurrentMediaItem();
-            if (mediaItem == null || mediaItem.localConfiguration != null && !videoFallbackHLSUrl.equals(mediaItem.localConfiguration.uri.toString())) {
-                videoType = VIDEO_TYPE_NORMAL;
+            if (mediaItem == null || mediaItem.localConfiguration != null && !videoFallbackDirectUrl.equals(mediaItem.localConfiguration.uri.toString())) {
+                videoType = VIDEO_TYPE_DIRECT;
+                videoDownloadUrl = videoFallbackDirectUrl;
+                mVideoUri = Uri.parse(videoFallbackDirectUrl);
+                videoFileName = FilenameUtils.getName(videoDownloadUrl);
                 player.prepare();
-                player.setMediaSource(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(videoFallbackHLSUrl)));
+                player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
                 preparePlayer(savedInstanceState);
             }
         }
