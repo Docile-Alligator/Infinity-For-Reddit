@@ -384,7 +384,7 @@ public class ParsePost {
                         post.setVideoDownloadUrl(url);
                         post.setIsImgur(true);
                     } else {
-                        //Gif video post (HLS)
+                        //Gif video post (HLS) and maybe Redgifs
 
                         String videoUrl = Html.fromHtml(data.getJSONObject(JSONUtils.PREVIEW_KEY)
                                 .getJSONObject(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY).getString(JSONUtils.HLS_URL_KEY)).toString();
