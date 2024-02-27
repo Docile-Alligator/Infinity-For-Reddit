@@ -279,7 +279,6 @@ public class Container extends RecyclerView {
   }
 
   @CallSuper @Override public void onScrollStateChanged(int state) {
-    super.onScrollStateChanged(state);
     // Need to handle the dead playback even when the Container is still scrolling/flinging.
     List<ToroPlayer> players = playerManager.getPlayers();
     // 1. Find players those are managed but not qualified to play anymore.
