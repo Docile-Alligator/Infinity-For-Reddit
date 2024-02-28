@@ -843,7 +843,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 videoType = VIDEO_TYPE_DIRECT;
                 videoDownloadUrl = videoFallbackDirectUrl;
                 mVideoUri = Uri.parse(videoFallbackDirectUrl);
-                videoFileName = FilenameUtils.getName(videoDownloadUrl);
+                videoFileName = videoFileName == null ? FilenameUtils.getName(videoDownloadUrl) : videoFileName;
                 player.prepare();
                 player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
                 preparePlayer(savedInstanceState);
