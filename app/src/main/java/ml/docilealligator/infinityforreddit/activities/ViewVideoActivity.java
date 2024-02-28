@@ -586,6 +586,9 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         }
         setPlaybackSpeed(Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_PLAYBACK_SPEED, "100")));
 
+        // Produces DataSource instances through which media data is loaded.
+        dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
+                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
         if (videoType == VIDEO_TYPE_STREAMABLE) {
             if (savedInstanceState != null) {
                 videoDownloadUrl = savedInstanceState.getString(VIDEO_DOWNLOAD_URL_STATE);
@@ -598,8 +601,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             if (mVideoUri == null) {
                 loadStreamableVideo(shortCode, savedInstanceState);
             } else {
-                dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
                 player.prepare();
                 player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
                 preparePlayer(savedInstanceState);
@@ -622,8 +623,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             if (mVideoUri == null) {
                 loadRedgifsVideo(redgifsId, savedInstanceState);
             } else {
-                dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
                 player.prepare();
                 player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
                 preparePlayer(savedInstanceState);
@@ -635,9 +634,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             } else {
                 videoFileName = "imgur-" + FilenameUtils.getName(videoDownloadUrl);
             }
-            // Produces DataSource instances through which media data is loaded.
-            dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
             // Prepare the player with the source.
             player.prepare();
             player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -647,9 +643,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             subredditName = intent.getStringExtra(EXTRA_SUBREDDIT);
             id = intent.getStringExtra(EXTRA_ID);
             videoFileName = subredditName + "-" + id + ".mp4";
-            // Produces DataSource instances through which media data is loaded.
-            dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
             // Prepare the player with the source.
             player.prepare();
             player.setMediaSource(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -727,8 +720,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                         progressBar.setVisibility(View.GONE);
                         mVideoUri = Uri.parse(webm);
                         videoDownloadUrl = mp4;
-                        dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
                         preparePlayer(savedInstanceState);
                         player.prepare();
                         player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -777,9 +768,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                                         videoDownloadUrl = post.getVideoDownloadUrl();
                                         videoType = VIDEO_TYPE_IMGUR;
                                         videoFileName = "imgur-" + FilenameUtils.getName(videoDownloadUrl);
-                                        // Produces DataSource instances through which media data is loaded.
-                                        dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
                                         // Prepare the player with the source.
                                         player.prepare();
                                         player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -793,9 +781,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                                             videoDownloadUrl = post.getVideoDownloadUrl();
 
                                             videoFileName = subredditName + "-" + id + ".mp4";
-                                            // Produces DataSource instances through which media data is loaded.
-                                            dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
                                             // Prepare the player with the source.
                                             preparePlayer(savedInstanceState);
                                             player.prepare();
@@ -837,8 +822,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                         progressBar.setVisibility(View.GONE);
                         videoDownloadUrl = streamableVideo.mp4 == null ? streamableVideo.mp4Mobile.url : streamableVideo.mp4.url;
                         mVideoUri = Uri.parse(videoDownloadUrl);
-                        dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
                         preparePlayer(savedInstanceState);
                         player.prepare();
                         player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
