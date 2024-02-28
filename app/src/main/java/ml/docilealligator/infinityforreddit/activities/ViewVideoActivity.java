@@ -737,7 +737,8 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                     @Override
                     public void failed(int errorCode) {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(ViewVideoActivity.this, R.string.fetch_redgifs_video_failed, Toast.LENGTH_SHORT).show();
+                        loadFallbackVideo(savedInstanceState);
+                        //Toast.makeText(ViewVideoActivity.this, R.string.fetch_redgifs_video_failed, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -845,7 +846,9 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
                     @Override
                     public void failed() {
-                        Toast.makeText(ViewVideoActivity.this, R.string.fetch_streamable_video_failed, Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
+                        loadFallbackVideo(savedInstanceState);
+                        //Toast.makeText(ViewVideoActivity.this, R.string.fetch_streamable_video_failed, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
