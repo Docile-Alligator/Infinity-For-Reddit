@@ -853,7 +853,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     private void loadFallbackVideo(Bundle savedInstanceState) {
         if (videoFallbackDirectUrl != null) {
             MediaItem mediaItem = player.getCurrentMediaItem();
-            if (mediaItem == null || mediaItem.localConfiguration != null && !videoFallbackDirectUrl.equals(mediaItem.localConfiguration.uri.toString())) {
+            if (mediaItem == null || (mediaItem.localConfiguration != null && !videoFallbackDirectUrl.equals(mediaItem.localConfiguration.uri.toString()))) {
                 videoType = VIDEO_TYPE_DIRECT;
                 videoDownloadUrl = videoFallbackDirectUrl;
                 mVideoUri = Uri.parse(videoFallbackDirectUrl);
