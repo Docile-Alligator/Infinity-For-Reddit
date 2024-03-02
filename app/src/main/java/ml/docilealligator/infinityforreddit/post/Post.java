@@ -43,6 +43,7 @@ public class Post implements Parcelable {
     private String url;
     private String videoUrl;
     private String videoDownloadUrl;
+    @Nullable
     private String videoFallBackDirectUrl;
     private String redgifsId;
     private String streamableShortCode;
@@ -330,11 +331,12 @@ public class Post implements Parcelable {
         this.videoDownloadUrl = videoDownloadUrl;
     }
 
+    @Nullable
     public String getVideoFallBackDirectUrl() {
         return videoFallBackDirectUrl;
     }
 
-    public void setVideoFallBackDirectUrl(String videoFallBackDirectUrl) {
+    public void setVideoFallBackDirectUrl(@Nullable String videoFallBackDirectUrl) {
         this.videoFallBackDirectUrl = videoFallBackDirectUrl;
     }
 

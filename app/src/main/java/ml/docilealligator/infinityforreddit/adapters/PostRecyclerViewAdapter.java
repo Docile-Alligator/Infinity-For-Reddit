@@ -3485,12 +3485,14 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
 
         void loadFallbackDirectVideo() {
-            mediaUri = Uri.parse(post.getVideoFallBackDirectUrl());
-            post.setVideoDownloadUrl(post.getVideoFallBackDirectUrl());
-            post.setVideoUrl(post.getVideoFallBackDirectUrl());
-            post.setLoadRedgifsOrStreamableVideoSuccess(true);
-            if (container != null) {
-                container.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
+            if (post.getVideoFallBackDirectUrl() != null) {
+                mediaUri = Uri.parse(post.getVideoFallBackDirectUrl());
+                post.setVideoDownloadUrl(post.getVideoFallBackDirectUrl());
+                post.setVideoUrl(post.getVideoFallBackDirectUrl());
+                post.setLoadRedgifsOrStreamableVideoSuccess(true);
+                if (container != null) {
+                    container.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
+                }
             }
         }
 
@@ -5208,12 +5210,14 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
 
         void loadFallbackDirectVideo() {
-            mediaUri = Uri.parse(post.getVideoFallBackDirectUrl());
-            post.setVideoDownloadUrl(post.getVideoFallBackDirectUrl());
-            post.setVideoUrl(post.getVideoFallBackDirectUrl());
-            post.setLoadRedgifsOrStreamableVideoSuccess(true);
-            if (container != null) {
-                container.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
+            if (post.getVideoFallBackDirectUrl() != null) {
+                mediaUri = Uri.parse(post.getVideoFallBackDirectUrl());
+                post.setVideoDownloadUrl(post.getVideoFallBackDirectUrl());
+                post.setVideoUrl(post.getVideoFallBackDirectUrl());
+                post.setLoadRedgifsOrStreamableVideoSuccess(true);
+                if (container != null) {
+                    container.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
+                }
             }
         }
 
@@ -6238,12 +6242,14 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
 
         void loadFallbackDirectVideo() {
-            mediaUri = Uri.parse(post.getVideoFallBackDirectUrl());
-            post.setVideoDownloadUrl(post.getVideoFallBackDirectUrl());
-            post.setVideoUrl(post.getVideoFallBackDirectUrl());
-            post.setLoadRedgifsOrStreamableVideoSuccess(true);
-            if (container != null) {
-                container.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
+            if (post.getVideoFallBackDirectUrl() != null) {
+                mediaUri = Uri.parse(post.getVideoFallBackDirectUrl());
+                post.setVideoDownloadUrl(post.getVideoFallBackDirectUrl());
+                post.setVideoUrl(post.getVideoFallBackDirectUrl());
+                post.setLoadRedgifsOrStreamableVideoSuccess(true);
+                if (container != null) {
+                    container.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
+                }
             }
         }
 

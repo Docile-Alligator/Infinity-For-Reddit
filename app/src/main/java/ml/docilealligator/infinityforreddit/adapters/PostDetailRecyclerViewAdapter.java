@@ -1785,12 +1785,14 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         }
 
         void loadFallbackDirectVideo() {
-            mediaUri = Uri.parse(mPost.getVideoFallBackDirectUrl());
-            mPost.setVideoDownloadUrl(mPost.getVideoFallBackDirectUrl());
-            mPost.setVideoUrl(mPost.getVideoFallBackDirectUrl());
-            mPost.setLoadRedgifsOrStreamableVideoSuccess(true);
-            if (container != null) {
-                container.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
+            if (mPost.getVideoFallBackDirectUrl() != null) {
+                mediaUri = Uri.parse(mPost.getVideoFallBackDirectUrl());
+                mPost.setVideoDownloadUrl(mPost.getVideoFallBackDirectUrl());
+                mPost.setVideoUrl(mPost.getVideoFallBackDirectUrl());
+                mPost.setLoadRedgifsOrStreamableVideoSuccess(true);
+                if (container != null) {
+                    container.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
+                }
             }
         }
 
