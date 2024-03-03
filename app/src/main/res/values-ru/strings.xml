@@ -1232,7 +1232,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="reddit_gallery_item_caption_hint">"Подпись (не более 180 символов)"</string>
     <string name="reddit_gallery_item_url_hint">"URL"</string>
     <string name="user_agreement_dialog_title">"Пользовательское соглашение"</string>
-    <string name="user_agreement_message">"Перед входом вам необходимо принять Пользовательское соглашение Reddit (%1$s) и Политику конфиденциальности Infinity для Reddit (%2$s)."</string>
     <string name="agree">"Принимаю"</string>
     <string name="do_not_agree">"Не принимаю"</string>
     <string name="option_1_hint">"Вариант 1 (обязательно)"</string>

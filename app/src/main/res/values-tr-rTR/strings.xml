@@ -1242,7 +1242,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="reddit_gallery_item_caption_hint">"Altyazı (en fazla 180 karakter)"</string>
     <string name="reddit_gallery_item_url_hint">"Bağlantı Adresi"</string>
     <string name="user_agreement_dialog_title">"Kullanıcı Sözleşmesi"</string>
-    <string name="user_agreement_message">"Giriş yapmadan önce Reddit Kullanıcı Sözleşmesini (%1$s) ve Infinity for Reddit Gizlilik Politikasını (%2$s) kabul etmeniz gerekir."</string>
     <string name="agree">"Kabul et"</string>
     <string name="do_not_agree">"Kabul etme"</string>
     <string name="option_1_hint">"Seçenek 1 (Zorunlu)"</string>

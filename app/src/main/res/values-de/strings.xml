@@ -1263,7 +1263,6 @@ Antippen zum Wiederholen."</string>
     <string name="reddit_gallery_item_caption_hint">"Titel (max 180 Buchstaben)"</string>
     <string name="reddit_gallery_item_url_hint">"Url"</string>
     <string name="user_agreement_dialog_title">"Nutzungsbedingungen"</string>
-    <string name="user_agreement_message">"Du musst Reddit Nutzungsbedingungen (%1$s) und Infinity for reddit's Datenschutz-Bestimmungen (%2$s) zustimmen bevor du dich anmelden kannst."</string>
     <string name="agree">"Zustimmen"</string>
     <string name="do_not_agree">"Nicht zustimmen"</string>
     <string name="option_1_hint">"Option 1 (notwendig)"</string>

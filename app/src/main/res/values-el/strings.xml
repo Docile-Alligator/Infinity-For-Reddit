@@ -1150,7 +1150,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="reddit_gallery_item_caption_hint">"Περιγραφή (έως 180 χαρακτήρες)"</string>
     <string name="reddit_gallery_item_url_hint">"Url"</string>
     <string name="user_agreement_dialog_title">"Συμφωνητικό Χρήστη"</string>
-    <string name="user_agreement_message">"Πρέπει να συμφωνήσετε με το Συμφωνητικό Χρήστη (%1$s) και την Πολιτική Απορρήτου του Infinity για το Reddit (%2$s) πριν συνδεθείτε."</string>
     <string name="agree">"Συμφωνώ"</string>
     <string name="do_not_agree">"Δεν Συμφωνώ"</string>
     <string name="option_1_hint">"Επιλογή 1 (Απαιτείται)"</string>

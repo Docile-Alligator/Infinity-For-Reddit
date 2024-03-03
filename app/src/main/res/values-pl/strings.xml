@@ -1182,7 +1182,6 @@ Brak podglądu w Ostatnich aplikacjach."</string>
     <string name="reddit_gallery_item_caption_hint">"Podpis (maks. 180 znaków)"</string>
     <string name="reddit_gallery_item_url_hint">"Url"</string>
     <string name="user_agreement_dialog_title">"Umowa użytkownika"</string>
-    <string name="user_agreement_message">"Musisz zaakceptować Umowę użytkownika Reddit (%1$s) i politykę prywatności Infinity for Reddit (%2$s) przed zalogowaniem się."</string>
     <string name="agree">"Zgadzam się"</string>
     <string name="do_not_agree">"Nie zgadzam się"</string>
     <string name="option_1_hint">"Opcja 1 (Wymagane)"</string>

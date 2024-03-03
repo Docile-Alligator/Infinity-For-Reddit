@@ -1214,7 +1214,6 @@ Apasă pentru a reîncerca."</string>
     <string name="reddit_gallery_item_caption_hint">"Notiță (maxim 180 caractere)"</string>
     <string name="reddit_gallery_item_url_hint">"Adresă"</string>
     <string name="user_agreement_dialog_title">"Acordul Utilizatorului"</string>
-    <string name="user_agreement_message">"Trebuie să fii de acord cu Acordul Utilizatorului Reddit (%1$s) și Politica Reddit de Confidențialitate (%2$s) înainte să te autentifici."</string>
     <string name="agree">"Sunt de acord"</string>
     <string name="do_not_agree">"Nu sunt de acord"</string>
     <string name="option_1_hint">"Opțiunea 1 (Obligatoriu)"</string>

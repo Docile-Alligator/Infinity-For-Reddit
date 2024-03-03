@@ -1285,7 +1285,7 @@
     <string name="reddit_gallery_item_url_hint">Url</string>
 
     <string name="user_agreement_dialog_title">User Agreement</string>
-    <string name="user_agreement_message">You need to agree to Reddit User Agreement (%1$s) and Infinity for Reddit\'s Privacy Policy (%2$s) before logging in.</string>
+    <string name="user_agreement_message">You need to agree to Reddit User Agreement (%1$s) and Infinity for Reddit\'s Privacy Policy (%2$s) before logging in.\n\nFrom now on, you will need a monthly subscription to access the Reddit API within Infinity for Reddit and this is because Reddit has started charging for API access since July 1st, 2023.</string>
     <string name="agree">Agree</string>
     <string name="do_not_agree">Don\'t Agree</string>
 

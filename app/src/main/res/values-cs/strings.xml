@@ -1222,7 +1222,6 @@ Pokud ano, přejmenujte je, než povolíte Material You."</string>
     <string name="reddit_gallery_item_caption_hint">"Popis (max 180 znaků)"</string>
     <string name="reddit_gallery_item_url_hint">"URL"</string>
     <string name="user_agreement_dialog_title">"Smlouva s uživatelem"</string>
-    <string name="user_agreement_message">"Před přihlášením musíte souhlasit se Smlovou s uživatelem Redditu (%1$s) a Zásadami ochrany osobních údajů aplikace Infinity for Reddit (%2$s)"</string>
     <string name="agree">"Souhlasím"</string>
     <string name="do_not_agree">"Nesouhlasit"</string>
     <string name="option_1_hint">"Možnost 1 (Povinná)"</string>

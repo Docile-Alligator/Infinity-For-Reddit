@@ -1154,7 +1154,6 @@ Premi per riprovare."</string>
     <string name="reddit_gallery_item_caption_hint">"Didascalia (max 180 caratteri)"</string>
     <string name="reddit_gallery_item_url_hint">"URL"</string>
     <string name="user_agreement_dialog_title">"Accordo per gli utenti"</string>
-    <string name="user_agreement_message">"Devi accettare l'Accordo per l'utente di Reddit (%1$s) e l'Informativa sulla privacy di Infinity for Reddit (%2$s) prima di accedere."</string>
     <string name="agree">"Accetto"</string>
     <string name="do_not_agree">"Non accetto"</string>
     <string name="option_1_hint">"Opzione 1 (richiesta)"</string>

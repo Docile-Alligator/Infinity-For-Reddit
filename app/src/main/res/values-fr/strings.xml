@@ -1349,7 +1349,6 @@ Cliquer pour réessayer."</string>
     <string name="reddit_gallery_item_caption_hint">"Sous titres (Maximum 180 caractères)"</string>
     <string name="reddit_gallery_item_url_hint">"Url"</string>
     <string name="user_agreement_dialog_title">"Accord d'utilisation"</string>
-    <string name="user_agreement_message">"Vous devez accepter l'accord d'utilisation de Reddit (%1$s) et la politique de confidentialité d'Infinity for Reddit (%2$s), avant de vous connecter."</string>
     <string name="agree">"J'accepte"</string>
     <string name="do_not_agree">"Je n’accepte pas"</string>
     <string name="option_1_hint">"Option 1 (Requise)"</string>

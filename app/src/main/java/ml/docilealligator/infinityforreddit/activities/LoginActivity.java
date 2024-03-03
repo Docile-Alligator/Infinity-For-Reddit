@@ -21,13 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,7 +35,6 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.FetchMyInfo;
@@ -50,6 +45,7 @@ import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.ParseAndInsertNewAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.databinding.ActivityLoginBinding;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -63,18 +59,6 @@ public class LoginActivity extends BaseActivity {
     private static final String ENABLE_DOM_STATE = "EDS";
     private static final String IS_AGREE_TO_USER_AGGREMENT_STATE = "IATUAS";
 
-    @BindView(R.id.coordinator_layout_login_activity)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_login_activity)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_login_activity)
-    Toolbar toolbar;
-    @BindView(R.id.two_fa_infO_text_view_login_activity)
-    TextView twoFAInfoTextView;
-    @BindView(R.id.webview_login_activity)
-    WebView webView;
-    @BindView(R.id.fab_login_activity)
-    FloatingActionButton fab;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -96,6 +80,7 @@ public class LoginActivity extends BaseActivity {
     private String authCode;
     private boolean enableDom = false;
     private boolean isAgreeToUserAgreement = false;
+    private ActivityLoginBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,9 +89,10 @@ public class LoginActivity extends BaseActivity {
         setImmersiveModeNotApplicable();
 
         super.onCreate(savedInstanceState);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
 
         try {
-            setContentView(R.layout.activity_login);
+            setContentView(binding.getRoot());
         } catch (InflateException ie) {
             Log.e("LoginActivity", "Failed to inflate LoginActivity: " + ie.getMessage());
             Toast.makeText(LoginActivity.this, R.string.no_system_webview_error, Toast.LENGTH_SHORT).show();
@@ -122,7 +108,7 @@ public class LoginActivity extends BaseActivity {
             Slidr.attach(this);
         }
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbarLoginActivity);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -131,7 +117,7 @@ public class LoginActivity extends BaseActivity {
             isAgreeToUserAgreement = savedInstanceState.getBoolean(IS_AGREE_TO_USER_AGGREMENT_STATE);
         }
 
-        fab.setOnClickListener(view -> {
+        binding.fabLoginActivity.setOnClickListener(view -> {
             new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.have_trouble_login_title)
                     .setMessage(R.string.have_trouble_login_message)
@@ -144,11 +130,11 @@ public class LoginActivity extends BaseActivity {
         });
 
         if (enableDom) {
-            twoFAInfoTextView.setVisibility(View.GONE);
+            binding.twoFaInfOTextViewLoginActivity.setVisibility(View.GONE);
         }
 
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setDomStorageEnabled(enableDom);
+        binding.webviewLoginActivity.getSettings().setJavaScriptEnabled(true);
+        binding.webviewLoginActivity.getSettings().setDomStorageEnabled(enableDom);
 
         Uri baseUri = Uri.parse(APIUtils.OAUTH_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
@@ -164,8 +150,8 @@ public class LoginActivity extends BaseActivity {
         CookieManager.getInstance().removeAllCookies(aBoolean -> {
         });
 
-        webView.loadUrl(url);
-        webView.setWebViewClient(new WebViewClient() {
+        binding.webviewLoginActivity.loadUrl(url);
+        binding.webviewLoginActivity.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.contains("&code=") || url.contains("?code=")) {
@@ -319,14 +305,14 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
-        twoFAInfoTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        binding.coordinatorLayoutLoginActivity.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutLoginActivity, null, binding.toolbarLoginActivity);
+        binding.twoFaInfOTextViewLoginActivity.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
         Drawable infoDrawable = Utils.getTintedDrawable(this, R.drawable.ic_info_preference_24dp, mCustomThemeWrapper.getPrimaryIconColor());
-        twoFAInfoTextView.setCompoundDrawablesWithIntrinsicBounds(infoDrawable, null, null, null);
-        applyFABTheme(fab);
+        binding.twoFaInfOTextViewLoginActivity.setCompoundDrawablesWithIntrinsicBounds(infoDrawable, null, null, null);
+        applyFABTheme(binding.fabLoginActivity);
         if (typeface != null) {
-            twoFAInfoTextView.setTypeface(typeface);
+            binding.twoFaInfOTextViewLoginActivity.setTypeface(typeface);
         }
     }
 

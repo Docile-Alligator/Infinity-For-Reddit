@@ -1216,7 +1216,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="reddit_gallery_item_caption_hint">"Заголовок (не більше 180 знаків)"</string>
     <string name="reddit_gallery_item_url_hint">"URL"</string>
     <string name="user_agreement_dialog_title">"Угода користувача"</string>
-    <string name="user_agreement_message">"Перед входом погодьтеся на Умови користувача Reddit (%1$s) та Політику приватності Infinity for Reddit (%2$s)."</string>
     <string name="agree">"Погоджуюся"</string>
     <string name="do_not_agree">"Не погоджуюся"</string>
     <string name="option_1_hint">"Варіант 1 (обовʼязково)"</string>

@@ -1272,7 +1272,6 @@ Toque para volver a intentarlo."</string>
     <string name="reddit_gallery_item_caption_hint">"Subtítulo (máximo 180 caracteres)"</string>
     <string name="reddit_gallery_item_url_hint">"Url"</string>
     <string name="user_agreement_dialog_title">"Acuerdo del usuario"</string>
-    <string name="user_agreement_message">"Tienes que aceptar el Acuerdo de usuario de Reddit (%1$s) y la Política de privacidad de Infinity para Reddit (%2$s) antes de iniciar sesión."</string>
     <string name="agree">"Aceptar"</string>
     <string name="do_not_agree">"Rechazar"</string>
     <string name="option_1_hint">"Opción 1 (Obligatorio)"</string>

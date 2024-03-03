@@ -1198,7 +1198,6 @@ Toque para tentar de novo."</string>
     <string name="reddit_gallery_item_caption_hint">"Legenda (até 180 caracteres)"</string>
     <string name="reddit_gallery_item_url_hint">"URL"</string>
     <string name="user_agreement_dialog_title">"Acordo de Usuário"</string>
-    <string name="user_agreement_message">"Você deve concordar com o Acordo de Usuário do Reddit (%1$s) e com a Política de Privacidade do Infinity for Reddit (%2$s) antes da autenticação."</string>
     <string name="agree">"Concordar"</string>
     <string name="do_not_agree">"Discordar"</string>
     <string name="option_1_hint">"Opção 1 (exigida)"</string>

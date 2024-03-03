@@ -1233,7 +1233,6 @@ Reddit 视频分辨率较低。
     <string name="reddit_gallery_item_caption_hint">"标题（最多 180 个字符）"</string>
     <string name="reddit_gallery_item_url_hint">"URL"</string>
     <string name="user_agreement_dialog_title">"用户协议"</string>
-    <string name="user_agreement_message">"在登录之前，您需要同意 Reddit 用户协议（%1$s）和 Infinity for Reddit 的隐私政策（%2$s）"</string>
     <string name="agree">"同意"</string>
     <string name="do_not_agree">"不同意"</string>
     <string name="option_1_hint">"选项 1（必须）"</string>
