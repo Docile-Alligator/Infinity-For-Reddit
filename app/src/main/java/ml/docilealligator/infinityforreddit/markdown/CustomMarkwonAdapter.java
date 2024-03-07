@@ -89,6 +89,13 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
     public void setParsedMarkdown(@NonNull Markwon markwon, @NonNull List<Node> nodes) {
         // clear all entries before applying
 
+        /*try {
+            JSONObject object = RichTextUtils.constructRichTextJSON(nodes);
+            Log.i("asdf", "s" + object);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }*/
+
         defaultEntry.clear();
 
         for (int i = 0, size = entries.size(); i < size; i++) {
