@@ -90,7 +90,7 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
         // clear all entries before applying
 
         /*try {
-            JSONObject object = RichTextUtils.constructRichTextJSON(nodes);
+            JSONObject object = new RichTextJSONConverter().constructRichTextJSON(nodes);
             Log.i("asdf", "s" + object);
         } catch (JSONException e) {
             throw new RuntimeException(e);
