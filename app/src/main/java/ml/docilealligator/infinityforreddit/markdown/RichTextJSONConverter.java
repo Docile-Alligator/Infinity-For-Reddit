@@ -123,6 +123,32 @@ public class RichTextJSONConverter implements Visitor {
         return null;
     }
 
+    @Nullable
+    private JSONArray getChildFormatArray(Node node) {
+        int formatNum = 0;
+        while (node != null && node.getFirstChild() != null) {
+            String className = node.getClass().getName();
+            if (formatMap.containsKey(className)) {
+                formatNum += formatMap.get(className);
+                node = node.getFirstChild();
+            }
+        }
+
+        if (node instanceof Text) {
+            int start = textSB.length();
+            textSB.append(((Text) node).getLiteral());
+            if (formatNum > 0) {
+                JSONArray format = new JSONArray();
+                format.put(formatNum);
+                format.put(start);
+                format.put(((Text) node).getLiteral().length());
+                return format;
+            }
+        }
+
+        return null;
+    }
+
     @Override
     public void visit(BlockQuote blockQuote) {
 
@@ -326,20 +352,20 @@ public class RichTextJSONConverter implements Visitor {
 
     @Override
     public void visit(CustomNode customNode) {
+        /*
+            Superscript can still has inline spans, thus checking children's next node until the end.
+            Superscript must use ^(), not ^ right now.
+         */
+        Node child = customNode.getFirstChild();
+        while (child != null) {
+            JSONArray format = getFormatArray(customNode);
+            if (format != null) {
+                formats.add(format);
+            }
 
-    }
-
-    public void visit(Strikethrough strikethrough) {
-        JSONArray format = getFormatArray(strikethrough);
-        if (format != null) {
-            formats.add(format);
-        }
-    }
-
-    public void visit(Superscript superscript) {
-        JSONArray format = getFormatArray(superscript);
-        if (format != null) {
-            formats.add(format);
+            Node next = child.getNext();
+            child.unlink();
+            child = next;
         }
     }
 }
