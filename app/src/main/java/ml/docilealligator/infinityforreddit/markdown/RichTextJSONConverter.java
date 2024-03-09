@@ -208,7 +208,26 @@ public class RichTextJSONConverter implements Visitor {
 
     @Override
     public void visit(FencedCodeBlock fencedCodeBlock) {
+        try {
+            JSONObject nodeJSON = new JSONObject();
+            nodeJSON.put(TYPE, CODE_BLOCK_E);
 
+            JSONArray cArray = new JSONArray();
+            String codeLiteral = fencedCodeBlock.getLiteral();
+
+            String[] codeLines = codeLiteral.split("\n");
+            for (String c : codeLines) {
+                JSONObject contentJSONObject = new JSONObject();
+                contentJSONObject.put(TYPE, RAW_E);
+                contentJSONObject.put(TEXT, c);
+                cArray.put(contentJSONObject);
+            }
+
+            nodeJSON.put(CONTENT, cArray);
+            contentArrayStack.peek().put(nodeJSON);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -259,12 +278,12 @@ public class RichTextJSONConverter implements Visitor {
 
     @Override
     public void visit(HtmlInline htmlInline) {
-
+        //Not supported by Reddit
     }
 
     @Override
     public void visit(HtmlBlock htmlBlock) {
-
+        //Not supported by Reddit
     }
 
     @Override
@@ -274,7 +293,26 @@ public class RichTextJSONConverter implements Visitor {
 
     @Override
     public void visit(IndentedCodeBlock indentedCodeBlock) {
+        try {
+            JSONObject nodeJSON = new JSONObject();
+            nodeJSON.put(TYPE, CODE_BLOCK_E);
 
+            JSONArray cArray = new JSONArray();
+            String codeLiteral = indentedCodeBlock.getLiteral();
+
+            String[] codeLines = codeLiteral.split("\n");
+            for (String c : codeLines) {
+                JSONObject contentJSONObject = new JSONObject();
+                contentJSONObject.put(TYPE, RAW_E);
+                contentJSONObject.put(TEXT, c);
+                cArray.put(contentJSONObject);
+            }
+
+            nodeJSON.put(CONTENT, cArray);
+            contentArrayStack.peek().put(nodeJSON);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
