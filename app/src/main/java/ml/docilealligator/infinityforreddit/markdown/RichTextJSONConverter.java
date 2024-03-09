@@ -50,7 +50,7 @@ public class RichTextJSONConverter implements Visitor {
     private static final String HEADING_E = "h";
     private static final String LINK_E = "link";
     private static final String LIST_E = "list";
-    private static final String LI_E = "li";
+    private static final String LIST_ITEM_E = "li";
     private static final String BLOCKQUOTE_E = "blockquote";
     private static final String CODE_BLOCK_E = "code";
     //For lines in code block
@@ -65,6 +65,7 @@ public class RichTextJSONConverter implements Visitor {
     private static final String FORMAT = "f";
     private static final String URL = "u";
     private static final String LEVEL = "l";
+    private static final String IS_ORDERED_LIST = "o";
     private static final String DOCUMENT = "document";
 
     private final Map<String, Integer> formatMap;
@@ -85,6 +86,8 @@ public class RichTextJSONConverter implements Visitor {
         textSB = new StringBuilder();
         formats = new ArrayList<>();
         contentArrayStack = new Stack<>();
+
+        contentArrayStack.push(document);
     }
 
     public JSONObject constructRichTextJSON(List<Node> nodes) throws JSONException {
@@ -133,32 +136,6 @@ public class RichTextJSONConverter implements Visitor {
         }
     }
 
-    @Nullable
-    private JSONArray getRawText(Node node) {
-        int formatNum = 0;
-        while (node != null && node.getFirstChild() != null) {
-            String className = node.getClass().getName();
-            if (formatMap.containsKey(className)) {
-                formatNum += formatMap.get(className);
-                node = node.getFirstChild();
-            }
-        }
-
-        if (node instanceof Text) {
-            int start = textSB.length();
-            textSB.append(((Text) node).getLiteral());
-            if (formatNum > 0) {
-                JSONArray format = new JSONArray();
-                format.put(formatNum);
-                format.put(start);
-                format.put(((Text) node).getLiteral().length());
-                return format;
-            }
-        }
-
-        return null;
-    }
-
     @Override
     public void visit(BlockQuote blockQuote) {
 
@@ -166,7 +143,26 @@ public class RichTextJSONConverter implements Visitor {
 
     @Override
     public void visit(BulletList bulletList) {
+        try {
+            JSONObject nodeJSON = new JSONObject();
+            nodeJSON.put(TYPE, LIST_E);
 
+            contentArrayStack.push(new JSONArray());
+
+            Node child = bulletList.getFirstChild();
+            while (child != null) {
+                child.accept(this);
+                child = child.getNext();
+            }
+
+            JSONArray cArray = contentArrayStack.pop();
+
+            nodeJSON.put(CONTENT, cArray);
+            nodeJSON.put(IS_ORDERED_LIST, false);
+            contentArrayStack.peek().put(nodeJSON);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -207,7 +203,7 @@ public class RichTextJSONConverter implements Visitor {
             nodeJSON.put(TYPE, HEADING_E);
             nodeJSON.put(LEVEL, heading.getLevel());
 
-            contentArrayStack.add(new JSONArray());
+            contentArrayStack.push(new JSONArray());
 
             Node child = heading.getFirstChild();
             while (child != null) {
@@ -227,7 +223,7 @@ public class RichTextJSONConverter implements Visitor {
 
             convertToRawTextJSONObject(cArray);
             nodeJSON.put(CONTENT, cArray);
-            document.put(nodeJSON);
+            contentArrayStack.peek().put(nodeJSON);
 
             formats = new ArrayList<>();
             textSB.delete(0, textSB.length());
@@ -315,12 +311,49 @@ public class RichTextJSONConverter implements Visitor {
 
     @Override
     public void visit(ListItem listItem) {
+        try {
+            JSONObject nodeJSON = new JSONObject();
+            nodeJSON.put(TYPE, LIST_ITEM_E);
 
+            contentArrayStack.push(new JSONArray());
+
+            Node child = listItem.getFirstChild();
+            while (child != null) {
+                child.accept(this);
+                child = child.getNext();
+            }
+
+            JSONArray cArray = contentArrayStack.pop();
+
+            nodeJSON.put(CONTENT, cArray);
+            contentArrayStack.peek().put(nodeJSON);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void visit(OrderedList orderedList) {
+        try {
+            JSONObject nodeJSON = new JSONObject();
+            nodeJSON.put(TYPE, LIST_E);
 
+            contentArrayStack.push(new JSONArray());
+
+            Node child = orderedList.getFirstChild();
+            while (child != null) {
+                child.accept(this);
+                child = child.getNext();
+            }
+
+            JSONArray cArray = contentArrayStack.pop();
+
+            nodeJSON.put(CONTENT, cArray);
+            nodeJSON.put(IS_ORDERED_LIST, true);
+            contentArrayStack.peek().put(nodeJSON);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -329,7 +362,7 @@ public class RichTextJSONConverter implements Visitor {
             JSONObject nodeJSON = new JSONObject();
             nodeJSON.put(TYPE, PARAGRAPH_E);
 
-            contentArrayStack.add(new JSONArray());
+            contentArrayStack.push(new JSONArray());
 
             Node child = paragraph.getFirstChild();
             while (child != null) {
@@ -355,7 +388,7 @@ public class RichTextJSONConverter implements Visitor {
             }
 
             nodeJSON.put(CONTENT, cArray);
-            document.put(nodeJSON);
+            contentArrayStack.peek().put(nodeJSON);
 
             formats = new ArrayList<>();
             textSB.delete(0, textSB.length());
