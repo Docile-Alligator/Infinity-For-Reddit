@@ -64,6 +64,7 @@ public class RichTextJSONConverter implements Visitor {
     private static final String TEXT = "t";
     private static final String FORMAT = "f";
     private static final String URL = "u";
+    private static final String LEVEL = "l";
     private static final String DOCUMENT = "document";
 
     private final Map<String, Integer> formatMap;
@@ -123,8 +124,17 @@ public class RichTextJSONConverter implements Visitor {
         return null;
     }
 
+    private void convertToRawTextJSONObject(JSONArray contentArray) throws JSONException {
+        for (int i = 0; i < contentArray.length(); i++) {
+            JSONObject content = contentArray.getJSONObject(i);
+            if (TEXT_E.equals(content.get(TYPE))) {
+                content.put(TYPE, RAW_E);
+            }
+        }
+    }
+
     @Nullable
-    private JSONArray getChildFormatArray(Node node) {
+    private JSONArray getRawText(Node node) {
         int formatNum = 0;
         while (node != null && node.getFirstChild() != null) {
             String className = node.getClass().getName();
@@ -192,7 +202,38 @@ public class RichTextJSONConverter implements Visitor {
 
     @Override
     public void visit(Heading heading) {
+        try {
+            JSONObject nodeJSON = new JSONObject();
+            nodeJSON.put(TYPE, HEADING_E);
+            nodeJSON.put(LEVEL, heading.getLevel());
 
+            contentArrayStack.add(new JSONArray());
+
+            Node child = heading.getFirstChild();
+            while (child != null) {
+                child.accept(this);
+                child = child.getNext();
+            }
+
+            JSONArray cArray = contentArrayStack.pop();
+
+            if (textSB.length() > 0) {
+                JSONObject content = new JSONObject();
+                content.put(TYPE, RAW_E);
+                content.put(TEXT, textSB.toString());
+
+                cArray.put(content);
+            }
+
+            convertToRawTextJSONObject(cArray);
+            nodeJSON.put(CONTENT, cArray);
+            document.put(nodeJSON);
+
+            formats = new ArrayList<>();
+            textSB.delete(0, textSB.length());
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -252,6 +293,7 @@ public class RichTextJSONConverter implements Visitor {
             }
 
             nodeJSON.put(TEXT, textSB.toString());
+            //It will automatically escape the string.
             nodeJSON.put(URL, link.getDestination());
 
             if (!formats.isEmpty()) {
