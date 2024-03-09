@@ -184,10 +184,13 @@ public class RichTextJSONConverter implements Visitor {
 
     @Override
     public void visit(Code code) {
-        JSONArray format = getFormatArray(code);
-        if (format != null) {
-            formats.add(format);
-        }
+        JSONArray format = new JSONArray();
+        format.put(INLINE_CODE);
+        format.put(textSB.length());
+        format.put(code.getLiteral().length());
+        formats.add(format);
+
+        textSB.append(code.getLiteral());
     }
 
     @Override
