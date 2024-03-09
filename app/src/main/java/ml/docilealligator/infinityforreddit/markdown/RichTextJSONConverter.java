@@ -98,7 +98,6 @@ public class RichTextJSONConverter implements Visitor {
         }
 
         richText.put(DOCUMENT, document);
-
         return richText;
     }
 
@@ -138,7 +137,25 @@ public class RichTextJSONConverter implements Visitor {
 
     @Override
     public void visit(BlockQuote blockQuote) {
+        try {
+            JSONObject nodeJSON = new JSONObject();
+            nodeJSON.put(TYPE, BLOCKQUOTE_E);
 
+            contentArrayStack.push(new JSONArray());
+
+            Node child = blockQuote.getFirstChild();
+            while (child != null) {
+                child.accept(this);
+                child = child.getNext();
+            }
+
+            JSONArray cArray = contentArrayStack.pop();
+
+            nodeJSON.put(CONTENT, cArray);
+            contentArrayStack.peek().put(nodeJSON);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
