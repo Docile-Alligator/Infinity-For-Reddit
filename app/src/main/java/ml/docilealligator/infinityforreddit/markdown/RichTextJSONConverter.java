@@ -217,7 +217,7 @@ public class RichTextJSONConverter implements Visitor {
 
     @Override
     public void visit(Document document) {
-
+        //Ignore
     }
 
     @Override
@@ -254,7 +254,7 @@ public class RichTextJSONConverter implements Visitor {
 
     @Override
     public void visit(HardLineBreak hardLineBreak) {
-
+        //Ignore
     }
 
     @Override
@@ -295,7 +295,7 @@ public class RichTextJSONConverter implements Visitor {
 
     @Override
     public void visit(ThematicBreak thematicBreak) {
-
+        //Not supported by Reddit
     }
 
     @Override
@@ -479,7 +479,7 @@ public class RichTextJSONConverter implements Visitor {
 
     @Override
     public void visit(SoftLineBreak softLineBreak) {
-
+        //Ignore
     }
 
     @Override
@@ -507,11 +507,11 @@ public class RichTextJSONConverter implements Visitor {
 
     @Override
     public void visit(CustomNode customNode) {
-        /*
+        if (customNode instanceof Superscript) {
+            /*
             Superscript can still has inline spans, thus checking children's next node until the end.
             Superscript must use ^(), not ^ right now.
          */
-        if (customNode instanceof Superscript) {
             Node child = customNode.getFirstChild();
             while (child != null) {
                 JSONArray format = getFormatArray(customNode);
@@ -529,9 +529,7 @@ public class RichTextJSONConverter implements Visitor {
                 JSONObject nodeJSON = new JSONObject();
                 nodeJSON.put(TYPE, SPOILER_E);
 
-                contentArrayStack.push(new JSONArray());
-
-                JSONArray cArray = contentArrayStack.pop();
+                JSONArray cArray = new JSONArray();
 
                 JSONObject contentJSONObject = new JSONObject();
                 contentJSONObject.put(TYPE, TEXT_E);
