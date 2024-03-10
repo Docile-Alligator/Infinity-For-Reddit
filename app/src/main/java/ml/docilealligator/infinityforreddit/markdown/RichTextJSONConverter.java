@@ -108,8 +108,8 @@ public class RichTextJSONConverter implements Visitor {
             String className = node.getClass().getName();
             if (formatMap.containsKey(className)) {
                 formatNum += formatMap.get(className);
-                node = node.getFirstChild();
             }
+            node = node.getFirstChild();
         }
         if (node instanceof Text) {
             int start = textSB.length();
@@ -124,6 +124,28 @@ public class RichTextJSONConverter implements Visitor {
         }
 
         return null;
+    }
+
+    private String getAllText(Node node) {
+        node = node.getFirstChild();
+        while (node != null) {
+            Node next = node;
+            while (next != null && next.getFirstChild() != null) {
+                next = next.getFirstChild();
+            }
+
+            if (next instanceof Text) {
+                textSB.append(((Text) next).getLiteral());
+            } else if (next instanceof Code) {
+                textSB.append(((Code) next).getLiteral());
+            }
+
+            node = node.getNext();
+        }
+
+        String text = textSB.toString();
+        textSB.delete(0, text.length());
+        return text;
     }
 
     private void convertToRawTextJSONObject(JSONArray contentArray) throws JSONException {
@@ -475,7 +497,7 @@ public class RichTextJSONConverter implements Visitor {
 
     @Override
     public void visit(LinkReferenceDefinition linkReferenceDefinition) {
-
+        //Not supported by Reddit
     }
 
     @Override
@@ -489,16 +511,38 @@ public class RichTextJSONConverter implements Visitor {
             Superscript can still has inline spans, thus checking children's next node until the end.
             Superscript must use ^(), not ^ right now.
          */
-        Node child = customNode.getFirstChild();
-        while (child != null) {
-            JSONArray format = getFormatArray(customNode);
-            if (format != null) {
-                formats.add(format);
-            }
+        if (customNode instanceof Superscript) {
+            Node child = customNode.getFirstChild();
+            while (child != null) {
+                JSONArray format = getFormatArray(customNode);
+                if (format != null) {
+                    formats.add(format);
+                }
 
-            Node next = child.getNext();
-            child.unlink();
-            child = next;
+                Node next = child.getNext();
+                child.unlink();
+                child = next;
+            }
+        } else if (customNode instanceof SpoilerNode) {
+            //Spoiler cannot have styles
+            try {
+                JSONObject nodeJSON = new JSONObject();
+                nodeJSON.put(TYPE, SPOILER_E);
+
+                contentArrayStack.push(new JSONArray());
+
+                JSONArray cArray = contentArrayStack.pop();
+
+                JSONObject contentJSONObject = new JSONObject();
+                contentJSONObject.put(TYPE, TEXT_E);
+                contentJSONObject.put(TEXT, getAllText(customNode));
+
+                cArray.put(contentJSONObject);
+                nodeJSON.put(CONTENT, cArray);
+                contentArrayStack.peek().put(nodeJSON);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
