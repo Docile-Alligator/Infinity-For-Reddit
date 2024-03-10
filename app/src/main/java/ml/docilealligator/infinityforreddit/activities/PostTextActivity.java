@@ -532,6 +532,9 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
             Intent intent = new Intent(this, FullMarkdownActivity.class);
             intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, contentEditText.getText().toString());
             intent.putExtra(FullMarkdownActivity.EXTRA_SUBMIT_POST, true);
+            if (!uploadedImages.isEmpty()) {
+                intent.putParcelableArrayListExtra("test", uploadedImages);
+            }
             startActivityForResult(intent, MARKDOWN_PREVIEW_REQUEST_CODE);
         } else if (itemId == R.id.action_send_post_text_activity) {
             submitPost(item);
@@ -718,8 +721,8 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
         int start = Math.max(contentEditText.getSelectionStart(), 0);
         int end = Math.max(contentEditText.getSelectionEnd(), 0);
         contentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
-                "[" + uploadedImage.imageName + "](" + uploadedImage.imageUrl + ")",
-                0, "[]()".length() + uploadedImage.imageName.length() + uploadedImage.imageUrl.length());
+                "![" + uploadedImage.getCaption() + "](" + uploadedImage.imageUrlOrKey + ")",
+                0, "![]()".length() + uploadedImage.getCaption().length() + uploadedImage.imageUrlOrKey.length());
     }
 
     @Override

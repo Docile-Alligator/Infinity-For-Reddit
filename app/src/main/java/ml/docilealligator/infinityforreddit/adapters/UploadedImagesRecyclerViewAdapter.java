@@ -38,7 +38,7 @@ public class UploadedImagesRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ((UploadedImageViewHolder) holder).imageNameTextView.setText(uploadedImages.get(position).imageName);
-        ((UploadedImageViewHolder) holder).imageUrlTextView.setText(uploadedImages.get(position).imageUrl);
+        ((UploadedImageViewHolder) holder).imageUrlTextView.setText(uploadedImages.get(position).imageUrlOrKey);
     }
 
     @Override

@@ -397,20 +397,20 @@ public final class Utils {
         executor.execute(() -> {
             try {
                 Bitmap bitmap = Glide.with(context).asBitmap().load(imageUri).submit().get();
-                String imageUrlOrError = UploadImageUtils.uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, bitmap);
+                String imageKeyOrError = UploadImageUtils.uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, bitmap, true);
                 handler.post(() -> {
-                    if (imageUrlOrError != null && !imageUrlOrError.startsWith("Error: ")) {
+                    if (imageKeyOrError != null && !imageKeyOrError.startsWith("Error: ")) {
                         String fileName = Utils.getFileName(context, imageUri);
                         if (fileName == null) {
-                            fileName = imageUrlOrError;
+                            fileName = imageKeyOrError;
                         }
-                        uploadedImages.add(new UploadedImage(fileName, imageUrlOrError));
+                        uploadedImages.add(new UploadedImage(fileName, imageKeyOrError));
 
                         int start = Math.max(editText.getSelectionStart(), 0);
                         int end = Math.max(editText.getSelectionEnd(), 0);
                         editText.getText().replace(Math.min(start, end), Math.max(start, end),
-                                "[" + fileName + "](" + imageUrlOrError + ")",
-                                0, "[]()".length() + fileName.length() + imageUrlOrError.length());
+                                "![](" + imageKeyOrError + ")",
+                                0, "![]()".length() + imageKeyOrError.length());
                         Snackbar.make(coordinatorLayout, R.string.upload_image_success, Snackbar.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(context, R.string.upload_image_failed, Toast.LENGTH_LONG).show();

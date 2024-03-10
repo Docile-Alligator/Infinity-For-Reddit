@@ -573,8 +573,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         int start = Math.max(binding.commentCommentEditText.getSelectionStart(), 0);
         int end = Math.max(binding.commentCommentEditText.getSelectionEnd(), 0);
         binding.commentCommentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
-                "[" + uploadedImage.imageName + "](" + uploadedImage.imageUrl + ")",
-                0, "[]()".length() + uploadedImage.imageName.length() + uploadedImage.imageUrl.length());
+                "[" + uploadedImage.imageName + "](" + uploadedImage.imageUrlOrKey + ")",
+                0, "[]()".length() + uploadedImage.imageName.length() + uploadedImage.imageUrlOrKey.length());
     }
 
     @Override

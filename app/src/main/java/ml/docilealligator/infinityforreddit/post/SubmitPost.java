@@ -88,7 +88,7 @@ public class SubmitPost {
                 Call<String> uploadMediaToAWS = uploadVideoToAWSApi.uploadMediaToAWS(nameValuePairsMap, fileToUpload);
                 Response<String> uploadMediaToAWSResponse = uploadMediaToAWS.execute();
                 if (uploadMediaToAWSResponse.isSuccessful()) {
-                    String url = UploadImageUtils.parseXMLResponseFromAWS(uploadMediaToAWSResponse.body());
+                    String url = UploadImageUtils.parseImageFromXMLResponseFromAWS(uploadMediaToAWSResponse.body());
                     if (url == null) {
                         submitPostListener.submitFailed(null);
                         return;

@@ -76,6 +76,7 @@ public class RichTextJSONConverter implements Visitor {
     private static final String TABLE_CELL_ALIGNMENT_LEFT = "l";
     private static final String TABLE_CELL_ALIGNMENT_CENTER = "c";
     private static final String TABLE_CELL_ALIGNMENT_RIGHT = "r";
+    private static final String IMAGE_ID = "id";
     private static final String DOCUMENT = "document";
 
     private final Map<String, Integer> formatMap;
@@ -542,6 +543,17 @@ public class RichTextJSONConverter implements Visitor {
 
                 formats = new ArrayList<>();
                 textSB.delete(0, textSB.length());
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (customBlock instanceof UploadedImageBlock) {
+            try {
+                JSONObject nodeJSON = new JSONObject();
+                nodeJSON.put(TYPE, IMAGE_E);
+                nodeJSON.put(IMAGE_ID, ((UploadedImageBlock) customBlock).uploadeImage.imageUrlOrKey);
+                nodeJSON.put(CONTENT, ((UploadedImageBlock) customBlock).uploadeImage.getCaption());
+
+                document.put(nodeJSON);
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
