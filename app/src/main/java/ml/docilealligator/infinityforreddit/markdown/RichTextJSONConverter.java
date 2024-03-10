@@ -3,6 +3,11 @@ package ml.docilealligator.infinityforreddit.markdown;
 import androidx.annotation.Nullable;
 
 import org.commonmark.ext.gfm.strikethrough.Strikethrough;
+import org.commonmark.ext.gfm.tables.TableBlock;
+import org.commonmark.ext.gfm.tables.TableBody;
+import org.commonmark.ext.gfm.tables.TableCell;
+import org.commonmark.ext.gfm.tables.TableHead;
+import org.commonmark.ext.gfm.tables.TableRow;
 import org.commonmark.node.BlockQuote;
 import org.commonmark.node.BulletList;
 import org.commonmark.node.Code;
@@ -66,6 +71,11 @@ public class RichTextJSONConverter implements Visitor {
     private static final String URL = "u";
     private static final String LEVEL = "l";
     private static final String IS_ORDERED_LIST = "o";
+    private static final String TABLE_HEADER_CONTENT = "h";
+    private static final String TABLE_CELL_ALIGNMENT = "a";
+    private static final String TABLE_CELL_ALIGNMENT_LEFT = "l";
+    private static final String TABLE_CELL_ALIGNMENT_CENTER = "c";
+    private static final String TABLE_CELL_ALIGNMENT_RIGHT = "r";
     private static final String DOCUMENT = "document";
 
     private final Map<String, Integer> formatMap;
@@ -502,7 +512,40 @@ public class RichTextJSONConverter implements Visitor {
 
     @Override
     public void visit(CustomBlock customBlock) {
+        if (customBlock instanceof TableBlock) {
+            try {
+                JSONObject nodeJSON = new JSONObject();
+                nodeJSON.put(TYPE, TABLE_E);
 
+                Node child = customBlock.getFirstChild();
+                while (child != null) {
+                    if (child instanceof TableHead) {
+                        contentArrayStack.push(new JSONArray());
+
+                        child.accept(this);
+
+                        JSONArray hArray = contentArrayStack.pop();
+                        nodeJSON.put(TABLE_HEADER_CONTENT, hArray);
+                    } else if (child instanceof TableBody) {
+                        contentArrayStack.push(new JSONArray());
+
+                        child.accept(this);
+
+                        JSONArray cArray = contentArrayStack.pop();
+                        nodeJSON.put(CONTENT, cArray);
+                    }
+                    child = child.getNext();
+                }
+
+
+                contentArrayStack.peek().put(nodeJSON);
+
+                formats = new ArrayList<>();
+                textSB.delete(0, textSB.length());
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override
@@ -538,6 +581,79 @@ public class RichTextJSONConverter implements Visitor {
                 cArray.put(contentJSONObject);
                 nodeJSON.put(CONTENT, cArray);
                 contentArrayStack.peek().put(nodeJSON);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (customNode instanceof TableHead) {
+            Node child = customNode.getFirstChild();
+            while (child != null) {
+                child.accept(this);
+                child = child.getNext();
+            }
+        } else if (customNode instanceof TableBody) {
+            Node child = customNode.getFirstChild();
+            while (child != null) {
+                if (child instanceof TableRow) {
+                    contentArrayStack.push(new JSONArray());
+
+                    child.accept(this);
+
+                    JSONArray array = contentArrayStack.pop();
+                    contentArrayStack.peek().put(array);
+                }
+                child = child.getNext();
+            }
+        } else if(customNode instanceof TableRow) {
+            Node child = customNode.getFirstChild();
+            while (child != null) {
+                child.accept(this);
+                child = child.getNext();
+            }
+        } else if (customNode instanceof TableCell) {
+            try {
+                JSONObject nodeJSON = new JSONObject();
+
+                contentArrayStack.push(new JSONArray());
+
+                Node child = customNode.getFirstChild();
+                while (child != null) {
+                    child.accept(this);
+                    child = child.getNext();
+                }
+
+                JSONArray cArray = contentArrayStack.pop();
+
+                if (textSB.length() > 0) {
+                    JSONObject content = new JSONObject();
+                    content.put(TYPE, TEXT_E);
+                    content.put(TEXT, textSB.toString());
+                    if (!formats.isEmpty()) {
+                        JSONArray formatsArray = new JSONArray();
+                        for (JSONArray f : formats) {
+                            formatsArray.put(f);
+                        }
+                        content.put(FORMAT, formatsArray);
+                    }
+
+                    cArray.put(content);
+                }
+
+                nodeJSON.put(CONTENT, cArray);
+                switch (((TableCell) customNode).getAlignment()) {
+                    case LEFT:
+                        nodeJSON.put(TABLE_CELL_ALIGNMENT, TABLE_CELL_ALIGNMENT_LEFT);
+                        break;
+                    case CENTER:
+                        nodeJSON.put(TABLE_CELL_ALIGNMENT, TABLE_CELL_ALIGNMENT_CENTER);
+                        break;
+                    case RIGHT:
+                        nodeJSON.put(TABLE_CELL_ALIGNMENT, TABLE_CELL_ALIGNMENT_RIGHT);
+                        break;
+                }
+                contentArrayStack.peek().put(nodeJSON);
+
+                formats = new ArrayList<>();
+                textSB.delete(0, textSB.length());
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
