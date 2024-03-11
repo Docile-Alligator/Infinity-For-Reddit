@@ -33,6 +33,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -41,11 +44,14 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import io.noties.markwon.Markwon;
+import io.noties.markwon.MarkwonReducer;
 import ml.docilealligator.infinityforreddit.AnyAccountAccessTokenAuthenticator;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.UploadedImage;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -55,6 +61,9 @@ import ml.docilealligator.infinityforreddit.events.SubmitImagePostEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitPollPostEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitTextOrLinkPostEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitVideoOrGifPostEvent;
+import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
+import ml.docilealligator.infinityforreddit.markdown.RichTextJSONConverter;
+import ml.docilealligator.infinityforreddit.markdown.UploadedImagePlugin;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.SubmitPost;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -70,6 +79,8 @@ public class SubmitPostService extends Service {
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_TITLE = "ET";
     public static final String EXTRA_CONTENT = "EC";
+    public static final String EXTRA_IS_RICHTEXT_JSON = "EIRJ";
+    public static final String EXTRA_UPLOADED_IMAGES = "EUI";
     public static final String EXTRA_REDDIT_GALLERY_PAYLOAD = "ERGP";
     public static final String EXTRA_POLL_PAYLOAD = "EPP";
     public static final String EXTRA_KIND = "EK";
@@ -146,10 +157,28 @@ public class SubmitPostService extends Service {
                     .build();
 
             if (postType == EXTRA_POST_TEXT_OR_LINK) {
-                String content = bundle.getString(EXTRA_CONTENT);
+                String content = bundle.getString(EXTRA_CONTENT, "");
+                boolean isRichTextJSON = bundle.getBoolean(EXTRA_IS_RICHTEXT_JSON);
                 String kind = bundle.getString(EXTRA_KIND);
+                if (isRichTextJSON) {
+                    List<UploadedImage> uploadedImages = bundle.getParcelableArrayList(EXTRA_UPLOADED_IMAGES);
+                    Map<String, UploadedImage> uploadedImageMap = new HashMap<>();
+                    for (UploadedImage u : uploadedImages) {
+                        uploadedImageMap.put(u.imageUrlOrKey, u);
+                    }
+                    UploadedImagePlugin uploadedImagePlugin = new UploadedImagePlugin();
+                    uploadedImagePlugin.setUploadedImageMap(uploadedImageMap);
+                    Markwon markwon = MarkdownUtils.createPostSubmissionRedditMarkwon(
+                            SubmitPostService.this, uploadedImagePlugin);
+                    try {
+                        content = new RichTextJSONConverter().constructRichTextJSON(MarkwonReducer.directChildren().reduce(markwon.parse(content))).toString();
+                    } catch (JSONException e) {
+                        handler.post(() -> EventBus.getDefault().post(new SubmitTextOrLinkPostEvent(false, null, getString(R.string.convert_to_richtext_json_failed))));
+                        return;
+                    }
+                }
                 submitTextOrLinkPost(newAuthenticatorOauthRetrofit, account, subredditName, title, content, flair, isSpoiler, isNSFW,
-                        receivePostReplyNotifications, kind);
+                        receivePostReplyNotifications, isRichTextJSON, kind);
             } else if (postType == EXTRA_POST_TYPE_CROSSPOST) {
                 String content = bundle.getString(EXTRA_CONTENT);
                 submitCrosspost(mExecutor, handler, newAuthenticatorOauthRetrofit, account, subredditName, title, content,
@@ -234,10 +263,10 @@ public class SubmitPostService extends Service {
 
     private void submitTextOrLinkPost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, String subredditName, String title, String content,
                                       Flair flair, boolean isSpoiler, boolean isNSFW, boolean receivePostReplyNotifications,
-                                      String kind) {
+                                      boolean isRichtextJSON, String kind) {
         SubmitPost.submitTextOrLinkPost(mExecutor, handler, newAuthenticatorOauthRetrofit, selectedAccount.getAccessToken(),
                 subredditName, title, content, flair, isSpoiler,
-                isNSFW, receivePostReplyNotifications, kind, new SubmitPost.SubmitPostListener() {
+                isNSFW, receivePostReplyNotifications, isRichtextJSON, kind, new SubmitPost.SubmitPostListener() {
                     @Override
                     public void submitSuccessful(Post post) {
                         handler.post(() -> EventBus.getDefault().post(new SubmitTextOrLinkPostEvent(true, post, null)));

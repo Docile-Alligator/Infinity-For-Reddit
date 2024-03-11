@@ -85,6 +85,7 @@ public class APIUtils {
     public static final String KIND_VIDEO = "video";
     public static final String KIND_VIDEOGIF = "videogif";
     public static final String KIND_CROSSPOST = "crosspost";
+    public static final String RICHTEXT_JSON_KEY = "richtext_json";
 
     public static final String FILEPATH_KEY = "filepath";
     public static final String MIMETYPE_KEY = "mimetype";

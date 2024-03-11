@@ -576,6 +576,11 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
         intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
         intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
         intent.putExtra(SubmitPostService.EXTRA_CONTENT, contentEditText.getText().toString());
+        if (!uploadedImages.isEmpty()) {
+            intent.putExtra(SubmitPostService.EXTRA_IS_RICHTEXT_JSON, true);
+            intent.putExtra(SubmitPostService.EXTRA_UPLOADED_IMAGES, uploadedImages);
+        }
+
         intent.putExtra(SubmitPostService.EXTRA_KIND, APIUtils.KIND_SELF);
         intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
         intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);

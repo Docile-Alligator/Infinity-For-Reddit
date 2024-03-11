@@ -58,6 +58,24 @@ public class MarkdownUtils {
     }
 
     @NonNull
+    public static Markwon createPostSubmissionRedditMarkwon(@NonNull Context context,
+                                                  @NonNull UploadedImagePlugin uploadedImagePlugin) {
+        return Markwon.builder(context)
+                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
+                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
+                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
+                }))
+                .usePlugin(SuperscriptPlugin.create())
+                .usePlugin(SpoilerParserPlugin.create(0, 0))
+                .usePlugin(RedditHeadingPlugin.create())
+                .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .usePlugin(uploadedImagePlugin)
+                .usePlugin(TableEntryPlugin.create(context))
+                .build();
+    }
+
+    @NonNull
     public static Markwon createDescriptionMarkwon(Context context, MarkwonPlugin miscPlugin,
                                                    EvenBetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener) {
         return Markwon.builder(context)

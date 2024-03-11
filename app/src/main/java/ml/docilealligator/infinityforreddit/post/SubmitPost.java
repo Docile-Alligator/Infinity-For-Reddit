@@ -32,10 +32,10 @@ public class SubmitPost {
     public static void submitTextOrLinkPost(Executor executor, Handler handler, Retrofit oauthRetrofit, String accessToken,
                                             String subredditName, String title, String content,
                                             Flair flair, boolean isSpoiler, boolean isNSFW,
-                                            boolean receivePostReplyNotifications, String kind,
+                                            boolean receivePostReplyNotifications, boolean isRichTextJSON, String kind,
                                             SubmitPostListener submitPostListener) {
         submitPost(executor, handler, oauthRetrofit, accessToken, subredditName, title, content,
-                flair, isSpoiler, isNSFW, receivePostReplyNotifications, kind, null, submitPostListener);
+                flair, isSpoiler, isNSFW, receivePostReplyNotifications, isRichTextJSON, kind, null, submitPostListener);
     }
 
     public static void submitImagePost(Executor executor, Handler handler, Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
@@ -47,7 +47,7 @@ public class SubmitPost {
             if (imageUrlOrError != null && !imageUrlOrError.startsWith("Error: ")) {
                 submitPost(executor, handler, oauthRetrofit, accessToken,
                         subredditName, title, imageUrlOrError, flair, isSpoiler, isNSFW,
-                        receivePostReplyNotifications, APIUtils.KIND_IMAGE, null, submitPostListener);
+                        receivePostReplyNotifications, false, APIUtils.KIND_IMAGE, null, submitPostListener);
             } else {
                 submitPostListener.submitFailed(imageUrlOrError);
             }
@@ -98,12 +98,12 @@ public class SubmitPost {
                         if (fileType.equals("gif")) {
                             submitPost(executor, handler, oauthRetrofit, accessToken,
                                     subredditName, title, url, flair, isSpoiler, isNSFW,
-                                    receivePostReplyNotifications, APIUtils.KIND_VIDEOGIF, imageUrlOrError,
+                                    receivePostReplyNotifications, false, APIUtils.KIND_VIDEOGIF, imageUrlOrError,
                                     submitPostListener);
                         } else {
                             submitPost(executor, handler, oauthRetrofit, accessToken,
                                     subredditName, title, url, flair, isSpoiler, isNSFW,
-                                    receivePostReplyNotifications, APIUtils.KIND_VIDEO, imageUrlOrError,
+                                    receivePostReplyNotifications, false, APIUtils.KIND_VIDEO, imageUrlOrError,
                                     submitPostListener);
                         }
                     } else {
@@ -127,14 +127,14 @@ public class SubmitPost {
                                        boolean receivePostReplyNotifications, String kind,
                                        SubmitPostListener submitPostListener) {
         submitPost(executor, handler, oauthRetrofit, accessToken, subredditName, title, crosspostFullname,
-                flair, isSpoiler, isNSFW, receivePostReplyNotifications, kind, null, submitPostListener);
+                flair, isSpoiler, isNSFW, receivePostReplyNotifications, false, kind, null, submitPostListener);
     }
 
     private static void submitPost(Executor executor, Handler handler, Retrofit oauthRetrofit, String accessToken,
                                    String subredditName, String title, String content,
                                    Flair flair, boolean isSpoiler, boolean isNSFW,
-                                   boolean receivePostReplyNotifications, String kind,
-                                   @Nullable String posterUrl, SubmitPostListener submitPostListener) {
+                                   boolean receivePostReplyNotifications, boolean isRichTextJSON,
+                                   String kind, @Nullable String posterUrl, SubmitPostListener submitPostListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
         Map<String, String> params = new HashMap<>();
@@ -144,7 +144,11 @@ public class SubmitPost {
         params.put(APIUtils.KIND_KEY, kind);
         switch (kind) {
             case APIUtils.KIND_SELF:
-                params.put(APIUtils.TEXT_KEY, content);
+                if (isRichTextJSON) {
+                    params.put(APIUtils.RICHTEXT_JSON_KEY, content);
+                } else {
+                    params.put(APIUtils.TEXT_KEY, content);
+                }
                 break;
             case APIUtils.KIND_LINK:
             case APIUtils.KIND_IMAGE:

@@ -547,6 +547,7 @@ public class RichTextJSONConverter implements Visitor {
                 throw new RuntimeException(e);
             }
         } else if (customBlock instanceof UploadedImageBlock) {
+            //Nothing is allowed inside this block.
             try {
                 JSONObject nodeJSON = new JSONObject();
                 nodeJSON.put(TYPE, IMAGE_E);
