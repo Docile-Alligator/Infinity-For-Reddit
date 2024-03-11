@@ -282,24 +282,25 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         }
 
         MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(
-                mCustomThemeWrapper, new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
-            @Override
-            public void onClick(int item) {
-                MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(
-                        CommentActivity.this, binding.commentCommentEditText, item);
-            }
+                mCustomThemeWrapper, true,
+                new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
+                    @Override
+                    public void onClick(int item) {
+                        MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(
+                                CommentActivity.this, binding.commentCommentEditText, item);
+                    }
 
-            @Override
-            public void onUploadImage() {
-                Utils.hideKeyboard(CommentActivity.this);
-                UploadedImagesBottomSheetFragment fragment = new UploadedImagesBottomSheetFragment();
-                Bundle arguments = new Bundle();
-                arguments.putParcelableArrayList(UploadedImagesBottomSheetFragment.EXTRA_UPLOADED_IMAGES,
-                        uploadedImages);
-                fragment.setArguments(arguments);
-                fragment.show(getSupportFragmentManager(), fragment.getTag());
-            }
-        });
+                    @Override
+                    public void onUploadImage() {
+                        Utils.hideKeyboard(CommentActivity.this);
+                        UploadedImagesBottomSheetFragment fragment = new UploadedImagesBottomSheetFragment();
+                        Bundle arguments = new Bundle();
+                        arguments.putParcelableArrayList(UploadedImagesBottomSheetFragment.EXTRA_UPLOADED_IMAGES,
+                                uploadedImages);
+                        fragment.setArguments(arguments);
+                        fragment.show(getSupportFragmentManager(), fragment.getTag());
+                    }
+                });
 
         binding.commentMarkdownBottomBarRecyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this,
                 LinearLayoutManagerBugFixed.HORIZONTAL, false));
@@ -436,8 +437,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     .connectionPool(new ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
                     .build())
                     .build();
-            SendComment.sendComment(mExecutor, new Handler(), binding.commentCommentEditText.getText().toString(),
-                    parentFullname, parentDepth, newAuthenticatorOauthRetrofit, selectedAccount,
+            SendComment.sendComment(this, mExecutor, new Handler(), binding.commentCommentEditText.getText().toString(),
+                    parentFullname, parentDepth, uploadedImages, newAuthenticatorOauthRetrofit, selectedAccount,
                     new SendComment.SendCommentListener() {
                         @Override
                         public void sendCommentSuccess(Comment comment) {
@@ -466,7 +467,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                                 item.getIcon().setAlpha(255);
                             }
 
-                            if (errorMessage == null || !errorMessage.equals("")) {
+                            if (errorMessage == null || errorMessage.isEmpty()) {
                                 Snackbar.make(binding.commentCoordinatorLayout, R.string.send_comment_failed, Snackbar.LENGTH_SHORT).show();
                             } else {
                                 Snackbar.make(binding.commentCoordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();

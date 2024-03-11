@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.markdown;
 
+import android.content.Context;
+
 import androidx.annotation.Nullable;
 
 import org.commonmark.ext.gfm.strikethrough.Strikethrough;
@@ -42,6 +44,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+
+import io.noties.markwon.Markwon;
+import io.noties.markwon.MarkwonReducer;
+import ml.docilealligator.infinityforreddit.UploadedImage;
 
 public class RichTextJSONConverter implements Visitor {
     private static final int BOLD = 1;
@@ -99,6 +105,25 @@ public class RichTextJSONConverter implements Visitor {
         contentArrayStack = new Stack<>();
 
         contentArrayStack.push(document);
+    }
+
+    public String constructRichTextJSON(Context context, String markdown,
+                                            List<UploadedImage> uploadedImages) throws JSONException {
+        UploadedImagePlugin uploadedImagePlugin = new UploadedImagePlugin();
+        uploadedImagePlugin.setUploadedImages(uploadedImages);
+        Markwon markwon = MarkdownUtils.createPostSubmissionRedditMarkwon(
+                context, uploadedImagePlugin);
+
+        List<Node> nodes = MarkwonReducer.directChildren().reduce(markwon.parse(markdown));
+
+        JSONObject richText = new JSONObject();
+
+        for (Node n : nodes) {
+            n.accept(this);
+        }
+
+        richText.put(DOCUMENT, document);
+        return richText.toString();
     }
 
     public JSONObject constructRichTextJSON(List<Node> nodes) throws JSONException {
@@ -565,9 +590,9 @@ public class RichTextJSONConverter implements Visitor {
     public void visit(CustomNode customNode) {
         if (customNode instanceof Superscript) {
             /*
-            Superscript can still has inline spans, thus checking children's next node until the end.
-            Superscript must use ^(), not ^ right now.
-         */
+                Superscript can still has inline spans, thus checking children's next node until the end.
+                Superscript must use ^(), not ^ right now.
+            */
             Node child = customNode.getFirstChild();
             while (child != null) {
                 JSONArray format = getFormatArray(customNode);

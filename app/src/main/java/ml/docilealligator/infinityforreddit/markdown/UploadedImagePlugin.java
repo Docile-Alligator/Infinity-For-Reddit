@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import org.commonmark.parser.Parser;
 
-import java.util.Map;
+import java.util.List;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
 import ml.docilealligator.infinityforreddit.UploadedImage;
@@ -27,7 +27,7 @@ public class UploadedImagePlugin extends AbstractMarkwonPlugin {
         builder.customBlockParserFactory(factory);
     }
 
-    public void setUploadedImageMap(Map<String, UploadedImage> uploadedImageMap) {
-        factory.setUploadedImageMap(uploadedImageMap);
+    public void setUploadedImages(List<UploadedImage> uploadedImages) {
+        factory.setUploadedImages(uploadedImages);
     }
 }

@@ -1368,5 +1368,6 @@
     <string name="i_understand">I understand</string>
 
     <string name="add_to_comment_filter">Add to Comment Filter</string>
+    <string name="cannot_edit_post_with_images">Editing posts with images is not allowed.</string>
 
 </resources>

@@ -31,9 +31,10 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
     public static final int CODE_BLOCK = 9;
     public static final int UPLOAD_IMAGE = 10;
 
-    private static final int ITEM_COUNT = 11;
+    private static final int ITEM_COUNT = 10;
 
     private final CustomThemeWrapper customThemeWrapper;
+    private final boolean canUploadImage;
     private final ItemClickListener itemClickListener;
 
     public interface ItemClickListener {
@@ -43,7 +44,14 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
 
     public MarkdownBottomBarRecyclerViewAdapter(CustomThemeWrapper customThemeWrapper,
                                                 ItemClickListener itemClickListener) {
+        this(customThemeWrapper, false, itemClickListener);
+    }
+
+    public MarkdownBottomBarRecyclerViewAdapter(CustomThemeWrapper customThemeWrapper,
+                                                boolean canUploadImage,
+                                                ItemClickListener itemClickListener) {
         this.customThemeWrapper = customThemeWrapper;
+        this.canUploadImage = canUploadImage;
         this.itemClickListener = itemClickListener;
     }
 
@@ -96,7 +104,7 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
 
     @Override
     public int getItemCount() {
-        return ITEM_COUNT;
+        return canUploadImage ? ITEM_COUNT + 1 : ITEM_COUNT;
     }
 
     public static void bindEditTextWithItemClickListener(Activity activity, EditText commentEditText, int item) {

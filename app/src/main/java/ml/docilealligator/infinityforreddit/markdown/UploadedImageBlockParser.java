@@ -10,6 +10,8 @@ import org.commonmark.parser.block.BlockStart;
 import org.commonmark.parser.block.MatchedBlockParser;
 import org.commonmark.parser.block.ParserState;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -63,8 +65,15 @@ public class UploadedImageBlockParser extends AbstractBlockParser {
             return BlockStart.none();
         }
 
-        public void setUploadedImageMap(@Nullable Map<String, UploadedImage> uploadedImageMap) {
-            this.uploadedImageMap = uploadedImageMap;
+        public void setUploadedImages(@Nullable List<UploadedImage> uploadedImages) {
+            if (uploadedImages == null) {
+                return;
+            }
+
+            uploadedImageMap = new HashMap<>();
+            for (UploadedImage u : uploadedImages) {
+                uploadedImageMap.put(u.imageUrlOrKey, u);
+            }
         }
     }
 }

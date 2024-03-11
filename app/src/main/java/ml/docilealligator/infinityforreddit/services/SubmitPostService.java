@@ -33,9 +33,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -44,8 +42,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import io.noties.markwon.Markwon;
-import io.noties.markwon.MarkwonReducer;
 import ml.docilealligator.infinityforreddit.AnyAccountAccessTokenAuthenticator;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -61,9 +57,7 @@ import ml.docilealligator.infinityforreddit.events.SubmitImagePostEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitPollPostEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitTextOrLinkPostEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitVideoOrGifPostEvent;
-import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.markdown.RichTextJSONConverter;
-import ml.docilealligator.infinityforreddit.markdown.UploadedImagePlugin;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.SubmitPost;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -162,16 +156,8 @@ public class SubmitPostService extends Service {
                 String kind = bundle.getString(EXTRA_KIND);
                 if (isRichTextJSON) {
                     List<UploadedImage> uploadedImages = bundle.getParcelableArrayList(EXTRA_UPLOADED_IMAGES);
-                    Map<String, UploadedImage> uploadedImageMap = new HashMap<>();
-                    for (UploadedImage u : uploadedImages) {
-                        uploadedImageMap.put(u.imageUrlOrKey, u);
-                    }
-                    UploadedImagePlugin uploadedImagePlugin = new UploadedImagePlugin();
-                    uploadedImagePlugin.setUploadedImageMap(uploadedImageMap);
-                    Markwon markwon = MarkdownUtils.createPostSubmissionRedditMarkwon(
-                            SubmitPostService.this, uploadedImagePlugin);
                     try {
-                        content = new RichTextJSONConverter().constructRichTextJSON(MarkwonReducer.directChildren().reduce(markwon.parse(content))).toString();
+                        content = new RichTextJSONConverter().constructRichTextJSON(SubmitPostService.this, content, uploadedImages);
                     } catch (JSONException e) {
                         handler.post(() -> EventBus.getDefault().post(new SubmitTextOrLinkPostEvent(false, null, getString(R.string.convert_to_richtext_json_failed))));
                         return;

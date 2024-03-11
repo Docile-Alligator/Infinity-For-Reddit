@@ -369,24 +369,25 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
         });
 
         MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(
-                mCustomThemeWrapper, new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
-            @Override
-            public void onClick(int item) {
-                MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(
-                        PostTextActivity.this, contentEditText, item);
-            }
+                mCustomThemeWrapper, true,
+                new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
+                    @Override
+                    public void onClick(int item) {
+                        MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(
+                                PostTextActivity.this, contentEditText, item);
+                    }
 
-            @Override
-            public void onUploadImage() {
-                Utils.hideKeyboard(PostTextActivity.this);
-                UploadedImagesBottomSheetFragment fragment = new UploadedImagesBottomSheetFragment();
-                Bundle arguments = new Bundle();
-                arguments.putParcelableArrayList(UploadedImagesBottomSheetFragment.EXTRA_UPLOADED_IMAGES,
-                        uploadedImages);
-                fragment.setArguments(arguments);
-                fragment.show(getSupportFragmentManager(), fragment.getTag());
-            }
-        });
+                    @Override
+                    public void onUploadImage() {
+                        Utils.hideKeyboard(PostTextActivity.this);
+                        UploadedImagesBottomSheetFragment fragment = new UploadedImagesBottomSheetFragment();
+                        Bundle arguments = new Bundle();
+                        arguments.putParcelableArrayList(UploadedImagesBottomSheetFragment.EXTRA_UPLOADED_IMAGES,
+                                uploadedImages);
+                        fragment.setArguments(arguments);
+                        fragment.show(getSupportFragmentManager(), fragment.getTag());
+                    }
+                });
 
         markdownBottomBarRecyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this,
                 LinearLayoutManager.HORIZONTAL, false));
