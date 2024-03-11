@@ -677,16 +677,20 @@ public class RichTextJSONConverter implements Visitor {
                 }
 
                 nodeJSON.put(CONTENT, cArray);
-                switch (((TableCell) customNode).getAlignment()) {
-                    case LEFT:
-                        nodeJSON.put(TABLE_CELL_ALIGNMENT, TABLE_CELL_ALIGNMENT_LEFT);
-                        break;
-                    case CENTER:
-                        nodeJSON.put(TABLE_CELL_ALIGNMENT, TABLE_CELL_ALIGNMENT_CENTER);
-                        break;
-                    case RIGHT:
-                        nodeJSON.put(TABLE_CELL_ALIGNMENT, TABLE_CELL_ALIGNMENT_RIGHT);
-                        break;
+                if (((TableCell) customNode).getAlignment() == null) {
+                    nodeJSON.put(TABLE_CELL_ALIGNMENT, TABLE_CELL_ALIGNMENT_LEFT);
+                } else {
+                    switch (((TableCell) customNode).getAlignment()) {
+                        case CENTER:
+                            nodeJSON.put(TABLE_CELL_ALIGNMENT, TABLE_CELL_ALIGNMENT_CENTER);
+                            break;
+                        case RIGHT:
+                            nodeJSON.put(TABLE_CELL_ALIGNMENT, TABLE_CELL_ALIGNMENT_RIGHT);
+                            break;
+                        default:
+                            nodeJSON.put(TABLE_CELL_ALIGNMENT, TABLE_CELL_ALIGNMENT_LEFT);
+                            break;
+                    }
                 }
                 contentArrayStack.peek().put(nodeJSON);
 

@@ -236,7 +236,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
 
             mOauthRetrofit.create(RedditAPI.class)
                     .editPostOrComment(APIUtils.getOAuthHeader(mAccessToken), params)
-                    .enqueue(new Callback<String>() {
+                    .enqueue(new Callback<>() {
                         @Override
                         public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                             isSubmitting = false;
