@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.markdown;
 
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.commonmark.node.Node;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Collections;
 import java.util.List;
@@ -92,12 +89,12 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
     public void setParsedMarkdown(@NonNull Markwon markwon, @NonNull List<Node> nodes) {
         // clear all entries before applying
 
-        try {
+        /*try {
             JSONObject object = new RichTextJSONConverter().constructRichTextJSON(nodes);
             Log.i("asdf", "s" + object);
         } catch (JSONException e) {
             throw new RuntimeException(e);
-        }
+        }*/
 
         defaultEntry.clear();
 

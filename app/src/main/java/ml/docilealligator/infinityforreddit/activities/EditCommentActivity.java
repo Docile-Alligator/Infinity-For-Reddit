@@ -28,6 +28,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +43,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.MediaMetadata;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.UploadImageEnabledActivity;
 import ml.docilealligator.infinityforreddit.UploadedImage;
@@ -51,6 +53,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesB
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.markdown.RichTextJSONConverter;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -63,9 +66,10 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
 
     public static final String EXTRA_CONTENT = "EC";
     public static final String EXTRA_FULLNAME = "EF";
+    public static final String EXTRA_MEDIA_METADATA_LIST = "EMML";
     public static final String EXTRA_POSITION = "EP";
-    public static final String EXTRA_EDITED_COMMENT_CONTENT = "EECC";
-    public static final String EXTRA_EDITED_COMMENT_POSITION = "EECP";
+    public static final String RETURN_EXTRA_EDITED_COMMENT_CONTENT = "REECC";
+    public static final String RETURN_EXTRA_EDITED_COMMENT_POSITION = "REECP";
 
     private static final int PICK_IMAGE_REQUEST_CODE = 100;
     private static final int CAPTURE_IMAGE_REQUEST_CODE = 200;
@@ -132,6 +136,25 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
         mFullName = getIntent().getStringExtra(EXTRA_FULLNAME);
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         mCommentContent = getIntent().getStringExtra(EXTRA_CONTENT);
+        ArrayList<MediaMetadata> mediaMetadataList = getIntent().getParcelableArrayListExtra(EXTRA_MEDIA_METADATA_LIST);
+
+        if (mediaMetadataList != null) {
+            StringBuilder sb = new StringBuilder(mCommentContent);
+            for (MediaMetadata m : mediaMetadataList) {
+                int index = sb.indexOf(m.original.url);
+                if (index >= 0) {
+                    if (index > 0 && sb.charAt(index - 1) == '(') {
+                        sb.replace(index, index + m.original.url.length(), m.id);
+                    } else {
+                        sb.insert(index + m.original.url.length(), ')')
+                                .insert(index, "![](")
+                                .replace(index + 4, index + 4 + m.original.url.length(), m.id);
+                    }
+                    uploadedImages.add(new UploadedImage(m.id, m.id));
+                }
+            }
+            mCommentContent = sb.toString();
+        }
         contentEditText.setText(mCommentContent);
 
         if (savedInstanceState != null) {
@@ -139,7 +162,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
         }
 
         MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(
-                mCustomThemeWrapper, new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
+                mCustomThemeWrapper, true, new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
             @Override
             public void onClick(int item) {
                 MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(
@@ -232,7 +255,18 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
 
             Map<String, String> params = new HashMap<>();
             params.put(APIUtils.THING_ID_KEY, mFullName);
-            params.put(APIUtils.TEXT_KEY, content);
+            if (!uploadedImages.isEmpty()) {
+                try {
+                    params.put(APIUtils.RICHTEXT_JSON_KEY, new RichTextJSONConverter().constructRichTextJSON(this, content, uploadedImages));
+                    params.put(APIUtils.TEXT_KEY, "");
+                } catch (JSONException e) {
+                    isSubmitting = false;
+                    Snackbar.make(coordinatorLayout, R.string.convert_to_richtext_json_failed, Snackbar.LENGTH_SHORT).show();
+                    return;
+                }
+            } else {
+                params.put(APIUtils.TEXT_KEY, content);
+            }
 
             mOauthRetrofit.create(RedditAPI.class)
                     .editPostOrComment(APIUtils.getOAuthHeader(mAccessToken), params)
@@ -244,8 +278,8 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
                                 Toast.makeText(EditCommentActivity.this, R.string.edit_success, Toast.LENGTH_SHORT).show();
 
                                 Intent returnIntent = new Intent();
-                                returnIntent.putExtra(EXTRA_EDITED_COMMENT_CONTENT, Utils.modifyMarkdown(content));
-                                returnIntent.putExtra(EXTRA_EDITED_COMMENT_POSITION, getIntent().getExtras().getInt(EXTRA_POSITION));
+                                returnIntent.putExtra(RETURN_EXTRA_EDITED_COMMENT_CONTENT, Utils.modifyMarkdown(content));
+                                returnIntent.putExtra(RETURN_EXTRA_EDITED_COMMENT_POSITION, getIntent().getExtras().getInt(EXTRA_POSITION));
                                 setResult(RESULT_OK, returnIntent);
 
                                 finish();
@@ -353,7 +387,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
         int start = Math.max(contentEditText.getSelectionStart(), 0);
         int end = Math.max(contentEditText.getSelectionEnd(), 0);
         contentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
-                "[" + uploadedImage.imageName + "](" + uploadedImage.imageUrlOrKey + ")",
-                0, "[]()".length() + uploadedImage.imageName.length() + uploadedImage.imageUrlOrKey.length());
+                "![](" + uploadedImage.imageUrlOrKey + ")",
+                0, "![]()".length() + uploadedImage.imageUrlOrKey.length());
     }
 }
