@@ -408,9 +408,16 @@ public final class Utils {
 
                         int start = Math.max(editText.getSelectionStart(), 0);
                         int end = Math.max(editText.getSelectionEnd(), 0);
-                        editText.getText().replace(Math.min(start, end), Math.max(start, end),
-                                "![](" + imageKeyOrError + ")",
-                                0, "![]()".length() + imageKeyOrError.length());
+                        int realStart = Math.min(start, end);
+                        if (realStart > 0 && editText.getText().toString().charAt(realStart - 1) != '\n') {
+                            editText.getText().replace(realStart, Math.max(start, end),
+                                    "\n![](" + imageKeyOrError + ")\n",
+                                    0, "\n![]()\n".length() + imageKeyOrError.length());
+                        } else {
+                            editText.getText().replace(realStart, Math.max(start, end),
+                                    "![](" + imageKeyOrError + ")\n",
+                                    0, "![]()\n".length() + imageKeyOrError.length());
+                        }
                         Snackbar.make(coordinatorLayout, R.string.upload_image_success, Snackbar.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(context, R.string.upload_image_failed, Toast.LENGTH_LONG).show();

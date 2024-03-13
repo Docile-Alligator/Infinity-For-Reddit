@@ -386,8 +386,15 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
     public void insertImageUrl(UploadedImage uploadedImage) {
         int start = Math.max(contentEditText.getSelectionStart(), 0);
         int end = Math.max(contentEditText.getSelectionEnd(), 0);
-        contentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
-                "![](" + uploadedImage.imageUrlOrKey + ")",
-                0, "![]()".length() + uploadedImage.imageUrlOrKey.length());
+        int realStart = Math.min(start, end);
+        if (realStart > 0 && contentEditText.getText().toString().charAt(realStart - 1) != '\n') {
+            contentEditText.getText().replace(realStart, Math.max(start, end),
+                    "\n![](" + uploadedImage.imageUrlOrKey + ")\n",
+                    0, "\n![]()\n".length() + uploadedImage.imageUrlOrKey.length());
+        } else {
+            contentEditText.getText().replace(realStart, Math.max(start, end),
+                    "![](" + uploadedImage.imageUrlOrKey + ")\n",
+                    0, "![]()\n".length() + uploadedImage.imageUrlOrKey.length());
+        }
     }
 }

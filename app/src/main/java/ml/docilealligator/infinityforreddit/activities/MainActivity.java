@@ -136,7 +136,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         ActivityToolbarInterface, FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback,
         RandomBottomSheetFragment.RandomOptionSelectionCallback, MarkPostAsReadInterface, RecyclerViewContentScrollingInterface {
 
-    static final String EXTRA_MESSSAGE_FULLNAME = "ENF";
+    static final String EXTRA_MESSAGE_FULLNAME = "ENF";
     static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
 
     private static final String FETCH_USER_INFO_STATE = "FUIS";
@@ -327,7 +327,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
             inboxCount = savedInstanceState.getInt(INBOX_COUNT_STATE);
         } else {
-            mMessageFullname = getIntent().getStringExtra(EXTRA_MESSSAGE_FULLNAME);
+            mMessageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
         }
 

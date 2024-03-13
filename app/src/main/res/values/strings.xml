@@ -219,6 +219,7 @@
 
     <string name="post_title_hint">Title</string>
     <string name="post_text_content_hint">Content</string>
+    <string name="post_optional_text_content_hint">Content (optional)</string>
     <string name="choose_a_subreddit">Choose a subreddit</string>
     <string name="rules">Rules</string>
     <string name="post_link_hint">URL</string>
