@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.post;
 import android.graphics.Bitmap;
 import android.os.Handler;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.json.JSONArray;
@@ -29,12 +30,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class SubmitPost {
-    public static void submitTextOrLinkPost(Executor executor, Handler handler, Retrofit oauthRetrofit, String accessToken,
-                                            String subredditName, String title, String content,
-                                            Flair flair, boolean isSpoiler, boolean isNSFW,
-                                            boolean receivePostReplyNotifications, boolean isRichTextJSON, String kind,
-                                            SubmitPostListener submitPostListener) {
-        submitPost(executor, handler, oauthRetrofit, accessToken, subredditName, title, content,
+    public static void submitTextOrLinkPost(Executor executor, Handler handler, Retrofit oauthRetrofit,
+                                            String accessToken, String subredditName, String title,
+                                            String content, @Nullable String url, Flair flair,
+                                            boolean isSpoiler, boolean isNSFW,
+                                            boolean receivePostReplyNotifications, boolean isRichTextJSON,
+                                            String kind, SubmitPostListener submitPostListener) {
+        submitPost(executor, handler, oauthRetrofit, accessToken, subredditName, title, content, url,
                 flair, isSpoiler, isNSFW, receivePostReplyNotifications, isRichTextJSON, kind, null, submitPostListener);
     }
 
@@ -46,7 +48,7 @@ public class SubmitPost {
             String imageUrlOrError = UploadImageUtils.uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, image);
             if (imageUrlOrError != null && !imageUrlOrError.startsWith("Error: ")) {
                 submitPost(executor, handler, oauthRetrofit, accessToken,
-                        subredditName, title, imageUrlOrError, flair, isSpoiler, isNSFW,
+                        subredditName, title, null, imageUrlOrError, flair, isSpoiler, isNSFW,
                         receivePostReplyNotifications, false, APIUtils.KIND_IMAGE, null, submitPostListener);
             } else {
                 submitPostListener.submitFailed(imageUrlOrError);
@@ -97,12 +99,12 @@ public class SubmitPost {
                     if (imageUrlOrError != null && !imageUrlOrError.startsWith("Error: ")) {
                         if (fileType.equals("gif")) {
                             submitPost(executor, handler, oauthRetrofit, accessToken,
-                                    subredditName, title, url, flair, isSpoiler, isNSFW,
+                                    subredditName, title, null, url, flair, isSpoiler, isNSFW,
                                     receivePostReplyNotifications, false, APIUtils.KIND_VIDEOGIF, imageUrlOrError,
                                     submitPostListener);
                         } else {
                             submitPost(executor, handler, oauthRetrofit, accessToken,
-                                    subredditName, title, url, flair, isSpoiler, isNSFW,
+                                    subredditName, title, null, url, flair, isSpoiler, isNSFW,
                                     receivePostReplyNotifications, false, APIUtils.KIND_VIDEO, imageUrlOrError,
                                     submitPostListener);
                         }
@@ -126,15 +128,16 @@ public class SubmitPost {
                                        Flair flair, boolean isSpoiler, boolean isNSFW,
                                        boolean receivePostReplyNotifications, String kind,
                                        SubmitPostListener submitPostListener) {
-        submitPost(executor, handler, oauthRetrofit, accessToken, subredditName, title, crosspostFullname,
+        submitPost(executor, handler, oauthRetrofit, accessToken, subredditName, title, crosspostFullname, null,
                 flair, isSpoiler, isNSFW, receivePostReplyNotifications, false, kind, null, submitPostListener);
     }
 
     private static void submitPost(Executor executor, Handler handler, Retrofit oauthRetrofit, String accessToken,
-                                   String subredditName, String title, String content,
-                                   Flair flair, boolean isSpoiler, boolean isNSFW,
+                                   String subredditName, String title, @Nullable String content,
+                                   @Nullable String url, Flair flair, boolean isSpoiler, boolean isNSFW,
                                    boolean receivePostReplyNotifications, boolean isRichTextJSON,
-                                   String kind, @Nullable String posterUrl, SubmitPostListener submitPostListener) {
+                                   @NonNull String kind, @Nullable String posterUrl,
+                                   SubmitPostListener submitPostListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
         Map<String, String> params = new HashMap<>();
@@ -151,16 +154,17 @@ public class SubmitPost {
                 }
                 break;
             case APIUtils.KIND_LINK:
+                params.put(APIUtils.TEXT_KEY, content);
             case APIUtils.KIND_IMAGE:
-                params.put(APIUtils.URL_KEY, content);
+                params.put(APIUtils.URL_KEY, url);
                 break;
             case APIUtils.KIND_VIDEOGIF:
                 params.put(APIUtils.KIND_KEY, APIUtils.KIND_IMAGE);
-                params.put(APIUtils.URL_KEY, content);
+                params.put(APIUtils.URL_KEY, url);
                 params.put(APIUtils.VIDEO_POSTER_URL_KEY, posterUrl);
                 break;
             case APIUtils.KIND_VIDEO:
-                params.put(APIUtils.URL_KEY, content);
+                params.put(APIUtils.URL_KEY, url);
                 params.put(APIUtils.VIDEO_POSTER_URL_KEY, posterUrl);
                 break;
             case APIUtils.KIND_CROSSPOST:

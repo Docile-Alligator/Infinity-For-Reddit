@@ -75,6 +75,7 @@ public class SubmitPostService extends Service {
     public static final String EXTRA_CONTENT = "EC";
     public static final String EXTRA_IS_RICHTEXT_JSON = "EIRJ";
     public static final String EXTRA_UPLOADED_IMAGES = "EUI";
+    public static final String EXTRA_URL = "EU";
     public static final String EXTRA_REDDIT_GALLERY_PAYLOAD = "ERGP";
     public static final String EXTRA_POLL_PAYLOAD = "EPP";
     public static final String EXTRA_KIND = "EK";
@@ -90,7 +91,7 @@ public class SubmitPostService extends Service {
     public static final int EXTRA_POST_TYPE_POLL = 4;
     public static final int EXTRA_POST_TYPE_CROSSPOST = 5;
 
-    private static final String EXTRA_MEDIA_URI = "EU";
+    private static final String EXTRA_MEDIA_URI = "EMU";
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -163,7 +164,8 @@ public class SubmitPostService extends Service {
                         return;
                     }
                 }
-                submitTextOrLinkPost(newAuthenticatorOauthRetrofit, account, subredditName, title, content, flair, isSpoiler, isNSFW,
+                submitTextOrLinkPost(newAuthenticatorOauthRetrofit, account, subredditName, title, content,
+                        bundle.getString(EXTRA_URL), flair, isSpoiler, isNSFW,
                         receivePostReplyNotifications, isRichTextJSON, kind);
             } else if (postType == EXTRA_POST_TYPE_CROSSPOST) {
                 String content = bundle.getString(EXTRA_CONTENT);
@@ -247,11 +249,13 @@ public class SubmitPostService extends Service {
                 .build();
     }
 
-    private void submitTextOrLinkPost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, String subredditName, String title, String content,
-                                      Flair flair, boolean isSpoiler, boolean isNSFW, boolean receivePostReplyNotifications,
-                                      boolean isRichtextJSON, String kind) {
+    private void submitTextOrLinkPost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount,
+                                      String subredditName, String title, String content, @Nullable String url,
+                                      Flair flair, boolean isSpoiler, boolean isNSFW,
+                                      boolean receivePostReplyNotifications, boolean isRichtextJSON,
+                                      String kind) {
         SubmitPost.submitTextOrLinkPost(mExecutor, handler, newAuthenticatorOauthRetrofit, selectedAccount.getAccessToken(),
-                subredditName, title, content, flair, isSpoiler,
+                subredditName, title, content, url, flair, isSpoiler,
                 isNSFW, receivePostReplyNotifications, isRichtextJSON, kind, new SubmitPost.SubmitPostListener() {
                     @Override
                     public void submitSuccessful(Post post) {

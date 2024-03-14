@@ -150,8 +150,6 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
         binding = ActivityPostPollBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ButterKnife.bind(this);
-
         EventBus.getDefault().register(this);
 
         applyCustomTheme();
