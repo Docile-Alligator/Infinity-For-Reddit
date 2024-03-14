@@ -41,14 +41,14 @@ public class SubmitPost {
     }
 
     public static void submitImagePost(Executor executor, Handler handler, Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
-                                       String accessToken, String subredditName, String title, Bitmap image,
-                                       Flair flair, boolean isSpoiler, boolean isNSFW,
+                                       String accessToken, String subredditName, String title, String content,
+                                       Bitmap image, Flair flair, boolean isSpoiler, boolean isNSFW,
                                        boolean receivePostReplyNotifications, SubmitPostListener submitPostListener) {
         try {
             String imageUrlOrError = UploadImageUtils.uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, image);
             if (imageUrlOrError != null && !imageUrlOrError.startsWith("Error: ")) {
                 submitPost(executor, handler, oauthRetrofit, accessToken,
-                        subredditName, title, null, imageUrlOrError, flair, isSpoiler, isNSFW,
+                        subredditName, title, content, imageUrlOrError, flair, isSpoiler, isNSFW,
                         receivePostReplyNotifications, false, APIUtils.KIND_IMAGE, null, submitPostListener);
             } else {
                 submitPostListener.submitFailed(imageUrlOrError);
@@ -154,8 +154,8 @@ public class SubmitPost {
                 }
                 break;
             case APIUtils.KIND_LINK:
-                params.put(APIUtils.TEXT_KEY, content);
             case APIUtils.KIND_IMAGE:
+                params.put(APIUtils.TEXT_KEY, content);
                 params.put(APIUtils.URL_KEY, url);
                 break;
             case APIUtils.KIND_VIDEOGIF:

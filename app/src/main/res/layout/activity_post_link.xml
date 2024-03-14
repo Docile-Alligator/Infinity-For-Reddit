@@ -257,7 +257,7 @@
         </androidx.core.widget.NestedScrollView>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/markdown_bottom_bar_recycler_view_post_text_activity"
+            android:id="@+id/markdown_bottom_bar_recycler_view_post_link_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="horizontal"

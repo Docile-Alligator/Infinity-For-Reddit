@@ -168,17 +168,16 @@ public class SubmitPostService extends Service {
                         bundle.getString(EXTRA_URL), flair, isSpoiler, isNSFW,
                         receivePostReplyNotifications, isRichTextJSON, kind);
             } else if (postType == EXTRA_POST_TYPE_CROSSPOST) {
-                String content = bundle.getString(EXTRA_CONTENT);
-                submitCrosspost(mExecutor, handler, newAuthenticatorOauthRetrofit, account, subredditName, title, content,
-                        flair, isSpoiler, isNSFW, receivePostReplyNotifications);
+                submitCrosspost(mExecutor, handler, newAuthenticatorOauthRetrofit, account, subredditName, title,
+                        bundle.getString(EXTRA_CONTENT), flair, isSpoiler, isNSFW, receivePostReplyNotifications);
             } else if (postType == EXTRA_POST_TYPE_IMAGE) {
                 Uri mediaUri = Uri.parse(bundle.getString(EXTRA_MEDIA_URI));
-                submitImagePost(newAuthenticatorOauthRetrofit, account, mediaUri, subredditName, title, flair, isSpoiler, isNSFW,
-                        receivePostReplyNotifications);
+                submitImagePost(newAuthenticatorOauthRetrofit, account, mediaUri, subredditName, title,
+                        bundle.getString(EXTRA_CONTENT), flair, isSpoiler, isNSFW, receivePostReplyNotifications);
             } else if (postType == EXTRA_POST_TYPE_VIDEO) {
                 Uri mediaUri = Uri.parse(bundle.getString(EXTRA_MEDIA_URI));
-                submitVideoPost(newAuthenticatorOauthRetrofit, account, mediaUri, subredditName, title, flair, isSpoiler, isNSFW,
-                        receivePostReplyNotifications);
+                submitVideoPost(newAuthenticatorOauthRetrofit, account, mediaUri, subredditName, title, flair,
+                        isSpoiler, isNSFW, receivePostReplyNotifications);
             } else if (postType == EXTRA_POST_TYPE_GALLERY) {
                 submitGalleryPost(newAuthenticatorOauthRetrofit, account, bundle.getString(EXTRA_REDDIT_GALLERY_PAYLOAD));
             } else {
@@ -296,12 +295,13 @@ public class SubmitPostService extends Service {
                 });
     }
 
-    private void submitImagePost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, Uri mediaUri, String subredditName, String title,
-                                 Flair flair, boolean isSpoiler, boolean isNSFW, boolean receivePostReplyNotifications) {
+    private void submitImagePost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, Uri mediaUri,
+                                 String subredditName, String title, String content, Flair flair,
+                                 boolean isSpoiler, boolean isNSFW, boolean receivePostReplyNotifications) {
         try {
             Bitmap resource = Glide.with(this).asBitmap().load(mediaUri).submit().get();
             SubmitPost.submitImagePost(mExecutor, handler, newAuthenticatorOauthRetrofit, mUploadMediaRetrofit,
-                    selectedAccount.getAccessToken(), subredditName, title, resource, flair, isSpoiler, isNSFW, receivePostReplyNotifications,
+                    selectedAccount.getAccessToken(), subredditName, title, content, resource, flair, isSpoiler, isNSFW, receivePostReplyNotifications,
                     new SubmitPost.SubmitPostListener() {
                         @Override
                         public void submitSuccessful(Post post) {
