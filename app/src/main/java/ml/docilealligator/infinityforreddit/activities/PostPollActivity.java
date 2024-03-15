@@ -486,7 +486,7 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
     }
 
     private void displaySubredditIcon() {
-        if (iconUrl != null && !iconUrl.equals("")) {
+        if (iconUrl != null && !iconUrl.isEmpty()) {
             mGlide.load(iconUrl)
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                     .error(mGlide.load(R.drawable.subreddit_default_icon)
@@ -538,13 +538,14 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
                 promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
                 return true;
             } else {
-                if (!binding.postTitleEditTextPostPollActivity.getText().toString().equals("")
-                        || !binding.option1TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")
-                        || !binding.option2TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")
-                        || !binding.option3TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")
-                        || !binding.option4TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")
-                        || !binding.option5TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")
-                        || !binding.option6TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")) {
+                if (!binding.postTitleEditTextPostPollActivity.getText().toString().isEmpty()
+                        || !binding.postContentEditTextPostPollActivity.getText().toString().isEmpty()
+                        || !binding.option1TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
+                        || !binding.option2TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
+                        || !binding.option3TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
+                        || !binding.option4TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
+                        || !binding.option5TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
+                        || !binding.option6TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
                     promptAlertDialog(R.string.discard, R.string.discard_detail);
                     return true;
                 }
@@ -570,22 +571,22 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
             }
 
             ArrayList<String> optionList = new ArrayList<>();
-            if (!binding.option1TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")) {
+            if (!binding.option1TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
                 optionList.add(binding.option1TextInputLayoutEditTextPostPollActivity.getText().toString());
             }
-            if (!binding.option2TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")) {
+            if (!binding.option2TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
                 optionList.add(binding.option2TextInputLayoutEditTextPostPollActivity.getText().toString());
             }
-            if (!binding.option3TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")) {
+            if (!binding.option3TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
                 optionList.add(binding.option3TextInputLayoutEditTextPostPollActivity.getText().toString());
             }
-            if (!binding.option4TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")) {
+            if (!binding.option4TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
                 optionList.add(binding.option4TextInputLayoutEditTextPostPollActivity.getText().toString());
             }
-            if (!binding.option5TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")) {
+            if (!binding.option5TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
                 optionList.add(binding.option5TextInputLayoutEditTextPostPollActivity.getText().toString());
             }
-            if (!binding.option6TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")) {
+            if (!binding.option6TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
                 optionList.add(binding.option6TextInputLayoutEditTextPostPollActivity.getText().toString());
             }
             
@@ -647,13 +648,14 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
         if (isPosting) {
             promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
         } else {
-            if (!binding.postTitleEditTextPostPollActivity.getText().toString().equals("")
-                    || !binding.option1TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")
-                    || !binding.option2TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")
-                    || !binding.option3TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")
-                    || !binding.option4TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")
-                    || !binding.option5TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")
-                    || !binding.option6TextInputLayoutEditTextPostPollActivity.getText().toString().equals("")) {
+            if (!binding.postTitleEditTextPostPollActivity.getText().toString().isEmpty()
+                    || !binding.postContentEditTextPostPollActivity.getText().toString().isEmpty()
+                    || !binding.option1TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
+                    || !binding.option2TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
+                    || !binding.option3TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
+                    || !binding.option4TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
+                    || !binding.option5TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
+                    || !binding.option6TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
                 promptAlertDialog(R.string.discard, R.string.discard_detail);
             } else {
                 finish();
@@ -791,7 +793,7 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
         } else {
             mMemu.findItem(R.id.action_send_post_poll_activity).setEnabled(true);
             mMemu.findItem(R.id.action_send_post_poll_activity).getIcon().setAlpha(255);
-            if (submitPollPostEvent.errorMessage == null || submitPollPostEvent.errorMessage.equals("")) {
+            if (submitPollPostEvent.errorMessage == null || submitPollPostEvent.errorMessage.isEmpty()) {
                 Snackbar.make(binding.coordinatorLayoutPostPollActivity, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
             } else {
                 Snackbar.make(binding.coordinatorLayoutPostPollActivity, submitPollPostEvent.errorMessage.substring(0, 1).toUpperCase()

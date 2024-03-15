@@ -61,7 +61,7 @@ public class SubmitPost {
 
     public static void submitVideoPost(Executor executor, Handler handler, Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
                                        Retrofit uploadVideoRetrofit, String accessToken,
-                                       String subredditName, String title, File buffer, String mimeType,
+                                       String subredditName, String title, String content, File buffer, String mimeType,
                                        Bitmap posterBitmap, Flair flair, boolean isSpoiler, boolean isNSFW,
                                        boolean receivePostReplyNotifications, SubmitPostListener submitPostListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
@@ -99,12 +99,12 @@ public class SubmitPost {
                     if (imageUrlOrError != null && !imageUrlOrError.startsWith("Error: ")) {
                         if (fileType.equals("gif")) {
                             submitPost(executor, handler, oauthRetrofit, accessToken,
-                                    subredditName, title, null, url, flair, isSpoiler, isNSFW,
+                                    subredditName, title, content, url, flair, isSpoiler, isNSFW,
                                     receivePostReplyNotifications, false, APIUtils.KIND_VIDEOGIF, imageUrlOrError,
                                     submitPostListener);
                         } else {
                             submitPost(executor, handler, oauthRetrofit, accessToken,
-                                    subredditName, title, null, url, flair, isSpoiler, isNSFW,
+                                    subredditName, title, content, url, flair, isSpoiler, isNSFW,
                                     receivePostReplyNotifications, false, APIUtils.KIND_VIDEO, imageUrlOrError,
                                     submitPostListener);
                         }
@@ -159,11 +159,13 @@ public class SubmitPost {
                 params.put(APIUtils.URL_KEY, url);
                 break;
             case APIUtils.KIND_VIDEOGIF:
+                params.put(APIUtils.TEXT_KEY, content);
                 params.put(APIUtils.KIND_KEY, APIUtils.KIND_IMAGE);
                 params.put(APIUtils.URL_KEY, url);
                 params.put(APIUtils.VIDEO_POSTER_URL_KEY, posterUrl);
                 break;
             case APIUtils.KIND_VIDEO:
+                params.put(APIUtils.TEXT_KEY, content);
                 params.put(APIUtils.URL_KEY, url);
                 params.put(APIUtils.VIDEO_POSTER_URL_KEY, posterUrl);
                 break;

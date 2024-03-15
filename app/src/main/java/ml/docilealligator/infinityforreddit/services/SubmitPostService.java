@@ -176,8 +176,8 @@ public class SubmitPostService extends Service {
                         bundle.getString(EXTRA_CONTENT), flair, isSpoiler, isNSFW, receivePostReplyNotifications);
             } else if (postType == EXTRA_POST_TYPE_VIDEO) {
                 Uri mediaUri = Uri.parse(bundle.getString(EXTRA_MEDIA_URI));
-                submitVideoPost(newAuthenticatorOauthRetrofit, account, mediaUri, subredditName, title, flair,
-                        isSpoiler, isNSFW, receivePostReplyNotifications);
+                submitVideoPost(newAuthenticatorOauthRetrofit, account, mediaUri, subredditName, title,
+                        bundle.getString(EXTRA_CONTENT), flair, isSpoiler, isNSFW, receivePostReplyNotifications);
             } else if (postType == EXTRA_POST_TYPE_GALLERY) {
                 submitGalleryPost(newAuthenticatorOauthRetrofit, account, bundle.getString(EXTRA_REDDIT_GALLERY_PAYLOAD));
             } else {
@@ -327,8 +327,9 @@ public class SubmitPostService extends Service {
         }
     }
 
-    private void submitVideoPost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, Uri mediaUri, String subredditName, String title,
-                                 Flair flair, boolean isSpoiler, boolean isNSFW, boolean receivePostReplyNotifications) {
+    private void submitVideoPost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, Uri mediaUri,
+                                 String subredditName, String title, String content, Flair flair,
+                                 boolean isSpoiler, boolean isNSFW, boolean receivePostReplyNotifications) {
         try {
             InputStream in = getContentResolver().openInputStream(mediaUri);
             String type = getContentResolver().getType(mediaUri);
@@ -345,8 +346,8 @@ public class SubmitPostService extends Service {
 
             if (type != null) {
                 SubmitPost.submitVideoPost(mExecutor, handler, newAuthenticatorOauthRetrofit, mUploadMediaRetrofit,
-                        mUploadVideoRetrofit, selectedAccount.getAccessToken(), subredditName, title, new File(cacheFilePath),
-                        type, resource, flair, isSpoiler, isNSFW, receivePostReplyNotifications,
+                        mUploadVideoRetrofit, selectedAccount.getAccessToken(), subredditName, title, content,
+                        new File(cacheFilePath), type, resource, flair, isSpoiler, isNSFW, receivePostReplyNotifications,
                         new SubmitPost.SubmitPostListener() {
                             @Override
                             public void submitSuccessful(Post post) {

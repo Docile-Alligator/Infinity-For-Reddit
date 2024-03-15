@@ -488,7 +488,9 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
                 promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
                 return true;
             } else {
-                if (!binding.postTitleEditTextPostLinkActivity.getText().toString().isEmpty() || !binding.postLinkEditTextPostLinkActivity.getText().toString().isEmpty()) {
+                if (!binding.postTitleEditTextPostLinkActivity.getText().toString().isEmpty()
+                        || !binding.postContentEditTextPostLinkActivity.getText().toString().isEmpty()
+                        || !binding.postLinkEditTextPostLinkActivity.getText().toString().isEmpty()) {
                     promptAlertDialog(R.string.discard, R.string.discard_detail);
                     return true;
                 }
@@ -550,7 +552,9 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         if (isPosting) {
             promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
         } else {
-            if (!binding.postTitleEditTextPostLinkActivity.getText().toString().isEmpty() || !binding.postLinkEditTextPostLinkActivity.getText().toString().isEmpty()) {
+            if (!binding.postTitleEditTextPostLinkActivity.getText().toString().isEmpty()
+                    || !binding.postContentEditTextPostLinkActivity.getText().toString().isEmpty()
+                    || !binding.postLinkEditTextPostLinkActivity.getText().toString().isEmpty()) {
                 promptAlertDialog(R.string.discard, R.string.discard_detail);
             } else {
                 finish();

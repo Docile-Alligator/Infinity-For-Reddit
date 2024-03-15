@@ -560,7 +560,9 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
         if (isPosting) {
             promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
         } else {
-            if (!binding.postTitleEditTextPostImageActivity.getText().toString().isEmpty() || imageUri != null) {
+            if (!binding.postTitleEditTextPostImageActivity.getText().toString().isEmpty()
+                    || !binding.postContentEditTextPostImageActivity.getText().toString().isEmpty()
+                    || imageUri != null) {
                 promptAlertDialog(R.string.discard, R.string.discard_detail);
             } else {
                 finish();
