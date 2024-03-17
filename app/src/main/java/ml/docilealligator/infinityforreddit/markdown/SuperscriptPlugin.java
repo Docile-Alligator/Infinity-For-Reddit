@@ -218,7 +218,7 @@ public class SuperscriptPlugin extends AbstractMarkwonPlugin {
 
     @Override
     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
-        if (superscriptOpeningList.size() == 0 || !(markdown instanceof Spannable)) {
+        if (superscriptOpeningList.isEmpty() || !(markdown instanceof Spannable)) {
             return;
         }
 

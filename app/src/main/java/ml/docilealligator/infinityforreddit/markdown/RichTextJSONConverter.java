@@ -594,15 +594,19 @@ public class RichTextJSONConverter implements Visitor {
                 Superscript must use ^(), not ^ right now.
             */
             Node child = customNode.getFirstChild();
-            while (child != null) {
-                JSONArray format = getFormatArray(customNode);
-                if (format != null) {
-                    formats.add(format);
-                }
+            if (child == null) {
+                //It may be ^Superscript
+            } else {
+                while (child != null) {
+                    JSONArray format = getFormatArray(customNode);
+                    if (format != null) {
+                        formats.add(format);
+                    }
 
-                Node next = child.getNext();
-                child.unlink();
-                child = next;
+                    Node next = child.getNext();
+                    child.unlink();
+                    child = next;
+                }
             }
         } else if (customNode instanceof SpoilerNode) {
             //Spoiler cannot have styles

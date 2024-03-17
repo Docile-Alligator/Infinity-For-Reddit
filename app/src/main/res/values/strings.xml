@@ -1215,6 +1215,13 @@
     <string name="reply">Reply</string>
 
     <string name="uploaded_images">Uploaded Images</string>
+    <string name="uploaded_images_explanation">This is an experimental feature, and here are some things you need to know:
+        \n1. Uploaded images will not be shown in the text editor, and instead, a piece of text will be inserted as a block,
+    with a format similar to ![](XXXXX). XXXXX is the image id, and it should not be modified. To add a caption for
+    your image, simply type between the brackets. Example: ![This is a caption](XXXXX). Note that the caption will be treated
+    as plain text.\n2. To write a superscript, please use ^(), and put the texts inside the parentheses, instead of only
+    using a single ^.\n3. This feature converts your markdown to rich text format and some formatting may be lost in the
+    process.\n4. You cannot edit a submitted post with embedded images in it.</string>
     <string name="select_image">Select an Image</string>
     <string name="capture">Capture</string>
     <string name="uploading_image">Uploading</string>
