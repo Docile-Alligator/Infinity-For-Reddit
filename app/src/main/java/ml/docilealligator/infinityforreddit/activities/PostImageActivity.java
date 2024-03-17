@@ -239,9 +239,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
             fragment.show(getSupportFragmentManager(), fragment.getTag());
         });
 
-        binding.subredditIconGifImageViewPostImageActivity.setOnClickListener(view -> binding.subredditNameTextViewPostImageActivity.performClick());
-
-        binding.subredditNameTextViewPostImageActivity.setOnClickListener(view -> {
+        binding.subredditRelativeLayoutPostImageActivity.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubredditSelectionActivity.class);
             intent.putExtra(SubredditSelectionActivity.EXTRA_SPECIFIED_ACCOUNT, selectedAccount);
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);

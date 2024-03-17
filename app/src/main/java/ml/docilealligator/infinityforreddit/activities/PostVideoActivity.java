@@ -259,11 +259,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
             fragment.show(getSupportFragmentManager(), fragment.getTag());
         });
 
-        binding.subredditIconGifImageViewPostVideoActivity.setOnClickListener(view -> {
-            binding.subredditNameTextViewPostVideoActivity.performClick();
-        });
-
-        binding.subredditNameTextViewPostVideoActivity.setOnClickListener(view -> {
+        binding.subredditRelativeLayoutPostVideoActivity.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubredditSelectionActivity.class);
             intent.putExtra(SubredditSelectionActivity.EXTRA_SPECIFIED_ACCOUNT, selectedAccount);
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);

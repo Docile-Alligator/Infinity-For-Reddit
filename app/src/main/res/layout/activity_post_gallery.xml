@@ -61,6 +61,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/subreddit_relative_layout_post_gallery_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="8dp"

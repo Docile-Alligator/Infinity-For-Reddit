@@ -232,9 +232,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
             fragment.show(getSupportFragmentManager(), fragment.getTag());
         });
 
-        binding.subredditIconGifImageViewPostLinkActivity.setOnClickListener(view -> binding.subredditNameTextViewPostLinkActivity.performClick());
-
-        binding.subredditNameTextViewPostLinkActivity.setOnClickListener(view -> {
+        binding.subredditRelativeLayoutPostLinkActivity.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubredditSelectionActivity.class);
             intent.putExtra(SubredditSelectionActivity.EXTRA_SPECIFIED_ACCOUNT, selectedAccount);
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
