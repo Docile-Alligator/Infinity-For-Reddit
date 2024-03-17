@@ -11,18 +11,13 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -40,8 +35,6 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MediaMetadata;
 import ml.docilealligator.infinityforreddit.R;
@@ -52,6 +45,7 @@ import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.databinding.ActivityEditCommentBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.RichTextJSONConverter;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -77,16 +71,6 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
 
     private static final String UPLOADED_IMAGES_STATE = "UIS";
 
-    @BindView(R.id.coordinator_layout_edit_comment_activity)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_edit_comment_activity)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_edit_comment_activity)
-    Toolbar toolbar;
-    @BindView(R.id.comment_edit_text_edit_comment_activity)
-    EditText contentEditText;
-    @BindView(R.id.markdown_bottom_bar_recycler_view_edit_comment_activity)
-    RecyclerView markdownBottomBarRecyclerView;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -109,6 +93,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
     private boolean isSubmitting = false;
     private Uri capturedImageUri;
     private ArrayList<UploadedImage> uploadedImages = new ArrayList<>();
+    private ActivityEditCommentBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,19 +103,17 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_edit_comment);
-
-        ButterKnife.bind(this);
+        binding = ActivityEditCommentBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         EventBus.getDefault().register(this);
 
         applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
-            addOnOffsetChangedListener(appBarLayout);
+            addOnOffsetChangedListener(binding.appbarLayoutEditCommentActivity);
         }
-
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbarEditCommentActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mFullName = getIntent().getStringExtra(EXTRA_FULLNAME);
@@ -155,7 +138,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
             }
             mCommentContent = sb.toString();
         }
-        contentEditText.setText(mCommentContent);
+        binding.commentEditTextEditCommentActivity.setText(mCommentContent);
 
         if (savedInstanceState != null) {
             uploadedImages = savedInstanceState.getParcelableArrayList(UPLOADED_IMAGES_STATE);
@@ -166,7 +149,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
             @Override
             public void onClick(int item) {
                 MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(
-                        EditCommentActivity.this, contentEditText, item);
+                        EditCommentActivity.this, binding.commentEditTextEditCommentActivity, item);
             }
 
             @Override
@@ -181,12 +164,12 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
             }
         });
 
-        markdownBottomBarRecyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this,
+        binding.markdownBottomBarRecyclerViewEditCommentActivity.setLayoutManager(new LinearLayoutManagerBugFixed(this,
                 LinearLayoutManager.HORIZONTAL, false));
-        markdownBottomBarRecyclerView.setAdapter(adapter);
+        binding.markdownBottomBarRecyclerViewEditCommentActivity.setAdapter(adapter);
 
-        contentEditText.requestFocus();
-        Utils.showKeyboard(this, new Handler(), contentEditText);
+        binding.commentEditTextEditCommentActivity.requestFocus();
+        Utils.showKeyboard(this, new Handler(), binding.commentEditTextEditCommentActivity);
     }
 
     @Override
@@ -206,12 +189,12 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
 
     @Override
     protected void applyCustomTheme() {
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
-        contentEditText.setTextColor(mCustomThemeWrapper.getCommentColor());
+        binding.coordinatorLayoutEditCommentActivity.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutEditCommentActivity, null, binding.toolbarEditCommentActivity);
+        binding.commentEditTextEditCommentActivity.setTextColor(mCustomThemeWrapper.getCommentColor());
 
         if (contentTypeface != null) {
-            contentEditText.setTypeface(contentTypeface);
+            binding.commentEditTextEditCommentActivity.setTypeface(contentTypeface);
         }
     }
 
@@ -232,7 +215,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_preview_edit_comment_activity) {
             Intent intent = new Intent(this, FullMarkdownActivity.class);
-            intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, contentEditText.getText().toString());
+            intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, binding.commentEditTextEditCommentActivity.getText().toString());
             intent.putExtra(FullMarkdownActivity.EXTRA_SUBMIT_POST, true);
             startActivityForResult(intent, MARKDOWN_PREVIEW_REQUEST_CODE);
         } else if (item.getItemId() == R.id.action_send_edit_comment_activity) {
@@ -249,9 +232,9 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
         if (!isSubmitting) {
             isSubmitting = true;
 
-            Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(binding.coordinatorLayoutEditCommentActivity, R.string.posting, Snackbar.LENGTH_SHORT).show();
 
-            String content = contentEditText.getText().toString();
+            String content = binding.commentEditTextEditCommentActivity.getText().toString();
 
             Map<String, String> params = new HashMap<>();
             params.put(APIUtils.THING_ID_KEY, mFullName);
@@ -261,7 +244,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
                     params.put(APIUtils.TEXT_KEY, "");
                 } catch (JSONException e) {
                     isSubmitting = false;
-                    Snackbar.make(coordinatorLayout, R.string.convert_to_richtext_json_failed, Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(binding.coordinatorLayoutEditCommentActivity, R.string.convert_to_richtext_json_failed, Snackbar.LENGTH_SHORT).show();
                     return;
                 }
             } else {
@@ -284,14 +267,14 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
 
                                 finish();
                             } else {
-                                Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(binding.coordinatorLayoutEditCommentActivity, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
                         public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                             isSubmitting = false;
-                            Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(binding.coordinatorLayoutEditCommentActivity, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
                         }
                     });
 
@@ -318,10 +301,10 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
                     return;
                 }
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
-                        mAccessToken, contentEditText, coordinatorLayout, data.getData(), uploadedImages);
+                        mAccessToken, binding.commentEditTextEditCommentActivity, binding.coordinatorLayoutEditCommentActivity, data.getData(), uploadedImages);
             } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
-                        mAccessToken, contentEditText, coordinatorLayout, capturedImageUri, uploadedImages);
+                        mAccessToken, binding.commentEditTextEditCommentActivity, binding.coordinatorLayoutEditCommentActivity, capturedImageUri, uploadedImages);
             } else if (requestCode == MARKDOWN_PREVIEW_REQUEST_CODE) {
                 editComment();
             }
@@ -339,7 +322,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
         if (isSubmitting) {
             promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_edit_comment_detail);
         } else {
-            if (contentEditText.getText().toString().equals(mCommentContent)) {
+            if (binding.commentEditTextEditCommentActivity.getText().toString().equals(mCommentContent)) {
                 finish();
             } else {
                 promptAlertDialog(R.string.discard, R.string.discard_detail);
@@ -384,15 +367,15 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
 
     @Override
     public void insertImageUrl(UploadedImage uploadedImage) {
-        int start = Math.max(contentEditText.getSelectionStart(), 0);
-        int end = Math.max(contentEditText.getSelectionEnd(), 0);
+        int start = Math.max(binding.commentEditTextEditCommentActivity.getSelectionStart(), 0);
+        int end = Math.max(binding.commentEditTextEditCommentActivity.getSelectionEnd(), 0);
         int realStart = Math.min(start, end);
-        if (realStart > 0 && contentEditText.getText().toString().charAt(realStart - 1) != '\n') {
-            contentEditText.getText().replace(realStart, Math.max(start, end),
+        if (realStart > 0 && binding.commentEditTextEditCommentActivity.getText().toString().charAt(realStart - 1) != '\n') {
+            binding.commentEditTextEditCommentActivity.getText().replace(realStart, Math.max(start, end),
                     "\n![](" + uploadedImage.imageUrlOrKey + ")\n",
                     0, "\n![]()\n".length() + uploadedImage.imageUrlOrKey.length());
         } else {
-            contentEditText.getText().replace(realStart, Math.max(start, end),
+            binding.commentEditTextEditCommentActivity.getText().replace(realStart, Math.max(start, end),
                     "![](" + uploadedImage.imageUrlOrKey + ")\n",
                     0, "![]()\n".length() + uploadedImage.imageUrlOrKey.length());
         }
