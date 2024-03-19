@@ -46,7 +46,6 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -132,7 +131,7 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
     private boolean isSpoiler = false;
     private boolean isNSFW = false;
     private Resources resources;
-    private Menu mMemu;
+    private Menu mMenu;
     private RequestManager mGlide;
     private FlairBottomSheetFragment flairSelectionBottomSheetFragment;
     private Snackbar mPostingSnackbar;
@@ -520,10 +519,10 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.post_poll_activity, menu);
         applyMenuItemTheme(menu);
-        mMemu = menu;
+        mMenu = menu;
         if (isPosting) {
-            mMemu.findItem(R.id.action_send_post_poll_activity).setEnabled(false);
-            mMemu.findItem(R.id.action_send_post_poll_activity).getIcon().setAlpha(130);
+            mMenu.findItem(R.id.action_send_post_poll_activity).setEnabled(false);
+            mMenu.findItem(R.id.action_send_post_poll_activity).getIcon().setAlpha(130);
         }
         return true;
     }
@@ -550,95 +549,106 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
             }
             finish();
             return true;
+        } else if (itemId == R.id.action_preview_post_poll_activity) {
+            Intent intent = new Intent(this, FullMarkdownActivity.class);
+            intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, binding.postContentEditTextPostPollActivity.getText().toString());
+            intent.putExtra(FullMarkdownActivity.EXTRA_SUBMIT_POST, true);
+            if (!uploadedImages.isEmpty()) {
+                intent.putParcelableArrayListExtra("test", uploadedImages);
+            }
+            startActivityForResult(intent, MARKDOWN_PREVIEW_REQUEST_CODE);
         } else if (itemId == R.id.action_send_post_poll_activity) {
-            if (!subredditSelected) {
-                Snackbar.make(binding.coordinatorLayoutPostPollActivity, R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
-                return true;
-            }
-
-            if (binding.postTitleEditTextPostPollActivity.getText() == null) {
-                Snackbar.make(binding.coordinatorLayoutPostPollActivity, R.string.title_required, Snackbar.LENGTH_SHORT).show();
-                return true;
-            }
-
-            String subredditName;
-            if (subredditIsUser) {
-                subredditName = "u_" + binding.subredditNameTextViewPostPollActivity.getText().toString();
-            } else {
-                subredditName = binding.subredditNameTextViewPostPollActivity.getText().toString();
-            }
-
-            ArrayList<String> optionList = new ArrayList<>();
-            if (!binding.option1TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
-                optionList.add(binding.option1TextInputLayoutEditTextPostPollActivity.getText().toString());
-            }
-            if (!binding.option2TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
-                optionList.add(binding.option2TextInputLayoutEditTextPostPollActivity.getText().toString());
-            }
-            if (!binding.option3TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
-                optionList.add(binding.option3TextInputLayoutEditTextPostPollActivity.getText().toString());
-            }
-            if (!binding.option4TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
-                optionList.add(binding.option4TextInputLayoutEditTextPostPollActivity.getText().toString());
-            }
-            if (!binding.option5TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
-                optionList.add(binding.option5TextInputLayoutEditTextPostPollActivity.getText().toString());
-            }
-            if (!binding.option6TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
-                optionList.add(binding.option6TextInputLayoutEditTextPostPollActivity.getText().toString());
-            }
-            
-            if (optionList.size() < 2) {
-                Snackbar.make(binding.coordinatorLayoutPostPollActivity, R.string.two_options_required, Snackbar.LENGTH_SHORT).show();
-                return true;
-            }
-
-            isPosting = true;
-
-            item.setEnabled(false);
-            item.getIcon().setAlpha(130);
-
-            mPostingSnackbar.show();
-
-            Intent intent = new Intent(this, SubmitPostService.class);
-            intent.putExtra(SubmitPostService.EXTRA_ACCOUNT, selectedAccount);
-            intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
-            intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_POLL);
-
-            PollPayload payload;
-            if (!binding.postContentEditTextPostPollActivity.getText().toString().isEmpty()) {
-                if (uploadedImages.isEmpty()) {
-                    payload = new PollPayload(subredditName, binding.postTitleEditTextPostPollActivity.getText().toString(),
-                            optionList.toArray(new String[0]), (int) binding.votingLengthSliderPostPollActivity.getValue(), isNSFW, isSpoiler, flair,
-                            null, binding.postContentEditTextPostPollActivity.getText().toString(),
-                            binding.receivePostReplyNotificationsSwitchMaterialPostPollActivity.isChecked(),
-                            subredditIsUser ? "profile" : "subreddit");
-                } else {
-                    try {
-                        payload = new PollPayload(subredditName, binding.postTitleEditTextPostPollActivity.getText().toString(),
-                                optionList.toArray(new String[0]), (int) binding.votingLengthSliderPostPollActivity.getValue(), isNSFW, isSpoiler, flair,
-                                new RichTextJSONConverter().constructRichTextJSON(this, binding.postContentEditTextPostPollActivity.getText().toString(), uploadedImages),
-                                null, binding.receivePostReplyNotificationsSwitchMaterialPostPollActivity.isChecked(),
-                                subredditIsUser ? "profile" : "subreddit");
-                    } catch (JSONException e) {
-                        Snackbar.make(binding.coordinatorLayoutPostPollActivity, R.string.convert_to_richtext_json_failed, Snackbar.LENGTH_SHORT).show();
-                        return true;
-                    }
-                }
-            } else {
-                payload = new PollPayload(subredditName, binding.postTitleEditTextPostPollActivity.getText().toString(),
-                        optionList.toArray(new String[0]), (int) binding.votingLengthSliderPostPollActivity.getValue(), isNSFW, isSpoiler, flair,
-                        binding.receivePostReplyNotificationsSwitchMaterialPostPollActivity.isChecked(),
-                        subredditIsUser ? "profile" : "subreddit");
-            }
-            intent.putExtra(SubmitPostService.EXTRA_POLL_PAYLOAD, new Gson().toJson(payload));
-
-            ContextCompat.startForegroundService(this, intent);
-
+            submitPost(item);
             return true;
         }
 
         return false;
+    }
+
+    private void submitPost(MenuItem item) {
+        if (!subredditSelected) {
+            Snackbar.make(binding.coordinatorLayoutPostPollActivity, R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (binding.postTitleEditTextPostPollActivity.getText() == null) {
+            Snackbar.make(binding.coordinatorLayoutPostPollActivity, R.string.title_required, Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
+        String subredditName;
+        if (subredditIsUser) {
+            subredditName = "u_" + binding.subredditNameTextViewPostPollActivity.getText().toString();
+        } else {
+            subredditName = binding.subredditNameTextViewPostPollActivity.getText().toString();
+        }
+
+        ArrayList<String> optionList = new ArrayList<>();
+        if (!binding.option1TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
+            optionList.add(binding.option1TextInputLayoutEditTextPostPollActivity.getText().toString());
+        }
+        if (!binding.option2TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
+            optionList.add(binding.option2TextInputLayoutEditTextPostPollActivity.getText().toString());
+        }
+        if (!binding.option3TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
+            optionList.add(binding.option3TextInputLayoutEditTextPostPollActivity.getText().toString());
+        }
+        if (!binding.option4TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
+            optionList.add(binding.option4TextInputLayoutEditTextPostPollActivity.getText().toString());
+        }
+        if (!binding.option5TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
+            optionList.add(binding.option5TextInputLayoutEditTextPostPollActivity.getText().toString());
+        }
+        if (!binding.option6TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
+            optionList.add(binding.option6TextInputLayoutEditTextPostPollActivity.getText().toString());
+        }
+
+        if (optionList.size() < 2) {
+            Snackbar.make(binding.coordinatorLayoutPostPollActivity, R.string.two_options_required, Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+
+        isPosting = true;
+
+        item.setEnabled(false);
+        item.getIcon().setAlpha(130);
+
+        mPostingSnackbar.show();
+
+        Intent intent = new Intent(this, SubmitPostService.class);
+        intent.putExtra(SubmitPostService.EXTRA_ACCOUNT, selectedAccount);
+        intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
+        intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_POLL);
+
+        PollPayload payload;
+        if (!binding.postContentEditTextPostPollActivity.getText().toString().isEmpty()) {
+            if (uploadedImages.isEmpty()) {
+                payload = new PollPayload(subredditName, binding.postTitleEditTextPostPollActivity.getText().toString(),
+                        optionList.toArray(new String[0]), (int) binding.votingLengthSliderPostPollActivity.getValue(), isNSFW, isSpoiler, flair,
+                        null, binding.postContentEditTextPostPollActivity.getText().toString(),
+                        binding.receivePostReplyNotificationsSwitchMaterialPostPollActivity.isChecked(),
+                        subredditIsUser ? "profile" : "subreddit");
+            } else {
+                try {
+                    payload = new PollPayload(subredditName, binding.postTitleEditTextPostPollActivity.getText().toString(),
+                            optionList.toArray(new String[0]), (int) binding.votingLengthSliderPostPollActivity.getValue(), isNSFW, isSpoiler, flair,
+                            new RichTextJSONConverter().constructRichTextJSON(this, binding.postContentEditTextPostPollActivity.getText().toString(), uploadedImages),
+                            null, binding.receivePostReplyNotificationsSwitchMaterialPostPollActivity.isChecked(),
+                            subredditIsUser ? "profile" : "subreddit");
+                } catch (JSONException e) {
+                    Snackbar.make(binding.coordinatorLayoutPostPollActivity, R.string.convert_to_richtext_json_failed, Snackbar.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+        } else {
+            payload = new PollPayload(subredditName, binding.postTitleEditTextPostPollActivity.getText().toString(),
+                    optionList.toArray(new String[0]), (int) binding.votingLengthSliderPostPollActivity.getValue(), isNSFW, isSpoiler, flair,
+                    binding.receivePostReplyNotificationsSwitchMaterialPostPollActivity.isChecked(),
+                    subredditIsUser ? "profile" : "subreddit");
+        }
+        intent.putExtra(SubmitPostService.EXTRA_POLL_PAYLOAD, new Gson().toJson(payload));
+
+        ContextCompat.startForegroundService(this, intent);
     }
 
     @Override
@@ -706,6 +716,8 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
             } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
                         accessToken, binding.postContentEditTextPostPollActivity, binding.coordinatorLayoutPostPollActivity, capturedImageUri, uploadedImages);
+            } else if (requestCode == MARKDOWN_PREVIEW_REQUEST_CODE) {
+                submitPost(mMenu.findItem(R.id.action_send_post_poll_activity));
             }
         }
     }
@@ -789,8 +801,8 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
             startActivity(intent);
             finish();
         } else {
-            mMemu.findItem(R.id.action_send_post_poll_activity).setEnabled(true);
-            mMemu.findItem(R.id.action_send_post_poll_activity).getIcon().setAlpha(255);
+            mMenu.findItem(R.id.action_send_post_poll_activity).setEnabled(true);
+            mMenu.findItem(R.id.action_send_post_poll_activity).getIcon().setAlpha(255);
             if (submitPollPostEvent.errorMessage == null || submitPollPostEvent.errorMessage.isEmpty()) {
                 Snackbar.make(binding.coordinatorLayoutPostPollActivity, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
             } else {
