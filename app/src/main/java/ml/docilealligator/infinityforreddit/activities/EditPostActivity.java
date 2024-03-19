@@ -200,7 +200,7 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_preview_edit_post_activity) {
             Intent intent = new Intent(this, FullMarkdownActivity.class);
-            intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, binding.postContentEditTextEditPostActivity.getText().toString());
+            intent.putExtra(FullMarkdownActivity.EXTRA_MARKDOWN, binding.postContentEditTextEditPostActivity.getText().toString());
             intent.putExtra(FullMarkdownActivity.EXTRA_SUBMIT_POST, true);
             startActivityForResult(intent, MARKDOWN_PREVIEW_REQUEST_CODE);
         } else if (item.getItemId() == R.id.action_send_edit_post_activity) {

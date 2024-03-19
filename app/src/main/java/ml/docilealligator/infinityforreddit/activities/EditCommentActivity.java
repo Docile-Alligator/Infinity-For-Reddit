@@ -215,7 +215,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_preview_edit_comment_activity) {
             Intent intent = new Intent(this, FullMarkdownActivity.class);
-            intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, binding.commentEditTextEditCommentActivity.getText().toString());
+            intent.putExtra(FullMarkdownActivity.EXTRA_MARKDOWN, binding.commentEditTextEditCommentActivity.getText().toString());
             intent.putExtra(FullMarkdownActivity.EXTRA_SUBMIT_POST, true);
             startActivityForResult(intent, MARKDOWN_PREVIEW_REQUEST_CODE);
         } else if (item.getItemId() == R.id.action_send_edit_comment_activity) {

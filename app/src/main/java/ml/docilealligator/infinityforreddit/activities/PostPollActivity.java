@@ -551,11 +551,8 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
             return true;
         } else if (itemId == R.id.action_preview_post_poll_activity) {
             Intent intent = new Intent(this, FullMarkdownActivity.class);
-            intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, binding.postContentEditTextPostPollActivity.getText().toString());
+            intent.putExtra(FullMarkdownActivity.EXTRA_MARKDOWN, binding.postContentEditTextPostPollActivity.getText().toString());
             intent.putExtra(FullMarkdownActivity.EXTRA_SUBMIT_POST, true);
-            if (!uploadedImages.isEmpty()) {
-                intent.putParcelableArrayListExtra("test", uploadedImages);
-            }
             startActivityForResult(intent, MARKDOWN_PREVIEW_REQUEST_CODE);
         } else if (itemId == R.id.action_send_post_poll_activity) {
             submitPost(item);

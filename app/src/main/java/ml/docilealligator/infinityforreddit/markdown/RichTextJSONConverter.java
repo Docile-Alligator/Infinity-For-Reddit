@@ -111,7 +111,7 @@ public class RichTextJSONConverter implements Visitor {
                                             List<UploadedImage> uploadedImages) throws JSONException {
         UploadedImagePlugin uploadedImagePlugin = new UploadedImagePlugin();
         uploadedImagePlugin.setUploadedImages(uploadedImages);
-        Markwon markwon = MarkdownUtils.createPostSubmissionRedditMarkwon(
+        Markwon markwon = MarkdownUtils.createContentSubmissionRedditMarkwon(
                 context, uploadedImagePlugin);
 
         List<Node> nodes = MarkwonReducer.directChildren().reduce(markwon.parse(markdown));

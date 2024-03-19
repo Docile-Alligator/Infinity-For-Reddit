@@ -177,7 +177,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
             if (activity.typeface != null) {
                 shortNameTextView.setTypeface(activity.typeface);
             }
-            markwonAdapter = MarkdownUtils.createCustomTablesAdapter(imageAndGifEntry);
+            markwonAdapter = MarkdownUtils.createCustomTablesAndImagesAdapter(imageAndGifEntry);
             SwipeLockLinearLayoutManager swipeLockLinearLayoutManager = new SwipeLockLinearLayoutManager(activity,
                     new SwipeLockInterface() {
                 @Override

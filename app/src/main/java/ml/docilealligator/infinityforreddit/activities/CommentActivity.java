@@ -240,7 +240,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             Markwon postBodyMarkwon = MarkdownUtils.createFullRedditMarkwon(this,
                     miscPlugin, emoteCloseBracketInlineProcessor, emotePlugin, imageAndGifPlugin, parentTextColor,
                     parentSpoilerBackgroundColor, null);
-            CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAdapter(imageAndGifEntry);
+            CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAndImagesAdapter(imageAndGifEntry);
             markwonAdapter.setOnLongClickListener(view -> {
                 Utils.hideKeyboard(CommentActivity.this);
                 CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
@@ -403,7 +403,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             return true;
         } else if (itemId == R.id.action_preview_comment_activity) {
             Intent intent = new Intent(this, FullMarkdownActivity.class);
-            intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, binding.commentCommentEditText.getText().toString());
+            intent.putExtra(FullMarkdownActivity.EXTRA_MARKDOWN, binding.commentCommentEditText.getText().toString());
             intent.putExtra(FullMarkdownActivity.EXTRA_SUBMIT_POST, true);
             startActivityForResult(intent, MARKDOWN_PREVIEW_REQUEST_CODE);
         } else if (itemId == R.id.action_send_comment_activity) {
