@@ -8,8 +8,8 @@ android {
         applicationId "ml.docilealligator.infinityforreddit"
         minSdk 21
         targetSdk 33
-        versionCode 162
-        versionName "7.0.2"
+        versionCode 163
+        versionName "7.1.0-beta1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -111,7 +111,7 @@ dependencies {
     def butterknifeVersion = "10.2.3"
     implementation "com.jakewharton:butterknife:$butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
-    compileOnly 'com.android.databinding:viewbinding:7.3.1'
+    compileOnly 'com.android.databinding:viewbinding:8.3.1'
 
     // Events
     def eventbusVersion = "3.3.1"
@@ -135,7 +135,7 @@ dependencies {
     implementation 'net.lingala.zip4j:zip4j:2.11.2'
 
     // IO functionality
-    implementation 'commons-io:commons-io:2.5'
+    implementation 'commons-io:commons-io:2.13.0'
 
     // Crash reporting
     implementation 'com.github.FunkyMuse:Crashy:1.2.0'
