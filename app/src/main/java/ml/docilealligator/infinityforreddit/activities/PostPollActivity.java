@@ -460,6 +460,9 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
             binding.option5TextInputLayoutEditTextPostPollActivity.setTypeface(typeface);
             binding.option6TextInputLayoutEditTextPostPollActivity.setTypeface(typeface);
         }
+        if (contentTypeface != null) {
+            binding.postContentEditTextPostPollActivity.setTypeface(contentTypeface);
+        }
     }
 
     public void setCursorDrawableColor(EditText editText, int color) {

@@ -442,6 +442,9 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
             binding.postTitleEditTextPostVideoActivity.setTypeface(typeface);
             binding.selectAgainTextViewPostVideoActivity.setTypeface(typeface);
         }
+        if (contentTypeface != null) {
+            binding.postContentEditTextPostVideoActivity.setTypeface(contentTypeface);
+        }
     }
 
     private void loadVideo() {

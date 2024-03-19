@@ -1223,7 +1223,7 @@
         2. To write a superscript, please use ^(), and put the texts inside the parentheses, instead of only
     using a single ^. For simplicity, click the superscript option in the formatting tools to insert a superscript.\n
         3. This feature converts your markdown to rich text format and some formatting may be lost in the process.\n
-        4. Uploaded images may not be shown on the preview screen.
+        4. Uploaded images may not be shown on the preview screen.\n
         5. You cannot edit a submitted post with embedded images in it.\n
         6. Please do not change your account using the account chooser on the editing screen. You should switch
         your account in the navigation drawer on the main screen.</string>

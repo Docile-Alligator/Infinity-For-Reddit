@@ -430,6 +430,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
             binding.suggestTitleButtonPostLinkActivity.setTypeface(typeface);
         }
         if (contentTypeface != null) {
+            binding.postContentEditTextPostLinkActivity.setTypeface(contentTypeface);
             binding.postLinkEditTextPostLinkActivity.setTypeface(contentTypeface);
         }
     }

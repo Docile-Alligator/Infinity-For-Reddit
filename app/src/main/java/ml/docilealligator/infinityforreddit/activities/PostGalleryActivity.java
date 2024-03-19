@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -53,12 +54,14 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.RedditGalleryPayload;
 import ml.docilealligator.infinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.adapters.RedditGallerySubmissionRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.AccountChooserBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SelectOrCaptureImageBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.ActivityPostGalleryBinding;
 import ml.docilealligator.infinityforreddit.events.SubmitGalleryPostEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -338,6 +341,25 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
         binding.receivePostReplyNotificationsLinearLayoutPostGalleryActivity.setOnClickListener(view -> {
             binding.receivePostReplyNotificationsSwitchMaterialPostGalleryActivity.performClick();
         });
+
+        MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(
+                mCustomThemeWrapper,
+                new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
+                    @Override
+                    public void onClick(int item) {
+                        MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(
+                                PostGalleryActivity.this, binding.postContentEditTextPostGalleryActivity, item);
+                    }
+
+                    @Override
+                    public void onUploadImage() {
+
+                    }
+                });
+
+        binding.markdownBottomBarRecyclerViewPostGalleryActivity.setLayoutManager(new LinearLayoutManagerBugFixed(this,
+                LinearLayoutManager.HORIZONTAL, false));
+        binding.markdownBottomBarRecyclerViewPostGalleryActivity.setAdapter(adapter);
     }
 
     private void loadCurrentAccount() {
@@ -399,6 +421,8 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
         binding.nsfwCustomTextViewPostGalleryActivity.setTextColor(primaryTextColor);
         binding.postTitleEditTextPostGalleryActivity.setTextColor(primaryTextColor);
         binding.postTitleEditTextPostGalleryActivity.setHintTextColor(secondaryTextColor);
+        binding.postContentEditTextPostGalleryActivity.setTextColor(primaryTextColor);
+        binding.postContentEditTextPostGalleryActivity.setHintTextColor(secondaryTextColor);
         if (typeface != null) {
             binding.subredditNameTextViewPostGalleryActivity.setTypeface(typeface);
             binding.rulesButtonPostGalleryActivity.setTypeface(typeface);
@@ -407,6 +431,9 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
             binding.spoilerCustomTextViewPostGalleryActivity.setTypeface(typeface);
             binding.nsfwCustomTextViewPostGalleryActivity.setTypeface(typeface);
             binding.postTitleEditTextPostGalleryActivity.setTypeface(typeface);
+        }
+        if (contentTypeface != null) {
+            binding.postContentEditTextPostGalleryActivity.setTypeface(contentTypeface);
         }
     }
 
@@ -462,7 +489,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     }
 
     private void displaySubredditIcon() {
-        if (iconUrl != null && !iconUrl.equals("")) {
+        if (iconUrl != null && !iconUrl.isEmpty()) {
             mGlide.load(iconUrl)
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                     .error(mGlide.load(R.drawable.subreddit_default_icon)
@@ -515,7 +542,9 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
                 return true;
             } else {
                 redditGalleryImageInfoList = adapter.getRedditGalleryImageInfoList();
-                if (!binding.postTitleEditTextPostGalleryActivity.getText().toString().equals("") || redditGalleryImageInfoList != null) {
+                if (!binding.postTitleEditTextPostGalleryActivity.getText().toString().isEmpty()
+                        || !binding.postContentEditTextPostGalleryActivity.getText().toString().isEmpty()
+                        || redditGalleryImageInfoList != null) {
                     promptAlertDialog(R.string.discard, R.string.discard_detail);
                     return true;
                 }
@@ -528,7 +557,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
                 return true;
             }
 
-            if (binding.postTitleEditTextPostGalleryActivity.getText() == null || binding.postTitleEditTextPostGalleryActivity.getText().toString().equals("")) {
+            if (binding.postTitleEditTextPostGalleryActivity.getText() == null || binding.postTitleEditTextPostGalleryActivity.getText().toString().isEmpty()) {
                 Snackbar.make(binding.coordinatorLayoutPostGalleryActivity, R.string.title_required, Snackbar.LENGTH_SHORT).show();
                 return true;
             }
@@ -567,8 +596,9 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
                 items.add(i.payload);
             }
             RedditGalleryPayload payload = new RedditGalleryPayload(subredditName, subredditIsUser ? "profile" : "subreddit",
-                    binding.postTitleEditTextPostGalleryActivity.getText().toString(), isSpoiler, isNSFW, binding.receivePostReplyNotificationsSwitchMaterialPostGalleryActivity.isChecked(),
-                    flair, items);
+                    binding.postTitleEditTextPostGalleryActivity.getText().toString(),
+                    binding.postContentEditTextPostGalleryActivity.getText().toString(), isSpoiler, isNSFW,
+                    binding.receivePostReplyNotificationsSwitchMaterialPostGalleryActivity.isChecked(), flair, items);
             intent.putExtra(SubmitPostService.EXTRA_REDDIT_GALLERY_PAYLOAD, new Gson().toJson(payload));
 
             ContextCompat.startForegroundService(this, intent);
@@ -585,7 +615,9 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
             promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
         } else {
             redditGalleryImageInfoList = adapter.getRedditGalleryImageInfoList();
-            if (!binding.postTitleEditTextPostGalleryActivity.getText().toString().equals("") || redditGalleryImageInfoList != null) {
+            if (!binding.postTitleEditTextPostGalleryActivity.getText().toString().isEmpty()
+                    || !binding.postContentEditTextPostGalleryActivity.getText().toString().isEmpty()
+                    || redditGalleryImageInfoList != null) {
                 promptAlertDialog(R.string.discard, R.string.discard_detail);
             } else {
                 finish();
@@ -702,7 +734,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
         } else {
             mMemu.findItem(R.id.action_send_post_gallery_activity).setEnabled(true);
             mMemu.findItem(R.id.action_send_post_gallery_activity).getIcon().setAlpha(255);
-            if (submitGalleryPostEvent.errorMessage == null || submitGalleryPostEvent.errorMessage.equals("")) {
+            if (submitGalleryPostEvent.errorMessage == null || submitGalleryPostEvent.errorMessage.isEmpty()) {
                 Snackbar.make(binding.coordinatorLayoutPostGalleryActivity, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
             } else {
                 Snackbar.make(binding.coordinatorLayoutPostGalleryActivity, submitGalleryPostEvent.errorMessage.substring(0, 1).toUpperCase()

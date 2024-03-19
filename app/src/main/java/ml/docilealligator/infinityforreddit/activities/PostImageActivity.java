@@ -426,6 +426,9 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
             binding.postTitleEditTextPostImageActivity.setTypeface(typeface);
             binding.selectAgainTextViewPostImageActivity.setTypeface(typeface);
         }
+        if (contentTypeface != null) {
+            binding.postContentEditTextPostImageActivity.setTypeface(contentTypeface);
+        }
     }
 
     private void loadImage() {

@@ -410,7 +410,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
             binding.postTitleEditTextPostTextActivity.setTypeface(typeface);
         }
         if (contentTypeface != null) {
-            binding.postTextContentEditTextPostTextActivity.setTypeface(typeface);
+            binding.postTextContentEditTextPostTextActivity.setTypeface(contentTypeface);
         }
     }
 
