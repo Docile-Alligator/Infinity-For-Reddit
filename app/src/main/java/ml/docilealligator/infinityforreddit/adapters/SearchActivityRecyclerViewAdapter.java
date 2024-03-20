@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.adapters;
 
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -26,7 +27,7 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
     public interface ItemOnClickListener {
         void onClick(String query);
-        void onDelete(RecentSearchQuery recentSearchQuery);
+        void onDelete(RecentSearchQuery recentSearchQuery, View view);
     }
 
     public SearchActivityRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper,
@@ -85,7 +86,7 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             });
 
             binding.deleteButtonItemRecentSearchQuery.setOnClickListener(view -> {
-                itemOnClickListener.onDelete(recentSearchQueries.get(getBindingAdapterPosition()));
+                itemOnClickListener.onDelete(recentSearchQueries.get(getBindingAdapterPosition()), view);
             });
         }
     }

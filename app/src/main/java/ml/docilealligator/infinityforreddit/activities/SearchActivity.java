@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -14,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -30,11 +32,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -279,7 +283,21 @@ public class SearchActivity extends BaseActivity {
                     .setTitle(R.string.confirm)
                     .setMessage(R.string.confirm_delete_all_recent_searches)
                     .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-                        executor.execute(() -> mRedditDataRoomDatabase.recentSearchQueryDao().deleteAllRecentSearchQueries(accountName));
+                        hideKeyboard(true);
+                        executor.execute(() -> {
+                            List<RecentSearchQuery> deletedQueries = mRedditDataRoomDatabase.recentSearchQueryDao().getAllRecentSearchQueries(accountName);
+                            mRedditDataRoomDatabase.recentSearchQueryDao().deleteAllRecentSearchQueries(accountName);
+                            view.post(() -> Snackbar.make(view, R.string.deleted_all_recent_search, Snackbar.LENGTH_LONG)
+                                    .setAction(R.string.undo, v -> executor.execute(() -> mRedditDataRoomDatabase.recentSearchQueryDao().insertAll(deletedQueries)))
+                                    .addCallback(new Snackbar.Callback() {
+                                        @Override
+                                        public void onDismissed(Snackbar transientBottomBar, int event) {
+                                            super.onDismissed(transientBottomBar, event);
+                                            hideKeyboard(false);
+                                        }
+                                    })
+                                    .show());
+                        });
                     })
                     .setNegativeButton(R.string.no, null)
                     .show();
@@ -326,8 +344,21 @@ public class SearchActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onDelete(RecentSearchQuery recentSearchQuery) {
-                    executor.execute(() -> mRedditDataRoomDatabase.recentSearchQueryDao().deleteRecentSearchQueries(recentSearchQuery));
+                public void onDelete(RecentSearchQuery recentSearchQuery, View view) {
+                    hideKeyboard(true);
+                    executor.execute(() -> {
+                        mRedditDataRoomDatabase.recentSearchQueryDao().deleteRecentSearchQueries(recentSearchQuery);
+                        Snackbar.make(view, R.string.deleted_recent_search, Snackbar.LENGTH_SHORT)
+                                .setAction(R.string.undo, v -> executor.execute(() -> mRedditDataRoomDatabase.recentSearchQueryDao().insert(recentSearchQuery)))
+                                .addCallback(new Snackbar.Callback() {
+                                    @Override
+                                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                                        super.onDismissed(transientBottomBar, event);
+                                        hideKeyboard(false);
+                                    }
+                                })
+                                .show();
+                    });
                 }
             });
             recyclerView.setVisibility(View.VISIBLE);
@@ -350,6 +381,15 @@ public class SearchActivity extends BaseActivity {
                     adapter.setRecentSearchQueries(recentSearchQueries);
                 });
             }
+        }
+    }
+
+    private void hideKeyboard(Boolean hide) {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (hide) imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            else imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
         }
     }
 
