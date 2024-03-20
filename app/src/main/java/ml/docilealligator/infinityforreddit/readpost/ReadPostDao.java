@@ -14,11 +14,11 @@ public interface ReadPostDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(ReadPost readPost);
 
-    @Query("SELECT * FROM read_posts WHERE username = :username AND time > :after ORDER BY time LIMIT 25")
-    ListenableFuture<List<ReadPost>> getAllReadPostsListenableFuture(String username, long after);
+    @Query("SELECT * FROM read_posts WHERE username = :username AND (:before IS NULL OR time < :before) ORDER BY time DESC LIMIT 25")
+    ListenableFuture<List<ReadPost>> getAllReadPostsListenableFuture(String username, Long before);
 
-    @Query("SELECT * FROM read_posts WHERE username = :username AND time > :after ORDER BY time LIMIT 25")
-    List<ReadPost> getAllReadPosts(String username, long after);
+    @Query("SELECT * FROM read_posts WHERE username = :username AND (:before IS NULL OR time < :before) ORDER BY time DESC LIMIT 25")
+    List<ReadPost> getAllReadPosts(String username, Long before);
 
     @Query("SELECT * FROM read_posts WHERE username = :username")
     List<ReadPost> getAllReadPosts(String username);
@@ -29,7 +29,7 @@ public interface ReadPostDao {
     @Query("SELECT COUNT(id) FROM read_posts")
     int getReadPostsCount();
 
-    @Query("DELETE FROM read_posts WHERE rowid IN (SELECT rowid FROM read_posts LIMIT 100) AND username = :username")
+    @Query("DELETE FROM read_posts WHERE rowid IN (SELECT rowid FROM read_posts ORDER BY time ASC LIMIT 100) AND username = :username")
     void deleteOldestReadPosts(String username);
 
     @Query("DELETE FROM read_posts")

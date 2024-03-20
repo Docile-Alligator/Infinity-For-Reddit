@@ -16,6 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
+
+import ml.docilealligator.infinityforreddit.MediaMetadata;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
@@ -81,6 +84,10 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
                     Intent intent = new Intent(activity, EditCommentActivity.class);
                     intent.putExtra(EditCommentActivity.EXTRA_FULLNAME, comment.getFullName());
                     intent.putExtra(EditCommentActivity.EXTRA_CONTENT, comment.getCommentMarkdown());
+                    if (comment.getMediaMetadataMap() != null) {
+                        ArrayList<MediaMetadata> mediaMetadataList = new ArrayList<>(comment.getMediaMetadataMap().values());
+                        intent.putParcelableArrayListExtra(EditCommentActivity.EXTRA_MEDIA_METADATA_LIST, mediaMetadataList);
+                    }
                     intent.putExtra(EditCommentActivity.EXTRA_POSITION, bundle.getInt(EXTRA_POSITION));
                     if (activity instanceof ViewPostDetailActivity) {
                         activity.startActivityForResult(intent, ViewPostDetailActivity.EDIT_COMMENT_REQUEST_CODE);

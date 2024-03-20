@@ -207,6 +207,7 @@
     <string name="error_processing_image">Error processing image</string>
     <string name="error_processing_video">Error processing video</string>
     <string name="two_options_required">A good poll needs two or more options!</string>
+    <string name="convert_to_richtext_json_failed">Could not process markdown</string>
 
     <string name="download_started">Download Started. Check the notification for progress.</string>
 
@@ -218,6 +219,7 @@
 
     <string name="post_title_hint">Title</string>
     <string name="post_text_content_hint">Content</string>
+    <string name="post_optional_text_content_hint">Content (optional)</string>
     <string name="choose_a_subreddit">Choose a subreddit</string>
     <string name="rules">Rules</string>
     <string name="post_link_hint">URL</string>
@@ -1216,6 +1218,18 @@
     <string name="reply">Reply</string>
 
     <string name="uploaded_images">Uploaded Images</string>
+    <string name="uploaded_images_explanation">This is an experimental feature, and here are some things you need to know:\n
+        1. Uploaded images will not be shown in the text editor, and instead, a piece of text will be inserted as a block,
+    with a format similar to ![](XXXXX). XXXXX is the image id, and it should not be modified. To add a caption for
+    your image, simply type between the brackets. Example: ![This is a caption](XXXXX). Note that the caption will be treated
+    as plain text.\n
+        2. To write a superscript, please use ^(), and put the texts inside the parentheses, instead of only
+    using a single ^. For simplicity, click the superscript option in the formatting tools to insert a superscript.\n
+        3. This feature converts your markdown to rich text format and some formatting may be lost in the process.\n
+        4. Uploaded images may not be shown on the preview screen.\n
+        5. You cannot edit a submitted post with embedded images in it.\n
+        6. Please do not change your account using the account chooser on the editing screen. You should switch
+        your account in the navigation drawer on the main screen.</string>
     <string name="select_image">Select an Image</string>
     <string name="capture">Capture</string>
     <string name="uploading_image">Uploading</string>
@@ -1370,5 +1384,6 @@
     <string name="i_understand">I understand</string>
 
     <string name="add_to_comment_filter">Add to Comment Filter</string>
+    <string name="cannot_edit_post_with_images">Editing posts with images is not allowed.</string>
 
 </resources>

@@ -33,6 +33,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -46,6 +47,7 @@ import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.UploadedImage;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -55,6 +57,7 @@ import ml.docilealligator.infinityforreddit.events.SubmitImagePostEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitPollPostEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitTextOrLinkPostEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitVideoOrGifPostEvent;
+import ml.docilealligator.infinityforreddit.markdown.RichTextJSONConverter;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.SubmitPost;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -70,6 +73,9 @@ public class SubmitPostService extends Service {
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_TITLE = "ET";
     public static final String EXTRA_CONTENT = "EC";
+    public static final String EXTRA_IS_RICHTEXT_JSON = "EIRJ";
+    public static final String EXTRA_UPLOADED_IMAGES = "EUI";
+    public static final String EXTRA_URL = "EU";
     public static final String EXTRA_REDDIT_GALLERY_PAYLOAD = "ERGP";
     public static final String EXTRA_POLL_PAYLOAD = "EPP";
     public static final String EXTRA_KIND = "EK";
@@ -85,7 +91,7 @@ public class SubmitPostService extends Service {
     public static final int EXTRA_POST_TYPE_POLL = 4;
     public static final int EXTRA_POST_TYPE_CROSSPOST = 5;
 
-    private static final String EXTRA_MEDIA_URI = "EU";
+    private static final String EXTRA_MEDIA_URI = "EMU";
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -146,22 +152,32 @@ public class SubmitPostService extends Service {
                     .build();
 
             if (postType == EXTRA_POST_TEXT_OR_LINK) {
-                String content = bundle.getString(EXTRA_CONTENT);
+                String content = bundle.getString(EXTRA_CONTENT, "");
+                boolean isRichTextJSON = bundle.getBoolean(EXTRA_IS_RICHTEXT_JSON);
                 String kind = bundle.getString(EXTRA_KIND);
-                submitTextOrLinkPost(newAuthenticatorOauthRetrofit, account, subredditName, title, content, flair, isSpoiler, isNSFW,
-                        receivePostReplyNotifications, kind);
+                if (isRichTextJSON) {
+                    List<UploadedImage> uploadedImages = bundle.getParcelableArrayList(EXTRA_UPLOADED_IMAGES);
+                    try {
+                        content = new RichTextJSONConverter().constructRichTextJSON(SubmitPostService.this, content, uploadedImages);
+                    } catch (JSONException e) {
+                        handler.post(() -> EventBus.getDefault().post(new SubmitTextOrLinkPostEvent(false, null, getString(R.string.convert_to_richtext_json_failed))));
+                        return;
+                    }
+                }
+                submitTextOrLinkPost(newAuthenticatorOauthRetrofit, account, subredditName, title, content,
+                        bundle.getString(EXTRA_URL), flair, isSpoiler, isNSFW,
+                        receivePostReplyNotifications, isRichTextJSON, kind);
             } else if (postType == EXTRA_POST_TYPE_CROSSPOST) {
-                String content = bundle.getString(EXTRA_CONTENT);
-                submitCrosspost(mExecutor, handler, newAuthenticatorOauthRetrofit, account, subredditName, title, content,
-                        flair, isSpoiler, isNSFW, receivePostReplyNotifications);
+                submitCrosspost(mExecutor, handler, newAuthenticatorOauthRetrofit, account, subredditName, title,
+                        bundle.getString(EXTRA_CONTENT), flair, isSpoiler, isNSFW, receivePostReplyNotifications);
             } else if (postType == EXTRA_POST_TYPE_IMAGE) {
                 Uri mediaUri = Uri.parse(bundle.getString(EXTRA_MEDIA_URI));
-                submitImagePost(newAuthenticatorOauthRetrofit, account, mediaUri, subredditName, title, flair, isSpoiler, isNSFW,
-                        receivePostReplyNotifications);
+                submitImagePost(newAuthenticatorOauthRetrofit, account, mediaUri, subredditName, title,
+                        bundle.getString(EXTRA_CONTENT), flair, isSpoiler, isNSFW, receivePostReplyNotifications);
             } else if (postType == EXTRA_POST_TYPE_VIDEO) {
                 Uri mediaUri = Uri.parse(bundle.getString(EXTRA_MEDIA_URI));
-                submitVideoPost(newAuthenticatorOauthRetrofit, account, mediaUri, subredditName, title, flair, isSpoiler, isNSFW,
-                        receivePostReplyNotifications);
+                submitVideoPost(newAuthenticatorOauthRetrofit, account, mediaUri, subredditName, title,
+                        bundle.getString(EXTRA_CONTENT), flair, isSpoiler, isNSFW, receivePostReplyNotifications);
             } else if (postType == EXTRA_POST_TYPE_GALLERY) {
                 submitGalleryPost(newAuthenticatorOauthRetrofit, account, bundle.getString(EXTRA_REDDIT_GALLERY_PAYLOAD));
             } else {
@@ -232,12 +248,14 @@ public class SubmitPostService extends Service {
                 .build();
     }
 
-    private void submitTextOrLinkPost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, String subredditName, String title, String content,
-                                      Flair flair, boolean isSpoiler, boolean isNSFW, boolean receivePostReplyNotifications,
+    private void submitTextOrLinkPost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount,
+                                      String subredditName, String title, String content, @Nullable String url,
+                                      Flair flair, boolean isSpoiler, boolean isNSFW,
+                                      boolean receivePostReplyNotifications, boolean isRichtextJSON,
                                       String kind) {
         SubmitPost.submitTextOrLinkPost(mExecutor, handler, newAuthenticatorOauthRetrofit, selectedAccount.getAccessToken(),
-                subredditName, title, content, flair, isSpoiler,
-                isNSFW, receivePostReplyNotifications, kind, new SubmitPost.SubmitPostListener() {
+                subredditName, title, content, url, flair, isSpoiler,
+                isNSFW, receivePostReplyNotifications, isRichtextJSON, kind, new SubmitPost.SubmitPostListener() {
                     @Override
                     public void submitSuccessful(Post post) {
                         handler.post(() -> EventBus.getDefault().post(new SubmitTextOrLinkPostEvent(true, post, null)));
@@ -277,12 +295,13 @@ public class SubmitPostService extends Service {
                 });
     }
 
-    private void submitImagePost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, Uri mediaUri, String subredditName, String title,
-                                 Flair flair, boolean isSpoiler, boolean isNSFW, boolean receivePostReplyNotifications) {
+    private void submitImagePost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, Uri mediaUri,
+                                 String subredditName, String title, String content, Flair flair,
+                                 boolean isSpoiler, boolean isNSFW, boolean receivePostReplyNotifications) {
         try {
             Bitmap resource = Glide.with(this).asBitmap().load(mediaUri).submit().get();
             SubmitPost.submitImagePost(mExecutor, handler, newAuthenticatorOauthRetrofit, mUploadMediaRetrofit,
-                    selectedAccount.getAccessToken(), subredditName, title, resource, flair, isSpoiler, isNSFW, receivePostReplyNotifications,
+                    selectedAccount.getAccessToken(), subredditName, title, content, resource, flair, isSpoiler, isNSFW, receivePostReplyNotifications,
                     new SubmitPost.SubmitPostListener() {
                         @Override
                         public void submitSuccessful(Post post) {
@@ -308,8 +327,9 @@ public class SubmitPostService extends Service {
         }
     }
 
-    private void submitVideoPost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, Uri mediaUri, String subredditName, String title,
-                                 Flair flair, boolean isSpoiler, boolean isNSFW, boolean receivePostReplyNotifications) {
+    private void submitVideoPost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, Uri mediaUri,
+                                 String subredditName, String title, String content, Flair flair,
+                                 boolean isSpoiler, boolean isNSFW, boolean receivePostReplyNotifications) {
         try {
             InputStream in = getContentResolver().openInputStream(mediaUri);
             String type = getContentResolver().getType(mediaUri);
@@ -326,8 +346,8 @@ public class SubmitPostService extends Service {
 
             if (type != null) {
                 SubmitPost.submitVideoPost(mExecutor, handler, newAuthenticatorOauthRetrofit, mUploadMediaRetrofit,
-                        mUploadVideoRetrofit, selectedAccount.getAccessToken(), subredditName, title, new File(cacheFilePath),
-                        type, resource, flair, isSpoiler, isNSFW, receivePostReplyNotifications,
+                        mUploadVideoRetrofit, selectedAccount.getAccessToken(), subredditName, title, content,
+                        new File(cacheFilePath), type, resource, flair, isSpoiler, isNSFW, receivePostReplyNotifications,
                         new SubmitPost.SubmitPostListener() {
                             @Override
                             public void submitSuccessful(Post post) {

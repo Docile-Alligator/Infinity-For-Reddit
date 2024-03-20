@@ -240,7 +240,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             Markwon postBodyMarkwon = MarkdownUtils.createFullRedditMarkwon(this,
                     miscPlugin, emoteCloseBracketInlineProcessor, emotePlugin, imageAndGifPlugin, parentTextColor,
                     parentSpoilerBackgroundColor, null);
-            CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAdapter(imageAndGifEntry);
+            CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAndImagesAdapter(imageAndGifEntry);
             markwonAdapter.setOnLongClickListener(view -> {
                 Utils.hideKeyboard(CommentActivity.this);
                 CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
@@ -282,24 +282,25 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         }
 
         MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(
-                mCustomThemeWrapper, new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
-            @Override
-            public void onClick(int item) {
-                MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(
-                        CommentActivity.this, binding.commentCommentEditText, item);
-            }
+                mCustomThemeWrapper, true,
+                new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
+                    @Override
+                    public void onClick(int item) {
+                        MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(
+                                CommentActivity.this, binding.commentCommentEditText, item);
+                    }
 
-            @Override
-            public void onUploadImage() {
-                Utils.hideKeyboard(CommentActivity.this);
-                UploadedImagesBottomSheetFragment fragment = new UploadedImagesBottomSheetFragment();
-                Bundle arguments = new Bundle();
-                arguments.putParcelableArrayList(UploadedImagesBottomSheetFragment.EXTRA_UPLOADED_IMAGES,
-                        uploadedImages);
-                fragment.setArguments(arguments);
-                fragment.show(getSupportFragmentManager(), fragment.getTag());
-            }
-        });
+                    @Override
+                    public void onUploadImage() {
+                        Utils.hideKeyboard(CommentActivity.this);
+                        UploadedImagesBottomSheetFragment fragment = new UploadedImagesBottomSheetFragment();
+                        Bundle arguments = new Bundle();
+                        arguments.putParcelableArrayList(UploadedImagesBottomSheetFragment.EXTRA_UPLOADED_IMAGES,
+                                uploadedImages);
+                        fragment.setArguments(arguments);
+                        fragment.show(getSupportFragmentManager(), fragment.getTag());
+                    }
+                });
 
         binding.commentMarkdownBottomBarRecyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this,
                 LinearLayoutManagerBugFixed.HORIZONTAL, false));
@@ -402,7 +403,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             return true;
         } else if (itemId == R.id.action_preview_comment_activity) {
             Intent intent = new Intent(this, FullMarkdownActivity.class);
-            intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, binding.commentCommentEditText.getText().toString());
+            intent.putExtra(FullMarkdownActivity.EXTRA_MARKDOWN, binding.commentCommentEditText.getText().toString());
             intent.putExtra(FullMarkdownActivity.EXTRA_SUBMIT_POST, true);
             startActivityForResult(intent, MARKDOWN_PREVIEW_REQUEST_CODE);
         } else if (itemId == R.id.action_send_comment_activity) {
@@ -436,8 +437,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     .connectionPool(new ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
                     .build())
                     .build();
-            SendComment.sendComment(mExecutor, new Handler(), binding.commentCommentEditText.getText().toString(),
-                    parentFullname, parentDepth, newAuthenticatorOauthRetrofit, selectedAccount,
+            SendComment.sendComment(this, mExecutor, new Handler(), binding.commentCommentEditText.getText().toString(),
+                    parentFullname, parentDepth, uploadedImages, newAuthenticatorOauthRetrofit, selectedAccount,
                     new SendComment.SendCommentListener() {
                         @Override
                         public void sendCommentSuccess(Comment comment) {
@@ -466,7 +467,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                                 item.getIcon().setAlpha(255);
                             }
 
-                            if (errorMessage == null || !errorMessage.equals("")) {
+                            if (errorMessage == null || errorMessage.isEmpty()) {
                                 Snackbar.make(binding.commentCoordinatorLayout, R.string.send_comment_failed, Snackbar.LENGTH_SHORT).show();
                             } else {
                                 Snackbar.make(binding.commentCoordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();
@@ -557,7 +558,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     public void captureImage() {
         Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
-            capturedImageUri = FileProvider.getUriForFile(this, "ml.docilealligator.infinityforreddit.provider",
+            capturedImageUri = FileProvider.getUriForFile(this, getPackageName() + ".provider",
                     File.createTempFile("captured_image", ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES)));
             pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
             startActivityForResult(pictureIntent, CAPTURE_IMAGE_REQUEST_CODE);
@@ -572,9 +573,16 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     public void insertImageUrl(UploadedImage uploadedImage) {
         int start = Math.max(binding.commentCommentEditText.getSelectionStart(), 0);
         int end = Math.max(binding.commentCommentEditText.getSelectionEnd(), 0);
-        binding.commentCommentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
-                "[" + uploadedImage.imageName + "](" + uploadedImage.imageUrl + ")",
-                0, "[]()".length() + uploadedImage.imageName.length() + uploadedImage.imageUrl.length());
+        int realStart = Math.min(start, end);
+        if (realStart > 0 && binding.commentCommentEditText.getText().toString().charAt(realStart - 1) != '\n') {
+            binding.commentCommentEditText.getText().replace(realStart, Math.max(start, end),
+                    "\n![](" + uploadedImage.imageUrlOrKey + ")\n",
+                    0, "\n![]()\n".length() + uploadedImage.imageUrlOrKey.length());
+        } else {
+            binding.commentCommentEditText.getText().replace(realStart, Math.max(start, end),
+                    "![](" + uploadedImage.imageUrlOrKey + ")\n",
+                    0, "![]()\n".length() + uploadedImage.imageUrlOrKey.length());
+        }
     }
 
     @Override

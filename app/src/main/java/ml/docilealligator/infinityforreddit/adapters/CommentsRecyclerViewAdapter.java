@@ -1339,7 +1339,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
             });
             commentMarkdownView.setLayoutManager(linearLayoutManager);
-            mMarkwonAdapter = MarkdownUtils.createCustomTablesAdapter(mImageAndGifEntry);
+            mMarkwonAdapter = MarkdownUtils.createCustomTablesAndImagesAdapter(mImageAndGifEntry);
             commentMarkdownView.setAdapter(mMarkwonAdapter);
 
             itemView.setBackgroundColor(mCommentBackgroundColor);

@@ -58,6 +58,45 @@ public class MarkdownUtils {
     }
 
     @NonNull
+    public static Markwon createContentSubmissionRedditMarkwon(@NonNull Context context,
+                                                               @NonNull UploadedImagePlugin uploadedImagePlugin) {
+        return Markwon.builder(context)
+                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
+                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
+                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
+                }))
+                .usePlugin(SuperscriptPlugin.create())
+                .usePlugin(SpoilerParserPlugin.create(0, 0))
+                .usePlugin(RedditHeadingPlugin.create())
+                .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .usePlugin(uploadedImagePlugin)
+                .usePlugin(TableEntryPlugin.create(context))
+                .build();
+    }
+
+    @NonNull
+    public static Markwon createContentPreviewRedditMarkwon(@NonNull Context context,
+                                                        @NonNull MarkwonPlugin miscPlugin,
+                                                            int markdownColor,
+                                                            int spoilerBackgroundColor) {
+        return Markwon.builder(context)
+                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
+                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
+                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
+                }))
+                .usePlugin(miscPlugin)
+                .usePlugin(SuperscriptPlugin.create())
+                .usePlugin(SpoilerParserPlugin.create(markdownColor, spoilerBackgroundColor))
+                .usePlugin(RedditHeadingPlugin.create())
+                .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(MovementMethodPlugin.create(new SpoilerAwareMovementMethod()))
+                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .usePlugin(TableEntryPlugin.create(context))
+                .build();
+    }
+
+    @NonNull
     public static Markwon createDescriptionMarkwon(Context context, MarkwonPlugin miscPlugin,
                                                    EvenBetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener) {
         return Markwon.builder(context)
@@ -99,12 +138,21 @@ public class MarkdownUtils {
      * Creates a CustomMarkwonAdapter configured with support for tables and images.
      */
     @NonNull
-    public static CustomMarkwonAdapter createCustomTablesAdapter(ImageAndGifEntry imageAndGifEntry) {
+    public static CustomMarkwonAdapter createCustomTablesAndImagesAdapter(ImageAndGifEntry imageAndGifEntry) {
         return CustomMarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
                 .include(TableBlock.class, TableEntry.create(builder -> builder
                         .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
                         .textLayoutIsRoot(R.layout.view_table_entry_cell)))
                 .include(ImageAndGifBlock.class, imageAndGifEntry)
+                .build();
+    }
+
+    @NonNull
+    public static CustomMarkwonAdapter createCustomTablesAdapter() {
+        return CustomMarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
+                .include(TableBlock.class, TableEntry.create(builder -> builder
+                        .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
+                        .textLayoutIsRoot(R.layout.view_table_entry_cell)))
                 .build();
     }
 }
