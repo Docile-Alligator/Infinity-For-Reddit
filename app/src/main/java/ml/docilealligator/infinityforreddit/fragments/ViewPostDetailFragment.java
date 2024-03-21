@@ -1064,11 +1064,15 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             }
             return true;
         } else if (itemId == R.id.action_edit_view_post_detail_fragment) {
-            Intent editPostIntent = new Intent(activity, EditPostActivity.class);
-            editPostIntent.putExtra(EditPostActivity.EXTRA_FULLNAME, mPost.getFullName());
-            editPostIntent.putExtra(EditPostActivity.EXTRA_TITLE, mPost.getTitle());
-            editPostIntent.putExtra(EditPostActivity.EXTRA_CONTENT, mPost.getSelfText());
-            startActivityForResult(editPostIntent, EDIT_POST_REQUEST_CODE);
+            if (mPost.getMediaMetadataMap() == null) {
+                Intent editPostIntent = new Intent(activity, EditPostActivity.class);
+                editPostIntent.putExtra(EditPostActivity.EXTRA_FULLNAME, mPost.getFullName());
+                editPostIntent.putExtra(EditPostActivity.EXTRA_TITLE, mPost.getTitle());
+                editPostIntent.putExtra(EditPostActivity.EXTRA_CONTENT, mPost.getSelfText());
+                startActivityForResult(editPostIntent, EDIT_POST_REQUEST_CODE);
+            } else {
+                Toast.makeText(activity, R.string.cannot_edit_post_with_images, Toast.LENGTH_LONG).show();
+            }
             return true;
         } else if (itemId == R.id.action_delete_view_post_detail_fragment) {
             new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)

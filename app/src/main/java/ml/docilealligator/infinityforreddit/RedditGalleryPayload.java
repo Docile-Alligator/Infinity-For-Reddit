@@ -17,6 +17,7 @@ public class RedditGalleryPayload {
     @SerializedName("show_error_list")
     public boolean showErrorList = true;
     public String title;
+    public String text;
     @SerializedName("spoiler")
     public boolean isSpoiler;
     @SerializedName("nsfw")
@@ -36,11 +37,12 @@ public class RedditGalleryPayload {
     public String flairText;
     public ArrayList<Item> items;
 
-    public RedditGalleryPayload(String subredditName, String submitType, String title,
+    public RedditGalleryPayload(String subredditName, String submitType, String title, String text,
                                 boolean isSpoiler, boolean isNSFW, boolean sendReplies, Flair flair, ArrayList<Item> items) {
         this.subredditName = subredditName;
         this.submitType = submitType;
         this.title = title;
+        this.text = text;
         this.isSpoiler = isSpoiler;
         this.isNSFW = isNSFW;
         this.sendReplies = sendReplies;

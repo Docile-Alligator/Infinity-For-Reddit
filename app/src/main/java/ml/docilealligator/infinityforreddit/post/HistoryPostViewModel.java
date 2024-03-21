@@ -49,7 +49,7 @@ public class HistoryPostViewModel extends ViewModel {
 
         postFilterLiveData = new MutableLiveData<>(postFilter);
 
-        Pager<String, Post> pager = new Pager<>(new PagingConfig(25, 4, false, 10), this::returnPagingSoruce);
+        Pager<String, Post> pager = new Pager<>(new PagingConfig(25, 4, false, 10), this::returnPagingSource);
 
         posts = Transformations.switchMap(postFilterLiveData, postFilterValue -> PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this)));
     }
@@ -58,19 +58,19 @@ public class HistoryPostViewModel extends ViewModel {
         return posts;
     }
 
-    public HistoryPostPagingSource returnPagingSoruce() {
-        HistoryPostPagingSource paging3PagingSource;
+    public HistoryPostPagingSource returnPagingSource() {
+        HistoryPostPagingSource historyPostPagingSource;
         switch (postType) {
             case HistoryPostPagingSource.TYPE_READ_POSTS:
-                paging3PagingSource = new HistoryPostPagingSource(retrofit, executor, redditDataRoomDatabase, accessToken, accountName,
+                historyPostPagingSource = new HistoryPostPagingSource(retrofit, executor, redditDataRoomDatabase, accessToken, accountName,
                         sharedPreferences, accountName, postType, postFilter);
                 break;
             default:
-                paging3PagingSource = new HistoryPostPagingSource(retrofit, executor, redditDataRoomDatabase, accessToken, accountName,
+                historyPostPagingSource = new HistoryPostPagingSource(retrofit, executor, redditDataRoomDatabase, accessToken, accountName,
                         sharedPreferences, accountName, postType, postFilter);
                 break;
         }
-        return paging3PagingSource;
+        return historyPostPagingSource;
     }
 
     public void changePostFilter(PostFilter postFilter) {

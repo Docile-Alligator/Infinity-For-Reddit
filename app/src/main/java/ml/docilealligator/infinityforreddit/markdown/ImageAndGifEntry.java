@@ -146,8 +146,8 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
             imageRequestBuilder
                     .apply(RequestOptions.bitmapTransform(
                             new MultiTransformation<>(
-                                    new BlurTransformation(50, 10),
-                                    new RoundedCornersTransformation(72, 0))))
+                                    new BlurTransformation(100, 4),
+                                    new RoundedCornersTransformation(8, 0))))
                     .into(holder.binding.imageViewMarkdownImageAndGifBlock);
         } else {
             imageRequestBuilder

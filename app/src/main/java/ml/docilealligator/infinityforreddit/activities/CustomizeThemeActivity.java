@@ -10,12 +10,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -27,8 +22,6 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
@@ -38,6 +31,7 @@ import ml.docilealligator.infinityforreddit.asynctasks.InsertCustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeSettingsItem;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ActivityCustomizeThemeBinding;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 
@@ -53,16 +47,6 @@ public class CustomizeThemeActivity extends BaseActivity {
     private static final String CUSTOM_THEME_SETTINGS_ITEMS_STATE = "CTSIS";
     private static final String THEME_NAME_STATE = "TNS";
 
-    @BindView(R.id.coordinator_customize_theme_activity)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_customize_theme_activity)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.collapsing_toolbar_layout_customize_theme_activity)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.toolbar_customize_theme_activity)
-    Toolbar toolbar;
-    @BindView(R.id.recycler_view_customize_theme_activity)
-    RecyclerView recyclerView;
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;
@@ -89,6 +73,7 @@ public class CustomizeThemeActivity extends BaseActivity {
     private boolean isPredefinedTheme;
     private ArrayList<CustomThemeSettingsItem> customThemeSettingsItems;
     private CustomizeThemeRecyclerViewAdapter adapter;
+    private ActivityCustomizeThemeBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,13 +82,12 @@ public class CustomizeThemeActivity extends BaseActivity {
         setImmersiveModeNotApplicable();
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_customize_theme);
-
-        ButterKnife.bind(this);
+        binding = ActivityCustomizeThemeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         applyCustomTheme();
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbarCustomizeThemeActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (getIntent().getBooleanExtra(EXTRA_CREATE_THEME, false)) {
@@ -152,14 +136,14 @@ public class CustomizeThemeActivity extends BaseActivity {
                     }
 
                     adapter = new CustomizeThemeRecyclerViewAdapter(this, customThemeWrapper, themeName);
-                    recyclerView.setAdapter(adapter);
+                    binding.recyclerViewCustomizeThemeActivity.setAdapter(adapter);
                     adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
                 });
             } else {
                 isPredefinedTheme = getIntent().getBooleanExtra(EXTRA_IS_PREDEFIINED_THEME, false);
                 themeName = getIntent().getStringExtra(EXTRA_THEME_NAME);
                 adapter = new CustomizeThemeRecyclerViewAdapter(this, customThemeWrapper, themeName);
-                recyclerView.setAdapter(adapter);
+                binding.recyclerViewCustomizeThemeActivity.setAdapter(adapter);
                 if (isPredefinedTheme) {
                     customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
                             CustomizeThemeActivity.this,
@@ -167,7 +151,7 @@ public class CustomizeThemeActivity extends BaseActivity {
                             androidVersion);
 
                     adapter = new CustomizeThemeRecyclerViewAdapter(this, customThemeWrapper, themeName);
-                    recyclerView.setAdapter(adapter);
+                    binding.recyclerViewCustomizeThemeActivity.setAdapter(adapter);
                     adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
                 } else {
                     GetCustomTheme.getCustomTheme(mExecutor, new Handler(), redditDataRoomDatabase,
@@ -181,7 +165,7 @@ public class CustomizeThemeActivity extends BaseActivity {
             }
         } else {
             adapter = new CustomizeThemeRecyclerViewAdapter(this, customThemeWrapper, themeName);
-            recyclerView.setAdapter(adapter);
+            binding.recyclerViewCustomizeThemeActivity.setAdapter(adapter);
             adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
         }
     }
@@ -209,7 +193,7 @@ public class CustomizeThemeActivity extends BaseActivity {
             if (adapter != null) {
                 themeName = adapter.getThemeName();
                 if (themeName.equals("")) {
-                    Snackbar.make(coordinatorLayout, R.string.no_theme_name, Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(binding.coordinatorCustomizeThemeActivity, R.string.no_theme_name, Snackbar.LENGTH_SHORT).show();
                     return true;
                 }
                 CustomTheme customTheme = CustomTheme.convertSettingsItemsToCustomTheme(customThemeSettingsItems, themeName);
@@ -264,7 +248,7 @@ public class CustomizeThemeActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
-        coordinatorLayout.setBackgroundColor(customThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCustomizeThemeActivity, binding.collapsingToolbarLayoutCustomizeThemeActivity, binding.toolbarCustomizeThemeActivity);
+        binding.coordinatorCustomizeThemeActivity.setBackgroundColor(customThemeWrapper.getBackgroundColor());
     }
 }

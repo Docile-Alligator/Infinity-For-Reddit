@@ -1215,8 +1215,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 if (data != null) {
                     if (sectionsPagerAdapter != null) {
                         sectionsPagerAdapter.editComment(
-                                data.getStringExtra(EditCommentActivity.EXTRA_EDITED_COMMENT_CONTENT),
-                                data.getExtras().getInt(EditCommentActivity.EXTRA_EDITED_COMMENT_POSITION));
+                                data.getStringExtra(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT_CONTENT),
+                                data.getExtras().getInt(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT_POSITION));
                     }
                 }
             } else if (requestCode == ADD_TO_MULTIREDDIT_REQUEST_CODE) {

@@ -55,7 +55,7 @@
                     android:layout_height="1dp" />
 
                 <EditText
-                    android:id="@+id/post_text_content_edit_text_edit_post_activity"
+                    android:id="@+id/post_content_edit_text_edit_post_activity"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="top"

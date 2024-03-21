@@ -562,7 +562,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 }
             });
             commentMarkdownView.setLayoutManager(linearLayoutManager);
-            markwonAdapter = MarkdownUtils.createCustomTablesAdapter(mImageAndGifEntry);
+            markwonAdapter = MarkdownUtils.createCustomTablesAndImagesAdapter(mImageAndGifEntry);
             markwonAdapter.setOnClickListener(view -> {
                 if (view instanceof SpoilerOnClickTextView) {
                     if (((SpoilerOnClickTextView) view).isSpoilerOnClick()) {

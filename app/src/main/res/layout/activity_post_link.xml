@@ -23,219 +23,248 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <LinearLayout
-                android:id="@+id/account_linear_layout_post_link_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <pl.droidsonroids.gif.GifImageView
-                    android:id="@+id/account_icon_gif_image_view_post_link_activity"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="16dp" />
-
-                <TextView
-                    android:id="@+id/account_name_text_view_post_link_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="32dp"
-                    android:textSize="?attr/font_default"
-                    android:fontFamily="?attr/font_family" />
-
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp">
-
-                <pl.droidsonroids.gif.GifImageView
-                    android:id="@+id/subreddit_icon_gif_image_view_post_link_activity"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="16dp" />
-
-                <TextView
-                    android:id="@+id/subreddit_name_text_view_post_link_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="32dp"
-                    android:layout_toStartOf="@id/rules_button_post_link_activity"
-                    android:layout_toEndOf="@id/subreddit_icon_gif_image_view_post_link_activity"
-                    android:text="@string/choose_a_subreddit"
-                    android:textSize="?attr/font_default"
-                    android:fontFamily="?attr/font_family" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/rules_button_post_link_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:text="@string/rules"
-                    android:textSize="?attr/font_default"
-                    android:fontFamily="?attr/font_family" />
-
-            </RelativeLayout>
-
-            <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/divider_1_post_link_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.libRG.CustomTextView
-                    android:id="@+id/flair_custom_text_view_post_link_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:padding="4dp"
-                    android:text="@string/flair"
-                    android:textColor="?attr/primaryTextColor"
-                    android:textSize="?attr/font_default"
-                    android:fontFamily="?attr/font_family"
-                    android:visibility="gone"
-                    app:lib_setRadius="6dp"
-                    app:lib_setRoundedView="true"
-                    app:lib_setShape="rectangle" />
-
-                <com.libRG.CustomTextView
-                    android:id="@+id/spoiler_custom_text_view_post_link_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:padding="4dp"
-                    android:text="@string/spoiler"
-                    android:textColor="?attr/primaryTextColor"
-                    android:textSize="?attr/font_default"
-                    android:fontFamily="?attr/font_family"
-                    app:lib_setRadius="6dp"
-                    app:lib_setRoundedView="true"
-                    app:lib_setShape="rectangle" />
-
-                <com.libRG.CustomTextView
-                    android:id="@+id/nsfw_custom_text_view_post_link_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
-                    android:padding="4dp"
-                    android:text="@string/nsfw"
-                    android:textColor="?attr/primaryTextColor"
-                    android:textSize="?attr/font_default"
-                    android:fontFamily="?attr/font_family"
-                    app:lib_setRadius="6dp"
-                    app:lib_setRoundedView="true"
-                    app:lib_setShape="rectangle" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/receive_post_reply_notifications_linear_layout_post_link_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <TextView
-                    android:id="@+id/receive_post_reply_notifications_text_view_post_link_activity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="16dp"
-                    android:text="@string/receive_post_reply_notifications"
-                    android:textSize="?attr/font_default"
-                    android:fontFamily="?attr/font_family" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/receive_post_reply_notifications_switch_material_post_link_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:checked="true" />
-
-            </LinearLayout>
-
-            <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/divider_2_post_link_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/post_title_edit_text_post_link_activity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:background="#00000000"
-                    android:gravity="top"
-                    android:hint="@string/post_title_hint"
-                    android:inputType="textCapSentences|textMultiLine"
-                    android:padding="16dp"
-                    android:textColor="?attr/primaryTextColor"
-                    android:textSize="?attr/title_font_18"
-                    android:fontFamily="?attr/title_font_family" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/suggest_title_button_post_link_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:text="@string/suggest_title"
-                    android:textSize="?attr/font_default"
-                    android:fontFamily="?attr/font_family" />
-
-            </LinearLayout>
-
-            <EditText
-                android:id="@+id/post_link_edit_text_post_link_activity"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#00000000"
-                android:gravity="top"
-                android:hint="@string/post_link_hint"
-                android:inputType="textMultiLine"
-                android:padding="16dp"
-                android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/content_font_18"
-                android:fontFamily="?attr/content_font_family" />
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/account_linear_layout_post_link_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
 
-    </androidx.core.widget.NestedScrollView>
+                    <pl.droidsonroids.gif.GifImageView
+                        android:id="@+id/account_icon_gif_image_view_post_link_activity"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="16dp" />
+
+                    <TextView
+                        android:id="@+id/account_name_text_view_post_link_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="32dp"
+                        android:textSize="?attr/font_default"
+                        android:fontFamily="?attr/font_family" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/subreddit_relative_layout_post_link_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
+
+                    <pl.droidsonroids.gif.GifImageView
+                        android:id="@+id/subreddit_icon_gif_image_view_post_link_activity"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="16dp" />
+
+                    <TextView
+                        android:id="@+id/subreddit_name_text_view_post_link_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="32dp"
+                        android:layout_toStartOf="@id/rules_button_post_link_activity"
+                        android:layout_toEndOf="@id/subreddit_icon_gif_image_view_post_link_activity"
+                        android:text="@string/choose_a_subreddit"
+                        android:textSize="?attr/font_default"
+                        android:fontFamily="?attr/font_family" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/rules_button_post_link_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/rules"
+                        android:textSize="?attr/font_default"
+                        android:fontFamily="?attr/font_family" />
+
+                </RelativeLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_1_post_link_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.libRG.CustomTextView
+                        android:id="@+id/flair_custom_text_view_post_link_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:padding="4dp"
+                        android:text="@string/flair"
+                        android:textColor="?attr/primaryTextColor"
+                        android:textSize="?attr/font_default"
+                        android:fontFamily="?attr/font_family"
+                        android:visibility="gone"
+                        app:lib_setRadius="6dp"
+                        app:lib_setRoundedView="true"
+                        app:lib_setShape="rectangle" />
+
+                    <com.libRG.CustomTextView
+                        android:id="@+id/spoiler_custom_text_view_post_link_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:padding="4dp"
+                        android:text="@string/spoiler"
+                        android:textColor="?attr/primaryTextColor"
+                        android:textSize="?attr/font_default"
+                        android:fontFamily="?attr/font_family"
+                        app:lib_setRadius="6dp"
+                        app:lib_setRoundedView="true"
+                        app:lib_setShape="rectangle" />
+
+                    <com.libRG.CustomTextView
+                        android:id="@+id/nsfw_custom_text_view_post_link_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:padding="4dp"
+                        android:text="@string/nsfw"
+                        android:textColor="?attr/primaryTextColor"
+                        android:textSize="?attr/font_default"
+                        android:fontFamily="?attr/font_family"
+                        app:lib_setRadius="6dp"
+                        app:lib_setRoundedView="true"
+                        app:lib_setShape="rectangle" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/receive_post_reply_notifications_linear_layout_post_link_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+
+                    <TextView
+                        android:id="@+id/receive_post_reply_notifications_text_view_post_link_activity"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/receive_post_reply_notifications"
+                        android:textSize="?attr/font_default"
+                        android:fontFamily="?attr/font_family" />
+
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/receive_post_reply_notifications_switch_material_post_link_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:checked="true" />
+
+                </LinearLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_2_post_link_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <EditText
+                        android:id="@+id/post_title_edit_text_post_link_activity"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center_vertical"
+                        android:background="#00000000"
+                        android:gravity="top"
+                        android:hint="@string/post_title_hint"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:padding="16dp"
+                        android:textColor="?attr/primaryTextColor"
+                        android:textSize="?attr/title_font_18"
+                        android:fontFamily="?attr/title_font_family" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/suggest_title_button_post_link_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:text="@string/suggest_title"
+                        android:textSize="?attr/font_default"
+                        android:fontFamily="?attr/font_family" />
+
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/post_link_edit_text_post_link_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#00000000"
+                    android:gravity="top"
+                    android:hint="@string/post_link_hint"
+                    android:inputType="textMultiLine"
+                    android:padding="16dp"
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="?attr/content_font_18"
+                    android:fontFamily="?attr/content_font_family" />
+
+                <EditText
+                    android:id="@+id/post_content_edit_text_post_link_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00000000"
+                    android:gravity="top"
+                    android:hint="@string/post_optional_text_content_hint"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:padding="16dp"
+                    android:textSize="?attr/content_font_18"
+                    android:fontFamily="?attr/content_font_family" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/markdown_bottom_bar_recycler_view_post_link_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal"
+            android:layout_gravity="bottom" />
+
+    </LinearLayout>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

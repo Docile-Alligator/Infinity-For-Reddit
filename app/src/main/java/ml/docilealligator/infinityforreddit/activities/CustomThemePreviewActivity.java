@@ -19,8 +19,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,9 +32,6 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -45,17 +40,15 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeSettingsItem;
-import ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
+import ml.docilealligator.infinityforreddit.databinding.ActivityThemePreviewBinding;
 import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.font.FontStyle;
 import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
@@ -71,46 +64,6 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
     public Typeface titleTypeface;
     public Typeface contentTypeface;
 
-    @BindView(R.id.coordinator_layout_theme_preview_activity)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.view_pager_theme_preview_activity)
-    ViewPagerBugFixed viewPager;
-    @BindView(R.id.appbar_layout_theme_preview_activity)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.collapsing_toolbar_layout_theme_preview_activity)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.toolbar_linear_layout_theme_preview_activity)
-    LinearLayout linearLayout;
-    @BindView(R.id.extra_padding_view_theme_preview_activity)
-    View extraPaddingView;
-    @BindView(R.id.subreddit_name_text_view_theme_preview_activity)
-    TextView subredditNameTextView;
-    @BindView(R.id.user_name_text_view_theme_preview_activity)
-    TextView usernameTextView;
-    @BindView(R.id.subscribe_subreddit_chip_theme_preview_activity)
-    Chip subscribeSubredditChip;
-    @BindView(R.id.primary_text_text_view_theme_preview_activity)
-    TextView primaryTextView;
-    @BindView(R.id.secondary_text_text_view_theme_preview_activity)
-    TextView secondaryTextView;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.tab_layout_theme_preview_activity)
-    TabLayout tabLayout;
-    @BindView(R.id.bottom_navigation_theme_preview_activity)
-    BottomAppBar bottomNavigationView;
-    @BindView(R.id.linear_layout_bottom_app_bar_theme_preview_activity)
-    LinearLayout linearLayoutBottomAppBar;
-    @BindView(R.id.subscriptions_bottom_app_bar_theme_preview_activity)
-    ImageView subscriptionsBottomAppBar;
-    @BindView(R.id.multi_reddit_bottom_app_bar_theme_preview_activity)
-    ImageView multiRedditBottomAppBar;
-    @BindView(R.id.message_bottom_app_bar_theme_preview_activity)
-    ImageView messageBottomAppBar;
-    @BindView(R.id.profile_bottom_app_bar_theme_preview_activity)
-    ImageView profileBottomAppBar;
-    @BindView(R.id.fab_theme_preview_activity)
-    FloatingActionButton fab;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
@@ -127,6 +80,7 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
     private int systemVisibilityToolbarExpanded = 0;
     private int systemVisibilityToolbarCollapsed = 0;
     private SliderPanel mSliderPanel;
+    private ActivityThemePreviewBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,9 +179,8 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
         getTheme().applyStyle(ContentFontStyle.valueOf(mSharedPreferences
                 .getString(SharedPreferencesUtils.CONTENT_FONT_SIZE_KEY, ContentFontStyle.Normal.name())).getResId(), true);
 
-        setContentView(R.layout.activity_theme_preview);
-
-        ButterKnife.bind(this);
+        binding = ActivityThemePreviewBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         applyCustomTheme();
 
@@ -242,88 +195,88 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
-                adjustToolbar(toolbar);
+                adjustToolbar(binding.toolbar);
 
                 Resources resources = getResources();
                 int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
                 if (navBarResourceId > 0) {
                     int navBarHeight = resources.getDimensionPixelSize(navBarResourceId);
                     if (navBarHeight > 0) {
-                        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) binding.fabThemePreviewActivity.getLayoutParams();
                         params.bottomMargin = navBarHeight;
-                        fab.setLayoutParams(params);
-                        linearLayoutBottomAppBar.setPadding(0,
+                        binding.fabThemePreviewActivity.setLayoutParams(params);
+                        binding.linearLayoutBottomAppBarThemePreviewActivity.setPadding(0,
                                 (int) (6 * getResources().getDisplayMetrics().density), 0, navBarHeight);
                     }
                 }
             }
 
             if (changeStatusBarIconColor) {
-                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                binding.appbarLayoutThemePreviewActivity.addOnOffsetChangedListener(new AppBarStateChangeListener() {
                     @Override
                     public void onStateChanged(AppBarLayout appBarLayout, AppBarStateChangeListener.State state) {
                         if (state == State.COLLAPSED) {
                             decorView.setSystemUiVisibility(systemVisibilityToolbarCollapsed);
-                            tabLayout.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
-                            tabLayout.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
-                            tabLayout.setBackgroundColor(collapsedTabBackgroundColor);
+                            binding.tabLayoutThemePreviewActivity.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
+                            binding.tabLayoutThemePreviewActivity.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
+                            binding.tabLayoutThemePreviewActivity.setBackgroundColor(collapsedTabBackgroundColor);
                         } else if (state == State.EXPANDED) {
                             decorView.setSystemUiVisibility(systemVisibilityToolbarExpanded);
-                            tabLayout.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
-                            tabLayout.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
-                            tabLayout.setBackgroundColor(expandedTabBackgroundColor);
+                            binding.tabLayoutThemePreviewActivity.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
+                            binding.tabLayoutThemePreviewActivity.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
+                            binding.tabLayoutThemePreviewActivity.setBackgroundColor(expandedTabBackgroundColor);
                         }
                     }
                 });
             } else {
-                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                binding.appbarLayoutThemePreviewActivity.addOnOffsetChangedListener(new AppBarStateChangeListener() {
                     @Override
                     public void onStateChanged(AppBarLayout appBarLayout, AppBarStateChangeListener.State state) {
                         if (state == State.COLLAPSED) {
-                            tabLayout.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
-                            tabLayout.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
-                            tabLayout.setBackgroundColor(collapsedTabBackgroundColor);
+                            binding.tabLayoutThemePreviewActivity.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
+                            binding.tabLayoutThemePreviewActivity.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
+                            binding.tabLayoutThemePreviewActivity.setBackgroundColor(collapsedTabBackgroundColor);
                         } else if (state == State.EXPANDED) {
-                            tabLayout.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
-                            tabLayout.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
-                            tabLayout.setBackgroundColor(expandedTabBackgroundColor);
+                            binding.tabLayoutThemePreviewActivity.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
+                            binding.tabLayoutThemePreviewActivity.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
+                            binding.tabLayoutThemePreviewActivity.setBackgroundColor(expandedTabBackgroundColor);
                         }
                     }
                 });
             }
         } else {
-            appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+            binding.appbarLayoutThemePreviewActivity.addOnOffsetChangedListener(new AppBarStateChangeListener() {
                 @Override
                 public void onStateChanged(AppBarLayout appBarLayout, State state) {
                     if (state == State.EXPANDED) {
-                        tabLayout.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
-                        tabLayout.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
-                        tabLayout.setBackgroundColor(expandedTabBackgroundColor);
+                        binding.tabLayoutThemePreviewActivity.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
+                        binding.tabLayoutThemePreviewActivity.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
+                        binding.tabLayoutThemePreviewActivity.setBackgroundColor(expandedTabBackgroundColor);
                     } else if (state == State.COLLAPSED) {
-                        tabLayout.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
-                        tabLayout.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
-                        tabLayout.setBackgroundColor(collapsedTabBackgroundColor);
+                        binding.tabLayoutThemePreviewActivity.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
+                        binding.tabLayoutThemePreviewActivity.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
+                        binding.tabLayoutThemePreviewActivity.setBackgroundColor(collapsedTabBackgroundColor);
                     }
                 }
             });
         }
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbar);
 
-        subscribeSubredditChip.setOnClickListener(view -> {
-            if (subscribeSubredditChip.getText().equals(getResources().getString(R.string.subscribe))) {
-                subscribeSubredditChip.setText(R.string.unsubscribe);
-                subscribeSubredditChip.setChipBackgroundColor(ColorStateList.valueOf(subscribedColor));
+        binding.subscribeSubredditChipThemePreviewActivity.setOnClickListener(view -> {
+            if (binding.subscribeSubredditChipThemePreviewActivity.getText().equals(getResources().getString(R.string.subscribe))) {
+                binding.subscribeSubredditChipThemePreviewActivity.setText(R.string.unsubscribe);
+                binding.subscribeSubredditChipThemePreviewActivity.setChipBackgroundColor(ColorStateList.valueOf(subscribedColor));
             } else {
-                subscribeSubredditChip.setText(R.string.subscribe);
-                subscribeSubredditChip.setChipBackgroundColor(ColorStateList.valueOf(unsubscribedColor));
+                binding.subscribeSubredditChipThemePreviewActivity.setText(R.string.subscribe);
+                binding.subscribeSubredditChipThemePreviewActivity.setChipBackgroundColor(ColorStateList.valueOf(unsubscribedColor));
             }
         });
 
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(sectionsPagerAdapter);
-        viewPager.setOffscreenPageLimit(2);
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        binding.viewPagerThemePreviewActivity.setAdapter(sectionsPagerAdapter);
+        binding.viewPagerThemePreviewActivity.setOffscreenPageLimit(2);
+        binding.viewPagerThemePreviewActivity.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
@@ -333,51 +286,51 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
                 }
             }
         });
-        tabLayout.setupWithViewPager(viewPager);
+        binding.tabLayoutThemePreviewActivity.setupWithViewPager(binding.viewPagerThemePreviewActivity);
     }
 
     private void applyCustomTheme() {
-        coordinatorLayout.setBackgroundColor(customTheme.backgroundColor);
-        appBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        binding.coordinatorLayoutThemePreviewActivity.setBackgroundColor(customTheme.backgroundColor);
+        binding.appbarLayoutThemePreviewActivity.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                appBarLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                collapsingToolbarLayout.setScrimVisibleHeightTrigger(toolbar.getHeight() + tabLayout.getHeight() + getStatusBarHeight() * 2);
+                binding.appbarLayoutThemePreviewActivity.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                binding.collapsingToolbarLayoutThemePreviewActivity.setScrimVisibleHeightTrigger(binding.toolbar.getHeight() + binding.tabLayoutThemePreviewActivity.getHeight() + getStatusBarHeight() * 2);
             }
         });
-        collapsingToolbarLayout.setContentScrimColor(customTheme.colorPrimary);
-        subscribeSubredditChip.setTextColor(customTheme.chipTextColor);
-        subscribeSubredditChip.setChipBackgroundColor(ColorStateList.valueOf(customTheme.unsubscribed));
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        binding.collapsingToolbarLayoutThemePreviewActivity.setContentScrimColor(customTheme.colorPrimary);
+        binding.subscribeSubredditChipThemePreviewActivity.setTextColor(customTheme.chipTextColor);
+        binding.subscribeSubredditChipThemePreviewActivity.setChipBackgroundColor(ColorStateList.valueOf(customTheme.unsubscribed));
+        applyAppBarLayoutAndToolbarTheme(binding.appbarLayoutThemePreviewActivity, binding.toolbar);
         expandedTabTextColor = customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor;
         expandedTabIndicatorColor = customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator;
         expandedTabBackgroundColor = customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground;
         collapsedTabTextColor = customTheme.tabLayoutWithCollapsedCollapsingToolbarTextColor;
         collapsedTabIndicatorColor = customTheme.tabLayoutWithCollapsedCollapsingToolbarTabIndicator;
         collapsedTabBackgroundColor = customTheme.tabLayoutWithCollapsedCollapsingToolbarTabBackground;
-        linearLayout.setBackgroundColor(customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground);
-        extraPaddingView.setBackgroundColor(customTheme.colorPrimary);
-        subredditNameTextView.setTextColor(customTheme.subreddit);
-        usernameTextView.setTextColor(customTheme.username);
-        subscribeSubredditChip.setTextColor(customTheme.chipTextColor);
-        primaryTextView.setTextColor(customTheme.primaryTextColor);
-        secondaryTextView.setTextColor(customTheme.secondaryTextColor);
-        bottomNavigationView.setBackgroundTint(ColorStateList.valueOf(customTheme.bottomAppBarBackgroundColor));
+        binding.linearLayoutBottomAppBarThemePreviewActivity.setBackgroundColor(customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground);
+        binding.extraPaddingViewThemePreviewActivity.setBackgroundColor(customTheme.colorPrimary);
+        binding.subredditNameTextViewThemePreviewActivity.setTextColor(customTheme.subreddit);
+        binding.userNameTextViewThemePreviewActivity.setTextColor(customTheme.username);
+        binding.subscribeSubredditChipThemePreviewActivity.setTextColor(customTheme.chipTextColor);
+        binding.primaryTextTextViewThemePreviewActivity.setTextColor(customTheme.primaryTextColor);
+        binding.secondaryTextTextViewThemePreviewActivity.setTextColor(customTheme.secondaryTextColor);
+        binding.bottomNavigationThemePreviewActivity.setBackgroundTint(ColorStateList.valueOf(customTheme.bottomAppBarBackgroundColor));
         int bottomAppBarIconColor = customTheme.bottomAppBarIconColor;
-        subscriptionsBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        multiRedditBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        messageBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        profileBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        applyTabLayoutTheme(tabLayout);
-        applyFABTheme(fab);
+        binding.subscriptionsBottomAppBarThemePreviewActivity.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        binding.multiRedditBottomAppBarThemePreviewActivity.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        binding.messageBottomAppBarThemePreviewActivity.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        binding.profileBottomAppBarThemePreviewActivity.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        applyTabLayoutTheme(binding.tabLayoutThemePreviewActivity);
+        applyFABTheme(binding.fabThemePreviewActivity);
         unsubscribedColor = customTheme.unsubscribed;
         subscribedColor = customTheme.subscribed;
         if (typeface != null) {
-            subredditNameTextView.setTypeface(typeface);
-            usernameTextView.setTypeface(typeface);
-            primaryTextView.setTypeface(typeface);
-            secondaryTextView.setTypeface(typeface);
-            subscribeSubredditChip.setTypeface(typeface);
+            binding.subredditNameTextViewThemePreviewActivity.setTypeface(typeface);
+            binding.userNameTextViewThemePreviewActivity.setTypeface(typeface);
+            binding.primaryTextTextViewThemePreviewActivity.setTypeface(typeface);
+            binding.secondaryTextTextViewThemePreviewActivity.setTypeface(typeface);
+            binding.subscribeSubredditChipThemePreviewActivity.setTypeface(typeface);
         }
     }
 
@@ -420,7 +373,7 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
             toolbar.setLayoutParams(params);
             TypedValue tv = new TypedValue();
             if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-                ((ViewGroup.MarginLayoutParams) linearLayout.getLayoutParams()).setMargins(0,
+                ((ViewGroup.MarginLayoutParams) binding.linearLayoutBottomAppBarThemePreviewActivity.getLayoutParams()).setMargins(0,
                         TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics()) + statusBarHeight, 0, 0);
             }
         }
@@ -428,9 +381,9 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
 
     protected void applyTabLayoutTheme(TabLayout tabLayout) {
         int toolbarAndTabBackgroundColor = customTheme.colorPrimary;
-        tabLayout.setBackgroundColor(toolbarAndTabBackgroundColor);
-        tabLayout.setSelectedTabIndicatorColor(customTheme.tabLayoutWithCollapsedCollapsingToolbarTabIndicator);
-        tabLayout.setTabTextColors(customTheme.tabLayoutWithCollapsedCollapsingToolbarTextColor,
+        binding.tabLayoutThemePreviewActivity.setBackgroundColor(toolbarAndTabBackgroundColor);
+        binding.tabLayoutThemePreviewActivity.setSelectedTabIndicatorColor(customTheme.tabLayoutWithCollapsedCollapsingToolbarTabIndicator);
+        binding.tabLayoutThemePreviewActivity.setTabTextColors(customTheme.tabLayoutWithCollapsedCollapsingToolbarTextColor,
                 customTheme.tabLayoutWithCollapsedCollapsingToolbarTextColor);
     }
 

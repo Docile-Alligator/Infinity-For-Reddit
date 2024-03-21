@@ -581,11 +581,12 @@ public class Post implements Parcelable {
         this.previews = previews;
     }
 
+    @Nullable
     public Map<String, MediaMetadata> getMediaMetadataMap() {
         return mediaMetadataMap;
     }
 
-    public void setMediaMetadataMap(Map<String, MediaMetadata> mediaMetadataMap) {
+    public void setMediaMetadataMap(@Nullable Map<String, MediaMetadata> mediaMetadataMap) {
         this.mediaMetadataMap = mediaMetadataMap;
     }
 

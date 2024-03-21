@@ -34,7 +34,15 @@ public class UploadImageUtils {
 
     @Nullable
     public static String uploadImage(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
-                                      String accessToken, Bitmap image, boolean returnResponseForGallerySubmission) throws IOException, JSONException, XmlPullParserException {
+                                     String accessToken, Bitmap image, boolean getImageKey) throws IOException, JSONException, XmlPullParserException {
+        return uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, image, false, getImageKey);
+    }
+
+    @Nullable
+    public static String uploadImage(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
+                                      String accessToken, Bitmap image,
+                                     boolean returnResponseForGallerySubmission,
+                                     boolean getImageKey) throws IOException, JSONException, XmlPullParserException {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
         Map<String, String> uploadImageParams = new HashMap<>();
@@ -60,7 +68,7 @@ public class UploadImageUtils {
                 if (returnResponseForGallerySubmission) {
                     return uploadImageResponse.body();
                 }
-                return parseXMLResponseFromAWS(uploadMediaToAWSResponse.body());
+                return parseImageFromXMLResponseFromAWS(uploadMediaToAWSResponse.body(), getImageKey);
             } else {
                 return "Error: " + uploadMediaToAWSResponse.code();
             }
@@ -70,19 +78,25 @@ public class UploadImageUtils {
     }
 
     @Nullable
-    public static String parseXMLResponseFromAWS(String response) throws XmlPullParserException, IOException {
+    public static String parseImageFromXMLResponseFromAWS(String response) throws XmlPullParserException, IOException {
+        //Get Image URL
+        return parseImageFromXMLResponseFromAWS(response, false);
+    }
+
+    @Nullable
+    public static String parseImageFromXMLResponseFromAWS(String response, boolean getImageKey) throws XmlPullParserException, IOException {
         XmlPullParser xmlPullParser = XmlPullParserFactory.newInstance().newPullParser();
         xmlPullParser.setInput(new StringReader(response));
 
-        boolean isLocationTag = false;
+        boolean isKeyTag = false;
         int eventType = xmlPullParser.getEventType();
         while (eventType != XmlPullParser.END_DOCUMENT) {
             if (eventType == XmlPullParser.START_TAG) {
-                if (xmlPullParser.getName().equals("Location")) {
-                    isLocationTag = true;
+                if ((xmlPullParser.getName().equals("Key") && getImageKey) || (xmlPullParser.getName().equals("Location") && !getImageKey)) {
+                    isKeyTag = true;
                 }
             } else if (eventType == XmlPullParser.TEXT) {
-                if (isLocationTag) {
+                if (isKeyTag) {
                     return xmlPullParser.getText();
                 }
             }
