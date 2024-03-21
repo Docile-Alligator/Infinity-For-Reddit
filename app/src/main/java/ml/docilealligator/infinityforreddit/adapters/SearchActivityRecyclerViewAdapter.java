@@ -27,7 +27,7 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
     public interface ItemOnClickListener {
         void onClick(String query);
-        void onDelete(RecentSearchQuery recentSearchQuery, View view);
+        void onDelete(RecentSearchQuery recentSearchQuery);
     }
 
     public SearchActivityRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper,
@@ -86,7 +86,7 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             });
 
             binding.deleteButtonItemRecentSearchQuery.setOnClickListener(view -> {
-                itemOnClickListener.onDelete(recentSearchQueries.get(getBindingAdapterPosition()), view);
+                itemOnClickListener.onDelete(recentSearchQueries.get(getBindingAdapterPosition()));
             });
         }
     }

@@ -344,11 +344,11 @@ public class SearchActivity extends BaseActivity {
                 }
 
                 @Override
-                public void onDelete(RecentSearchQuery recentSearchQuery, View view) {
+                public void onDelete(RecentSearchQuery recentSearchQuery) {
                     hideKeyboard(true);
                     executor.execute(() -> {
                         mRedditDataRoomDatabase.recentSearchQueryDao().deleteRecentSearchQueries(recentSearchQuery);
-                        Snackbar.make(view, R.string.deleted_recent_search, Snackbar.LENGTH_SHORT)
+                        Snackbar.make(appBarLayout, R.string.deleted_recent_search, Snackbar.LENGTH_SHORT)
                                 .setAction(R.string.undo, v -> executor.execute(() -> mRedditDataRoomDatabase.recentSearchQueryDao().insert(recentSearchQuery)))
                                 .addCallback(new Snackbar.Callback() {
                                     @Override
