@@ -37,6 +37,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
+        coreLibraryDesugaringEnabled true
     }
 
     lint {
@@ -52,9 +53,12 @@ android {
     buildFeatures {
         viewBinding true
     }
+    namespace 'ml.docilealligator.infinityforreddit'
 }
 
 dependencies {
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs_nio:2.0.3"
+
 /** AndroidX **/
     implementation 'androidx.appcompat:appcompat:1.7.0-alpha01'
     implementation 'androidx.biometric:biometric:1.2.0-alpha05'
