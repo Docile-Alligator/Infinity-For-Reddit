@@ -16,6 +16,11 @@
         app:key="separate_folder_for_each_subreddit"
         app:title="@string/settings_separate_folder_for_each_subreddit" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="download_with_sensible_file_name"
+        app:title="@string/settings_download_with_sensible_file_name" />
+
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceCategory
         app:title="@string/nsfw" />
 
