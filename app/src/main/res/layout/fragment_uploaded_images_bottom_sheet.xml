@@ -1,65 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     tools:context=".bottomsheetfragments.UploadedImagesBottomSheetFragment">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingTop="16dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="@string/uploaded_images"
-        android:fontFamily="?attr/font_family"
-        android:textSize="?attr/font_18"
-        android:textColor="?attr/primaryTextColor" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:text="@string/uploaded_images_explanation"
-        android:fontFamily="?attr/font_family"
-        android:textSize="?attr/font_default"
-        android:textColor="?attr/secondaryTextColor" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/capture_button_uploaded_images_bottom_sheet_fragment"
-            android:layout_width="0dp"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="16dp"
-            android:backgroundTint="@color/colorPrimary"
-            android:textColor="#FFFFFF"
-            android:text="@string/capture" />
+            android:gravity="center"
+            android:paddingTop="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/uploaded_images"
+            android:fontFamily="?attr/font_family"
+            android:textSize="?attr/font_18"
+            android:textColor="?attr/primaryTextColor" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/upload_button_uploaded_images_bottom_sheet_fragment"
-            android:layout_width="0dp"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="16dp"
-            android:backgroundTint="@color/colorPrimary"
-            android:textColor="#FFFFFF"
-            android:text="@string/select_image" />
+            android:paddingTop="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/uploaded_images_explanation"
+            android:fontFamily="?attr/font_family"
+            android:textSize="?attr/font_default"
+            android:textColor="?attr/secondaryTextColor" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/capture_button_uploaded_images_bottom_sheet_fragment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="16dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="#FFFFFF"
+                android:text="@string/capture" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/upload_button_uploaded_images_bottom_sheet_fragment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="16dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="#FFFFFF"
+                android:text="@string/select_image" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_uploaded_images_bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:nestedScrollingEnabled="false" />
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_uploaded_images_bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-</LinearLayout>
+</ScrollView>
