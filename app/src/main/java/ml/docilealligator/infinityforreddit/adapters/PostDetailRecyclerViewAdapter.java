@@ -1276,8 +1276,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             mPost.getScore() + mPost.getVoteType()));
                 }
 
-                mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
-
                 VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingWithoutPositionListener() {
                     @Override
                     public void onVoteThingSuccess() {
@@ -1369,8 +1367,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                             mPost.getScore() + mPost.getVoteType()));
                 }
-
-                mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
 
                 VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingWithoutPositionListener() {
                     @Override
