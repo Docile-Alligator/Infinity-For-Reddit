@@ -323,7 +323,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public int getItemViewType(int position) {
-        if (mVisibleComments.size() == 0) {
+        if (mVisibleComments.isEmpty()) {
             if (isInitiallyLoading) {
                 return VIEW_TYPE_FIRST_LOADING;
             } else if (isInitiallyLoadingFailed) {
@@ -842,15 +842,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         return findCommentPosition(fullName, positionHint, Comment.NOT_PLACEHOLDER);
     }
 
-    /**
-     * Find position of comment with given {@code fullName} and
-     * {@link Comment#PLACEHOLDER_LOAD_MORE_COMMENTS} placeholder type
-     * @return position of the placeholder or -1 if not found
-     */
-    private int findLoadMoreCommentsPlaceholderPosition(String fullName, int positionHint) {
-        return findCommentPosition(fullName, positionHint, Comment.PLACEHOLDER_LOAD_MORE_COMMENTS);
-    }
-
     private int findCommentPosition(String fullName, int positionHint, int placeholderType) {
         if (0 <= positionHint && positionHint < mVisibleComments.size()
                 && mVisibleComments.get(positionHint).getFullName().equals(fullName)
@@ -867,8 +858,17 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         return -1;
     }
 
+    /**
+     * Find position of comment with given {@code fullName} and
+     * {@link Comment#PLACEHOLDER_LOAD_MORE_COMMENTS} placeholder type
+     * @return position of the placeholder or -1 if not found
+     */
+    private int findLoadMoreCommentsPlaceholderPosition(String fullName, int positionHint) {
+        return findCommentPosition(fullName, positionHint, Comment.PLACEHOLDER_LOAD_MORE_COMMENTS);
+    }
+
     private void expandChildren(ArrayList<Comment> comments, ArrayList<Comment> newList) {
-        if (comments != null && comments.size() > 0) {
+        if (comments != null && !comments.isEmpty()) {
             for (Comment comment : comments) {
                 newList.add(comment);
                 expandChildren(comment.getChildren(), newList);
@@ -1165,7 +1165,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             return 1;
         }
 
-        if (isInitiallyLoadingFailed || mVisibleComments.size() == 0) {
+        if (isInitiallyLoadingFailed || mVisibleComments.isEmpty()) {
             return mIsSingleCommentThreadMode ? 2 : 1;
         }
 
@@ -1370,7 +1370,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             });
 
             moreButton.setOnClickListener(view -> {
-                getItemCount();
                 Comment comment = getCurrentComment(this);
                 if (comment != null) {
                     Bundle bundle = new Bundle();

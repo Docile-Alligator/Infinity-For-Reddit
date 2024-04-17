@@ -1280,7 +1280,8 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
     public void onNeedForPostListFromPostRecyclerViewAdapterEvent(NeedForPostListFromPostFragmentEvent event) {
         if (historyPostFragmentId == event.postFragmentTimeId && mAdapter != null) {
             EventBus.getDefault().post(new ProvidePostListToViewPostDetailActivityEvent(historyPostFragmentId,
-                    new ArrayList<>(mAdapter.snapshot()), HistoryPostPagingSource.TYPE_READ_POSTS, null, null, null,
+                    new ArrayList<>(mAdapter.snapshot()), HistoryPostPagingSource.TYPE_READ_POSTS,
+                    null, null, null, null,
                     null, null, null, postFilter, null, null));
         }
     }

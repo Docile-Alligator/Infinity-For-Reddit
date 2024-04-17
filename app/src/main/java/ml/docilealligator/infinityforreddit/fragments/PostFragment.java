@@ -1238,18 +1238,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     mRetrofit, null, activity.accountName, mSharedPreferences,
                     mPostFeedScrolledPositionSharedPreferences, null, subredditName, postType, sortType,
                     postFilter, readPosts)).get(PostViewModel.class);
-        } else if (postType == PostPagingSource.TYPE_MULTI_REDDIT) {
-            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
-                    mRetrofit, null, activity.accountName, mSharedPreferences,
-                    mPostFeedScrolledPositionSharedPreferences, null, multiRedditPath,
-                    postType, sortType, postFilter, readPosts)).get(PostViewModel.class);
         } else if (postType == PostPagingSource.TYPE_USER) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
                     mRetrofit, null, activity.accountName, mSharedPreferences,
                     mPostFeedScrolledPositionSharedPreferences, null, username, postType, sortType, postFilter,
                     where, readPosts)).get(PostViewModel.class);
         } else {
-            //Anonymous Front Page
+            //Anonymous front page or multireddit
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
                     mRetrofit, mSharedPreferences, concatenatedSubredditNames, postType, sortType, postFilter))
                     .get(PostViewModel.class);
@@ -2051,8 +2046,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onNeedForPostListFromPostRecyclerViewAdapterEvent(NeedForPostListFromPostFragmentEvent event) {
         if (postFragmentId == event.postFragmentTimeId && mAdapter != null) {
             EventBus.getDefault().post(new ProvidePostListToViewPostDetailActivityEvent(postFragmentId,
-                    new ArrayList<>(mAdapter.snapshot()), postType, subredditName, username, where,
-                    multiRedditPath, query, trendingSource, postFilter, sortType, readPosts));
+                    new ArrayList<>(mAdapter.snapshot()), postType, subredditName,
+                    concatenatedSubredditNames, username, where, multiRedditPath, query, trendingSource,
+                    postFilter, sortType, readPosts));
         }
     }
 

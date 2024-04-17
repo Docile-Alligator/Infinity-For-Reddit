@@ -86,7 +86,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         this.accountName = accountName;
         this.sharedPreferences = sharedPreferences;
         this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
-        if (postType == TYPE_SUBREDDIT || postType == TYPE_ANONYMOUS_FRONT_PAGE) {
+        if (postType == TYPE_SUBREDDIT || postType == TYPE_ANONYMOUS_FRONT_PAGE || postType == TYPE_ANONYMOUS_MULTIREDDIT) {
             this.subredditOrUserName = path;
         } else {
             if (sortType != null) {

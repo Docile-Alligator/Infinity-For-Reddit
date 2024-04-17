@@ -151,6 +151,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @State
     String subredditName;
     @State
+    String concatenatedSubredditNames;
+    @State
     String username;
     @State
     String userWhere;
@@ -559,8 +561,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                         }
                         break;
                     case PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE:
-                        //case PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT
-                        call = api.getSubredditBestPosts(subredditName, sortType, sortTime, afterKey);
+                    case PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT:
+                        call = api.getSubredditBestPosts(concatenatedSubredditNames, sortType, sortTime, afterKey);
                         break;
                     default:
                         call = api.getBestPosts(sortType, sortTime, afterKey,
@@ -725,6 +727,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             this.posts = event.posts;
             this.postType = event.postType;
             this.subredditName = event.subredditName;
+            this.concatenatedSubredditNames = event.concatenatedSubredditNames;
             this.username = event.username;
             this.userWhere = event.userWhere;
             this.multiPath = event.multiPath;
