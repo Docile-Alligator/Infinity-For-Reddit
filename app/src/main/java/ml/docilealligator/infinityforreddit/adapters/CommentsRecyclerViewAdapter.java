@@ -821,6 +821,26 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         this.canStartActivity = canStartActivity;
     }
 
+    @Nullable
+    private Comment getCurrentComment(RecyclerView.ViewHolder holder) {
+        return getCurrentComment(holder.getBindingAdapterPosition());
+    }
+
+    @Nullable
+    private Comment getCurrentComment(int position) {
+        if (mIsSingleCommentThreadMode) {
+            if (position - 1 >= 0 && position - 1 < mVisibleComments.size()) {
+                return mVisibleComments.get(position - 1);
+            }
+        } else {
+            if (position >= 0 && position < mVisibleComments.size()) {
+                return mVisibleComments.get(position);
+            }
+        }
+
+        return null;
+    }
+
     private int getParentPosition(int position) {
         if (position >= 0 && position < mVisibleComments.size()) {
             int childDepth = mVisibleComments.get(position).getDepth();
@@ -906,10 +926,10 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public void addComments(@NonNull ArrayList<Comment> comments, boolean hasMoreComments) {
-        if (mVisibleComments.size() == 0) {
+        if (mVisibleComments.isEmpty()) {
             isInitiallyLoading = false;
             isInitiallyLoadingFailed = false;
-            if (comments.size() == 0) {
+            if (comments.isEmpty()) {
                 notifyItemChanged(0);
             } else {
                 notifyItemRemoved(0);
@@ -919,7 +939,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         int sizeBefore = mVisibleComments.size();
         mVisibleComments.addAll(comments);
         if (mIsSingleCommentThreadMode) {
-            notifyItemRangeInserted(sizeBefore, comments.size() + 1);
+            notifyItemRangeInserted(sizeBefore + 1, comments.size());
         } else {
             notifyItemRangeInserted(sizeBefore, comments.size());
         }
@@ -1807,26 +1827,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     binding.verticalBlockIndentationItemComment,
                     binding.dividerItemComment);
         }
-    }
-
-    @Nullable
-    private Comment getCurrentComment(RecyclerView.ViewHolder holder) {
-        return getCurrentComment(holder.getBindingAdapterPosition());
-    }
-
-    @Nullable
-    private Comment getCurrentComment(int position) {
-        if (mIsSingleCommentThreadMode) {
-            if (position - 1 >= 0 && position - 1 < mVisibleComments.size()) {
-                return mVisibleComments.get(position - 1);
-            }
-        } else {
-            if (position >= 0 && position < mVisibleComments.size()) {
-                return mVisibleComments.get(position);
-            }
-        }
-
-        return null;
     }
 
     class CommentFullyCollapsedViewHolder extends RecyclerView.ViewHolder {
