@@ -1421,7 +1421,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
     private void fetchCommentsRespectRecommendedSort(boolean changeRefreshState, SortType.Type sortType) {
         if (mRespectSubredditRecommendedSortType && mPost != null) {
-            if (mPost.getSuggestedSort() != null && !mPost.getSuggestedSort().equals("null") && !mPost.getSuggestedSort().equals("")) {
+            if (mPost.getSuggestedSort() != null && !mPost.getSuggestedSort().equals("null") && !mPost.getSuggestedSort().isEmpty()) {
                 try {
                     SortType.Type sortTypeType = SortType.Type.valueOf(mPost.getSuggestedSort().toUpperCase(Locale.US));
                     activity.setTitle(sortTypeType.fullName);

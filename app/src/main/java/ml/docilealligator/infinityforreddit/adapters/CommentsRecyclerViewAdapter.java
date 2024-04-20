@@ -929,7 +929,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         if (mVisibleComments.isEmpty()) {
             isInitiallyLoading = false;
             isInitiallyLoadingFailed = false;
-            if (comments.isEmpty()) {
+            if (comments.isEmpty() || mIsSingleCommentThreadMode) {
                 notifyItemChanged(0);
             } else {
                 notifyItemRemoved(0);
