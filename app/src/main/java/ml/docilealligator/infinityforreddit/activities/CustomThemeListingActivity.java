@@ -13,17 +13,17 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.gson.JsonParseException;
 
 import org.greenrobot.eventbus.EventBus;
@@ -34,12 +34,10 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.adapters.CustomThemeListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.asynctasks.ChangeThemeName;
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteTheme;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCustomTheme;
@@ -47,16 +45,18 @@ import ml.docilealligator.infinityforreddit.asynctasks.InsertCustomTheme;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CreateThemeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CustomThemeOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeViewModel;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCustomThemeListingBinding;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
+import ml.docilealligator.infinityforreddit.fragments.CustomThemeListingFragment;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class CustomThemeListingActivity extends BaseActivity implements
         CustomThemeOptionsBottomSheetFragment.CustomThemeOptionsBottomSheetFragmentListener,
-        CreateThemeBottomSheetFragment.SelectBaseThemeBottomSheetFragmentListener {
+        CreateThemeBottomSheetFragment.SelectBaseThemeBottomSheetFragmentListener,
+        RecyclerViewContentScrollingInterface {
 
     @Inject
     @Named("default")
@@ -79,7 +79,8 @@ public class CustomThemeListingActivity extends BaseActivity implements
     SharedPreferences amoledThemeSharedPreferences;
     @Inject
     Executor executor;
-    public CustomThemeViewModel customThemeViewModel;
+    private FragmentManager fragmentManager;
+    private SectionsPagerAdapter sectionsPagerAdapter;
     private ActivityCustomThemeListingBinding binding;
 
     @Override
@@ -99,29 +100,44 @@ public class CustomThemeListingActivity extends BaseActivity implements
         setSupportActionBar(binding.toolbarCustomizeThemeListingActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        CustomThemeListingRecyclerViewAdapter adapter = new CustomThemeListingRecyclerViewAdapter(this,
-                CustomThemeWrapper.getPredefinedThemes(this));
-        binding.recyclerViewCustomizeThemeListingActivity.setAdapter(adapter);
-        binding.recyclerViewCustomizeThemeListingActivity.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0) {
-                    binding.fabCustomThemeListingActivity.hide();
-                } else if (dy < 0) {
-                    binding.fabCustomThemeListingActivity.show();
-                }
-            }
-        });
-
-        customThemeViewModel = new ViewModelProvider(this,
-                new CustomThemeViewModel.Factory(redditDataRoomDatabase))
-                .get(CustomThemeViewModel.class);
-        customThemeViewModel.getAllCustomThemes().observe(this, adapter::setUserThemes);
-
         binding.fabCustomThemeListingActivity.setOnClickListener(view -> {
             CreateThemeBottomSheetFragment createThemeBottomSheetFragment = new CreateThemeBottomSheetFragment();
             createThemeBottomSheetFragment.show(getSupportFragmentManager(), createThemeBottomSheetFragment.getTag());
         });
+
+        fragmentManager = getSupportFragmentManager();
+
+        initializeViewPager();
+    }
+
+    private void initializeViewPager() {
+        sectionsPagerAdapter = new SectionsPagerAdapter(this);
+        binding.viewPager2CustomizeThemeListingActivity.setAdapter(sectionsPagerAdapter);
+        binding.viewPager2CustomizeThemeListingActivity.setUserInputEnabled(!sharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
+        new TabLayoutMediator(binding.tabLayoutCustomizeThemeListingActivity, binding.viewPager2CustomizeThemeListingActivity, (tab, position) -> {
+            switch (position) {
+                case 0:
+                    Utils.setTitleWithCustomFontToTab(typeface, tab, getString(R.string.local));
+                    break;
+                case 1:
+                    Utils.setTitleWithCustomFontToTab(typeface, tab, getString(R.string.online));
+                    break;
+            }
+        }).attach();
+
+        binding.viewPager2CustomizeThemeListingActivity.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                binding.fabCustomThemeListingActivity.show();
+                if (position == 0) {
+                    unlockSwipeRightToGoBack();
+                } else {
+                    lockSwipeRightToGoBack();
+                }
+            }
+        });
+
+        fixViewPager2Sensitivity(binding.viewPager2CustomizeThemeListingActivity);
     }
 
     @Override
@@ -153,6 +169,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
         binding.coordinatorLayoutCustomThemeListingActivity.setBackgroundColor(customThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCustomizeThemeListingActivity, binding.collapsingToolbarLayoutCustomizeThemeListingActivity, binding.toolbarCustomizeThemeListingActivity);
         applyFABTheme(binding.fabCustomThemeListingActivity);
+        applyTabLayoutTheme(binding.tabLayoutCustomizeThemeListingActivity);
     }
 
     @Override
@@ -278,6 +295,16 @@ public class CustomThemeListingActivity extends BaseActivity implements
         }
     }
 
+    @Override
+    public void contentScrollUp() {
+        binding.fabCustomThemeListingActivity.show();
+    }
+
+    @Override
+    public void contentScrollDown() {
+        binding.fabCustomThemeListingActivity.hide();
+    }
+
     private void checkDuplicateAndImportTheme(CustomTheme customTheme, boolean checkDuplicate) {
         InsertCustomTheme.insertCustomTheme(executor, new Handler(), redditDataRoomDatabase, lightThemeSharedPreferences,
                 darkThemeSharedPreferences, amoledThemeSharedPreferences, customTheme, checkDuplicate,
@@ -323,5 +350,36 @@ public class CustomThemeListingActivity extends BaseActivity implements
                                 .show();
                     }
                 });
+    }
+
+    private class SectionsPagerAdapter extends FragmentStateAdapter {
+
+        SectionsPagerAdapter(FragmentActivity fa) {
+            super(fa);
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            if (position == 0) {
+                CustomThemeListingFragment fragment = new CustomThemeListingFragment();
+                return fragment;
+            }
+            CustomThemeListingFragment fragment = new CustomThemeListingFragment();
+            return fragment;
+        }
+
+        @Nullable
+        private Fragment getCurrentFragment() {
+            if (fragmentManager == null) {
+                return null;
+            }
+            return fragmentManager.findFragmentByTag("f" + binding.viewPager2CustomizeThemeListingActivity.getCurrentItem());
+        }
+
+        @Override
+        public int getItemCount() {
+            return 2;
+        }
     }
 }

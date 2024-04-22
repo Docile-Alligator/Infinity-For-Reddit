@@ -69,6 +69,7 @@ import ml.docilealligator.infinityforreddit.activities.WikiActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.AccountChooserBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.fragments.CommentsListingFragment;
+import ml.docilealligator.infinityforreddit.fragments.CustomThemeListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.FollowedUsersListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.HistoryPostFragment;
 import ml.docilealligator.infinityforreddit.fragments.InboxFragment;
@@ -312,6 +313,8 @@ public interface AppComponent {
     void inject(CustomizeCommentFilterActivity customizeCommentFilterActivity);
 
     void inject(CommentFilterUsageListingActivity commentFilterUsageListingActivity);
+
+    void inject(CustomThemeListingFragment customThemeListingFragment);
 
     @Component.Factory
     interface Factory {
