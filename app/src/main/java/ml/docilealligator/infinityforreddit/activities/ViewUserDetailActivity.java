@@ -402,9 +402,16 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 } else {
                     glide.load(userData.getBanner()).into(bannerImageView);
                     bannerImageView.setOnClickListener(view -> {
+                        String fileName = Uri.parse(userData.getBanner()).getLastPathSegment();
+                        int idx = fileName.lastIndexOf('.');
+                        String extension = ".jpg";
+                        if (idx != -1) {
+                            extension = fileName.substring(idx);
+                        }
+
                         Intent intent = new Intent(this, ViewImageOrGifActivity.class);
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, userData.getBanner());
-                        intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, username + "-banner.jpg");
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, username + "-banner" + extension);
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, username);
                         startActivity(intent);
                     });
@@ -423,9 +430,16 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                             .into(iconGifImageView);
 
                     iconGifImageView.setOnClickListener(view -> {
+                        String fileName = Uri.parse(userData.getIconUrl()).getLastPathSegment();
+                        int idx = fileName.lastIndexOf('.');
+                        String extension = ".jpg";
+                        if (idx != -1) {
+                            extension = fileName.substring(idx);
+                        }
+
                         Intent intent = new Intent(this, ViewImageOrGifActivity.class);
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, userData.getIconUrl());
-                        intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, username + "-icon.jpg");
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, username + "-icon" + extension);
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, username);
                         startActivity(intent);
                     });

@@ -2100,10 +2100,17 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 if (canStartActivity) {
                     canStartActivity = false;
                     if (mPost.getPostType() == Post.IMAGE_TYPE) {
+                        String fileName = Uri.parse(mPost.getUrl()).getLastPathSegment();
+                        int idx = fileName.lastIndexOf('.');
+                        String extension = ".jpg";
+                        if (idx != -1) {
+                            extension = fileName.substring(idx);
+                        }
+
                         Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, mPost.getUrl());
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mPost.getSubredditNamePrefixed().substring(2)
-                                + "-" + mPost.getId().substring(3) + ".jpg");
+                                + "-" + mPost.getId().substring(3) + extension);
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, mPost.getTitle());
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, mPost.getSubredditName());
                         mActivity.startActivity(intent);
@@ -2243,10 +2250,17 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                         mActivity.startActivity(intent);
                     } else if (mPost.getPostType() == Post.IMAGE_TYPE) {
+                        String fileName = Uri.parse(mPost.getUrl()).getLastPathSegment();
+                        int idx = fileName.lastIndexOf('.');
+                        String extension = ".jpg";
+                        if (idx != -1) {
+                            extension = fileName.substring(idx);
+                        }
+
                         Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, mPost.getUrl());
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mPost.getSubredditName()
-                                + "-" + mPost.getId() + ".jpg");
+                                + "-" + mPost.getId() + extension);
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, mPost.getTitle());
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, mPost.getSubredditName());
                         mActivity.startActivity(intent);
