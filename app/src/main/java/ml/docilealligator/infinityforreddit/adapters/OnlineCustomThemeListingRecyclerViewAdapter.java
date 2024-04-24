@@ -1,0 +1,121 @@
+package ml.docilealligator.infinityforreddit.adapters;
+
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.paging.PagingDataAdapter;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.RecyclerView;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.CustomThemeListingActivity;
+import ml.docilealligator.infinityforreddit.activities.CustomizeThemeActivity;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.CustomThemeOptionsBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
+
+public class OnlineCustomThemeListingRecyclerViewAdapter extends PagingDataAdapter<CustomTheme, RecyclerView.ViewHolder> {
+    private static final int VIEW_TYPE_USER_THEME = 1;
+    private static final int VIEW_TYPE_USER_THEME_DIVIDER = 2;
+
+    private final BaseActivity activity;
+
+    public OnlineCustomThemeListingRecyclerViewAdapter(BaseActivity activity) {
+        super(new DiffUtil.ItemCallback<>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull CustomTheme oldItem, @NonNull CustomTheme newItem) {
+                return oldItem.name.equals(newItem.name);
+            }
+
+            @Override
+            public boolean areContentsTheSame(@NonNull CustomTheme oldItem, @NonNull CustomTheme newItem) {
+                return false;
+            }
+        });
+        this.activity = activity;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return VIEW_TYPE_USER_THEME;
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case VIEW_TYPE_USER_THEME_DIVIDER:
+                return new OnlineCustomThemeDividerViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_theme_type_divider, parent, false));
+            default:
+                return new OnlineCustomThemeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user_custom_theme, parent, false));
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof OnlineCustomThemeViewHolder) {
+            CustomTheme customTheme = getItem(position);
+            ((OnlineCustomThemeViewHolder) holder).colorPrimaryView.setBackgroundTintList(ColorStateList.valueOf(customTheme.colorPrimary));
+            ((OnlineCustomThemeViewHolder) holder).nameTextView.setText(customTheme.name);
+            ((OnlineCustomThemeViewHolder) holder).createThemeImageView.setOnClickListener(view -> {
+                Intent intent = new Intent(activity, CustomizeThemeActivity.class);
+                intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_NAME, customTheme.name);
+                intent.putExtra(CustomizeThemeActivity.EXTRA_CREATE_THEME, true);
+                activity.startActivity(intent);
+            });
+            ((OnlineCustomThemeViewHolder) holder).shareImageView.setOnClickListener(view -> {
+                ((CustomThemeListingActivity) activity).shareTheme(customTheme);
+            });
+            holder.itemView.setOnClickListener(view -> {
+                CustomThemeOptionsBottomSheetFragment customThemeOptionsBottomSheetFragment = new CustomThemeOptionsBottomSheetFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(CustomThemeOptionsBottomSheetFragment.EXTRA_THEME_NAME, customTheme.name);
+                customThemeOptionsBottomSheetFragment.setArguments(bundle);
+                customThemeOptionsBottomSheetFragment.show(activity.getSupportFragmentManager(), customThemeOptionsBottomSheetFragment.getTag());
+            });
+            holder.itemView.setOnLongClickListener(view -> {
+                holder.itemView.performClick();
+                return true;
+            });
+        }
+    }
+
+    class OnlineCustomThemeViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.color_primary_item_user_custom_theme)
+        View colorPrimaryView;
+        @BindView(R.id.name_text_view_item_user_custom_theme)
+        TextView nameTextView;
+        @BindView(R.id.add_image_view_item_user_custom_theme)
+        ImageView createThemeImageView;
+        @BindView(R.id.share_image_view_item_user_custom_theme)
+        ImageView shareImageView;
+
+        OnlineCustomThemeViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            if (activity.typeface != null) {
+                nameTextView.setTypeface(activity.typeface);
+            }
+        }
+    }
+
+    class OnlineCustomThemeDividerViewHolder extends RecyclerView.ViewHolder {
+
+        OnlineCustomThemeDividerViewHolder(@NonNull View itemView) {
+            super(itemView);
+            if (activity.typeface != null) {
+                ((TextView) itemView).setTypeface(activity.typeface);
+            }
+        }
+    }
+}

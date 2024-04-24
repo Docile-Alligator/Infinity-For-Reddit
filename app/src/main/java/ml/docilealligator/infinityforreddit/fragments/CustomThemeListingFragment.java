@@ -22,12 +22,19 @@ import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterfac
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.adapters.CustomThemeListingRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.adapters.OnlineCustomThemeListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeViewModel;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.FragmentCustomThemeListingBinding;
+import retrofit2.Retrofit;
 
 public class CustomThemeListingFragment extends Fragment {
 
+    public static final String EXTRA_IS_ONLINE = "EIO";
+
+    @Inject
+    @Named("online_custom_themes")
+    Retrofit onlineCustomThemesRetrofit;
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;
@@ -52,6 +59,7 @@ public class CustomThemeListingFragment extends Fragment {
     public CustomThemeViewModel customThemeViewModel;
     private BaseActivity activity;
     private FragmentCustomThemeListingBinding binding;
+    private boolean isOnline;
 
     public CustomThemeListingFragment() {
         // Required empty public constructor
@@ -65,9 +73,10 @@ public class CustomThemeListingFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentCustomThemeListingBinding.inflate(inflater, container, false);
 
-        CustomThemeListingRecyclerViewAdapter adapter = new CustomThemeListingRecyclerViewAdapter(activity,
-                CustomThemeWrapper.getPredefinedThemes(activity));
-        binding.recyclerViewCustomizeThemeListingActivity.setAdapter(adapter);
+        if (getArguments() != null) {
+            isOnline = getArguments().getBoolean(EXTRA_IS_ONLINE);
+        }
+
         binding.recyclerViewCustomizeThemeListingActivity.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -79,10 +88,25 @@ public class CustomThemeListingFragment extends Fragment {
             }
         });
 
-        customThemeViewModel = new ViewModelProvider(this,
-                new CustomThemeViewModel.Factory(redditDataRoomDatabase))
-                .get(CustomThemeViewModel.class);
-        customThemeViewModel.getAllCustomThemes().observe(getViewLifecycleOwner(), adapter::setUserThemes);
+        if (isOnline) {
+            OnlineCustomThemeListingRecyclerViewAdapter adapter = new OnlineCustomThemeListingRecyclerViewAdapter(activity);
+            binding.recyclerViewCustomizeThemeListingActivity.setAdapter(adapter);
+
+            customThemeViewModel = new ViewModelProvider(this,
+                    new CustomThemeViewModel.Factory(executor, onlineCustomThemesRetrofit, redditDataRoomDatabase))
+                    .get(CustomThemeViewModel.class);
+            customThemeViewModel.getOnlineCustomThemes().observe(getViewLifecycleOwner(),
+                    customThemePagingData -> adapter.submitData(getViewLifecycleOwner().getLifecycle(), customThemePagingData));
+        } else {
+            CustomThemeListingRecyclerViewAdapter adapter = new CustomThemeListingRecyclerViewAdapter(activity,
+                    CustomThemeWrapper.getPredefinedThemes(activity));
+            binding.recyclerViewCustomizeThemeListingActivity.setAdapter(adapter);
+
+            customThemeViewModel = new ViewModelProvider(this,
+                    new CustomThemeViewModel.Factory(redditDataRoomDatabase))
+                    .get(CustomThemeViewModel.class);
+            customThemeViewModel.getAllCustomThemes().observe(getViewLifecycleOwner(), adapter::setUserThemes);
+        }
 
         return binding.getRoot();
     }

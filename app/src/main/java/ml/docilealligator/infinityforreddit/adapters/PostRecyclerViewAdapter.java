@@ -147,7 +147,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private static final int VIEW_TYPE_POST_CARD_3_GALLERY_TYPE = 14;
     private static final int VIEW_TYPE_POST_CARD_3_TEXT_TYPE = 15;
 
-    private static final DiffUtil.ItemCallback<Post> DIFF_CALLBACK = new DiffUtil.ItemCallback<Post>() {
+    private static final DiffUtil.ItemCallback<Post> DIFF_CALLBACK = new DiffUtil.ItemCallback<>() {
         @Override
         public boolean areItemsTheSame(@NonNull Post post, @NonNull Post t1) {
             return post.getId().equals(t1.getId());

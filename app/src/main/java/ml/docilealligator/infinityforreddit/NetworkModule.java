@@ -192,6 +192,15 @@ abstract class NetworkModule {
     }
 
     @Provides
+    @Named("online_custom_themes")
+    @Singleton
+    static Retrofit provideOnlineCustomThemesRetrofit(@Named("base") Retrofit retrofit) {
+        return retrofit.newBuilder()
+                .baseUrl(APIUtils.ONLINE_CUSTOM_THEMES_API_BASE_URI)
+                .build();
+    }
+
+    @Provides
     @Singleton
     static StreamableAPI provideStreamableApi(@Named("streamable") Retrofit streamableRetrofit) {
         return streamableRetrofit.create(StreamableAPI.class);

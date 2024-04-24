@@ -366,6 +366,9 @@ public class CustomThemeListingActivity extends BaseActivity implements
                 return fragment;
             }
             CustomThemeListingFragment fragment = new CustomThemeListingFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(CustomThemeListingFragment.EXTRA_IS_ONLINE, true);
+            fragment.setArguments(bundle);
             return fragment;
         }
 
