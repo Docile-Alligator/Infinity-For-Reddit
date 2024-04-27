@@ -362,8 +362,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
         @Override
         public Fragment createFragment(int position) {
             if (position == 0) {
-                CustomThemeListingFragment fragment = new CustomThemeListingFragment();
-                return fragment;
+                return new CustomThemeListingFragment();
             }
             CustomThemeListingFragment fragment = new CustomThemeListingFragment();
             Bundle bundle = new Bundle();
