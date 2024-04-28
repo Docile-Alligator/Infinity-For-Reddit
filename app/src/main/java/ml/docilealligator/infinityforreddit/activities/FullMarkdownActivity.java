@@ -21,7 +21,6 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
@@ -63,8 +62,6 @@ public class FullMarkdownActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityCommentFullMarkdownBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
 

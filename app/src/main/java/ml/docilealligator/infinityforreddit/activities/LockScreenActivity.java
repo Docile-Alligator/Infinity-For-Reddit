@@ -16,7 +16,6 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -44,8 +43,6 @@ public class LockScreenActivity extends BaseActivity {
 
         binding = ActivityLockScreenBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        ButterKnife.bind(this);
 
         applyCustomTheme();
 

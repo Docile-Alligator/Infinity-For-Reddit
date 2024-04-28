@@ -111,8 +111,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         binding = ActivityFilteredThingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ButterKnife.bind(this);
-
         EventBus.getDefault().register(this);
 
         applyCustomTheme();

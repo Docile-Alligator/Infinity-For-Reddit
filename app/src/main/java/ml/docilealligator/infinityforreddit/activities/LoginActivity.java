@@ -35,7 +35,6 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.ButterKnife;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.FetchMyInfo;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -99,8 +98,6 @@ public class LoginActivity extends BaseActivity {
             finish();
             return;
         }
-
-        ButterKnife.bind(this);
 
         applyCustomTheme();
 

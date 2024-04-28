@@ -96,6 +96,7 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
         setImmersiveModeNotApplicable();
 
         super.onCreate(savedInstanceState);
+
         binding = ActivityEditPostBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 

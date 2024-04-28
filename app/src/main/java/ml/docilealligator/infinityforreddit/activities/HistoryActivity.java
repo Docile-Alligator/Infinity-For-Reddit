@@ -76,7 +76,7 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
             mSliderPanel = Slidr.attach(this);
         }
 
-        //mViewPager2 = viewPager2;
+        mViewPager2 = binding.viewPagerHistoryActivity;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
