@@ -34,7 +34,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/content_markdown_view_comment_full_markdown_activity"
+        android:id="@+id/content_recycler_view_comment_full_markdown_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingStart="16dp"

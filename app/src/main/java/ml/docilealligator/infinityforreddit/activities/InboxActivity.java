@@ -51,6 +51,7 @@ import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.databinding.ActivityInboxBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
 import ml.docilealligator.infinityforreddit.events.PassPrivateMessageEvent;
 import ml.docilealligator.infinityforreddit.events.PassPrivateMessageIndexEvent;
@@ -74,20 +75,6 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
     private static final int SEARCH_USER_REQUEST_CODE = 1;
 
-    @BindView(R.id.coordinator_layout_inbox_activity)
-    CoordinatorLayout mCoordinatorLayout;
-    @BindView(R.id.appbar_layout_inbox_activity)
-    AppBarLayout mAppBarLayout;
-    @BindView(R.id.collapsing_toolbar_layout_inbox_activity)
-    CollapsingToolbarLayout mCollapsingToolbarLayout;
-    @BindView(R.id.toolbar_inbox_activity)
-    Toolbar mToolbar;
-    @BindView(R.id.tab_layout_inbox_activity)
-    TabLayout tabLayout;
-    @BindView(R.id.view_pager_inbox_activity)
-    ViewPager2 viewPager2;
-    @BindView(R.id.fab_inbox_activity)
-    FloatingActionButton fab;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -106,6 +93,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     private SectionsPagerAdapter sectionsPagerAdapter;
     private FragmentManager fragmentManager;
     private String mNewAccountName;
+    private ActivityInboxBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +101,8 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_inbox);
+        binding = ActivityInboxBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         ButterKnife.bind(this);
 
@@ -129,7 +118,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             Window window = getWindow();
 
             if (isChangeStatusBarIconColor()) {
-                addOnOffsetChangedListener(mAppBarLayout);
+                addOnOffsetChangedListener(binding.appbarLayoutInboxActivity);
             }
 
             if (isImmersiveInterface()) {
@@ -138,20 +127,20 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
-                adjustToolbar(mToolbar);
+                adjustToolbar(binding.toolbarInboxActivity);
 
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {
-                    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) binding.fabInboxActivity.getLayoutParams();
                     params.bottomMargin += navBarHeight;
-                    fab.setLayoutParams(params);
+                    binding.fabInboxActivity.setLayoutParams(params);
                 }
             }
         }
 
-        mToolbar.setTitle(R.string.inbox);
-        setSupportActionBar(mToolbar);
-        setToolbarGoToTop(mToolbar);
+        binding.toolbarInboxActivity.setTitle(R.string.inbox);
+        setSupportActionBar(binding.toolbarInboxActivity);
+        setToolbarGoToTop(binding.toolbarInboxActivity);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -162,15 +151,15 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         }
         getCurrentAccountAndFetchMessage(savedInstanceState);
 
-        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        binding.viewPagerInboxActivity.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                fab.show();
+                binding.fabInboxActivity.show();
             }
         });
 
-        fab.setOnClickListener(view -> {
-            View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, mCoordinatorLayout, false);
+        binding.fabInboxActivity.setOnClickListener(view -> {
+            View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, binding.getRoot(), false);
             TextInputEditText thingEditText = rootView.findViewById(R.id.text_input_edit_text_go_to_thing_edit_text);
             thingEditText.requestFocus();
             Utils.showKeyboard(this, new Handler(), thingEditText);
@@ -225,9 +214,10 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
 
     @Override
     protected void applyCustomTheme() {
-        mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(mAppBarLayout, mCollapsingToolbarLayout, mToolbar);
-        applyTabLayoutTheme(tabLayout);
+        binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutInboxActivity,
+                binding.collapsingToolbarLayoutInboxActivity, binding.toolbarInboxActivity);
+        applyTabLayoutTheme(binding.tabLayoutInboxActivity);
         applyFABTheme(fab);
     }
 
@@ -256,7 +246,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
 
     private void bindView(Bundle savedInstanceState) {
         sectionsPagerAdapter = new SectionsPagerAdapter(this);
-        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        binding.viewPagerInboxActivity.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
@@ -266,9 +256,9 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                 }
             }
         });
-        viewPager2.setAdapter(sectionsPagerAdapter);
-        viewPager2.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
-        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
+        binding.viewPagerInboxActivity.setAdapter(sectionsPagerAdapter);
+        binding.viewPagerInboxActivity.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
+        new TabLayoutMediator(binding.tabLayoutInboxActivity, binding.viewPagerInboxActivity, (tab, position) -> {
             switch (position) {
                 case 0:
                     Utils.setTitleWithCustomFontToTab(typeface, tab, getString(R.string.notifications));
@@ -279,10 +269,10 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             }
         }).attach();
         if (savedInstanceState == null && getIntent().getBooleanExtra(EXTRA_VIEW_MESSAGE, false)) {
-            viewPager2.setCurrentItem(1, false);
+            binding.viewPagerInboxActivity.setCurrentItem(1, false);
         }
 
-        fixViewPager2Sensitivity(viewPager2);
+        fixViewPager2Sensitivity(binding.viewPagerInboxActivity);
     }
 
     @Override
@@ -394,12 +384,12 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
 
     @Override
     public void contentScrollUp() {
-        fab.show();
+        binding.fabInboxActivity.show();
     }
 
     @Override
     public void contentScrollDown() {
-        fab.hide();
+        binding.fabInboxActivity.hide();
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {

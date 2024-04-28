@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/relative_layout_fetch_random_subreddit_or_post_activity"
     tools:context=".activities.FetchRandomSubredditOrPostActivity">
 
     <com.airbnb.lottie.LottieAnimationView

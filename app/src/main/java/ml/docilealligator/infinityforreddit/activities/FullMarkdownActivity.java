@@ -14,12 +14,6 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,7 +21,6 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
@@ -41,6 +34,7 @@ import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFi
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.databinding.ActivityCommentFullMarkdownBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
@@ -52,16 +46,6 @@ public class FullMarkdownActivity extends BaseActivity {
     public static final String EXTRA_IS_NSFW = "EIN";
     public static final String EXTRA_SUBMIT_POST = "ESP";
 
-    @BindView(R.id.coordinator_layout_comment_full_markdown_activity)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_comment_full_markdown_activity)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.collapsing_toolbar_layout_comment_full_markdown_activity)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.toolbar_comment_full_markdown_activity)
-    Toolbar toolbar;
-    @BindView(R.id.content_markdown_view_comment_full_markdown_activity)
-    RecyclerView markdownRecyclerView;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
@@ -70,13 +54,15 @@ public class FullMarkdownActivity extends BaseActivity {
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    private ActivityCommentFullMarkdownBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comment_full_markdown);
+        binding = ActivityCommentFullMarkdownBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         ButterKnife.bind(this);
 
@@ -84,7 +70,7 @@ public class FullMarkdownActivity extends BaseActivity {
 
         applyCustomTheme();
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbarCommentFullMarkdownActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setTitle(" ");
@@ -97,7 +83,7 @@ public class FullMarkdownActivity extends BaseActivity {
             Window window = getWindow();
 
             if (isChangeStatusBarIconColor()) {
-                addOnOffsetChangedListener(appBarLayout);
+                addOnOffsetChangedListener(binding.appbarLayoutCommentFullMarkdownActivity);
             }
 
             if (isImmersiveInterface()) {
@@ -106,8 +92,8 @@ public class FullMarkdownActivity extends BaseActivity {
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
-                adjustToolbar(toolbar);
-                markdownRecyclerView.setPadding(markdownRecyclerView.getPaddingLeft(), 0, markdownRecyclerView.getPaddingRight(), getNavBarHeight());
+                adjustToolbar(binding.toolbarCommentFullMarkdownActivity);
+                binding.contentRecyclerViewCommentFullMarkdownActivity.setPadding(binding.contentRecyclerViewCommentFullMarkdownActivity.getPaddingLeft(), 0, binding.contentRecyclerViewCommentFullMarkdownActivity.getPaddingRight(), getNavBarHeight());
             }
         }
 
@@ -158,8 +144,8 @@ public class FullMarkdownActivity extends BaseActivity {
                 }
             }
         });
-        markdownRecyclerView.setLayoutManager(linearLayoutManager);
-        markdownRecyclerView.setAdapter(markwonAdapter);
+        binding.contentRecyclerViewCommentFullMarkdownActivity.setLayoutManager(linearLayoutManager);
+        binding.contentRecyclerViewCommentFullMarkdownActivity.setAdapter(markwonAdapter);
         markwonAdapter.setMarkdown(markwon, markdown);
         // noinspection NotifyDataSetChanged
         markwonAdapter.notifyDataSetChanged();
@@ -206,8 +192,8 @@ public class FullMarkdownActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
+        binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCommentFullMarkdownActivity, binding.collapsingToolbarLayoutCommentFullMarkdownActivity, binding.toolbarCommentFullMarkdownActivity);
     }
 
     @Override
