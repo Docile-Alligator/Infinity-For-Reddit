@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_search_subreddits_result_activity"
     tools:application=".SearchSubredditsResultActivity">
 
     <com.google.android.material.appbar.AppBarLayout

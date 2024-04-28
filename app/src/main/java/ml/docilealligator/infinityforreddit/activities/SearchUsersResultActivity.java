@@ -11,11 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-
-import com.google.android.material.appbar.AppBarLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -25,14 +21,12 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.databinding.ActivitySearchUsersResultBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.UserListingFragment;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -47,12 +41,6 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
 
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
-    @BindView(R.id.coordinator_layout_search_users_result_activity)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_search_users_result_activity)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_search_users_result_activity)
-    Toolbar toolbar;
     Fragment mFragment;
     @Inject
     @Named("default")
@@ -62,15 +50,16 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    private ActivitySearchUsersResultBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_users_result);
 
-        ButterKnife.bind(this);
+        binding = ActivitySearchUsersResultBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         EventBus.getDefault().register(this);
 
@@ -84,7 +73,7 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
             Window window = getWindow();
 
             if (isChangeStatusBarIconColor()) {
-                addOnOffsetChangedListener(appBarLayout);
+                addOnOffsetChangedListener(binding.appbarLayoutSearchUsersResultActivity);
             }
 
             if (isImmersiveInterface()) {
@@ -93,13 +82,13 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
-                adjustToolbar(toolbar);
+                adjustToolbar(binding.toolbarSearchUsersResultActivity);
             }
         }
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbarSearchUsersResultActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setToolbarGoToTop(toolbar);
+        setToolbarGoToTop(binding.toolbarSearchUsersResultActivity);
 
         String query = getIntent().getExtras().getString(EXTRA_QUERY);
 
@@ -135,8 +124,9 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
 
     @Override
     protected void applyCustomTheme() {
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
+        binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutSearchUsersResultActivity,
+                null, binding.toolbarSearchUsersResultActivity);
     }
 
     public void getSelectedUser(String name, String iconUrl) {
