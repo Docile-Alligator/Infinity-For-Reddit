@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -23,11 +22,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -39,7 +34,6 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -218,7 +212,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutInboxActivity,
                 binding.collapsingToolbarLayoutInboxActivity, binding.toolbarInboxActivity);
         applyTabLayoutTheme(binding.tabLayoutInboxActivity);
-        applyFABTheme(fab);
+        applyFABTheme(binding.fabInboxActivity);
     }
 
     private void getCurrentAccountAndFetchMessage(Bundle savedInstanceState) {
@@ -400,10 +394,10 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
 
         @Nullable
         private Fragment getCurrentFragment() {
-            if (viewPager2 == null || fragmentManager == null) {
+            if (fragmentManager == null) {
                 return null;
             }
-            return fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
+            return fragmentManager.findFragmentByTag("f" + binding.viewPagerInboxActivity.getCurrentItem());
         }
 
         void refresh() {
@@ -428,10 +422,10 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         }
 
         Message getPrivateMessage(int index) {
-            if (viewPager2 == null || fragmentManager == null) {
+            if (fragmentManager == null) {
                 return null;
             }
-            Fragment fragment = fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
+            Fragment fragment = fragmentManager.findFragmentByTag("f" + binding.viewPagerInboxActivity.getCurrentItem());
             if (fragment instanceof InboxFragment) {
                 return ((InboxFragment) fragment).getMessageByIndex(index);
             }

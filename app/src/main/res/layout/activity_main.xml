@@ -8,6 +8,7 @@
     tools:openDrawer="start">
 
     <include
+        android:id="@+id/included_app_bar"
         layout="@layout/app_bar_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

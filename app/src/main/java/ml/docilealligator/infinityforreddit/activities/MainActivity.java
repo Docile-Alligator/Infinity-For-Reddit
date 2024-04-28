@@ -98,6 +98,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomS
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.NavigationWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ActivityMainBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableSwipingBetweenTabsEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideFabInPostFeedEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideKarmaEvent;
@@ -148,24 +149,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     private static final int LOGIN_ACTIVITY_REQUEST_CODE = 0;
 
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawer;
-    @BindView(R.id.navigation_view_main_activity)
-    NavigationView navigationView;
-    @BindView(R.id.coordinator_layout_main_activity)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_main_activity)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.view_pager_main_activity)
-    ViewPager2 viewPager2;
-    @BindView(R.id.collapsing_toolbar_layout_main_activity)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.toolbar)
-    MaterialToolbar toolbar;
-    @BindView(R.id.nav_drawer_recycler_view_main_activity)
-    RecyclerView navDrawerRecyclerView;
-    @BindView(R.id.tab_layout_main_activity)
-    TabLayout tabLayout;
     MultiRedditViewModel multiRedditViewModel;
     SubscribedSubredditViewModel subscribedSubredditViewModel;
     AccountViewModel accountViewModel;
@@ -229,6 +212,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private boolean mShowSubscribedSubreddits;
     private int fabOption;
     private int inboxCount;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,7 +226,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         ButterKnife.bind(this);
 
@@ -263,18 +248,18 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             Window window = getWindow();
 
             if (isChangeStatusBarIconColor()) {
-                addOnOffsetChangedListener(appBarLayout);
+                addOnOffsetChangedListener(binding.includedAppBar.appbarLayoutMainActivity);
             }
 
             if (isImmersiveInterface()) {
-                drawer.setStatusBarBackgroundColor(Color.TRANSPARENT);
+                binding.drawerLayout.setStatusBarBackgroundColor(Color.TRANSPARENT);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    drawer.setFitsSystemWindows(false);
+                    binding.drawerLayout.setFitsSystemWindows(false);
                     window.setDecorFitsSystemWindows(false);
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
-                adjustToolbar(toolbar);
+                adjustToolbar(binding.includedAppBar.toolbar);
 
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {
@@ -287,21 +272,21 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         navigationWrapper.linearLayoutBottomAppBar.setPadding(navigationWrapper.linearLayoutBottomAppBar.getPaddingLeft(),
                                 navigationWrapper.linearLayoutBottomAppBar.getPaddingTop(), navigationWrapper.linearLayoutBottomAppBar.getPaddingRight(), navBarHeight);
                     }
-                    navDrawerRecyclerView.setPadding(0, 0, 0, navBarHeight);
+                    binding.navDrawerRecyclerViewMainActivity.setPadding(0, 0, 0, navBarHeight);
                 }
             } else {
-                drawer.setStatusBarBackgroundColor(mCustomThemeWrapper.getColorPrimaryDark());
+                binding.drawerLayout.setStatusBarBackgroundColor(mCustomThemeWrapper.getColorPrimaryDark());
             }
         }
 
-        setSupportActionBar(toolbar);
-        setToolbarGoToTop(toolbar);
+        setSupportActionBar(binding.includedAppBar.toolbar);
+        setToolbarGoToTop(binding.includedAppBar.toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, binding.drawerLayout, binding.includedAppBar.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.getDrawerArrowDrawable().setColor(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
-        drawer.addDrawerListener(toggle);
-        drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+        binding.drawerLayout.addDrawerListener(toggle);
+        binding.drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerClosed(View drawerView) {
                 if (adapter != null) {
@@ -311,7 +296,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         });
         toggle.syncState();
 
-        mViewPager2 = viewPager2;
+        mViewPager2 = binding.includedAppBar.viewPagerMainActivity;
 
         mBackButtonAction = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_BACK_BUTTON_ACTION, "0"));
         mLockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
@@ -358,11 +343,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Override
     protected void applyCustomTheme() {
         int backgroundColor = mCustomThemeWrapper.getBackgroundColor();
-        drawer.setBackgroundColor(backgroundColor);
+        binding.drawerLayout.setBackgroundColor(backgroundColor);
         navigationWrapper.applyCustomTheme(mCustomThemeWrapper.getBottomAppBarIconColor(), mCustomThemeWrapper.getBottomAppBarBackgroundColor());
-        navigationView.setBackgroundColor(backgroundColor);
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
-        applyTabLayoutTheme(tabLayout);
+        binding.navigationViewMainActivity.setBackgroundColor(backgroundColor);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.includedAppBar.appbarLayoutMainActivity, binding.includedAppBar.collapsingToolbarLayoutMainActivity, binding.includedAppBar.toolbar);
+        applyTabLayoutTheme(binding.includedAppBar.tabLayoutMainActivity);
         applyFABTheme(navigationWrapper.floatingActionButton);
     }
 
@@ -844,7 +829,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         if (intent != null) {
                             startActivity(intent);
                         }
-                        drawer.closeDrawers();
+                        binding.drawerLayout.closeDrawers();
                     }
 
                     @Override
@@ -865,8 +850,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     }
                 });
         adapter.setInboxCount(inboxCount);
-        navDrawerRecyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this));
-        navDrawerRecyclerView.setAdapter(adapter.getConcatAdapter());
+        binding.navDrawerRecyclerViewMainActivity.setLayoutManager(new LinearLayoutManagerBugFixed(this));
+        binding.navDrawerRecyclerViewMainActivity.setAdapter(adapter.getConcatAdapter());
 
         int tabCount = mMainActivityTabsSharedPreferences.getInt((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_COUNT, 3);
         mShowFavoriteMultiReddits = mMainActivityTabsSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_MULTIREDDITS, false);
@@ -875,16 +860,16 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         mShowSubscribedSubreddits = mMainActivityTabsSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, false);
         sectionsPagerAdapter = new SectionsPagerAdapter(this, tabCount, mShowFavoriteMultiReddits,
                 mShowMultiReddits, mShowFavoriteSubscribedSubreddits, mShowSubscribedSubreddits);
-        viewPager2.setAdapter(sectionsPagerAdapter);
-        viewPager2.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
-        viewPager2.setUserInputEnabled(!mDisableSwipingBetweenTabs);
+        binding.includedAppBar.viewPagerMainActivity.setAdapter(sectionsPagerAdapter);
+        binding.includedAppBar.viewPagerMainActivity.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
+        binding.includedAppBar.viewPagerMainActivity.setUserInputEnabled(!mDisableSwipingBetweenTabs);
         if (mMainActivityTabsSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_TAB_NAMES, true)) {
             if (mShowFavoriteMultiReddits || mShowMultiReddits || mShowFavoriteSubscribedSubreddits || mShowSubscribedSubreddits) {
-                tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+                binding.includedAppBar.tabLayoutMainActivity.setTabMode(TabLayout.MODE_SCROLLABLE);
             } else {
-                tabLayout.setTabMode(TabLayout.MODE_FIXED);
+                binding.includedAppBar.tabLayoutMainActivity.setTabMode(TabLayout.MODE_FIXED);
             }
-            new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
+            new TabLayoutMediator(binding.includedAppBar.tabLayoutMainActivity, binding.includedAppBar.viewPagerMainActivity, (tab, position) -> {
                 switch (position) {
                     case 0:
                         Utils.setTitleWithCustomFontToTab(typeface, tab, mMainActivityTabsSharedPreferences.getString((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_TITLE, getString(R.string.home)));
@@ -920,10 +905,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 }
             }).attach();
         } else {
-            tabLayout.setVisibility(View.GONE);
+            binding.includedAppBar.tabLayoutMainActivity.setVisibility(View.GONE);
         }
 
-        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        binding.includedAppBar.viewPagerMainActivity.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 if (showBottomAppBar) {
@@ -936,7 +921,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             }
         });
 
-        fixViewPager2Sensitivity(viewPager2);
+        fixViewPager2Sensitivity(binding.includedAppBar.viewPagerMainActivity);
 
         loadSubscriptions();
 
@@ -1123,8 +1108,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     @Override
     public void onBackPressed() {
-        if (drawer.isOpen()) {
-            drawer.close();
+        if (binding.drawerLayout.isOpen()) {
+            binding.drawerLayout.close();
         } else {
             if (mBackButtonAction == SharedPreferencesUtils.MAIN_PAGE_BACK_BUTTON_ACTION_CONFIRM_EXIT) {
                 new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
@@ -1134,7 +1119,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         .setNegativeButton(R.string.no, null)
                         .show();
             } else if (mBackButtonAction == SharedPreferencesUtils.MAIN_PAGE_BACK_BUTTON_ACTION_OPEN_NAVIGATION_DRAWER) {
-                drawer.open();
+                binding.drawerLayout.open();
             } else {
                 super.onBackPressed();
             }
@@ -1264,7 +1249,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Subscribe
     public void onChangeDisableSwipingBetweenTabsEvent(ChangeDisableSwipingBetweenTabsEvent changeDisableSwipingBetweenTabsEvent) {
         mDisableSwipingBetweenTabs = changeDisableSwipingBetweenTabsEvent.disableSwipingBetweenTabs;
-        viewPager2.setUserInputEnabled(!mDisableSwipingBetweenTabs);
+        binding.includedAppBar.viewPagerMainActivity.setUserInputEnabled(!mDisableSwipingBetweenTabs);
     }
 
     @Subscribe
@@ -1279,18 +1264,18 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         if (adapter != null) {
             adapter.setShowAvatarOnTheRightInTheNavigationDrawer(event.showAvatarOnTheRightInTheNavigationDrawer);
             int previousPosition = -1;
-            if (navDrawerRecyclerView.getLayoutManager() != null) {
-                previousPosition = ((LinearLayoutManagerBugFixed) navDrawerRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+            if (binding.navDrawerRecyclerViewMainActivity.getLayoutManager() != null) {
+                previousPosition = ((LinearLayoutManagerBugFixed) binding.navDrawerRecyclerViewMainActivity.getLayoutManager()).findFirstVisibleItemPosition();
             }
 
-            RecyclerView.LayoutManager layoutManager = navDrawerRecyclerView.getLayoutManager();
-            navDrawerRecyclerView.setAdapter(null);
-            navDrawerRecyclerView.setLayoutManager(null);
-            navDrawerRecyclerView.setAdapter(adapter.getConcatAdapter());
-            navDrawerRecyclerView.setLayoutManager(layoutManager);
+            RecyclerView.LayoutManager layoutManager = binding.navDrawerRecyclerViewMainActivity.getLayoutManager();
+            binding.navDrawerRecyclerViewMainActivity.setAdapter(null);
+            binding.navDrawerRecyclerViewMainActivity.setLayoutManager(null);
+            binding.navDrawerRecyclerViewMainActivity.setAdapter(adapter.getConcatAdapter());
+            binding.navDrawerRecyclerViewMainActivity.setLayoutManager(layoutManager);
 
             if (previousPosition > 0) {
-                navDrawerRecyclerView.scrollToPosition(previousPosition);
+                binding.navDrawerRecyclerViewMainActivity.scrollToPosition(previousPosition);
             }
         }
     }
@@ -1386,7 +1371,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     private void goToSubreddit() {
-        View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, coordinatorLayout, false);
+        View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text,
+                binding.includedAppBar.coordinatorLayoutMainActivity, false);
         TextInputEditText thingEditText = rootView.findViewById(R.id.text_input_edit_text_go_to_thing_edit_text);
         RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view_go_to_thing_edit_text);
         SubredditAutocompleteRecyclerViewAdapter adapter = new SubredditAutocompleteRecyclerViewAdapter(
@@ -1475,7 +1461,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     private void goToUser() {
-        View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, coordinatorLayout, false);
+        View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, binding.includedAppBar.coordinatorLayoutMainActivity, false);
         TextInputEditText thingEditText = rootView.findViewById(R.id.text_input_edit_text_go_to_thing_edit_text);
         thingEditText.requestFocus();
         Utils.showKeyboard(this, new Handler(), thingEditText);
@@ -1711,10 +1697,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
         @Nullable
         private PostFragment getCurrentFragment() {
-            if (viewPager2 == null || fragmentManager == null) {
+            if (fragmentManager == null) {
                 return null;
             }
-            Fragment fragment = fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
+            Fragment fragment = fragmentManager.findFragmentByTag("f" + binding.includedAppBar.viewPagerMainActivity.getCurrentItem());
             if (fragment instanceof PostFragment) {
                 return (PostFragment) fragment;
             }
@@ -1779,7 +1765,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             PostFragment currentFragment = getCurrentFragment();
             if (currentFragment != null) {
                 SortType sortType = currentFragment.getSortType();
-                Utils.displaySortTypeInToolbar(sortType, toolbar);
+                Utils.displaySortTypeInToolbar(sortType, binding.includedAppBar.toolbar);
             }
         }
 
