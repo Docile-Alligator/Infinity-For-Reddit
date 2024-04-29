@@ -13,16 +13,9 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
@@ -31,13 +24,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.snackbar.Snackbar;
-import com.libRG.CustomTextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -48,8 +36,6 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -60,12 +46,12 @@ import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.AccountChooserBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ActivitySubmitCrosspostBinding;
 import ml.docilealligator.infinityforreddit.events.SubmitCrosspostEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.services.SubmitPostService;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
-import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 public class SubmitCrosspostActivity extends BaseActivity implements FlairBottomSheetFragment.FlairSelectionCallback,
@@ -86,54 +72,6 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
 
-    @BindView(R.id.coordinator_layout_submit_crosspost_activity)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_submit_crosspost_activity)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_submit_crosspost_activity)
-    Toolbar toolbar;
-    @BindView(R.id.account_linear_layout_submit_crosspost_activity)
-    LinearLayout accountLinearLayout;
-    @BindView(R.id.account_icon_gif_image_view_submit_crosspost_activity)
-    GifImageView accountIconImageView;
-    @BindView(R.id.account_name_text_view_submit_crosspost_activity)
-    TextView accountNameTextView;
-    @BindView(R.id.subreddit_icon_gif_image_view_submit_crosspost_activity)
-    GifImageView iconGifImageView;
-    @BindView(R.id.subreddit_name_text_view_submit_crosspost_activity)
-    TextView subredditNameTextView;
-    @BindView(R.id.rules_button_submit_crosspost_activity)
-    MaterialButton rulesButton;
-    @BindView(R.id.divider_1_submit_crosspost_activity)
-    View divider1;
-    @BindView(R.id.flair_custom_text_view_submit_crosspost_activity)
-    CustomTextView flairTextView;
-    @BindView(R.id.spoiler_custom_text_view_submit_crosspost_activity)
-    CustomTextView spoilerTextView;
-    @BindView(R.id.nsfw_custom_text_view_submit_crosspost_activity)
-    CustomTextView nsfwTextView;
-    @BindView(R.id.divider_2_submit_crosspost_activity)
-    View divider2;
-    @BindView(R.id.receive_post_reply_notifications_linear_layout_submit_crosspost_activity)
-    LinearLayout receivePostReplyNotificationsLinearLayout;
-    @BindView(R.id.receive_post_reply_notifications_text_view_submit_crosspost_activity)
-    TextView receivePostReplyNotificationsTextView;
-    @BindView(R.id.receive_post_reply_notifications_switch_material_submit_crosspost_activity)
-    MaterialSwitch receivePostReplyNotificationsSwitchMaterial;
-    @BindView(R.id.divider_3_submit_crosspost_activity)
-    View divider3;
-    @BindView(R.id.post_title_edit_text_submit_crosspost_activity)
-    EditText titleEditText;
-    @BindView(R.id.divider_4_submit_crosspost_activity)
-    View divider4;
-    @BindView(R.id.post_content_text_view_submit_crosspost_activity)
-    TextView contentTextView;
-    @BindView(R.id.frame_layout_submit_crosspost_activity)
-    FrameLayout frameLayout;
-    @BindView(R.id.image_view_submit_crosspost_activity)
-    SubsamplingScaleImageView imageView;
-    @BindView(R.id.play_button_image_view_submit_crosspost_activity)
-    ImageView playButton;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -175,6 +113,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
     private RequestManager mGlide;
     private FlairBottomSheetFragment flairSelectionBottomSheetFragment;
     private Snackbar mPostingSnackbar;
+    private ActivitySubmitCrosspostBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,24 +122,24 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
         setImmersiveModeNotApplicable();
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_submit_crosspost);
 
-        ButterKnife.bind(this);
+        binding = ActivitySubmitCrosspostBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         EventBus.getDefault().register(this);
 
         applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
-            addOnOffsetChangedListener(appBarLayout);
+            addOnOffsetChangedListener(binding.appbarLayoutSubmitCrosspostActivity);
         }
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbarSubmitCrosspostActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mGlide = Glide.with(this);
 
-        mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
+        mPostingSnackbar = Snackbar.make(binding.getRoot(), R.string.posting, Snackbar.LENGTH_INDEFINITE);
 
         resources = getResources();
 
@@ -223,17 +162,17 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                         .error(mGlide.load(R.drawable.subreddit_default_icon)
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                        .into(accountIconImageView);
+                        .into(binding.accountIconGifImageViewSubmitCrosspostActivity);
 
-                accountNameTextView.setText(selectedAccount.getAccountName());
+                binding.accountNameTextViewSubmitCrosspostActivity.setText(selectedAccount.getAccountName());
             } else {
                 loadCurrentAccount();
             }
 
             if (subredditName != null) {
-                subredditNameTextView.setTextColor(primaryTextColor);
-                subredditNameTextView.setText(subredditName);
-                flairTextView.setVisibility(View.VISIBLE);
+                binding.subredditNameTextViewSubmitCrosspostActivity.setTextColor(primaryTextColor);
+                binding.subredditNameTextViewSubmitCrosspostActivity.setText(subredditName);
+                binding.flairCustomTextViewSubmitCrosspostActivity.setVisibility(View.VISIBLE);
                 if (!loadSubredditIconSuccessful) {
                     loadSubredditIcon();
                 }
@@ -245,20 +184,20 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
             }
 
             if (flair != null) {
-                flairTextView.setText(flair.getText());
-                flairTextView.setBackgroundColor(flairBackgroundColor);
-                flairTextView.setBorderColor(flairBackgroundColor);
-                flairTextView.setTextColor(flairTextColor);
+                binding.flairCustomTextViewSubmitCrosspostActivity.setText(flair.getText());
+                binding.flairCustomTextViewSubmitCrosspostActivity.setBackgroundColor(flairBackgroundColor);
+                binding.flairCustomTextViewSubmitCrosspostActivity.setBorderColor(flairBackgroundColor);
+                binding.flairCustomTextViewSubmitCrosspostActivity.setTextColor(flairTextColor);
             }
             if (isSpoiler) {
-                spoilerTextView.setBackgroundColor(spoilerBackgroundColor);
-                spoilerTextView.setBorderColor(spoilerBackgroundColor);
-                spoilerTextView.setTextColor(spoilerTextColor);
+                binding.spoilerCustomTextViewSubmitCrosspostActivity.setBackgroundColor(spoilerBackgroundColor);
+                binding.spoilerCustomTextViewSubmitCrosspostActivity.setBorderColor(spoilerBackgroundColor);
+                binding.spoilerCustomTextViewSubmitCrosspostActivity.setTextColor(spoilerTextColor);
             }
             if (isNSFW) {
-                nsfwTextView.setBackgroundColor(nsfwBackgroundColor);
-                nsfwTextView.setBorderColor(nsfwBackgroundColor);
-                nsfwTextView.setTextColor(nsfwTextColor);
+                binding.nsfwCustomTextViewSubmitCrosspostActivity.setBackgroundColor(nsfwBackgroundColor);
+                binding.nsfwCustomTextViewSubmitCrosspostActivity.setBorderColor(nsfwBackgroundColor);
+                binding.nsfwCustomTextViewSubmitCrosspostActivity.setTextColor(nsfwTextColor);
             }
         } else {
             isPosting = false;
@@ -267,36 +206,36 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
 
             mGlide.load(R.drawable.subreddit_default_icon)
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                    .into(iconGifImageView);
+                    .into(binding.subredditIconGifImageViewSubmitCrosspostActivity);
 
             if (post.isSpoiler()) {
-                spoilerTextView.setBackgroundColor(spoilerBackgroundColor);
-                spoilerTextView.setBorderColor(spoilerBackgroundColor);
-                spoilerTextView.setTextColor(spoilerTextColor);
+                binding.spoilerCustomTextViewSubmitCrosspostActivity.setBackgroundColor(spoilerBackgroundColor);
+                binding.spoilerCustomTextViewSubmitCrosspostActivity.setBorderColor(spoilerBackgroundColor);
+                binding.spoilerCustomTextViewSubmitCrosspostActivity.setTextColor(spoilerTextColor);
             }
             if (post.isNSFW()) {
-                nsfwTextView.setBackgroundColor(nsfwBackgroundColor);
-                nsfwTextView.setBorderColor(nsfwBackgroundColor);
-                nsfwTextView.setTextColor(nsfwTextColor);
+                binding.nsfwCustomTextViewSubmitCrosspostActivity.setBackgroundColor(nsfwBackgroundColor);
+                binding.nsfwCustomTextViewSubmitCrosspostActivity.setBorderColor(nsfwBackgroundColor);
+                binding.nsfwCustomTextViewSubmitCrosspostActivity.setTextColor(nsfwTextColor);
             }
 
-            titleEditText.setText(post.getTitle());
+            binding.postTitleEditTextSubmitCrosspostActivity.setText(post.getTitle());
         }
 
         if (post.getPostType() == Post.TEXT_TYPE) {
-            contentTextView.setVisibility(View.VISIBLE);
-            contentTextView.setText(post.getSelfTextPlain());
+            binding.postContentTextViewSubmitCrosspostActivity.setVisibility(View.VISIBLE);
+            binding.postContentTextViewSubmitCrosspostActivity.setText(post.getSelfTextPlain());
         } else if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
-            contentTextView.setVisibility(View.VISIBLE);
-            contentTextView.setText(post.getUrl());
+            binding.postContentTextViewSubmitCrosspostActivity.setVisibility(View.VISIBLE);
+            binding.postContentTextViewSubmitCrosspostActivity.setText(post.getUrl());
         } else {
             Post.Preview preview = getPreview(post);
             if (preview != null) {
-                frameLayout.setVisibility(View.VISIBLE);
+                binding.frameLayoutSubmitCrosspostActivity.setVisibility(View.VISIBLE);
                 mGlide.asBitmap().load(preview.getPreviewUrl()).into(new CustomTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        imageView.setImage(ImageSource.bitmap(resource));
+                        binding.imageViewSubmitCrosspostActivity.setImage(ImageSource.bitmap(resource));
                     }
 
                     @Override
@@ -306,33 +245,33 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
                 });
 
                 if (post.getPostType() == Post.VIDEO_TYPE || post.getPostType() == Post.GIF_TYPE) {
-                    playButton.setVisibility(View.VISIBLE);
-                    playButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_play_circle_36dp));
+                    binding.playButtonImageViewSubmitCrosspostActivity.setVisibility(View.VISIBLE);
+                    binding.playButtonImageViewSubmitCrosspostActivity.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_play_circle_36dp));
                 } else if (post.getPostType() == Post.GALLERY_TYPE) {
-                    playButton.setVisibility(View.VISIBLE);
-                    playButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_gallery_24dp));
+                    binding.playButtonImageViewSubmitCrosspostActivity.setVisibility(View.VISIBLE);
+                    binding.playButtonImageViewSubmitCrosspostActivity.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_gallery_24dp));
                 }
             }
         }
 
-        accountLinearLayout.setOnClickListener(view -> {
+        binding.accountLinearLayoutSubmitCrosspostActivity.setOnClickListener(view -> {
             AccountChooserBottomSheetFragment fragment = new AccountChooserBottomSheetFragment();
             fragment.show(getSupportFragmentManager(), fragment.getTag());
         });
 
-        iconGifImageView.setOnClickListener(view -> {
-            subredditNameTextView.performClick();
+        binding.subredditIconGifImageViewSubmitCrosspostActivity.setOnClickListener(view -> {
+            binding.subredditNameTextViewSubmitCrosspostActivity.performClick();
         });
 
-        subredditNameTextView.setOnClickListener(view -> {
+        binding.subredditNameTextViewSubmitCrosspostActivity.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubredditSelectionActivity.class);
             intent.putExtra(SubredditSelectionActivity.EXTRA_SPECIFIED_ACCOUNT, selectedAccount);
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
         });
 
-        rulesButton.setOnClickListener(view -> {
+        binding.rulesButtonSubmitCrosspostActivity.setOnClickListener(view -> {
             if (subredditName == null) {
-                Snackbar.make(coordinatorLayout, R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
             } else {
                 Intent intent = new Intent(this, RulesActivity.class);
                 if (subredditIsUser) {
@@ -344,7 +283,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
             }
         });
 
-        flairTextView.setOnClickListener(view -> {
+        binding.flairCustomTextViewSubmitCrosspostActivity.setOnClickListener(view -> {
             if (flair == null) {
                 flairSelectionBottomSheetFragment = new FlairBottomSheetFragment();
                 Bundle bundle = new Bundle();
@@ -356,41 +295,41 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
                 flairSelectionBottomSheetFragment.setArguments(bundle);
                 flairSelectionBottomSheetFragment.show(getSupportFragmentManager(), flairSelectionBottomSheetFragment.getTag());
             } else {
-                flairTextView.setBackgroundColor(resources.getColor(android.R.color.transparent));
-                flairTextView.setTextColor(primaryTextColor);
-                flairTextView.setText(getString(R.string.flair));
+                binding.flairCustomTextViewSubmitCrosspostActivity.setBackgroundColor(resources.getColor(android.R.color.transparent));
+                binding.flairCustomTextViewSubmitCrosspostActivity.setTextColor(primaryTextColor);
+                binding.flairCustomTextViewSubmitCrosspostActivity.setText(getString(R.string.flair));
                 flair = null;
             }
         });
 
-        spoilerTextView.setOnClickListener(view -> {
+        binding.spoilerCustomTextViewSubmitCrosspostActivity.setOnClickListener(view -> {
             if (!isSpoiler) {
-                spoilerTextView.setBackgroundColor(spoilerBackgroundColor);
-                spoilerTextView.setBorderColor(spoilerBackgroundColor);
-                spoilerTextView.setTextColor(spoilerTextColor);
+                binding.spoilerCustomTextViewSubmitCrosspostActivity.setBackgroundColor(spoilerBackgroundColor);
+                binding.spoilerCustomTextViewSubmitCrosspostActivity.setBorderColor(spoilerBackgroundColor);
+                binding.spoilerCustomTextViewSubmitCrosspostActivity.setTextColor(spoilerTextColor);
                 isSpoiler = true;
             } else {
-                spoilerTextView.setBackgroundColor(resources.getColor(android.R.color.transparent));
-                spoilerTextView.setTextColor(primaryTextColor);
+                binding.spoilerCustomTextViewSubmitCrosspostActivity.setBackgroundColor(resources.getColor(android.R.color.transparent));
+                binding.spoilerCustomTextViewSubmitCrosspostActivity.setTextColor(primaryTextColor);
                 isSpoiler = false;
             }
         });
 
-        nsfwTextView.setOnClickListener(view -> {
+        binding.nsfwCustomTextViewSubmitCrosspostActivity.setOnClickListener(view -> {
             if (!isNSFW) {
-                nsfwTextView.setBackgroundColor(nsfwBackgroundColor);
-                nsfwTextView.setBorderColor(nsfwBackgroundColor);
-                nsfwTextView.setTextColor(nsfwTextColor);
+                binding.nsfwCustomTextViewSubmitCrosspostActivity.setBackgroundColor(nsfwBackgroundColor);
+                binding.nsfwCustomTextViewSubmitCrosspostActivity.setBorderColor(nsfwBackgroundColor);
+                binding.nsfwCustomTextViewSubmitCrosspostActivity.setTextColor(nsfwTextColor);
                 isNSFW = true;
             } else {
-                nsfwTextView.setBackgroundColor(resources.getColor(android.R.color.transparent));
-                nsfwTextView.setTextColor(primaryTextColor);
+                binding.nsfwCustomTextViewSubmitCrosspostActivity.setBackgroundColor(resources.getColor(android.R.color.transparent));
+                binding.nsfwCustomTextViewSubmitCrosspostActivity.setTextColor(primaryTextColor);
                 isNSFW = false;
             }
         });
 
-        receivePostReplyNotificationsLinearLayout.setOnClickListener(view -> {
-            receivePostReplyNotificationsSwitchMaterial.performClick();
+        binding.receivePostReplyNotificationsLinearLayoutSubmitCrosspostActivity.setOnClickListener(view -> {
+            binding.receivePostReplyNotificationsSwitchMaterialSubmitCrosspostActivity.performClick();
         });
     }
 
@@ -405,9 +344,9 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                             .error(mGlide.load(R.drawable.subreddit_default_icon)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                            .into(accountIconImageView);
+                            .into(binding.accountIconGifImageViewSubmitCrosspostActivity);
 
-                    accountNameTextView.setText(account.getAccountName());
+                    binding.accountNameTextViewSubmitCrosspostActivity.setText(account.getAccountName());
                 }
             });
         });
@@ -440,46 +379,47 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
 
     @Override
     protected void applyCustomTheme() {
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
+        binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutSubmitCrosspostActivity,
+                null, binding.toolbarSubmitCrosspostActivity);
         primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
-        accountNameTextView.setTextColor(primaryTextColor);
+        binding.accountNameTextViewSubmitCrosspostActivity.setTextColor(primaryTextColor);
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
-        subredditNameTextView.setTextColor(secondaryTextColor);
-        rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
-        rulesButton.setBackgroundColor(mCustomThemeWrapper.getColorPrimaryLightTheme());
-        receivePostReplyNotificationsTextView.setTextColor(primaryTextColor);
+        binding.subredditNameTextViewSubmitCrosspostActivity.setTextColor(secondaryTextColor);
+        binding.rulesButtonSubmitCrosspostActivity.setTextColor(mCustomThemeWrapper.getButtonTextColor());
+        binding.rulesButtonSubmitCrosspostActivity.setBackgroundColor(mCustomThemeWrapper.getColorPrimaryLightTheme());
+        binding.receivePostReplyNotificationsTextViewSubmitCrosspostActivity.setTextColor(primaryTextColor);
         int dividerColor = mCustomThemeWrapper.getDividerColor();
-        divider1.setBackgroundColor(dividerColor);
-        divider2.setBackgroundColor(dividerColor);
-        divider3.setBackgroundColor(dividerColor);
-        divider4.setBackgroundColor(dividerColor);
+        binding.divider1SubmitCrosspostActivity.setBackgroundColor(dividerColor);
+        binding.divider2SubmitCrosspostActivity.setBackgroundColor(dividerColor);
+        binding.divider3SubmitCrosspostActivity.setBackgroundColor(dividerColor);
+        binding.divider4SubmitCrosspostActivity.setBackgroundColor(dividerColor);
         flairBackgroundColor = mCustomThemeWrapper.getFlairBackgroundColor();
         flairTextColor = mCustomThemeWrapper.getFlairTextColor();
         spoilerBackgroundColor = mCustomThemeWrapper.getSpoilerBackgroundColor();
         spoilerTextColor = mCustomThemeWrapper.getSpoilerTextColor();
         nsfwBackgroundColor = mCustomThemeWrapper.getNsfwBackgroundColor();
         nsfwTextColor = mCustomThemeWrapper.getNsfwTextColor();
-        flairTextView.setTextColor(primaryTextColor);
-        spoilerTextView.setTextColor(primaryTextColor);
-        nsfwTextView.setTextColor(primaryTextColor);
-        titleEditText.setTextColor(primaryTextColor);
-        titleEditText.setHintTextColor(secondaryTextColor);
-        contentTextView.setTextColor(primaryTextColor);
-        contentTextView.setHintTextColor(secondaryTextColor);
-        playButton.setColorFilter(mCustomThemeWrapper.getMediaIndicatorIconColor(), PorterDuff.Mode.SRC_IN);
-        playButton.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getMediaIndicatorBackgroundColor()));
+        binding.flairCustomTextViewSubmitCrosspostActivity.setTextColor(primaryTextColor);
+        binding.spoilerCustomTextViewSubmitCrosspostActivity.setTextColor(primaryTextColor);
+        binding.nsfwCustomTextViewSubmitCrosspostActivity.setTextColor(primaryTextColor);
+        binding.postTitleEditTextSubmitCrosspostActivity.setTextColor(primaryTextColor);
+        binding.postTitleEditTextSubmitCrosspostActivity.setHintTextColor(secondaryTextColor);
+        binding.postContentTextViewSubmitCrosspostActivity.setTextColor(primaryTextColor);
+        binding.postContentTextViewSubmitCrosspostActivity.setHintTextColor(secondaryTextColor);
+        binding.playButtonImageViewSubmitCrosspostActivity.setColorFilter(mCustomThemeWrapper.getMediaIndicatorIconColor(), PorterDuff.Mode.SRC_IN);
+        binding.playButtonImageViewSubmitCrosspostActivity.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getMediaIndicatorBackgroundColor()));
         if (typeface != null) {
-            subredditNameTextView.setTypeface(typeface);
-            rulesButton.setTypeface(typeface);
-            receivePostReplyNotificationsTextView.setTypeface(typeface);
-            flairTextView.setTypeface(typeface);
-            spoilerTextView.setTypeface(typeface);
-            nsfwTextView.setTypeface(typeface);
-            titleEditText.setTypeface(typeface);
+            binding.subredditNameTextViewSubmitCrosspostActivity.setTypeface(typeface);
+            binding.rulesButtonSubmitCrosspostActivity.setTypeface(typeface);
+            binding.receivePostReplyNotificationsTextViewSubmitCrosspostActivity.setTypeface(typeface);
+            binding.flairCustomTextViewSubmitCrosspostActivity.setTypeface(typeface);
+            binding.spoilerCustomTextViewSubmitCrosspostActivity.setTypeface(typeface);
+            binding.nsfwCustomTextViewSubmitCrosspostActivity.setTypeface(typeface);
+            binding.postTitleEditTextSubmitCrosspostActivity.setTypeface(typeface);
         }
         if (contentTypeface != null) {
-            contentTextView.setTypeface(contentTypeface);
+            binding.postContentTextViewSubmitCrosspostActivity.setTypeface(contentTypeface);
         }
     }
 
@@ -489,11 +429,11 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                     .error(mGlide.load(R.drawable.subreddit_default_icon)
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                    .into(iconGifImageView);
+                    .into(binding.subredditIconGifImageViewSubmitCrosspostActivity);
         } else {
             mGlide.load(R.drawable.subreddit_default_icon)
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                    .into(iconGifImageView);
+                    .into(binding.subredditIconGifImageViewSubmitCrosspostActivity);
         }
     }
 
@@ -536,7 +476,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
                 promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
                 return true;
             } else {
-                if (!titleEditText.getText().toString().equals("")) {
+                if (!binding.postTitleEditTextSubmitCrosspostActivity.getText().toString().equals("")) {
                     promptAlertDialog(R.string.discard, R.string.discard_detail);
                     return true;
                 }
@@ -545,12 +485,12 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
             return true;
         } else if (itemId == R.id.action_send_submit_crosspost_activity) {
             if (!subredditSelected) {
-                Snackbar.make(coordinatorLayout, R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
                 return true;
             }
 
-            if (titleEditText.getText() == null || titleEditText.getText().toString().equals("")) {
-                Snackbar.make(coordinatorLayout, R.string.title_required, Snackbar.LENGTH_SHORT).show();
+            if (binding.postTitleEditTextSubmitCrosspostActivity.getText() == null || binding.postTitleEditTextSubmitCrosspostActivity.getText().toString().equals("")) {
+                Snackbar.make(binding.getRoot(), R.string.title_required, Snackbar.LENGTH_SHORT).show();
                 return true;
             }
 
@@ -563,15 +503,15 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
 
             String subredditName;
             if (subredditIsUser) {
-                subredditName = "u_" + subredditNameTextView.getText().toString();
+                subredditName = "u_" + binding.subredditNameTextViewSubmitCrosspostActivity.getText().toString();
             } else {
-                subredditName = subredditNameTextView.getText().toString();
+                subredditName = binding.subredditNameTextViewSubmitCrosspostActivity.getText().toString();
             }
 
             Intent intent = new Intent(this, SubmitPostService.class);
             intent.putExtra(SubmitPostService.EXTRA_ACCOUNT, selectedAccount);
             intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
-            intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
+            intent.putExtra(SubmitPostService.EXTRA_TITLE, binding.postTitleEditTextSubmitCrosspostActivity.getText().toString());
             if (post.isCrosspost()) {
                 intent.putExtra(SubmitPostService.EXTRA_CONTENT, "t3_" + post.getCrosspostParentId());
             } else {
@@ -581,7 +521,8 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
             intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
             intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
             intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
-            intent.putExtra(SubmitPostService.EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS, receivePostReplyNotificationsSwitchMaterial.isChecked());
+            intent.putExtra(SubmitPostService.EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS,
+                    binding.receivePostReplyNotificationsSwitchMaterialSubmitCrosspostActivity.isChecked());
             intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_CROSSPOST);
             ContextCompat.startForegroundService(this, intent);
 
@@ -596,7 +537,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
         if (isPosting) {
             promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
         } else {
-            if (!titleEditText.getText().toString().equals("")) {
+            if (!binding.postTitleEditTextSubmitCrosspostActivity.getText().toString().equals("")) {
                 promptAlertDialog(R.string.discard, R.string.discard_detail);
             } else {
                 finish();
@@ -629,14 +570,14 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
                 subredditSelected = true;
                 subredditIsUser = data.getExtras().getBoolean(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_IS_USER);
 
-                subredditNameTextView.setTextColor(primaryTextColor);
-                subredditNameTextView.setText(subredditName);
+                binding.subredditNameTextViewSubmitCrosspostActivity.setTextColor(primaryTextColor);
+                binding.subredditNameTextViewSubmitCrosspostActivity.setText(subredditName);
                 displaySubredditIcon();
 
-                flairTextView.setVisibility(View.VISIBLE);
-                flairTextView.setBackgroundColor(resources.getColor(android.R.color.transparent));
-                flairTextView.setTextColor(primaryTextColor);
-                flairTextView.setText(getString(R.string.flair));
+                binding.flairCustomTextViewSubmitCrosspostActivity.setVisibility(View.VISIBLE);
+                binding.flairCustomTextViewSubmitCrosspostActivity.setBackgroundColor(resources.getColor(android.R.color.transparent));
+                binding.flairCustomTextViewSubmitCrosspostActivity.setTextColor(primaryTextColor);
+                binding.flairCustomTextViewSubmitCrosspostActivity.setText(getString(R.string.flair));
                 flair = null;
             }
         }
@@ -651,10 +592,10 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
     @Override
     public void flairSelected(Flair flair) {
         this.flair = flair;
-        flairTextView.setText(flair.getText());
-        flairTextView.setBackgroundColor(flairBackgroundColor);
-        flairTextView.setBorderColor(flairBackgroundColor);
-        flairTextView.setTextColor(flairTextColor);
+        binding.flairCustomTextViewSubmitCrosspostActivity.setText(flair.getText());
+        binding.flairCustomTextViewSubmitCrosspostActivity.setBackgroundColor(flairBackgroundColor);
+        binding.flairCustomTextViewSubmitCrosspostActivity.setBorderColor(flairBackgroundColor);
+        binding.flairCustomTextViewSubmitCrosspostActivity.setTextColor(flairTextColor);
     }
 
     @Override
@@ -666,9 +607,9 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                     .error(mGlide.load(R.drawable.subreddit_default_icon)
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                    .into(accountIconImageView);
+                    .into(binding.accountIconGifImageViewSubmitCrosspostActivity);
 
-            accountNameTextView.setText(selectedAccount.getAccountName());
+            binding.accountNameTextViewSubmitCrosspostActivity.setText(selectedAccount.getAccountName());
         }
     }
 
@@ -690,9 +631,9 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
             mMenu.findItem(R.id.action_send_submit_crosspost_activity).setEnabled(true);
             mMenu.findItem(R.id.action_send_submit_crosspost_activity).getIcon().setAlpha(255);
             if (submitCrosspostEvent.errorMessage == null || submitCrosspostEvent.errorMessage.equals("")) {
-                Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), R.string.post_failed, Snackbar.LENGTH_SHORT).show();
             } else {
-                Snackbar.make(coordinatorLayout, submitCrosspostEvent.errorMessage.substring(0, 1).toUpperCase()
+                Snackbar.make(binding.getRoot(), submitCrosspostEvent.errorMessage.substring(0, 1).toUpperCase()
                         + submitCrosspostEvent.errorMessage.substring(1), Snackbar.LENGTH_SHORT).show();
             }
         }

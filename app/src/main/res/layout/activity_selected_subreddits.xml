@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_selected_subreddits_and_users_activity"
     tools:context=".activities.AccountPostsActivity">
 
     <com.google.android.material.appbar.AppBarLayout

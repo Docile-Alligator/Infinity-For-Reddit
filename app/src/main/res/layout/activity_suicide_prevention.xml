@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:id="@+id/linear_layout_suicide_prevention_activity"
     tools:context=".activities.SuicidePreventionActivity">
 
     <com.airbnb.lottie.LottieAnimationView

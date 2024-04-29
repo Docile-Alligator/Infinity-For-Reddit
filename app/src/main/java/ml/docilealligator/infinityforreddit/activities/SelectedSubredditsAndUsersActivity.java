@@ -9,13 +9,7 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,8 +17,6 @@ import java.util.Collections;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
@@ -33,6 +25,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.SelectSubreddit
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.databinding.ActivitySelectedSubredditsBinding;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class SelectedSubredditsAndUsersActivity extends BaseActivity implements ActivityToolbarInterface {
@@ -43,18 +36,6 @@ public class SelectedSubredditsAndUsersActivity extends BaseActivity implements 
     private static final int USER_SELECTION_REQUEST_CODE = 2;
     private static final String SELECTED_SUBREDDITS_STATE = "SSS";
 
-    @BindView(R.id.coordinator_layout_selected_subreddits_and_users_activity)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_selected_subreddits_and_users_activity)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.collapsing_toolbar_layout_selected_subreddits_and_users_activity)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.toolbar_selected_subreddits_and_users_activity)
-    Toolbar toolbar;
-    @BindView(R.id.recycler_view_selected_subreddits_and_users_activity)
-    RecyclerView recyclerView;
-    @BindView(R.id.fab_selected_subreddits_and_users_activity)
-    FloatingActionButton fab;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
@@ -66,6 +47,7 @@ public class SelectedSubredditsAndUsersActivity extends BaseActivity implements 
     private LinearLayoutManagerBugFixed linearLayoutManager;
     private SelectedSubredditsRecyclerViewAdapter adapter;
     private ArrayList<String> subreddits;
+    private ActivitySelectedSubredditsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +56,9 @@ public class SelectedSubredditsAndUsersActivity extends BaseActivity implements 
         setImmersiveModeNotApplicable();
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_selected_subreddits);
 
-        ButterKnife.bind(this);
+        binding = ActivitySelectedSubredditsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         applyCustomTheme();
 
@@ -84,9 +66,9 @@ public class SelectedSubredditsAndUsersActivity extends BaseActivity implements 
             Slidr.attach(this);
         }
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbarSelectedSubredditsAndUsersActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setToolbarGoToTop(toolbar);
+        setToolbarGoToTop(binding.toolbarSelectedSubredditsAndUsersActivity);
 
         if (savedInstanceState != null) {
             subreddits = savedInstanceState.getStringArrayList(SELECTED_SUBREDDITS_STATE);
@@ -98,21 +80,21 @@ public class SelectedSubredditsAndUsersActivity extends BaseActivity implements 
 
         adapter = new SelectedSubredditsRecyclerViewAdapter(this, mCustomThemeWrapper, subreddits);
         linearLayoutManager = new LinearLayoutManagerBugFixed(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(adapter);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        binding.recyclerViewSelectedSubredditsAndUsersActivity.setLayoutManager(linearLayoutManager);
+        binding.recyclerViewSelectedSubredditsAndUsersActivity.setAdapter(adapter);
+        binding.recyclerViewSelectedSubredditsAndUsersActivity.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0) {
-                    fab.hide();
+                    binding.fabSelectedSubredditsAndUsersActivity.hide();
                 } else {
-                    fab.show();
+                    binding.fabSelectedSubredditsAndUsersActivity.show();
                 }
             }
         });
 
-        fab.setOnClickListener(view -> {
+        binding.fabSelectedSubredditsAndUsersActivity.setOnClickListener(view -> {
             SelectSubredditsOrUsersOptionsBottomSheetFragment selectSubredditsOrUsersOptionsBottomSheetFragment = new SelectSubredditsOrUsersOptionsBottomSheetFragment();
             selectSubredditsOrUsersOptionsBottomSheetFragment.show(getSupportFragmentManager(), selectSubredditsOrUsersOptionsBottomSheetFragment.getTag());
         });
@@ -200,9 +182,10 @@ public class SelectedSubredditsAndUsersActivity extends BaseActivity implements 
 
     @Override
     protected void applyCustomTheme() {
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
-        applyFABTheme(fab);
+        binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutSelectedSubredditsAndUsersActivity,
+                binding.collapsingToolbarLayoutSelectedSubredditsAndUsersActivity, binding.toolbarSelectedSubredditsAndUsersActivity);
+        applyFABTheme(binding.fabSelectedSubredditsAndUsersActivity);
     }
 
     @Override
