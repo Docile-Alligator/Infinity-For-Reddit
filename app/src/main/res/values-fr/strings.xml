@@ -1170,9 +1170,7 @@ Vous voulez toujours l'activer ?"</string>
 
     <!-- Fuzzy -->
     <string name="post_gallery_activity_label">"Publier une galerie"</string>
-    <string name="trending_activity_label">"Tendance"</string>
     <string name="action_share_post_link">"Partager le lien du Post"</string>
-    <string name="trending">"Tendance"</string>
     <string name="receive_post_reply_notifications">"Recevoir des notifications de réponse de publication"</string>
     <string name="bottom_sheet_post_gallery">"Gallerie"</string>
     <string name="posting_gallery">"Publication de la galerie"</string>

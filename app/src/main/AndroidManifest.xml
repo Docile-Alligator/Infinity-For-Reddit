@@ -76,11 +76,6 @@
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".activities.TrendingActivity"
-            android:label="@string/trending_activity_label"
-            android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.Slidable" />
-        <activity
             android:name=".activities.PostGalleryActivity"
             android:label="@string/post_gallery_activity_label"
             android:parentActivityName=".activities.MainActivity"

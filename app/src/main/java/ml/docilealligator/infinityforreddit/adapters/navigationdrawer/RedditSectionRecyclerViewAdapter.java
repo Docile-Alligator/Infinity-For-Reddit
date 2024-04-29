@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;
@@ -80,24 +79,18 @@ public class RedditSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                 notifyItemChanged(holder.getBindingAdapterPosition());
             });
         } else if (holder instanceof MenuItemViewHolder) {
-            int stringId = 0;
+            /*int stringId = 0;
             int drawableId = 0;
-
-            if (position == 1) {
-                stringId = R.string.trending;
-                drawableId = R.drawable.ic_trending_24dp;
-            }
 
             ((MenuItemViewHolder) holder).menuTextView.setText(stringId);
             ((MenuItemViewHolder) holder).imageView.setImageDrawable(ContextCompat.getDrawable(baseActivity, drawableId));
             int finalStringId = stringId;
-            holder.itemView.setOnClickListener(view -> itemClickListener.onMenuClick(finalStringId));
+            holder.itemView.setOnClickListener(view -> itemClickListener.onMenuClick(finalStringId));*/
         }
     }
 
     @Override
     public int getItemCount() {
-        //return collapseRedditSection ? 1 : REDDIT_SECTION_ITEMS + 1;
         return 0;
     }
 

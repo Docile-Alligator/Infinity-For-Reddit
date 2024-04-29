@@ -1067,9 +1067,7 @@ Tự động phát video bị tắt."</string>
 Bạn có vẫn muốn bật tuỳ chọn này không?"</string>
     <string name="reply">"Trả lời"</string>
     <string name="post_gallery_activity_label">"Bài đăng bộ sưu tập"</string>
-    <string name="trending_activity_label">"Trending"</string>
     <string name="action_share_post_link">"Chia sẻ đường link bài đăng"</string>
-    <string name="trending">"Trending"</string>
     <string name="receive_post_reply_notifications">"Nhận thông báo trả lời trong bài đăng"</string>
     <string name="bottom_sheet_post_gallery">"Bộ sưu tập"</string>
     <string name="posting_gallery">"Đăng bộ sưu tập"</string>

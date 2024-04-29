@@ -40,7 +40,6 @@
     <string name="search_users_result_activity_label">Users</string>
     <string name="multireddit_selection_activity_label">Select a Multireddit</string>
     <string name="post_gallery_activity_label">Gallery Post</string>
-    <string name="trending_activity_label">Trending</string>
     <string name="wiki_activity_label">Wiki</string>
     <string name="edit_profile_activity_label">Edit Profile</string>
     <string name="post_poll_activity_label">Poll Post</string>
@@ -141,7 +140,6 @@
     <string name="history">History</string>
     <string name="inbox">Inbox</string>
     <string name="inbox_with_count">Inbox (%1$,d)</string>
-    <string name="trending">Trending</string>
     <string name="upvoted">Upvoted</string>
     <string name="downvoted">Downvoted</string>
     <string name="hidden">Hidden</string>

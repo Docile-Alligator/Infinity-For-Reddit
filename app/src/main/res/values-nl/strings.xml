@@ -1042,9 +1042,7 @@ Automatisch afspelen van video is uitgeschakeld."</string>
 Wil je het nog steeds activeren?"</string>
     <string name="reply">"Antwoord"</string>
     <string name="post_gallery_activity_label">"Gallerijpost"</string>
-    <string name="trending_activity_label">"Trending"</string>
     <string name="action_share_post_link">"Deel Post Link"</string>
-    <string name="trending">"Trending"</string>
     <string name="receive_post_reply_notifications">"Ontvang Post Reactie Notificaties"</string>
     <string name="bottom_sheet_post_gallery">"Gallerij"</string>
     <string name="posting_gallery">"Post gallerij"</string>

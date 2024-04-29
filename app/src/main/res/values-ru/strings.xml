@@ -1064,9 +1064,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 Всё ещё хотите включить его?"</string>
     <string name="reply">"Ответ"</string>
     <string name="post_gallery_activity_label">"Пост в галерее"</string>
-    <string name="trending_activity_label">"Популярное"</string>
     <string name="action_share_post_link">"Поделиться ссылкой на пост"</string>
-    <string name="trending">"Популярное"</string>
     <string name="receive_post_reply_notifications">"Получать уведомления об ответах на пост"</string>
     <string name="bottom_sheet_post_gallery">"Галерея"</string>
     <string name="posting_gallery">"Галерея постов"</string>

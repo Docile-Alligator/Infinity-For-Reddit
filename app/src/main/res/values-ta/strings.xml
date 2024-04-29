@@ -688,9 +688,7 @@
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"சிதைவறிக்கைகள் அழிக்கப்பட்டன"</string>
     <string name="reply">"பதிலளி"</string>
-    <string name="trending_activity_label">"பிரபலமாகும்"</string>
     <string name="action_share_post_link">"இடுகை தொடுப்பைப் பகிர்"</string>
-    <string name="trending">"பிரபலமாகும்"</string>
     <string name="bottom_sheet_post_gallery">"காட்சியகம்"</string>
     <string name="label_reddit">"ரெட்டிட்"</string>
     <string name="settings_more_tabs_show_multireddits_title">"பல்ரெட்டிட்டைக் காட்டு"</string>

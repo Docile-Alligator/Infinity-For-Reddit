@@ -990,9 +990,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 Θέλετε σίγουρα να το ενεργοποιήσετε;"</string>
     <string name="reply">"Απάντηση"</string>
     <string name="post_gallery_activity_label">"Ανάρτηση Εικόνας"</string>
-    <string name="trending_activity_label">"Σε τάση"</string>
     <string name="action_share_post_link">"Κοινοποίηση Συνδέσμου Ανάρτησης"</string>
-    <string name="trending">"Σε τάση"</string>
     <string name="receive_post_reply_notifications">"Λήψη μόνο ειδοποιήσεων απαντήσεων σε αναρτήσεις"</string>
     <string name="bottom_sheet_post_gallery">"Γκαλερί"</string>
     <string name="posting_gallery">"Συλλογή Αναρτάται"</string>

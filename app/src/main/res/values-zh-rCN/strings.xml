@@ -1069,9 +1069,7 @@ Reddit 视频分辨率较低。
 仍然要继续吗？"</string>
     <string name="reply">"回复"</string>
     <string name="post_gallery_activity_label">"相册帖"</string>
-    <string name="trending_activity_label">"热门"</string>
     <string name="action_share_post_link">"分享帖子链接"</string>
-    <string name="trending">"热门"</string>
     <string name="receive_post_reply_notifications">"接收帖子回复提醒"</string>
     <string name="bottom_sheet_post_gallery">"相册"</string>
     <string name="posting_gallery">"相册发布中"</string>

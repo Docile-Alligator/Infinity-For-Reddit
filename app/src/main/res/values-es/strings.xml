@@ -1104,9 +1104,7 @@ https://s3.eu-west-1.amazonaws.com/po-pub/i/hJAe7sMhrfJzqjhp9VkDQOVC.PNG -->
 ¿Seguro que quieres activarlo?"</string>
     <string name="reply">"Responder"</string>
     <string name="post_gallery_activity_label">"Publicación de galería"</string>
-    <string name="trending_activity_label">"Tendencias"</string>
     <string name="action_share_post_link">"Compartir enlace de publicación"</string>
-    <string name="trending">"Tendencias"</string>
     <string name="receive_post_reply_notifications">"Recibir notificaciones de respuesta a publicaciones"</string>
     <string name="bottom_sheet_post_gallery">"Galería"</string>
     <string name="posting_gallery">"Publicación de galería"</string>

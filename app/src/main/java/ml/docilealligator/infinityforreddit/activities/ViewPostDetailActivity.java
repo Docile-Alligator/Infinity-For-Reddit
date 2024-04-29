@@ -15,12 +15,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.fragment.app.Fragment;
@@ -32,13 +30,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.evernote.android.state.State;
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 import com.livefront.bridge.Bridge;
 
 import org.greenrobot.eventbus.EventBus;
@@ -55,8 +47,6 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.LoadingMorePostsStatus;
@@ -71,6 +61,7 @@ import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.databinding.ActivityViewPostDetailBinding;
 import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragmentEvent;
 import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -102,30 +93,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     public static final int EDIT_COMMENT_REQUEST_CODE = 3;
     @State
     String mNewAccountName;
-    @BindView(R.id.coordinator_layout_view_post_detail)
-    CoordinatorLayout mCoordinatorLayout;
-    @BindView(R.id.appbar_layout_view_post_detail_activity)
-    AppBarLayout mAppBarLayout;
-    @BindView(R.id.collapsing_toolbar_layout_view_post_detail_activity)
-    CollapsingToolbarLayout mCollapsingToolbarLayout;
-    @BindView(R.id.toolbar_view_post_detail_activity)
-    Toolbar mToolbar;
-    @BindView(R.id.view_pager_2_view_post_detail_activity)
-    ViewPager2 viewPager2;
-    @BindView(R.id.fab_view_post_detail_activity)
-    FloatingActionButton fab;
-    @BindView(R.id.search_panel_material_card_view_view_post_detail_activity)
-    MaterialCardView searchPanelMaterialCardView;
-    @BindView(R.id.search_text_input_layout_view_post_detail_activity)
-    TextInputLayout searchTextInputLayout;
-    @BindView(R.id.search_text_input_edit_text_view_post_detail_activity)
-    TextInputEditText searchTextInputEditText;
-    @BindView(R.id.previous_result_image_view_view_post_detail_activity)
-    ImageView previousResultImageView;
-    @BindView(R.id.next_result_image_view_view_post_detail_activity)
-    ImageView nextResultImageView;
-    @BindView(R.id.close_search_panel_image_view_view_post_detail_activity)
-    ImageView closeSearchPanelImageView;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -183,6 +150,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     private int orientation;
     private boolean mVolumeKeysNavigateComments;
     private boolean isNsfwSubreddit;
+    private ActivityViewPostDetailBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,11 +160,10 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         BigImageViewer.initialize(GlideImageLoader.with(this.getApplicationContext()));
 
-        setContentView(R.layout.activity_view_post_detail);
+        binding = ActivityViewPostDetailBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         Bridge.restoreInstanceState(this, savedInstanceState);
-
-        ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
 
@@ -206,7 +173,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             Window window = getWindow();
 
             if (isChangeStatusBarIconColor()) {
-                addOnOffsetChangedListener(mAppBarLayout);
+                addOnOffsetChangedListener(binding.appbarLayoutViewPostDetailActivity);
             }
 
             if (isImmersiveInterface()) {
@@ -215,18 +182,18 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
-                adjustToolbar(mToolbar);
+                adjustToolbar(binding.toolbarViewPostDetailActivity);
 
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {
-                    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) binding.fabViewPostDetailActivity.getLayoutParams();
                     params.bottomMargin += navBarHeight;
-                    fab.setLayoutParams(params);
+                    binding.fabViewPostDetailActivity.setLayoutParams(params);
 
-                    searchPanelMaterialCardView.setContentPadding(searchPanelMaterialCardView.getPaddingStart(),
-                            searchPanelMaterialCardView.getPaddingTop(),
-                            searchPanelMaterialCardView.getPaddingEnd(),
-                            searchPanelMaterialCardView.getPaddingBottom() + navBarHeight);
+                    binding.searchPanelMaterialCardViewViewPostDetailActivity.setContentPadding(binding.searchPanelMaterialCardViewViewPostDetailActivity.getPaddingStart(),
+                            binding.searchPanelMaterialCardViewViewPostDetailActivity.getPaddingTop(),
+                            binding.searchPanelMaterialCardViewViewPostDetailActivity.getPaddingEnd(),
+                            binding.searchPanelMaterialCardViewViewPostDetailActivity.getPaddingBottom() + navBarHeight);
                 }
             }
         }
@@ -236,9 +203,9 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
                 mSliderPanel = Slidr.attach(this);
             }
-            viewPager2.setUserInputEnabled(false);
+            binding.viewPager2ViewPostDetailActivity.setUserInputEnabled(false);
         } else {
-            super.mViewPager2 = viewPager2;
+            mViewPager2 = binding.viewPager2ViewPostDetailActivity;
         }
         postFragmentId = getIntent().getLongExtra(EXTRA_POST_FRAGMENT_ID, -1);
         if (swipeBetweenPosts && posts == null && postFragmentId > 0) {
@@ -256,9 +223,9 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         orientation = getResources().getConfiguration().orientation;
 
-        mToolbar.setTitle("");
-        setSupportActionBar(mToolbar);
-        setToolbarGoToTop(mToolbar);
+        binding.toolbarViewPostDetailActivity.setTitle("");
+        setSupportActionBar(binding.toolbarViewPostDetailActivity);
+        setToolbarGoToTop(binding.toolbarViewPostDetailActivity);
 
         if (savedInstanceState == null) {
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
@@ -266,7 +233,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         mVolumeKeysNavigateComments = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOLUME_KEYS_NAVIGATE_COMMENTS, false);
 
-        fab.setOnClickListener(view -> {
+        binding.fabViewPostDetailActivity.setOnClickListener(view -> {
             if (sectionsPagerAdapter != null) {
                 ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
                 if (fragment != null) {
@@ -275,7 +242,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             }
         });
 
-        fab.setOnLongClickListener(view -> {
+        binding.fabViewPostDetailActivity.setOnLongClickListener(view -> {
             if (sectionsPagerAdapter != null) {
                 ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
                 if (fragment != null) {
@@ -287,7 +254,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         });
 
         if (accountName.equals(Account.ANONYMOUS_ACCOUNT) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            searchTextInputEditText.setImeOptions(searchTextInputEditText.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
+            binding.searchTextInputEditTextViewPostDetailActivity.setImeOptions(binding.searchTextInputEditTextViewPostDetailActivity.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
         }
 
         if (loadingMorePostsStatus == LoadingMorePostsStatus.LOADING) {
@@ -299,21 +266,21 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     public void setTitle(String title) {
-        if (mToolbar != null) {
-            mToolbar.setTitle(title);
+        if (binding.toolbarViewPostDetailActivity != null) {
+            binding.toolbarViewPostDetailActivity.setTitle(title);
         }
     }
 
     public void showFab() {
-        fab.show();
+        binding.fabViewPostDetailActivity.show();
     }
 
     public void hideFab() {
-        fab.hide();
+        binding.fabViewPostDetailActivity.hide();
     }
 
     public void showSnackBar(int resId) {
-        Snackbar.make(mCoordinatorLayout, resId, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(binding.getRoot(), resId, Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
@@ -333,20 +300,21 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
     @Override
     protected void applyCustomTheme() {
-        mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(mAppBarLayout, mCollapsingToolbarLayout, mToolbar);
-        applyFABTheme(fab);
-        searchPanelMaterialCardView.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimary()));
+        binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutViewPostDetailActivity,
+                binding.collapsingToolbarLayoutViewPostDetailActivity, binding.toolbarViewPostDetailActivity);
+        applyFABTheme(binding.fabViewPostDetailActivity);
+        binding.searchPanelMaterialCardViewViewPostDetailActivity.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimary()));
         int searchPanelTextAndIconColor = mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor();
-        searchTextInputLayout.setBoxStrokeColor(searchPanelTextAndIconColor);
-        searchTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(searchPanelTextAndIconColor));
-        searchTextInputEditText.setTextColor(searchPanelTextAndIconColor);
-        previousResultImageView.setColorFilter(searchPanelTextAndIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        nextResultImageView.setColorFilter(searchPanelTextAndIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        closeSearchPanelImageView.setColorFilter(searchPanelTextAndIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        binding.searchTextInputLayoutViewPostDetailActivity.setBoxStrokeColor(searchPanelTextAndIconColor);
+        binding.searchTextInputLayoutViewPostDetailActivity.setDefaultHintTextColor(ColorStateList.valueOf(searchPanelTextAndIconColor));
+        binding.searchTextInputEditTextViewPostDetailActivity.setTextColor(searchPanelTextAndIconColor);
+        binding.previousResultImageViewViewPostDetailActivity.setColorFilter(searchPanelTextAndIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        binding.nextResultImageViewViewPostDetailActivity.setColorFilter(searchPanelTextAndIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        binding.closeSearchPanelImageViewViewPostDetailActivity.setColorFilter(searchPanelTextAndIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         if (typeface != null) {
-            searchTextInputLayout.setTypeface(typeface);
-            searchTextInputEditText.setTypeface(typeface);
+            binding.searchTextInputLayoutViewPostDetailActivity.setTypeface(typeface);
+            binding.searchTextInputEditTextViewPostDetailActivity.setTypeface(typeface);
         }
     }
 
@@ -372,11 +340,11 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
     private void bindView(Bundle savedInstanceState) {
         sectionsPagerAdapter = new SectionsPagerAdapter(this);
-        viewPager2.setAdapter(sectionsPagerAdapter);
+        binding.viewPager2ViewPostDetailActivity.setAdapter(sectionsPagerAdapter);
         if (savedInstanceState == null) {
-            viewPager2.setCurrentItem(getIntent().getIntExtra(EXTRA_POST_LIST_POSITION, 0), false);
+            binding.viewPager2ViewPostDetailActivity.setCurrentItem(getIntent().getIntExtra(EXTRA_POST_LIST_POSITION, 0), false);
         }
-        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        binding.viewPager2ViewPostDetailActivity.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 if (posts != null && position > posts.size() - 5) {
@@ -385,29 +353,29 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             }
         });
 
-        searchPanelMaterialCardView.setOnClickListener(null);
+        binding.searchPanelMaterialCardViewViewPostDetailActivity.setOnClickListener(null);
         
-        nextResultImageView.setOnClickListener(view -> {
+        binding.nextResultImageViewViewPostDetailActivity.setOnClickListener(view -> {
             ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
             if (fragment != null) {
                 searchComment(fragment, true);
             }
         });
 
-        previousResultImageView.setOnClickListener(view -> {
+        binding.previousResultImageViewViewPostDetailActivity.setOnClickListener(view -> {
             ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
             if (fragment != null) {
                 searchComment(fragment, false);
             }
         });
 
-        closeSearchPanelImageView.setOnClickListener(view -> {
+        binding.closeSearchPanelImageViewViewPostDetailActivity.setOnClickListener(view -> {
             ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
             if (fragment != null) {
                 fragment.resetSearchCommentIndex();
             }
 
-            searchPanelMaterialCardView.setVisibility(View.GONE);
+            binding.searchPanelMaterialCardViewViewPostDetailActivity.setVisibility(View.GONE);
         });
     }
 
@@ -480,19 +448,19 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     public boolean toggleSearchPanelVisibility() {
-        if (searchPanelMaterialCardView.getVisibility() == View.GONE) {
-            searchPanelMaterialCardView.setVisibility(View.VISIBLE);
+        if (binding.searchPanelMaterialCardViewViewPostDetailActivity.getVisibility() == View.GONE) {
+            binding.searchPanelMaterialCardViewViewPostDetailActivity.setVisibility(View.VISIBLE);
             return false;
         } else {
-            searchPanelMaterialCardView.setVisibility(View.GONE);
-            searchTextInputEditText.setText("");
+            binding.searchPanelMaterialCardViewViewPostDetailActivity.setVisibility(View.GONE);
+            binding.searchTextInputEditTextViewPostDetailActivity.setText("");
             return true;
         }
     }
 
     public void searchComment(ViewPostDetailFragment fragment, boolean searchNextComment) {
-        if (!searchTextInputEditText.getText().toString().isEmpty()) {
-            fragment.searchComment(searchTextInputEditText.getText().toString(), searchNextComment);
+        if (!binding.searchTextInputEditTextViewPostDetailActivity.getText().toString().isEmpty()) {
+            fragment.searchComment(binding.searchTextInputEditTextViewPostDetailActivity.getText().toString(), searchNextComment);
         }
     }
 
@@ -598,7 +566,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                                 posts = new ArrayList<>(postLinkedHashSet);
                                 handler.post(() -> {
                                     if (changePage) {
-                                        viewPager2.setCurrentItem(currentPostsSize - 1, false);
+                                        binding.viewPager2ViewPostDetailActivity.setCurrentItem(currentPostsSize - 1, false);
                                     }
                                     sectionsPagerAdapter.notifyItemRangeInserted(currentPostsSize, postLinkedHashSet.size() - currentPostsSize);
                                     loadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING;
@@ -680,7 +648,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                                 posts = new ArrayList<>(postLinkedHashSet);
                                 handler.post(() -> {
                                     if (changePage) {
-                                        viewPager2.setCurrentItem(currentPostsSize - 1, false);
+                                        binding.viewPager2ViewPostDetailActivity.setCurrentItem(currentPostsSize - 1, false);
                                     }
                                     sectionsPagerAdapter.notifyItemRangeInserted(currentPostsSize, postLinkedHashSet.size() - currentPostsSize);
                                     loadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING;
@@ -832,7 +800,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
         if (fragment != null) {
             fragment.changeSortType(sortType);
-            mToolbar.setTitle(sortType.getType().fullName);
+            binding.toolbarViewPostDetailActivity.setTitle(sortType.getType().fullName);
         }
     }
 
@@ -895,10 +863,10 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         @Nullable
         ViewPostDetailFragment getCurrentFragment() {
-            if (viewPager2 == null || fragmentManager == null) {
+            if (fragmentManager == null) {
                 return null;
             }
-            Fragment fragment = fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
+            Fragment fragment = fragmentManager.findFragmentByTag("f" + binding.viewPager2ViewPostDetailActivity.getCurrentItem());
             if (fragment instanceof ViewPostDetailFragment) {
                 return (ViewPostDetailFragment) fragment;
             }
