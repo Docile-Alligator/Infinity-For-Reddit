@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_comments_listing_fragment"
     tools:application="ml.docilealligator.infinityforreddit.fragments.CommentsListingFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

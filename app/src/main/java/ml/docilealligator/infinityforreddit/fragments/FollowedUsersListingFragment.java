@@ -40,6 +40,7 @@ import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingAct
 import ml.docilealligator.infinityforreddit.adapters.FollowedUsersRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.databinding.FragmentFollowedUsersListingBinding;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserViewModel;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
@@ -50,16 +51,6 @@ import retrofit2.Retrofit;
  */
 public class FollowedUsersListingFragment extends Fragment implements FragmentCommunicator {
 
-    @BindView(R.id.swipe_refresh_layout_followed_users_listing_fragment)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.recycler_view_followed_users_listing_fragment)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.no_subscriptions_linear_layout_followed_users_listing_fragment)
-    LinearLayout mLinearLayout;
-    @BindView(R.id.no_subscriptions_image_view_followed_users_listing_fragment)
-    ImageView mImageView;
-    @BindView(R.id.error_text_view_followed_users_listing_fragment)
-    TextView mErrorTextView;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -76,17 +67,16 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
     private BaseActivity mActivity;
     private RequestManager mGlide;
     private LinearLayoutManagerBugFixed mLinearLayoutManager;
+    private FragmentFollowedUsersListingBinding binding;
 
     public FollowedUsersListingFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_followed_users_listing, container, false);
-
-        ButterKnife.bind(this, rootView);
+        binding = FragmentFollowedUsersListingBinding.inflate(inflater, container, false);
 
         ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
@@ -95,56 +85,56 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
         Resources resources = getResources();
 
         if ((mActivity instanceof BaseActivity && ((BaseActivity) mActivity).isImmersiveInterface())) {
-            mRecyclerView.setPadding(0, 0, 0, ((BaseActivity) mActivity).getNavBarHeight());
+            binding.recyclerViewFollowedUsersListingFragment.setPadding(0, 0, 0, ((BaseActivity) mActivity).getNavBarHeight());
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
             int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
             if (navBarResourceId > 0) {
-                mRecyclerView.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
+                binding.recyclerViewFollowedUsersListingFragment.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
             }
         }
 
         mGlide = Glide.with(this);
 
         if (mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-            mSwipeRefreshLayout.setEnabled(false);
+            binding.swipeRefreshLayoutFollowedUsersListingFragment.setEnabled(false);
         }
         mLinearLayoutManager = new LinearLayoutManagerBugFixed(mActivity);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        binding.recyclerViewFollowedUsersListingFragment.setLayoutManager(mLinearLayoutManager);
         FollowedUsersRecyclerViewAdapter adapter = new FollowedUsersRecyclerViewAdapter(mActivity,
                 mExecutor, mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, mActivity.accessToken, mActivity.accountName);
-        mRecyclerView.setAdapter(adapter);
-        new FastScrollerBuilder(mRecyclerView).useMd2Style().build();
+        binding.recyclerViewFollowedUsersListingFragment.setAdapter(adapter);
+        new FastScrollerBuilder(binding.recyclerViewFollowedUsersListingFragment).useMd2Style().build();
 
         mSubscribedUserViewModel = new ViewModelProvider(this,
                 new SubscribedUserViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, mActivity.accountName))
                 .get(SubscribedUserViewModel.class);
 
         mSubscribedUserViewModel.getAllSubscribedUsers().observe(getViewLifecycleOwner(), subscribedUserData -> {
-            mSwipeRefreshLayout.setRefreshing(false);
+            binding.swipeRefreshLayoutFollowedUsersListingFragment.setRefreshing(false);
             if (subscribedUserData == null || subscribedUserData.size() == 0) {
-                mRecyclerView.setVisibility(View.GONE);
-                mLinearLayout.setVisibility(View.VISIBLE);
-                mGlide.load(R.drawable.error_image).into(mImageView);
+                binding.recyclerViewFollowedUsersListingFragment.setVisibility(View.GONE);
+                binding.noSubscriptionsLinearLayoutFollowedUsersListingFragment.setVisibility(View.VISIBLE);
+                mGlide.load(R.drawable.error_image).into(binding.noSubscriptionsImageViewFollowedUsersListingFragment);
             } else {
-                mLinearLayout.setVisibility(View.GONE);
-                mRecyclerView.setVisibility(View.VISIBLE);
-                mGlide.clear(mImageView);
+                binding.noSubscriptionsLinearLayoutFollowedUsersListingFragment.setVisibility(View.GONE);
+                binding.recyclerViewFollowedUsersListingFragment.setVisibility(View.VISIBLE);
+                mGlide.clear(binding.noSubscriptionsImageViewFollowedUsersListingFragment);
             }
             adapter.setSubscribedUsers(subscribedUserData);
         });
 
         mSubscribedUserViewModel.getAllFavoriteSubscribedUsers().observe(getViewLifecycleOwner(), favoriteSubscribedUserData -> {
-            mSwipeRefreshLayout.setRefreshing(false);
+            binding.swipeRefreshLayoutFollowedUsersListingFragment.setRefreshing(false);
             if (favoriteSubscribedUserData != null && favoriteSubscribedUserData.size() > 0) {
-                mLinearLayout.setVisibility(View.GONE);
-                mRecyclerView.setVisibility(View.VISIBLE);
-                mGlide.clear(mImageView);
+                binding.noSubscriptionsLinearLayoutFollowedUsersListingFragment.setVisibility(View.GONE);
+                binding.recyclerViewFollowedUsersListingFragment.setVisibility(View.VISIBLE);
+                mGlide.clear(binding.noSubscriptionsImageViewFollowedUsersListingFragment);
             }
             adapter.setFavoriteSubscribedUsers(favoriteSubscribedUserData);
         });
 
-        return rootView;
+        return binding.getRoot();
     }
 
     @Override
@@ -155,21 +145,21 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
 
     @Override
     public void stopRefreshProgressbar() {
-        mSwipeRefreshLayout.setRefreshing(false);
+        binding.swipeRefreshLayoutFollowedUsersListingFragment.setRefreshing(false);
     }
 
     @Override
     public void applyTheme() {
         if (mActivity instanceof SubscribedThingListingActivity) {
-            mSwipeRefreshLayout.setOnRefreshListener(() -> ((SubscribedThingListingActivity) mActivity).loadSubscriptions(true));
-            mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
-            mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
+            binding.swipeRefreshLayoutFollowedUsersListingFragment.setOnRefreshListener(() -> ((SubscribedThingListingActivity) mActivity).loadSubscriptions(true));
+            binding.swipeRefreshLayoutFollowedUsersListingFragment.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
+            binding.swipeRefreshLayoutFollowedUsersListingFragment.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         } else {
-            mSwipeRefreshLayout.setEnabled(false);
+            binding.swipeRefreshLayoutFollowedUsersListingFragment.setEnabled(false);
         }
-        mErrorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        binding.errorTextViewFollowedUsersListingFragment.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
         if (mActivity.typeface != null) {
-            mErrorTextView.setTypeface(mActivity.typeface);
+            binding.errorTextViewFollowedUsersListingFragment.setTypeface(mActivity.typeface);
         }
     }
 
