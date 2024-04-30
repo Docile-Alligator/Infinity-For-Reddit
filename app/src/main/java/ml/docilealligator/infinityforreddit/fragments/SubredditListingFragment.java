@@ -46,6 +46,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivi
 import ml.docilealligator.infinityforreddit.adapters.SubredditListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.databinding.FragmentSubredditListingBinding;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditListingViewModel;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -61,18 +62,6 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     public static final String EXTRA_IS_GETTING_SUBREDDIT_INFO = "EIGSI";
     public static final String EXTRA_IS_MULTI_SELECTION = "EIMS";
 
-    @BindView(R.id.coordinator_layout_subreddit_listing_fragment)
-    CoordinatorLayout mCoordinatorLayout;
-    @BindView(R.id.recycler_view_subreddit_listing_fragment)
-    RecyclerView mSubredditListingRecyclerView;
-    @BindView(R.id.swipe_refresh_layout_subreddit_listing_fragment)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.fetch_subreddit_listing_info_linear_layout_subreddit_listing_fragment)
-    LinearLayout mFetchSubredditListingInfoLinearLayout;
-    @BindView(R.id.fetch_subreddit_listing_info_image_view_subreddit_listing_fragment)
-    ImageView mFetchSubredditListingInfoImageView;
-    @BindView(R.id.fetch_subreddit_listing_info_text_view_subreddit_listing_fragment)
-    TextView mFetchSubredditListingInfoTextView;
     SubredditListingViewModel mSubredditListingViewModel;
     @Inject
     @Named("no_oauth")
@@ -99,6 +88,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     private SubredditListingRecyclerViewAdapter mAdapter;
     private BaseActivity mActivity;
     private SortType sortType;
+    private FragmentSubredditListingBinding binding;
 
     public SubredditListingFragment() {
         // Required empty public constructor
@@ -109,28 +99,26 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_subreddit_listing, container, false);
+        binding = FragmentSubredditListingBinding.inflate(inflater, container, false);
 
         ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
-
-        ButterKnife.bind(this, rootView);
 
         applyTheme();
 
         Resources resources = getResources();
 
         if ((mActivity != null && ((BaseActivity) mActivity).isImmersiveInterface())) {
-            mSubredditListingRecyclerView.setPadding(0, 0, 0, ((BaseActivity) mActivity).getNavBarHeight());
+            binding.recyclerViewSubredditListingFragment.setPadding(0, 0, 0, ((BaseActivity) mActivity).getNavBarHeight());
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
             int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
             if (navBarResourceId > 0) {
-                mSubredditListingRecyclerView.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
+                binding.recyclerViewSubredditListingFragment.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
             }
         }
 
         mLinearLayoutManager = new LinearLayoutManagerBugFixed(getActivity());
-        mSubredditListingRecyclerView.setLayoutManager(mLinearLayoutManager);
+        binding.recyclerViewSubredditListingFragment.setLayoutManager(mLinearLayoutManager);
 
         String query = getArguments().getString(EXTRA_QUERY);
         boolean isGettingSubredditInfo = getArguments().getBoolean(EXTRA_IS_GETTING_SUBREDDIT_INFO);
@@ -160,10 +148,10 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
                     }
                 });
 
-        mSubredditListingRecyclerView.setAdapter(mAdapter);
+        binding.recyclerViewSubredditListingFragment.setAdapter(mAdapter);
 
         if (mActivity instanceof RecyclerViewContentScrollingInterface) {
-            mSubredditListingRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            binding.recyclerViewSubredditListingFragment.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     if (dy > 0) {
@@ -181,24 +169,24 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         mSubredditListingViewModel.getSubreddits().observe(getViewLifecycleOwner(), subredditData -> mAdapter.submitList(subredditData));
 
         mSubredditListingViewModel.hasSubredditLiveData().observe(getViewLifecycleOwner(), hasSubreddit -> {
-            mSwipeRefreshLayout.setRefreshing(false);
+            binding.swipeRefreshLayoutSubredditListingFragment.setRefreshing(false);
             if (hasSubreddit) {
-                mFetchSubredditListingInfoLinearLayout.setVisibility(View.GONE);
+                binding.fetchSubredditListingInfoLinearLayoutSubredditListingFragment.setVisibility(View.GONE);
             } else {
-                mFetchSubredditListingInfoLinearLayout.setOnClickListener(null);
+                binding.fetchSubredditListingInfoLinearLayoutSubredditListingFragment.setOnClickListener(null);
                 showErrorView(R.string.no_subreddits);
             }
         });
 
         mSubredditListingViewModel.getInitialLoadingState().observe(getViewLifecycleOwner(), networkState -> {
             if (networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
-                mSwipeRefreshLayout.setRefreshing(false);
+                binding.swipeRefreshLayoutSubredditListingFragment.setRefreshing(false);
             } else if (networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mSwipeRefreshLayout.setRefreshing(false);
-                mFetchSubredditListingInfoLinearLayout.setOnClickListener(view -> refresh());
+                binding.swipeRefreshLayoutSubredditListingFragment.setRefreshing(false);
+                binding.fetchSubredditListingInfoLinearLayoutSubredditListingFragment.setOnClickListener(view -> refresh());
                 showErrorView(R.string.search_subreddits_error);
             } else {
-                mSwipeRefreshLayout.setRefreshing(true);
+                binding.swipeRefreshLayoutSubredditListingFragment.setRefreshing(true);
             }
         });
 
@@ -206,9 +194,9 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
             mAdapter.setNetworkState(networkState);
         });
 
-        mSwipeRefreshLayout.setOnRefreshListener(() -> mSubredditListingViewModel.refresh());
+        binding.swipeRefreshLayoutSubredditListingFragment.setOnRefreshListener(() -> mSubredditListingViewModel.refresh());
 
-        return rootView;
+        return binding.getRoot();
     }
 
     @Override
@@ -219,10 +207,10 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
     private void showErrorView(int stringResId) {
         if (getActivity() != null && isAdded()) {
-            mSwipeRefreshLayout.setRefreshing(false);
-            mFetchSubredditListingInfoLinearLayout.setVisibility(View.VISIBLE);
-            mFetchSubredditListingInfoTextView.setText(stringResId);
-            Glide.with(this).load(R.drawable.error_image).into(mFetchSubredditListingInfoImageView);
+            binding.swipeRefreshLayoutSubredditListingFragment.setRefreshing(false);
+            binding.fetchSubredditListingInfoLinearLayoutSubredditListingFragment.setVisibility(View.VISIBLE);
+            binding.fetchSubredditListingInfoTextViewSubredditListingFragment.setText(stringResId);
+            Glide.with(this).load(R.drawable.error_image).into(binding.fetchSubredditListingInfoImageViewSubredditListingFragment);
         }
     }
 
@@ -234,18 +222,18 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
     @Override
     public void refresh() {
-        mFetchSubredditListingInfoLinearLayout.setVisibility(View.GONE);
+        binding.fetchSubredditListingInfoLinearLayoutSubredditListingFragment.setVisibility(View.GONE);
         mSubredditListingViewModel.refresh();
         mAdapter.setNetworkState(null);
     }
 
     @Override
     public void applyTheme() {
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
-        mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
-        mFetchSubredditListingInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        binding.swipeRefreshLayoutSubredditListingFragment.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
+        binding.swipeRefreshLayoutSubredditListingFragment.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
+        binding.fetchSubredditListingInfoTextViewSubredditListingFragment.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
         if (mActivity.typeface != null) {
-            mFetchSubredditListingInfoTextView.setTypeface(mActivity.contentTypeface);
+            binding.fetchSubredditListingInfoTextViewSubredditListingFragment.setTypeface(mActivity.contentTypeface);
         }
     }
 

@@ -550,7 +550,7 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
             return new PlaybackInfo(INDEX_UNSET, TIME_UNSET, volumeInfo);
         });
 
-        return rootView;
+        return binding.getRoot();
     }
 
     @Override

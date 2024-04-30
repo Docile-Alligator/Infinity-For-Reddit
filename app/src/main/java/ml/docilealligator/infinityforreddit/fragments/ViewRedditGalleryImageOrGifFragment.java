@@ -19,10 +19,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -44,17 +40,13 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.ImageLoader;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
-import com.github.piasy.biv.view.BigImageView;
 import com.github.piasy.biv.view.GlideImageViewFactory;
-import com.google.android.material.bottomappbar.BottomAppBar;
 
 import java.io.File;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -66,6 +58,7 @@ import ml.docilealligator.infinityforreddit.asynctasks.SaveGIFToFile;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetAsWallpaperBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.databinding.FragmentViewRedditGalleryImageOrGifBinding;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -79,30 +72,6 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     public static final String EXTRA_IS_NSFW = "EIN";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
 
-    @BindView(R.id.progress_bar_view_reddit_gallery_image_or_gif_fragment)
-    ProgressBar progressBar;
-    @BindView(R.id.image_view_view_reddit_gallery_image_or_gif_fragment)
-    BigImageView imageView;
-    @BindView(R.id.load_image_error_linear_layout_view_reddit_gallery_image_or_gif_fragment)
-    LinearLayout errorLinearLayout;
-    @BindView(R.id.bottom_navigation_view_reddit_gallery_image_or_gif_fragment)
-    BottomAppBar bottomAppBar;
-    @BindView(R.id.caption_layout_view_reddit_gallery_image_or_gif_fragment)
-    LinearLayout captionLayout;
-    @BindView(R.id.caption_text_view_view_reddit_gallery_image_or_gif_fragment)
-    TextView captionTextView;
-    @BindView(R.id.caption_url_text_view_view_reddit_gallery_image_or_gif_fragment)
-    TextView captionUrlTextView;
-    @BindView(R.id.bottom_app_bar_menu_view_reddit_gallery_image_or_gif_fragment)
-    LinearLayout bottomAppBarMenu;
-    @BindView(R.id.title_text_view_view_reddit_gallery_image_or_gif_fragment)
-    TextView titleTextView;
-    @BindView(R.id.download_image_view_view_reddit_gallery_image_or_gif_fragment)
-    ImageView downloadImageView;
-    @BindView(R.id.share_image_view_view_reddit_gallery_image_or_gif_fragment)
-    ImageView shareImageView;
-    @BindView(R.id.wallpaper_image_view_view_reddit_gallery_image_or_gif_fragment)
-    ImageView wallpaperImageView;
     @Inject
     Executor mExecutor;
 
@@ -114,21 +83,20 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     private boolean isDownloading = false;
     private boolean isUseBottomCaption = false;
     private boolean isFallback = false;
+    private FragmentViewRedditGalleryImageOrGifBinding binding;
 
     public ViewRedditGalleryImageOrGifFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         BigImageViewer.initialize(GlideImageLoader.with(activity.getApplicationContext()));
 
-        View rootView = inflater.inflate(R.layout.fragment_view_reddit_gallery_image_or_gif, container, false);
+        binding = FragmentViewRedditGalleryImageOrGifBinding.inflate(inflater, container, false);
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
-
-        ButterKnife.bind(this, rootView);
 
         setHasOptionsMenu(true);
 
@@ -138,14 +106,14 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         glide = Glide.with(activity);
 
         if (activity.typeface != null) {
-            titleTextView.setTypeface(activity.typeface);
-            captionTextView.setTypeface(activity.typeface);
-            captionUrlTextView.setTypeface(activity.typeface);
+            binding.titleTextViewViewRedditGalleryImageOrGifFragment.setTypeface(activity.typeface);
+            binding.captionTextViewViewRedditGalleryImageOrGifFragment.setTypeface(activity.typeface);
+            binding.captionUrlTextViewViewRedditGalleryImageOrGifFragment.setTypeface(activity.typeface);
         }
 
-        imageView.setImageViewFactory(new GlideImageViewFactory());
+        binding.imageViewViewRedditGalleryImageOrGifFragment.setImageViewFactory(new GlideImageViewFactory());
 
-        imageView.setImageLoaderCallback(new ImageLoader.Callback() {
+        binding.imageViewViewRedditGalleryImageOrGifFragment.setImageLoaderCallback(new ImageLoader.Callback() {
             @Override
             public void onCacheHit(int imageType, File image) {
 
@@ -173,9 +141,9 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
             @Override
             public void onSuccess(File image) {
-                progressBar.setVisibility(View.GONE);
+                binding.progressBarViewRedditGalleryImageOrGifFragment.setVisibility(View.GONE);
 
-                final SubsamplingScaleImageView view = imageView.getSSIV();
+                final SubsamplingScaleImageView view = binding.imageViewViewRedditGalleryImageOrGifFragment.getSSIV();
 
                 if (view != null) {
                     view.setOnImageEventListener(new SubsamplingScaleImageView.DefaultOnImageEventListener() {
@@ -195,7 +163,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                             // Make sure it's not stuck in a loop if it comes to that
                             // Fallback url should be empty if it's not an album item
                             if (!isFallback && media.hasFallback()) {
-                                imageView.cancel();
+                                binding.imageViewViewRedditGalleryImageOrGifFragment.cancel();
                                 isFallback = true;
                                 loadImage();
                             } else {
@@ -208,8 +176,8 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
             @Override
             public void onFail(Exception error) {
-                progressBar.setVisibility(View.GONE);
-                errorLinearLayout.setVisibility(View.VISIBLE);
+                binding.progressBarViewRedditGalleryImageOrGifFragment.setVisibility(View.GONE);
+                binding.loadImageErrorLinearLayoutViewRedditGalleryImageOrGifFragment.setVisibility(View.VISIBLE);
             }
         });
 
@@ -221,53 +189,53 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         boolean captionUrlIsEmpty = TextUtils.isEmpty(captionUrl);
         boolean captionTextOrUrlIsNotEmpty = !captionIsEmpty || !captionUrlIsEmpty;
 
-        imageView.setOnClickListener(view -> {
+        binding.imageViewViewRedditGalleryImageOrGifFragment.setOnClickListener(view -> {
             if (activity.isActionBarHidden()) {
                 activity.getWindow().getDecorView().setSystemUiVisibility(0);
                 activity.setActionBarHidden(false);
                 if (activity.isUseBottomAppBar()) {
-                    bottomAppBarMenu.setVisibility(View.VISIBLE);
+                    binding.bottomAppBarMenuViewRedditGalleryImageOrGifFragment.setVisibility(View.VISIBLE);
                 }
                 if (captionTextOrUrlIsNotEmpty) {
-                    captionLayout.setVisibility(View.VISIBLE);
+                    binding.captionLayoutViewRedditGalleryImageOrGifFragment.setVisibility(View.VISIBLE);
                 }
             } else {
                 hideAppBar();
             }
         });
 
-        captionLayout.setOnClickListener(view -> hideAppBar());
+        binding.captionLayoutViewRedditGalleryImageOrGifFragment.setOnClickListener(view -> hideAppBar());
 
-        errorLinearLayout.setOnClickListener(view -> {
-            progressBar.setVisibility(View.VISIBLE);
-            errorLinearLayout.setVisibility(View.GONE);
+        binding.loadImageErrorLinearLayoutViewRedditGalleryImageOrGifFragment.setOnClickListener(view -> {
+            binding.progressBarViewRedditGalleryImageOrGifFragment.setVisibility(View.VISIBLE);
+            binding.loadImageErrorLinearLayoutViewRedditGalleryImageOrGifFragment.setVisibility(View.GONE);
             loadImage();
         });
 
         if (activity.isUseBottomAppBar()) {
-            bottomAppBarMenu.setVisibility(View.VISIBLE);
+            binding.bottomAppBarMenuViewRedditGalleryImageOrGifFragment.setVisibility(View.VISIBLE);
             if (media.mediaType == Post.Gallery.TYPE_GIF) {
-                titleTextView.setText(getString(R.string.view_reddit_gallery_activity_gif_label,
+                binding.titleTextViewViewRedditGalleryImageOrGifFragment.setText(getString(R.string.view_reddit_gallery_activity_gif_label,
                         getArguments().getInt(EXTRA_INDEX) + 1, getArguments().getInt(EXTRA_MEDIA_COUNT)));
             } else {
-                titleTextView.setText(getString(R.string.view_reddit_gallery_activity_image_label,
+                binding.titleTextViewViewRedditGalleryImageOrGifFragment.setText(getString(R.string.view_reddit_gallery_activity_image_label,
                         getArguments().getInt(EXTRA_INDEX) + 1, getArguments().getInt(EXTRA_MEDIA_COUNT)));
             }
-            downloadImageView.setOnClickListener(view -> {
+            binding.downloadImageViewViewRedditGalleryImageOrGifFragment.setOnClickListener(view -> {
                 if (isDownloading) {
                     return;
                 }
                 isDownloading = true;
                 requestPermissionAndDownload();
             });
-            shareImageView.setOnClickListener(view -> {
+            binding.shareImageViewViewRedditGalleryImageOrGifFragment.setOnClickListener(view -> {
                 if (media.mediaType == Post.Gallery.TYPE_GIF) {
                     shareGif();
                 } else {
                     shareImage();
                 }
             });
-            wallpaperImageView.setOnClickListener(view -> {
+            binding.wallpaperImageViewViewRedditGalleryImageOrGifFragment.setOnClickListener(view -> {
                 setWallpaper();
             });
         }
@@ -276,21 +244,21 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             isUseBottomCaption = true;
 
             if (!activity.isUseBottomAppBar()) {
-                bottomAppBarMenu.setVisibility(View.GONE);
+                binding.bottomAppBarMenuViewRedditGalleryImageOrGifFragment.setVisibility(View.GONE);
             }
 
-            captionLayout.setVisibility(View.VISIBLE);
+            binding.captionLayoutViewRedditGalleryImageOrGifFragment.setVisibility(View.VISIBLE);
 
             if (!captionIsEmpty) {
-                captionTextView.setVisibility(View.VISIBLE);
-                captionTextView.setText(caption);
-                captionTextView.setOnClickListener(view -> hideAppBar());
-                captionTextView.setOnLongClickListener(view -> {
+                binding.captionTextViewViewRedditGalleryImageOrGifFragment.setVisibility(View.VISIBLE);
+                binding.captionTextViewViewRedditGalleryImageOrGifFragment.setText(caption);
+                binding.captionTextViewViewRedditGalleryImageOrGifFragment.setOnClickListener(view -> hideAppBar());
+                binding.captionTextViewViewRedditGalleryImageOrGifFragment.setOnLongClickListener(view -> {
                     if (activity != null
                             && !activity.isDestroyed()
                             && !activity.isFinishing()
-                            && captionTextView.getSelectionStart() == -1
-                            && captionTextView.getSelectionEnd() == -1) {
+                            && binding.captionTextViewViewRedditGalleryImageOrGifFragment.getSelectionStart() == -1
+                            && binding.captionTextViewViewRedditGalleryImageOrGifFragment.getSelectionEnd() == -1) {
                         CopyTextBottomSheetFragment.show(
                                 activity.getSupportFragmentManager(), caption, null);
                     }
@@ -304,23 +272,23 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                     urlWithoutScheme = captionUrl.substring(scheme.length() + 3);
                 }
 
-                captionUrlTextView.setText(TextUtils.isEmpty(urlWithoutScheme) ? captionUrl : urlWithoutScheme);
+                binding.captionUrlTextViewViewRedditGalleryImageOrGifFragment.setText(TextUtils.isEmpty(urlWithoutScheme) ? captionUrl : urlWithoutScheme);
 
-                BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, captionUrlTextView).setOnLinkLongClickListener((textView, url) -> {
+                BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, binding.captionUrlTextViewViewRedditGalleryImageOrGifFragment).setOnLinkLongClickListener((textView, url) -> {
                     if (activity != null && !activity.isDestroyed() && !activity.isFinishing()) {
                         UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = UrlMenuBottomSheetFragment.newInstance(captionUrl);
                         urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), null);
                     }
                     return true;
                 });
-                captionUrlTextView.setVisibility(View.VISIBLE);
-                captionUrlTextView.setHighlightColor(Color.TRANSPARENT);
+                binding.captionUrlTextViewViewRedditGalleryImageOrGifFragment.setVisibility(View.VISIBLE);
+                binding.captionUrlTextViewViewRedditGalleryImageOrGifFragment.setHighlightColor(Color.TRANSPARENT);
             }
         } else {
-            captionLayout.setVisibility(View.GONE);
+            binding.captionLayoutViewRedditGalleryImageOrGifFragment.setVisibility(View.GONE);
         }
 
-        return rootView;
+        return binding.getRoot();
     }
 
     private void hideAppBar() {
@@ -333,17 +301,17 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
         activity.setActionBarHidden(true);
         if (activity.isUseBottomAppBar()) {
-            bottomAppBarMenu.setVisibility(View.GONE);
+            binding.bottomAppBarMenuViewRedditGalleryImageOrGifFragment.setVisibility(View.GONE);
         }
-        captionLayout.setVisibility(View.GONE);
+        binding.captionLayoutViewRedditGalleryImageOrGifFragment.setVisibility(View.GONE);
     }
 
     private void loadImage() {
         if (isFallback) {
-            imageView.showImage(Uri.parse(media.fallbackUrl));
+            binding.imageViewViewRedditGalleryImageOrGifFragment.showImage(Uri.parse(media.fallbackUrl));
         }
         else{
-            imageView.showImage(Uri.parse(media.url));
+            binding.imageViewViewRedditGalleryImageOrGifFragment.showImage(Uri.parse(media.url));
         }
     }
 
@@ -532,7 +500,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        SubsamplingScaleImageView ssiv = imageView.getSSIV();
+        SubsamplingScaleImageView ssiv = binding.imageViewViewRedditGalleryImageOrGifFragment.getSSIV();
         if (ssiv == null || !ssiv.hasImage()) {
             loadImage();
         }
@@ -553,9 +521,9 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        imageView.cancel();
+        binding.imageViewViewRedditGalleryImageOrGifFragment.cancel();
         isFallback = false;
-        SubsamplingScaleImageView subsamplingScaleImageView = imageView.getSSIV();
+        SubsamplingScaleImageView subsamplingScaleImageView = binding.imageViewViewRedditGalleryImageOrGifFragment.getSSIV();
         if (subsamplingScaleImageView != null) {
             subsamplingScaleImageView.recycle();
         }

@@ -41,6 +41,7 @@ import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingAct
 import ml.docilealligator.infinityforreddit.adapters.SubscribedSubredditsRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.databinding.FragmentSubscribedSubredditsListingBinding;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditViewModel;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
@@ -55,16 +56,6 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
     public static final String EXTRA_IS_SUBREDDIT_SELECTION = "EISS";
     public static final String EXTRA_EXTRA_CLEAR_SELECTION = "EECS";
 
-    @BindView(R.id.swipe_refresh_layout_subscribed_subreddits_listing_fragment)
-    SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.recycler_view_subscribed_subreddits_listing_fragment)
-    RecyclerView mRecyclerView;
-    @BindView(R.id.no_subscriptions_linear_layout_subreddits_listing_fragment)
-    LinearLayout mLinearLayout;
-    @BindView(R.id.no_subscriptions_image_view_subreddits_listing_fragment)
-    ImageView mImageView;
-    @BindView(R.id.error_text_view_subscribed_subreddits_listing_fragment)
-    TextView mErrorTextView;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -81,6 +72,7 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
     private BaseActivity mActivity;
     private RequestManager mGlide;
     private LinearLayoutManagerBugFixed mLinearLayoutManager;
+    private FragmentSubscribedSubredditsListingBinding binding;
 
     public SubscribedSubredditsListingFragment() {
         // Required empty public constructor
@@ -89,33 +81,31 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_subscribed_subreddits_listing, container, false);
-
-        ButterKnife.bind(this, rootView);
+        binding = FragmentSubscribedSubredditsListingBinding.inflate(inflater, container, false);
 
         ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         applyTheme();
 
-        if ((mActivity instanceof BaseActivity && ((BaseActivity) mActivity).isImmersiveInterface())) {
-            mRecyclerView.setPadding(0, 0, 0, ((BaseActivity) mActivity).getNavBarHeight());
+        if ((mActivity.isImmersiveInterface())) {
+            binding.recyclerViewSubscribedSubredditsListingFragment.setPadding(0, 0, 0, ((BaseActivity) mActivity).getNavBarHeight());
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
             Resources resources = getResources();
             int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
             if (navBarResourceId > 0) {
-                mRecyclerView.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
+                binding.recyclerViewSubscribedSubredditsListingFragment.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
             }
         }
 
         if (mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-            mSwipeRefreshLayout.setEnabled(false);
+            binding.swipeRefreshLayoutSubscribedSubredditsListingFragment.setEnabled(false);
         }
 
         mGlide = Glide.with(this);
 
         mLinearLayoutManager = new LinearLayoutManagerBugFixed(mActivity);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        binding.recyclerViewSubscribedSubredditsListingFragment.setLayoutManager(mLinearLayoutManager);
 
         SubscribedSubredditsRecyclerViewAdapter adapter;
         if (getArguments().getBoolean(EXTRA_IS_SUBREDDIT_SELECTION)) {
@@ -127,22 +117,22 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
                     mCustomThemeWrapper, mActivity.accessToken, mActivity.accountName);
         }
 
-        mRecyclerView.setAdapter(adapter);
-        new FastScrollerBuilder(mRecyclerView).useMd2Style().build();
+        binding.recyclerViewSubscribedSubredditsListingFragment.setAdapter(adapter);
+        new FastScrollerBuilder(binding.recyclerViewSubscribedSubredditsListingFragment).useMd2Style().build();
 
         mSubscribedSubredditViewModel = new ViewModelProvider(this,
                 new SubscribedSubredditViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, mActivity.accountName))
                 .get(SubscribedSubredditViewModel.class);
         mSubscribedSubredditViewModel.getAllSubscribedSubreddits().observe(getViewLifecycleOwner(), subscribedSubredditData -> {
-            mSwipeRefreshLayout.setRefreshing(false);
+            binding.swipeRefreshLayoutSubscribedSubredditsListingFragment.setRefreshing(false);
             if (subscribedSubredditData == null || subscribedSubredditData.size() == 0) {
-                mRecyclerView.setVisibility(View.GONE);
-                mLinearLayout.setVisibility(View.VISIBLE);
-                mGlide.load(R.drawable.error_image).into(mImageView);
+                binding.recyclerViewSubscribedSubredditsListingFragment.setVisibility(View.GONE);
+                binding.noSubscriptionsLinearLayoutSubredditsListingFragment.setVisibility(View.VISIBLE);
+                mGlide.load(R.drawable.error_image).into(binding.noSubscriptionsImageViewSubredditsListingFragment);
             } else {
-                mLinearLayout.setVisibility(View.GONE);
-                mRecyclerView.setVisibility(View.VISIBLE);
-                mGlide.clear(mImageView);
+                binding.noSubscriptionsLinearLayoutSubredditsListingFragment.setVisibility(View.GONE);
+                binding.recyclerViewSubscribedSubredditsListingFragment.setVisibility(View.VISIBLE);
+                mGlide.clear(binding.noSubscriptionsImageViewSubredditsListingFragment);
             }
 
             if (!mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
@@ -152,17 +142,17 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
         });
 
         mSubscribedSubredditViewModel.getAllFavoriteSubscribedSubreddits().observe(getViewLifecycleOwner(), favoriteSubscribedSubredditData -> {
-            mSwipeRefreshLayout.setRefreshing(false);
+            binding.swipeRefreshLayoutSubscribedSubredditsListingFragment.setRefreshing(false);
             if (favoriteSubscribedSubredditData != null && favoriteSubscribedSubredditData.size() > 0) {
-                mLinearLayout.setVisibility(View.GONE);
-                mRecyclerView.setVisibility(View.VISIBLE);
-                mGlide.clear(mImageView);
+                binding.noSubscriptionsLinearLayoutSubredditsListingFragment.setVisibility(View.GONE);
+                binding.recyclerViewSubscribedSubredditsListingFragment.setVisibility(View.VISIBLE);
+                mGlide.clear(binding.noSubscriptionsImageViewSubredditsListingFragment);
             }
 
             adapter.setFavoriteSubscribedSubreddits(favoriteSubscribedSubredditData);
         });
 
-        return rootView;
+        return binding.getRoot();
     }
 
     @Override
@@ -173,21 +163,21 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
 
     @Override
     public void stopRefreshProgressbar() {
-        mSwipeRefreshLayout.setRefreshing(false);
+        binding.swipeRefreshLayoutSubscribedSubredditsListingFragment.setRefreshing(false);
     }
 
     @Override
     public void applyTheme() {
         if (mActivity instanceof SubscribedThingListingActivity) {
-            mSwipeRefreshLayout.setOnRefreshListener(() -> ((SubscribedThingListingActivity) mActivity).loadSubscriptions(true));
-            mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
-            mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
+            binding.swipeRefreshLayoutSubscribedSubredditsListingFragment.setOnRefreshListener(() -> ((SubscribedThingListingActivity) mActivity).loadSubscriptions(true));
+            binding.swipeRefreshLayoutSubscribedSubredditsListingFragment.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
+            binding.swipeRefreshLayoutSubscribedSubredditsListingFragment.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         } else {
-            mSwipeRefreshLayout.setEnabled(false);
+            binding.swipeRefreshLayoutSubscribedSubredditsListingFragment.setEnabled(false);
         }
-        mErrorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        binding.errorTextViewSubscribedSubredditsListingFragment.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
         if (mActivity.typeface != null) {
-            mErrorTextView.setTypeface(mActivity.contentTypeface);
+            binding.errorTextViewSubscribedSubredditsListingFragment.setTypeface(mActivity.contentTypeface);
         }
     }
 

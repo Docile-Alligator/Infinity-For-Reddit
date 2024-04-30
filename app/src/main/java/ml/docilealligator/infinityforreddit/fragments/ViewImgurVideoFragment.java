@@ -16,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,25 +30,21 @@ import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
-import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.button.MaterialButton;
 import com.google.common.collect.ImmutableList;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ImgurMedia;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.ViewImgurMediaActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.databinding.FragmentViewImgurVideoBinding;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -64,20 +59,7 @@ public class ViewImgurVideoFragment extends Fragment {
     private static final String IS_MUTE_STATE = "IMS";
     private static final String POSITION_STATE = "PS";
     private static final String PLAYBACK_SPEED_STATE = "PSS";
-    @BindView(R.id.player_view_view_imgur_video_fragment)
-    PlayerView videoPlayerView;
-    @BindView(R.id.mute_exo_playback_control_view)
-    MaterialButton muteButton;
-    @BindView(R.id.bottom_navigation_exo_playback_control_view)
-    BottomAppBar bottomAppBar;
-    @BindView(R.id.title_text_view_exo_playback_control_view)
-    TextView titleTextView;
-    @BindView(R.id.back_button_exo_playback_control_view)
-    MaterialButton backButton;
-    @BindView(R.id.download_image_view_exo_playback_control_view)
-    MaterialButton downloadButton;
-    @BindView(R.id.playback_speed_image_view_exo_playback_control_view)
-    MaterialButton playbackSpeedButton;
+
     private ViewImgurMediaActivity activity;
     private ImgurMedia imgurMedia;
     private ExoPlayer player;
@@ -91,6 +73,7 @@ public class ViewImgurVideoFragment extends Fragment {
     SharedPreferences mSharedPreferences;
     @Inject
     SimpleCache mSimpleCache;
+    private ViewImgurVideoFragmentBindingAdapter binding;
 
     public ViewImgurVideoFragment() {
         // Required empty public constructor
@@ -100,16 +83,14 @@ public class ViewImgurVideoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_view_imgur_video, container, false);
+        binding = new ViewImgurVideoFragmentBindingAdapter(FragmentViewImgurVideoBinding.inflate(inflater, container, false));
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
-
-        ButterKnife.bind(this, rootView);
 
         setHasOptionsMenu(true);
 
         if (activity.typeface != null) {
-            titleTextView.setTypeface(activity.typeface);
+            binding.getTitleTextView().setTypeface(activity.typeface);
         }
 
         activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -120,19 +101,19 @@ public class ViewImgurVideoFragment extends Fragment {
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || getResources().getBoolean(R.bool.isTablet)) {
                 //Set player controller bottom margin in order to display it above the navbar
                 int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-                LinearLayout controllerLinearLayout = rootView.findViewById(R.id.linear_layout_exo_playback_control_view);
+                LinearLayout controllerLinearLayout = binding.getRoot().findViewById(R.id.linear_layout_exo_playback_control_view);
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
                 params.bottomMargin = getResources().getDimensionPixelSize(resourceId);
             } else {
                 //Set player controller right margin in order to display it above the navbar
                 int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-                LinearLayout controllerLinearLayout = rootView.findViewById(R.id.linear_layout_exo_playback_control_view);
+                LinearLayout controllerLinearLayout = binding.getRoot().findViewById(R.id.linear_layout_exo_playback_control_view);
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
                 params.rightMargin = getResources().getDimensionPixelSize(resourceId);
             }
         }
 
-        videoPlayerView.setControllerVisibilityListener(visibility -> {
+        binding.getRoot().setControllerVisibilityListener(visibility -> {
             switch (visibility) {
                 case View.GONE:
                     activity.getWindow().getDecorView().setSystemUiVisibility(
@@ -153,7 +134,7 @@ public class ViewImgurVideoFragment extends Fragment {
 
         TrackSelector trackSelector = new DefaultTrackSelector(activity);
         player = new ExoPlayer.Builder(activity).setTrackSelector(trackSelector).build();
-        videoPlayerView.setPlayer(player);
+        binding.getRoot().setPlayer(player);
         dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
                 .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
         player.prepare();
@@ -165,17 +146,17 @@ public class ViewImgurVideoFragment extends Fragment {
         setPlaybackSpeed(Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_PLAYBACK_SPEED, "100")));
         preparePlayer(savedInstanceState);
 
-        titleTextView.setText(getString(R.string.view_imgur_media_activity_video_label,
+        binding.getTitleTextView().setText(getString(R.string.view_imgur_media_activity_video_label,
                 getArguments().getInt(EXTRA_INDEX) + 1, getArguments().getInt(EXTRA_MEDIA_COUNT)));
 
         if (activity.isUseBottomAppBar()) {
-            bottomAppBar.setVisibility(View.VISIBLE);
+            binding.getBottomAppBar().setVisibility(View.VISIBLE);
 
-            backButton.setOnClickListener(view -> {
+            binding.getBackButton().setOnClickListener(view -> {
                 activity.finish();
             });
 
-            downloadButton.setOnClickListener(view -> {
+            binding.getDownloadButton().setOnClickListener(view -> {
                 if (isDownloading) {
                     return;
                 }
@@ -183,12 +164,12 @@ public class ViewImgurVideoFragment extends Fragment {
                 requestPermissionAndDownload();
             });
 
-            playbackSpeedButton.setOnClickListener(view -> {
+            binding.getPlaybackSpeedButton().setOnClickListener(view -> {
                 changePlaybackSpeed();
             });
         }
 
-        return rootView;
+        return binding.getRoot();
     }
 
     private void changePlaybackSpeed() {
@@ -287,17 +268,17 @@ public class ViewImgurVideoFragment extends Fragment {
             isMute = savedInstanceState.getBoolean(IS_MUTE_STATE);
             if (isMute) {
                 player.setVolume(0f);
-                muteButton.setIconResource(R.drawable.ic_mute_24dp);
+                binding.getMuteButton().setIconResource(R.drawable.ic_mute_24dp);
             } else {
                 player.setVolume(1f);
-                muteButton.setIconResource(R.drawable.ic_unmute_24dp);
+                binding.getMuteButton().setIconResource(R.drawable.ic_unmute_24dp);
             }
         } else if (muteVideo) {
             isMute = true;
             player.setVolume(0f);
-            muteButton.setIconResource(R.drawable.ic_mute_24dp);
+            binding.getMuteButton().setIconResource(R.drawable.ic_mute_24dp);
         } else {
-            muteButton.setIconResource(R.drawable.ic_unmute_24dp);
+            binding.getMuteButton().setIconResource(R.drawable.ic_unmute_24dp);
         }
 
         player.addListener(new Player.Listener() {
@@ -308,23 +289,23 @@ public class ViewImgurVideoFragment extends Fragment {
                     for (int i = 0; i < trackGroups.size(); i++) {
                         String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
                         if (mimeType != null && mimeType.contains("audio")) {
-                            muteButton.setVisibility(View.VISIBLE);
-                            muteButton.setOnClickListener(view -> {
+                            binding.getMuteButton().setVisibility(View.VISIBLE);
+                            binding.getMuteButton().setOnClickListener(view -> {
                                 if (isMute) {
                                     isMute = false;
                                     player.setVolume(1f);
-                                    muteButton.setIconResource(R.drawable.ic_unmute_24dp);
+                                    binding.getMuteButton().setIconResource(R.drawable.ic_unmute_24dp);
                                 } else {
                                     isMute = true;
                                     player.setVolume(0f);
-                                    muteButton.setIconResource(R.drawable.ic_mute_24dp);
+                                    binding.getMuteButton().setIconResource(R.drawable.ic_mute_24dp);
                                 }
                             });
                             break;
                         }
                     }
                 } else {
-                    muteButton.setVisibility(View.GONE);
+                    binding.getMuteButton().setVisibility(View.GONE);
                 }
             }
         });
