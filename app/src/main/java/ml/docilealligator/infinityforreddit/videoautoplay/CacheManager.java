@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.LinkedHashMap;
 
+import ml.docilealligator.infinityforreddit.videoautoplay.widget.Container;
+
 /**
  * {@link CacheManager} is a helper interface used by {@link Container} to manage the
  * {@link PlaybackInfo} of {@link ToroPlayer}s. For each {@link ToroPlayer},

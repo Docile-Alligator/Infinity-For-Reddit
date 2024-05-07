@@ -61,8 +61,6 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Provider;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.FetchRedgifsVideoLinks;

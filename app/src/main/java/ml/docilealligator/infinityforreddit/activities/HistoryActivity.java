@@ -24,7 +24,6 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
@@ -65,8 +64,6 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
 
         binding = ActivityHistoryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
 

@@ -18,7 +18,6 @@ package ml.docilealligator.infinityforreddit.videoautoplay.widget;
 
 import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
 import static java.util.Collections.singletonList;
-
 import static ml.docilealligator.infinityforreddit.videoautoplay.widget.Common.allowsToPlay;
 import static ml.docilealligator.infinityforreddit.videoautoplay.widget.Common.findFirst;
 

@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.FetchUserFlairs;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -68,8 +67,6 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
 
         binding = ActivitySelectUserFlairBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        ButterKnife.bind(this);
 
         applyCustomTheme();
 

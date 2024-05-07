@@ -107,10 +107,6 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
     // Binding
-    // NOTE: Deprecated in favor of viewbinding
-    def butterknifeVersion = "10.2.3"
-    implementation "com.jakewharton:butterknife:$butterknifeVersion"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
     compileOnly 'com.android.databinding:viewbinding:8.3.1'
 
     // Events

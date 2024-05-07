@@ -50,9 +50,6 @@ public class AcknowledgementFragment extends Fragment {
         acknowledgements.add(new Acknowledgement("Dagger",
                 "A fast dependency injector for Java and Android.",
                 Uri.parse("https://github.com/google/dagger")));
-        acknowledgements.add(new Acknowledgement("Butter Knife",
-                "Field and method binding for Android views",
-                Uri.parse("https://github.com/JakeWharton/butterknife")));
         acknowledgements.add(new Acknowledgement("Aspect Ratio ImageView",
                 "A simple imageview which scales the width or height aspect with the given ratio",
                 Uri.parse("https://github.com/santalu/aspect-ratio-imageview")));
