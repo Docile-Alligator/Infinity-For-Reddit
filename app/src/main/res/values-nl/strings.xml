@@ -1022,7 +1022,7 @@ Automatisch afspelen van video is uitgeschakeld."</string>
     <string name="action_delete_logs">"Verwijder logs"</string>
 
     <!-- Fuzzy -->
-    <string name="inbox_with_count">"Postvak IN"</string>
+    <string name="inbox_with_count">"Postvak IN (%1$,d)"</string>
     <string name="comment_continue_thread">"Ga verder met draad"</string>
     <string name="settings_swipe_vertically_to_go_back_from_media_title">"Omhoog swipen om terug te gaan van foto's en gif's"</string>
     <string name="settings_hide_post_flair">"Verberg Post Flair"</string>
