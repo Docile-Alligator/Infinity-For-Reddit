@@ -3,22 +3,17 @@ package ml.docilealligator.infinityforreddit.adapters;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ItemTranslationContributorBinding;
 import ml.docilealligator.infinityforreddit.settings.Translation;
 
 public class TranslationFragmentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -37,7 +32,7 @@ public class TranslationFragmentRecyclerViewAdapter extends RecyclerView.Adapter
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new TranslationContributorViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_translation_contributor, parent, false));
+        return new TranslationContributorViewHolder(ItemTranslationContributorBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -45,12 +40,12 @@ public class TranslationFragmentRecyclerViewAdapter extends RecyclerView.Adapter
         if (holder instanceof TranslationContributorViewHolder) {
             Translation translation = translationContributors.get(position);
             if (translation.flagDrawableId < 0) {
-                ((TranslationContributorViewHolder) holder).countryFlagImageView.setImageDrawable(null);
+                ((TranslationContributorViewHolder) holder).binding.countryFlagImageViewItemTranslationContributor.setImageDrawable(null);
             } else {
-                ((TranslationContributorViewHolder) holder).countryFlagImageView.setImageResource(translation.flagDrawableId);
+                ((TranslationContributorViewHolder) holder).binding.countryFlagImageViewItemTranslationContributor.setImageResource(translation.flagDrawableId);
             }
-            ((TranslationContributorViewHolder) holder).languageNameTextView.setText(translation.language);
-            ((TranslationContributorViewHolder) holder).contributorNamesTextView.setText(translation.contributors);
+            ((TranslationContributorViewHolder) holder).binding.languageNameTextViewItemTranslationContributor.setText(translation.language);
+            ((TranslationContributorViewHolder) holder).binding.contributorNamesTextViewItemTranslationContributor.setText(translation.contributors);
         }
     }
 
@@ -60,26 +55,20 @@ public class TranslationFragmentRecyclerViewAdapter extends RecyclerView.Adapter
     }
 
     class TranslationContributorViewHolder extends RecyclerView.ViewHolder {
+        ItemTranslationContributorBinding binding;
 
-        @BindView(R.id.country_flag_image_view_item_translation_contributor)
-        ImageView countryFlagImageView;
-        @BindView(R.id.language_name_text_view_item_translation_contributor)
-        TextView languageNameTextView;
-        @BindView(R.id.contributor_names_text_view_item_translation_contributor)
-        TextView contributorNamesTextView;
+        public TranslationContributorViewHolder(@NonNull ItemTranslationContributorBinding binding) {
+            super(binding.getRoot());
 
-        public TranslationContributorViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            ButterKnife.bind(this, itemView);
+            this.binding = binding;
 
             if (activity.typeface != null) {
-                languageNameTextView.setTypeface(activity.typeface);
-                contributorNamesTextView.setTypeface(activity.typeface);
+                binding.languageNameTextViewItemTranslationContributor.setTypeface(activity.typeface);
+                binding.contributorNamesTextViewItemTranslationContributor.setTypeface(activity.typeface);
             }
 
-            languageNameTextView.setTextColor(primaryTextColor);
-            contributorNamesTextView.setTextColor(secondaryTextColor);
+            binding.languageNameTextViewItemTranslationContributor.setTextColor(primaryTextColor);
+            binding.contributorNamesTextViewItemTranslationContributor.setTextColor(secondaryTextColor);
 
             itemView.setOnClickListener(view -> {
                 Intent intent = new Intent(activity, LinkResolverActivity.class);

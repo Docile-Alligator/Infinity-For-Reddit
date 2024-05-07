@@ -1,21 +1,16 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ItemSelectedSubredditBinding;
 
 public class SelectedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final BaseActivity activity;
@@ -35,15 +30,15 @@ public class SelectedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new SubredditViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_selected_subreddit, parent, false));
+        return new SubredditViewHolder(ItemSelectedSubredditBinding
+                .inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof SubredditViewHolder) {
-            ((SubredditViewHolder) holder).subredditNameTextView.setText(subreddits.get(holder.getBindingAdapterPosition()));
-            ((SubredditViewHolder) holder).deleteButton.setOnClickListener(view -> {
+            ((SubredditViewHolder) holder).binding.subredditNameItemSelectedSubreddit.setText(subreddits.get(holder.getBindingAdapterPosition()));
+            ((SubredditViewHolder) holder).binding.deleteImageViewItemSelectedSubreddit.setOnClickListener(view -> {
                 subreddits.remove(holder.getBindingAdapterPosition());
                 notifyItemRemoved(holder.getBindingAdapterPosition());
             });
@@ -71,20 +66,17 @@ public class SelectedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<
     }
 
     class SubredditViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.subreddit_name_item_selected_subreddit)
-        TextView subredditNameTextView;
-        @BindView(R.id.delete_image_view_item_selected_subreddit)
-        ImageView deleteButton;
+        ItemSelectedSubredditBinding binding;
 
-        public SubredditViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        public SubredditViewHolder(@NonNull ItemSelectedSubredditBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
-            subredditNameTextView.setTextColor(customThemeWrapper.getPrimaryIconColor());
-            deleteButton.setColorFilter(customThemeWrapper.getPrimaryIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
+            binding.subredditNameItemSelectedSubreddit.setTextColor(customThemeWrapper.getPrimaryIconColor());
+            binding.deleteImageViewItemSelectedSubreddit.setColorFilter(customThemeWrapper.getPrimaryIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
 
             if (activity.typeface != null) {
-                subredditNameTextView.setTypeface(activity.typeface);
+                binding.subredditNameItemSelectedSubreddit.setTypeface(activity.typeface);
             }
         }
     }

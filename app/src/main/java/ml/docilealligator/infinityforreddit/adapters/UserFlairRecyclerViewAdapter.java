@@ -3,20 +3,17 @@ package ml.docilealligator.infinityforreddit.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.UserFlair;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ItemUserFlairBinding;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class UserFlairRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -40,26 +37,26 @@ public class UserFlairRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new UserFlairViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user_flair, parent, false));
+        return new UserFlairViewHolder(ItemUserFlairBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof UserFlairViewHolder) {
             if (position == 0) {
-                ((UserFlairViewHolder) holder).userFlairHtmlTextView.setText(R.string.clear_user_flair);
-                ((UserFlairViewHolder) holder).editUserFlairImageView.setVisibility(View.GONE);
+                ((UserFlairViewHolder) holder).binding.userFlairHtmlTextViewItemUserFlair.setText(R.string.clear_user_flair);
+                ((UserFlairViewHolder) holder).binding.editUserFlairImageViewItemUserFlair.setVisibility(View.GONE);
             } else {
                 UserFlair userFlair = userFlairs.get(holder.getBindingAdapterPosition() - 1);
                 if (userFlair.getHtmlText() == null || userFlair.getHtmlText().equals("")) {
-                    ((UserFlairViewHolder) holder).userFlairHtmlTextView.setText(userFlair.getText());
+                    ((UserFlairViewHolder) holder).binding.userFlairHtmlTextViewItemUserFlair.setText(userFlair.getText());
                 } else {
-                    Utils.setHTMLWithImageToTextView(((UserFlairViewHolder) holder).userFlairHtmlTextView, userFlair.getHtmlText(), true);
+                    Utils.setHTMLWithImageToTextView(((UserFlairViewHolder) holder).binding.userFlairHtmlTextViewItemUserFlair, userFlair.getHtmlText(), true);
                 }
                 if (userFlair.isEditable()) {
-                    ((UserFlairViewHolder) holder).editUserFlairImageView.setVisibility(View.VISIBLE);
+                    ((UserFlairViewHolder) holder).binding.editUserFlairImageViewItemUserFlair.setVisibility(View.VISIBLE);
                 } else {
-                    ((UserFlairViewHolder) holder).editUserFlairImageView.setVisibility(View.GONE);
+                    ((UserFlairViewHolder) holder).binding.editUserFlairImageViewItemUserFlair.setVisibility(View.GONE);
                 }
             }
         }
@@ -71,21 +68,17 @@ public class UserFlairRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     class UserFlairViewHolder extends RecyclerView.ViewHolder {
+        ItemUserFlairBinding binding;
 
-        @BindView(R.id.user_flair_html_text_view_item_user_flair)
-        TextView userFlairHtmlTextView;
-        @BindView(R.id.edit_user_flair_image_view_item_user_flair)
-        ImageView editUserFlairImageView;
+        public UserFlairViewHolder(@NonNull ItemUserFlairBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
-        public UserFlairViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-
-            userFlairHtmlTextView.setTextColor(customThemeWrapper.getPrimaryTextColor());
-            editUserFlairImageView.setColorFilter(customThemeWrapper.getPrimaryTextColor(), android.graphics.PorterDuff.Mode.SRC_IN);
+            binding.userFlairHtmlTextViewItemUserFlair.setTextColor(customThemeWrapper.getPrimaryTextColor());
+            binding.editUserFlairImageViewItemUserFlair.setColorFilter(customThemeWrapper.getPrimaryTextColor(), android.graphics.PorterDuff.Mode.SRC_IN);
 
             if (activity.typeface != null) {
-                userFlairHtmlTextView.setTypeface(activity.typeface);
+                binding.userFlairHtmlTextViewItemUserFlair.setTypeface(activity.typeface);
             }
 
             itemView.setOnClickListener(view -> {
@@ -96,7 +89,7 @@ public class UserFlairRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
                 }
             });
 
-            editUserFlairImageView.setOnClickListener(view -> {
+            binding.editUserFlairImageViewItemUserFlair.setOnClickListener(view -> {
                 itemClickListener.onClick(userFlairs.get(getBindingAdapterPosition() - 1), true);
             });
         }

@@ -2,22 +2,17 @@ package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.ReportReason;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ItemReportReasonBinding;
 
 public class ReportReasonRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -37,7 +32,7 @@ public class ReportReasonRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ReasonViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_report_reason, parent, false));
+        return new ReasonViewHolder(ItemReportReasonBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -49,8 +44,8 @@ public class ReportReasonRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
             } else {
                 reportReason = generalReasons.get(holder.getBindingAdapterPosition());
             }
-            ((ReasonViewHolder) holder).reasonTextView.setText(reportReason.getReportReason());
-            ((ReasonViewHolder) holder).checkBox.setChecked(reportReason.isSelected());
+            ((ReasonViewHolder) holder).binding.reasonTextViewItemReportReason.setText(reportReason.getReportReason());
+            ((ReasonViewHolder) holder).binding.checkBoxItemReportReason.setChecked(reportReason.isSelected());
         }
     }
 
@@ -91,24 +86,20 @@ public class ReportReasonRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     }
 
     class ReasonViewHolder extends RecyclerView.ViewHolder {
+        ItemReportReasonBinding binding;
 
-        @BindView(R.id.reason_text_view_item_report_reason)
-        TextView reasonTextView;
-        @BindView(R.id.check_box_item_report_reason)
-        CheckBox checkBox;
+        ReasonViewHolder(@NonNull ItemReportReasonBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
-        ReasonViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-
-            reasonTextView.setTextColor(primaryTextColor);
-            checkBox.setButtonTintList(ColorStateList.valueOf(colorAccent));
+            binding.reasonTextViewItemReportReason.setTextColor(primaryTextColor);
+            binding.checkBoxItemReportReason.setButtonTintList(ColorStateList.valueOf(colorAccent));
 
             if (activity.typeface != null) {
-                reasonTextView.setTypeface(activity.typeface);
+                binding.reasonTextViewItemReportReason.setTypeface(activity.typeface);
             }
 
-            checkBox.setOnClickListener(view -> {
+            binding.checkBoxItemReportReason.setOnClickListener(view -> {
                 for (int i = 0; i < generalReasons.size(); i++) {
                     if (generalReasons.get(i).isSelected()) {
                         generalReasons.get(i).setSelected(false);
@@ -127,13 +118,13 @@ public class ReportReasonRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                 }
 
                 if (getBindingAdapterPosition() >= generalReasons.size()) {
-                    rules.get(getBindingAdapterPosition() - generalReasons.size()).setSelected(checkBox.isChecked());
+                    rules.get(getBindingAdapterPosition() - generalReasons.size()).setSelected(binding.checkBoxItemReportReason.isChecked());
                 } else {
-                    generalReasons.get(getBindingAdapterPosition()).setSelected(checkBox.isChecked());
+                    generalReasons.get(getBindingAdapterPosition()).setSelected(binding.checkBoxItemReportReason.isChecked());
                 }
             });
 
-            itemView.setOnClickListener(view -> checkBox.performClick());
+            itemView.setOnClickListener(view -> binding.checkBoxItemReportReason.performClick());
         }
     }
 }

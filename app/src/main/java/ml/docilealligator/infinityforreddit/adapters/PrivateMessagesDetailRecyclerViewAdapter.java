@@ -25,8 +25,6 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
@@ -43,6 +41,8 @@ import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPrivateMessagesActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ItemPrivateMessageReceivedBinding;
+import ml.docilealligator.infinityforreddit.databinding.ItemPrivateMessageSentBinding;
 import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
@@ -137,9 +137,9 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_MESSAGE_SENT) {
-            return new SentMessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_private_message_sent, parent, false));
+            return new SentMessageViewHolder(ItemPrivateMessageSentBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         } else {
-            return new ReceivedMessageViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_private_message_received, parent, false));
+            return new ReceivedMessageViewHolder(ItemPrivateMessageReceivedBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         }
     }
 
@@ -170,17 +170,17 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                     if (userAvatarUrl == null || userAvatarUrl.equals("")) {
                         mGlide.load(R.drawable.subreddit_default_icon)
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                .into(((ReceivedMessageViewHolder) holder).userAvatarImageView);
+                                .into(((ReceivedMessageViewHolder) holder).binding.avatarImageViewItemPrivateMessageReceived);
                     } else {
                         mGlide.load(userAvatarUrl)
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                 .error(mGlide.load(R.drawable.subreddit_default_icon)
                                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                                .into(((ReceivedMessageViewHolder) holder).userAvatarImageView);
+                                .into(((ReceivedMessageViewHolder) holder).binding.avatarImageViewItemPrivateMessageReceived);
                     }
                 });
 
-                ((ReceivedMessageViewHolder) holder).userAvatarImageView.setOnClickListener(view -> {
+                ((ReceivedMessageViewHolder) holder).binding.avatarImageViewItemPrivateMessageReceived.setOnClickListener(view -> {
                     if (message.isAuthorDeleted()) {
                         return;
                     }
@@ -232,7 +232,7 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
             ((MessageViewHolder) holder).timeTextView.setVisibility(View.GONE);
         }
         if (holder instanceof ReceivedMessageViewHolder) {
-            mGlide.clear(((ReceivedMessageViewHolder) holder).userAvatarImageView);
+            mGlide.clear(((ReceivedMessageViewHolder) holder).binding.avatarImageViewItemPrivateMessageReceived);
         }
     }
 
@@ -296,38 +296,28 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
     }
 
     class SentMessageViewHolder extends MessageViewHolder {
-        @BindView(R.id.message_text_view_item_private_message_sent)
-        TextView messageTextView;
-        @BindView(R.id.time_text_view_item_private_message_sent)
-        TextView timeTextView;
-        @BindView(R.id.copy_image_view_item_private_message_sent)
-        ImageView copyImageView;
 
-        SentMessageViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            setBaseView(messageTextView, timeTextView, copyImageView);
+        SentMessageViewHolder(@NonNull ItemPrivateMessageSentBinding binding) {
+            super(binding.getRoot());
+            setBaseView(binding.messageTextViewItemPrivateMessageSent,
+                    binding.timeTextViewItemPrivateMessageSent,
+                    binding.copyImageViewItemPrivateMessageSent);
 
-            messageTextView.setTextColor(mSentMessageTextColor);
+            binding.messageTextViewItemPrivateMessageSent.setTextColor(mSentMessageTextColor);
         }
     }
 
     class ReceivedMessageViewHolder extends MessageViewHolder {
-        @BindView(R.id.avatar_image_view_item_private_message_received)
-        ImageView userAvatarImageView;
-        @BindView(R.id.message_text_view_item_private_message_received)
-        TextView messageTextView;
-        @BindView(R.id.time_text_view_item_private_message_received)
-        TextView timeTextView;
-        @BindView(R.id.copy_image_view_item_private_message_received)
-        ImageView copyImageView;
+        ItemPrivateMessageReceivedBinding binding;
 
-        ReceivedMessageViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            setBaseView(messageTextView, timeTextView, copyImageView);
+        ReceivedMessageViewHolder(@NonNull ItemPrivateMessageReceivedBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            setBaseView(binding.messageTextViewItemPrivateMessageReceived,
+                    binding.timeTextViewItemPrivateMessageReceived,
+                    binding.copyImageViewItemPrivateMessageReceived);
 
-            messageTextView.setTextColor(mReceivedMessageTextColor);
+            binding.messageTextViewItemPrivateMessageReceived.setTextColor(mReceivedMessageTextColor);
         }
     }
 }
