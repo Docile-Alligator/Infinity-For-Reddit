@@ -7,54 +7,24 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.materialswitch.MaterialSwitch;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
+import ml.docilealligator.infinityforreddit.databinding.FragmentPostHistoryBinding;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class PostHistoryFragment extends Fragment {
 
-    @BindView(R.id.info_text_view_post_history_fragment)
-    TextView infoTextView;
-    @BindView(R.id.mark_posts_as_read_linear_layout_post_history_fragment)
-    LinearLayout markPostsAsReadLinearLayout;
-    @BindView(R.id.mark_posts_as_read_text_view_post_history_fragment)
-    TextView markPostsAsReadTextView;
-    @BindView(R.id.mark_posts_as_read_switch_post_history_fragment)
-    MaterialSwitch markPostsAsReadSwitch;
-    @BindView(R.id.mark_posts_as_read_after_voting_linear_layout_post_history_fragment)
-    LinearLayout markPostsAsReadAfterVotingLinearLayout;
-    @BindView(R.id.mark_posts_as_read_after_voting_text_view_post_history_fragment)
-    TextView markPostsAsReadAfterVotingTextView;
-    @BindView(R.id.mark_posts_as_read_after_voting_switch_post_history_fragment)
-    MaterialSwitch markPostsAsReadAfterVotingSwitch;
-    @BindView(R.id.mark_posts_as_read_on_scroll_linear_layout_post_history_fragment)
-    LinearLayout markPostsAsReadOnScrollLinearLayout;
-    @BindView(R.id.mark_posts_as_read_on_scroll_text_view_post_history_fragment)
-    TextView markPostsAsReadOnScrollTextView;
-    @BindView(R.id.mark_posts_as_read_on_scroll_switch_post_history_fragment)
-    MaterialSwitch markPostsAsReadOnScrollSwitch;
-    @BindView(R.id.hide_read_posts_automatically_linear_layout_post_history_fragment)
-    LinearLayout hideReadPostsAutomaticallyLinearLayout;
-    @BindView(R.id.hide_read_posts_automatically_text_view_post_history_fragment)
-    TextView hideReadPostsAutomaticallyTextView;
-    @BindView(R.id.hide_read_posts_automatically_switch_post_history_fragment)
-    MaterialSwitch hideReadPostsAutomaticallySwitch;
+    private FragmentPostHistoryBinding binding;
     @Inject
     @Named("post_history")
     SharedPreferences postHistorySharedPreferences;
@@ -65,72 +35,70 @@ public class PostHistoryFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_post_history, container, false);
+        binding = FragmentPostHistoryBinding.inflate(inflater, container, false);
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
-        ButterKnife.bind(this, rootView);
-
-        rootView.setBackgroundColor(activity.customThemeWrapper.getBackgroundColor());
+        binding.getRoot().setBackgroundColor(activity.customThemeWrapper.getBackgroundColor());
         applyCustomTheme();
 
         if (activity.typeface != null) {
-            Utils.setFontToAllTextViews(rootView, activity.typeface);
+            Utils.setFontToAllTextViews(binding.getRoot(), activity.typeface);
         }
 
         if (activity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-            infoTextView.setText(R.string.only_for_logged_in_user);
-            markPostsAsReadLinearLayout.setVisibility(View.GONE);
-            markPostsAsReadAfterVotingLinearLayout.setVisibility(View.GONE);
-            markPostsAsReadOnScrollLinearLayout.setVisibility(View.GONE);
-            hideReadPostsAutomaticallyLinearLayout.setVisibility(View.GONE);
-            return rootView;
+            binding.infoTextViewPostHistoryFragment.setText(R.string.only_for_logged_in_user);
+            binding.markPostsAsReadLinearLayoutPostHistoryFragment.setVisibility(View.GONE);
+            binding.markPostsAsReadAfterVotingLinearLayoutPostHistoryFragment.setVisibility(View.GONE);
+            binding.markPostsAsReadOnScrollLinearLayoutPostHistoryFragment.setVisibility(View.GONE);
+            binding.hideReadPostsAutomaticallyLinearLayoutPostHistoryFragment.setVisibility(View.GONE);
+            return binding.getRoot();
         }
 
-        markPostsAsReadSwitch.setChecked(postHistorySharedPreferences.getBoolean(
+        binding.markPostsAsReadSwitchPostHistoryFragment.setChecked(postHistorySharedPreferences.getBoolean(
                 activity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false));
-        markPostsAsReadAfterVotingSwitch.setChecked(postHistorySharedPreferences.getBoolean(
+        binding.markPostsAsReadAfterVotingSwitchPostHistoryFragment.setChecked(postHistorySharedPreferences.getBoolean(
                 activity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false));
-        markPostsAsReadOnScrollSwitch.setChecked(postHistorySharedPreferences.getBoolean(
+        binding.markPostsAsReadOnScrollSwitchPostHistoryFragment.setChecked(postHistorySharedPreferences.getBoolean(
                 activity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_ON_SCROLL_BASE, false));
-        hideReadPostsAutomaticallySwitch.setChecked(postHistorySharedPreferences.getBoolean(
+        binding.hideReadPostsAutomaticallySwitchPostHistoryFragment.setChecked(postHistorySharedPreferences.getBoolean(
                 activity.accountName + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));
 
-        markPostsAsReadLinearLayout.setOnClickListener(view -> {
-            markPostsAsReadSwitch.performClick();
+        binding.markPostsAsReadLinearLayoutPostHistoryFragment.setOnClickListener(view -> {
+            binding.markPostsAsReadSwitchPostHistoryFragment.performClick();
         });
 
-        markPostsAsReadSwitch.setOnCheckedChangeListener((compoundButton, b) ->
+        binding.markPostsAsReadSwitchPostHistoryFragment.setOnCheckedChangeListener((compoundButton, b) ->
                 postHistorySharedPreferences.edit().putBoolean(activity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, b).apply());
 
-        markPostsAsReadAfterVotingLinearLayout.setOnClickListener(view -> markPostsAsReadAfterVotingSwitch.performClick());
+        binding.markPostsAsReadAfterVotingLinearLayoutPostHistoryFragment.setOnClickListener(view -> binding.markPostsAsReadAfterVotingSwitchPostHistoryFragment.performClick());
 
-        markPostsAsReadAfterVotingSwitch.setOnCheckedChangeListener((compoundButton, b) ->
+        binding.markPostsAsReadAfterVotingSwitchPostHistoryFragment.setOnCheckedChangeListener((compoundButton, b) ->
                 postHistorySharedPreferences.edit().putBoolean(activity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, b).apply());
 
-        markPostsAsReadOnScrollLinearLayout.setOnClickListener(view -> markPostsAsReadOnScrollSwitch.performClick());
+        binding.markPostsAsReadOnScrollLinearLayoutPostHistoryFragment.setOnClickListener(view -> binding.markPostsAsReadOnScrollSwitchPostHistoryFragment.performClick());
 
-        markPostsAsReadOnScrollSwitch.setOnCheckedChangeListener((compoundButton, b) -> postHistorySharedPreferences.edit().putBoolean(activity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_ON_SCROLL_BASE, b).apply());
+        binding.markPostsAsReadOnScrollSwitchPostHistoryFragment.setOnCheckedChangeListener((compoundButton, b) -> postHistorySharedPreferences.edit().putBoolean(activity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_ON_SCROLL_BASE, b).apply());
 
-        hideReadPostsAutomaticallyLinearLayout.setOnClickListener(view -> hideReadPostsAutomaticallySwitch.performClick());
+        binding.hideReadPostsAutomaticallyLinearLayoutPostHistoryFragment.setOnClickListener(view -> binding.hideReadPostsAutomaticallySwitchPostHistoryFragment.performClick());
 
-        hideReadPostsAutomaticallySwitch.setOnCheckedChangeListener((compoundButton, b) -> postHistorySharedPreferences.edit().putBoolean(activity.accountName + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, b).apply());
+        binding.hideReadPostsAutomaticallySwitchPostHistoryFragment.setOnCheckedChangeListener((compoundButton, b) -> postHistorySharedPreferences.edit().putBoolean(activity.accountName + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, b).apply());
 
-        return rootView;
+        return binding.getRoot();
     }
 
     private void applyCustomTheme() {
-        infoTextView.setTextColor(activity.customThemeWrapper.getSecondaryTextColor());
+        binding.infoTextViewPostHistoryFragment.setTextColor(activity.customThemeWrapper.getSecondaryTextColor());
         Drawable infoDrawable = Utils.getTintedDrawable(activity, R.drawable.ic_info_preference_24dp, activity.customThemeWrapper.getPrimaryIconColor());
-        infoTextView.setCompoundDrawablesWithIntrinsicBounds(infoDrawable, null, null, null);
+        binding.infoTextViewPostHistoryFragment.setCompoundDrawablesWithIntrinsicBounds(infoDrawable, null, null, null);
         int primaryTextColor = activity.customThemeWrapper.getPrimaryTextColor();
-        markPostsAsReadTextView.setTextColor(primaryTextColor);
-        markPostsAsReadAfterVotingTextView.setTextColor(primaryTextColor);
-        markPostsAsReadOnScrollTextView.setTextColor(primaryTextColor);
-        hideReadPostsAutomaticallyTextView.setTextColor(primaryTextColor);
+        binding.markPostsAsReadTextViewPostHistoryFragment.setTextColor(primaryTextColor);
+        binding.markPostsAsReadAfterVotingTextViewPostHistoryFragment.setTextColor(primaryTextColor);
+        binding.markPostsAsReadOnScrollTextViewPostHistoryFragment.setTextColor(primaryTextColor);
+        binding.hideReadPostsAutomaticallyTextViewPostHistoryFragment.setTextColor(primaryTextColor);
     }
 
     @Override
