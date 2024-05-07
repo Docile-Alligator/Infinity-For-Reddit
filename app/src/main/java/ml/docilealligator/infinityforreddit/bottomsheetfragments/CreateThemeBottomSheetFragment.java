@@ -6,17 +6,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.databinding.FragmentCreateThemeBottomSheetBinding;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 /**
@@ -24,14 +22,6 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
  */
 public class CreateThemeBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
-    @BindView(R.id.import_theme_text_view_create_theme_bottom_sheet_fragment)
-    TextView importTextView;
-    @BindView(R.id.light_theme_text_view_create_theme_bottom_sheet_fragment)
-    TextView lightThemeTextView;
-    @BindView(R.id.dark_theme_text_view_create_theme_bottom_sheet_fragment)
-    TextView darkThemeTextView;
-    @BindView(R.id.amoled_theme_text_view_create_theme_bottom_sheet_fragment)
-    TextView amoledThemeTextView;
     private BaseActivity activity;
 
     public interface SelectBaseThemeBottomSheetFragmentListener {
@@ -43,17 +33,16 @@ public class CreateThemeBottomSheetFragment extends LandscapeExpandedRoundedBott
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_create_theme_bottom_sheet, container, false);
-        ButterKnife.bind(this, rootView);
+        FragmentCreateThemeBottomSheetBinding binding = FragmentCreateThemeBottomSheetBinding.inflate(inflater, container, false);
 
-        importTextView.setOnClickListener(view -> {
+        binding.importThemeTextViewCreateThemeBottomSheetFragment.setOnClickListener(view -> {
             ((SelectBaseThemeBottomSheetFragmentListener) activity).importTheme();
             dismiss();
         });
 
-        lightThemeTextView.setOnClickListener(view -> {
+        binding.lightThemeTextViewCreateThemeBottomSheetFragment.setOnClickListener(view -> {
             Intent intent = new Intent(activity, CustomizeThemeActivity.class);
             intent.putExtra(CustomizeThemeActivity.EXTRA_CREATE_THEME, true);
             intent.putExtra(CustomizeThemeActivity.EXTRA_IS_PREDEFIINED_THEME, true);
@@ -62,7 +51,7 @@ public class CreateThemeBottomSheetFragment extends LandscapeExpandedRoundedBott
             dismiss();
         });
 
-        darkThemeTextView.setOnClickListener(view -> {
+        binding.darkThemeTextViewCreateThemeBottomSheetFragment.setOnClickListener(view -> {
             Intent intent = new Intent(activity, CustomizeThemeActivity.class);
             intent.putExtra(CustomizeThemeActivity.EXTRA_CREATE_THEME, true);
             intent.putExtra(CustomizeThemeActivity.EXTRA_IS_PREDEFIINED_THEME, true);
@@ -71,7 +60,7 @@ public class CreateThemeBottomSheetFragment extends LandscapeExpandedRoundedBott
             dismiss();
         });
 
-        amoledThemeTextView.setOnClickListener(view -> {
+        binding.amoledThemeTextViewCreateThemeBottomSheetFragment.setOnClickListener(view -> {
             Intent intent = new Intent(activity, CustomizeThemeActivity.class);
             intent.putExtra(CustomizeThemeActivity.EXTRA_CREATE_THEME, true);
             intent.putExtra(CustomizeThemeActivity.EXTRA_IS_PREDEFIINED_THEME, true);
@@ -81,9 +70,9 @@ public class CreateThemeBottomSheetFragment extends LandscapeExpandedRoundedBott
         });
 
         if (activity.typeface != null) {
-            Utils.setFontToAllTextViews(rootView, activity.typeface);
+            Utils.setFontToAllTextViews(binding.getRoot(), activity.typeface);
         }
-        return rootView;
+        return binding.getRoot();
     }
 
     @Override

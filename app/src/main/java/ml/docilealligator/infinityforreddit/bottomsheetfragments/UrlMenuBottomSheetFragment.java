@@ -11,32 +11,22 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.databinding.FragmentUrlMenuBottomSheetBinding;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class UrlMenuBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     public static final String EXTRA_URL = "EU";
-    @BindView(R.id.link_text_view_url_menu_bottom_sheet_fragment)
-    TextView linkTextView;
-    @BindView(R.id.open_link_text_view_url_menu_bottom_sheet_fragment)
-    TextView openLinkTextView;
-    @BindView(R.id.copy_link_text_view_url_menu_bottom_sheet_fragment)
-    TextView copyLinkTextView;
-    @BindView(R.id.share_link_text_view_url_menu_bottom_sheet_fragment)
-    TextView shareLinkTextView;
+
     private Activity activity;
     private String url;
 
@@ -54,10 +44,9 @@ public class UrlMenuBottomSheetFragment extends LandscapeExpandedRoundedBottomSh
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_url_menu_bottom_sheet, container, false);
-        ButterKnife.bind(this, rootView);
+        FragmentUrlMenuBottomSheetBinding binding = FragmentUrlMenuBottomSheetBinding.inflate(inflater, container, false);
 
         url = getArguments().getString(EXTRA_URL);
 
@@ -66,16 +55,16 @@ public class UrlMenuBottomSheetFragment extends LandscapeExpandedRoundedBottomSh
             url = "https://www.reddit.com" + url;
         }
 
-        linkTextView.setText(url);
+        binding.linkTextViewUrlMenuBottomSheetFragment.setText(url);
 
-        openLinkTextView.setOnClickListener(view -> {
+        binding.openLinkTextViewUrlMenuBottomSheetFragment.setOnClickListener(view -> {
             Intent intent = new Intent(activity, LinkResolverActivity.class);
             intent.setData(Uri.parse(url));
             activity.startActivity(intent);
             dismiss();
         });
 
-        copyLinkTextView.setOnClickListener(view -> {
+        binding.copyLinkTextViewUrlMenuBottomSheetFragment.setOnClickListener(view -> {
             ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
             if (clipboard != null) {
                 ClipData clip = ClipData.newPlainText("simple text", url);
@@ -89,7 +78,7 @@ public class UrlMenuBottomSheetFragment extends LandscapeExpandedRoundedBottomSh
             dismiss();
         });
 
-        shareLinkTextView.setOnClickListener(view -> {
+        binding.shareLinkTextViewUrlMenuBottomSheetFragment.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_TEXT, url);
@@ -105,15 +94,15 @@ public class UrlMenuBottomSheetFragment extends LandscapeExpandedRoundedBottomSh
 
         if (activity instanceof BaseActivity) {
             if (((BaseActivity) activity).typeface != null) {
-                Utils.setFontToAllTextViews(rootView, ((BaseActivity) activity).typeface);
+                Utils.setFontToAllTextViews(binding.getRoot(), ((BaseActivity) activity).typeface);
             }
         } else if (activity instanceof ViewRedditGalleryActivity) {
             if (((ViewRedditGalleryActivity) activity).typeface != null) {
-                Utils.setFontToAllTextViews(rootView, ((ViewRedditGalleryActivity) activity).typeface);
+                Utils.setFontToAllTextViews(binding.getRoot(), ((ViewRedditGalleryActivity) activity).typeface);
             }
         }
 
-        return rootView;
+        return binding.getRoot();
     }
 
     @Override

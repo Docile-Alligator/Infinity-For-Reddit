@@ -6,15 +6,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.databinding.FragmentRandomBottomSheetBinding;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class RandomBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
@@ -25,15 +22,6 @@ public class RandomBottomSheetFragment extends LandscapeExpandedRoundedBottomShe
     public static final int RANDOM_NSFW_SUBREDDIT = 2;
     public static final int RANDOM_NSFW_POST = 3;
 
-    @BindView(R.id.random_subreddit_text_view_random_bottom_sheet_fragment)
-    TextView randomSubredditTextView;
-    @BindView(R.id.random_post_text_view_random_bottom_sheet_fragment)
-    TextView randomPostTextView;
-    @BindView(R.id.random_nsfw_subreddit_text_view_random_bottom_sheet_fragment)
-    TextView randomNSFWSubredditTextView;
-    @BindView(R.id.random_nsfw_post_text_view_random_bottom_sheet_fragment)
-    TextView randomNSFWPostTextView;
-
     private RandomOptionSelectionCallback activity;
 
     public RandomBottomSheetFragment() {
@@ -41,36 +29,34 @@ public class RandomBottomSheetFragment extends LandscapeExpandedRoundedBottomShe
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_random_bottom_sheet, container, false);
-
-        ButterKnife.bind(this, rootView);
+        FragmentRandomBottomSheetBinding binding = FragmentRandomBottomSheetBinding.inflate(inflater, container, false);
 
         boolean isNSFW = getArguments().getBoolean(EXTRA_IS_NSFW, false);
 
         if (!isNSFW) {
-            randomNSFWSubredditTextView.setVisibility(View.GONE);
-            randomNSFWPostTextView.setVisibility(View.GONE);
+            binding.randomNsfwSubredditTextViewRandomBottomSheetFragment.setVisibility(View.GONE);
+            binding.randomNsfwPostTextViewRandomBottomSheetFragment.setVisibility(View.GONE);
         } else {
-            randomNSFWSubredditTextView.setOnClickListener(view -> {
+            binding.randomNsfwSubredditTextViewRandomBottomSheetFragment.setOnClickListener(view -> {
                 activity.randomOptionSelected(RANDOM_NSFW_SUBREDDIT);
                 dismiss();
             });
 
-            randomNSFWPostTextView.setOnClickListener(view -> {
+            binding.randomNsfwPostTextViewRandomBottomSheetFragment.setOnClickListener(view -> {
                 activity.randomOptionSelected(RANDOM_NSFW_POST);
                 dismiss();
             });
         }
 
-        randomSubredditTextView.setOnClickListener(view -> {
+        binding.randomSubredditTextViewRandomBottomSheetFragment.setOnClickListener(view -> {
             activity.randomOptionSelected(RANDOM_SUBREDDIT);
             dismiss();
         });
 
-        randomPostTextView.setOnClickListener(view -> {
+        binding.randomPostTextViewRandomBottomSheetFragment.setOnClickListener(view -> {
             activity.randomOptionSelected(RANDOM_POST);
             dismiss();
         });
@@ -78,11 +64,11 @@ public class RandomBottomSheetFragment extends LandscapeExpandedRoundedBottomShe
         Activity baseActivity = getActivity();
         if (baseActivity instanceof BaseActivity) {
             if (((BaseActivity) activity).typeface != null) {
-                Utils.setFontToAllTextViews(rootView, ((BaseActivity) activity).typeface);
+                Utils.setFontToAllTextViews(binding.getRoot(), ((BaseActivity) activity).typeface);
             }
         }
 
-        return rootView;
+        return binding.getRoot();
     }
 
     @Override
