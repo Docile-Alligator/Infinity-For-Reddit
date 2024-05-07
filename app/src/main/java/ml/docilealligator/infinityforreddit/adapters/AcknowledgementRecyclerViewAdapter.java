@@ -2,20 +2,16 @@ package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
+import ml.docilealligator.infinityforreddit.databinding.ItemAcknowledgementBinding;
 import ml.docilealligator.infinityforreddit.settings.Acknowledgement;
 
 public class AcknowledgementRecyclerViewAdapter extends RecyclerView.Adapter<AcknowledgementRecyclerViewAdapter.AcknowledgementViewHolder> {
@@ -30,15 +26,15 @@ public class AcknowledgementRecyclerViewAdapter extends RecyclerView.Adapter<Ack
     @NonNull
     @Override
     public AcknowledgementViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new AcknowledgementViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_acknowledgement, parent, false));
+        return new AcknowledgementViewHolder(ItemAcknowledgementBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull AcknowledgementViewHolder holder, int position) {
         Acknowledgement acknowledgement = acknowledgements.get(holder.getBindingAdapterPosition());
         if (acknowledgement != null) {
-            holder.nameTextView.setText(acknowledgement.getName());
-            holder.introductionTextView.setText(acknowledgement.getIntroduction());
+            holder.binding.nameTextViewItemAcknowledgement.setText(acknowledgement.getName());
+            holder.binding.introductionTextViewItemAcknowledgement.setText(acknowledgement.getIntroduction());
             holder.itemView.setOnClickListener(view -> {
                 if (activity != null) {
                     Intent intent = new Intent(activity, LinkResolverActivity.class);
@@ -55,23 +51,18 @@ public class AcknowledgementRecyclerViewAdapter extends RecyclerView.Adapter<Ack
     }
 
     class AcknowledgementViewHolder extends RecyclerView.ViewHolder {
-        View itemView;
-        @BindView(R.id.name_text_view_item_acknowledgement)
-        TextView nameTextView;
-        @BindView(R.id.introduction_text_view_item_acknowledgement)
-        TextView introductionTextView;
+        ItemAcknowledgementBinding binding;
 
-        AcknowledgementViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            this.itemView = itemView;
+        AcknowledgementViewHolder(@NonNull ItemAcknowledgementBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
-            nameTextView.setTextColor(activity.customThemeWrapper.getPrimaryTextColor());
-            introductionTextView.setTextColor(activity.customThemeWrapper.getSecondaryTextColor());
+            binding.nameTextViewItemAcknowledgement.setTextColor(activity.customThemeWrapper.getPrimaryTextColor());
+            binding.introductionTextViewItemAcknowledgement.setTextColor(activity.customThemeWrapper.getSecondaryTextColor());
 
             if (activity.typeface != null) {
-                nameTextView.setTypeface(activity.typeface);
-                introductionTextView.setTypeface(activity.typeface);
+                binding.nameTextViewItemAcknowledgement.setTypeface(activity.typeface);
+                binding.introductionTextViewItemAcknowledgement.setTypeface(activity.typeface);
             }
         }
     }
