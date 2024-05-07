@@ -52,6 +52,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+    namespace 'ml.docilealligator.infinityforreddit'
 }
 
 dependencies {
