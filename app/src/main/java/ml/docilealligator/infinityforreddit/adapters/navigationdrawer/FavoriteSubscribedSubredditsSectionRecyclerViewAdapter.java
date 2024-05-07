@@ -2,10 +2,7 @@ package ml.docilealligator.infinityforreddit.adapters.navigationdrawer;
 
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,15 +13,14 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ItemNavDrawerMenuGroupTitleBinding;
+import ml.docilealligator.infinityforreddit.databinding.ItemNavDrawerSubscribedThingBinding;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import pl.droidsonroids.gif.GifImageView;
 
 public class FavoriteSubscribedSubredditsSectionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -62,22 +58,22 @@ public class FavoriteSubscribedSubredditsSectionRecyclerViewAdapter extends Recy
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_MENU_GROUP_TITLE) {
-            return new MenuGroupTitleViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_nav_drawer_menu_group_title, parent, false));
+            return new MenuGroupTitleViewHolder(ItemNavDrawerMenuGroupTitleBinding
+                    .inflate(LayoutInflater.from(parent.getContext()), parent, false));
         } else {
-            return new FavoriteSubscribedThingViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_nav_drawer_subscribed_thing, parent, false));
+            return new FavoriteSubscribedThingViewHolder(ItemNavDrawerSubscribedThingBinding
+                    .inflate(LayoutInflater.from(parent.getContext()), parent, false));
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MenuGroupTitleViewHolder) {
-            ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.favorites);
+            ((MenuGroupTitleViewHolder) holder).binding.titleTextViewItemNavDrawerMenuGroupTitle.setText(R.string.favorites);
             if (collapseFavoriteSubredditsSection) {
-                ((MenuGroupTitleViewHolder) holder).collapseIndicatorImageView.setImageResource(R.drawable.ic_baseline_arrow_drop_up_24dp);
+                ((MenuGroupTitleViewHolder) holder).binding.collapseIndicatorImageViewItemNavDrawerMenuGroupTitle.setImageResource(R.drawable.ic_baseline_arrow_drop_up_24dp);
             } else {
-                ((MenuGroupTitleViewHolder) holder).collapseIndicatorImageView.setImageResource(R.drawable.ic_baseline_arrow_drop_down_24dp);
+                ((MenuGroupTitleViewHolder) holder).binding.collapseIndicatorImageViewItemNavDrawerMenuGroupTitle.setImageResource(R.drawable.ic_baseline_arrow_drop_down_24dp);
             }
 
             holder.itemView.setOnClickListener(view -> {
@@ -94,17 +90,17 @@ public class FavoriteSubscribedSubredditsSectionRecyclerViewAdapter extends Recy
             SubscribedSubredditData subreddit = favoriteSubscribedSubreddits.get(position - 1);
             String subredditName = subreddit.getName();
             String iconUrl = subreddit.getIconUrl();
-            ((FavoriteSubscribedThingViewHolder) holder).subredditNameTextView.setText(subredditName);
+            ((FavoriteSubscribedThingViewHolder) holder).binding.thingNameTextViewItemNavDrawerSubscribedThing.setText(subredditName);
             if (iconUrl != null && !iconUrl.equals("")) {
                 glide.load(iconUrl)
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                         .error(glide.load(R.drawable.subreddit_default_icon)
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                        .into(((FavoriteSubscribedThingViewHolder) holder).iconGifImageView);
+                        .into(((FavoriteSubscribedThingViewHolder) holder).binding.thingIconGifImageViewItemNavDrawerSubscribedThing);
             } else {
                 glide.load(R.drawable.subreddit_default_icon)
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                        .into(((FavoriteSubscribedThingViewHolder) holder).iconGifImageView);
+                        .into(((FavoriteSubscribedThingViewHolder) holder).binding.thingIconGifImageViewItemNavDrawerSubscribedThing);
             }
 
             holder.itemView.setOnClickListener(view -> {
@@ -125,7 +121,7 @@ public class FavoriteSubscribedSubredditsSectionRecyclerViewAdapter extends Recy
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         if (holder instanceof FavoriteSubscribedThingViewHolder) {
-            glide.clear(((FavoriteSubscribedThingViewHolder) holder).iconGifImageView);
+            glide.clear(((FavoriteSubscribedThingViewHolder) holder).binding.thingIconGifImageViewItemNavDrawerSubscribedThing);
         }
     }
 
@@ -135,35 +131,29 @@ public class FavoriteSubscribedSubredditsSectionRecyclerViewAdapter extends Recy
     }
 
     class MenuGroupTitleViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.title_text_view_item_nav_drawer_menu_group_title)
-        TextView titleTextView;
-        @BindView(R.id.collapse_indicator_image_view_item_nav_drawer_menu_group_title)
-        ImageView collapseIndicatorImageView;
+        ItemNavDrawerMenuGroupTitleBinding binding;
 
-        MenuGroupTitleViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        MenuGroupTitleViewHolder(@NonNull ItemNavDrawerMenuGroupTitleBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
             if (baseActivity.typeface != null) {
-                titleTextView.setTypeface(baseActivity.typeface);
+                binding.titleTextViewItemNavDrawerMenuGroupTitle.setTypeface(baseActivity.typeface);
             }
-            titleTextView.setTextColor(secondaryTextColor);
-            collapseIndicatorImageView.setColorFilter(secondaryTextColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            binding.titleTextViewItemNavDrawerMenuGroupTitle.setTextColor(secondaryTextColor);
+            binding.collapseIndicatorImageViewItemNavDrawerMenuGroupTitle.setColorFilter(secondaryTextColor, android.graphics.PorterDuff.Mode.SRC_IN);
         }
     }
 
     class FavoriteSubscribedThingViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.thing_icon_gif_image_view_item_nav_drawer_subscribed_thing)
-        GifImageView iconGifImageView;
-        @BindView(R.id.thing_name_text_view_item_nav_drawer_subscribed_thing)
-        TextView subredditNameTextView;
+        ItemNavDrawerSubscribedThingBinding binding;
 
-        FavoriteSubscribedThingViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        FavoriteSubscribedThingViewHolder(@NonNull ItemNavDrawerSubscribedThingBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
             if (baseActivity.typeface != null) {
-                subredditNameTextView.setTypeface(baseActivity.typeface);
+                binding.thingNameTextViewItemNavDrawerSubscribedThing.setTypeface(baseActivity.typeface);
             }
-            subredditNameTextView.setTextColor(primaryTextColor);
+            binding.thingNameTextViewItemNavDrawerSubscribedThing.setTextColor(primaryTextColor);
         }
     }
 }

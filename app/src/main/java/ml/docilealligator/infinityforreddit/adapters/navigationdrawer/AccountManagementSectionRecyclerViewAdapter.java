@@ -1,10 +1,7 @@
 package ml.docilealligator.infinityforreddit.adapters.navigationdrawer;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -16,14 +13,13 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import pl.droidsonroids.gif.GifImageView;
+import ml.docilealligator.infinityforreddit.databinding.ItemNavDrawerAccountBinding;
+import ml.docilealligator.infinityforreddit.databinding.ItemNavDrawerMenuItemBinding;
 
 public class AccountManagementSectionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -62,12 +58,10 @@ public class AccountManagementSectionRecyclerViewAdapter extends RecyclerView.Ad
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ACCOUNT) {
-            return new AccountViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_nav_drawer_account, parent, false));
+            return new AccountViewHolder(ItemNavDrawerAccountBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         }
 
-        return new MenuItemViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_nav_drawer_menu_item, parent, false));
+        return new MenuItemViewHolder(ItemNavDrawerMenuItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
@@ -76,8 +70,8 @@ public class AccountManagementSectionRecyclerViewAdapter extends RecyclerView.Ad
             glide.load(accounts.get(position).getProfileImageUrl())
                     .error(glide.load(R.drawable.subreddit_default_icon))
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
-                    .into(((AccountViewHolder) holder).profileImageGifImageView);
-            ((AccountViewHolder) holder).usernameTextView.setText(accounts.get(position).getAccountName());
+                    .into(((AccountViewHolder) holder).binding.profileImageItemAccount);
+            ((AccountViewHolder) holder).binding.usernameTextViewItemAccount.setText(accounts.get(position).getAccountName());
             holder.itemView.setOnClickListener(view ->
                     itemClickListener.onAccountClick(accounts.get(position).getAccountName()));
         } else if (holder instanceof MenuItemViewHolder) {
@@ -102,8 +96,8 @@ public class AccountManagementSectionRecyclerViewAdapter extends RecyclerView.Ad
             }
 
             if (stringId != 0) {
-                ((MenuItemViewHolder) holder).menuTextView.setText(stringId);
-                ((MenuItemViewHolder) holder).imageView.setImageDrawable(ContextCompat.getDrawable(baseActivity, drawableId));
+                ((MenuItemViewHolder) holder).binding.textViewItemNavDrawerMenuItem.setText(stringId);
+                ((MenuItemViewHolder) holder).binding.imageViewItemNavDrawerMenuItem.setImageDrawable(ContextCompat.getDrawable(baseActivity, drawableId));
             }
             int finalStringId = stringId;
             holder.itemView.setOnClickListener(view -> itemClickListener.onMenuClick(finalStringId));
@@ -133,35 +127,29 @@ public class AccountManagementSectionRecyclerViewAdapter extends RecyclerView.Ad
     }
 
     class AccountViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.profile_image_item_account)
-        GifImageView profileImageGifImageView;
-        @BindView(R.id.username_text_view_item_account)
-        TextView usernameTextView;
+        ItemNavDrawerAccountBinding binding;
 
-        AccountViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        AccountViewHolder(@NonNull ItemNavDrawerAccountBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
             if (baseActivity.typeface != null) {
-                usernameTextView.setTypeface(baseActivity.typeface);
+                binding.usernameTextViewItemAccount.setTypeface(baseActivity.typeface);
             }
-            usernameTextView.setTextColor(primaryTextColor);
+            binding.usernameTextViewItemAccount.setTextColor(primaryTextColor);
         }
     }
 
     class MenuItemViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.image_view_item_nav_drawer_menu_item)
-        ImageView imageView;
-        @BindView(R.id.text_view_item_nav_drawer_menu_item)
-        TextView menuTextView;
+        ItemNavDrawerMenuItemBinding binding;
 
-        MenuItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        MenuItemViewHolder(@NonNull ItemNavDrawerMenuItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
             if (baseActivity.typeface != null) {
-                menuTextView.setTypeface(baseActivity.typeface);
+                binding.textViewItemNavDrawerMenuItem.setTypeface(baseActivity.typeface);
             }
-            menuTextView.setTextColor(primaryTextColor);
-            imageView.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            binding.textViewItemNavDrawerMenuItem.setTextColor(primaryTextColor);
+            binding.imageViewItemNavDrawerMenuItem.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         }
     }
 }
