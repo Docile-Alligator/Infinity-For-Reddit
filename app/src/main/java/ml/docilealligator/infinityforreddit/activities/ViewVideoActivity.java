@@ -56,7 +56,7 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionOverride;
 import com.google.android.exoplayer2.ui.PlayerControlView;
-import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
@@ -459,24 +459,27 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 }
             });
         } else {
-            PlayerView videoPlayerView = findViewById(R.id.player_view_view_video_activity);
+            StyledPlayerView videoPlayerView = findViewById(R.id.player_view_view_video_activity);
             videoPlayerView.setPlayer(player);
-            videoPlayerView.setControllerVisibilityListener(visibility -> {
-                switch (visibility) {
-                    case View.GONE:
-                        getWindow().getDecorView().setSystemUiVisibility(
-                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
-                        break;
-                    case View.VISIBLE:
-                        getWindow().getDecorView().setSystemUiVisibility(
-                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            videoPlayerView.setControllerVisibilityListener(new StyledPlayerView.ControllerVisibilityListener() {
+                @Override
+                public void onVisibilityChanged(int visibility) {
+                    switch (visibility) {
+                        case View.GONE:
+                            getWindow().getDecorView().setSystemUiVisibility(
+                                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                            break;
+                        case View.VISIBLE:
+                            getWindow().getDecorView().setSystemUiVisibility(
+                                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                    }
                 }
             });
         }

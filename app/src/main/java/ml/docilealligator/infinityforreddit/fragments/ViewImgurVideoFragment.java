@@ -30,6 +30,7 @@ import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
@@ -113,22 +114,25 @@ public class ViewImgurVideoFragment extends Fragment {
             }
         }
 
-        binding.getRoot().setControllerVisibilityListener(visibility -> {
-            switch (visibility) {
-                case View.GONE:
-                    activity.getWindow().getDecorView().setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_IMMERSIVE);
-                    break;
-                case View.VISIBLE:
-                    activity.getWindow().getDecorView().setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        binding.getRoot().setControllerVisibilityListener(new StyledPlayerView.ControllerVisibilityListener() {
+            @Override
+            public void onVisibilityChanged(int visibility) {
+                switch (visibility) {
+                    case View.GONE:
+                        activity.getWindow().getDecorView().setSystemUiVisibility(
+                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                        break;
+                    case View.VISIBLE:
+                        activity.getWindow().getDecorView().setSystemUiVisibility(
+                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                }
             }
         });
 

@@ -35,7 +35,7 @@ import com.google.android.exoplayer2.source.BehindLiveWindowException;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.common.collect.ImmutableList;
 
 import ml.docilealligator.infinityforreddit.R;
@@ -85,7 +85,7 @@ public class ExoPlayable extends PlayableImpl {
     }
 
     @Override
-    public void setPlayerView(@Nullable PlayerView playerView) {
+    public void setPlayerView(@Nullable StyledPlayerView playerView) {
         // This will also clear these flags
         if (playerView != this.playerView) {
             this.lastSeenTrackGroupArray = null;

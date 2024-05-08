@@ -32,7 +32,7 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.text.Cue;
 import com.google.android.exoplayer2.text.CueGroup;
 import com.google.android.exoplayer2.text.TextOutput;
-import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.video.VideoSize;
 
 import java.util.List;
@@ -43,7 +43,7 @@ import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
 import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
 
 /**
- * Define an interface to control a playback, specific for {@link SimpleExoPlayer} and {@link PlayerView}.
+ * Define an interface to control a playback, specific for {@link SimpleExoPlayer} and {@link StyledPlayerView}.
  * <p>
  * This interface is designed to be reused across Config change. Implementation must not hold any
  * strong reference to Activity, and if it supports any kind of that, make sure to implicitly clean
@@ -63,7 +63,7 @@ public interface Playable {
      * - If there is non-trivial PlaybackInfo, update it to the SimpleExoPlayer.
      * - If client request to prepare MediaSource, then prepare it.
      * <p>
-     * This method must be called before {@link #setPlayerView(PlayerView)}.
+     * This method must be called before {@link #setPlayerView(com.google.android.exoplayer2.ui.StyledPlayerView)}.
      *
      * @param prepareSource if {@code true}, also prepare the MediaSource when preparing the Player,
      *                      if {@code false} just do nothing for the MediaSource.
@@ -71,7 +71,7 @@ public interface Playable {
     void prepare(boolean prepareSource);
 
     /**
-     * Set the {@link PlayerView} for this Playable. It is expected that a playback doesn't require a
+     * Set the {@link StyledPlayerView} for this Playable. It is expected that a playback doesn't require a
      * UI, so this setup is optional. But it must be called after the SimpleExoPlayer is prepared,
      * that is after {@link #prepare(boolean)} and before {@link #release()}.
      * <p>
@@ -80,15 +80,15 @@ public interface Playable {
      *
      * @param playerView the PlayerView to set to the SimpleExoPlayer.
      */
-    void setPlayerView(@Nullable PlayerView playerView);
+    void setPlayerView(@Nullable StyledPlayerView playerView);
 
     /**
-     * Get current {@link PlayerView} of this Playable.
+     * Get current {@link StyledPlayerView} of this Playable.
      *
      * @return current PlayerView instance of this Playable.
      */
     @Nullable
-    PlayerView getPlayerView();
+    StyledPlayerView getPlayerView();
 
     /**
      * Start the playback. If the {@link MediaSource} is not prepared, then also prepare it.

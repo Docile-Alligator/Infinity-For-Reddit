@@ -31,7 +31,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 
 import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
 import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
@@ -61,7 +61,7 @@ class PlayableImpl implements Playable {
 
     protected ToroExoPlayer player; // on-demand, cached
     protected MediaSource mediaSource;  // on-demand, since we do not reuse MediaSource now.
-    protected PlayerView playerView; // on-demand, not always required.
+    protected StyledPlayerView playerView; // on-demand, not always required.
 
     private boolean sourcePrepared = false;
     private boolean listenerApplied = false;
@@ -83,13 +83,13 @@ class PlayableImpl implements Playable {
 
     @CallSuper
     @Override
-    public void setPlayerView(@Nullable PlayerView playerView) {
+    public void setPlayerView(@Nullable StyledPlayerView playerView) {
         if (this.playerView == playerView) return;
         if (playerView == null) {
             this.playerView.setPlayer(null);
         } else {
             if (this.player != null) {
-                PlayerView.switchTargetView(this.player.getPlayer(), this.playerView, playerView);
+                StyledPlayerView.switchTargetView(this.player.getPlayer(), this.playerView, playerView);
             }
         }
 
@@ -97,7 +97,7 @@ class PlayableImpl implements Playable {
     }
 
     @Override
-    public final PlayerView getPlayerView() {
+    public final StyledPlayerView getPlayerView() {
         return this.playerView;
     }
 

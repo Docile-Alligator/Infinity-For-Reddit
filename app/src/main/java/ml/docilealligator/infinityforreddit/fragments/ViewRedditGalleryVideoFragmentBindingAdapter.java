@@ -4,7 +4,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
 
@@ -35,7 +35,7 @@ class ViewRedditGalleryVideoFragmentBindingAdapter {
         return binding.getRoot();
     }
 
-    PlayerView getPlayerView() {
+    StyledPlayerView getPlayerView() {
         return binding.playerViewViewRedditGalleryVideoFragment;
     }
 

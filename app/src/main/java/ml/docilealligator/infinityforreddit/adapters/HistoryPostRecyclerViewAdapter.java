@@ -47,7 +47,7 @@ import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.DefaultTimeBar;
-import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.ui.TimeBar;
 import com.google.android.material.button.MaterialButton;
 import com.google.common.collect.ImmutableList;
@@ -3111,7 +3111,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         AspectRatioFrameLayout aspectRatioFrameLayout;
         GifImageView previewImageView;
         ImageView errorLoadingVideoImageView;
-        PlayerView videoPlayer;
+        StyledPlayerView videoPlayer;
         ImageView muteButton;
         ImageView fullscreenButton;
         ImageView pauseButton;
@@ -3143,7 +3143,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                                         AspectRatioFrameLayout aspectRatioFrameLayout,
                                         GifImageView previewImageView,
                                         ImageView errorLoadingVideoImageView,
-                                        PlayerView videoPlayer,
+                                        StyledPlayerView videoPlayer,
                                         ImageView muteButton,
                                         ImageView fullscreenButton,
                                         ImageView pauseButton,
@@ -3283,7 +3283,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
 
             videoPlayer.setOnClickListener(view -> {
-                if (mEasierToWatchInFullScreen && videoPlayer.isControllerVisible()) {
+                if (mEasierToWatchInFullScreen && videoPlayer.isControllerFullyVisible()) {
                     fullscreenButton.performClick();
                 }
             });
@@ -4753,7 +4753,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         AspectRatioFrameLayout aspectRatioFrameLayout;
         GifImageView previewImageView;
         ImageView errorLoadingRedgifsImageView;
-        PlayerView videoPlayer;
+        StyledPlayerView videoPlayer;
         ImageView muteButton;
         ImageView fullscreenButton;
         ImageView pauseButton;
@@ -4787,7 +4787,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                                              AspectRatioFrameLayout aspectRatioFrameLayout,
                                              GifImageView previewImageView,
                                              ImageView errorLoadingRedgifsImageView,
-                                             PlayerView videoPlayer,
+                                             StyledPlayerView videoPlayer,
                                              ImageView muteButton,
                                              ImageView fullscreenButton,
                                              ImageView pauseButton,
@@ -4929,7 +4929,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
 
             videoPlayer.setOnClickListener(view -> {
-                if (mEasierToWatchInFullScreen && videoPlayer.isControllerVisible()) {
+                if (mEasierToWatchInFullScreen && videoPlayer.isControllerFullyVisible()) {
                     fullscreenButton.performClick();
                 }
             });
@@ -5770,7 +5770,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         AspectRatioFrameLayout aspectRatioFrameLayout;
         GifImageView previewImageView;
         ImageView errorLoadingRedgifsImageView;
-        PlayerView videoPlayer;
+        StyledPlayerView videoPlayer;
         ImageView muteButton;
         ImageView fullscreenButton;
         ImageView pauseButton;
@@ -5795,7 +5795,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                                                  AspectRatioFrameLayout aspectRatioFrameLayout,
                                                  GifImageView previewImageView,
                                                  ImageView errorLoadingRedgifsImageView,
-                                                 PlayerView videoPlayer,
+                                                 StyledPlayerView videoPlayer,
                                                  ImageView muteButton,
                                                  ImageView fullscreenButton,
                                                  ImageView pauseButton,
@@ -5925,7 +5925,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
 
             videoPlayer.setOnClickListener(view -> {
-                if (mEasierToWatchInFullScreen && videoPlayer.isControllerVisible()) {
+                if (mEasierToWatchInFullScreen && videoPlayer.isControllerFullyVisible()) {
                     fullscreenButton.performClick();
                 }
             });

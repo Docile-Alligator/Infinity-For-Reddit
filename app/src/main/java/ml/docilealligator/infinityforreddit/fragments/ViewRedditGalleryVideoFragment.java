@@ -30,6 +30,7 @@ import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
@@ -118,7 +119,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
             }
         }
 
-        binding.getPlayerView().setControllerVisibilityListener(visibility -> {
+        binding.getPlayerView().setControllerVisibilityListener((StyledPlayerView.ControllerVisibilityListener) visibility -> {
             switch (visibility) {
                 case View.GONE:
                     activity.getWindow().getDecorView().setSystemUiVisibility(

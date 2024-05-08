@@ -25,7 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 
 import ml.docilealligator.infinityforreddit.videoautoplay.annotations.RemoveIn;
 import ml.docilealligator.infinityforreddit.videoautoplay.helper.ToroPlayerHelper;
@@ -77,7 +77,7 @@ public class ExoPlayerViewHelper extends ToroPlayerHelper {
   public ExoPlayerViewHelper(@NonNull ToroPlayer player, @NonNull ExoPlayable playable) {
     super(player);
     //noinspection ConstantConditions
-    if (player.getPlayerView() == null || !(player.getPlayerView() instanceof PlayerView)) {
+    if (player.getPlayerView() == null || !(player.getPlayerView() instanceof StyledPlayerView)) {
       throw new IllegalArgumentException("Require non-null PlayerView");
     }
 
@@ -92,7 +92,7 @@ public class ExoPlayerViewHelper extends ToroPlayerHelper {
     playable.addErrorListener(super.getErrorListeners());
     playable.addOnVolumeChangeListener(super.getVolumeChangeListeners());
     playable.prepare(!lazyPrepare);
-    playable.setPlayerView((PlayerView) player.getPlayerView());
+    playable.setPlayerView((StyledPlayerView) player.getPlayerView());
   }
 
   @Override public void release() {

@@ -2,7 +2,7 @@ package ml.docilealligator.infinityforreddit.fragments;
 
 import android.widget.TextView;
 
-import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
 
@@ -28,7 +28,7 @@ class ViewImgurVideoFragmentBindingAdapter {
         playbackSpeedButton = binding.getRoot().findViewById(R.id.playback_speed_image_view_exo_playback_control_view);
     }
 
-    PlayerView getRoot() {
+    StyledPlayerView getRoot() {
         return binding.getRoot();
     }
 

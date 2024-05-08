@@ -42,7 +42,7 @@ import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.DefaultTimeBar;
-import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.ui.TimeBar;
 import com.google.android.material.button.MaterialButton;
 import com.google.common.collect.ImmutableList;
@@ -1592,7 +1592,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     class PostDetailBaseVideoAutoplayViewHolder extends PostDetailBaseViewHolder implements ToroPlayer {
         public Call<String> fetchRedgifsOrStreamableVideoCall;
         AspectRatioFrameLayout aspectRatioFrameLayout;
-        PlayerView playerView;
+        StyledPlayerView playerView;
         GifImageView previewImageView;
         ImageView mErrorLoadingRedgifsImageView;
         ImageView muteButton;
@@ -1624,7 +1624,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                                      CustomTextView flairTextView,
                                                      TextView upvoteRatioTextView,
                                                      AspectRatioFrameLayout aspectRatioFrameLayout,
-                                                     PlayerView playerView,
+                                                     StyledPlayerView playerView,
                                                      GifImageView previewImageView,
                                                      ImageView errorLoadingRedgifsImageView,
                                                      ImageView muteButton,
@@ -1758,7 +1758,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
             previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
             playerView.setOnClickListener(view -> {
-                if (mEasierToWatchInFullScreen && playerView.isControllerVisible()) {
+                if (mEasierToWatchInFullScreen && playerView.isControllerFullyVisible()) {
                     fullscreenButton.performClick();
                 }
             });

@@ -24,7 +24,7 @@
             android:background="#000000"
             app:resize_mode="fixed_width">
 
-            <com.google.android.exoplayer2.ui.PlayerView
+            <com.google.android.exoplayer2.ui.StyledPlayerView
                 android:id="@+id/player_view_item_post_card_3_video_type_autoplay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
