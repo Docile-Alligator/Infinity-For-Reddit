@@ -69,7 +69,7 @@ public class DefaultExoCreator implements ExoCreator, MediaSourceEventListener {
     public DefaultExoCreator(@NonNull ToroExo toro, @NonNull Config config) {
         this.toro = checkNotNull(toro);
         this.config = checkNotNull(config);
-        trackSelector = new DefaultTrackSelector();
+        trackSelector = new DefaultTrackSelector(toro.context);
         loadControl = config.loadControl;
         mediaSourceBuilder = config.mediaSourceBuilder;
 

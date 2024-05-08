@@ -278,11 +278,6 @@ public interface Playable {
         }
 
         @Override
-        public void onSeekProcessed() {
-
-        }
-
-        @Override
         public void onVideoSizeChanged(@NonNull VideoSize videoSize) {
             EventListener.super.onVideoSizeChanged(videoSize);
         }

@@ -342,7 +342,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         player.seekToDefaultPosition();
-        player.stop(true);
+        player.stop();
         player.release();
     }
 
