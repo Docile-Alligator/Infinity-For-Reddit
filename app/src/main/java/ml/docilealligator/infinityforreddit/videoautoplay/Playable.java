@@ -307,6 +307,13 @@ public interface Playable {
         }
 
         @Override
+        public void onEvents(@NonNull Player player, @NonNull Player.Events events) {
+            for (EventListener eventListener : this) {
+                eventListener.onEvents(player, events);
+            }
+        }
+
+        @Override
         public void onVideoSizeChanged(@NonNull VideoSize videoSize) {
             for (EventListener eventListener : this) {
                 eventListener.onVideoSizeChanged(videoSize);

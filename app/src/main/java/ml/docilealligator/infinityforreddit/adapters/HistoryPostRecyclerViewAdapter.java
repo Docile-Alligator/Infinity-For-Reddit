@@ -25,10 +25,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.Barrier;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -44,11 +46,13 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.exoplayer2.PlaybackException;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.DefaultTimeBar;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.ui.TimeBar;
+import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.button.MaterialButton;
 import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
@@ -3114,8 +3118,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         StyledPlayerView videoPlayer;
         ImageView muteButton;
         ImageView fullscreenButton;
-        ImageView pauseButton;
-        ImageView playButton;
+        ImageView playPauseButton;
         DefaultTimeBar progressBar;
         @Nullable
         Container container;
@@ -3125,6 +3128,8 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         private float volume;
         public Call<String> fetchRedgifsOrStreamableVideoCall;
         private boolean isManuallyPaused;
+        private Drawable playDrawable;
+        private Drawable pauseDrawable;
 
         PostBaseVideoAutoplayViewHolder(View rootView,
                                         AspectRatioGifImageView iconGifImageView,
@@ -3146,8 +3151,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                                         StyledPlayerView videoPlayer,
                                         ImageView muteButton,
                                         ImageView fullscreenButton,
-                                        ImageView pauseButton,
-                                        ImageView playButton,
+                                        ImageView playPauseButton,
                                         DefaultTimeBar progressBar,
                                         ConstraintLayout bottomConstraintLayout,
                                         MaterialButton upvoteButton,
@@ -3185,9 +3189,10 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             this.videoPlayer = videoPlayer;
             this.muteButton = muteButton;
             this.fullscreenButton = fullscreenButton;
-            this.pauseButton = pauseButton;
-            this.playButton = playButton;
+            this.playPauseButton = playPauseButton;
             this.progressBar = progressBar;
+            playDrawable = AppCompatResources.getDrawable(mActivity, R.drawable.ic_play_arrow_24dp);
+            pauseDrawable = AppCompatResources.getDrawable(mActivity, R.drawable.ic_pause_24dp);
 
             aspectRatioFrameLayout.setOnClickListener(null);
 
@@ -3250,15 +3255,15 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                 }
             });
 
-            pauseButton.setOnClickListener(view -> {
-                pause();
-                isManuallyPaused = true;
-                savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
-            });
-
-            playButton.setOnClickListener(view -> {
-                isManuallyPaused = false;
-                play();
+            playPauseButton.setOnClickListener(view -> {
+                if (isPlaying()) {
+                    pause();
+                    isManuallyPaused = true;
+                    savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+                } else {
+                    isManuallyPaused = false;
+                    play();
+                }
             });
 
             progressBar.addListener(new TimeBar.OnScrubListener() {
@@ -3340,6 +3345,16 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             if (helper == null) {
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
                 helper.addEventListener(new Playable.DefaultEventListener() {
+                    @Override
+                    public void onEvents(@NonNull Player player, @NonNull Player.Events events) {
+                        if (events.containsAny(
+                                Player.EVENT_PLAY_WHEN_READY_CHANGED,
+                                Player.EVENT_PLAYBACK_STATE_CHANGED,
+                                Player.EVENT_PLAYBACK_SUPPRESSION_REASON_CHANGED)) {
+                            playPauseButton.setImageDrawable(Util.shouldShowPlayButton(player) ? playDrawable : pauseDrawable);
+                        }
+                    }
+
                     @Override
                     public void onTracksChanged(@NonNull Tracks tracks) {
                         ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
@@ -3450,7 +3465,6 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     binding.playerViewItemPostVideoTypeAutoplay,
                     binding.getRoot().findViewById(R.id.mute_exo_playback_control_view),
                     binding.getRoot().findViewById(R.id.fullscreen_exo_playback_control_view),
-                    binding.getRoot().findViewById(R.id.exo_pause),
                     binding.getRoot().findViewById(R.id.exo_play),
                     binding.getRoot().findViewById(R.id.exo_progress),
                     binding.bottomConstraintLayoutItemPostVideoTypeAutoplay,
@@ -3485,7 +3499,6 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     binding.playerViewItemPostVideoTypeAutoplay,
                     binding.getRoot().findViewById(R.id.mute_exo_playback_control_view),
                     binding.getRoot().findViewById(R.id.fullscreen_exo_playback_control_view),
-                    binding.getRoot().findViewById(R.id.exo_pause),
                     binding.getRoot().findViewById(R.id.exo_play),
                     binding.getRoot().findViewById(R.id.exo_progress),
                     binding.bottomConstraintLayoutItemPostVideoTypeAutoplay,
@@ -4756,8 +4769,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         StyledPlayerView videoPlayer;
         ImageView muteButton;
         ImageView fullscreenButton;
-        ImageView pauseButton;
-        ImageView playButton;
+        ImageView playPauseButton;
         DefaultTimeBar progressBar;
         View divider;
 
@@ -4769,6 +4781,8 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         private float volume;
         public Call<String> fetchRedgifsOrStreamableVideoCall;
         private boolean isManuallyPaused;
+        private Drawable playDrawable;
+        private Drawable pauseDrawable;
 
         PostCard2BaseVideoAutoplayViewHolder(View itemView,
                                              AspectRatioGifImageView iconGifImageView,
@@ -4790,8 +4804,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                                              StyledPlayerView videoPlayer,
                                              ImageView muteButton,
                                              ImageView fullscreenButton,
-                                             ImageView pauseButton,
-                                             ImageView playButton,
+                                             ImageView playPauseButton,
                                              DefaultTimeBar progressBar,
                                              ConstraintLayout bottomConstraintLayout,
                                              MaterialButton upvoteButton,
@@ -4831,10 +4844,11 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             this.videoPlayer = videoPlayer;
             this.muteButton = muteButton;
             this.fullscreenButton = fullscreenButton;
-            this.pauseButton = pauseButton;
-            this.playButton = playButton;
+            this.playPauseButton = playPauseButton;
             this.progressBar = progressBar;
             this.divider = divider;
+            playDrawable = AppCompatResources.getDrawable(mActivity, R.drawable.ic_play_arrow_24dp);
+            pauseDrawable = AppCompatResources.getDrawable(mActivity, R.drawable.ic_pause_24dp);
 
             divider.setBackgroundColor(mDividerColor);
 
@@ -4856,15 +4870,15 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                 }
             });
 
-            pauseButton.setOnClickListener(view -> {
-                pause();
-                isManuallyPaused = true;
-                savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
-            });
-
-            playButton.setOnClickListener(view -> {
-                isManuallyPaused = false;
-                play();
+            playPauseButton.setOnClickListener(view -> {
+                if (isPlaying()) {
+                    pause();
+                    isManuallyPaused = true;
+                    savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+                } else {
+                    isManuallyPaused = false;
+                    play();
+                }
             });
 
             progressBar.addListener(new TimeBar.OnScrubListener() {
@@ -4987,6 +5001,16 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
                 helper.addEventListener(new Playable.DefaultEventListener() {
                     @Override
+                    public void onEvents(@NonNull Player player, @NonNull Player.Events events) {
+                        if (events.containsAny(
+                                Player.EVENT_PLAY_WHEN_READY_CHANGED,
+                                Player.EVENT_PLAYBACK_STATE_CHANGED,
+                                Player.EVENT_PLAYBACK_SUPPRESSION_REASON_CHANGED)) {
+                            playPauseButton.setImageDrawable(Util.shouldShowPlayButton(player) ? playDrawable : pauseDrawable);
+                        }
+                    }
+
+                    @Override
                     public void onTracksChanged(@NonNull Tracks tracks) {
                         ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
                         if (!trackGroups.isEmpty()) {
@@ -5096,7 +5120,6 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     binding.playerViewItemPostCard2VideoAutoplay,
                     binding.getRoot().findViewById(R.id.mute_exo_playback_control_view),
                     binding.getRoot().findViewById(R.id.fullscreen_exo_playback_control_view),
-                    binding.getRoot().findViewById(R.id.exo_pause),
                     binding.getRoot().findViewById(R.id.exo_play),
                     binding.getRoot().findViewById(R.id.exo_progress),
                     binding.bottomConstraintLayoutItemPostCard2VideoAutoplay,
@@ -5132,7 +5155,6 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     binding.playerViewItemPostCard2VideoAutoplay,
                     binding.getRoot().findViewById(R.id.mute_exo_playback_control_view),
                     binding.getRoot().findViewById(R.id.fullscreen_exo_playback_control_view),
-                    binding.getRoot().findViewById(R.id.exo_pause),
                     binding.getRoot().findViewById(R.id.exo_play),
                     binding.getRoot().findViewById(R.id.exo_progress),
                     binding.bottomConstraintLayoutItemPostCard2VideoAutoplay,
@@ -5773,8 +5795,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         StyledPlayerView videoPlayer;
         ImageView muteButton;
         ImageView fullscreenButton;
-        ImageView pauseButton;
-        ImageView playButton;
+        ImageView playPauseButton;
         DefaultTimeBar progressBar;
         @Nullable
         Container container;
@@ -5784,6 +5805,8 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         private float volume;
         public Call<String> fetchRedgifsOrStreamableVideoCall;
         private boolean isManuallyPaused;
+        private Drawable playDrawable;
+        private Drawable pauseDrawable;
 
         PostMaterial3CardBaseVideoAutoplayViewHolder(View rootView,
                                                  AspectRatioGifImageView iconGifImageView,
@@ -5798,8 +5821,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                                                  StyledPlayerView videoPlayer,
                                                  ImageView muteButton,
                                                  ImageView fullscreenButton,
-                                                 ImageView pauseButton,
-                                                 ImageView playButton,
+                                                 ImageView playPauseButton,
                                                  DefaultTimeBar progressBar,
                                                  ConstraintLayout bottomConstraintLayout,
                                                  MaterialButton upvoteButton,
@@ -5830,9 +5852,10 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             this.videoPlayer = videoPlayer;
             this.muteButton = muteButton;
             this.fullscreenButton = fullscreenButton;
-            this.pauseButton = pauseButton;
-            this.playButton = playButton;
+            this.playPauseButton = playPauseButton;
             this.progressBar = progressBar;
+            playDrawable = AppCompatResources.getDrawable(mActivity, R.drawable.ic_play_arrow_24dp);
+            pauseDrawable = AppCompatResources.getDrawable(mActivity, R.drawable.ic_pause_24dp);
 
             aspectRatioFrameLayout.setOnClickListener(null);
 
@@ -5852,15 +5875,15 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                 }
             });
 
-            pauseButton.setOnClickListener(view -> {
-                pause();
-                isManuallyPaused = true;
-                savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
-            });
-
-            playButton.setOnClickListener(view -> {
-                isManuallyPaused = false;
-                play();
+            playPauseButton.setOnClickListener(view -> {
+                if (isPlaying()) {
+                    pause();
+                    isManuallyPaused = true;
+                    savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+                } else {
+                    isManuallyPaused = false;
+                    play();
+                }
             });
 
             progressBar.addListener(new TimeBar.OnScrubListener() {
@@ -5983,6 +6006,16 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
                 helper.addEventListener(new Playable.DefaultEventListener() {
                     @Override
+                    public void onEvents(@NonNull Player player, @NonNull Player.Events events) {
+                        if (events.containsAny(
+                                Player.EVENT_PLAY_WHEN_READY_CHANGED,
+                                Player.EVENT_PLAYBACK_STATE_CHANGED,
+                                Player.EVENT_PLAYBACK_SUPPRESSION_REASON_CHANGED)) {
+                            playPauseButton.setImageDrawable(Util.shouldShowPlayButton(player) ? playDrawable : pauseDrawable);
+                        }
+                    }
+
+                    @Override
                     public void onTracksChanged(@NonNull Tracks tracks) {
                         ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
                         if (!trackGroups.isEmpty()) {
@@ -6085,7 +6118,6 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     binding.playerViewItemPostCard3VideoTypeAutoplay,
                     binding.getRoot().findViewById(R.id.mute_exo_playback_control_view),
                     binding.getRoot().findViewById(R.id.fullscreen_exo_playback_control_view),
-                    binding.getRoot().findViewById(R.id.exo_pause),
                     binding.getRoot().findViewById(R.id.exo_play),
                     binding.getRoot().findViewById(R.id.exo_progress),
                     binding.bottomConstraintLayoutItemPostCard3VideoTypeAutoplay,
@@ -6113,7 +6145,6 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     binding.playerViewItemPostCard3VideoTypeAutoplay,
                     binding.getRoot().findViewById(R.id.mute_exo_playback_control_view),
                     binding.getRoot().findViewById(R.id.fullscreen_exo_playback_control_view),
-                    binding.getRoot().findViewById(R.id.exo_pause),
                     binding.getRoot().findViewById(R.id.exo_play),
                     binding.getRoot().findViewById(R.id.exo_progress),
                     binding.bottomConstraintLayoutItemPostCard3VideoTypeAutoplay,
