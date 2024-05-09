@@ -57,6 +57,7 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionOverride;
 import com.google.android.exoplayer2.ui.PlayerControlView;
+import com.google.android.exoplayer2.ui.StyledPlayerControlView;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -464,9 +465,9 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         } else {
             StyledPlayerView videoPlayerView = findViewById(R.id.player_view_view_video_activity);
             videoPlayerView.setPlayer(player);
-            videoPlayerView.setControllerVisibilityListener(new StyledPlayerView.ControllerVisibilityListener() {
+            videoPlayerView.setControllerVisibilityListener(new StyledPlayerControlView.VisibilityListener() {
                 @Override
-                public void onVisibilityChanged(int visibility) {
+                public void onVisibilityChange(int visibility) {
                     switch (visibility) {
                         case View.GONE:
                             getWindow().getDecorView().setSystemUiVisibility(
