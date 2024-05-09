@@ -34,8 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                app:controller_layout_id="@layout/exo_playback_control_view"
-                app:show_timeout="1500" />
+                app:controller_layout_id="@layout/exo_playback_control_view" />
 
             <ProgressBar
                 android:id="@+id/progress_bar_view_video_activity"

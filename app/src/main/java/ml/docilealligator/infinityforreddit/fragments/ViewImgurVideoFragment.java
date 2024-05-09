@@ -289,7 +289,7 @@ public class ViewImgurVideoFragment extends Fragment {
             binding.getMuteButton().setIconResource(R.drawable.ic_unmute_24dp);
         }
 
-        MaterialButton playPauseButton = binding.getRoot().findViewById(R.id.exo_play);
+        MaterialButton playPauseButton = binding.getRoot().findViewById(R.id.exo_play_pause);
         Drawable playDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_24dp, null);
         Drawable pauseDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pause_24dp, null);
         playPauseButton.setOnClickListener(view -> {

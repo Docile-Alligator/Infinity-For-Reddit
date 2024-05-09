@@ -57,7 +57,6 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionOverride;
 import com.google.android.exoplayer2.ui.PlayerControlView;
-import com.google.android.exoplayer2.ui.StyledPlayerControlView;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -465,9 +464,9 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         } else {
             StyledPlayerView videoPlayerView = findViewById(R.id.player_view_view_video_activity);
             videoPlayerView.setPlayer(player);
-            videoPlayerView.setControllerVisibilityListener(new StyledPlayerControlView.VisibilityListener() {
+            videoPlayerView.setControllerVisibilityListener(new StyledPlayerView.ControllerVisibilityListener() {
                 @Override
-                public void onVisibilityChange(int visibility) {
+                public void onVisibilityChanged(int visibility) {
                     switch (visibility) {
                         case View.GONE:
                             getWindow().getDecorView().setSystemUiVisibility(
@@ -488,7 +487,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             });
         }
 
-        MaterialButton playPauseButton = findViewById(R.id.exo_play);
+        MaterialButton playPauseButton = findViewById(R.id.exo_play_pause);
         Drawable playDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_24dp, null);
         Drawable pauseDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pause_24dp, null);
         playPauseButton.setOnClickListener(view -> {

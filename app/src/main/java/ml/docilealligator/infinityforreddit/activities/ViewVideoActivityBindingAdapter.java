@@ -64,7 +64,7 @@ public class ViewVideoActivityBindingAdapter {
     }
 
     public MaterialButton getMuteButton() {
-        return binding.getRoot().findViewById(R.id.mute_exo_playback_control_view);
+        return getRoot().findViewById(R.id.mute_exo_playback_control_view);
     }
 
     public MaterialButton getHdButton() {
