@@ -487,7 +487,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             });
         }
 
-        MaterialButton playPauseButton = findViewById(R.id.exo_play_pause);
+        MaterialButton playPauseButton = findViewById(R.id.exo_play_pause_button_exo_playback_control_view);
         Drawable playDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_24dp, null);
         Drawable pauseDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pause_24dp, null);
         playPauseButton.setOnClickListener(view -> {

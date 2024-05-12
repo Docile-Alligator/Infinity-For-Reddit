@@ -55,14 +55,14 @@
             app:backgroundTint="#444141"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/exo_play_pause"
+            app:layout_constraintEnd_toStartOf="@+id/exo_play_pause_button_exo_playback_control_view"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
             style="?attr/materialIconButtonOutlinedStyle" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/exo_play_pause"
+            android:id="@+id/exo_play_pause_button_exo_playback_control_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:strokeWidth="0dp"
@@ -90,7 +90,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/exo_play_pause"
+            app:layout_constraintStart_toEndOf="@+id/exo_play_pause_button_exo_playback_control_view"
             style="?attr/materialIconButtonOutlinedStyle" />
 
         <com.google.android.material.button.MaterialButton
