@@ -26,12 +26,13 @@ import android.net.Uri;
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.PlaybackParameters;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.ui.StyledPlayerView;
+import androidx.annotation.OptIn;
+import androidx.media3.common.C;
+import androidx.media3.common.PlaybackParameters;
+import androidx.media3.common.Player;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.exoplayer.source.MediaSource;
+import androidx.media3.ui.PlayerView;
 
 import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
 import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
@@ -47,6 +48,7 @@ import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
  * @author eneim (2018/02/25).
  */
 @SuppressWarnings("WeakerAccess") //
+@OptIn(markerClass = UnstableApi.class)
 class PlayableImpl implements Playable {
 
     private final PlaybackInfo playbackInfo = new PlaybackInfo(); // never expose to outside.
@@ -61,7 +63,7 @@ class PlayableImpl implements Playable {
 
     protected ToroExoPlayer player; // on-demand, cached
     protected MediaSource mediaSource;  // on-demand, since we do not reuse MediaSource now.
-    protected StyledPlayerView playerView; // on-demand, not always required.
+    protected PlayerView playerView; // on-demand, not always required.
 
     private boolean sourcePrepared = false;
     private boolean listenerApplied = false;
@@ -83,13 +85,13 @@ class PlayableImpl implements Playable {
 
     @CallSuper
     @Override
-    public void setPlayerView(@Nullable StyledPlayerView playerView) {
+    public void setPlayerView(@Nullable PlayerView playerView) {
         if (this.playerView == playerView) return;
         if (playerView == null) {
             this.playerView.setPlayer(null);
         } else {
             if (this.player != null) {
-                StyledPlayerView.switchTargetView(this.player.getPlayer(), this.playerView, playerView);
+                PlayerView.switchTargetView(this.player.getPlayer(), this.playerView, playerView);
             }
         }
 
@@ -97,7 +99,7 @@ class PlayableImpl implements Playable {
     }
 
     @Override
-    public final StyledPlayerView getPlayerView() {
+    public final PlayerView getPlayerView() {
         return this.playerView;
     }
 

@@ -19,14 +19,14 @@
         app:cardCornerRadius="8dp"
         style="?attr/materialCardViewElevatedStyle">
 
-        <com.google.android.exoplayer2.ui.AspectRatioFrameLayout
+        <androidx.media3.ui.AspectRatioFrameLayout
             android:id="@+id/aspect_ratio_frame_layout_item_post_card_2_video_autoplay"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="#000000"
             app:resize_mode="fixed_width">
 
-            <com.google.android.exoplayer2.ui.StyledPlayerView
+            <androidx.media3.ui.PlayerView
                 android:id="@+id/player_view_item_post_card_2_video_autoplay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -53,7 +53,7 @@
                 android:src="@drawable/ic_error_white_36dp"
                 android:visibility="gone" />
 
-        </com.google.android.exoplayer2.ui.AspectRatioFrameLayout>
+        </androidx.media3.ui.AspectRatioFrameLayout>
 
     </com.google.android.material.card.MaterialCardView>
 

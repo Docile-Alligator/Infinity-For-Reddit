@@ -32,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.OptIn;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,29 +44,30 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.media3.common.C;
+import androidx.media3.common.Format;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.MimeTypes;
+import androidx.media3.common.PlaybackException;
+import androidx.media3.common.PlaybackParameters;
+import androidx.media3.common.Player;
+import androidx.media3.common.TrackSelectionOverride;
+import androidx.media3.common.Tracks;
+import androidx.media3.common.VideoSize;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.common.util.Util;
+import androidx.media3.datasource.DataSource;
+import androidx.media3.datasource.DefaultHttpDataSource;
+import androidx.media3.datasource.cache.CacheDataSource;
+import androidx.media3.datasource.cache.SimpleCache;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.hls.HlsMediaSource;
+import androidx.media3.exoplayer.source.ProgressiveMediaSource;
+import androidx.media3.exoplayer.trackselection.DefaultTrackSelector;
+import androidx.media3.ui.PlayerControlView;
+import androidx.media3.ui.PlayerView;
+import androidx.media3.ui.TrackSelectionDialogBuilder;
 
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.Format;
-import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.PlaybackException;
-import com.google.android.exoplayer2.PlaybackParameters;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.Tracks;
-import com.google.android.exoplayer2.source.ProgressiveMediaSource;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionOverride;
-import com.google.android.exoplayer2.ui.PlayerControlView;
-import com.google.android.exoplayer2.ui.StyledPlayerView;
-import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
-import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
-import com.google.android.exoplayer2.upstream.cache.SimpleCache;
-import com.google.android.exoplayer2.util.MimeTypes;
-import com.google.android.exoplayer2.util.Util;
-import com.google.android.exoplayer2.video.VideoSize;
 import com.google.android.material.button.MaterialButton;
 import com.google.common.collect.ImmutableList;
 import com.otaliastudios.zoom.ZoomEngine;
@@ -152,6 +154,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
     private Uri mVideoUri;
     private ExoPlayer player;
+    @UnstableApi
     private DefaultTrackSelector trackSelector;
     private DataSource.Factory dataSourceFactory;
 
@@ -202,9 +205,11 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     @Inject
     Executor mExecutor;
 
+    @UnstableApi
     @Inject
     SimpleCache mSimpleCache;
 
+    @OptIn(markerClass = UnstableApi.class)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -462,9 +467,9 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 }
             });
         } else {
-            StyledPlayerView videoPlayerView = findViewById(R.id.player_view_view_video_activity);
+            PlayerView videoPlayerView = findViewById(R.id.player_view_view_video_activity);
             videoPlayerView.setPlayer(player);
-            videoPlayerView.setControllerVisibilityListener(new StyledPlayerView.ControllerVisibilityListener() {
+            videoPlayerView.setControllerVisibilityListener(new PlayerView.ControllerVisibilityListener() {
                 @Override
                 public void onVisibilityChanged(int visibility) {
                     switch (visibility) {
@@ -686,6 +691,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         playbackSpeedBottomSheetFragment.show(getSupportFragmentManager(), playbackSpeedBottomSheetFragment.getTag());
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     private int inferPrimaryTrackType(Format format) {
         int trackType = MimeTypes.getTrackType(format.sampleMimeType);
         if (trackType != C.TRACK_TYPE_UNKNOWN) {
@@ -710,6 +716,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         binding.getProgressBar().setVisibility(View.VISIBLE);
         FetchRedgifsVideoLinks.fetchRedgifsVideoLinks(mExecutor, new Handler(), mRedgifsRetrofit,
                 mCurrentAccountSharedPreferences, redgifsId, new FetchRedgifsVideoLinks.FetchRedgifsVideoLinksListener() {
+                    @OptIn(markerClass = UnstableApi.class)
                     @Override
                     public void success(String webm, String mp4) {
                         binding.getProgressBar().setVisibility(View.GONE);
@@ -742,6 +749,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                     String postId = segments.get(commentsIndex + 1);
                     FetchPost.fetchPost(mExecutor, new Handler(), mRetrofit, postId, null, Account.ANONYMOUS_ACCOUNT,
                             new FetchPost.FetchPostListener() {
+                                @OptIn(markerClass = UnstableApi.class)
                                 @Override
                                 public void fetchPostSuccess(Post post) {
                                     videoFallbackDirectUrl = post.getVideoFallBackDirectUrl();
@@ -807,6 +815,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         binding.getProgressBar().setVisibility(View.VISIBLE);
         FetchStreamableVideo.fetchStreamableVideo(mExecutor, new Handler(), mStreamableApiProvider, shortCode,
                 new FetchStreamableVideo.FetchStreamableVideoListener() {
+                    @OptIn(markerClass = UnstableApi.class)
                     @Override
                     public void success(StreamableVideo streamableVideo) {
                         if (streamableVideo.mp4 == null && streamableVideo.mp4Mobile == null) {
@@ -831,6 +840,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 });
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     private void loadFallbackVideo(Bundle savedInstanceState) {
         if (videoFallbackDirectUrl != null) {
             MediaItem mediaItem = player.getCurrentMediaItem();

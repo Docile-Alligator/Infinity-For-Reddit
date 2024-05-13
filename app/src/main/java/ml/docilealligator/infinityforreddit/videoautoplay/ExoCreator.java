@@ -21,13 +21,12 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.source.MediaSource;
 
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.source.MediaSource;
 
 /**
- * A simple interface whose implementation helps Client to easily create {@link SimpleExoPlayer}
+ * A simple interface whose implementation helps Client to easily create {@link ExoPlayer}
  * instance, {@link MediaSource} instance or specifically a {@link Playable} instance.
  *
  * Most of the time, Client just needs to request for a {@link Playable} for a specific Uri.
@@ -47,11 +46,11 @@ public interface ExoCreator {
   @Nullable Context getContext();
 
   /**
-   * Create a new {@link SimpleExoPlayer} instance. This method should always create new instance of
-   * {@link SimpleExoPlayer}, but client should use {@link ExoCreator} indirectly via
+   * Create a new {@link ExoPlayer} instance. This method should always create new instance of
+   * {@link ExoPlayer}, but client should use {@link ExoCreator} indirectly via
    * {@link ToroExo}.
    *
-   * @return a new {@link SimpleExoPlayer} instance.
+   * @return a new {@link ExoPlayer} instance.
    */
   @NonNull
   ExoPlayer createPlayer();

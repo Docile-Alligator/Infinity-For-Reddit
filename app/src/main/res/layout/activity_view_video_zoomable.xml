@@ -29,12 +29,14 @@
                 app:verticalPanEnabled="true"
                 app:zoomEnabled="true" />
 
-            <com.google.android.exoplayer2.ui.PlayerControlView
+            <androidx.media3.ui.PlayerControlView
                 android:id="@+id/player_control_view_view_video_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                app:controller_layout_id="@layout/exo_playback_control_view" />
+                android:animateLayoutChanges="true"
+                app:controller_layout_id="@layout/exo_playback_control_view"
+                app:animation_enabled="false" />
 
             <ProgressBar
                 android:id="@+id/progress_bar_view_video_activity"

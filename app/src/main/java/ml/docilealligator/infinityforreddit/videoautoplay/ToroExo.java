@@ -25,13 +25,13 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
 import androidx.annotation.RestrictTo;
 import androidx.annotation.StringRes;
 import androidx.core.util.Pools;
-
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.util.Util;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.common.util.Util;
+import androidx.media3.exoplayer.ExoPlayer;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
@@ -44,8 +44,8 @@ import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
 
 /**
- * Global helper class to manage {@link ExoCreator} and {@link SimpleExoPlayer} instances.
- * In this setup, {@link ExoCreator} and SimpleExoPlayer pools are cached. A {@link Config}
+ * Global helper class to manage {@link ExoCreator} and {@link ExoPlayer} instances.
+ * In this setup, {@link ExoCreator} and ExoPlayer pools are cached. A {@link Config}
  * is a key for each {@link ExoCreator}.
  * <p>
  * A suggested usage is as below:
@@ -65,6 +65,7 @@ public final class ToroExo {
     private static final String TAG = "ToroExo";
 
     // Magic number: Build.VERSION.SDK_INT / 6 --> API 16 ~ 18 will set pool size to 2, etc.
+    @UnstableApi
     @SuppressWarnings("WeakerAccess") //
     static final int MAX_POOL_SIZE = Math.max(Util.SDK_INT / 6, getRuntime().availableProcessors());
     @SuppressLint("StaticFieldLeak")  //
@@ -107,6 +108,7 @@ public final class ToroExo {
     /**
      * Utility method to produce {@link ExoCreator} instance from a {@link Config}.
      */
+    @OptIn(markerClass = UnstableApi.class)
     public ExoCreator getCreator(Config config) {
         ExoCreator creator = this.creators.get(config);
         if (creator == null) {
@@ -131,14 +133,14 @@ public final class ToroExo {
     }
 
     /**
-     * Request an instance of {@link SimpleExoPlayer}. It can be an existing instance cached by Pool
+     * Request an instance of {@link ExoPlayer}. It can be an existing instance cached by Pool
      * or new one.
      * <p>
      * The creator may or may not be the one created by either {@link #getCreator(Config)} or
      * {@link #getDefaultCreator()}.
      *
-     * @param creator the {@link ExoCreator} that is scoped to the {@link SimpleExoPlayer} config.
-     * @return an usable {@link SimpleExoPlayer} instance.
+     * @param creator the {@link ExoCreator} that is scoped to the {@link ExoPlayer} config.
+     * @return an usable {@link ExoPlayer} instance.
      */
     @NonNull  //
     public ToroExoPlayer requestPlayer(@NonNull ExoCreator creator) {
@@ -151,7 +153,7 @@ public final class ToroExo {
      * Release player to Pool attached to the creator.
      *
      * @param creator the {@link ExoCreator} that created the player.
-     * @param player  the {@link SimpleExoPlayer} to be released back to the Pool
+     * @param player  the {@link ExoPlayer} to be released back to the Pool
      * @return true if player is released to relevant Pool, false otherwise.
      */
     @SuppressWarnings({"WeakerAccess", "UnusedReturnValue"}) //
@@ -175,6 +177,7 @@ public final class ToroExo {
     }
 
     /// internal APIs
+    @OptIn(markerClass = UnstableApi.class)
     private Pools.Pool<ExoPlayer> getPool(ExoCreator creator) {
         Pools.Pool<ExoPlayer> pool = playerPools.get(creator);
         if (pool == null) {

@@ -266,7 +266,7 @@
                     android:fontFamily="?attr/font_family"
                     android:visibility="gone" />
 
-                <com.google.android.exoplayer2.ui.StyledPlayerView
+                <androidx.media3.ui.PlayerView
                     android:id="@+id/player_view_post_video_activity"
                     android:layout_width="match_parent"
                     android:layout_height="400dp"

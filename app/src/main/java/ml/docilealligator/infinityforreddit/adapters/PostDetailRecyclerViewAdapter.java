@@ -25,9 +25,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.media3.common.PlaybackException;
+import androidx.media3.common.Player;
+import androidx.media3.common.Tracks;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.common.util.Util;
+import androidx.media3.ui.AspectRatioFrameLayout;
+import androidx.media3.ui.DefaultTimeBar;
+import androidx.media3.ui.PlayerView;
+import androidx.media3.ui.TimeBar;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,14 +49,6 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.google.android.exoplayer2.PlaybackException;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.Tracks;
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.google.android.exoplayer2.ui.DefaultTimeBar;
-import com.google.android.exoplayer2.ui.StyledPlayerView;
-import com.google.android.exoplayer2.ui.TimeBar;
-import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.button.MaterialButton;
 import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
@@ -463,6 +465,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         }
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -512,6 +515,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         }
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PostDetailBaseViewHolder) {
@@ -1020,6 +1024,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         }
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof PostDetailBaseViewHolder) {
@@ -1592,10 +1597,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         }
     }
 
+    @UnstableApi
     class PostDetailBaseVideoAutoplayViewHolder extends PostDetailBaseViewHolder implements ToroPlayer {
         public Call<String> fetchRedgifsOrStreamableVideoCall;
         AspectRatioFrameLayout aspectRatioFrameLayout;
-        StyledPlayerView playerView;
+        PlayerView playerView;
         GifImageView previewImageView;
         ImageView mErrorLoadingRedgifsImageView;
         ImageView muteButton;
@@ -1628,7 +1634,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                                      CustomTextView flairTextView,
                                                      TextView upvoteRatioTextView,
                                                      AspectRatioFrameLayout aspectRatioFrameLayout,
-                                                     StyledPlayerView playerView,
+                                                     PlayerView playerView,
                                                      GifImageView previewImageView,
                                                      ImageView errorLoadingRedgifsImageView,
                                                      ImageView muteButton,
@@ -1913,6 +1919,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         }
     }
 
+    @UnstableApi
     class PostDetailVideoAutoplayViewHolder extends PostDetailBaseVideoAutoplayViewHolder {
         PostDetailVideoAutoplayViewHolder(@NonNull ItemPostDetailVideoAutoplayBinding binding) {
             super(binding.getRoot(),
@@ -1949,6 +1956,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         }
     }
 
+    @UnstableApi
     class PostDetailVideoAutoplayLegacyControllerViewHolder extends PostDetailBaseVideoAutoplayViewHolder {
         PostDetailVideoAutoplayLegacyControllerViewHolder(ItemPostDetailVideoAutoplayLegacyControllerBinding binding) {
             super(binding.getRoot(),

@@ -16,26 +16,27 @@
 
 package ml.docilealligator.infinityforreddit.videoautoplay;
 
-import static com.google.android.exoplayer2.DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;
+import static androidx.media3.exoplayer.DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;
 import static ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil.checkNotNull;
 
 import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
 import androidx.core.util.ObjectsCompat;
-
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.DefaultRenderersFactory.ExtensionRendererMode;
-import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.cache.Cache;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.datasource.DataSource;
+import androidx.media3.datasource.cache.Cache;
+import androidx.media3.exoplayer.DefaultLoadControl;
+import androidx.media3.exoplayer.DefaultRenderersFactory;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.LoadControl;
+import androidx.media3.exoplayer.source.MediaSource;
+import androidx.media3.exoplayer.upstream.DefaultBandwidthMeter;
 
 /**
- * Necessary configuration for {@link ExoCreator} to produces {@link SimpleExoPlayer} and
+ * Necessary configuration for {@link ExoCreator} to produces {@link ExoPlayer} and
  * {@link MediaSource}. Instance of this class must be construct using {@link Builder}.
  *
  * @author eneim (2018/01/23).
@@ -49,19 +50,23 @@ public final class Config {
   private final Context context;
 
   // primitive flags
-  @ExtensionRendererMode final int extensionMode;
+  @DefaultRenderersFactory.ExtensionRendererMode
+  final int extensionMode;
 
   // NonNull options
   @NonNull final BaseMeter meter;
+  @UnstableApi
   @NonNull final LoadControl loadControl;
   @NonNull final MediaSourceBuilder mediaSourceBuilder;
 
   // Nullable options
+  @UnstableApi
   @Nullable final Cache cache; // null by default
   // If null, ExoCreator must come up with a default one.
   // This is to help customizing the Data source, for example using OkHttp extension.
   @Nullable final DataSource.Factory dataSourceFactory;
 
+  @OptIn(markerClass = UnstableApi.class)
   @SuppressWarnings("WeakerAccess") //
   Config(@Nullable Context context, int extensionMode, @NonNull BaseMeter meter,
          @NonNull LoadControl loadControl,
@@ -77,6 +82,7 @@ public final class Config {
     this.cache = cache;
   }
 
+  @OptIn(markerClass = UnstableApi.class)
   @Override public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
@@ -91,6 +97,7 @@ public final class Config {
     return ObjectsCompat.equals(dataSourceFactory, config.dataSourceFactory);
   }
 
+  @OptIn(markerClass = UnstableApi.class)
   @Override public int hashCode() {
     int result = extensionMode;
     result = 31 * result + meter.hashCode();
@@ -101,6 +108,7 @@ public final class Config {
     return result;
   }
 
+  @OptIn(markerClass = UnstableApi.class)
   @SuppressWarnings("unused") public Builder newBuilder() {
     return new Builder(context).setCache(this.cache)
         .setExtensionMode(this.extensionMode)
@@ -124,6 +132,7 @@ public final class Config {
       this(null);
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     public Builder(@Nullable Context context) {
       this.context = context != null ? context.getApplicationContext() : null;
       DefaultBandwidthMeter bandwidthMeter =
@@ -131,14 +140,19 @@ public final class Config {
       meter = new BaseMeter<>(bandwidthMeter);
     }
 
-    @ExtensionRendererMode private int extensionMode = EXTENSION_RENDERER_MODE_OFF;
+    @UnstableApi
+    @DefaultRenderersFactory.ExtensionRendererMode
+    private int extensionMode = EXTENSION_RENDERER_MODE_OFF;
     private BaseMeter meter;
+    @UnstableApi
     private LoadControl loadControl = new DefaultLoadControl();
     private DataSource.Factory dataSourceFactory = null;
     private MediaSourceBuilder mediaSourceBuilder = MediaSourceBuilder.DEFAULT;
+    @UnstableApi
     private Cache cache = null;
 
-    public Builder setExtensionMode(@ExtensionRendererMode int extensionMode) {
+    @OptIn(markerClass = UnstableApi.class)
+    public Builder setExtensionMode(@DefaultRenderersFactory.ExtensionRendererMode int extensionMode) {
       this.extensionMode = extensionMode;
       return this;
     }
@@ -148,6 +162,7 @@ public final class Config {
       return this;
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     public Builder setLoadControl(@NonNull LoadControl loadControl) {
       this.loadControl = checkNotNull(loadControl, "Need non-null LoadControl");
       return this;
@@ -165,11 +180,13 @@ public final class Config {
       return this;
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     public Builder setCache(@Nullable Cache cache) {
       this.cache = cache;
       return this;
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     public Config build() {
       return new Config(context, extensionMode, meter, loadControl, dataSourceFactory,
           mediaSourceBuilder, cache);

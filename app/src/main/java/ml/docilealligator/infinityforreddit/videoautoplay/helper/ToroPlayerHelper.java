@@ -143,7 +143,7 @@ public abstract class ToroPlayerHelper {
 
   /**
    * Initialize the necessary resource for the incoming playback. For example, prepare the
-   * ExoPlayer instance for SimpleExoPlayerView. The initialization is feed by an initial playback
+   * ExoPlayer instance for ExoPlayerView. The initialization is feed by an initial playback
    * info, telling if the playback should start from a specific position or from beginning.
    *
    * Normally this info can be obtained from cache if there is cache manager, or {@link PlaybackInfo#SCRAP}

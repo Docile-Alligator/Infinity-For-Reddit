@@ -23,9 +23,10 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ui.StyledPlayerView;
+import androidx.annotation.OptIn;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.ui.PlayerView;
 
 import ml.docilealligator.infinityforreddit.videoautoplay.annotations.RemoveIn;
 import ml.docilealligator.infinityforreddit.videoautoplay.helper.ToroPlayerHelper;
@@ -44,6 +45,7 @@ import ml.docilealligator.infinityforreddit.videoautoplay.widget.Container;
 public class ExoPlayerViewHelper extends ToroPlayerHelper {
 
   @NonNull private final ExoPlayable playable;
+  @UnstableApi
   @NonNull private final MyEventListeners listeners;
   private final boolean lazyPrepare;
 
@@ -74,10 +76,11 @@ public class ExoPlayerViewHelper extends ToroPlayerHelper {
     this(player, new ExoPlayable(creator, uri, fileExt));
   }
 
+  @OptIn(markerClass = UnstableApi.class)
   public ExoPlayerViewHelper(@NonNull ToroPlayer player, @NonNull ExoPlayable playable) {
     super(player);
     //noinspection ConstantConditions
-    if (player.getPlayerView() == null || !(player.getPlayerView() instanceof StyledPlayerView)) {
+    if (player.getPlayerView() == null || !(player.getPlayerView() instanceof PlayerView)) {
       throw new IllegalArgumentException("Require non-null PlayerView");
     }
 
@@ -86,15 +89,17 @@ public class ExoPlayerViewHelper extends ToroPlayerHelper {
     this.lazyPrepare = true;
   }
 
+  @OptIn(markerClass = UnstableApi.class)
   @Override protected void initialize(@NonNull PlaybackInfo playbackInfo) {
     playable.setPlaybackInfo(playbackInfo);
     playable.addEventListener(listeners);
     playable.addErrorListener(super.getErrorListeners());
     playable.addOnVolumeChangeListener(super.getVolumeChangeListeners());
     playable.prepare(!lazyPrepare);
-    playable.setPlayerView((StyledPlayerView) player.getPlayerView());
+    playable.setPlayerView((PlayerView) player.getPlayerView());
   }
 
+  @OptIn(markerClass = UnstableApi.class)
   @Override public void release() {
     super.release();
     playable.setPlayerView(null);
@@ -140,16 +145,19 @@ public class ExoPlayerViewHelper extends ToroPlayerHelper {
     this.playable.setPlaybackInfo(playbackInfo);
   }
 
+  @OptIn(markerClass = UnstableApi.class)
   public void addEventListener(@NonNull Playable.EventListener listener) {
     //noinspection ConstantConditions
     if (listener != null) this.listeners.add(listener);
   }
 
+  @OptIn(markerClass = UnstableApi.class)
   public void removeEventListener(Playable.EventListener listener) {
     this.listeners.remove(listener);
   }
 
   // A proxy, to also hook into ToroPlayerHelper's state change event.
+  @UnstableApi
   private class MyEventListeners extends Playable.EventListeners {
 
     MyEventListeners() {

@@ -4,11 +4,12 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.annotation.OptIn;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.database.StandaloneDatabaseProvider;
+import androidx.media3.datasource.cache.LeastRecentlyUsedCacheEvictor;
+import androidx.media3.datasource.cache.SimpleCache;
 import androidx.preference.PreferenceManager;
-
-import com.google.android.exoplayer2.database.StandaloneDatabaseProvider;
-import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
-import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 
 import java.io.File;
 import java.util.concurrent.Executor;
@@ -162,11 +163,13 @@ abstract class AppModule {
         return new File(appCache, "/exoplayer");
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     @Provides
     static StandaloneDatabaseProvider provideExoDatabaseProvider(Application application) {
         return new StandaloneDatabaseProvider(application);
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     @Provides
     @Singleton
     static SimpleCache provideSimpleCache(StandaloneDatabaseProvider standaloneDatabaseProvider,
@@ -176,6 +179,7 @@ abstract class AppModule {
                 standaloneDatabaseProvider);
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     @Provides
     static Config providesMediaConfig(Application application, SimpleCache simpleCache) {
         return new Config.Builder(application)

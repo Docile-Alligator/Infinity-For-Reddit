@@ -17,7 +17,8 @@
 package ml.docilealligator.infinityforreddit.videoautoplay;
 
 import static android.text.TextUtils.isEmpty;
-import static com.google.android.exoplayer2.util.Util.inferContentType;
+
+import static androidx.media3.common.util.Util.inferContentType;
 
 import android.content.Context;
 import android.net.Uri;
@@ -25,20 +26,21 @@ import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.C.ContentType;
-import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.source.LoopingMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.MediaSourceEventListener;
-import com.google.android.exoplayer2.source.ProgressiveMediaSource;
-import com.google.android.exoplayer2.source.dash.DashMediaSource;
-import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
-import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
-import com.google.android.exoplayer2.upstream.DataSource;
+import androidx.annotation.OptIn;
+import androidx.media3.common.C;
+import androidx.media3.common.C.ContentType;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.datasource.DataSource;
+import androidx.media3.exoplayer.dash.DashMediaSource;
+import androidx.media3.exoplayer.dash.DefaultDashChunkSource;
+import androidx.media3.exoplayer.hls.HlsMediaSource;
+import androidx.media3.exoplayer.smoothstreaming.DefaultSsChunkSource;
+import androidx.media3.exoplayer.smoothstreaming.SsMediaSource;
+import androidx.media3.exoplayer.source.LoopingMediaSource;
+import androidx.media3.exoplayer.source.MediaSource;
+import androidx.media3.exoplayer.source.MediaSourceEventListener;
+import androidx.media3.exoplayer.source.ProgressiveMediaSource;
 
 /**
  * @author eneim (2018/01/24).
@@ -47,6 +49,7 @@ import com.google.android.exoplayer2.upstream.DataSource;
 
 public interface MediaSourceBuilder {
 
+    @OptIn(markerClass = UnstableApi.class)
     @NonNull
     MediaSource buildMediaSource(@NonNull Context context, @NonNull Uri uri,
                                  @Nullable String fileExt, @Nullable Handler handler,
@@ -55,13 +58,14 @@ public interface MediaSourceBuilder {
                                  @Nullable MediaSourceEventListener listener);
 
     MediaSourceBuilder DEFAULT = new MediaSourceBuilder() {
+        @OptIn(markerClass = UnstableApi.class)
         @NonNull
         @Override
         public MediaSource buildMediaSource(@NonNull Context context, @NonNull Uri uri,
                                             @Nullable String ext, @Nullable Handler handler,
                                             @NonNull DataSource.Factory manifestDataSourceFactory,
                                             @NonNull DataSource.Factory mediaDataSourceFactory, MediaSourceEventListener listener) {
-            @ContentType int type = isEmpty(ext) ? inferContentType(uri) : inferContentType("." + ext);
+            @ContentType int type = isEmpty(ext) ? inferContentType(uri) : inferContentType(Uri.parse("." + ext));
             MediaSource result;
             switch (type) {
                 case C.CONTENT_TYPE_SS:
@@ -93,6 +97,7 @@ public interface MediaSourceBuilder {
 
     MediaSourceBuilder LOOPING = new MediaSourceBuilder() {
 
+        @OptIn(markerClass = UnstableApi.class)
         @NonNull
         @Override
         public MediaSource buildMediaSource(@NonNull Context context, @NonNull Uri uri,
