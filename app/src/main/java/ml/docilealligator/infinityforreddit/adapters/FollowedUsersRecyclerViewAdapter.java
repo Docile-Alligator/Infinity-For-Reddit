@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.adapters;
 import android.content.Intent;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
@@ -177,10 +178,10 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
     @NonNull
     @Override
-    public String getPopupText(int position) {
+    public CharSequence getPopupText(@NonNull View view, int position) {
         switch (getItemViewType(position)) {
             case VIEW_TYPE_USER:
-                int offset = (mFavoriteSubscribedUserData != null && mFavoriteSubscribedUserData.size() > 0) ?
+                int offset = (mFavoriteSubscribedUserData != null && !mFavoriteSubscribedUserData.isEmpty()) ?
                         mFavoriteSubscribedUserData.size() + 2 : 0;
                 return mSubscribedUserData.get(position - offset).getName().substring(0, 1).toUpperCase();
             case VIEW_TYPE_FAVORITE_USER:

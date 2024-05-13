@@ -425,7 +425,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
 
     @NonNull
     @Override
-    public String getPopupText(int position) {
+    public CharSequence getPopupText(@NonNull View view, int position) {
         switch (getItemViewType(position)) {
             case VIEW_TYPE_SUBREDDIT:
                 if (hasClearSelectionRow && position == 0) {
