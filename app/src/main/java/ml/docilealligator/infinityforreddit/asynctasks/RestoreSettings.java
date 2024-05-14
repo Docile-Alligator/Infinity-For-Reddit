@@ -32,6 +32,8 @@ import java.util.concurrent.Executor;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
+import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterUsage;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubreddit;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
@@ -132,6 +134,8 @@ public class RestoreSettings {
                                 File customThemesFile = new File(f.getAbsolutePath() + "/custom_themes.json");
                                 File postFiltersFile = new File(f.getAbsolutePath() + "/post_filters.json");
                                 File postFilterUsageFile = new File(f.getAbsolutePath() + "/post_filter_usage.json");
+                                File commentFiltersFile = new File(f.getAbsolutePath() + "/comment_filters.json");
+                                File commentFilterUsageFile = new File(f.getAbsolutePath() + "/comment_filter_usage.json");
 
                                 if (anonymousSubscribedSubredditsFile.exists()) {
                                     List<SubscribedSubredditData> anonymousSubscribedSubreddits = getListFromFile(anonymousSubscribedSubredditsFile, new TypeToken<List<SubscribedSubredditData>>() {}.getType());
@@ -161,6 +165,15 @@ public class RestoreSettings {
                                     if (postFilterUsageFile.exists()) {
                                         List<PostFilterUsage> postFilterUsage = getListFromFile(postFilterUsageFile, new TypeToken<List<PostFilterUsage>>() {}.getType());
                                         redditDataRoomDatabase.postFilterUsageDao().insertAll(postFilterUsage);
+                                    }
+                                }
+                                if (commentFiltersFile.exists()) {
+                                    List<CommentFilter> commentFilters = getListFromFile(commentFiltersFile, new TypeToken<List<CommentFilter>>() {}.getType());
+                                    redditDataRoomDatabase.commentFilterDao().insertAll(commentFilters);
+
+                                    if (commentFilterUsageFile.exists()) {
+                                        List<CommentFilterUsage> commentFilterUsage = getListFromFile(commentFilterUsageFile, new TypeToken<List<CommentFilterUsage>>() {}.getType());
+                                        redditDataRoomDatabase.commentFilterUsageDao().insertAll(commentFilterUsage);
                                     }
                                 }
                             }
