@@ -37,7 +37,7 @@
             app:strokeWidth="0dp"
             app:iconSize="24dp"
             app:iconTint="@null"
-            app:backgroundTint="#10FFFFFF"
+            app:backgroundTint="#444141"
             android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
