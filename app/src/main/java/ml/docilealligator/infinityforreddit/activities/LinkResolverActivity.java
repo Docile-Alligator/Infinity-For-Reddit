@@ -57,6 +57,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String IMGUR_GALLERY_PATTERN = "/gallery/\\w+/?";
     private static final String IMGUR_ALBUM_PATTERN = "/(album|a)/\\w+/?";
     private static final String IMGUR_IMAGE_PATTERN = "/\\w+/?";
+    private static final String MEDIA_PATTERN = "/media/?";
     private static final String WIKI_PATTERN = "/[rR]/[\\w-]+/(wiki|w)(?:/[\\w-]+)*";
     private static final String GOOGLE_AMP_PATTERN = "/amp/s/amp.reddit.com/.*";
     private static final String STREAMABLE_PATTERN = "/\\w+/?";
@@ -186,6 +187,10 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 startActivity(intent);
                             } else if (path.equals("/report")) {
                                 openInWebView(uri);
+                            } else if (path.matches(MEDIA_PATTERN)) {
+                                // TODO: check if this can be video.
+                                // Example: https://www.reddit.com/media?url=https%3A%2F%2Fpreview.redd.it%2F9iamzovpcrta1.png%3Fwidth%3D720%26auto%3Dwebp%26s%3Da6d1287094fc6ad986e1245a5fc3869b2f0c7da4
+                                deepLinkError(uri);
                             } else if (path.matches(POST_PATTERN) || path.matches(POST_PATTERN_2)) {
                                 int commentsIndex = segments.lastIndexOf("comments");
                                 if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
