@@ -203,6 +203,7 @@
                     android:inputType="textCapSentences|textMultiLine"
                     android:padding="16dp"
                     android:textSize="?attr/title_font_18"
+                    android:textStyle="bold"
                     android:fontFamily="?attr/title_font_family" />
 
                 <EditText
