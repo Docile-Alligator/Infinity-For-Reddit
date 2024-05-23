@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.markdown;
 
 import android.util.SparseArray;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
@@ -24,9 +25,11 @@ import io.noties.markwon.MarkwonReducer;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.SimpleEntry;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
 
 public class CustomMarkwonAdapter extends MarkwonAdapter {
+    private BaseActivity activity;
     private final SparseArray<Entry<Node, Holder>> entries;
     private final Entry<Node, Holder> defaultEntry;
     private final MarkwonReducer reducer;
@@ -43,9 +46,11 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
 
     @SuppressWarnings("WeakerAccess")
     CustomMarkwonAdapter(
+            @NonNull BaseActivity activity,
             @NonNull SparseArray<Entry<Node, Holder>> entries,
             @NonNull Entry<Node, Holder> defaultEntry,
             @NonNull MarkwonReducer reducer) {
+        this.activity = activity;
         this.entries = entries;
         this.defaultEntry = defaultEntry;
         this.reducer = reducer;
@@ -63,16 +68,17 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
 
     @NonNull
     public static CustomBuilderImpl builder(
+            @NonNull BaseActivity activity,
             @LayoutRes int defaultEntryLayoutResId,
             @IdRes int defaultEntryTextViewResId
     ) {
-        return builder(SimpleEntry.create(defaultEntryLayoutResId, defaultEntryTextViewResId));
+        return builder(activity, SimpleEntry.create(defaultEntryLayoutResId, defaultEntryTextViewResId));
     }
 
     @NonNull
-    public static CustomBuilderImpl builder(@NonNull Entry<? extends Node, ? extends Holder> defaultEntry) {
+    public static CustomBuilderImpl builder(@NonNull BaseActivity activity, @NonNull Entry<? extends Node, ? extends Holder> defaultEntry) {
         //noinspection unchecked
-        return new CustomBuilderImpl((Entry<Node, Holder>) defaultEntry);
+        return new CustomBuilderImpl(activity, (Entry<Node, Holder>) defaultEntry);
     }
 
     @Override
@@ -136,6 +142,39 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
                 return false;
             });
         } else if (holder.itemView instanceof HorizontalScrollView) {
+            holder.itemView.setOnTouchListener(new View.OnTouchListener() {
+                boolean isSliderPanelLockedAlready;
+                boolean isViewPager2UserInputEnabledAlready;
+                @Override
+                public boolean onTouch(View v, MotionEvent motionEvent) {
+                    if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP) {
+                        if (activity.mSliderPanel != null) {
+                            activity.mSliderPanel.requestDisallowInterceptTouchEvent(false);
+                        }
+
+                        if (activity.mViewPager2 != null && isViewPager2UserInputEnabledAlready) {
+                            activity.mViewPager2.setUserInputEnabled(true);
+                        }
+
+                        if (!isSliderPanelLockedAlready) {
+                            activity.unlockSwipeRightToGoBack();
+                        }
+                    } else {
+                        if (activity.mSliderPanel != null) {
+                            isSliderPanelLockedAlready = activity.mSliderPanel.isLocked();
+                            activity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
+                        }
+                        if (activity.mViewPager2 != null) {
+                            isViewPager2UserInputEnabledAlready = activity.mViewPager2.isUserInputEnabled();
+                            activity.mViewPager2.setUserInputEnabled(false);
+                        }
+                        activity.lockSwipeRightToGoBack();
+                    }
+
+                    return false;
+                }
+            });
+
             TableLayout tableLayout = holder.itemView.findViewById(R.id.table_layout);
             if (tableLayout != null) {
                 for (int i = 0; i < tableLayout.getChildCount(); i++) {
@@ -246,13 +285,16 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
 
     public static class CustomBuilderImpl implements Builder {
 
+        private final BaseActivity activity;
+
         private final SparseArray<Entry<Node, Holder>> entries = new SparseArray<>(3);
 
         private final Entry<Node, Holder> defaultEntry;
 
         private MarkwonReducer reducer;
 
-        CustomBuilderImpl(@NonNull Entry<Node, Holder> defaultEntry) {
+        CustomBuilderImpl(@NonNull BaseActivity activity, @NonNull Entry<Node, Holder> defaultEntry) {
+            this.activity = activity;
             this.defaultEntry = defaultEntry;
         }
 
@@ -281,7 +323,7 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
                 reducer = MarkwonReducer.directChildren();
             }
 
-            return new CustomMarkwonAdapter(entries, defaultEntry, reducer);
+            return new CustomMarkwonAdapter(activity, entries, defaultEntry, reducer);
         }
     }
 }

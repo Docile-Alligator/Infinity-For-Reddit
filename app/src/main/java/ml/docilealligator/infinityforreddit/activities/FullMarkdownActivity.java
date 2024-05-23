@@ -125,7 +125,7 @@ public class FullMarkdownActivity extends BaseActivity {
         Markwon markwon = MarkdownUtils.createContentPreviewRedditMarkwon(this, miscPlugin, markdownColor,
                 markdownColor | 0xFF000000);
 
-        CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAdapter();
+        CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAdapter(this);
         LinearLayoutManagerBugFixed linearLayoutManager = new SwipeLockLinearLayoutManager(this, new SwipeLockInterface() {
             @Override
             public void lockSwipe() {

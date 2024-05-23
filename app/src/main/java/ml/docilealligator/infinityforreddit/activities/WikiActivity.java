@@ -189,7 +189,7 @@ public class WikiActivity extends BaseActivity {
         markwon = MarkdownUtils.createFullRedditMarkwon(this,
                 miscPlugin, emoteCloseBracketInlineProcessor, emotePlugin, imageAndGifPlugin, markdownColor, spoilerBackgroundColor, onLinkLongClickListener);
 
-        markwonAdapter = MarkdownUtils.createCustomTablesAndImagesAdapter(imageAndGifEntry);
+        markwonAdapter = MarkdownUtils.createCustomTablesAndImagesAdapter(this, imageAndGifEntry);
         LinearLayoutManagerBugFixed linearLayoutManager = new SwipeLockLinearLayoutManager(this, new SwipeLockInterface() {
             @Override
             public void lockSwipe() {

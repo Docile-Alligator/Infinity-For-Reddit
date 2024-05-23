@@ -240,7 +240,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             Markwon postBodyMarkwon = MarkdownUtils.createFullRedditMarkwon(this,
                     miscPlugin, emoteCloseBracketInlineProcessor, emotePlugin, imageAndGifPlugin, parentTextColor,
                     parentSpoilerBackgroundColor, null);
-            CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAndImagesAdapter(imageAndGifEntry);
+            CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAndImagesAdapter(this, imageAndGifEntry);
             markwonAdapter.setOnLongClickListener(view -> {
                 Utils.hideKeyboard(CommentActivity.this);
                 CopyTextBottomSheetFragment.show(getSupportFragmentManager(),

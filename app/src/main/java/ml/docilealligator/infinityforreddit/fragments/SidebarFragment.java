@@ -177,7 +177,7 @@ public class SidebarFragment extends Fragment {
         Markwon markwon = MarkdownUtils.createFullRedditMarkwon(activity,
                 miscPlugin, emoteCloseBracketInlineProcessor, emotePlugin, imageAndGifPlugin, markdownColor,
                 spoilerBackgroundColor, onLinkLongClickListener);
-        CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAndImagesAdapter(imageAndGifEntry);
+        CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAndImagesAdapter(activity, imageAndGifEntry);
         markwonAdapter.setOnLongClickListener(view -> {
             if (sidebarDescription != null && !sidebarDescription.equals("")) {
                 Bundle bundle = new Bundle();

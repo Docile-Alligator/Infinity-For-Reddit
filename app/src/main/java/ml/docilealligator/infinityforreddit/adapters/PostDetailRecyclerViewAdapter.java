@@ -421,7 +421,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         activity.startActivity(intent);
                     }
                 });
-        mMarkwonAdapter = MarkdownUtils.createCustomTablesAndImagesAdapter(mImageAndGifEntry);
+        mMarkwonAdapter = MarkdownUtils.createCustomTablesAndImagesAdapter(mActivity, mImageAndGifEntry);
     }
 
     public void setCanStartActivity(boolean canStartActivity) {
