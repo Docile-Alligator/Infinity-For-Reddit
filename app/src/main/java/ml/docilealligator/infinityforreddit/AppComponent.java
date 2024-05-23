@@ -29,6 +29,7 @@ import ml.docilealligator.infinityforreddit.activities.InboxActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.LockScreenActivity;
 import ml.docilealligator.infinityforreddit.activities.LoginActivity;
+import ml.docilealligator.infinityforreddit.activities.LoginChromeCustomTabActivity;
 import ml.docilealligator.infinityforreddit.activities.MainActivity;
 import ml.docilealligator.infinityforreddit.activities.MultiredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.activities.PostFilterPreferenceActivity;
@@ -312,6 +313,8 @@ public interface AppComponent {
     void inject(CommentFilterUsageListingActivity commentFilterUsageListingActivity);
 
     void inject(CustomThemeListingFragment customThemeListingFragment);
+
+    void inject(LoginChromeCustomTabActivity loginChromeCustomTabActivity);
 
     @Component.Factory
     interface Factory {

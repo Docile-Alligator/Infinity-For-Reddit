@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -21,10 +20,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -45,6 +44,7 @@ import ml.docilealligator.infinityforreddit.asynctasks.ParseAndInsertNewAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivityLoginBinding;
+import ml.docilealligator.infinityforreddit.events.NewUserLoggedInEvent;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -114,18 +114,6 @@ public class LoginActivity extends BaseActivity {
             isAgreeToUserAgreement = savedInstanceState.getBoolean(IS_AGREE_TO_USER_AGGREMENT_STATE);
         }
 
-        binding.fabLoginActivity.setOnClickListener(view -> {
-            new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
-                    .setTitle(R.string.have_trouble_login_title)
-                    .setMessage(R.string.have_trouble_login_message)
-                    .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-                        enableDom = !enableDom;
-                        ActivityCompat.recreate(this);
-                    })
-                    .setNegativeButton(R.string.no, null)
-                    .show();
-        });
-
         if (enableDom) {
             binding.twoFaInfOTextViewLoginActivity.setVisibility(View.GONE);
         }
@@ -143,6 +131,22 @@ public class LoginActivity extends BaseActivity {
         uriBuilder.appendQueryParameter(APIUtils.SCOPE_KEY, APIUtils.SCOPE);
 
         String url = uriBuilder.toString();
+
+        binding.fabLoginActivity.setOnClickListener(view -> {
+            /*new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                    .setTitle(R.string.have_trouble_login_title)
+                    .setMessage(R.string.have_trouble_login_message)
+                    .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
+                        enableDom = !enableDom;
+                        ActivityCompat.recreate(this);
+                    })
+                    .setNegativeButton(R.string.no, null)
+                    .show();*/
+
+            Intent intent = new Intent(this, LoginChromeCustomTabActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
         CookieManager.getInstance().removeAllCookies(aBoolean -> {
         });
@@ -190,8 +194,7 @@ public class LoginActivity extends BaseActivity {
                                                         ParseAndInsertNewAccount.parseAndInsertNewAccount(mExecutor, new Handler(), name, accessToken, refreshToken, profileImageUrl, bannerImageUrl,
                                                                 karma, authCode, mRedditDataRoomDatabase.accountDao(),
                                                                 () -> {
-                                                                    Intent resultIntent = new Intent();
-                                                                    setResult(Activity.RESULT_OK, resultIntent);
+                                                                    EventBus.getDefault().post(new NewUserLoggedInEvent());
                                                                     finish();
                                                                 });
                                                     }

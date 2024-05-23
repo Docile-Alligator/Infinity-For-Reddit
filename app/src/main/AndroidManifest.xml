@@ -35,22 +35,41 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
         <activity
+            android:name=".activities.LoginChromeCustomTabActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.Slidable"
+            android:launchMode="singleTop"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="localhost"
+                    android:scheme="infinity" />
+            </intent-filter>
+
+        </activity>
+        <activity
             android:name=".activities.CommentFilterUsageListingActivity"
+            android:exported="false"
             android:parentActivityName=".activities.SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:exported="false" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.CustomizeCommentFilterActivity"
+            android:exported="false"
             android:label="@string/customize_comment_filter_activity_label"
             android:parentActivityName=".activities.SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:exported="false" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.CommentFilterPreferenceActivity"
+            android:exported="false"
             android:label="@string/comment_filter_preference_activity_label"
             android:parentActivityName=".activities.SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:exported="false" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.HistoryActivity"
             android:exported="false"
@@ -122,11 +141,6 @@
             android:name=".activities.FetchRandomSubredditOrPostActivity"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activities.GiveAwardActivity"
-            android:label="@string/give_award_activity_label"
-            android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.Slidable" />
         <activity
             android:name=".activities.SelectUserFlairActivity"
             android:parentActivityName=".activities.MainActivity"
