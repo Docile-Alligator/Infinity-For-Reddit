@@ -8,16 +8,15 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsService;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
@@ -39,6 +38,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.ParseAndInsertNewAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ActivityLoginChromeCustomTabBinding;
 import ml.docilealligator.infinityforreddit.events.NewUserLoggedInEvent;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -67,49 +67,34 @@ public class LoginChromeCustomTabActivity extends BaseActivity {
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
+    private ActivityLoginChromeCustomTabBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
+        setImmersiveModeNotApplicable();
+
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_login_chrome_custom_tab);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        //EdgeToEdge.enable(this);
+        binding = ActivityLoginChromeCustomTabBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        /*ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
-        });
+        });*/
 
         applyCustomTheme();
 
-        ArrayList<ResolveInfo> resolveInfos = getCustomTabsPackages(getPackageManager());
-        if (!resolveInfos.isEmpty()) {
-            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-            // add share action to menu list
-            builder.setShareState(CustomTabsIntent.SHARE_STATE_ON);
-            builder.setDefaultColorSchemeParams(
-                    new CustomTabColorSchemeParams.Builder()
-                            .setToolbarColor(mCustomThemeWrapper.getColorPrimary())
-                            .build());
-            CustomTabsIntent customTabsIntent = builder.build();
-            customTabsIntent.intent.setPackage(resolveInfos.get(0).activityInfo.packageName);
-            customTabsIntent.intent.putExtra("com.google.android.apps.chrome.EXTRA_OPEN_NEW_INCOGNITO_TAB", true);
+        setSupportActionBar(binding.toolbarLoginChromeCustomTabActivity);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-            try {
-                Uri.Builder uriBuilder = Uri.parse(APIUtils.OAUTH_URL).buildUpon();
-                uriBuilder.appendQueryParameter(APIUtils.CLIENT_ID_KEY, APIUtils.CLIENT_ID);
-                uriBuilder.appendQueryParameter(APIUtils.RESPONSE_TYPE_KEY, APIUtils.RESPONSE_TYPE);
-                uriBuilder.appendQueryParameter(APIUtils.STATE_KEY, APIUtils.STATE);
-                uriBuilder.appendQueryParameter(APIUtils.REDIRECT_URI_KEY, APIUtils.REDIRECT_URI);
-                uriBuilder.appendQueryParameter(APIUtils.DURATION_KEY, APIUtils.DURATION);
-                uriBuilder.appendQueryParameter(APIUtils.SCOPE_KEY, APIUtils.SCOPE);
+        openLoginPage();
 
-                customTabsIntent.launchUrl(this, uriBuilder.build());
-            } catch (ActivityNotFoundException e) {
-                // TODO catch this
-            }
-        }
+        binding.openWebpageButtonLoginChromeCustomTabActivity.setOnClickListener(view -> {
+            openLoginPage();
+        });
     }
 
     @Override
@@ -118,8 +103,11 @@ public class LoginChromeCustomTabActivity extends BaseActivity {
 
         Uri uri = intent.getData();
         if (uri == null) {
+            binding.openWebpageButtonLoginChromeCustomTabActivity.setVisibility(View.VISIBLE);
             return;
         }
+
+        binding.openWebpageButtonLoginChromeCustomTabActivity.setVisibility(View.GONE);
 
         String authCode = uri.getQueryParameter("code");
         if (authCode != null) {
@@ -220,7 +208,45 @@ public class LoginChromeCustomTabActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
+        binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutLoginChromeCustomTabActivity, null, binding.toolbarLoginChromeCustomTabActivity);
+        binding.openWebpageButtonLoginChromeCustomTabActivity.setTextColor(mCustomThemeWrapper.getButtonTextColor());
+        binding.openWebpageButtonLoginChromeCustomTabActivity.setBackgroundColor(mCustomThemeWrapper.getColorPrimaryLightTheme());
+        if (typeface != null) {
+            binding.openWebpageButtonLoginChromeCustomTabActivity.setTypeface(typeface);
+        }
+    }
 
+    private void openLoginPage() {
+        ArrayList<ResolveInfo> resolveInfos = getCustomTabsPackages(getPackageManager());
+        if (!resolveInfos.isEmpty()) {
+            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+            // add share action to menu list
+            builder.setShareState(CustomTabsIntent.SHARE_STATE_ON);
+            builder.setDefaultColorSchemeParams(
+                    new CustomTabColorSchemeParams.Builder()
+                            .setToolbarColor(mCustomThemeWrapper.getColorPrimary())
+                            .build());
+            CustomTabsIntent customTabsIntent = builder.build();
+            customTabsIntent.intent.setPackage(resolveInfos.get(0).activityInfo.packageName);
+            customTabsIntent.intent.putExtra("com.google.android.apps.chrome.EXTRA_OPEN_NEW_INCOGNITO_TAB", true);
+
+            try {
+                Uri.Builder uriBuilder = Uri.parse(APIUtils.OAUTH_URL).buildUpon();
+                uriBuilder.appendQueryParameter(APIUtils.CLIENT_ID_KEY, APIUtils.CLIENT_ID);
+                uriBuilder.appendQueryParameter(APIUtils.RESPONSE_TYPE_KEY, APIUtils.RESPONSE_TYPE);
+                uriBuilder.appendQueryParameter(APIUtils.STATE_KEY, APIUtils.STATE);
+                uriBuilder.appendQueryParameter(APIUtils.REDIRECT_URI_KEY, APIUtils.REDIRECT_URI);
+                uriBuilder.appendQueryParameter(APIUtils.DURATION_KEY, APIUtils.DURATION);
+                uriBuilder.appendQueryParameter(APIUtils.SCOPE_KEY, APIUtils.SCOPE);
+
+                customTabsIntent.launchUrl(this, uriBuilder.build());
+            } catch (ActivityNotFoundException e) {
+                Snackbar.make(binding.getRoot(), R.string.custom_tab_not_available, Snackbar.LENGTH_LONG).show();
+            }
+        } else {
+            Snackbar.make(binding.getRoot(), R.string.custom_tab_not_available, Snackbar.LENGTH_LONG).show();
+        }
     }
 
     private ArrayList<ResolveInfo> getCustomTabsPackages(PackageManager pm) {

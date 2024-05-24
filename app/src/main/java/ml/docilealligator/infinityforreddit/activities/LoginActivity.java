@@ -12,7 +12,6 @@ import android.text.util.Linkify;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -55,7 +54,6 @@ import retrofit2.Retrofit;
 
 public class LoginActivity extends BaseActivity {
 
-    private static final String ENABLE_DOM_STATE = "EDS";
     private static final String IS_AGREE_TO_USER_AGGREMENT_STATE = "IATUAS";
 
     @Inject
@@ -77,7 +75,6 @@ public class LoginActivity extends BaseActivity {
     @Inject
     Executor mExecutor;
     private String authCode;
-    private boolean enableDom = false;
     private boolean isAgreeToUserAgreement = false;
     private ActivityLoginBinding binding;
 
@@ -110,16 +107,10 @@ public class LoginActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (savedInstanceState != null) {
-            enableDom = savedInstanceState.getBoolean(ENABLE_DOM_STATE);
             isAgreeToUserAgreement = savedInstanceState.getBoolean(IS_AGREE_TO_USER_AGGREMENT_STATE);
         }
 
-        if (enableDom) {
-            binding.twoFaInfOTextViewLoginActivity.setVisibility(View.GONE);
-        }
-
         binding.webviewLoginActivity.getSettings().setJavaScriptEnabled(true);
-        binding.webviewLoginActivity.getSettings().setDomStorageEnabled(enableDom);
 
         Uri baseUri = Uri.parse(APIUtils.OAUTH_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
@@ -133,16 +124,6 @@ public class LoginActivity extends BaseActivity {
         String url = uriBuilder.toString();
 
         binding.fabLoginActivity.setOnClickListener(view -> {
-            /*new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
-                    .setTitle(R.string.have_trouble_login_title)
-                    .setMessage(R.string.have_trouble_login_message)
-                    .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-                        enableDom = !enableDom;
-                        ActivityCompat.recreate(this);
-                    })
-                    .setNegativeButton(R.string.no, null)
-                    .show();*/
-
             Intent intent = new Intent(this, LoginChromeCustomTabActivity.class);
             startActivity(intent);
             finish();
@@ -284,7 +265,6 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(ENABLE_DOM_STATE, enableDom);
         outState.putBoolean(IS_AGREE_TO_USER_AGGREMENT_STATE, isAgreeToUserAgreement);
     }
 
@@ -305,7 +285,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        binding.coordinatorLayoutLoginActivity.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutLoginActivity, null, binding.toolbarLoginActivity);
         binding.twoFaInfOTextViewLoginActivity.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
         Drawable infoDrawable = Utils.getTintedDrawable(this, R.drawable.ic_info_preference_24dp, mCustomThemeWrapper.getPrimaryIconColor());

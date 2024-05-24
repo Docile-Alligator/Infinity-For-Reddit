@@ -36,6 +36,7 @@
         tools:replace="android:label">
         <activity
             android:name=".activities.LoginChromeCustomTabActivity"
+            android:label="@string/login_activity_label"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable"
             android:launchMode="singleTop"

@@ -1049,7 +1049,7 @@
 
     <string name="top_score">%1$s pts</string>
 
-    <string name="login_activity_2fa_prompt">If you have 2-factor authentication enabled, kindly type your password like the following: &lt;password&gt;:&lt;2FA code&gt;.\nExample: yourpass:123456</string>
+    <string name="login_activity_2fa_prompt">2-factor authentication: &lt;password&gt;:&lt;2FA code&gt;.\nExample: yourpass:123456\nGoogle login or having trouble login: click the bottom right button.</string>
 
     <string name="block_user">Block User</string>
     <string name="block_user_success">Blocked</string>
@@ -1157,8 +1157,8 @@
 
     <string name="choose_a_user">Choose a user</string>
 
-    <string name="have_trouble_login_title">Having Trouble Login</string>
-    <string name="have_trouble_login_message">Do you want to try another way to login?</string>
+    <string name="open_login_page">Open login page</string>
+    <string name="custom_tab_not_available">Chrome custom tab not available. Is Chrome or Firefox installed?</string>
 
     <string name="vote">Vote</string>
 
