@@ -1001,8 +1001,6 @@ Automatisches Abspielen von Videos ist deaktiviert."</string>
     <string name="settings_hide_the_number_of_comments">"Anzahl der Kommentare verstecken"</string>
     <string name="post_layout_gallery">"Galerie-Ansicht"</string>
     <string name="post_layout_card_2">"Karten-Ansicht 2"</string>
-    <string name="have_trouble_login_title">"Probleme beim Anmelden"</string>
-    <string name="have_trouble_login_message">"Möchtest du eine andere Anmeldungs-Art versuchen?"</string>
     <string name="vote">"Abstimmen"</string>
     <string name="action_share_link">"Link teilen"</string>
     <string name="action_copy_link">"Link kopieren"</string>

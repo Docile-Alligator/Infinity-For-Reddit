@@ -980,8 +980,6 @@ Otomatik video oynatma kapatılır."</string>
     <string name="settings_hide_the_number_of_comments">"Yorum Sayısını Gizle"</string>
     <string name="post_layout_gallery">"Galeri Düzeni"</string>
     <string name="post_layout_card_2">"Kart Düzeni 2"</string>
-    <string name="have_trouble_login_title">"Giriş Yapmakta Sorun Yaşanıyor"</string>
-    <string name="have_trouble_login_message">"Giriş yapmanın başka bir yolunu denemek ister misiniz?"</string>
     <string name="vote">"Oy"</string>
     <string name="action_share_link">"Bağlantıyı Paylaş"</string>
     <string name="action_copy_link">"Bağlantıyı Kopyala"</string>

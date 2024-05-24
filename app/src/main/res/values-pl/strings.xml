@@ -963,8 +963,6 @@ użytkownika / multireddita"</string>
     <string name="settings_hide_the_number_of_comments">"Ukryj liczbę komentarzy"</string>
     <string name="post_layout_gallery">"Layout galerii"</string>
     <string name="post_layout_card_2">"Layout karty 2"</string>
-    <string name="have_trouble_login_title">"Problem z logowaniem"</string>
-    <string name="have_trouble_login_message">"Chcesz spróbować innej opcji logowania?"</string>
     <string name="vote">"Zagłosuj"</string>
     <string name="action_share_link">"Zapisz link"</string>
     <string name="action_copy_link">"Skopiuj link"</string>

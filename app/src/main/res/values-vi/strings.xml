@@ -973,8 +973,6 @@ Tự động phát video bị tắt."</string>
     <string name="settings_hide_the_number_of_comments">"Ẩn số lượng bình luận"</string>
     <string name="post_layout_gallery">"Bố cục bộ sưu tập"</string>
     <string name="post_layout_card_2">"Bố cục thẻ 2"</string>
-    <string name="have_trouble_login_title">"Đang gặp rắc rối khi đăng nhập"</string>
-    <string name="have_trouble_login_message">"Bạn có muốn thử một cách khác để đăng nhập không?"</string>
     <string name="vote">"Vote"</string>
     <string name="action_share_link">"Chia sẻ liên kết"</string>
     <string name="action_copy_link">"Sao chép liên kết"</string>

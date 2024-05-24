@@ -1012,8 +1012,6 @@ https://s3.eu-west-1.amazonaws.com/po-pub/i/hJAe7sMhrfJzqjhp9VkDQOVC.PNG -->
     <string name="settings_hide_the_number_of_comments">"Ocultar el número de comentarios"</string>
     <string name="post_layout_gallery">"Diseño de galería"</string>
     <string name="post_layout_card_2">"Diseño de tarjeta 2"</string>
-    <string name="have_trouble_login_title">"Tenemos problemas para iniciar sesión"</string>
-    <string name="have_trouble_login_message">"¿Quieres probar otra manera de iniciar sesión?"</string>
     <string name="vote">"Votar"</string>
     <string name="action_share_link">"Compartir enlace"</string>
     <string name="action_copy_link">"Copiar enlace"</string>

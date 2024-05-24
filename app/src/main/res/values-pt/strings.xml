@@ -959,8 +959,6 @@ Reprodução automática de vídeos desativada."</string>
     <string name="settings_hide_the_number_of_comments">"Esconder Número de Comentários"</string>
     <string name="post_layout_gallery">"Galeria"</string>
     <string name="post_layout_card_2">"Cartão 2"</string>
-    <string name="have_trouble_login_title">"Dificuldades ao Iniciar Sessão"</string>
-    <string name="have_trouble_login_message">"Quer tentar iniciar sessão de outra forma?"</string>
     <string name="vote">"Votar"</string>
     <string name="action_share_link">"Partilhar Ligação"</string>
     <string name="action_copy_link">"Copiar Ligação"</string>

@@ -956,8 +956,6 @@ Redarea automată a videoclipurilor este dezactivată."</string>
     <string name="settings_hide_the_number_of_comments">"Ascunde Numărul de Comentarii"</string>
     <string name="post_layout_gallery">"Aspectul Galeriei"</string>
     <string name="post_layout_card_2">"Aspect Card 2"</string>
-    <string name="have_trouble_login_title">"Există Probleme de Autentificare"</string>
-    <string name="have_trouble_login_message">"Dorești să încerci o altă modalitate de autentificare?"</string>
     <string name="vote">"Votează"</string>
     <string name="action_share_link">"Partajează link"</string>
     <string name="action_copy_link">"Copie Link-ul"</string>

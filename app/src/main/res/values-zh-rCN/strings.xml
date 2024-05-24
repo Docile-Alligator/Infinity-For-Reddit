@@ -987,8 +987,6 @@ Reddit 视频分辨率较低。
     <string name="settings_hide_the_number_of_comments">"隐藏评论数"</string>
     <string name="post_layout_gallery">"相册布局"</string>
     <string name="post_layout_card_2">"卡片布局 2"</string>
-    <string name="have_trouble_login_title">"登录遇到问题"</string>
-    <string name="have_trouble_login_message">"您想尝试其他方式登录吗？"</string>
     <string name="vote">"投票"</string>
     <string name="action_share_link">"分享链接"</string>
     <string name="action_copy_link">"复制链接"</string>

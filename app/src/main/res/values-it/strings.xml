@@ -912,8 +912,6 @@ La riproduzione automatica video è disabilitata."</string>
     <string name="settings_hide_the_number_of_comments">"Nascondi numero di commenti"</string>
     <string name="post_layout_gallery">"Layout a galleria"</string>
     <string name="post_layout_card_2">"Layout a schede 2"</string>
-    <string name="have_trouble_login_title">"Problemi di accesso"</string>
-    <string name="have_trouble_login_message">"Vuoi provare un altro metodo di accesso?"</string>
     <string name="vote">"Vota"</string>
     <string name="action_share_link">"Condividi Link"</string>
     <string name="action_copy_link">"Copia Link"</string>

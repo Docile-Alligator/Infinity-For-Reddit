@@ -964,8 +964,6 @@ Automatické přehrávání videí je zakázáno."</string>
     <string name="settings_hide_the_number_of_comments">"Skrýt počet komentářů"</string>
     <string name="post_layout_gallery">"Rozložení galerie"</string>
     <string name="post_layout_card_2">"Rozložení karet 2"</string>
-    <string name="have_trouble_login_title">"Problémy s přihlášením"</string>
-    <string name="have_trouble_login_message">"Chcete zkusit jiný způsob přihlášení?"</string>
     <string name="vote">"Hlasovat"</string>
     <string name="action_share_link">"Sdílet odkaz"</string>
     <string name="action_copy_link">"Zkopírovat odkaz"</string>
