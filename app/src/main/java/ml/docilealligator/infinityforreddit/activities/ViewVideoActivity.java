@@ -23,7 +23,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.OrientationEventListener;
@@ -84,7 +83,6 @@ import javax.inject.Named;
 import javax.inject.Provider;
 
 import app.futured.hauler.DragDirection;
-import app.futured.hauler.OnDragActivityListener;
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
 import ml.docilealligator.infinityforreddit.FetchRedgifsVideoLinks;
 import ml.docilealligator.infinityforreddit.FetchStreamableVideo;
@@ -347,15 +345,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 }
             });
         }
-
-
-
-        binding.getRoot().setOnDragActivityListener(new OnDragActivityListener() {
-            @Override
-            public void onDrag(float v, float v1) {
-                Log.i("asdfasdf", "v " + v + " v1 " + v1);
-            }
-        });
 
         binding.getRoot().setOnDragDismissedListener(dragDirection -> {
             int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
