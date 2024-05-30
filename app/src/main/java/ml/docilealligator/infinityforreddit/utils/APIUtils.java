@@ -123,7 +123,7 @@ public class APIUtils {
     public static Map<String, String> getOAuthHeader(String accessToken) {
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.AUTHORIZATION_KEY, APIUtils.AUTHORIZATION_BASE + accessToken);
-        params.put(APIUtils.USER_AGENT_KEY, APIUtils.USER_AGENT);
+        //params.put(APIUtils.USER_AGENT_KEY, APIUtils.USER_AGENT);
         return params;
     }
 
