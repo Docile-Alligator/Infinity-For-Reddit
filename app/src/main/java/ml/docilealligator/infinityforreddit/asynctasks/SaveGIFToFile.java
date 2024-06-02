@@ -15,7 +15,7 @@ public class SaveGIFToFile {
 
     public static void saveGifToFile(Executor executor, Handler handler, GifDrawable resource,
                                      String cacheDirPath, String fileName,
-                                     SaveGIFToFileAsyncTaskListener saveImageToFileAsyncTaskListener) {
+                                     SaveGIFToFileListener saveImageToFileListener) {
         executor.execute(() -> {
             try {
                 File imageFile = new File(cacheDirPath, fileName);
@@ -26,14 +26,14 @@ public class SaveGIFToFile {
                 outputStream.write(bytes, 0, bytes.length);
                 outputStream.close();
 
-                handler.post(() -> saveImageToFileAsyncTaskListener.saveSuccess(imageFile));
+                handler.post(() -> saveImageToFileListener.saveSuccess(imageFile));
             } catch (IOException e) {
-                handler.post(saveImageToFileAsyncTaskListener::saveFailed);
+                handler.post(saveImageToFileListener::saveFailed);
             }
         });
     }
 
-    public interface SaveGIFToFileAsyncTaskListener {
+    public interface SaveGIFToFileListener {
         void saveSuccess(File imageFile);
         void saveFailed();
     }

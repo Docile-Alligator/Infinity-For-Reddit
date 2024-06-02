@@ -418,7 +418,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
                 if (getExternalCacheDir() != null) {
                     SaveGIFToFile.saveGifToFile(mExecutor, handler, resource, getExternalCacheDir().getPath(), mImageFileName,
-                            new SaveGIFToFile.SaveGIFToFileAsyncTaskListener() {
+                            new SaveGIFToFile.SaveGIFToFileListener() {
                                 @Override
                                 public void saveSuccess(File imageFile) {
                                     Uri uri = FileProvider.getUriForFile(ViewImageOrGifActivity.this,

@@ -437,7 +437,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
                 if (activity.getExternalCacheDir() != null) {
                     SaveGIFToFile.saveGifToFile(mExecutor, new Handler(), resource, activity.getExternalCacheDir().getPath(), media.fileName,
-                            new SaveGIFToFile.SaveGIFToFileAsyncTaskListener() {
+                            new SaveGIFToFile.SaveGIFToFileListener() {
                                 @Override
                                 public void saveSuccess(File imageFile) {
                                     Uri uri = FileProvider.getUriForFile(activity,
