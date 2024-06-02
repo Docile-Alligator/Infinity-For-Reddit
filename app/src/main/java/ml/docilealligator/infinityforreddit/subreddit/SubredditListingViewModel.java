@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
+import java.util.concurrent.Executor;
+
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
@@ -22,8 +24,10 @@ public class SubredditListingViewModel extends ViewModel {
     private final LiveData<PagedList<SubredditData>> subreddits;
     private final MutableLiveData<SortType> sortTypeLiveData;
 
-    public SubredditListingViewModel(Retrofit retrofit, String query, SortType sortType, @Nullable String accessToken, @NonNull String accountName, boolean nsfw) {
-        subredditListingDataSourceFactory = new SubredditListingDataSourceFactory(retrofit, query, sortType, accessToken, accountName, nsfw);
+    public SubredditListingViewModel(Executor executor, Retrofit retrofit, String query, SortType sortType,
+                                     @Nullable String accessToken, @NonNull String accountName, boolean nsfw) {
+        subredditListingDataSourceFactory = new SubredditListingDataSourceFactory(executor, retrofit, query,
+                sortType, accessToken, accountName, nsfw);
 
         initialLoadingState = Transformations.switchMap(subredditListingDataSourceFactory.getSubredditListingDataSourceMutableLiveData(),
                 SubredditListingDataSource::getInitialLoadStateLiveData);
@@ -75,6 +79,7 @@ public class SubredditListingViewModel extends ViewModel {
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
+        private final Executor executor;
         private final Retrofit retrofit;
         private final String query;
         private final SortType sortType;
@@ -84,8 +89,9 @@ public class SubredditListingViewModel extends ViewModel {
         private final String accountName;
         private final boolean nsfw;
 
-        public Factory(Retrofit retrofit, String query, SortType sortType, @Nullable String accessToken,
-                       @NonNull String accountName, boolean nsfw) {
+        public Factory(Executor executor, Retrofit retrofit, String query, SortType sortType,
+                       @Nullable String accessToken, @NonNull String accountName, boolean nsfw) {
+            this.executor = executor;
             this.retrofit = retrofit;
             this.query = query;
             this.sortType = sortType;
@@ -97,7 +103,7 @@ public class SubredditListingViewModel extends ViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new SubredditListingViewModel(retrofit, query, sortType, accessToken, accountName, nsfw);
+            return (T) new SubredditListingViewModel(executor, retrofit, query, sortType, accessToken,accountName, nsfw);
         }
     }
 }

@@ -166,6 +166,7 @@ public class SearchActivity extends BaseActivity {
             binding.searchEditTextSearchActivity.setImeOptions(binding.searchEditTextSearchActivity.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
         }
 
+        Handler handler = new Handler();
         binding.searchEditTextSearchActivity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -190,18 +191,19 @@ public class SearchActivity extends BaseActivity {
                         @Override
                         public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                             if (response.isSuccessful()) {
-                                ParseSubredditData.parseSubredditListingData(response.body(), nsfw, new ParseSubredditData.ParseSubredditListingDataListener() {
-                                    @Override
-                                    public void onParseSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
-                                        subredditAutocompleteRecyclerViewAdapter.setSubreddits(subredditData);
-                                        binding.recyclerViewSearchActivity.setAdapter(subredditAutocompleteRecyclerViewAdapter);
-                                    }
+                                ParseSubredditData.parseSubredditListingData(executor, handler,
+                                        response.body(), nsfw, new ParseSubredditData.ParseSubredditListingDataListener() {
+                                            @Override
+                                            public void onParseSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
+                                                subredditAutocompleteRecyclerViewAdapter.setSubreddits(subredditData);
+                                                binding.recyclerViewSearchActivity.setAdapter(subredditAutocompleteRecyclerViewAdapter);
+                                            }
 
-                                    @Override
-                                    public void onParseSubredditListingDataFail() {
+                                            @Override
+                                            public void onParseSubredditListingDataFail() {
 
-                                    }
-                                });
+                                            }
+                                        });
                             }
                         }
 

@@ -1,6 +1,6 @@
 package ml.docilealligator.infinityforreddit.subreddit;
 
-import android.os.AsyncTask;
+import android.os.Handler;
 
 import androidx.annotation.Nullable;
 
@@ -9,21 +9,98 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class ParseSubredditData {
-    public static void parseSubredditData(String response, ParseSubredditDataListener parseSubredditDataListener) {
-        new ParseSubredditDataAsyncTask(response, parseSubredditDataListener).execute();
+    public static void parseSubredditDataSync(Handler handler, @Nullable String response,
+                                              FetchSubredditData.FetchSubredditDataListener fetchSubredditDataListener) {
+        if (response == null) {
+            handler.post(() -> fetchSubredditDataListener.onFetchSubredditDataFail(false));
+            return;
+        }
+
+        try {
+            JSONObject data = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY);
+
+            int nCurrentOnlineSubscribers = data.getInt(JSONUtils.ACTIVE_USER_COUNT_KEY);
+            SubredditData subredditData = parseSubredditDataSync(data, true);
+
+            if (subredditData == null) {
+                handler.post(() -> fetchSubredditDataListener.onFetchSubredditDataFail(false));
+            } else {
+                handler.post(() -> fetchSubredditDataListener.onFetchSubredditDataSuccess(subredditData, nCurrentOnlineSubscribers));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            handler.post(() -> fetchSubredditDataListener.onFetchSubredditDataFail(false));
+        }
     }
 
-    public static void parseSubredditListingData(String response, boolean nsfw, ParseSubredditListingDataListener parseSubredditListingDataListener) {
-        new ParseSubredditListingDataAsyncTask(response, nsfw, parseSubredditListingDataListener).execute();
+    public static void parseSubredditListingDataSync(Handler handler, @Nullable String response, boolean nsfw,
+                                                     FetchSubredditData.FetchSubredditListingDataListener fetchSubredditListingDataListener) {
+        if (response == null) {
+            handler.post(fetchSubredditListingDataListener::onFetchSubredditListingDataFail);
+            return;
+        }
+
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray children = jsonObject.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+
+            ArrayList<SubredditData> subredditListingData = new ArrayList<>();
+            for (int i = 0; i < children.length(); i++) {
+                JSONObject data = children.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
+                SubredditData subredditData = parseSubredditDataSync(data, nsfw);
+                if (subredditData != null) {
+                    subredditListingData.add(subredditData);
+                }
+            }
+
+            String after = jsonObject.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
+
+            handler.post(() -> fetchSubredditListingDataListener.onFetchSubredditListingDataSuccess(subredditListingData, after));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            handler.post(fetchSubredditListingDataListener::onFetchSubredditListingDataFail);
+        }
+    }
+
+    public static void parseSubredditListingData(Executor executor, Handler handler, @Nullable String response, boolean nsfw,
+                                                 ParseSubredditListingDataListener parseSubredditListingDataListener) {
+        if (response == null) {
+            parseSubredditListingDataListener.onParseSubredditListingDataFail();
+            return;
+        }
+
+        executor.execute(() -> {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                JSONArray children = jsonObject.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+
+                ArrayList<SubredditData> subredditListingData = new ArrayList<>();
+                for (int i = 0; i < children.length(); i++) {
+                    JSONObject data = children.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
+                    SubredditData subredditData = parseSubredditDataSync(data, nsfw);
+                    if (subredditData != null) {
+                        subredditListingData.add(subredditData);
+                    }
+                }
+
+                String after = jsonObject.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
+
+                handler.post(() -> parseSubredditListingDataListener.onParseSubredditListingDataSuccess(subredditListingData, after));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                handler.post(parseSubredditListingDataListener::onParseSubredditListingDataFail);
+            }
+        });
     }
 
     @Nullable
-    private static SubredditData parseSubredditData(JSONObject subredditDataJsonObject, boolean nsfw) throws JSONException {
+    private static SubredditData parseSubredditDataSync(JSONObject subredditDataJsonObject, boolean nsfw) throws JSONException {
         boolean isNSFW = !subredditDataJsonObject.isNull(JSONUtils.OVER18_KEY) && subredditDataJsonObject.getBoolean(JSONUtils.OVER18_KEY);
         if (!nsfw && isNSFW) {
             return null;
@@ -64,110 +141,9 @@ public class ParseSubredditData {
                 sidebarDescription, nSubscribers, createdUTC, suggestedCommentSort, isNSFW);
     }
 
-    interface ParseSubredditDataListener {
-        void onParseSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers);
-
-        void onParseSubredditDataFail();
-    }
-
     public interface ParseSubredditListingDataListener {
         void onParseSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after);
 
         void onParseSubredditListingDataFail();
-    }
-
-    private static class ParseSubredditDataAsyncTask extends AsyncTask<Void, Void, Void> {
-        private JSONObject jsonResponse;
-        private boolean parseFailed;
-        private final ParseSubredditDataListener parseSubredditDataListener;
-        private SubredditData subredditData;
-        private int mNCurrentOnlineSubscribers;
-
-        ParseSubredditDataAsyncTask(String response, ParseSubredditDataListener parseSubredditDataListener) {
-            this.parseSubredditDataListener = parseSubredditDataListener;
-            try {
-                jsonResponse = new JSONObject(response);
-                parseFailed = false;
-            } catch (JSONException e) {
-                e.printStackTrace();
-                parseSubredditDataListener.onParseSubredditDataFail();
-            }
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                JSONObject data = jsonResponse.getJSONObject(JSONUtils.DATA_KEY);
-                mNCurrentOnlineSubscribers = data.getInt(JSONUtils.ACTIVE_USER_COUNT_KEY);
-                subredditData = parseSubredditData(data, true);
-            } catch (JSONException e) {
-                parseFailed = true;
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            if (!parseFailed) {
-                parseSubredditDataListener.onParseSubredditDataSuccess(subredditData, mNCurrentOnlineSubscribers);
-            } else {
-                parseSubredditDataListener.onParseSubredditDataFail();
-            }
-        }
-    }
-
-    private static class ParseSubredditListingDataAsyncTask extends AsyncTask<Void, Void, Void> {
-        private JSONObject jsonResponse;
-        private boolean nsfw;
-        private boolean parseFailed;
-        private final ParseSubredditListingDataListener parseSubredditListingDataListener;
-        private ArrayList<SubredditData> subredditListingData;
-        private String after;
-
-        ParseSubredditListingDataAsyncTask(String response, boolean nsfw, ParseSubredditListingDataListener parseSubredditListingDataListener) {
-            this.parseSubredditListingDataListener = parseSubredditListingDataListener;
-            try {
-                jsonResponse = new JSONObject(response);
-                this.nsfw = nsfw;
-                parseFailed = false;
-                subredditListingData = new ArrayList<>();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                parseFailed = true;
-            }
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                if (!parseFailed) {
-                    JSONArray children = jsonResponse.getJSONObject(JSONUtils.DATA_KEY)
-                            .getJSONArray(JSONUtils.CHILDREN_KEY);
-                    for (int i = 0; i < children.length(); i++) {
-                        JSONObject data = children.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-                        SubredditData subredditData = parseSubredditData(data, nsfw);
-                        if (subredditData != null) {
-                            subredditListingData.add(subredditData);
-                        }
-                    }
-                    after = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                parseFailed = true;
-                parseSubredditListingDataListener.onParseSubredditListingDataFail();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            if (!parseFailed) {
-                parseSubredditListingDataListener.onParseSubredditListingDataSuccess(subredditListingData, after);
-            } else {
-                parseSubredditListingDataListener.onParseSubredditListingDataFail();
-            }
-        }
     }
 }

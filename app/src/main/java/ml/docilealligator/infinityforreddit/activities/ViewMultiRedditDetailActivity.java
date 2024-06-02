@@ -594,6 +594,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
             return false;
         });
 
+        Handler handler = new Handler();
         boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
         thingEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -617,17 +618,18 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if (response.isSuccessful()) {
-                            ParseSubredditData.parseSubredditListingData(response.body(), nsfw, new ParseSubredditData.ParseSubredditListingDataListener() {
-                                @Override
-                                public void onParseSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
-                                    adapter.setSubreddits(subredditData);
-                                }
+                            ParseSubredditData.parseSubredditListingData(mExecutor, handler, response.body(),
+                                    nsfw, new ParseSubredditData.ParseSubredditListingDataListener() {
+                                        @Override
+                                        public void onParseSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
+                                            adapter.setSubreddits(subredditData);
+                                        }
 
-                                @Override
-                                public void onParseSubredditListingDataFail() {
+                                        @Override
+                                        public void onParseSubredditListingDataFail() {
 
-                                }
-                            });
+                                        }
+                                    });
                         }
                     }
 

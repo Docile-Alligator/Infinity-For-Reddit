@@ -544,21 +544,24 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     private void fetchSubredditData() {
         if (!mFetchSubredditInfoSuccess) {
-            FetchSubredditData.fetchSubredditData(accountName.equals(Account.ANONYMOUS_ACCOUNT) ? null : mOauthRetrofit, mRetrofit, subredditName, accessToken, new FetchSubredditData.FetchSubredditDataListener() {
-                @Override
-                public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
-                    mNCurrentOnlineSubscribers = nCurrentOnlineSubscribers;
-                    binding.onlineSubscriberCountTextViewViewSubredditDetailActivity.setText(getString(R.string.online_subscribers_number_detail, nCurrentOnlineSubscribers));
-                    InsertSubredditData.insertSubredditData(mExecutor, new Handler(), mRedditDataRoomDatabase,
-                            subredditData, () -> mFetchSubredditInfoSuccess = true);
-                }
+            Handler handler = new Handler();
+            FetchSubredditData.fetchSubredditData(mExecutor, handler,
+                    accountName.equals(Account.ANONYMOUS_ACCOUNT) ? null : mOauthRetrofit, mRetrofit,
+                    subredditName, accessToken, new FetchSubredditData.FetchSubredditDataListener() {
+                        @Override
+                        public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
+                            mNCurrentOnlineSubscribers = nCurrentOnlineSubscribers;
+                            binding.onlineSubscriberCountTextViewViewSubredditDetailActivity.setText(getString(R.string.online_subscribers_number_detail, nCurrentOnlineSubscribers));
+                            InsertSubredditData.insertSubredditData(mExecutor, handler, mRedditDataRoomDatabase,
+                                    subredditData, () -> mFetchSubredditInfoSuccess = true);
+                        }
 
-                @Override
-                public void onFetchSubredditDataFail(boolean isQuarantined) {
-                    makeSnackbar(R.string.cannot_fetch_subreddit_info, true);
-                    mFetchSubredditInfoSuccess = false;
-                }
-            });
+                        @Override
+                        public void onFetchSubredditDataFail(boolean isQuarantined) {
+                            makeSnackbar(R.string.cannot_fetch_subreddit_info, true);
+                            mFetchSubredditInfoSuccess = false;
+                        }
+                    });
         }
     }
 
@@ -1396,6 +1399,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             return false;
         });
 
+        Handler handler = new Handler();
         boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
         thingEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -1415,21 +1419,22 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 }
                 subredditAutocompleteCall = mOauthRetrofit.create(RedditAPI.class).subredditAutocomplete(APIUtils.getOAuthHeader(accessToken),
                         editable.toString(), nsfw);
-                subredditAutocompleteCall.enqueue(new Callback<String>() {
+                subredditAutocompleteCall.enqueue(new Callback<>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if (response.isSuccessful()) {
-                            ParseSubredditData.parseSubredditListingData(response.body(), nsfw, new ParseSubredditData.ParseSubredditListingDataListener() {
-                                @Override
-                                public void onParseSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
-                                    adapter.setSubreddits(subredditData);
-                                }
+                            ParseSubredditData.parseSubredditListingData(mExecutor, handler, response.body(),
+                                    nsfw, new ParseSubredditData.ParseSubredditListingDataListener() {
+                                        @Override
+                                        public void onParseSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
+                                            adapter.setSubreddits(subredditData);
+                                        }
 
-                                @Override
-                                public void onParseSubredditListingDataFail() {
+                                        @Override
+                                        public void onParseSubredditListingDataFail() {
 
-                                }
-                            });
+                                        }
+                                    });
                         }
                     }
 

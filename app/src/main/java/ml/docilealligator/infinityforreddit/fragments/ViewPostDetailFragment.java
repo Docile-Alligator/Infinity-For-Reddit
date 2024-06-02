@@ -1413,7 +1413,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     e.printStackTrace();
                 }
             }
-            FetchSubredditData.fetchSubredditData(activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? null : mOauthRetrofit, mRetrofit, mPost.getSubredditName(), activity.accessToken,
+            FetchSubredditData.fetchSubredditData(mExecutor, new Handler(),
+                    activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? null : mOauthRetrofit,
+                    mRetrofit, mPost.getSubredditName(), activity.accessToken,
                     new FetchSubredditData.FetchSubredditDataListener() {
                         @Override
                         public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
