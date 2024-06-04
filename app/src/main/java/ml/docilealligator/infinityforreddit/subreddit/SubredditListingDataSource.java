@@ -34,7 +34,7 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
     private LoadParams<String> params;
     private LoadCallback<String, SubredditData> callback;
 
-    SubredditListingDataSource(Executor executor, Retrofit retrofit, String query, SortType sortType,
+    SubredditListingDataSource(Executor executor, Handler handler, Retrofit retrofit, String query, SortType sortType,
                                @Nullable String accessToken, @NonNull String accountName, boolean nsfw) {
         this.executor = executor;
         this.retrofit = retrofit;
@@ -43,7 +43,7 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.nsfw = nsfw;
-        handler = new Handler();
+        this.handler = handler;
         paginationNetworkStateLiveData = new MutableLiveData<>();
         initialLoadStateLiveData = new MutableLiveData<>();
         hasSubredditLiveData = new MutableLiveData<>();
