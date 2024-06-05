@@ -9,8 +9,7 @@
 ## Preferences reflection
 -keep class * extends androidx.preference.PreferenceFragmentCompat
 
--keep class ml.docilealligator.infinityforreddit.settings.FontPreviewFragment { *; }
--keep class ml.docilealligator.infinityforreddit.settings.CrashReportsFragment { *; }
+-keep public class ml.docilealligator.infinityforreddit.settings.**
 
 ## EventBus Rules
 -keepattributes *Annotation*
@@ -66,6 +65,14 @@
 -keep class ml.docilealligator.infinityforreddit.customtheme.CustomTheme { <fields>; }
 -keep class ml.docilealligator.infinityforreddit.multireddit.MultiRedditJSONModel { <fields>; }
 -keep class ml.docilealligator.infinityforreddit.multireddit.SubredditInMultiReddit { <fields>; }
+-keep class ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData { <fields>; }
+-keep class ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData { <fields>; }
+-keep class ml.docilealligator.infinityforreddit.multireddit.MultiReddit { <fields>; }
+-keep class ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubreddit { <fields>; }
+-keep class ml.docilealligator.infinityforreddit.postfilter.PostFilter { <fields>; }
+-keep class ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage { <fields>; }
+-keep class ml.docilealligator.infinityforreddit.commentfilter.CommentFilter { <fields>; }
+-keep class ml.docilealligator.infinityforreddit.commentfilter.CommentFilterUsage { <fields>; }
 
 # Prevent proguard from stripping interface information from TypeAdapter, TypeAdapterFactory,
 # JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
