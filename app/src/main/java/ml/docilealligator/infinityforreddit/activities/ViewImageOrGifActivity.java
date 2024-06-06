@@ -77,6 +77,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     public static final String EXTRA_IMAGE_URL_KEY = "EIUK";
     public static final String EXTRA_GIF_URL_KEY = "EGUK";
     public static final String EXTRA_FILE_NAME_KEY = "EFNK";
+    public static final String EXTRA_SENSIBLE_FILE_NAME_KEY = "ESFNK";
     public static final String EXTRA_SUBREDDIT_OR_USERNAME_KEY = "ESOUK";
     public static final String EXTRA_POST_TITLE_KEY = "EPTK";
     public static final String EXTRA_IS_NSFW = "EIN";
@@ -92,6 +93,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     private RequestManager glide;
     private String mImageUrl;
     private String mImageFileName;
+    private String mImageSensibleFileName;
     private String mSubredditName;
     private boolean isGif = true;
     private boolean isNsfw;
@@ -150,6 +152,8 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             mImageUrl = intent.getStringExtra(EXTRA_IMAGE_URL_KEY);
         }
         mImageFileName = intent.getStringExtra(EXTRA_FILE_NAME_KEY);
+        mImageSensibleFileName = intent.getStringExtra(EXTRA_SENSIBLE_FILE_NAME_KEY);
+
         String postTitle = intent.getStringExtra(EXTRA_POST_TITLE_KEY);
         mSubredditName = intent.getStringExtra(EXTRA_SUBREDDIT_OR_USERNAME_KEY);
         isNsfw = intent.getBooleanExtra(EXTRA_IS_NSFW, false);
@@ -355,10 +359,12 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     private void download() {
         isDownloading = false;
 
+        boolean isSensibleFileName = mSharedPreferences.getBoolean(SharedPreferencesUtils.DOWNLOAD_WITH_SENSIBLE_FILE_NAME, false);
+
         Intent intent = new Intent(this, DownloadMediaService.class);
         intent.putExtra(DownloadMediaService.EXTRA_URL, mImageUrl);
         intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, isGif ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF : DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
-        intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, mImageFileName);
+        intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, isSensibleFileName ? mImageSensibleFileName : mImageFileName);
         intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, mSubredditName);
         intent.putExtra(DownloadMediaService.EXTRA_IS_NSFW, isNsfw);
         ContextCompat.startForegroundService(this, intent);

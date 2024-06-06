@@ -2124,6 +2124,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, mPost.getUrl());
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mPost.getSubredditNamePrefixed().substring(2)
                                 + "-" + mPost.getId().substring(3) + ".jpg");
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_SENSIBLE_FILE_NAME_KEY, mPost.getSubredditName()
+                                + "-" + mPost.getTitle() + ".jpg");
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, mPost.getTitle());
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, mPost.getSubredditName());
                         mActivity.startActivity(intent);
