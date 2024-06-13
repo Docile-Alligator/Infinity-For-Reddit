@@ -1,4 +1,4 @@
-<p>Infinity is a beautiful, feature-rich app that offers a smooth Reddit browsing experience. It is completely free and ad-less; you can browse Reddit without interruptions or distractions. Built by a passionate university student, Infinity is open source. Please check out, support or contribute to the project at https://github.com/Docile-Alligator/Infinity-For-Reddit!</p>
+<p>Infinity is a beautiful, feature-rich app that offers a smooth Reddit browsing experience. It is partially free and ad-less; it allows anonymous browsing for free and a subscription is only required when you want to login; you can browse Reddit without interruptions or distractions. Built by a passionate university student, Infinity is open source. Please check out, support or contribute to the project at https://github.com/Docile-Alligator/Infinity-For-Reddit!</p>
 
 <p>A subreddit for this app is available: https://www.reddit.com/r/Infinity_For_Reddit/</p>
 
