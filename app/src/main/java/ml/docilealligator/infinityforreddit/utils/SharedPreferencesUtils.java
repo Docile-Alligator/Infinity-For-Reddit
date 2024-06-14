@@ -215,6 +215,10 @@ public class SharedPreferencesUtils {
     public static final String COMMENT_DIVIDER_TYPE = "comment_divider_type";
     public static final String SUBSCRIBED_THINGS_SYNC_TIME = "subscribed_things_sync_time";
     public static final String COMMENT_FILTER = "comment_filter";
+    public static final String POST_DETAIL_FAB_PORTRAIT_X = "fab_portrait_x";
+    public static final String POST_DETAIL_FAB_PORTRAIT_Y = "fab_portrait_y";
+    public static final String POST_DETAIL_FAB_LANDSCAPE_X = "fab_landscape_x";
+    public static final String POST_DETAIL_FAB_LANDSCAPE_Y = "fab_landscape_y";
 
     public static final String DEFAULT_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit_preferences";
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";

@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -107,6 +109,9 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @Inject
     @Named("current_account")
     SharedPreferences mCurrentAccountSharedPreferences;
+    @Inject
+    @Named("post_details")
+    SharedPreferences mPostDetailsSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
@@ -262,6 +267,14 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             fetchMorePosts(false);
         }
 
+        binding.fabViewPostDetailActivity.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                binding.fabViewPostDetailActivity.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                binding.fabViewPostDetailActivity.setCoordinates(mPostDetailsSharedPreferences,
+                        getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
+            }
+        });
         checkNewAccountAndBindView(savedInstanceState);
     }
 
@@ -772,6 +785,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
+        binding.fabViewPostDetailActivity.saveCoordinates(mPostDetailsSharedPreferences,
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
         super.onDestroy();
         Bridge.clear(this);
         BigImageViewer.imageLoader().cancelAll();
