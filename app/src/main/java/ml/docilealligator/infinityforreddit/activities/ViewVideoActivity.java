@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.OptIn;
 import androidx.appcompat.app.ActionBar;
@@ -347,6 +348,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         }
 
         binding.getRoot().setOnDragDismissedListener(dragDirection -> {
+            player.stop();
             int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
             finish();
             overridePendingTransition(0, slide);
@@ -648,6 +650,15 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             player.setMediaSource(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
             preparePlayer(savedInstanceState);
         }
+
+        getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                player.stop();
+                setEnabled(false);
+                getOnBackPressedDispatcher().onBackPressed();
+            }
+        });
     }
 
     private void preparePlayer(Bundle savedInstanceState) {
