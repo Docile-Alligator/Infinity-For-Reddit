@@ -3,9 +3,12 @@ package ml.docilealligator.infinityforreddit.customviews;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.AttributeSet;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -141,30 +144,30 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
         setY(newY);
     }
 
-    public void setCoordinates(SharedPreferences postDetailsSharedPreferences, boolean portrait) {
+    public void setCoordinates(@Nullable Display display, SharedPreferences postDetailsSharedPreferences, boolean portrait) {
         if (portrait) {
-            if (postDetailsSharedPreferences.contains(SharedPreferencesUtils.POST_DETAIL_FAB_PORTRAIT_X)
-                    && postDetailsSharedPreferences.contains(SharedPreferencesUtils.POST_DETAIL_FAB_PORTRAIT_Y)) {
-                setPositionEnsureVisibility(postDetailsSharedPreferences.getFloat(SharedPreferencesUtils.POST_DETAIL_FAB_PORTRAIT_X, 0),
-                        postDetailsSharedPreferences.getFloat(SharedPreferencesUtils.POST_DETAIL_FAB_PORTRAIT_Y, 0));
+            if (postDetailsSharedPreferences.contains(SharedPreferencesUtils.getPostDetailFabPortraitX(display))
+                    && postDetailsSharedPreferences.contains(SharedPreferencesUtils.getPostDetailFabPortraitY(display))) {
+                setPositionEnsureVisibility(postDetailsSharedPreferences.getFloat(SharedPreferencesUtils.getPostDetailFabPortraitX(display), 0),
+                        postDetailsSharedPreferences.getFloat(SharedPreferencesUtils.getPostDetailFabPortraitY(display), 0));
             }
         } else {
-            if (postDetailsSharedPreferences.contains(SharedPreferencesUtils.POST_DETAIL_FAB_LANDSCAPE_X)
-                    && postDetailsSharedPreferences.contains(SharedPreferencesUtils.POST_DETAIL_FAB_LANDSCAPE_Y)) {
-                setPositionEnsureVisibility(postDetailsSharedPreferences.getFloat(SharedPreferencesUtils.POST_DETAIL_FAB_LANDSCAPE_X, 0),
-                        postDetailsSharedPreferences.getFloat(SharedPreferencesUtils.POST_DETAIL_FAB_LANDSCAPE_Y, 0));
+            if (postDetailsSharedPreferences.contains(SharedPreferencesUtils.getPostDetailFabLandscapeX(display))
+                    && postDetailsSharedPreferences.contains(SharedPreferencesUtils.getPostDetailFabLandscapeY(display))) {
+                setPositionEnsureVisibility(postDetailsSharedPreferences.getFloat(SharedPreferencesUtils.getPostDetailFabLandscapeX(display), 0),
+                        postDetailsSharedPreferences.getFloat(SharedPreferencesUtils.getPostDetailFabLandscapeY(display), 0));
             }
         }
     }
 
-    public void saveCoordinates(SharedPreferences postDetailsSharedPreferences, boolean portrait) {
+    public void saveCoordinates(@Nullable Display display, SharedPreferences postDetailsSharedPreferences, boolean portrait) {
         if (portrait) {
-            postDetailsSharedPreferences.edit().putFloat(SharedPreferencesUtils.POST_DETAIL_FAB_PORTRAIT_X, getX())
-                    .putFloat(SharedPreferencesUtils.POST_DETAIL_FAB_PORTRAIT_Y, getY())
+            postDetailsSharedPreferences.edit().putFloat(SharedPreferencesUtils.getPostDetailFabPortraitX(display), getX())
+                    .putFloat(SharedPreferencesUtils.getPostDetailFabPortraitY(display), getY())
                     .apply();
         } else {
-            postDetailsSharedPreferences.edit().putFloat(SharedPreferencesUtils.POST_DETAIL_FAB_LANDSCAPE_X, getX())
-                    .putFloat(SharedPreferencesUtils.POST_DETAIL_FAB_LANDSCAPE_Y, getY())
+            postDetailsSharedPreferences.edit().putFloat(SharedPreferencesUtils.getPostDetailFabLandscapeX(display), getX())
+                    .putFloat(SharedPreferencesUtils.getPostDetailFabLandscapeY(display), getY())
                     .apply();
         }
     }

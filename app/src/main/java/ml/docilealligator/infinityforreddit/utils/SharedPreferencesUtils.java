@@ -1,5 +1,9 @@
 package ml.docilealligator.infinityforreddit.utils;
 
+import android.view.Display;
+
+import androidx.annotation.Nullable;
+
 /**
  * Created by alex on 2/23/18.
  */
@@ -215,10 +219,42 @@ public class SharedPreferencesUtils {
     public static final String COMMENT_DIVIDER_TYPE = "comment_divider_type";
     public static final String SUBSCRIBED_THINGS_SYNC_TIME = "subscribed_things_sync_time";
     public static final String COMMENT_FILTER = "comment_filter";
-    public static final String POST_DETAIL_FAB_PORTRAIT_X = "fab_portrait_x";
-    public static final String POST_DETAIL_FAB_PORTRAIT_Y = "fab_portrait_y";
-    public static final String POST_DETAIL_FAB_LANDSCAPE_X = "fab_landscape_x";
-    public static final String POST_DETAIL_FAB_LANDSCAPE_Y = "fab_landscape_y";
+    private static final String POST_DETAIL_FAB_PORTRAIT_X_BASE = "fab_portrait_x_";
+    private static final String POST_DETAIL_FAB_PORTRAIT_Y_BASE = "fab_portrait_y_";
+    private static final String POST_DETAIL_FAB_LANDSCAPE_X_BASE = "fab_landscape_x_";
+    private static final String POST_DETAIL_FAB_LANDSCAPE_Y_BASE = "fab_landscape_y_";
+
+    public static String getPostDetailFabPortraitX(@Nullable Display display) {
+        if (display == null) {
+            return POST_DETAIL_FAB_PORTRAIT_X_BASE;
+        }
+
+        return POST_DETAIL_FAB_PORTRAIT_X_BASE + display.getDisplayId();
+    }
+
+    public static String getPostDetailFabPortraitY(@Nullable Display display) {
+        if (display == null) {
+            return POST_DETAIL_FAB_PORTRAIT_Y_BASE;
+        }
+
+        return POST_DETAIL_FAB_PORTRAIT_Y_BASE + display.getDisplayId();
+    }
+
+    public static String getPostDetailFabLandscapeX(@Nullable Display display) {
+        if (display == null) {
+            return POST_DETAIL_FAB_LANDSCAPE_X_BASE;
+        }
+
+        return POST_DETAIL_FAB_LANDSCAPE_X_BASE + display.getDisplayId();
+    }
+
+    public static String getPostDetailFabLandscapeY(@Nullable Display display) {
+        if (display == null) {
+            return POST_DETAIL_FAB_LANDSCAPE_Y_BASE;
+        }
+
+        return POST_DETAIL_FAB_LANDSCAPE_Y_BASE + display.getDisplayId();
+    }
 
     public static final String DEFAULT_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit_preferences";
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";

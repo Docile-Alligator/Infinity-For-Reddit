@@ -271,7 +271,9 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             @Override
             public void onGlobalLayout() {
                 binding.fabViewPostDetailActivity.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                binding.fabViewPostDetailActivity.setCoordinates(mPostDetailsSharedPreferences,
+                binding.fabViewPostDetailActivity.setCoordinates(
+                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ? getDisplay() : null,
+                        mPostDetailsSharedPreferences,
                         getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
             }
         });
@@ -785,7 +787,9 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
-        binding.fabViewPostDetailActivity.saveCoordinates(mPostDetailsSharedPreferences,
+        binding.fabViewPostDetailActivity.saveCoordinates(
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ? getDisplay() : null,
+                mPostDetailsSharedPreferences,
                 getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
         super.onDestroy();
         Bridge.clear(this);
