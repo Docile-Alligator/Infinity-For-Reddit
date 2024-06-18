@@ -88,6 +88,9 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
         if (postType == TYPE_SUBREDDIT || postType == TYPE_ANONYMOUS_FRONT_PAGE || postType == TYPE_ANONYMOUS_MULTIREDDIT) {
             this.subredditOrUserName = path;
+            if (subredditOrUserName == null) {
+                subredditOrUserName = "popular";
+            }
         } else {
             if (sortType != null) {
                 if (path.endsWith("/")) {
@@ -101,7 +104,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         }
         this.postType = postType;
         if (sortType == null) {
-            if (path.equals("popular") || path.equals("all")) {
+            if ("popular".equals(path) || "all".equals(path)) {
                 this.sortType = new SortType(SortType.Type.HOT);
             } else {
                 this.sortType = new SortType(SortType.Type.BEST);
