@@ -23,6 +23,12 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
     private float downRawX, downRawY;
     private float dX, dY;
 
+    @Nullable
+    private Display display;
+    @Nullable
+    private SharedPreferences postDetailsSharedPreferences;
+    private boolean portrait;
+
     public MovableFloatingActionButton(Context context) {
         super(context);
         init();
@@ -102,6 +108,7 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
                     .setDuration(0)
                     .start();
 
+            saveCoordinates(newX, newY);
             return true;
         } else if (action == MotionEvent.ACTION_UP) {
             if (longClicked) {
@@ -144,7 +151,17 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
         setY(newY);
     }
 
-    public void setCoordinates(@Nullable Display display, SharedPreferences postDetailsSharedPreferences, boolean portrait) {
+    public void bindRequiredData(@Nullable Display display, SharedPreferences postDetailsSharedPreferences, boolean portrait) {
+        this.display = display;
+        this.postDetailsSharedPreferences = postDetailsSharedPreferences;
+        this.portrait = portrait;
+    }
+
+    public void setCoordinates() {
+        if (postDetailsSharedPreferences == null) {
+            return;
+        }
+
         if (portrait) {
             if (postDetailsSharedPreferences.contains(SharedPreferencesUtils.getPostDetailFabPortraitX(display))
                     && postDetailsSharedPreferences.contains(SharedPreferencesUtils.getPostDetailFabPortraitY(display))) {
@@ -160,14 +177,18 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
         }
     }
 
-    public void saveCoordinates(@Nullable Display display, SharedPreferences postDetailsSharedPreferences, boolean portrait) {
+    private void saveCoordinates(float x, float y) {
+        if (postDetailsSharedPreferences == null) {
+            return;
+        }
+
         if (portrait) {
-            postDetailsSharedPreferences.edit().putFloat(SharedPreferencesUtils.getPostDetailFabPortraitX(display), getX())
-                    .putFloat(SharedPreferencesUtils.getPostDetailFabPortraitY(display), getY())
+            postDetailsSharedPreferences.edit().putFloat(SharedPreferencesUtils.getPostDetailFabPortraitX(display), x)
+                    .putFloat(SharedPreferencesUtils.getPostDetailFabPortraitY(display), y)
                     .apply();
         } else {
-            postDetailsSharedPreferences.edit().putFloat(SharedPreferencesUtils.getPostDetailFabLandscapeX(display), getX())
-                    .putFloat(SharedPreferencesUtils.getPostDetailFabLandscapeY(display), getY())
+            postDetailsSharedPreferences.edit().putFloat(SharedPreferencesUtils.getPostDetailFabLandscapeX(display), x)
+                    .putFloat(SharedPreferencesUtils.getPostDetailFabLandscapeY(display), y)
                     .apply();
         }
     }

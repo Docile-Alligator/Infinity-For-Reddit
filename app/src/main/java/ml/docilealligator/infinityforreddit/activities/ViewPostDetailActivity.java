@@ -267,14 +267,17 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             fetchMorePosts(false);
         }
 
+        binding.fabViewPostDetailActivity.bindRequiredData(
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ? getDisplay() : null,
+                mPostDetailsSharedPreferences,
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+        );
+
         binding.fabViewPostDetailActivity.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 binding.fabViewPostDetailActivity.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                binding.fabViewPostDetailActivity.setCoordinates(
-                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ? getDisplay() : null,
-                        mPostDetailsSharedPreferences,
-                        getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
+                binding.fabViewPostDetailActivity.setCoordinates();
             }
         });
         checkNewAccountAndBindView(savedInstanceState);
@@ -787,10 +790,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
-        binding.fabViewPostDetailActivity.saveCoordinates(
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.R ? getDisplay() : null,
-                mPostDetailsSharedPreferences,
-                getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
         super.onDestroy();
         Bridge.clear(this);
         BigImageViewer.imageLoader().cancelAll();
