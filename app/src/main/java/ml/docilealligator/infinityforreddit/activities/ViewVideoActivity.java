@@ -210,6 +210,8 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     @Inject
     SimpleCache mSimpleCache;
 
+    private Post post;
+
     @OptIn(markerClass = UnstableApi.class)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -390,7 +392,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             }
         }
 
-        Post post = intent.getParcelableExtra(EXTRA_POST);
+        post = intent.getParcelableExtra(EXTRA_POST);
         if (post != null) {
             binding.getTitleTextView().setText(post.getTitle());
             videoFallbackDirectUrl = post.getVideoFallBackDirectUrl();
@@ -975,9 +977,17 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         Intent intent;
         if (videoType != VIDEO_TYPE_NORMAL) {
             intent = new Intent(this, DownloadMediaService.class);
-            intent.putExtra(DownloadMediaService.EXTRA_URL, videoDownloadUrl);
-            intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
-            intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, videoFileName);
+            if (post.getPostType() == Post.GIF_TYPE) {
+                intent.putExtra(DownloadMediaService.EXTRA_URL, post.getVideoUrl());
+                intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_GIF);
+                intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, post.getSubredditName()
+                        + "-" + post.getId() + ".gif");
+            } else {
+                intent.putExtra(DownloadMediaService.EXTRA_URL, videoDownloadUrl);
+                intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
+                intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, videoFileName);
+            }
+
             intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
             intent.putExtra(DownloadMediaService.EXTRA_IS_NSFW, isNSFW);
         } else {
