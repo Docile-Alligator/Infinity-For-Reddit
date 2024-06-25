@@ -61,6 +61,7 @@ import androidx.media3.datasource.DataSource;
 import androidx.media3.datasource.DefaultHttpDataSource;
 import androidx.media3.datasource.cache.CacheDataSource;
 import androidx.media3.datasource.cache.SimpleCache;
+import androidx.media3.exoplayer.DefaultRenderersFactory;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.hls.HlsMediaSource;
 import androidx.media3.exoplayer.source.ProgressiveMediaSource;
@@ -404,7 +405,10 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                     trackSelector.buildUponParameters()
                             .setMaxVideoSize(dataSavingModeDefaultResolution, dataSavingModeDefaultResolution));
         }
-        player = new ExoPlayer.Builder(this).setTrackSelector(trackSelector).build();
+        player = new ExoPlayer.Builder(this)
+                .setTrackSelector(trackSelector)
+                .setRenderersFactory(new DefaultRenderersFactory(this).setEnableDecoderFallback(true))
+                .build();
 
         if (zoomable) {
             PlayerControlView playerControlView = findViewById(R.id.player_control_view_view_video_activity);
