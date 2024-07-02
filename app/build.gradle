@@ -85,7 +85,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.12.0'
 
 /** ExoPlayer **/
-    def media3_version = "1.4.0-beta01"
+    def media3_version = "1.4.0-alpha02"
     implementation "androidx.media3:media3-exoplayer:$media3_version"
     implementation "androidx.media3:media3-exoplayer-dash:$media3_version"
     implementation "androidx.media3:media3-exoplayer-hls:$media3_version"
