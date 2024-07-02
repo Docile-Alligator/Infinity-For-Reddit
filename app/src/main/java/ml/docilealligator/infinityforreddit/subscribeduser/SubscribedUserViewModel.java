@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.subscribeduser;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -14,14 +13,13 @@ import java.util.List;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
-public class SubscribedUserViewModel extends AndroidViewModel {
+public class SubscribedUserViewModel extends ViewModel {
     private final SubscribedUserRepository mSubscribedUserRepository;
     private final LiveData<List<SubscribedUserData>> mAllSubscribedUsers;
     private final LiveData<List<SubscribedUserData>> mAllFavoriteSubscribedUsers;
     private final MutableLiveData<String> searchQueryLiveData;
 
-    public SubscribedUserViewModel(Application application, RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
-        super(application);
+    public SubscribedUserViewModel(RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
         mSubscribedUserRepository = new SubscribedUserRepository(redditDataRoomDatabase, accountName);
         searchQueryLiveData = new MutableLiveData<>("");
 
@@ -46,12 +44,10 @@ public class SubscribedUserViewModel extends AndroidViewModel {
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
-        private final Application mApplication;
         private final RedditDataRoomDatabase mRedditDataRoomDatabase;
         private final String mAccountName;
 
-        public Factory(Application application, RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
-            mApplication = application;
+        public Factory(RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
             mRedditDataRoomDatabase = redditDataRoomDatabase;
             mAccountName = accountName;
         }
@@ -59,7 +55,7 @@ public class SubscribedUserViewModel extends AndroidViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new SubscribedUserViewModel(mApplication, mRedditDataRoomDatabase, mAccountName);
+            return (T) new SubscribedUserViewModel(mRedditDataRoomDatabase, mAccountName);
         }
     }
 }

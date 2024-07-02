@@ -363,7 +363,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         });
 
         mSubredditViewModel = new ViewModelProvider(this,
-                new SubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, subredditName))
+                new SubredditViewModel.Factory(mRedditDataRoomDatabase, subredditName))
                 .get(SubredditViewModel.class);
         mSubredditViewModel.getSubredditLiveData().observe(this, subredditData -> {
             if (subredditData != null) {

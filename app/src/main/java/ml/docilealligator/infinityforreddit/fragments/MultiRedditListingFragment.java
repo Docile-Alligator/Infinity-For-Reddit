@@ -138,7 +138,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
         new FastScrollerBuilder(binding.recyclerViewMultiRedditListingFragment).useMd2Style().build();
 
         mMultiRedditViewModel = new ViewModelProvider(this,
-                new MultiRedditViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, mActivity.accountName))
+                new MultiRedditViewModel.Factory(mRedditDataRoomDatabase, mActivity.accountName))
                 .get(MultiRedditViewModel.class);
 
         mMultiRedditViewModel.getAllMultiReddits().observe(getViewLifecycleOwner(), subscribedUserData -> {

@@ -912,7 +912,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
         loadSubscriptions();
 
-        multiRedditViewModel = new ViewModelProvider(this, new MultiRedditViewModel.Factory(getApplication(),
+        multiRedditViewModel = new ViewModelProvider(this, new MultiRedditViewModel.Factory(
                 mRedditDataRoomDatabase, accountName))
                 .get(MultiRedditViewModel.class);
 
@@ -929,7 +929,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         });
 
         subscribedSubredditViewModel = new ViewModelProvider(this,
-                new SubscribedSubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, accountName))
+                new SubscribedSubredditViewModel.Factory(mRedditDataRoomDatabase, accountName))
                 .get(SubscribedSubredditViewModel.class);
         subscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this,
                 subscribedSubredditData -> {

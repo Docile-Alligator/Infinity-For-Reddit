@@ -100,7 +100,7 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
         new FastScrollerBuilder(binding.recyclerViewFollowedUsersListingFragment).useMd2Style().build();
 
         mSubscribedUserViewModel = new ViewModelProvider(this,
-                new SubscribedUserViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, mActivity.accountName))
+                new SubscribedUserViewModel.Factory(mRedditDataRoomDatabase, mActivity.accountName))
                 .get(SubscribedUserViewModel.class);
 
         mSubscribedUserViewModel.getAllSubscribedUsers().observe(getViewLifecycleOwner(), subscribedUserData -> {

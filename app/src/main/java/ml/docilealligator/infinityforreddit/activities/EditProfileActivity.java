@@ -101,7 +101,7 @@ public class EditProfileActivity extends BaseActivity {
 
         final RequestManager glide = Glide.with(this);
         final UserViewModel.Factory userViewModelFactory =
-                new UserViewModel.Factory(getApplication(), mRedditDataRoomDatabase, accountName);
+                new UserViewModel.Factory(mRedditDataRoomDatabase, accountName);
         final UserViewModel userViewModel =
                 new ViewModelProvider(this, userViewModelFactory).get(UserViewModel.class);
 

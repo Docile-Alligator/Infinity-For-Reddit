@@ -273,7 +273,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                     getSupportActionBar().setTitle(subredditNamePrefixed);
 
                     mSubredditViewModel = new ViewModelProvider(this,
-                            new SubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, name))
+                            new SubredditViewModel.Factory(mRedditDataRoomDatabase, name))
                             .get(SubredditViewModel.class);
                     mSubredditViewModel.getSubredditLiveData().observe(this, subredditData -> {
                         if (subredditData != null) {

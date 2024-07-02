@@ -10,12 +10,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
-public class UserViewModel extends AndroidViewModel {
+public class UserViewModel extends ViewModel {
     private final UserRepository mSubredditRepository;
     private final LiveData<UserData> mUserLiveData;
 
-    public UserViewModel(Application application, RedditDataRoomDatabase redditDataRoomDatabase, String id) {
-        super(application);
+    public UserViewModel(RedditDataRoomDatabase redditDataRoomDatabase, String id) {
         mSubredditRepository = new UserRepository(redditDataRoomDatabase, id);
         mUserLiveData = mSubredditRepository.getUserLiveData();
     }
@@ -30,13 +29,10 @@ public class UserViewModel extends AndroidViewModel {
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
 
-        @NonNull
-        private final Application mApplication;
         private final RedditDataRoomDatabase mRedditDataRoomDatabase;
         private final String mUsername;
 
-        public Factory(@NonNull Application application, RedditDataRoomDatabase redditDataRoomDatabase, String username) {
-            mApplication = application;
+        public Factory(RedditDataRoomDatabase redditDataRoomDatabase, String username) {
             mRedditDataRoomDatabase = redditDataRoomDatabase;
             mUsername = username;
         }
@@ -44,7 +40,7 @@ public class UserViewModel extends AndroidViewModel {
         @Override
         public <T extends ViewModel> T create(Class<T> modelClass) {
             //noinspection unchecked
-            return (T) new UserViewModel(mApplication, mRedditDataRoomDatabase, mUsername);
+            return (T) new UserViewModel(mRedditDataRoomDatabase, mUsername);
         }
     }
 }

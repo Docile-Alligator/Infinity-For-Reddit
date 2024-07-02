@@ -114,7 +114,7 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
         new FastScrollerBuilder(binding.recyclerViewSubscribedSubredditsListingFragment).useMd2Style().build();
 
         mSubscribedSubredditViewModel = new ViewModelProvider(this,
-                new SubscribedSubredditViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, mActivity.accountName))
+                new SubscribedSubredditViewModel.Factory(mRedditDataRoomDatabase, mActivity.accountName))
                 .get(SubscribedSubredditViewModel.class);
         mSubscribedSubredditViewModel.getAllSubscribedSubreddits().observe(getViewLifecycleOwner(), subscribedSubredditData -> {
             binding.swipeRefreshLayoutSubscribedSubredditsListingFragment.setRefreshing(false);

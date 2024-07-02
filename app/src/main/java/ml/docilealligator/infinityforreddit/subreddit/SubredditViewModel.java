@@ -1,21 +1,17 @@
 package ml.docilealligator.infinityforreddit.subreddit;
 
-import android.app.Application;
-
 import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
-public class SubredditViewModel extends AndroidViewModel {
+public class SubredditViewModel extends ViewModel {
     private final SubredditRepository mSubredditRepository;
     private final LiveData<SubredditData> mSubredditLiveData;
 
-    public SubredditViewModel(Application application, RedditDataRoomDatabase redditDataRoomDatabase, String id) {
-        super(application);
+    public SubredditViewModel(RedditDataRoomDatabase redditDataRoomDatabase, String id) {
         mSubredditRepository = new SubredditRepository(redditDataRoomDatabase, id);
         mSubredditLiveData = mSubredditRepository.getSubredditLiveData();
     }
@@ -30,13 +26,10 @@ public class SubredditViewModel extends AndroidViewModel {
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
 
-        @NonNull
-        private final Application mApplication;
         private final RedditDataRoomDatabase mRedditDataRoomDatabase;
         private final String mSubredditName;
 
-        public Factory(@NonNull Application application, RedditDataRoomDatabase redditDataRoomDatabase, String subredditname) {
-            mApplication = application;
+        public Factory(RedditDataRoomDatabase redditDataRoomDatabase, String subredditname) {
             mRedditDataRoomDatabase = redditDataRoomDatabase;
             mSubredditName = subredditname;
         }
@@ -44,8 +37,8 @@ public class SubredditViewModel extends AndroidViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            //noinspection unchecked
-            return (T) new SubredditViewModel(mApplication, mRedditDataRoomDatabase, mSubredditName);
+            //noinspection
+            return (T) new SubredditViewModel(mRedditDataRoomDatabase, mSubredditName);
         }
     }
 }

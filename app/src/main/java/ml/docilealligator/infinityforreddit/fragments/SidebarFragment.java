@@ -204,7 +204,7 @@ public class SidebarFragment extends Fragment {
         });
 
         mSubredditViewModel = new ViewModelProvider(activity,
-                new SubredditViewModel.Factory(activity.getApplication(), mRedditDataRoomDatabase, subredditName))
+                new SubredditViewModel.Factory(mRedditDataRoomDatabase, subredditName))
                 .get(SubredditViewModel.class);
         mSubredditViewModel.getSubredditLiveData().observe(getViewLifecycleOwner(), subredditData -> {
             if (subredditData != null) {
