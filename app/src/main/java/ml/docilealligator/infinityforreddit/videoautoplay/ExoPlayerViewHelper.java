@@ -59,12 +59,14 @@ public class ExoPlayerViewHelper extends ToroPlayerHelper {
     this(player, uri, null);
   }
 
+  @OptIn(markerClass = UnstableApi.class)
   public ExoPlayerViewHelper(@NonNull ToroPlayer player, @NonNull Uri uri,
       @Nullable String fileExt) {
     this(player, uri, fileExt, with(player.getPlayerView().getContext()).getDefaultCreator());
   }
 
   /** Config instance should be kept as global instance. */
+  @OptIn(markerClass = UnstableApi.class)
   public ExoPlayerViewHelper(@NonNull ToroPlayer player, @NonNull Uri uri, @Nullable String fileExt,
       @NonNull Config config) {
     this(player, uri, fileExt,

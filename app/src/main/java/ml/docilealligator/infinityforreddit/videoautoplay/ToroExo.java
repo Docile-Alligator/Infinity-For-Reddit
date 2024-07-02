@@ -60,6 +60,7 @@ import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
  * @since 3.4.0
  */
 
+@UnstableApi
 public final class ToroExo {
 
     private static final String TAG = "ToroExo";

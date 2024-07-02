@@ -193,6 +193,7 @@ abstract class AppModule {
         return ToroExo.with(application);
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     @Provides
     @Singleton
     static ExoCreator provideExoCreator(Config config,

@@ -31,9 +31,9 @@ import androidx.media3.datasource.DataSource;
 import androidx.media3.datasource.DefaultDataSource;
 import androidx.media3.datasource.DefaultHttpDataSource;
 import androidx.media3.datasource.cache.CacheDataSource;
+import androidx.media3.exoplayer.DefaultLoadControl;
 import androidx.media3.exoplayer.DefaultRenderersFactory;
 import androidx.media3.exoplayer.ExoPlayer;
-import androidx.media3.exoplayer.LoadControl;
 import androidx.media3.exoplayer.RenderersFactory;
 import androidx.media3.exoplayer.source.LoadEventInfo;
 import androidx.media3.exoplayer.source.MediaLoadData;
@@ -61,7 +61,6 @@ public class DefaultExoCreator implements ExoCreator, MediaSourceEventListener {
     final ToroExo toro;  // per application
     final Config config;
     private final TrackSelector trackSelector;  // 'maybe' stateless
-    private final LoadControl loadControl;  // stateless
     private final MediaSourceBuilder mediaSourceBuilder;  // stateless
     private final RenderersFactory renderersFactory;  // stateless
     private final DataSource.Factory mediaDataSourceFactory;  // stateless
@@ -71,7 +70,6 @@ public class DefaultExoCreator implements ExoCreator, MediaSourceEventListener {
         this.toro = checkNotNull(toro);
         this.config = checkNotNull(config);
         trackSelector = new DefaultTrackSelector(toro.context);
-        loadControl = config.loadControl;
         mediaSourceBuilder = config.mediaSourceBuilder;
 
         DefaultRenderersFactory tempFactory = new DefaultRenderersFactory(this.toro.context);
@@ -103,7 +101,6 @@ public class DefaultExoCreator implements ExoCreator, MediaSourceEventListener {
 
         if (!toro.equals(that.toro)) return false;
         if (!trackSelector.equals(that.trackSelector)) return false;
-        if (!loadControl.equals(that.loadControl)) return false;
         if (!mediaSourceBuilder.equals(that.mediaSourceBuilder)) return false;
         if (!renderersFactory.equals(that.renderersFactory)) return false;
         if (!mediaDataSourceFactory.equals(that.mediaDataSourceFactory)) return false;
@@ -114,7 +111,6 @@ public class DefaultExoCreator implements ExoCreator, MediaSourceEventListener {
     public int hashCode() {
         int result = toro.hashCode();
         result = 31 * result + trackSelector.hashCode();
-        result = 31 * result + loadControl.hashCode();
         result = 31 * result + mediaSourceBuilder.hashCode();
         result = 31 * result + renderersFactory.hashCode();
         result = 31 * result + mediaDataSourceFactory.hashCode();
@@ -135,7 +131,7 @@ public class DefaultExoCreator implements ExoCreator, MediaSourceEventListener {
     @NonNull
     @Override
     public ExoPlayer createPlayer() {
-        return new ToroExoPlayer(toro.context, renderersFactory, trackSelector, loadControl,
+        return new ToroExoPlayer(toro.context, renderersFactory, trackSelector, new DefaultLoadControl(),
                 new DefaultBandwidthMeter.Builder(toro.context).build(), Util.getCurrentOrMainLooper()).getPlayer();
     }
 
