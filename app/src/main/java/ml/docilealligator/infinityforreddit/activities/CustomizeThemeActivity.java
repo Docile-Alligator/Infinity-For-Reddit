@@ -42,6 +42,7 @@ public class CustomizeThemeActivity extends BaseActivity {
     public static final int EXTRA_DARK_THEME = CustomThemeSharedPreferencesUtils.DARK;
     public static final int EXTRA_AMOLED_THEME = CustomThemeSharedPreferencesUtils.AMOLED;
     public static final String EXTRA_THEME_NAME = "ETN";
+    public static final String EXTRA_CUSTOM_THEME = "ECT";
     public static final String EXTRA_IS_PREDEFIINED_THEME = "EIPT";
     public static final String EXTRA_CREATE_THEME = "ECT";
     private static final String CUSTOM_THEME_SETTINGS_ITEMS_STATE = "CTSIS";
@@ -70,6 +71,7 @@ public class CustomizeThemeActivity extends BaseActivity {
     Executor mExecutor;
 
     private String themeName;
+    private CustomTheme customTheme;
     private boolean isPredefinedTheme;
     private ArrayList<CustomThemeSettingsItem> customThemeSettingsItems;
     private CustomizeThemeRecyclerViewAdapter adapter;
@@ -142,6 +144,8 @@ public class CustomizeThemeActivity extends BaseActivity {
             } else {
                 isPredefinedTheme = getIntent().getBooleanExtra(EXTRA_IS_PREDEFIINED_THEME, false);
                 themeName = getIntent().getStringExtra(EXTRA_THEME_NAME);
+                customTheme = getIntent().getParcelableExtra(EXTRA_CUSTOM_THEME);
+
                 adapter = new CustomizeThemeRecyclerViewAdapter(this, customThemeWrapper, themeName);
                 binding.recyclerViewCustomizeThemeActivity.setAdapter(adapter);
                 if (isPredefinedTheme) {
@@ -154,13 +158,20 @@ public class CustomizeThemeActivity extends BaseActivity {
                     binding.recyclerViewCustomizeThemeActivity.setAdapter(adapter);
                     adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
                 } else {
-                    GetCustomTheme.getCustomTheme(mExecutor, new Handler(), redditDataRoomDatabase,
-                            themeName, customTheme -> {
-                                customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
-                                        CustomizeThemeActivity.this, customTheme, androidVersion);
+                    if (customTheme != null) {
+                        customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
+                                CustomizeThemeActivity.this, customTheme, androidVersion);
 
-                                adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
-                            });
+                        adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
+                    } else {
+                        GetCustomTheme.getCustomTheme(mExecutor, new Handler(), redditDataRoomDatabase,
+                                themeName, customTheme -> {
+                                    customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
+                                            CustomizeThemeActivity.this, customTheme, androidVersion);
+
+                                    adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
+                                });
+                    }
                 }
             }
         } else {

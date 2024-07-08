@@ -67,6 +67,7 @@ public class OnlineCustomThemeListingRecyclerViewAdapter extends PagingDataAdapt
             ((OnlineCustomThemeViewHolder) holder).binding.addImageViewItemUserCustomTheme.setOnClickListener(view -> {
                 Intent intent = new Intent(activity, CustomizeThemeActivity.class);
                 intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_NAME, customTheme.name);
+                intent.putExtra(CustomizeThemeActivity.EXTRA_CUSTOM_THEME, customTheme);
                 intent.putExtra(CustomizeThemeActivity.EXTRA_CREATE_THEME, true);
                 activity.startActivity(intent);
             });
@@ -77,6 +78,7 @@ public class OnlineCustomThemeListingRecyclerViewAdapter extends PagingDataAdapt
                 CustomThemeOptionsBottomSheetFragment customThemeOptionsBottomSheetFragment = new CustomThemeOptionsBottomSheetFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(CustomThemeOptionsBottomSheetFragment.EXTRA_THEME_NAME, customTheme.name);
+                bundle.putParcelable(CustomThemeOptionsBottomSheetFragment.EXTRA_CUSTOM_THEME, customTheme);
                 customThemeOptionsBottomSheetFragment.setArguments(bundle);
                 customThemeOptionsBottomSheetFragment.show(activity.getSupportFragmentManager(), customThemeOptionsBottomSheetFragment.getTag());
             });
