@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomizeThemeActivity;
-import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
+import ml.docilealligator.infinityforreddit.customtheme.OnlineCustomThemeMetadata;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.databinding.FragmentCustomThemeOptionsBottomSheetBinding;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -23,10 +23,10 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 public class CustomThemeOptionsBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     public static final String EXTRA_THEME_NAME = "ETN";
-    public static final String EXTRA_CUSTOM_THEME = "ECT";
+    public static final String EXTRA_ONLINE_CUSTOM_THEME_METADATA = "ECT";
 
     private String themeName;
-    private CustomTheme customTheme;
+    private OnlineCustomThemeMetadata onlineCustomThemeMetadata;
     private BaseActivity activity;
 
     public CustomThemeOptionsBottomSheetFragment() {
@@ -36,6 +36,7 @@ public class CustomThemeOptionsBottomSheetFragment extends LandscapeExpandedRoun
     public interface CustomThemeOptionsBottomSheetFragmentListener {
         void changeName(String oldThemeName);
         void shareTheme(String themeName);
+        void shareTheme(OnlineCustomThemeMetadata onlineCustomThemeMetadata);
         void delete(String themeName);
     }
 
@@ -45,20 +46,24 @@ public class CustomThemeOptionsBottomSheetFragment extends LandscapeExpandedRoun
         FragmentCustomThemeOptionsBottomSheetBinding binding = FragmentCustomThemeOptionsBottomSheetBinding.inflate(inflater, container, false);
 
         themeName = getArguments().getString(EXTRA_THEME_NAME);
-        customTheme = getArguments().getParcelable(EXTRA_CUSTOM_THEME);
+        onlineCustomThemeMetadata = getArguments().getParcelable(EXTRA_ONLINE_CUSTOM_THEME_METADATA);
 
         binding.themeNameTextViewCustomThemeOptionsBottomSheetFragment.setText(themeName);
 
         binding.editThemeTextViewCustomThemeOptionsBottomSheetFragment.setOnClickListener(view -> {
             Intent intent = new Intent(activity, CustomizeThemeActivity.class);
             intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_NAME, themeName);
-            intent.putExtra(CustomizeThemeActivity.EXTRA_CUSTOM_THEME, customTheme);
+            intent.putExtra(CustomizeThemeActivity.EXTRA_ONLINE_CUSTOM_THEME_METADATA, onlineCustomThemeMetadata);
             startActivity(intent);
             dismiss();
         });
 
         binding.shareThemeTextViewCustomThemeOptionsBottomSheetFragment.setOnClickListener(view -> {
-            ((CustomThemeOptionsBottomSheetFragmentListener) activity).shareTheme(themeName);
+            if (onlineCustomThemeMetadata != null) {
+                ((CustomThemeOptionsBottomSheetFragmentListener) activity).shareTheme(onlineCustomThemeMetadata);
+            } else {
+                ((CustomThemeOptionsBottomSheetFragmentListener) activity).shareTheme(themeName);
+            }
             dismiss();
         });
 

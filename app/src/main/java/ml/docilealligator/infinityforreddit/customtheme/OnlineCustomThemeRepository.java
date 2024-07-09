@@ -15,21 +15,21 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import retrofit2.Retrofit;
 
 public class OnlineCustomThemeRepository {
-    private final LiveData<PagingData<CustomTheme>> customThemes;
+    private final LiveData<PagingData<OnlineCustomThemeMetadata>> customThemes;
     private MutableLiveData<OnlineCustomThemeFilter> onlineCustomThemeFilterMutableLiveData;
 
     public OnlineCustomThemeRepository(Executor executor, Retrofit retrofit,
                                        RedditDataRoomDatabase redditDataRoomDatabase, CoroutineScope viewModelScope) {
         onlineCustomThemeFilterMutableLiveData = new MutableLiveData<>(new OnlineCustomThemeFilter());
 
-        Pager<String, CustomTheme> pager = new Pager<>(new PagingConfig(25, 4, false, 10),
+        Pager<String, OnlineCustomThemeMetadata> pager = new Pager<>(new PagingConfig(25, 4, false, 10),
                 () -> new OnlineCustomThemePagingSource(executor, retrofit, redditDataRoomDatabase));
 
         customThemes = PagingLiveData.cachedIn(Transformations.switchMap(onlineCustomThemeFilterMutableLiveData,
                 customThemeFilter -> PagingLiveData.getLiveData(pager)), viewModelScope);
     }
 
-    public LiveData<PagingData<CustomTheme>> getOnlineCustomThemes() {
+    public LiveData<PagingData<OnlineCustomThemeMetadata>> getOnlineCustomThemeMetadata() {
         return customThemes;
     }
 

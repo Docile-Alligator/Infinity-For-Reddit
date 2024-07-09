@@ -2,11 +2,13 @@ package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,14 +28,20 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.adapters.CustomizeThemeRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.apis.OnlineCustomThemeAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCustomTheme;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertCustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeSettingsItem;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customtheme.OnlineCustomThemeMetadata;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCustomizeThemeBinding;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class CustomizeThemeActivity extends BaseActivity {
 
@@ -42,12 +50,15 @@ public class CustomizeThemeActivity extends BaseActivity {
     public static final int EXTRA_DARK_THEME = CustomThemeSharedPreferencesUtils.DARK;
     public static final int EXTRA_AMOLED_THEME = CustomThemeSharedPreferencesUtils.AMOLED;
     public static final String EXTRA_THEME_NAME = "ETN";
-    public static final String EXTRA_CUSTOM_THEME = "ECT";
+    public static final String EXTRA_ONLINE_CUSTOM_THEME_METADATA = "EOCTM";
     public static final String EXTRA_IS_PREDEFIINED_THEME = "EIPT";
     public static final String EXTRA_CREATE_THEME = "ECT";
     private static final String CUSTOM_THEME_SETTINGS_ITEMS_STATE = "CTSIS";
     private static final String THEME_NAME_STATE = "TNS";
 
+    @Inject
+    @Named("online_custom_themes")
+    Retrofit onlineCustomThemesRetrofit;
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;
@@ -71,7 +82,7 @@ public class CustomizeThemeActivity extends BaseActivity {
     Executor mExecutor;
 
     private String themeName;
-    private CustomTheme customTheme;
+    private OnlineCustomThemeMetadata onlineCustomThemeMetadata;
     private boolean isPredefinedTheme;
     private ArrayList<CustomThemeSettingsItem> customThemeSettingsItems;
     private CustomizeThemeRecyclerViewAdapter adapter;
@@ -144,7 +155,7 @@ public class CustomizeThemeActivity extends BaseActivity {
             } else {
                 isPredefinedTheme = getIntent().getBooleanExtra(EXTRA_IS_PREDEFIINED_THEME, false);
                 themeName = getIntent().getStringExtra(EXTRA_THEME_NAME);
-                customTheme = getIntent().getParcelableExtra(EXTRA_CUSTOM_THEME);
+                onlineCustomThemeMetadata = getIntent().getParcelableExtra(EXTRA_ONLINE_CUSTOM_THEME_METADATA);
 
                 adapter = new CustomizeThemeRecyclerViewAdapter(this, customThemeWrapper, themeName);
                 binding.recyclerViewCustomizeThemeActivity.setAdapter(adapter);
@@ -158,11 +169,34 @@ public class CustomizeThemeActivity extends BaseActivity {
                     binding.recyclerViewCustomizeThemeActivity.setAdapter(adapter);
                     adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
                 } else {
-                    if (customTheme != null) {
-                        customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
-                                CustomizeThemeActivity.this, customTheme, androidVersion);
+                    if (onlineCustomThemeMetadata != null) {
+                        binding.progressBarCustomizeThemeActivity.setVisibility(View.VISIBLE);
+                        onlineCustomThemesRetrofit.create(OnlineCustomThemeAPI.class)
+                                .getCustomTheme(onlineCustomThemeMetadata.name, onlineCustomThemeMetadata.username)
+                                .enqueue(new Callback<>() {
+                                    @Override
+                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                        if (response.isSuccessful()) {
+                                            customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
+                                                    CustomizeThemeActivity.this,
+                                                    CustomTheme.fromJson(response.body()),
+                                                    androidVersion);
 
-                        adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
+                                            adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
+
+                                            binding.progressBarCustomizeThemeActivity.setVisibility(View.GONE);
+                                        } else {
+                                            Toast.makeText(CustomizeThemeActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
+                                        Toast.makeText(CustomizeThemeActivity.this, R.string.cannot_download_theme_data, Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                });
                     } else {
                         GetCustomTheme.getCustomTheme(mExecutor, new Handler(), redditDataRoomDatabase,
                                 themeName, customTheme -> {
@@ -261,5 +295,6 @@ public class CustomizeThemeActivity extends BaseActivity {
     protected void applyCustomTheme() {
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCustomizeThemeActivity, binding.collapsingToolbarLayoutCustomizeThemeActivity, binding.toolbarCustomizeThemeActivity);
         binding.coordinatorCustomizeThemeActivity.setBackgroundColor(customThemeWrapper.getBackgroundColor());
+        binding.progressBarCustomizeThemeActivity.setIndeterminateTintList(ColorStateList.valueOf(customThemeWrapper.getColorAccent()));
     }
 }

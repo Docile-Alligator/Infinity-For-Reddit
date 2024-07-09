@@ -95,7 +95,7 @@ public class CustomThemeListingFragment extends Fragment {
             customThemeViewModel = new ViewModelProvider(this,
                     new CustomThemeViewModel.Factory(executor, onlineCustomThemesRetrofit, redditDataRoomDatabase))
                     .get(CustomThemeViewModel.class);
-            customThemeViewModel.getOnlineCustomThemes().observe(getViewLifecycleOwner(),
+            customThemeViewModel.getOnlineCustomThemeMetadata().observe(getViewLifecycleOwner(),
                     customThemePagingData -> adapter.submitData(getViewLifecycleOwner().getLifecycle(), customThemePagingData));
         } else {
             CustomThemeListingRecyclerViewAdapter adapter = new CustomThemeListingRecyclerViewAdapter(activity,

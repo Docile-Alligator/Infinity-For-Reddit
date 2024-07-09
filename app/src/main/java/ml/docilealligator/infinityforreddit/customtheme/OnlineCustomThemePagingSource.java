@@ -7,6 +7,7 @@ import androidx.paging.PagingState;
 
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.gson.JsonParseException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +25,7 @@ import retrofit2.HttpException;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class OnlineCustomThemePagingSource extends ListenableFuturePagingSource<String, CustomTheme> {
+public class OnlineCustomThemePagingSource extends ListenableFuturePagingSource<String, OnlineCustomThemeMetadata> {
     private final Executor executor;
     private final OnlineCustomThemeAPI api;
     private final RedditDataRoomDatabase redditDataRoomDatabase;
@@ -37,19 +38,19 @@ public class OnlineCustomThemePagingSource extends ListenableFuturePagingSource<
 
     @Nullable
     @Override
-    public String getRefreshKey(@NonNull PagingState<String, CustomTheme> pagingState) {
+    public String getRefreshKey(@NonNull PagingState<String, OnlineCustomThemeMetadata> pagingState) {
         return null;
     }
 
     @NonNull
     @Override
-    public ListenableFuture<LoadResult<String, CustomTheme>> loadFuture(@NonNull LoadParams<String> loadParams) {
+    public ListenableFuture<LoadResult<String, OnlineCustomThemeMetadata>> loadFuture(@NonNull LoadParams<String> loadParams) {
         ListenableFuture<Response<String>> customThemes;
         customThemes = api.getCustomThemesListenableFuture(loadParams.getKey());
 
-        ListenableFuture<LoadResult<String, CustomTheme>> pageFuture = Futures.transform(customThemes, this::transformData, executor);
+        ListenableFuture<LoadResult<String, OnlineCustomThemeMetadata>> pageFuture = Futures.transform(customThemes, this::transformData, executor);
 
-        ListenableFuture<LoadResult<String, CustomTheme>> partialLoadResultFuture =
+        ListenableFuture<LoadResult<String, OnlineCustomThemeMetadata>> partialLoadResultFuture =
                 Futures.catching(pageFuture, HttpException.class,
                         LoadResult.Error::new, executor);
 
@@ -57,9 +58,9 @@ public class OnlineCustomThemePagingSource extends ListenableFuturePagingSource<
                 IOException.class, LoadResult.Error::new, executor);
     }
 
-    public LoadResult<String, CustomTheme> transformData(Response<String> response) {
+    public LoadResult<String, OnlineCustomThemeMetadata> transformData(Response<String> response) {
         if (response.isSuccessful()) {
-            List<CustomTheme> themes = new ArrayList<>();
+            List<OnlineCustomThemeMetadata> themeMetadataList = new ArrayList<>();
             try {
                 String responseString = response.body();
                 JSONObject data = new JSONObject(responseString);
@@ -67,14 +68,16 @@ public class OnlineCustomThemePagingSource extends ListenableFuturePagingSource<
                 JSONArray themesArray = data.getJSONArray(JSONUtils.DATA_KEY);
                 for (int i = 0; i < themesArray.length(); i++) {
                     try {
-                        themes.add(CustomTheme.fromJson(themesArray.getJSONObject(i).getString(JSONUtils.DATA_KEY)));
-                    } catch (JSONException ignore) {}
+                        themeMetadataList.add(OnlineCustomThemeMetadata.fromJson(themesArray.getJSONObject(i).toString()));
+                    } catch (JsonParseException ignore) {
+
+                    }
                 }
 
-                if (themes.isEmpty()) {
-                    return new LoadResult.Page<>(themes, null, null);
+                if (themeMetadataList.isEmpty()) {
+                    return new LoadResult.Page<>(themeMetadataList, null, null);
                 } else {
-                    return new LoadResult.Page<>(themes, null, Integer.toString(page + 1));
+                    return new LoadResult.Page<>(themeMetadataList, null, Integer.toString(page + 1));
                 }
             } catch (JSONException e) {
                 return new LoadResult.Error<>(new Exception("Response failed"));

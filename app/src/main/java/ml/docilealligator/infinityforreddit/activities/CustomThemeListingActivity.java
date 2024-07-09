@@ -38,6 +38,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.apis.OnlineCustomThemeAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.ChangeThemeName;
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteTheme;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCustomTheme;
@@ -46,18 +47,26 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.CreateThemeBott
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CustomThemeOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customtheme.OnlineCustomThemeMetadata;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCustomThemeListingBinding;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.fragments.CustomThemeListingFragment;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class CustomThemeListingActivity extends BaseActivity implements
         CustomThemeOptionsBottomSheetFragment.CustomThemeOptionsBottomSheetFragmentListener,
         CreateThemeBottomSheetFragment.SelectBaseThemeBottomSheetFragmentListener,
         RecyclerViewContentScrollingInterface {
 
+    @Inject
+    @Named("online_custom_themes")
+    Retrofit onlineCustomThemesRetrofit;
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;
@@ -260,6 +269,34 @@ public class CustomThemeListingActivity extends BaseActivity implements
         } else {
             Snackbar.make(binding.coordinatorLayoutCustomThemeListingActivity, R.string.cannot_find_theme, Snackbar.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void shareTheme(OnlineCustomThemeMetadata onlineCustomThemeMetadata) {
+        onlineCustomThemesRetrofit.create(OnlineCustomThemeAPI.class)
+                .getCustomTheme(onlineCustomThemeMetadata.name, onlineCustomThemeMetadata.username)
+                .enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                        if (response.isSuccessful()) {
+                            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                            if (clipboard != null) {
+                                ClipData clip = ClipData.newPlainText("simple text", response.body());
+                                clipboard.setPrimaryClip(clip);
+                                Snackbar.make(binding.coordinatorLayoutCustomThemeListingActivity, R.string.theme_copied, Snackbar.LENGTH_SHORT).show();
+                            } else {
+                                Snackbar.make(binding.coordinatorLayoutCustomThemeListingActivity, R.string.copy_theme_faied, Snackbar.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(CustomThemeListingActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
+                        Toast.makeText(CustomThemeListingActivity.this, R.string.cannot_download_theme_data, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Subscribe

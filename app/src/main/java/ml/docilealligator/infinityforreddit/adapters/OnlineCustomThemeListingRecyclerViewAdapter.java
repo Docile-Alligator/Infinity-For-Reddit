@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,10 +19,10 @@ import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomThemeListingActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CustomThemeOptionsBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
+import ml.docilealligator.infinityforreddit.customtheme.OnlineCustomThemeMetadata;
 import ml.docilealligator.infinityforreddit.databinding.ItemUserCustomThemeBinding;
 
-public class OnlineCustomThemeListingRecyclerViewAdapter extends PagingDataAdapter<CustomTheme, RecyclerView.ViewHolder> {
+public class OnlineCustomThemeListingRecyclerViewAdapter extends PagingDataAdapter<OnlineCustomThemeMetadata, RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_USER_THEME = 1;
     private static final int VIEW_TYPE_USER_THEME_DIVIDER = 2;
 
@@ -30,13 +31,13 @@ public class OnlineCustomThemeListingRecyclerViewAdapter extends PagingDataAdapt
     public OnlineCustomThemeListingRecyclerViewAdapter(BaseActivity activity) {
         super(new DiffUtil.ItemCallback<>() {
             @Override
-            public boolean areItemsTheSame(@NonNull CustomTheme oldItem, @NonNull CustomTheme newItem) {
-                return oldItem.name.equals(newItem.name);
+            public boolean areItemsTheSame(@NonNull OnlineCustomThemeMetadata oldItem, @NonNull OnlineCustomThemeMetadata newItem) {
+                return oldItem.name.equals(newItem.name) && oldItem.username.equals(newItem.username);
             }
 
             @Override
-            public boolean areContentsTheSame(@NonNull CustomTheme oldItem, @NonNull CustomTheme newItem) {
-                return false;
+            public boolean areContentsTheSame(@NonNull OnlineCustomThemeMetadata oldItem, @NonNull OnlineCustomThemeMetadata newItem) {
+                return true;
             }
         });
         this.activity = activity;
@@ -61,24 +62,24 @@ public class OnlineCustomThemeListingRecyclerViewAdapter extends PagingDataAdapt
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof OnlineCustomThemeViewHolder) {
-            CustomTheme customTheme = getItem(position);
-            ((OnlineCustomThemeViewHolder) holder).binding.colorPrimaryItemUserCustomTheme.setBackgroundTintList(ColorStateList.valueOf(customTheme.colorPrimary));
-            ((OnlineCustomThemeViewHolder) holder).binding.nameTextViewItemUserCustomTheme.setText(customTheme.name);
+            OnlineCustomThemeMetadata onlineCustomThemeMetadata = getItem(position);
+            ((OnlineCustomThemeViewHolder) holder).binding.colorPrimaryItemUserCustomTheme.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor(onlineCustomThemeMetadata.colorPrimary)));
+            ((OnlineCustomThemeViewHolder) holder).binding.nameTextViewItemUserCustomTheme.setText(onlineCustomThemeMetadata.name);
             ((OnlineCustomThemeViewHolder) holder).binding.addImageViewItemUserCustomTheme.setOnClickListener(view -> {
                 Intent intent = new Intent(activity, CustomizeThemeActivity.class);
-                intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_NAME, customTheme.name);
-                intent.putExtra(CustomizeThemeActivity.EXTRA_CUSTOM_THEME, customTheme);
+                intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_NAME, onlineCustomThemeMetadata.name);
+                intent.putExtra(CustomizeThemeActivity.EXTRA_ONLINE_CUSTOM_THEME_METADATA, onlineCustomThemeMetadata);
                 intent.putExtra(CustomizeThemeActivity.EXTRA_CREATE_THEME, true);
                 activity.startActivity(intent);
             });
             ((OnlineCustomThemeViewHolder) holder).binding.shareImageViewItemUserCustomTheme.setOnClickListener(view -> {
-                ((CustomThemeListingActivity) activity).shareTheme(customTheme);
+                ((CustomThemeListingActivity) activity).shareTheme(onlineCustomThemeMetadata);
             });
             holder.itemView.setOnClickListener(view -> {
                 CustomThemeOptionsBottomSheetFragment customThemeOptionsBottomSheetFragment = new CustomThemeOptionsBottomSheetFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(CustomThemeOptionsBottomSheetFragment.EXTRA_THEME_NAME, customTheme.name);
-                bundle.putParcelable(CustomThemeOptionsBottomSheetFragment.EXTRA_CUSTOM_THEME, customTheme);
+                bundle.putString(CustomThemeOptionsBottomSheetFragment.EXTRA_THEME_NAME, onlineCustomThemeMetadata.name);
+                bundle.putParcelable(CustomThemeOptionsBottomSheetFragment.EXTRA_ONLINE_CUSTOM_THEME_METADATA, onlineCustomThemeMetadata);
                 customThemeOptionsBottomSheetFragment.setArguments(bundle);
                 customThemeOptionsBottomSheetFragment.show(activity.getSupportFragmentManager(), customThemeOptionsBottomSheetFragment.getTag());
             });
