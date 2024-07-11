@@ -248,8 +248,9 @@ public class CustomizeThemeActivity extends BaseActivity {
                             .setTitle(R.string.override_online_theme_question)
                             .setMessage(R.string.override_online_theme_message)
                             .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-                                onlineCustomThemesRetrofit.create(OnlineCustomThemeAPI.class).uploadTheme(
-                                        customTheme.name, accountName, customTheme.getJSONModel(),
+                                onlineCustomThemesRetrofit.create(OnlineCustomThemeAPI.class).modifyTheme(
+                                        onlineCustomThemeMetadata.id, customTheme.name,
+                                        customTheme.getJSONModel(),
                                         ('#' + Integer.toHexString(customTheme.colorPrimary)).toUpperCase()
                                 ).enqueue(new Callback<>() {
                                     @Override

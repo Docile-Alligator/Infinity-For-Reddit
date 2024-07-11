@@ -10,18 +10,20 @@ import com.google.gson.JsonParseException;
 import com.google.gson.annotations.SerializedName;
 
 public class OnlineCustomThemeMetadata implements Parcelable {
+    public int id;
     public String name;
     public String username;
     @SerializedName("primary_color")
     public String colorPrimary;
 
     protected OnlineCustomThemeMetadata(Parcel in) {
+        id = in.readInt();
         name = in.readString();
         username = in.readString();
         colorPrimary = in.readString();
     }
 
-    public static final Creator<OnlineCustomThemeMetadata> CREATOR = new Creator<OnlineCustomThemeMetadata>() {
+    public static final Creator<OnlineCustomThemeMetadata> CREATOR = new Creator<>() {
         @Override
         public OnlineCustomThemeMetadata createFromParcel(Parcel in) {
             return new OnlineCustomThemeMetadata(in);
@@ -45,6 +47,7 @@ public class OnlineCustomThemeMetadata implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(username);
         dest.writeString(colorPrimary);
