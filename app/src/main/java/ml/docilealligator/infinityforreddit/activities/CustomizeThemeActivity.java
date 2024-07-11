@@ -242,19 +242,54 @@ public class CustomizeThemeActivity extends BaseActivity {
                     return true;
                 }
                 CustomTheme customTheme = CustomTheme.convertSettingsItemsToCustomTheme(customThemeSettingsItems, themeName);
-                InsertCustomTheme.insertCustomTheme(mExecutor, new Handler(), redditDataRoomDatabase, lightThemeSharedPreferences,
-                        darkThemeSharedPreferences, amoledThemeSharedPreferences, customTheme,
-                        false, () -> {
-                            Toast.makeText(CustomizeThemeActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
-                            EventBus.getDefault().post(new RecreateActivityEvent());
-                            finish();
-                        });
+                if (onlineCustomThemeMetadata != null && onlineCustomThemeMetadata.username.equals(accountName)) {
+                    // This custom theme is uploaded by the current user
+                    new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                            .setTitle(R.string.override_online_theme_question)
+                            .setMessage(R.string.override_online_theme_message)
+                            .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
+                                onlineCustomThemesRetrofit.create(OnlineCustomThemeAPI.class).uploadTheme(
+                                        customTheme.name, accountName, customTheme.getJSONModel(),
+                                        ('#' + Integer.toHexString(customTheme.colorPrimary)).toUpperCase()
+                                ).enqueue(new Callback<>() {
+                                    @Override
+                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                        if (response.isSuccessful()) {
+                                            Toast.makeText(CustomizeThemeActivity.this, R.string.online_theme_modified, Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        } else {
+                                            Toast.makeText(CustomizeThemeActivity.this, R.string.upload_theme_failed, Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
+                                        Toast.makeText(CustomizeThemeActivity.this, R.string.upload_theme_failed, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            })
+                            .setNeutralButton(R.string.save_to_local, ((dialog, which) -> saveThemeLocally(customTheme)))
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                } else {
+                    saveThemeLocally(customTheme);
+                }
             }
 
             return true;
         }
 
         return false;
+    }
+
+    private void saveThemeLocally(CustomTheme customTheme) {
+        InsertCustomTheme.insertCustomTheme(mExecutor, new Handler(), redditDataRoomDatabase, lightThemeSharedPreferences,
+                darkThemeSharedPreferences, amoledThemeSharedPreferences, customTheme,
+                false, () -> {
+                    Toast.makeText(CustomizeThemeActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
+                    EventBus.getDefault().post(new RecreateActivityEvent());
+                    finish();
+                });
     }
 
     @Override

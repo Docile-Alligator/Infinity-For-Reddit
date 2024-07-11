@@ -965,6 +965,11 @@
     <string name="duplicate_theme_name_dialog_message">A theme in the database is also called %1$s. Do you want to change the name of this imported theme?</string>
     <string name="rename">Rename</string>
     <string name="override">Override</string>
+    <string name="override_online_theme_question">Override online theme?</string>
+    <string name="override_online_theme_message">You uploaded this theme so you can make changes.</string>
+    <string name="save_to_local">Save to local</string>
+    <string name="online_theme_modified">Online theme modified.</string>
+    <string name="upload_theme_failed">Failed to upload this theme. Try again later.</string>
 
     <string name="color_picker">Color Picker</string>
     <string name="invalid_color">Invalid Color</string>
