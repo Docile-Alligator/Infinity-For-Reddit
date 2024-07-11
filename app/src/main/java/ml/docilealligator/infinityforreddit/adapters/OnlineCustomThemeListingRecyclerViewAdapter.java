@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.paging.ItemSnapshotList;
 import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -80,6 +81,7 @@ public class OnlineCustomThemeListingRecyclerViewAdapter extends PagingDataAdapt
                 Bundle bundle = new Bundle();
                 bundle.putString(CustomThemeOptionsBottomSheetFragment.EXTRA_THEME_NAME, onlineCustomThemeMetadata.name);
                 bundle.putParcelable(CustomThemeOptionsBottomSheetFragment.EXTRA_ONLINE_CUSTOM_THEME_METADATA, onlineCustomThemeMetadata);
+                bundle.putInt(CustomThemeOptionsBottomSheetFragment.EXTRA_INDEX_IN_THEME_LIST, holder.getBindingAdapterPosition());
                 customThemeOptionsBottomSheetFragment.setArguments(bundle);
                 customThemeOptionsBottomSheetFragment.show(activity.getSupportFragmentManager(), customThemeOptionsBottomSheetFragment.getTag());
             });
@@ -87,6 +89,20 @@ public class OnlineCustomThemeListingRecyclerViewAdapter extends PagingDataAdapt
                 holder.itemView.performClick();
                 return true;
             });
+        }
+    }
+
+    public void updateMetadata(int index, String themeName, String primaryColor) {
+        if (index >= 0) {
+            ItemSnapshotList<OnlineCustomThemeMetadata> list = snapshot();
+            if (index < list.size()) {
+                OnlineCustomThemeMetadata metadata = list.get(index);
+                if (metadata != null) {
+                    metadata.name = themeName;
+                    metadata.colorPrimary = primaryColor;
+                }
+            }
+            notifyItemChanged(index);
         }
     }
 

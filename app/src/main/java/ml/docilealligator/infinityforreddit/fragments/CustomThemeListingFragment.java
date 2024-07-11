@@ -1,13 +1,18 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +26,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.adapters.CustomThemeListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.adapters.OnlineCustomThemeListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeViewModel;
@@ -60,6 +66,8 @@ public class CustomThemeListingFragment extends Fragment {
     private BaseActivity activity;
     private FragmentCustomThemeListingBinding binding;
     private boolean isOnline;
+    @Nullable
+    private ActivityResultLauncher<Intent> customizeThemeActivityResultLauncher;
 
     public CustomThemeListingFragment() {
         // Required empty public constructor
@@ -97,6 +105,17 @@ public class CustomThemeListingFragment extends Fragment {
                     .get(CustomThemeViewModel.class);
             customThemeViewModel.getOnlineCustomThemeMetadata().observe(getViewLifecycleOwner(),
                     customThemePagingData -> adapter.submitData(getViewLifecycleOwner().getLifecycle(), customThemePagingData));
+
+            customizeThemeActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), activityResult -> {
+                if (activityResult.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = activityResult.getData();
+                    int index = data.getIntExtra(CustomizeThemeActivity.RETURN_EXTRA_INDEX_IN_THEME_LIST, -1);
+                    String themeName = data.getStringExtra(CustomizeThemeActivity.RETURN_EXTRA_THEME_NAME);
+                    String primaryColorHex = data.getStringExtra(CustomizeThemeActivity.RETURN_EXTRA_PRIMARY_COLOR);
+
+                    adapter.updateMetadata(index, themeName, primaryColorHex);
+                }
+            });
         } else {
             CustomThemeListingRecyclerViewAdapter adapter = new CustomThemeListingRecyclerViewAdapter(activity,
                     CustomThemeWrapper.getPredefinedThemes(activity));
@@ -109,6 +128,11 @@ public class CustomThemeListingFragment extends Fragment {
         }
 
         return binding.getRoot();
+    }
+
+    @Nullable
+    public ActivityResultLauncher<Intent> getCustomizeThemeActivityResultLauncher() {
+        return customizeThemeActivityResultLauncher;
     }
 
     @Override

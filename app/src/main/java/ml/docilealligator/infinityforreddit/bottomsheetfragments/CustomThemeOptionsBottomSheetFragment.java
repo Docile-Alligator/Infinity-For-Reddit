@@ -1,17 +1,16 @@
 package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.activities.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.customtheme.OnlineCustomThemeMetadata;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.databinding.FragmentCustomThemeOptionsBottomSheetBinding;
@@ -24,6 +23,7 @@ public class CustomThemeOptionsBottomSheetFragment extends LandscapeExpandedRoun
 
     public static final String EXTRA_THEME_NAME = "ETN";
     public static final String EXTRA_ONLINE_CUSTOM_THEME_METADATA = "ECT";
+    public static final String EXTRA_INDEX_IN_THEME_LIST = "EIITL";
 
     private String themeName;
     private OnlineCustomThemeMetadata onlineCustomThemeMetadata;
@@ -34,6 +34,7 @@ public class CustomThemeOptionsBottomSheetFragment extends LandscapeExpandedRoun
     }
 
     public interface CustomThemeOptionsBottomSheetFragmentListener {
+        void editTheme(String themeName, @Nullable OnlineCustomThemeMetadata onlineCustomThemeMetadata, int indexInThemeList);
         void changeName(String oldThemeName);
         void shareTheme(String themeName);
         void shareTheme(OnlineCustomThemeMetadata onlineCustomThemeMetadata);
@@ -51,10 +52,7 @@ public class CustomThemeOptionsBottomSheetFragment extends LandscapeExpandedRoun
         binding.themeNameTextViewCustomThemeOptionsBottomSheetFragment.setText(themeName);
 
         binding.editThemeTextViewCustomThemeOptionsBottomSheetFragment.setOnClickListener(view -> {
-            Intent intent = new Intent(activity, CustomizeThemeActivity.class);
-            intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_NAME, themeName);
-            intent.putExtra(CustomizeThemeActivity.EXTRA_ONLINE_CUSTOM_THEME_METADATA, onlineCustomThemeMetadata);
-            startActivity(intent);
+            ((CustomThemeOptionsBottomSheetFragmentListener) activity).editTheme(themeName, onlineCustomThemeMetadata, getArguments().getInt(EXTRA_INDEX_IN_THEME_LIST, -1));
             dismiss();
         });
 

@@ -51,8 +51,12 @@ public class CustomizeThemeActivity extends BaseActivity {
     public static final int EXTRA_AMOLED_THEME = CustomThemeSharedPreferencesUtils.AMOLED;
     public static final String EXTRA_THEME_NAME = "ETN";
     public static final String EXTRA_ONLINE_CUSTOM_THEME_METADATA = "EOCTM";
+    public static final String EXTRA_INDEX_IN_THEME_LIST = "EIITL";
     public static final String EXTRA_IS_PREDEFIINED_THEME = "EIPT";
     public static final String EXTRA_CREATE_THEME = "ECT";
+    public static final String RETURN_EXTRA_THEME_NAME = "RETN";
+    public static final String RETURN_EXTRA_PRIMARY_COLOR = "REPC";
+    public static final String RETURN_EXTRA_INDEX_IN_THEME_LIST = "REIITL";
     private static final String CUSTOM_THEME_SETTINGS_ITEMS_STATE = "CTSIS";
     private static final String THEME_NAME_STATE = "TNS";
 
@@ -257,6 +261,12 @@ public class CustomizeThemeActivity extends BaseActivity {
                                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                                         if (response.isSuccessful()) {
                                             Toast.makeText(CustomizeThemeActivity.this, R.string.online_theme_modified, Toast.LENGTH_SHORT).show();
+                                            Intent returnIntent = new Intent();
+                                            returnIntent.putExtra(RETURN_EXTRA_INDEX_IN_THEME_LIST, getIntent().getIntExtra(EXTRA_INDEX_IN_THEME_LIST, -1));
+                                            returnIntent.putExtra(RETURN_EXTRA_THEME_NAME, customTheme.name);
+                                            returnIntent.putExtra(RETURN_EXTRA_PRIMARY_COLOR, '#' + Integer.toHexString(customTheme.colorPrimary));
+                                            setResult(RESULT_OK, returnIntent);
+
                                             finish();
                                         } else {
                                             Toast.makeText(CustomizeThemeActivity.this, R.string.upload_theme_failed, Toast.LENGTH_SHORT).show();

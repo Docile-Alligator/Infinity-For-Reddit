@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -91,6 +93,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ActivityCustomThemeListingBinding binding;
+    private ActivityResultLauncher<Intent> customizeThemeActivityResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,6 +182,24 @@ public class CustomThemeListingActivity extends BaseActivity implements
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCustomizeThemeListingActivity, binding.collapsingToolbarLayoutCustomizeThemeListingActivity, binding.toolbarCustomizeThemeListingActivity);
         applyFABTheme(binding.fabCustomThemeListingActivity);
         applyTabLayoutTheme(binding.tabLayoutCustomizeThemeListingActivity);
+    }
+
+    @Override
+    public void editTheme(String themeName, @Nullable OnlineCustomThemeMetadata onlineCustomThemeMetadata, int indexInThemeList) {
+        Intent intent = new Intent(this, CustomizeThemeActivity.class);
+        intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_NAME, themeName);
+        intent.putExtra(CustomizeThemeActivity.EXTRA_ONLINE_CUSTOM_THEME_METADATA, onlineCustomThemeMetadata);
+        intent.putExtra(CustomizeThemeActivity.EXTRA_INDEX_IN_THEME_LIST, indexInThemeList);
+
+        if (indexInThemeList >= 0) {
+            //Online theme
+            Fragment fragment = sectionsPagerAdapter.getOnlineThemeFragment();
+            if (fragment != null && ((CustomThemeListingFragment) fragment).getCustomizeThemeActivityResultLauncher() != null) {
+                ((CustomThemeListingFragment) fragment).getCustomizeThemeActivityResultLauncher().launch(intent);
+                return;
+            }
+        }
+        startActivity(intent);
     }
 
     @Override
@@ -409,11 +430,11 @@ public class CustomThemeListingActivity extends BaseActivity implements
         }
 
         @Nullable
-        private Fragment getCurrentFragment() {
+        private Fragment getOnlineThemeFragment() {
             if (fragmentManager == null) {
                 return null;
             }
-            return fragmentManager.findFragmentByTag("f" + binding.viewPager2CustomizeThemeListingActivity.getCurrentItem());
+            return fragmentManager.findFragmentByTag("f1");
         }
 
         @Override
