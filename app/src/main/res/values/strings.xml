@@ -1395,10 +1395,10 @@
     <string name="online">Online</string>
 
     <string name="image_and_gif">Image and GIF</string>
-    <string name="image_and_emoji">Image and emoji</string>
-    <string name="gif_and_emoji">GIF and emoji</string>
+    <string name="image_and_emote">Image and emote</string>
+    <string name="gif_and_emote">GIF and emote</string>
     <string name="image_embedded_media">Image</string>
-    <string name="emoji">Emoji</string>
+    <string name="emote">Emote</string>
     <string name="none">None</string>
 
 

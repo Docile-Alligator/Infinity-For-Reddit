@@ -384,21 +384,23 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             return true;
         };
         mEmoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
-        mEmotePlugin = EmotePlugin.create(activity, mDataSavingMode, mDisableImagePreview, mediaMetadata -> {
-            Intent intent = new Intent(activity, ViewImageOrGifActivity.class);
-            if (mediaMetadata.isGIF) {
-                intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, mediaMetadata.original.url);
-            } else {
-                intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, mediaMetadata.original.url);
-            }
-            intent.putExtra(ViewImageOrGifActivity.EXTRA_IS_NSFW, post.isNSFW());
-            intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, post.getSubredditName());
-            intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mediaMetadata.fileName);
-            if (canStartActivity) {
-                canStartActivity = false;
-                activity.startActivity(intent);
-            }
-        });
+        mEmotePlugin = EmotePlugin.create(activity,
+                Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.EMBEDDED_MEDIA_TYPE, "15")),
+                mDataSavingMode, mDisableImagePreview, mediaMetadata -> {
+                    Intent intent = new Intent(activity, ViewImageOrGifActivity.class);
+                    if (mediaMetadata.isGIF) {
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, mediaMetadata.original.url);
+                    } else {
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, mediaMetadata.original.url);
+                    }
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_IS_NSFW, post.isNSFW());
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, post.getSubredditName());
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mediaMetadata.fileName);
+                    if (canStartActivity) {
+                        canStartActivity = false;
+                        activity.startActivity(intent);
+                    }
+                });
         mImageAndGifPlugin = new ImageAndGifPlugin();
         mPostDetailMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
                 miscPlugin, mEmoteCloseBracketInlineProcessor, mEmotePlugin, mImageAndGifPlugin, markdownColor,

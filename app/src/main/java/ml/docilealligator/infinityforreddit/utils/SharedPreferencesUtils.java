@@ -267,7 +267,7 @@ public class SharedPreferencesUtils {
         return embeddedMediaType == 15 || embeddedMediaType == 7 || embeddedMediaType == 5 || embeddedMediaType == 2;
     }
 
-    public static boolean canShowEmoji(int embeddedMediaType) {
+    public static boolean canShowEmote(int embeddedMediaType) {
         return embeddedMediaType == 15 || embeddedMediaType == 6 || embeddedMediaType == 5 || embeddedMediaType == 1;
     }
 

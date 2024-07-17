@@ -701,11 +701,11 @@
     <string-array name="settings_embedded_media_type">
         <item>@string/all</item>
         <item>@string/image_and_gif</item>
-        <item>@string/image_and_emoji</item>
-        <item>@string/gif_and_emoji</item>
+        <item>@string/image_and_emote</item>
+        <item>@string/gif_and_emote</item>
         <item>@string/image_embedded_media</item>
         <item>@string/gif</item>
-        <item>@string/emoji</item>
+        <item>@string/emote</item>
         <item>@string/none</item>
     </string-array>
 
