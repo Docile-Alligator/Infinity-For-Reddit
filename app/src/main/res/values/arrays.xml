@@ -692,4 +692,10 @@
         <item>1</item>
     </string-array>
 
+    <string-array name="save_theme_options">
+        <item>@string/save_locally</item>
+        <item>@string/save_online</item>
+        <item>@string/save_locally_and_online</item>
+    </string-array>
+
 </resources>

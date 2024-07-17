@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -248,38 +249,29 @@ public class CustomizeThemeActivity extends BaseActivity {
                 CustomTheme customTheme = CustomTheme.convertSettingsItemsToCustomTheme(customThemeSettingsItems, themeName);
                 if (onlineCustomThemeMetadata != null && onlineCustomThemeMetadata.username.equals(accountName)) {
                     // This custom theme is uploaded by the current user
+                    final int[] option = {0};
                     new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
-                            .setTitle(R.string.override_online_theme_question)
-                            .setMessage(R.string.override_online_theme_message)
-                            .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-                                onlineCustomThemesRetrofit.create(OnlineCustomThemeAPI.class).modifyTheme(
-                                        onlineCustomThemeMetadata.id, customTheme.name,
-                                        customTheme.getJSONModel(),
-                                        ('#' + Integer.toHexString(customTheme.colorPrimary)).toUpperCase()
-                                ).enqueue(new Callback<>() {
-                                    @Override
-                                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                                        if (response.isSuccessful()) {
-                                            Toast.makeText(CustomizeThemeActivity.this, R.string.online_theme_modified, Toast.LENGTH_SHORT).show();
-                                            Intent returnIntent = new Intent();
-                                            returnIntent.putExtra(RETURN_EXTRA_INDEX_IN_THEME_LIST, getIntent().getIntExtra(EXTRA_INDEX_IN_THEME_LIST, -1));
-                                            returnIntent.putExtra(RETURN_EXTRA_THEME_NAME, customTheme.name);
-                                            returnIntent.putExtra(RETURN_EXTRA_PRIMARY_COLOR, '#' + Integer.toHexString(customTheme.colorPrimary));
-                                            setResult(RESULT_OK, returnIntent);
-
-                                            finish();
-                                        } else {
-                                            Toast.makeText(CustomizeThemeActivity.this, R.string.upload_theme_failed, Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
-                                        Toast.makeText(CustomizeThemeActivity.this, R.string.upload_theme_failed, Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                            .setTitle(R.string.save_theme_options_title)
+                            //.setMessage(R.string.save_theme_options_message)
+                            .setSingleChoiceItems(R.array.save_theme_options, 0, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    option[0] = which;
+                                }
                             })
-                            .setNeutralButton(R.string.save_to_local, ((dialog, which) -> saveThemeLocally(customTheme)))
+                            .setPositiveButton(R.string.ok, (dialogInterface, which) -> {
+                                switch (option[0]) {
+                                    case 0:
+                                        saveThemeLocally(customTheme);
+                                        break;
+                                    case 1:
+                                        saveThemeOnline(customTheme);
+                                        break;
+                                    case 2:
+                                        saveThemeLocally(customTheme);
+                                        saveThemeOnline(customTheme);
+                                }
+                            })
                             .setNegativeButton(R.string.cancel, null)
                             .show();
                 } else {
@@ -297,10 +289,39 @@ public class CustomizeThemeActivity extends BaseActivity {
         InsertCustomTheme.insertCustomTheme(mExecutor, new Handler(), redditDataRoomDatabase, lightThemeSharedPreferences,
                 darkThemeSharedPreferences, amoledThemeSharedPreferences, customTheme,
                 false, () -> {
-                    Toast.makeText(CustomizeThemeActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CustomizeThemeActivity.this, R.string.theme_saved_locally, Toast.LENGTH_SHORT).show();
                     EventBus.getDefault().post(new RecreateActivityEvent());
                     finish();
                 });
+    }
+
+    private void saveThemeOnline(CustomTheme customTheme) {
+        onlineCustomThemesRetrofit.create(OnlineCustomThemeAPI.class).modifyTheme(
+                onlineCustomThemeMetadata.id, customTheme.name,
+                customTheme.getJSONModel(),
+                ('#' + Integer.toHexString(customTheme.colorPrimary)).toUpperCase()
+        ).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(CustomizeThemeActivity.this, R.string.theme_saved_online, Toast.LENGTH_SHORT).show();
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra(RETURN_EXTRA_INDEX_IN_THEME_LIST, getIntent().getIntExtra(EXTRA_INDEX_IN_THEME_LIST, -1));
+                    returnIntent.putExtra(RETURN_EXTRA_THEME_NAME, customTheme.name);
+                    returnIntent.putExtra(RETURN_EXTRA_PRIMARY_COLOR, '#' + Integer.toHexString(customTheme.colorPrimary));
+                    setResult(RESULT_OK, returnIntent);
+
+                    finish();
+                } else {
+                    Toast.makeText(CustomizeThemeActivity.this, R.string.upload_theme_failed, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
+                Toast.makeText(CustomizeThemeActivity.this, R.string.upload_theme_failed, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
