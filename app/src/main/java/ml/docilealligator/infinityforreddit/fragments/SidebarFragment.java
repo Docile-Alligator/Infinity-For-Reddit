@@ -163,7 +163,7 @@ public class SidebarFragment extends Fragment {
         });
         ImageAndGifPlugin imageAndGifPlugin = new ImageAndGifPlugin();
         imageAndGifEntry = new ImageAndGifEntry(activity,
-                Glide.with(this),
+                Glide.with(this), SharedPreferencesUtils.EMBEDDED_MEDIA_ALL,
                 mediaMetadata -> {
                     Intent imageIntent = new Intent(activity, ViewImageOrGifActivity.class);
                     if (mediaMetadata.isGIF) {

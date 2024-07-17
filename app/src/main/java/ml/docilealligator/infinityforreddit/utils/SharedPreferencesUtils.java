@@ -256,6 +256,21 @@ public class SharedPreferencesUtils {
         return POST_DETAIL_FAB_LANDSCAPE_Y_BASE + display.getDisplayId();
     }
 
+    public static final String EMBEDDED_MEDIA_TYPE = "embedded_media_type";
+    public static final int EMBEDDED_MEDIA_ALL = 15;
+
+    public static boolean canShowImage(int embeddedMediaType) {
+        return embeddedMediaType == 15 || embeddedMediaType == 7 || embeddedMediaType == 6 || embeddedMediaType == 3;
+    }
+
+    public static boolean canShowGif(int embeddedMediaType) {
+        return embeddedMediaType == 15 || embeddedMediaType == 7 || embeddedMediaType == 5 || embeddedMediaType == 2;
+    }
+
+    public static boolean canShowEmoji(int embeddedMediaType) {
+        return embeddedMediaType == 15 || embeddedMediaType == 6 || embeddedMediaType == 5 || embeddedMediaType == 1;
+    }
+
     public static final String DEFAULT_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit_preferences";
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
     public static final String MAIN_PAGE_TAB_COUNT = "_main_page_tab_count";

@@ -227,7 +227,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                 imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mediaMetadata.fileName);
             });
             ImageAndGifPlugin imageAndGifPlugin = new ImageAndGifPlugin();
-            imageAndGifEntry = new ImageAndGifEntry(this, mGlide, mediaMetadata -> {
+            imageAndGifEntry = new ImageAndGifEntry(this, mGlide, SharedPreferencesUtils.EMBEDDED_MEDIA_ALL, mediaMetadata -> {
                 Intent imageIntent = new Intent(this, ViewImageOrGifActivity.class);
                 if (mediaMetadata.isGIF) {
                     imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, mediaMetadata.original.url);

@@ -404,7 +404,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 miscPlugin, mEmoteCloseBracketInlineProcessor, mEmotePlugin, mImageAndGifPlugin, markdownColor,
                 postSpoilerBackgroundColor, onLinkLongClickListener);
         mImageAndGifEntry = new ImageAndGifEntry(activity,
-                mGlide, mDataSavingMode, mDisableImagePreview,
+                mGlide, Integer.parseInt(postDetailsSharedPreferences.getString(SharedPreferencesUtils.EMBEDDED_MEDIA_TYPE, "15")),
+                mDataSavingMode, mDisableImagePreview,
                 (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit())) || (mPost.isSpoiler() && mNeedBlurSpoiler),
                 mediaMetadata -> {
                     Intent intent = new Intent(activity, ViewImageOrGifActivity.class);

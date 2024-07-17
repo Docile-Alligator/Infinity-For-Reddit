@@ -698,4 +698,26 @@
         <item>@string/save_locally_and_online</item>
     </string-array>
 
+    <string-array name="settings_embedded_media_type">
+        <item>@string/all</item>
+        <item>@string/image_and_gif</item>
+        <item>@string/image_and_emoji</item>
+        <item>@string/gif_and_emoji</item>
+        <item>@string/image_embedded_media</item>
+        <item>@string/gif</item>
+        <item>@string/emoji</item>
+        <item>@string/none</item>
+    </string-array>
+
+    <string-array name="settings_embedded_media_type_values">
+        <item>15</item>
+        <item>7</item>
+        <item>6</item>
+        <item>5</item>
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+        <item>0</item>
+    </string-array>
+
 </resources>

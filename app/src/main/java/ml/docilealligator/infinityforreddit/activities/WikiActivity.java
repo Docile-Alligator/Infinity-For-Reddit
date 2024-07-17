@@ -176,7 +176,7 @@ public class WikiActivity extends BaseActivity {
         });
         imageAndGifPlugin = new ImageAndGifPlugin();
         imageAndGifEntry = new ImageAndGifEntry(this,
-                mGlide, mediaMetadata -> {
+                mGlide, SharedPreferencesUtils.EMBEDDED_MEDIA_ALL, mediaMetadata -> {
             Intent intent = new Intent(this, ViewImageOrGifActivity.class);
             if (mediaMetadata.isGIF) {
                 intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, mediaMetadata.original.url);

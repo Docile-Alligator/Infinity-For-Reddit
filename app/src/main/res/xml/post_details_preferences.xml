@@ -37,4 +37,12 @@
         app:key="hide_the_number_of_comments"
         app:title="@string/settings_hide_the_number_of_comments" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+        app:defaultValue="15"
+        app:entries="@array/settings_embedded_media_type"
+        app:entryValues="@array/settings_embedded_media_type_values"
+        app:key="embedded_media_type"
+        app:title="@string/settings_embedded_media_type_title"
+        app:useSimpleSummaryProvider="true" />
+
 </PreferenceScreen>

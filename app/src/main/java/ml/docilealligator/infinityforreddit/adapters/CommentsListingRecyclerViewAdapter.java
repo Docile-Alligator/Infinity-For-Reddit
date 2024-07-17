@@ -198,20 +198,22 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
                 miscPlugin, mEmoteCloseBracketInlineProcessor, mEmotePlugin, mImageAndGifPlugin, mCommentColor,
                 commentSpoilerBackgroundColor, onLinkLongClickListener);
-        mImageAndGifEntry = new ImageAndGifEntry(activity, Glide.with(activity), mediaMetadata -> {
-            Intent intent = new Intent(activity, ViewImageOrGifActivity.class);
-            if (mediaMetadata.isGIF) {
-                intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, mediaMetadata.original.url);
-            } else {
-                intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, mediaMetadata.original.url);
-            }
-            intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, username);
-            intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mediaMetadata.fileName);
-            if (canStartActivity) {
-                canStartActivity = false;
-                activity.startActivity(intent);
-            }
-        });
+        mImageAndGifEntry = new ImageAndGifEntry(activity, Glide.with(activity),
+                Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.EMBEDDED_MEDIA_TYPE, "15")),
+                mediaMetadata -> {
+                    Intent intent = new Intent(activity, ViewImageOrGifActivity.class);
+                    if (mediaMetadata.isGIF) {
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, mediaMetadata.original.url);
+                    } else {
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, mediaMetadata.original.url);
+                    }
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, username);
+                    intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mediaMetadata.fileName);
+                    if (canStartActivity) {
+                        canStartActivity = false;
+                        activity.startActivity(intent);
+                    }
+                });
         recycledViewPool = new RecyclerView.RecycledViewPool();
     }
 

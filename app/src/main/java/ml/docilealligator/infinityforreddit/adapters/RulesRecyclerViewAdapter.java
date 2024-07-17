@@ -38,6 +38,7 @@ import ml.docilealligator.infinityforreddit.markdown.EvenBetterLinkMovementMetho
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAdapter.RuleViewHolder> {
     private final BaseActivity activity;
@@ -103,7 +104,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         });
         imageAndGifPlugin = new ImageAndGifPlugin();
         imageAndGifEntry = new ImageAndGifEntry(activity,
-                Glide.with(activity),
+                Glide.with(activity), SharedPreferencesUtils.EMBEDDED_MEDIA_ALL,
                 mediaMetadata -> {
                     Intent imageIntent = new Intent(activity, ViewImageOrGifActivity.class);
                     if (mediaMetadata.isGIF) {

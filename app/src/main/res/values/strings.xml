@@ -642,6 +642,7 @@
     <string name="settings_hide_fab_in_post_feed">Hide FAB in Post Feed</string>
     <string name="settings_comment_divider_type">Comment Divider Type</string>
     <string name="settings_comment_filter_title">Comment Filter</string>
+    <string name="settings_embedded_media_type_title">Embedded Media Type</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -1392,5 +1393,13 @@
 
     <string name="local">Local</string>
     <string name="online">Online</string>
+
+    <string name="image_and_gif">Image and GIF</string>
+    <string name="image_and_emoji">Image and emoji</string>
+    <string name="gif_and_emoji">GIF and emoji</string>
+    <string name="image_embedded_media">Image</string>
+    <string name="emoji">Emoji</string>
+    <string name="none">None</string>
+
 
 </resources>
