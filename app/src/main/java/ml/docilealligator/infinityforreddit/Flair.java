@@ -3,6 +3,9 @@ package ml.docilealligator.infinityforreddit;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+
 public class Flair implements Parcelable {
     public static final Creator<Flair> CREATOR = new Creator<Flair>() {
         @Override
@@ -65,5 +68,13 @@ public class Flair implements Parcelable {
         parcel.writeString(id);
         parcel.writeString(text);
         parcel.writeByte((byte) (editable ? 1 : 0));
+    }
+
+    public String getJSONModel() {
+        return new Gson().toJson(this);
+    }
+
+    public static Flair fromJson(String json) throws JsonParseException {
+        return new Gson().fromJson(json, Flair.class);
     }
 }

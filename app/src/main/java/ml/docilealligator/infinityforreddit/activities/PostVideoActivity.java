@@ -1,6 +1,9 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -8,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -551,8 +555,8 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
                 subredditName = binding.subredditNameTextViewPostVideoActivity.getText().toString();
             }
 
-            Intent intent = new Intent(this, SubmitPostService.class);
-            intent.setData(videoUri);
+            /*Intent intent = new Intent(this, SubmitPostService.class);
+            intent.putExtra(SubmitPostService.EXTRA_MEDIA_URI, videoUri.toString());
             intent.putExtra(SubmitPostService.EXTRA_ACCOUNT, selectedAccount);
             intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
             intent.putExtra(SubmitPostService.EXTRA_TITLE, binding.postTitleEditTextPostVideoActivity.getText().toString());
@@ -564,7 +568,25 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
             intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_VIDEO);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-            ContextCompat.startForegroundService(this, intent);
+            ContextCompat.startForegroundService(this, intent);*/
+
+            PersistableBundle extras = new PersistableBundle();
+            extras.putString(SubmitPostService.EXTRA_MEDIA_URI, videoUri.toString());
+            extras.putString(SubmitPostService.EXTRA_ACCOUNT, selectedAccount.getJSONModel());
+            extras.putString(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
+            extras.putString(SubmitPostService.EXTRA_TITLE, binding.postTitleEditTextPostVideoActivity.getText().toString());
+            extras.putString(SubmitPostService.EXTRA_CONTENT, binding.postContentEditTextPostVideoActivity.getText().toString());
+            if (flair != null) {
+                extras.putString(SubmitPostService.EXTRA_FLAIR, flair.getJSONModel());
+            }
+            extras.putInt(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler ? 1 : 0);
+            extras.putInt(SubmitPostService.EXTRA_IS_NSFW, isNSFW ? 1 : 0);
+            extras.putInt(SubmitPostService.EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS, binding.receivePostReplyNotificationsSwitchMaterialPostVideoActivity.isChecked() ? 1 : 0);
+            extras.putInt(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_VIDEO);
+
+            // TODO: jobId and uploadBytes
+            JobInfo jobInfo = SubmitPostService.constructJobInfo(this, 1, 100, extras);
+            ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
 
             return true;
         }
