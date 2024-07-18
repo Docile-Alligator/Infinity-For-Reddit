@@ -671,7 +671,8 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
                 try {
                     payload = new PollPayload(subredditName, binding.postTitleEditTextPostPollActivity.getText().toString(),
                             optionList.toArray(new String[0]), (int) binding.votingLengthSliderPostPollActivity.getValue(), isNSFW, isSpoiler, flair,
-                            new RichTextJSONConverter().constructRichTextJSON(this, binding.postContentEditTextPostPollActivity.getText().toString(), uploadedImages),
+                            new RichTextJSONConverter().constructRichTextJSON(this,
+                                    binding.postContentEditTextPostPollActivity.getText().toString(), uploadedImages),
                             null, binding.receivePostReplyNotificationsSwitchMaterialPostPollActivity.isChecked(),
                             subredditIsUser ? "profile" : "subreddit");
                 } catch (JSONException e) {
@@ -685,10 +686,11 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
                     binding.receivePostReplyNotificationsSwitchMaterialPostPollActivity.isChecked(),
                     subredditIsUser ? "profile" : "subreddit");
         }
-        extras.putString(SubmitPostService.EXTRA_POLL_PAYLOAD, new Gson().toJson(payload));
+        String payloadJSON = new Gson().toJson(payload);
+        extras.putString(SubmitPostService.EXTRA_POLL_PAYLOAD, payloadJSON);
 
         // TODO: jobId and uploadBytes
-        JobInfo jobInfo = SubmitPostService.constructJobInfo(this, 1, 100, extras);
+        JobInfo jobInfo = SubmitPostService.constructJobInfo(this, payloadJSON.length() * 2L, extras);
         ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
     }
 

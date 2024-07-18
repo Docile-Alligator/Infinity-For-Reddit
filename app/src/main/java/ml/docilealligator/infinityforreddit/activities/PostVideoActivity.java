@@ -21,7 +21,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
-import androidx.core.content.ContextCompat;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.Player;
 import androidx.media3.common.util.UnstableApi;
@@ -570,12 +569,21 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
 
             ContextCompat.startForegroundService(this, intent);*/
 
+            int contentEstimatedBytes = 0;
             PersistableBundle extras = new PersistableBundle();
+            //TODO estimate video size
             extras.putString(SubmitPostService.EXTRA_MEDIA_URI, videoUri.toString());
             extras.putString(SubmitPostService.EXTRA_ACCOUNT, selectedAccount.getJSONModel());
             extras.putString(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
-            extras.putString(SubmitPostService.EXTRA_TITLE, binding.postTitleEditTextPostVideoActivity.getText().toString());
-            extras.putString(SubmitPostService.EXTRA_CONTENT, binding.postContentEditTextPostVideoActivity.getText().toString());
+
+            String title = binding.postTitleEditTextPostVideoActivity.getText().toString();
+            contentEstimatedBytes += title.length() * 2;
+            extras.putString(SubmitPostService.EXTRA_TITLE, title);
+
+            String content = binding.postContentEditTextPostVideoActivity.getText().toString();
+            contentEstimatedBytes += content.length() * 2;
+            extras.putString(SubmitPostService.EXTRA_CONTENT, content);
+
             if (flair != null) {
                 extras.putString(SubmitPostService.EXTRA_FLAIR, flair.getJSONModel());
             }
@@ -585,7 +593,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
             extras.putInt(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_VIDEO);
 
             // TODO: jobId and uploadBytes
-            JobInfo jobInfo = SubmitPostService.constructJobInfo(this, 1, 100, extras);
+            JobInfo jobInfo = SubmitPostService.constructJobInfo(this, contentEstimatedBytes, extras);
             ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
 
             return true;

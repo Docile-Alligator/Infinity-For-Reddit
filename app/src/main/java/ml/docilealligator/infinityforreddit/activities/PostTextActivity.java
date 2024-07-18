@@ -535,14 +535,24 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
         intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TEXT_OR_LINK);
         ContextCompat.startForegroundService(this, intent);*/
 
+        int contentEstimatedBytes = 0;
         PersistableBundle extras = new PersistableBundle();
         extras.putString(SubmitPostService.EXTRA_ACCOUNT, selectedAccount.getJSONModel());
         extras.putString(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
-        extras.putString(SubmitPostService.EXTRA_TITLE, binding.postTitleEditTextPostTextActivity.getText().toString());
-        extras.putString(SubmitPostService.EXTRA_CONTENT, binding.postTextContentEditTextPostTextActivity.getText().toString());
+
+        String title = binding.postTitleEditTextPostTextActivity.getText().toString();
+        contentEstimatedBytes += title.length() * 2;
+        extras.putString(SubmitPostService.EXTRA_TITLE, title);
+
+        String content = binding.postTextContentEditTextPostTextActivity.getText().toString();
+        contentEstimatedBytes += content.length() * 2;
+        extras.putString(SubmitPostService.EXTRA_CONTENT, content);
+
         if (!uploadedImages.isEmpty()) {
             extras.putInt(SubmitPostService.EXTRA_IS_RICHTEXT_JSON, 1);
-            extras.putString(SubmitPostService.EXTRA_UPLOADED_IMAGES, UploadedImage.getArrayListJSONModel(uploadedImages));
+            String uploadedImagesJSON = UploadedImage.getArrayListJSONModel(uploadedImages);
+            contentEstimatedBytes += uploadedImagesJSON.length() * 2;
+            extras.putString(SubmitPostService.EXTRA_UPLOADED_IMAGES, uploadedImagesJSON);
         }
 
         extras.putString(SubmitPostService.EXTRA_KIND, APIUtils.KIND_SELF);
@@ -555,7 +565,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
         extras.putInt(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TEXT_OR_LINK);
 
         // TODO: jobId and uploadBytes
-        JobInfo jobInfo = SubmitPostService.constructJobInfo(this, 1, 100, extras);
+        JobInfo jobInfo = SubmitPostService.constructJobInfo(this, contentEstimatedBytes, extras);
         ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
     }
 

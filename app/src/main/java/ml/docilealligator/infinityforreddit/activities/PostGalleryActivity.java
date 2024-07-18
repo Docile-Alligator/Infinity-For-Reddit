@@ -619,10 +619,12 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
                     binding.postTitleEditTextPostGalleryActivity.getText().toString(),
                     binding.postContentEditTextPostGalleryActivity.getText().toString(), isSpoiler, isNSFW,
                     binding.receivePostReplyNotificationsSwitchMaterialPostGalleryActivity.isChecked(), flair, items);
-            extras.putString(SubmitPostService.EXTRA_REDDIT_GALLERY_PAYLOAD, new Gson().toJson(payload));
+
+            String payloadJSON = new Gson().toJson(payload);
+            extras.putString(SubmitPostService.EXTRA_REDDIT_GALLERY_PAYLOAD, payloadJSON);
 
             // TODO: jobId and uploadBytes
-            JobInfo jobInfo = SubmitPostService.constructJobInfo(this, 1, 100, extras);
+            JobInfo jobInfo = SubmitPostService.constructJobInfo(this, payloadJSON.length() * 2L, extras);
             ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
 
             return true;

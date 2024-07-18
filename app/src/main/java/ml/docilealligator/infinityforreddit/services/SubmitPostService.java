@@ -90,6 +90,8 @@ public class SubmitPostService extends JobService {
     public static final int EXTRA_POST_TYPE_GALLERY = 3;
     public static final int EXTRA_POST_TYPE_POLL = 4;
     public static final int EXTRA_POST_TYPE_CROSSPOST = 5;
+    private static int JOB_ID = 1000;
+
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -116,16 +118,16 @@ public class SubmitPostService extends JobService {
     public SubmitPostService() {
     }
 
-    public static JobInfo constructJobInfo(Context context, int jobId, long uploadBytes, PersistableBundle extras) {
+    public static JobInfo constructJobInfo(Context context, long contentEstimatedBytes, PersistableBundle extras) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            return new JobInfo.Builder(jobId, new ComponentName(context, SubmitPostService.class))
+            return new JobInfo.Builder(JOB_ID++, new ComponentName(context, SubmitPostService.class))
                     .setUserInitiated(true)
                     .setRequiredNetwork(new NetworkRequest.Builder().build())
-                    .setEstimatedNetworkBytes(0, uploadBytes)
+                    .setEstimatedNetworkBytes(0, contentEstimatedBytes + 500)
                     .setExtras(extras)
                     .build();
         } else {
-            return new JobInfo.Builder(jobId, new ComponentName(context, SubmitPostService.class))
+            return new JobInfo.Builder(JOB_ID++, new ComponentName(context, SubmitPostService.class))
                     .build();
         }
     }

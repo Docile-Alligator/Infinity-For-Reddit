@@ -543,12 +543,23 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
             intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TEXT_OR_LINK);
             ContextCompat.startForegroundService(this, intent);*/
 
+            int contentEstimatedBytes = 0;
             PersistableBundle extras = new PersistableBundle();
             extras.putString(SubmitPostService.EXTRA_ACCOUNT, selectedAccount.getJSONModel());
             extras.putString(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
-            extras.putString(SubmitPostService.EXTRA_TITLE, binding.postTitleEditTextPostLinkActivity.getText().toString());
-            extras.putString(SubmitPostService.EXTRA_CONTENT, binding.postContentEditTextPostLinkActivity.getText().toString());
-            extras.putString(SubmitPostService.EXTRA_URL, binding.postLinkEditTextPostLinkActivity.getText().toString());
+
+            String title = binding.postTitleEditTextPostLinkActivity.getText().toString();
+            contentEstimatedBytes += title.length() * 2;
+            extras.putString(SubmitPostService.EXTRA_TITLE, title);
+
+            String content = binding.postContentEditTextPostLinkActivity.getText().toString();
+            contentEstimatedBytes += content.length() * 2;
+            extras.putString(SubmitPostService.EXTRA_CONTENT, content);
+
+            String link = binding.postLinkEditTextPostLinkActivity.getText().toString();
+            contentEstimatedBytes += link.length() * 2;
+            extras.putString(SubmitPostService.EXTRA_URL, link);
+
             extras.putString(SubmitPostService.EXTRA_KIND, APIUtils.KIND_LINK);
             if (flair != null) {
                 extras.putString(SubmitPostService.EXTRA_FLAIR, flair.getJSONModel());
@@ -559,7 +570,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
             extras.putInt(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TEXT_OR_LINK);
 
             // TODO: jobId and uploadBytes
-            JobInfo jobInfo = SubmitPostService.constructJobInfo(this, 1, 100, extras);
+            JobInfo jobInfo = SubmitPostService.constructJobInfo(this, contentEstimatedBytes, extras);
             ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
 
             return true;
