@@ -62,6 +62,31 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="20dp">
+
+                <TextView
+                    android:id="@+id/display_mode_title_text_view_customize_comment_filter_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/comment_filter_display_mode"
+                    android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family" />
+
+                <Spinner
+                    android:id="@+id/display_mode_spinner_customize_comment_filter_activity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/comment_filter_display_mode" />
+
+            </LinearLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/exclude_strings_text_input_layout_customize_comment_filter_activity"
                 android:layout_width="match_parent"

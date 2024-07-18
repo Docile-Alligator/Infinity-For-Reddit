@@ -38,6 +38,7 @@ public class CommentFilter implements Parcelable {
 
     protected CommentFilter(Parcel in) {
         name = in.readString();
+        displayMode = in.readInt();
         maxVote = in.readInt();
         minVote = in.readInt();
         excludeStrings = in.readString();
@@ -120,6 +121,7 @@ public class CommentFilter implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(name);
+        dest.writeInt(displayMode);
         dest.writeInt(maxVote);
         dest.writeInt(minVote);
         dest.writeString(excludeStrings);

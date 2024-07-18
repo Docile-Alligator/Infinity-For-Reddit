@@ -1401,5 +1401,9 @@
     <string name="emote">Emote</string>
     <string name="none">None</string>
 
+    <string name="comment_filter_display_mode">Display mode</string>
+    <string name="comment_filter_display_mode_remove_comments">Remove comments</string>
+    <string name="comment_filter_display_mode_fully_collapse_comments">Fully collapse comments</string>
+
 
 </resources>

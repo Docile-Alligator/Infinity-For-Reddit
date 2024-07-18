@@ -720,4 +720,9 @@
         <item>0</item>
     </string-array>
 
+    <string-array name="comment_filter_display_mode">
+        <item>@string/comment_filter_display_mode_remove_comments</item>
+        <item>@string/comment_filter_display_mode_fully_collapse_comments</item>
+    </string-array>
+
 </resources>
