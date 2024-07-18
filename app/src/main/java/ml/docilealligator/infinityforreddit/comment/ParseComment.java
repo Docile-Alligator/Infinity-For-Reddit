@@ -210,9 +210,9 @@ public class ParseComment {
                 singleComment.addChildren(children);
                 singleComment.setMoreChildrenIds(nextMoreChildrenIds);
                 singleComment.setChildCount(getChildCount(singleComment));
-                singleComment.setIsFilteredOut(isFilteredOut);
             }
 
+            singleComment.setIsFilteredOut(isFilteredOut);
             newCommentData.add(singleComment);
         }
     }

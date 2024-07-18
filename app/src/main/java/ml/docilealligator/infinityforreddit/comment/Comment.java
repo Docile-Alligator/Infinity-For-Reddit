@@ -313,7 +313,7 @@ public class Comment implements Parcelable {
     }
 
     public void setIsFilteredOut(boolean isFilteredOut) {
-        this.isExpanded = isFilteredOut;
+        this.isFilteredOut = isFilteredOut;
     }
 
     public int getVoteType() {
