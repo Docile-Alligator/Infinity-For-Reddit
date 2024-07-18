@@ -358,7 +358,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
             Comment comment = mVisibleComments.get(position - 1);
             if (comment.getPlaceholderType() == Comment.NOT_PLACEHOLDER) {
-                if (mFullyCollapseComment && !comment.isExpanded() && comment.hasExpandedBefore()) {
+                if ((mFullyCollapseComment && !comment.isExpanded() && comment.hasExpandedBefore())
+                        || (comment.isFilteredOut() && !comment.hasExpandedBefore())) {
                     return VIEW_TYPE_COMMENT_FULLY_COLLAPSED;
                 }
                 return VIEW_TYPE_COMMENT;
@@ -376,7 +377,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
             Comment comment = mVisibleComments.get(position);
             if (comment.getPlaceholderType() == Comment.NOT_PLACEHOLDER) {
-                if (mFullyCollapseComment && !comment.isExpanded() && comment.hasExpandedBefore()) {
+                if ((mFullyCollapseComment && !comment.isExpanded() && comment.hasExpandedBefore())
+                        || (comment.isFilteredOut() && !comment.hasExpandedBefore())) {
                     return VIEW_TYPE_COMMENT_FULLY_COLLAPSED;
                 }
                 return VIEW_TYPE_COMMENT;
