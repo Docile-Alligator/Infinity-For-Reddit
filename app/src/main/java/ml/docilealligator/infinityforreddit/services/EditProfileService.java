@@ -16,6 +16,7 @@ import android.os.PersistableBundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -152,17 +153,17 @@ public class EditProfileService extends JobService {
         mExecutor.execute(() -> {
             switch (postType) {
                 case EXTRA_POST_TYPE_CHANGE_BANNER:
-                    submitChangeBanner(params, accessToken,
+                    submitChangeBannerSync(params, accessToken,
                             Uri.parse(bundle.getString(EXTRA_MEDIA_URI)),
                             accountName);
                     break;
                 case EXTRA_POST_TYPE_CHANGE_AVATAR:
-                    submitChangeAvatar(params, accessToken,
+                    submitChangeAvatarSync(params, accessToken,
                             Uri.parse(bundle.getString(EXTRA_MEDIA_URI)),
                             accountName);
                     break;
                 case EXTRA_POST_TYPE_SAVE_EDIT_PROFILE:
-                    submitSaveEditProfile(
+                    submitSaveEditProfileSync(
                             params,
                             accessToken,
                             accountName,
@@ -181,80 +182,68 @@ public class EditProfileService extends JobService {
         return false;
     }
 
-    private void submitChangeBanner(JobParameters parameters, String accessToken, Uri mediaUri, String accountName) {
+    @WorkerThread
+    private void submitChangeBannerSync(JobParameters parameters, String accessToken, Uri mediaUri, String accountName) {
         try {
             final int width = getWidthBanner(mediaUri);
             final int height = Math.round(width * 3 / 10f); // ratio 10:3
             CropTransformation bannerCrop = new CropTransformation(width, height, CropTransformation.CropType.CENTER);
             Bitmap resource = Glide.with(this).asBitmap().skipMemoryCache(true)
                     .load(mediaUri).transform(bannerCrop).submit().get();
-            EditProfileUtils.uploadBanner(mOauthRetrofit, accessToken, accountName, resource, new EditProfileUtils.EditProfileUtilsListener() {
-                @Override
-                public void success() {
-                    handler.post(() -> EventBus.getDefault().post(new SubmitChangeBannerEvent(true, "")));
-                    jobFinished(parameters, false);
-                }
-
-                @Override
-                public void failed(String message) {
-                    handler.post(() -> EventBus.getDefault().post(new SubmitChangeBannerEvent(false, message)));
-                    jobFinished(parameters, false);
-                }
-            });
+            String potentialError = EditProfileUtils.uploadBannerSync(mOauthRetrofit, accessToken, accountName, resource);
+            if (potentialError == null) {
+                //Successful
+                handler.post(() -> EventBus.getDefault().post(new SubmitChangeBannerEvent(true, "")));
+                jobFinished(parameters, false);
+            } else {
+                handler.post(() -> EventBus.getDefault().post(new SubmitChangeBannerEvent(false, potentialError)));
+                jobFinished(parameters, false);
+            }
         } catch (InterruptedException | ExecutionException | FileNotFoundException e) {
             e.printStackTrace();
+            handler.post(() -> EventBus.getDefault().post(new SubmitChangeBannerEvent(false, e.getLocalizedMessage())));
             jobFinished(parameters, false);
         }
     }
 
-    private void submitChangeAvatar(JobParameters parameters, String accessToken, Uri mediaUri, String accountName) {
+    @WorkerThread
+    private void submitChangeAvatarSync(JobParameters parameters, String accessToken, Uri mediaUri, String accountName) {
         try {
             final CropTransformation avatarCrop = new CropTransformation(AVATAR_SIZE, AVATAR_SIZE, CropTransformation.CropType.CENTER);
             final Bitmap resource = Glide.with(this).asBitmap().skipMemoryCache(true)
                     .load(mediaUri).transform(avatarCrop).submit().get();
-            EditProfileUtils.uploadAvatar(mOauthRetrofit, accessToken, accountName, resource, new EditProfileUtils.EditProfileUtilsListener() {
-                @Override
-                public void success() {
-                    handler.post(() -> EventBus.getDefault().post(new SubmitChangeAvatarEvent(true, "")));
-                    jobFinished(parameters, false);
-                }
-
-                @Override
-                public void failed(String message) {
-                    handler.post(() -> EventBus.getDefault().post(new SubmitChangeAvatarEvent(false, message)));
-                    jobFinished(parameters, false);
-                }
-            });
+            String potentialError = EditProfileUtils.uploadAvatarSync(mOauthRetrofit, accessToken, accountName, resource);
+            if (potentialError == null) {
+                //Successful
+                handler.post(() -> EventBus.getDefault().post(new SubmitChangeAvatarEvent(true, "")));
+                jobFinished(parameters, false);
+            } else {
+                handler.post(() -> EventBus.getDefault().post(new SubmitChangeAvatarEvent(false, potentialError)));
+                jobFinished(parameters, false);
+            }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
+            handler.post(() -> EventBus.getDefault().post(new SubmitChangeAvatarEvent(false, e.getLocalizedMessage())));
             jobFinished(parameters, false);
         }
     }
 
-    private void submitSaveEditProfile(JobParameters parameters, @Nullable String accessToken,
-                                       @NonNull String accountName,
-                                       String displayName,
-                                       String publicDesc
+    @WorkerThread
+    private void submitSaveEditProfileSync(JobParameters parameters, @Nullable String accessToken,
+                                           @NonNull String accountName,
+                                           String displayName,
+                                           String publicDesc
     ) {
-        EditProfileUtils.updateProfile(mOauthRetrofit,
-                accessToken,
-                accountName,
-                displayName,
-                publicDesc,
-                new EditProfileUtils.EditProfileUtilsListener() {
-                    @Override
-                    public void success() {
-                        handler.post(() -> EventBus.getDefault().post(new SubmitSaveProfileEvent(true, "")));
-                        jobFinished(parameters, false);
-                    }
-
-                    @Override
-                    public void failed(String message) {
-                        handler.post(() -> EventBus.getDefault().post(new SubmitSaveProfileEvent(false, message)));
-                        jobFinished(parameters, false);
-                    }
-                });
-
+        String potentialError = EditProfileUtils.updateProfileSync(mOauthRetrofit, accessToken, accountName,
+                displayName, publicDesc);
+        if (potentialError == null) {
+            //Successful
+            handler.post(() -> EventBus.getDefault().post(new SubmitSaveProfileEvent(true, "")));
+            jobFinished(parameters, false);
+        } else {
+            handler.post(() -> EventBus.getDefault().post(new SubmitSaveProfileEvent(false, potentialError)));
+            jobFinished(parameters, false);
+        }
     }
 
     private Notification createNotification(int stringResId) {

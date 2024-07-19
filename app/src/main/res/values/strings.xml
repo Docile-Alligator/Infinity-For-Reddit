@@ -1294,7 +1294,7 @@
     <string name="message_remove_banner_failed">Failed to remove banner %s</string>
     <string name="message_change_avatar_success">Change avatar successfully</string>
     <string name="message_change_avatar_failed">Failed to change avatar %s</string>
-    <string name="message_change_banner_success">Changing banner successfully</string>
+    <string name="message_change_banner_success">Change banner successfully</string>
     <string name="message_change_banner_failed">Failed to change banner %s</string>
     <string name="message_save_profile_success">Save profile successfully</string>
     <string name="message_save_profile_failed">Failed to save profile %s</string>
