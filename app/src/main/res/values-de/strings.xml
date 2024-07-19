@@ -126,7 +126,7 @@ Tippen für Neuversuch."</string>
     <string name="settings">"Einstellungen"</string>
     <string name="subscribers_number_detail">"Abonnenten: %1$,d"</string>
     <string name="online_subscribers_number_detail">"Online: %1$,d"</string>
-    <string name="cannot_fetch_subreddit_info">"Kann Subredddit-Info nicht abrufen"</string>
+    <string name="cannot_fetch_subreddit_info">"Kann Subreddit-Info nicht abrufen"</string>
     <string name="cannot_fetch_user_info">"Kann Benutzer-Info nicht abrufen"</string>
     <string name="cannot_fetch_sidebar">"Kann Seitenleiste nicht abrufen"</string>
     <string name="cannot_fetch_multireddit">"Kann Multireddit-Info nicht abrufen"</string>
