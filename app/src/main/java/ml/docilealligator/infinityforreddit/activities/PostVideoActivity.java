@@ -592,7 +592,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
             extras.putInt(SubmitPostService.EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS, binding.receivePostReplyNotificationsSwitchMaterialPostVideoActivity.isChecked() ? 1 : 0);
             extras.putInt(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_VIDEO);
 
-            // TODO: jobId and uploadBytes
+            // TODO: contentEstimatedBytes
             JobInfo jobInfo = SubmitPostService.constructJobInfo(this, contentEstimatedBytes, extras);
             ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
 

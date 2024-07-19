@@ -569,7 +569,6 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
             extras.putInt(SubmitPostService.EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS, binding.receivePostReplyNotificationsSwitchMaterialPostLinkActivity.isChecked() ? 1 : 0);
             extras.putInt(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TEXT_OR_LINK);
 
-            // TODO: jobId and uploadBytes
             JobInfo jobInfo = SubmitPostService.constructJobInfo(this, contentEstimatedBytes, extras);
             ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
 

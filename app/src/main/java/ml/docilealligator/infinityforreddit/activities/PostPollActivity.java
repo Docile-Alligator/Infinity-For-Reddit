@@ -689,7 +689,6 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
         String payloadJSON = new Gson().toJson(payload);
         extras.putString(SubmitPostService.EXTRA_POLL_PAYLOAD, payloadJSON);
 
-        // TODO: jobId and uploadBytes
         JobInfo jobInfo = SubmitPostService.constructJobInfo(this, payloadJSON.length() * 2L, extras);
         ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
     }

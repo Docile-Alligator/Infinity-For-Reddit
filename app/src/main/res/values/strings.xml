@@ -1275,9 +1275,9 @@
     <string name="app_lock_timeout_24_hours">24 hours</string>
 
     <!--EditProfileService Notification-->
-    <string name="submit_change_avatar">Submit Change Avatar</string>
-    <string name="submit_change_banner">Submit Change Banner</string>
-    <string name="submit_save_profile">Submit Save Profile</string>
+    <string name="submit_change_avatar">Changing Avatar</string>
+    <string name="submit_change_banner">Changing Banner</string>
+    <string name="submit_save_profile">Saving Profile</string>
 
     <!--EditProfileActivity-->
     <string name="action_edit_profile">Edit Profile</string>

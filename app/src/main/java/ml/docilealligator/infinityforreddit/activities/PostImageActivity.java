@@ -581,7 +581,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
                 extras.putInt(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_IMAGE);
             }
 
-            // TODO: jobId and uploadBytes
+            // TODO: contentEstimatedBytes
             JobInfo jobInfo = SubmitPostService.constructJobInfo(this, contentEstimatedBytes, extras);
             ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
 
