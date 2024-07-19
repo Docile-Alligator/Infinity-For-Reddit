@@ -1,6 +1,8 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
 import android.Manifest;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -221,11 +224,21 @@ public class ViewImgurImageFragment extends Fragment {
     private void download() {
         isDownloading = false;
 
-        Intent intent = new Intent(activity, DownloadMediaService.class);
+        /*Intent intent = new Intent(activity, DownloadMediaService.class);
         intent.putExtra(DownloadMediaService.EXTRA_URL, imgurMedia.getLink());
         intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
         intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, imgurMedia.getFileName());
-        ContextCompat.startForegroundService(activity, intent);
+        ContextCompat.startForegroundService(activity, intent);*/
+
+        PersistableBundle extras = new PersistableBundle();
+        extras.putString(DownloadMediaService.EXTRA_URL, imgurMedia.getLink());
+        extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
+        extras.putString(DownloadMediaService.EXTRA_FILE_NAME, imgurMedia.getFileName());
+
+        //TODO: contentEstimatedBytes
+        JobInfo jobInfo = DownloadMediaService.constructJobInfo(activity, 5000000, extras);
+        ((JobScheduler) activity.getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
+
         Toast.makeText(activity, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 

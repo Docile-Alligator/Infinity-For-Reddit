@@ -1,6 +1,9 @@
 package ml.docilealligator.infinityforreddit.activities;
 
 import android.Manifest;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -12,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.text.Html;
 import android.text.Spanned;
 import android.view.Menu;
@@ -355,13 +359,25 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     private void download() {
         isDownloading = false;
 
-        Intent intent = new Intent(this, DownloadMediaService.class);
+        /*Intent intent = new Intent(this, DownloadMediaService.class);
         intent.putExtra(DownloadMediaService.EXTRA_URL, mImageUrl);
         intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, isGif ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF : DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
         intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, mImageFileName);
         intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, mSubredditName);
         intent.putExtra(DownloadMediaService.EXTRA_IS_NSFW, isNsfw);
-        ContextCompat.startForegroundService(this, intent);
+        ContextCompat.startForegroundService(this, intent);*/
+
+        PersistableBundle extras = new PersistableBundle();
+        extras.putString(DownloadMediaService.EXTRA_URL, mImageUrl);
+        extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, isGif ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF : DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
+        extras.putString(DownloadMediaService.EXTRA_FILE_NAME, mImageFileName);
+        extras.putString(DownloadMediaService.EXTRA_SUBREDDIT_NAME, mSubredditName);
+        extras.putInt(DownloadMediaService.EXTRA_IS_NSFW, isNsfw ? 1 : 0);
+
+        //TODO: contentEstimatedBytes
+        JobInfo jobInfo = DownloadMediaService.constructJobInfo(this, 5000000, extras);
+        ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
+
         Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 
