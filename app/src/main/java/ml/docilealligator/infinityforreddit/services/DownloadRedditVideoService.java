@@ -4,9 +4,13 @@ import static android.os.Environment.getExternalStoragePublicDirectory;
 
 import android.app.Notification;
 import android.app.PendingIntent;
-import android.app.Service;
+import android.app.job.JobInfo;
+import android.app.job.JobParameters;
+import android.app.job.JobService;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaCodec;
@@ -14,16 +18,11 @@ import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
 import android.media.MediaScannerConnection;
+import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
-import android.os.Process;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
@@ -41,6 +40,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.util.Random;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -58,7 +58,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class DownloadRedditVideoService extends Service {
+public class DownloadRedditVideoService extends JobService {
 
     public static final String EXTRA_VIDEO_URL = "EVU";
     public static final String EXTRA_SUBREDDIT = "ES";
@@ -74,6 +74,8 @@ public class DownloadRedditVideoService extends Service {
     private static final int ERROR_MUXED_VIDEO_FILE_CANNOT_SAVE = 5;
     private static final int ERROR_CANNOT_GET_DESTINATION_DIRECTORY = 6;
 
+    private static int JOB_ID = 30000;
+
     @Inject
     @Named("download_media")
     Retrofit retrofit;
@@ -82,7 +84,8 @@ public class DownloadRedditVideoService extends Service {
     SharedPreferences sharedPreferences;
     @Inject
     CustomThemeWrapper customThemeWrapper;
-    private ServiceHandler serviceHandler;
+    @Inject
+    Executor executor;
     private NotificationManagerCompat notificationManager;
     private NotificationCompat.Builder builder;
     private final String[] possibleAudioUrlSuffices = new String[]{"/DASH_AUDIO_128.mp4", "/DASH_audio.mp4", "/DASH_audio", "/audio.mp4", "/audio"};
@@ -90,22 +93,66 @@ public class DownloadRedditVideoService extends Service {
     public DownloadRedditVideoService() {
     }
 
-    private final class ServiceHandler extends Handler {
-        public ServiceHandler(Looper looper) {
-            super(looper);
+    public static JobInfo constructJobInfo(Context context, long contentEstimatedBytes, PersistableBundle extras) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            return new JobInfo.Builder(JOB_ID++, new ComponentName(context, DownloadRedditVideoService.class))
+                    .setUserInitiated(true)
+                    .setRequiredNetwork(new NetworkRequest.Builder().build())
+                    .setEstimatedNetworkBytes(0, contentEstimatedBytes + 500)
+                    .setExtras(extras)
+                    .build();
+        } else {
+            return new JobInfo.Builder(JOB_ID++, new ComponentName(context, DownloadRedditVideoService.class))
+                    .build();
         }
-        @Override
-        public void handleMessage(Message msg) {
-            Bundle intent = msg.getData();
-            String videoUrl = intent.getString(EXTRA_VIDEO_URL);
+    }
 
-            String audioUrlPrefix = Build.VERSION.SDK_INT > Build.VERSION_CODES.N ? videoUrl.substring(0, videoUrl.lastIndexOf('/')) : null;
+    @Override
+    public void onCreate() {
+        ((Infinity) getApplication()).getAppComponent().inject(this);
+        notificationManager = NotificationManagerCompat.from(this);
+    }
 
-            String subredditName = intent.getString(EXTRA_SUBREDDIT);
-            String fileNameWithoutExtension = subredditName + "-" + intent.getString(EXTRA_POST_ID);
-            boolean isNsfw = intent.getBoolean(EXTRA_IS_NSFW, false);
-            int randomNotificationIdOffset = msg.arg1;
+    @Override
+    public boolean onStartJob(JobParameters params) {
+        builder = new NotificationCompat.Builder(DownloadRedditVideoService.this, NotificationUtils.CHANNEL_ID_DOWNLOAD_REDDIT_VIDEO);
 
+        PersistableBundle intent = params.getExtras();
+
+        String subredditName = intent.getString(EXTRA_SUBREDDIT);
+        String fileNameWithoutExtension = subredditName + "-" + intent.getString(EXTRA_POST_ID);
+
+        NotificationChannelCompat serviceChannel =
+                new NotificationChannelCompat.Builder(
+                        NotificationUtils.CHANNEL_ID_DOWNLOAD_REDDIT_VIDEO,
+                        NotificationManagerCompat.IMPORTANCE_LOW)
+                        .setName(NotificationUtils.CHANNEL_DOWNLOAD_REDDIT_VIDEO)
+                        .build();
+        notificationManager.createNotificationChannel(serviceChannel);
+
+        int randomNotificationIdOffset = new Random().nextInt(10000);
+        startForeground(
+                NotificationUtils.DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID + randomNotificationIdOffset,
+                createNotification(fileNameWithoutExtension + ".mp4")
+        );
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            setNotification(params,
+                    NotificationUtils.DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID + randomNotificationIdOffset,
+                    createNotification(fileNameWithoutExtension + ".mp4"),
+                    JobService.JOB_END_NOTIFICATION_POLICY_DETACH);
+        } else {
+            notificationManager.notify(NotificationUtils.DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID + randomNotificationIdOffset,
+                    createNotification(fileNameWithoutExtension + ".mp4"));
+        }
+
+        String videoUrl = intent.getString(EXTRA_VIDEO_URL);
+
+        String audioUrlPrefix = Build.VERSION.SDK_INT > Build.VERSION_CODES.N ? videoUrl.substring(0, videoUrl.lastIndexOf('/')) : null;
+
+        boolean isNsfw = intent.getInt(EXTRA_IS_NSFW, 0) == 1;
+
+        executor.execute(() -> {
             final DownloadProgressResponseBody.ProgressListener progressListener = new DownloadProgressResponseBody.ProgressListener() {
                 long time = 0;
 
@@ -141,6 +188,7 @@ public class DownloadRedditVideoService extends Service {
             File externalCacheDirectory = getExternalCacheDir();
             if (externalCacheDirectory != null) {
                 String destinationFileName = fileNameWithoutExtension + ".mp4";
+                String finalFileNameWithoutExtension = fileNameWithoutExtension;
 
                 try {
                     Response<ResponseBody> videoResponse = downloadFileRetrofit.downloadFile(videoUrl).execute();
@@ -201,11 +249,11 @@ public class DownloadRedditVideoService extends Service {
                             DocumentFile checkForDuplicates = dir.findFile(destinationFileName);
                             int num = 1;
                             while (checkForDuplicates != null) {
-                                fileNameWithoutExtension = fileNameWithoutExtension + " (" + num + ")";
-                                checkForDuplicates = dir.findFile(fileNameWithoutExtension + ".mp4");
+                                finalFileNameWithoutExtension = finalFileNameWithoutExtension + " (" + num + ")";
+                                checkForDuplicates = dir.findFile(finalFileNameWithoutExtension + ".mp4");
                                 num++;
                             }
-                            picFile = dir.createFile("video/mp4", fileNameWithoutExtension + ".mp4");
+                            picFile = dir.createFile("video/mp4", finalFileNameWithoutExtension + ".mp4");
                             if (picFile == null) {
                                 downloadFinished(null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, randomNotificationIdOffset);
                                 return;
@@ -216,7 +264,7 @@ public class DownloadRedditVideoService extends Service {
                         updateNotification(R.string.downloading_reddit_video_audio_track, 0,
                                 randomNotificationIdOffset, null);
 
-                        String videoFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + "-cache.mp4";
+                        String videoFilePath = externalCacheDirectoryPath + finalFileNameWithoutExtension + "-cache.mp4";
                         String savedVideoFilePath = writeResponseBodyToDisk(videoResponse.body(), videoFilePath);
                         if (savedVideoFilePath == null) {
                             downloadFinished(null, ERROR_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
@@ -225,9 +273,9 @@ public class DownloadRedditVideoService extends Service {
 
                         if (audioUrlPrefix != null) {
                             ResponseBody audioResponse = getAudioResponse(downloadFileRetrofit, audioUrlPrefix, 0);
-                            String outputFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + ".mp4";
+                            String outputFilePath = externalCacheDirectoryPath + finalFileNameWithoutExtension + ".mp4";
                             if (audioResponse != null) {
-                                String audioFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + "-cache.mp3";
+                                String audioFilePath = externalCacheDirectoryPath + finalFileNameWithoutExtension + "-cache.mp3";
 
                                 String savedAudioFilePath = writeResponseBodyToDisk(audioResponse, audioFilePath);
                                 if (savedAudioFilePath == null) {
@@ -301,282 +349,238 @@ public class DownloadRedditVideoService extends Service {
             } else {
                 downloadFinished(null, ERROR_CANNOT_GET_CACHE_DIRECTORY, randomNotificationIdOffset);
             }
+        });
+
+        return true;
+    }
+
+    @Override
+    public boolean onStopJob(JobParameters params) {
+        return false;
+    }
+
+    @Nullable
+    private ResponseBody getAudioResponse(DownloadFile downloadFileRetrofit, @NonNull String audioUrlPrefix, int audioSuffixIndex) throws IOException {
+        if (audioSuffixIndex >= possibleAudioUrlSuffices.length) {
+            return null;
         }
 
-        @Nullable
-        private ResponseBody getAudioResponse(DownloadFile downloadFileRetrofit, @NonNull String audioUrlPrefix, int audioSuffixIndex) throws IOException {
-            if (audioSuffixIndex >= possibleAudioUrlSuffices.length) {
-                return null;
-            }
-
-            String audioUrl = audioUrlPrefix + possibleAudioUrlSuffices[audioSuffixIndex];
-            Response<ResponseBody> audioResponse = downloadFileRetrofit.downloadFile(audioUrl).execute();
-            ResponseBody responseBody = audioResponse.body();
-            if (audioResponse.isSuccessful() && responseBody != null) {
-                return responseBody;
-            }
-
-            return getAudioResponse(downloadFileRetrofit, audioUrlPrefix, audioSuffixIndex + 1);
+        String audioUrl = audioUrlPrefix + possibleAudioUrlSuffices[audioSuffixIndex];
+        Response<ResponseBody> audioResponse = downloadFileRetrofit.downloadFile(audioUrl).execute();
+        ResponseBody responseBody = audioResponse.body();
+        if (audioResponse.isSuccessful() && responseBody != null) {
+            return responseBody;
         }
 
-        private String writeResponseBodyToDisk(ResponseBody body, String filePath) {
+        return getAudioResponse(downloadFileRetrofit, audioUrlPrefix, audioSuffixIndex + 1);
+    }
+
+    private String writeResponseBodyToDisk(ResponseBody body, String filePath) {
+        try {
+            File file = new File(filePath);
+
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
             try {
-                File file = new File(filePath);
+                byte[] fileReader = new byte[4096];
 
-                InputStream inputStream = null;
-                OutputStream outputStream = null;
+                long fileSize = body.contentLength();
+                long fileSizeDownloaded = 0;
 
-                try {
-                    byte[] fileReader = new byte[4096];
+                inputStream = body.byteStream();
+                outputStream = new FileOutputStream(file);
 
-                    long fileSize = body.contentLength();
-                    long fileSizeDownloaded = 0;
+                while (true) {
+                    int read = inputStream.read(fileReader);
 
-                    inputStream = body.byteStream();
-                    outputStream = new FileOutputStream(file);
-
-                    while (true) {
-                        int read = inputStream.read(fileReader);
-
-                        if (read == -1) {
-                            break;
-                        }
-
-                        outputStream.write(fileReader, 0, read);
-
-                        fileSizeDownloaded += read;
+                    if (read == -1) {
+                        break;
                     }
 
-                    outputStream.flush();
+                    outputStream.write(fileReader, 0, read);
 
-                    return file.getPath();
-                } catch (IOException e) {
-                    return null;
-                } finally {
-                    if (inputStream != null) {
-                        inputStream.close();
-                    }
-
-                    if (outputStream != null) {
-                        outputStream.close();
-                    }
+                    fileSizeDownloaded += read;
                 }
+
+                outputStream.flush();
+
+                return file.getPath();
             } catch (IOException e) {
                 return null;
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+
+                if (outputStream != null) {
+                    outputStream.close();
+                }
             }
+        } catch (IOException e) {
+            return null;
         }
+    }
 
-        private boolean muxVideoAndAudio(String videoFilePath, String audioFilePath, String outputFilePath) {
-            try {
-                File file = new File(outputFilePath);
-                file.createNewFile();
-                MediaExtractor videoExtractor = new MediaExtractor();
-                videoExtractor.setDataSource(videoFilePath);
-                MediaMuxer muxer = new MediaMuxer(outputFilePath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
+    private boolean muxVideoAndAudio(String videoFilePath, String audioFilePath, String outputFilePath) {
+        try {
+            File file = new File(outputFilePath);
+            file.createNewFile();
+            MediaExtractor videoExtractor = new MediaExtractor();
+            videoExtractor.setDataSource(videoFilePath);
+            MediaMuxer muxer = new MediaMuxer(outputFilePath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
 
-                videoExtractor.selectTrack(0);
-                MediaFormat videoFormat = videoExtractor.getTrackFormat(0);
-                int videoTrack = muxer.addTrack(videoFormat);
+            videoExtractor.selectTrack(0);
+            MediaFormat videoFormat = videoExtractor.getTrackFormat(0);
+            int videoTrack = muxer.addTrack(videoFormat);
 
-                boolean sawEOS = false;
-                int offset = 100;
-                int sampleSize = 4096 * 1024;
-                ByteBuffer videoBuf = ByteBuffer.allocate(sampleSize);
-                ByteBuffer audioBuf = ByteBuffer.allocate(sampleSize);
-                MediaCodec.BufferInfo videoBufferInfo = new MediaCodec.BufferInfo();
+            boolean sawEOS = false;
+            int offset = 100;
+            int sampleSize = 4096 * 1024;
+            ByteBuffer videoBuf = ByteBuffer.allocate(sampleSize);
+            ByteBuffer audioBuf = ByteBuffer.allocate(sampleSize);
+            MediaCodec.BufferInfo videoBufferInfo = new MediaCodec.BufferInfo();
 
-                videoExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
+            videoExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
 
-                // audio not present for all videos
-                MediaExtractor audioExtractor = new MediaExtractor();
-                MediaCodec.BufferInfo audioBufferInfo = new MediaCodec.BufferInfo();
-                int audioTrack = -1;
-                if (audioFilePath != null) {
-                    audioExtractor.setDataSource(audioFilePath);
-                    audioExtractor.selectTrack(0);
-                    MediaFormat audioFormat = audioExtractor.getTrackFormat(0);
-                    audioExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
-                    audioTrack = muxer.addTrack(audioFormat);
-                }
-
-                muxer.start();
-
-                while (!sawEOS) {
-                    videoBufferInfo.offset = offset;
-                    videoBufferInfo.size = videoExtractor.readSampleData(videoBuf, offset);
-
-                    if (videoBufferInfo.size < 0) {
-                        sawEOS = true;
-                        videoBufferInfo.size = 0;
-                    } else {
-                        videoBufferInfo.presentationTimeUs = videoExtractor.getSampleTime();
-                        videoBufferInfo.flags = videoExtractor.getSampleFlags();
-                        muxer.writeSampleData(videoTrack, videoBuf, videoBufferInfo);
-                        videoExtractor.advance();
-                    }
-                }
-
-                if (audioFilePath != null) {
-                    boolean sawEOS2 = false;
-                    while (!sawEOS2) {
-                        audioBufferInfo.offset = offset;
-                        audioBufferInfo.size = audioExtractor.readSampleData(audioBuf, offset);
-
-                        if (audioBufferInfo.size < 0) {
-                            sawEOS2 = true;
-                            audioBufferInfo.size = 0;
-                        } else {
-                            audioBufferInfo.presentationTimeUs = audioExtractor.getSampleTime();
-                            audioBufferInfo.flags = audioExtractor.getSampleFlags();
-                            muxer.writeSampleData(audioTrack, audioBuf, audioBufferInfo);
-                            audioExtractor.advance();
-                        }
-                    }
-                }
-
-                muxer.stop();
-                muxer.release();
-            } catch (IllegalArgumentException | IllegalStateException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return false;
+            // audio not present for all videos
+            MediaExtractor audioExtractor = new MediaExtractor();
+            MediaCodec.BufferInfo audioBufferInfo = new MediaCodec.BufferInfo();
+            int audioTrack = -1;
+            if (audioFilePath != null) {
+                audioExtractor.setDataSource(audioFilePath);
+                audioExtractor.selectTrack(0);
+                MediaFormat audioFormat = audioExtractor.getTrackFormat(0);
+                audioExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
+                audioTrack = muxer.addTrack(audioFormat);
             }
 
-            return true;
-        }
+            muxer.start();
 
-        private Uri copyToDestination(String srcPath, String destinationFileUriString, String destinationFileName,
-                                      boolean isDefaultDestination) throws IOException {
-            ContentResolver contentResolver = getContentResolver();
-            if (isDefaultDestination) {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                    InputStream in = new FileInputStream(srcPath);
-                    OutputStream out = new FileOutputStream(destinationFileUriString);
-                    byte[] buf = new byte[1024];
-                    int len;
-                    while ((len = in.read(buf)) > 0) {
-                        out.write(buf, 0, len);
-                    }
+            while (!sawEOS) {
+                videoBufferInfo.offset = offset;
+                videoBufferInfo.size = videoExtractor.readSampleData(videoBuf, offset);
 
-                    new File(srcPath).delete();
+                if (videoBufferInfo.size < 0) {
+                    sawEOS = true;
+                    videoBufferInfo.size = 0;
                 } else {
-                    ContentValues contentValues = new ContentValues();
-                    contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, destinationFileName);
-                    contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4");
-                    contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, destinationFileUriString);
-                    contentValues.put(MediaStore.Video.Media.IS_PENDING, 1);
+                    videoBufferInfo.presentationTimeUs = videoExtractor.getSampleTime();
+                    videoBufferInfo.flags = videoExtractor.getSampleFlags();
+                    muxer.writeSampleData(videoTrack, videoBuf, videoBufferInfo);
+                    videoExtractor.advance();
+                }
+            }
 
-                    OutputStream stream = null;
-                    Uri uri = null;
+            if (audioFilePath != null) {
+                boolean sawEOS2 = false;
+                while (!sawEOS2) {
+                    audioBufferInfo.offset = offset;
+                    audioBufferInfo.size = audioExtractor.readSampleData(audioBuf, offset);
 
-                    try {
-                        final Uri contentUri = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-                        uri = contentResolver.insert(contentUri, contentValues);
-
-                        if (uri == null) {
-                            throw new IOException("Failed to create new MediaStore record.");
-                        }
-
-                        stream = contentResolver.openOutputStream(uri);
-
-                        if (stream == null) {
-                            throw new IOException("Failed to get output stream.");
-                        }
-
-                        InputStream in = new FileInputStream(srcPath);
-
-                        byte[] buf = new byte[1024];
-                        int len;
-                        while ((len = in.read(buf)) > 0) {
-                            stream.write(buf, 0, len);
-                        }
-
-                        contentValues.clear();
-                        contentValues.put(MediaStore.Video.Media.IS_PENDING, 0);
-                        contentResolver.update(uri, contentValues, null, null);
-                        return uri;
-                    } catch (IOException e) {
-                        if (uri != null) {
-                            // Don't leave an orphan entry in the MediaStore
-                            contentResolver.delete(uri, null, null);
-                        }
-
-                        throw e;
-                    } finally {
-                        if (stream != null) {
-                            stream.close();
-                        }
+                    if (audioBufferInfo.size < 0) {
+                        sawEOS2 = true;
+                        audioBufferInfo.size = 0;
+                    } else {
+                        audioBufferInfo.presentationTimeUs = audioExtractor.getSampleTime();
+                        audioBufferInfo.flags = audioExtractor.getSampleFlags();
+                        muxer.writeSampleData(audioTrack, audioBuf, audioBufferInfo);
+                        audioExtractor.advance();
                     }
                 }
-            } else {
-                OutputStream stream = contentResolver.openOutputStream(Uri.parse(destinationFileUriString));
-                if (stream == null) {
-                    throw new IOException("Failed to get output stream.");
-                }
+            }
 
+            muxer.stop();
+            muxer.release();
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    private Uri copyToDestination(String srcPath, String destinationFileUriString, String destinationFileName,
+                                  boolean isDefaultDestination) throws IOException {
+        ContentResolver contentResolver = getContentResolver();
+        if (isDefaultDestination) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 InputStream in = new FileInputStream(srcPath);
-
+                OutputStream out = new FileOutputStream(destinationFileUriString);
                 byte[] buf = new byte[1024];
                 int len;
                 while ((len = in.read(buf)) > 0) {
-                    stream.write(buf, 0, len);
+                    out.write(buf, 0, len);
+                }
+
+                new File(srcPath).delete();
+            } else {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, destinationFileName);
+                contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "video/mp4");
+                contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, destinationFileUriString);
+                contentValues.put(MediaStore.Video.Media.IS_PENDING, 1);
+
+                OutputStream stream = null;
+                Uri uri = null;
+
+                try {
+                    final Uri contentUri = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+                    uri = contentResolver.insert(contentUri, contentValues);
+
+                    if (uri == null) {
+                        throw new IOException("Failed to create new MediaStore record.");
+                    }
+
+                    stream = contentResolver.openOutputStream(uri);
+
+                    if (stream == null) {
+                        throw new IOException("Failed to get output stream.");
+                    }
+
+                    InputStream in = new FileInputStream(srcPath);
+
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while ((len = in.read(buf)) > 0) {
+                        stream.write(buf, 0, len);
+                    }
+
+                    contentValues.clear();
+                    contentValues.put(MediaStore.Video.Media.IS_PENDING, 0);
+                    contentResolver.update(uri, contentValues, null, null);
+                    return uri;
+                } catch (IOException e) {
+                    if (uri != null) {
+                        // Don't leave an orphan entry in the MediaStore
+                        contentResolver.delete(uri, null, null);
+                    }
+
+                    throw e;
+                } finally {
+                    if (stream != null) {
+                        stream.close();
+                    }
                 }
             }
+        } else {
+            OutputStream stream = contentResolver.openOutputStream(Uri.parse(destinationFileUriString));
+            if (stream == null) {
+                throw new IOException("Failed to get output stream.");
+            }
 
-            return Uri.parse(destinationFileUriString);
+            InputStream in = new FileInputStream(srcPath);
+
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = in.read(buf)) > 0) {
+                stream.write(buf, 0, len);
+            }
         }
-    }
 
-    @Override
-    public void onCreate() {
-        ((Infinity) getApplication()).getAppComponent().inject(this);
-        notificationManager = NotificationManagerCompat.from(this);
-        // Start up the thread running the service. Note that we create a
-        // separate thread because the service normally runs in the process's
-        // main thread, which we don't want to block. We also make it
-        // background priority so CPU-intensive work doesn't disrupt our UI.
-        HandlerThread thread = new HandlerThread("ServiceStartArguments",
-                Process.THREAD_PRIORITY_BACKGROUND);
-        thread.start();
-
-        // Get the HandlerThread's Looper and use it for our Handler
-        serviceHandler = new ServiceHandler(thread.getLooper());
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        builder = new NotificationCompat.Builder(DownloadRedditVideoService.this, NotificationUtils.CHANNEL_ID_DOWNLOAD_REDDIT_VIDEO);
-
-        String subredditName = intent.getStringExtra(EXTRA_SUBREDDIT);
-        String fileNameWithoutExtension = subredditName + "-" + intent.getStringExtra(EXTRA_POST_ID);
-
-        NotificationChannelCompat serviceChannel =
-                new NotificationChannelCompat.Builder(
-                NotificationUtils.CHANNEL_ID_DOWNLOAD_REDDIT_VIDEO,
-                NotificationManagerCompat.IMPORTANCE_LOW)
-                        .setName(NotificationUtils.CHANNEL_DOWNLOAD_REDDIT_VIDEO)
-                        .build();
-        notificationManager.createNotificationChannel(serviceChannel);
-
-        int randomNotificationIdOffset = new Random().nextInt(10000);
-        startForeground(
-                NotificationUtils.DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID + randomNotificationIdOffset,
-                createNotification(fileNameWithoutExtension + ".mp4")
-        );
-
-        Message msg = serviceHandler.obtainMessage();
-        Bundle bundle = intent.getExtras();
-        msg.setData(bundle);
-        msg.arg1 = randomNotificationIdOffset;
-        serviceHandler.sendMessage(msg);
-
-        return START_NOT_STICKY;
+        return Uri.parse(destinationFileUriString);
     }
 
     private void downloadFinished(Uri destinationFileUri, int errorCode, int randomNotificationIdOffset) {
