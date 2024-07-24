@@ -8,6 +8,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 
 import java.util.ArrayList;
 
@@ -15,7 +16,8 @@ import ml.docilealligator.infinityforreddit.account.Account;
 
 @Entity(tableName = "multi_reddits", primaryKeys = {"path", "username"},
         foreignKeys = @ForeignKey(entity = Account.class, parentColumns = "username",
-                childColumns = "username", onDelete = ForeignKey.CASCADE))
+                childColumns = "username", onDelete = ForeignKey.CASCADE)
+        indices = {@Index(value = "username")})
 public class MultiReddit implements Parcelable {
     @NonNull
     @ColumnInfo(name = "path")
