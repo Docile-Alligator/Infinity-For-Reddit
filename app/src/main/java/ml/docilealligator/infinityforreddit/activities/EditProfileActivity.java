@@ -239,7 +239,7 @@ public class EditProfileActivity extends BaseActivity {
                 extras.putInt(EditProfileService.EXTRA_POST_TYPE, EditProfileService.EXTRA_POST_TYPE_CHANGE_BANNER);
 
                 //TODO: contentEstimatedBytes
-                JobInfo jobInfo = EditProfileService.constructJobInfo(this, 100, extras);
+                JobInfo jobInfo = EditProfileService.constructJobInfo(this, 500000, extras);
                 ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
                 break;
             }
@@ -247,7 +247,7 @@ public class EditProfileActivity extends BaseActivity {
                 extras.putInt(EditProfileService.EXTRA_POST_TYPE, EditProfileService.EXTRA_POST_TYPE_CHANGE_AVATAR);
 
                 //TODO: contentEstimatedBytes
-                JobInfo jobInfo = EditProfileService.constructJobInfo(this, 100, extras);
+                JobInfo jobInfo = EditProfileService.constructJobInfo(this, 500000, extras);
                 ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
                 break;
             }

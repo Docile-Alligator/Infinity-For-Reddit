@@ -130,11 +130,6 @@ public class DownloadRedditVideoService extends JobService {
         notificationManager.createNotificationChannel(serviceChannel);
 
         int randomNotificationIdOffset = new Random().nextInt(10000);
-        startForeground(
-                NotificationUtils.DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID + randomNotificationIdOffset,
-                createNotification(builder, fileNameWithoutExtension + ".mp4")
-        );
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             setNotification(params,
                     NotificationUtils.DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID + randomNotificationIdOffset,

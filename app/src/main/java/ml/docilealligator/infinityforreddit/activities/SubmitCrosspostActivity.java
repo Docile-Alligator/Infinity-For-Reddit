@@ -1,5 +1,8 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -10,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -508,7 +512,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
                 subredditName = binding.subredditNameTextViewSubmitCrosspostActivity.getText().toString();
             }
 
-            Intent intent = new Intent(this, SubmitPostService.class);
+            /*Intent intent = new Intent(this, SubmitPostService.class);
             intent.putExtra(SubmitPostService.EXTRA_ACCOUNT, selectedAccount);
             intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
             intent.putExtra(SubmitPostService.EXTRA_TITLE, binding.postTitleEditTextSubmitCrosspostActivity.getText().toString());
@@ -524,7 +528,32 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
             intent.putExtra(SubmitPostService.EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS,
                     binding.receivePostReplyNotificationsSwitchMaterialSubmitCrosspostActivity.isChecked());
             intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_CROSSPOST);
-            ContextCompat.startForegroundService(this, intent);
+            ContextCompat.startForegroundService(this, intent);*/
+
+
+            PersistableBundle extras = new PersistableBundle();
+            extras.putString(SubmitPostService.EXTRA_ACCOUNT, selectedAccount.getJSONModel());
+            extras.putString(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
+            String title = binding.postTitleEditTextSubmitCrosspostActivity.getText().toString();
+            extras.putString(SubmitPostService.EXTRA_TITLE, title);
+            if (post.isCrosspost()) {
+                extras.putString(SubmitPostService.EXTRA_CONTENT, "t3_" + post.getCrosspostParentId());
+            } else {
+                extras.putString(SubmitPostService.EXTRA_CONTENT, post.getFullName());
+            }
+            extras.putString(SubmitPostService.EXTRA_KIND, APIUtils.KIND_CROSSPOST);
+            if (flair != null) {
+                extras.putString(SubmitPostService.EXTRA_FLAIR, flair.getJSONModel());
+            }
+            extras.putInt(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler ? 1 : 0);
+            extras.putInt(SubmitPostService.EXTRA_IS_NSFW, isNSFW ? 1 : 0);
+            extras.putInt(SubmitPostService.EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS,
+                    binding.receivePostReplyNotificationsSwitchMaterialSubmitCrosspostActivity.isChecked() ? 1 : 0);
+            extras.putInt(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_CROSSPOST);
+
+            // TODO: contentEstimatedBytes
+            JobInfo jobInfo = SubmitPostService.constructJobInfo(this, title.length() * 2L + 20000, extras);
+            ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
 
             return true;
         }
