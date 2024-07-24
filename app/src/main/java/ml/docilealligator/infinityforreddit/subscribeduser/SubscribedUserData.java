@@ -10,7 +10,7 @@ import ml.docilealligator.infinityforreddit.account.Account;
 
 @Entity(tableName = "subscribed_users", primaryKeys = {"name", "username"},
         foreignKeys = @ForeignKey(entity = Account.class, parentColumns = "username",
-        childColumns = "username", onDelete = ForeignKey.CASCADE)
+                childColumns = "username", onDelete = ForeignKey.CASCADE),
         indices = {@Index(value = "username")})
 public class SubscribedUserData {
     @NonNull

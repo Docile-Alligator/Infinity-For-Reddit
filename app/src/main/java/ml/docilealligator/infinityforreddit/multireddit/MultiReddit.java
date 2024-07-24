@@ -16,7 +16,7 @@ import ml.docilealligator.infinityforreddit.account.Account;
 
 @Entity(tableName = "multi_reddits", primaryKeys = {"path", "username"},
         foreignKeys = @ForeignKey(entity = Account.class, parentColumns = "username",
-                childColumns = "username", onDelete = ForeignKey.CASCADE)
+                childColumns = "username", onDelete = ForeignKey.CASCADE),
         indices = {@Index(value = "username")})
 public class MultiReddit implements Parcelable {
     @NonNull
