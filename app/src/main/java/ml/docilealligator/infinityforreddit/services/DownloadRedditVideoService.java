@@ -87,7 +87,6 @@ public class DownloadRedditVideoService extends JobService {
     @Inject
     Executor executor;
     private NotificationManagerCompat notificationManager;
-    private NotificationCompat.Builder builder;
     private final String[] possibleAudioUrlSuffices = new String[]{"/DASH_AUDIO_128.mp4", "/DASH_audio.mp4", "/DASH_audio", "/audio.mp4", "/audio"};
 
     public DownloadRedditVideoService() {
@@ -115,7 +114,7 @@ public class DownloadRedditVideoService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters params) {
-        builder = new NotificationCompat.Builder(DownloadRedditVideoService.this, NotificationUtils.CHANNEL_ID_DOWNLOAD_REDDIT_VIDEO);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(DownloadRedditVideoService.this, NotificationUtils.CHANNEL_ID_DOWNLOAD_REDDIT_VIDEO);
 
         PersistableBundle intent = params.getExtras();
 
@@ -133,17 +132,17 @@ public class DownloadRedditVideoService extends JobService {
         int randomNotificationIdOffset = new Random().nextInt(10000);
         startForeground(
                 NotificationUtils.DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID + randomNotificationIdOffset,
-                createNotification(fileNameWithoutExtension + ".mp4")
+                createNotification(builder, fileNameWithoutExtension + ".mp4")
         );
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             setNotification(params,
                     NotificationUtils.DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID + randomNotificationIdOffset,
-                    createNotification(fileNameWithoutExtension + ".mp4"),
+                    createNotification(builder, fileNameWithoutExtension + ".mp4"),
                     JobService.JOB_END_NOTIFICATION_POLICY_DETACH);
         } else {
             notificationManager.notify(NotificationUtils.DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID + randomNotificationIdOffset,
-                    createNotification(fileNameWithoutExtension + ".mp4"));
+                    createNotification(builder, fileNameWithoutExtension + ".mp4"));
         }
 
         String videoUrl = intent.getString(EXTRA_VIDEO_URL);
@@ -162,7 +161,7 @@ public class DownloadRedditVideoService extends JobService {
                             long currentTime = System.currentTimeMillis();
                             if (currentTime - time > 1000) {
                                 time = currentTime;
-                                updateNotification(0, (int) ((100 * bytesRead) / contentLength),
+                                updateNotification(builder, 0, (int) ((100 * bytesRead) / contentLength),
                                         randomNotificationIdOffset, null);
                             }
                         }
@@ -209,12 +208,12 @@ public class DownloadRedditVideoService extends JobService {
                                     String destinationDirectoryPath = separateDownloadFolder ? destinationDirectory.getAbsolutePath() + "/Infinity/" + subredditName + "/" : destinationDirectory.getAbsolutePath() + "/Infinity/";
                                     File infinityDir = new File(destinationDirectoryPath);
                                     if (!infinityDir.exists() && !infinityDir.mkdir()) {
-                                        downloadFinished(params, null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, randomNotificationIdOffset);
+                                        downloadFinished(params, builder, null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, randomNotificationIdOffset);
                                         return;
                                     }
                                     destinationFileUriString = destinationDirectoryPath + destinationFileName;
                                 } else {
-                                    downloadFinished(params, null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, randomNotificationIdOffset);
+                                    downloadFinished(params, builder, null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, randomNotificationIdOffset);
                                     return;
                                 }
                             } else {
@@ -228,21 +227,21 @@ public class DownloadRedditVideoService extends JobService {
                             if (separateDownloadFolder) {
                                 dir = DocumentFile.fromTreeUri(DownloadRedditVideoService.this, Uri.parse(destinationFileDirectory));
                                 if (dir == null) {
-                                    downloadFinished(params, null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, randomNotificationIdOffset);
+                                    downloadFinished(params, builder, null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, randomNotificationIdOffset);
                                     return;
                                 }
                                 dir = dir.findFile(subredditName);
                                 if (dir == null) {
                                     dir = DocumentFile.fromTreeUri(DownloadRedditVideoService.this, Uri.parse(destinationFileDirectory)).createDirectory(subredditName);
                                     if (dir == null) {
-                                        downloadFinished(params, null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, randomNotificationIdOffset);
+                                        downloadFinished(params, builder, null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, randomNotificationIdOffset);
                                         return;
                                     }
                                 }
                             } else {
                                 dir = DocumentFile.fromTreeUri(DownloadRedditVideoService.this, Uri.parse(destinationFileDirectory));
                                 if (dir == null) {
-                                    downloadFinished(params, null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, randomNotificationIdOffset);
+                                    downloadFinished(params, builder, null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, randomNotificationIdOffset);
                                     return;
                                 }
                             }
@@ -255,19 +254,19 @@ public class DownloadRedditVideoService extends JobService {
                             }
                             picFile = dir.createFile("video/mp4", finalFileNameWithoutExtension + ".mp4");
                             if (picFile == null) {
-                                downloadFinished(params, null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, randomNotificationIdOffset);
+                                downloadFinished(params, builder, null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, randomNotificationIdOffset);
                                 return;
                             }
                             destinationFileUriString = picFile.getUri().toString();
                         }
 
-                        updateNotification(R.string.downloading_reddit_video_audio_track, 0,
+                        updateNotification(builder, R.string.downloading_reddit_video_audio_track, 0,
                                 randomNotificationIdOffset, null);
 
                         String videoFilePath = externalCacheDirectoryPath + finalFileNameWithoutExtension + "-cache.mp4";
                         String savedVideoFilePath = writeResponseBodyToDisk(videoResponse.body(), videoFilePath);
                         if (savedVideoFilePath == null) {
-                            downloadFinished(params, null, ERROR_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
+                            downloadFinished(params, builder, null, ERROR_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
                             return;
                         }
 
@@ -279,18 +278,18 @@ public class DownloadRedditVideoService extends JobService {
 
                                 String savedAudioFilePath = writeResponseBodyToDisk(audioResponse, audioFilePath);
                                 if (savedAudioFilePath == null) {
-                                    downloadFinished(params, null, ERROR_AUDIO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
+                                    downloadFinished(params, builder, null, ERROR_AUDIO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
                                     return;
                                 }
 
-                                updateNotification(R.string.downloading_reddit_video_muxing, -1,
+                                updateNotification(builder, R.string.downloading_reddit_video_muxing, -1,
                                         randomNotificationIdOffset, null);
                                 if (!muxVideoAndAudio(videoFilePath, audioFilePath, outputFilePath)) {
-                                    downloadFinished(params, null, ERROR_MUX_FAILED, randomNotificationIdOffset);
+                                    downloadFinished(params, builder, null, ERROR_MUX_FAILED, randomNotificationIdOffset);
                                     return;
                                 }
 
-                                updateNotification(R.string.downloading_reddit_video_save_file_to_public_dir, -1,
+                                updateNotification(builder, R.string.downloading_reddit_video_save_file_to_public_dir, -1,
                                         randomNotificationIdOffset, null);
                                 try {
                                     Uri destinationFileUri = copyToDestination(outputFilePath, destinationFileUriString, destinationFileName, isDefaultDestination);
@@ -299,20 +298,20 @@ public class DownloadRedditVideoService extends JobService {
                                     new File(audioFilePath).delete();
                                     new File(outputFilePath).delete();
 
-                                    downloadFinished(params, destinationFileUri, NO_ERROR, randomNotificationIdOffset);
+                                    downloadFinished(params, builder, destinationFileUri, NO_ERROR, randomNotificationIdOffset);
                                 } catch (IOException e) {
                                     e.printStackTrace();
-                                    downloadFinished(params, null, ERROR_MUXED_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
+                                    downloadFinished(params, builder, null, ERROR_MUXED_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
                                 }
                             } else {
-                                updateNotification(R.string.downloading_reddit_video_muxing, -1,
+                                updateNotification(builder, R.string.downloading_reddit_video_muxing, -1,
                                         randomNotificationIdOffset, null);
                                 if (!muxVideoAndAudio(videoFilePath, null, outputFilePath)) {
-                                    downloadFinished(params, null, ERROR_MUX_FAILED, randomNotificationIdOffset);
+                                    downloadFinished(params, builder, null, ERROR_MUX_FAILED, randomNotificationIdOffset);
                                     return;
                                 }
 
-                                updateNotification(R.string.downloading_reddit_video_save_file_to_public_dir, -1,
+                                updateNotification(builder, R.string.downloading_reddit_video_save_file_to_public_dir, -1,
                                         randomNotificationIdOffset, null);
                                 try {
                                     Uri destinationFileUri = copyToDestination(outputFilePath, destinationFileUriString, destinationFileName, isDefaultDestination);
@@ -320,34 +319,34 @@ public class DownloadRedditVideoService extends JobService {
                                     new File(videoFilePath).delete();
                                     new File(outputFilePath).delete();
 
-                                    downloadFinished(params, destinationFileUri, NO_ERROR, randomNotificationIdOffset);
+                                    downloadFinished(params, builder, destinationFileUri, NO_ERROR, randomNotificationIdOffset);
                                 } catch (IOException e) {
                                     e.printStackTrace();
-                                    downloadFinished(params, null, ERROR_MUXED_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
+                                    downloadFinished(params, builder, null, ERROR_MUXED_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
                                 }
                             }
                         } else {
                             // do not remux video on <= Android N, just save video
-                            updateNotification(R.string.downloading_reddit_video_save_file_to_public_dir, -1,
+                            updateNotification(builder, R.string.downloading_reddit_video_save_file_to_public_dir, -1,
                                     randomNotificationIdOffset, null);
                             try {
                                 Uri destinationFileUri = copyToDestination(videoFilePath, destinationFileUriString, destinationFileName, isDefaultDestination);
                                 new File(videoFilePath).delete();
-                                downloadFinished(params, destinationFileUri, NO_ERROR, randomNotificationIdOffset);
+                                downloadFinished(params, builder, destinationFileUri, NO_ERROR, randomNotificationIdOffset);
                             } catch (IOException e) {
                                 e.printStackTrace();
-                                downloadFinished(params, null, ERROR_MUXED_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
+                                downloadFinished(params, builder, null, ERROR_MUXED_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
                             }
                         }
                     } else {
-                        downloadFinished(params, null, ERROR_VIDEO_FILE_CANNOT_DOWNLOAD, randomNotificationIdOffset);
+                        downloadFinished(params, builder, null, ERROR_VIDEO_FILE_CANNOT_DOWNLOAD, randomNotificationIdOffset);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    downloadFinished(params, null, ERROR_VIDEO_FILE_CANNOT_DOWNLOAD, randomNotificationIdOffset);
+                    downloadFinished(params, builder, null, ERROR_VIDEO_FILE_CANNOT_DOWNLOAD, randomNotificationIdOffset);
                 }
             } else {
-                downloadFinished(params, null, ERROR_CANNOT_GET_CACHE_DIRECTORY, randomNotificationIdOffset);
+                downloadFinished(params, builder, null, ERROR_CANNOT_GET_CACHE_DIRECTORY, randomNotificationIdOffset);
             }
         });
 
@@ -583,35 +582,35 @@ public class DownloadRedditVideoService extends JobService {
         return Uri.parse(destinationFileUriString);
     }
 
-    private void downloadFinished(JobParameters parameters, Uri destinationFileUri, int errorCode, int randomNotificationIdOffset) {
+    private void downloadFinished(JobParameters parameters, NotificationCompat.Builder builder, Uri destinationFileUri, int errorCode, int randomNotificationIdOffset) {
         if (errorCode != NO_ERROR) {
             switch (errorCode) {
                 case ERROR_CANNOT_GET_CACHE_DIRECTORY:
-                    updateNotification(R.string.downloading_reddit_video_failed_cannot_get_cache_directory, -1,
+                    updateNotification(builder, R.string.downloading_reddit_video_failed_cannot_get_cache_directory, -1,
                             randomNotificationIdOffset, null);
                     break;
                 case ERROR_VIDEO_FILE_CANNOT_DOWNLOAD:
-                    updateNotification(R.string.downloading_reddit_video_failed_cannot_download_video, -1,
+                    updateNotification(builder, R.string.downloading_reddit_video_failed_cannot_download_video, -1,
                             randomNotificationIdOffset, null);
                     break;
                 case ERROR_VIDEO_FILE_CANNOT_SAVE:
-                    updateNotification(R.string.downloading_reddit_video_failed_cannot_save_video, -1,
+                    updateNotification(builder, R.string.downloading_reddit_video_failed_cannot_save_video, -1,
                             randomNotificationIdOffset, null);
                     break;
                 case ERROR_AUDIO_FILE_CANNOT_SAVE:
-                    updateNotification(R.string.downloading_reddit_video_failed_cannot_save_audio, -1,
+                    updateNotification(builder, R.string.downloading_reddit_video_failed_cannot_save_audio, -1,
                             randomNotificationIdOffset, null);
                     break;
                 case ERROR_MUX_FAILED:
-                    updateNotification(R.string.downloading_reddit_video_failed_cannot_mux, -1,
+                    updateNotification(builder, R.string.downloading_reddit_video_failed_cannot_mux, -1,
                             randomNotificationIdOffset, null);
                     break;
                 case ERROR_MUXED_VIDEO_FILE_CANNOT_SAVE:
-                    updateNotification(R.string.downloading_reddit_video_failed_cannot_save_mux_video, -1,
+                    updateNotification(builder, R.string.downloading_reddit_video_failed_cannot_save_mux_video, -1,
                             randomNotificationIdOffset, null);
                     break;
                 case ERROR_CANNOT_GET_DESTINATION_DIRECTORY:
-                    updateNotification(R.string.downloading_media_failed_cannot_save_to_destination_directory, -1,
+                    updateNotification(builder, R.string.downloading_media_failed_cannot_save_to_destination_directory, -1,
                             randomNotificationIdOffset, null);
                     break;
             }
@@ -619,21 +618,21 @@ public class DownloadRedditVideoService extends JobService {
             MediaScannerConnection.scanFile(
                     this, new String[]{destinationFileUri.toString()}, null,
                     (path, uri) -> {
-                        updateNotification(R.string.downloading_reddit_video_finished, -1, randomNotificationIdOffset, destinationFileUri);
+                        updateNotification(builder, R.string.downloading_reddit_video_finished, -1, randomNotificationIdOffset, destinationFileUri);
                     }
             );
         }
         jobFinished(parameters, false);
     }
 
-    private Notification createNotification(String fileName) {
+    private Notification createNotification(NotificationCompat.Builder builder, String fileName) {
         builder.setContentTitle(fileName).setContentText(getString(R.string.downloading_reddit_video)).setProgress(100, 0, false);
         return builder.setSmallIcon(R.drawable.ic_notification)
                 .setColor(customThemeWrapper.getColorPrimaryLightTheme())
                 .build();
     }
 
-    private void updateNotification(int contentStringResId, int progress, int randomNotificationIdOffset, Uri mediaUri) {
+    private void updateNotification(NotificationCompat.Builder builder, int contentStringResId, int progress, int randomNotificationIdOffset, Uri mediaUri) {
         if (notificationManager != null) {
             if (progress < 0) {
                 builder.setProgress(0, 0, false);
