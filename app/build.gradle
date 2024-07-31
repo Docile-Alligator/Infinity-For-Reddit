@@ -35,8 +35,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     lint {
@@ -196,3 +196,5 @@ dependencies {
     // debugImplementation because LeakCanary should only run in debug builds.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:x.y'
 }
+
+apply from: '../gradle/butterknife-fix.gradle'
