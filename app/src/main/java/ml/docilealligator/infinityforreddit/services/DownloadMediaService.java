@@ -21,6 +21,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
@@ -94,6 +95,7 @@ public class DownloadMediaService extends JobService {
                     .build();
         } else {
             return new JobInfo.Builder(JOB_ID++, new ComponentName(context, DownloadMediaService.class))
+                    .setExtras(extras)
                     .build();
         }
     }
