@@ -223,6 +223,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                             mNewAccountName = null;
                             if (newAccount != null) {
                                 accessToken = newAccount.getAccessToken();
+                                accountName = newAccount.getAccountName();
                             }
 
                             bindView(savedInstanceState);

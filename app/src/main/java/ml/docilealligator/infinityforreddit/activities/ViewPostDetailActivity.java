@@ -345,6 +345,10 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                             Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
                             mNewAccountName = null;
+                            if (newAccount != null) {
+                                accessToken = newAccount.getAccessToken();
+                                accountName = newAccount.getAccountName();
+                            }
 
                             bindView(savedInstanceState);
                         });
