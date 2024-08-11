@@ -4,12 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 
 import ml.docilealligator.infinityforreddit.account.Account;
 
 @Entity(tableName = "subscribed_subreddits", primaryKeys = {"id", "username"},
         foreignKeys = @ForeignKey(entity = Account.class, parentColumns = "username",
-        childColumns = "username", onDelete = ForeignKey.CASCADE))
+                childColumns = "username", onDelete = ForeignKey.CASCADE),
+        indices = {@Index(value = "username")})
 public class SubscribedSubredditData {
     @NonNull
     @ColumnInfo(name = "id")
