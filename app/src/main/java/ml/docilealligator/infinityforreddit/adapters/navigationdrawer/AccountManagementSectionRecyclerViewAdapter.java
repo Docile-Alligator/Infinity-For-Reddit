@@ -72,8 +72,6 @@ public class AccountManagementSectionRecyclerViewAdapter extends RecyclerView.Ad
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
                     .into(((AccountViewHolder) holder).binding.profileImageItemAccount);
             ((AccountViewHolder) holder).binding.usernameTextViewItemAccount.setText(accounts.get(position).getAccountName());
-            holder.itemView.setOnClickListener(view ->
-                    itemClickListener.onAccountClick(accounts.get(position).getAccountName()));
         } else if (holder instanceof MenuItemViewHolder) {
             int stringId = 0;
             int drawableId = 0;
@@ -136,6 +134,14 @@ public class AccountManagementSectionRecyclerViewAdapter extends RecyclerView.Ad
                 binding.usernameTextViewItemAccount.setTypeface(baseActivity.typeface);
             }
             binding.usernameTextViewItemAccount.setTextColor(primaryTextColor);
+
+            itemView.setOnClickListener(view ->
+                    itemClickListener.onAccountClick(accounts.get(getBindingAdapterPosition()).getAccountName()));
+
+            itemView.setOnLongClickListener(view -> {
+                itemClickListener.onAccountLongClick(accounts.get(getBindingAdapterPosition()).getAccountName());
+                return true;
+            });
         }
     }
 

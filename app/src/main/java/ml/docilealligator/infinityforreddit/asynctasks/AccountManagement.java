@@ -7,9 +7,11 @@ import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.account.AccountDao;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
-public class SwitchAccount {
+public class AccountManagement {
+
     public static void switchAccount(RedditDataRoomDatabase redditDataRoomDatabase,
                                      SharedPreferences currentAccountSharedPreferences, Executor executor,
                                      Handler handler, String newAccountName,
@@ -26,6 +28,36 @@ public class SwitchAccount {
             handler.post(() -> switchAccountListener.switched(account));
         });
 
+    }
+
+    public static void switchToAnonymousMode(RedditDataRoomDatabase redditDataRoomDatabase, SharedPreferences currentAccountSharedPreferences,
+                                             Executor executor, Handler handler, boolean removeCurrentAccount,
+                                             SwitchToAnonymousAccountAsyncTaskListener switchToAnonymousAccountAsyncTaskListener) {
+        executor.execute(() -> {
+            AccountDao accountDao = redditDataRoomDatabase.accountDao();
+            if (removeCurrentAccount) {
+                accountDao.deleteCurrentAccount();
+            }
+            accountDao.markAllAccountsNonCurrent();
+
+            String redgifsAccessToken = currentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "");
+
+            currentAccountSharedPreferences.edit().clear().apply();
+            currentAccountSharedPreferences.edit().putString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, redgifsAccessToken).apply();
+
+            handler.post(switchToAnonymousAccountAsyncTaskListener::logoutSuccess);
+        });
+    }
+
+    public static void removeAccount(RedditDataRoomDatabase redditDataRoomDatabase,
+                                             Executor executor, String accoutName) {
+        executor.execute(() -> {
+            redditDataRoomDatabase.accountDao().deleteAccount(accoutName);
+        });
+    }
+
+    public interface SwitchToAnonymousAccountAsyncTaskListener {
+        void logoutSuccess();
     }
 
     public interface SwitchAccountListener {
