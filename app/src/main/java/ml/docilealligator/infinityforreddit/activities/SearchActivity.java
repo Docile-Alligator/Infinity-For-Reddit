@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -196,7 +199,7 @@ public class SearchActivity extends BaseActivity {
                                             @Override
                                             public void onParseSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
                                                 subredditAutocompleteRecyclerViewAdapter.setSubreddits(subredditData);
-                                                binding.recyclerViewSearchActivity.setAdapter(subredditAutocompleteRecyclerViewAdapter);
+                                                binding.subredditAutocompleteRecyclerViewSearchActivity.setAdapter(subredditAutocompleteRecyclerViewAdapter);
                                             }
 
                                             @Override
@@ -298,9 +301,28 @@ public class SearchActivity extends BaseActivity {
                     executor.execute(() -> mRedditDataRoomDatabase.recentSearchQueryDao().deleteRecentSearchQueries(recentSearchQuery));
                 }
             });
-            binding.recyclerViewSearchActivity.setVisibility(View.VISIBLE);
-            binding.recyclerViewSearchActivity.setNestedScrollingEnabled(false);
-            binding.recyclerViewSearchActivity.setAdapter(adapter);
+            binding.recentSearchQueryRecyclerViewSearchActivity.setVisibility(View.VISIBLE);
+            binding.recentSearchQueryRecyclerViewSearchActivity.setNestedScrollingEnabled(false);
+            binding.recentSearchQueryRecyclerViewSearchActivity.setAdapter(adapter);
+            binding.recentSearchQueryRecyclerViewSearchActivity.addItemDecoration(new RecyclerView.ItemDecoration() {
+                int spacing = (int) Utils.convertDpToPixel(16, SearchActivity.this);
+                int halfSpacing = spacing / 2;
+
+                @Override
+                public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                    int column = ((GridLayoutManager.LayoutParams) view.getLayoutParams()).getSpanIndex();
+                    boolean toTheLeft = column == 0;
+
+                    if (toTheLeft) {
+                        outRect.left = spacing;
+                        outRect.right = halfSpacing;
+                    } else {
+                        outRect.left = halfSpacing;
+                        outRect.right = spacing;
+                    }
+                    outRect.bottom = spacing;
+                }
+            });
 
             if (mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SEARCH_HISTORY, true)) {
                 mRecentSearchQueryViewModel = new ViewModelProvider(this,
@@ -309,10 +331,8 @@ public class SearchActivity extends BaseActivity {
 
                 mRecentSearchQueryViewModel.getAllRecentSearchQueries().observe(this, recentSearchQueries -> {
                     if (recentSearchQueries != null && !recentSearchQueries.isEmpty()) {
-                        binding.dividerSearchActivity.setVisibility(View.VISIBLE);
                         binding.deleteAllRecentSearchesButtonSearchActivity.setVisibility(View.VISIBLE);
                     } else {
-                        binding.dividerSearchActivity.setVisibility(View.GONE);
                         binding.deleteAllRecentSearchesButtonSearchActivity.setVisibility(View.GONE);
                     }
                     adapter.setRecentSearchQueries(recentSearchQueries);
@@ -385,7 +405,6 @@ public class SearchActivity extends BaseActivity {
         binding.searchInTextViewSearchActivity.setTextColor(colorAccent);
         binding.deleteAllRecentSearchesButtonSearchActivity.setIconTint(ColorStateList.valueOf(mCustomThemeWrapper.getPrimaryIconColor()));
         binding.subredditNameTextViewSearchActivity.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
-        binding.dividerSearchActivity.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
         if (typeface != null) {
             Utils.setFontToAllTextViews(binding.getRoot(), typeface);
         }

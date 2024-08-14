@@ -122,14 +122,16 @@
 
             </RelativeLayout>
 
-            <View
-                android:id="@+id/divider_search_activity"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recent_search_query_recycler_view_search_activity"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:visibility="gone" />
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:spanCount="2"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_search_activity"
+                android:id="@+id/subreddit_autocomplete_recycler_view_search_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
