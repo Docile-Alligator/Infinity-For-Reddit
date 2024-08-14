@@ -193,13 +193,14 @@ public class SearchActivity extends BaseActivity {
                     subredditAutocompleteCall.enqueue(new Callback<>() {
                         @Override
                         public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                            if (response.isSuccessful()) {
+                            if (response.isSuccessful() && !call.isCanceled()) {
                                 ParseSubredditData.parseSubredditListingData(executor, handler,
                                         response.body(), nsfw, new ParseSubredditData.ParseSubredditListingDataListener() {
                                             @Override
                                             public void onParseSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
+                                                binding.recentSearchQueryRecyclerViewSearchActivity.setVisibility(View.GONE);
+                                                binding.subredditAutocompleteRecyclerViewSearchActivity.setVisibility(View.VISIBLE);
                                                 subredditAutocompleteRecyclerViewAdapter.setSubreddits(subredditData);
-                                                binding.subredditAutocompleteRecyclerViewSearchActivity.setAdapter(subredditAutocompleteRecyclerViewAdapter);
                                             }
 
                                             @Override
@@ -217,6 +218,12 @@ public class SearchActivity extends BaseActivity {
                     });
                     binding.clearSearchEditViewSearchActivity.setVisibility(View.VISIBLE);
                 } else {
+                    if (subredditAutocompleteCall != null) {
+                        subredditAutocompleteCall.cancel();
+                    }
+
+                    binding.recentSearchQueryRecyclerViewSearchActivity.setVisibility(View.VISIBLE);
+                    binding.subredditAutocompleteRecyclerViewSearchActivity.setVisibility(View.GONE);
                     binding.clearSearchEditViewSearchActivity.setVisibility(View.GONE);
                 }
             }
@@ -305,8 +312,8 @@ public class SearchActivity extends BaseActivity {
             binding.recentSearchQueryRecyclerViewSearchActivity.setNestedScrollingEnabled(false);
             binding.recentSearchQueryRecyclerViewSearchActivity.setAdapter(adapter);
             binding.recentSearchQueryRecyclerViewSearchActivity.addItemDecoration(new RecyclerView.ItemDecoration() {
-                int spacing = (int) Utils.convertDpToPixel(16, SearchActivity.this);
-                int halfSpacing = spacing / 2;
+                final int spacing = (int) Utils.convertDpToPixel(16, SearchActivity.this);
+                final int halfSpacing = spacing / 2;
 
                 @Override
                 public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -323,6 +330,8 @@ public class SearchActivity extends BaseActivity {
                     outRect.bottom = spacing;
                 }
             });
+
+            binding.subredditAutocompleteRecyclerViewSearchActivity.setAdapter(subredditAutocompleteRecyclerViewAdapter);
 
             if (mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SEARCH_HISTORY, true)) {
                 mRecentSearchQueryViewModel = new ViewModelProvider(this,
