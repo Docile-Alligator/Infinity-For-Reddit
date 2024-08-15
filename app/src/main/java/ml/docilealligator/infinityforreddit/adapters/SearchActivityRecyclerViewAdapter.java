@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -46,7 +47,13 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof RecentSearchQueryViewHolder) {
             if (recentSearchQueries != null && !recentSearchQueries.isEmpty() && position < recentSearchQueries.size()) {
-                ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryTextViewItemRecentSearchQuery.setText(recentSearchQueries.get(position).getSearchQuery());
+                RecentSearchQuery recentSearchQuery = recentSearchQueries.get(position);
+                ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryTextViewItemRecentSearchQuery.setText(recentSearchQuery.getSearchQuery());
+                if (recentSearchQuery.getSearchInSubredditOrUserName() != null && !recentSearchQuery.getSearchInSubredditOrUserName().isEmpty()) {
+                    ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery.setVisibility(View.VISIBLE);
+                    ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
+                            .setText((recentSearchQuery.isSearchInIsUser() ? "u/" : "r/") + recentSearchQuery.getSearchQuery());
+                }
                 holder.itemView.postDelayed(() -> {
                     ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryTextViewItemRecentSearchQuery.setSelected(true);
                     ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery.setSelected(true);
@@ -64,6 +71,7 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         if (holder instanceof RecentSearchQueryViewHolder) {
+            ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery.setVisibility(View.GONE);
             ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryTextViewItemRecentSearchQuery.setSelected(false);
             ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery.setSelected(false);
         }
