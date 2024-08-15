@@ -35,8 +35,7 @@
             android:textSize="?attr/font_default"
             android:singleLine="true"
             android:ellipsize="marquee"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:visibility="gone" />
+            android:marqueeRepeatLimit="marquee_forever" />
 
     </LinearLayout>
 

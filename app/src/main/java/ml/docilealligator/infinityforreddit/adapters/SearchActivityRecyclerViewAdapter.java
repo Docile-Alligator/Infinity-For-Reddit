@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -10,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.ItemRecentSearchQueryBinding;
@@ -21,6 +21,8 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private final int filledCardViewBackgroundColor;
     private final int primaryTextColor;
     private final int secondaryTextColor;
+    private final int subredditTextColor;
+    private final int userTextColor;
     private final ItemOnClickListener itemOnClickListener;
 
     public interface ItemOnClickListener {
@@ -34,6 +36,8 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         this.filledCardViewBackgroundColor = customThemeWrapper.getFilledCardViewBackgroundColor();
         this.primaryTextColor = customThemeWrapper.getPrimaryTextColor();
         this.secondaryTextColor = customThemeWrapper.getSecondaryTextColor();
+        this.subredditTextColor = customThemeWrapper.getSubreddit();
+        this.userTextColor = customThemeWrapper.getUsername();
         this.itemOnClickListener = itemOnClickListener;
     }
 
@@ -50,9 +54,22 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 RecentSearchQuery recentSearchQuery = recentSearchQueries.get(position);
                 ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryTextViewItemRecentSearchQuery.setText(recentSearchQuery.getSearchQuery());
                 if (recentSearchQuery.getSearchInSubredditOrUserName() != null && !recentSearchQuery.getSearchInSubredditOrUserName().isEmpty()) {
-                    ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery.setVisibility(View.VISIBLE);
+                    if (recentSearchQuery.isSearchInIsUser()) {
+                        ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
+                                .setTextColor(userTextColor);
+                        ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
+                                .setText("u/" + recentSearchQuery.getSearchQuery());
+                    } else {
+                        ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
+                                .setTextColor(subredditTextColor);
+                        ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
+                                .setText("r/" + recentSearchQuery.getSearchQuery());
+                    }
+                } else {
                     ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
-                            .setText((recentSearchQuery.isSearchInIsUser() ? "u/" : "r/") + recentSearchQuery.getSearchQuery());
+                            .setTextColor(secondaryTextColor);
+                    ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
+                            .setText(R.string.all_subreddits);
                 }
                 holder.itemView.postDelayed(() -> {
                     ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryTextViewItemRecentSearchQuery.setSelected(true);
@@ -71,7 +88,6 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         if (holder instanceof RecentSearchQueryViewHolder) {
-            ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery.setVisibility(View.GONE);
             ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryTextViewItemRecentSearchQuery.setSelected(false);
             ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery.setSelected(false);
         }
@@ -92,7 +108,6 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             itemView.setBackgroundTintList(ColorStateList.valueOf(filledCardViewBackgroundColor));
 
             binding.recentSearchQueryTextViewItemRecentSearchQuery.setTextColor(primaryTextColor);
-            binding.recentSearchQueryWhereTextViewItemRecentSearchQuery.setTextColor(secondaryTextColor);
 
             if (activity.typeface != null) {
                 binding.recentSearchQueryTextViewItemRecentSearchQuery.setTypeface(activity.typeface);
