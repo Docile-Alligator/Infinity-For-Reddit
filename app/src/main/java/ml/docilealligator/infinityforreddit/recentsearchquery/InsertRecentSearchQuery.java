@@ -16,6 +16,8 @@ public class InsertRecentSearchQuery {
                                                        RedditDataRoomDatabase redditDataRoomDatabase,
                                                        String username,
                                                        String recentSearchQuery,
+                                                       String searchInSubredditOrUserName,
+                                                       boolean searchInIsUser,
                                                        InsertRecentSearchQueryListener insertRecentSearchQueryListener) {
         executor.execute(() -> {
             RecentSearchQueryDao recentSearchQueryDao = redditDataRoomDatabase.recentSearchQueryDao();
@@ -26,7 +28,7 @@ public class InsertRecentSearchQuery {
                 }
             }
 
-            recentSearchQueryDao.insert(new RecentSearchQuery(username, recentSearchQuery));
+            recentSearchQueryDao.insert(new RecentSearchQuery(username, recentSearchQuery, searchInSubredditOrUserName, searchInIsUser));
 
             handler.post(insertRecentSearchQueryListener::success);
         });

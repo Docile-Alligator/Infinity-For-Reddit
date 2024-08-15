@@ -826,6 +826,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 }
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH: {
                     Intent intent = new Intent(this, SearchActivity.class);
+                    intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, username);
+                    intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_IS_USER, true);
                     startActivity(intent);
                     break;
                 }
@@ -914,6 +916,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SEARCH: {
                 Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, username);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_IS_USER, true);
                 startActivity(intent);
                 break;
             }
@@ -1091,8 +1095,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             return true;
         } else if (itemId == R.id.action_search_view_user_detail_activity) {
             Intent intent = new Intent(this, SearchActivity.class);
-            intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, username);
-            intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_IS_USER, true);
+            intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, username);
+            intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_IS_USER, true);
             startActivity(intent);
             return true;
         } else if (itemId == R.id.action_refresh_view_user_detail_activity) {
@@ -1277,6 +1281,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_SEARCH:
                 Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, username);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_IS_USER, true);
                 startActivity(intent);
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_GO_TO_SUBREDDIT: {

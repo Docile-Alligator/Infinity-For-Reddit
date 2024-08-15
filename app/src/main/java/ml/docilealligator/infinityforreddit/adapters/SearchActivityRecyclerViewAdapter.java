@@ -23,7 +23,7 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private final ItemOnClickListener itemOnClickListener;
 
     public interface ItemOnClickListener {
-        void onClick(String query);
+        void onClick(RecentSearchQuery recentSearchQuery);
         void onDelete(RecentSearchQuery recentSearchQuery);
     }
 
@@ -92,7 +92,7 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             itemView.setOnClickListener(view -> {
                 if (recentSearchQueries != null && !recentSearchQueries.isEmpty()) {
-                    itemOnClickListener.onClick(recentSearchQueries.get(getBindingAdapterPosition()).getSearchQuery());
+                    itemOnClickListener.onClick(recentSearchQueries.get(getBindingAdapterPosition()));
                 }
             });
 

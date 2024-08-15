@@ -60,8 +60,8 @@ import retrofit2.Retrofit;
 public class SearchActivity extends BaseActivity {
 
     public static final String EXTRA_QUERY = "EQ";
-    public static final String EXTRA_SUBREDDIT_NAME = "ESN";
-    public static final String EXTRA_SUBREDDIT_IS_USER = "ESIU";
+    public static final String EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME = "ESISOUN";
+    public static final String EXTRA_SEARCH_IN_SUBREDDIT_IS_USER = "ESISIU";
     public static final String EXTRA_SEARCH_ONLY_SUBREDDITS = "ESOS";
     public static final String EXTRA_SEARCH_ONLY_USERS = "ESOU";
     public static final String EXTRA_RETURN_SUBREDDIT_NAME = "ERSN";
@@ -99,8 +99,8 @@ public class SearchActivity extends BaseActivity {
     @Inject
     Executor executor;
     private String query;
-    private String subredditName;
-    private boolean subredditIsUser;
+    private String searchInSubredditOrUserName;
+    private boolean searchInIsUser;
     private boolean searchOnlySubreddits;
     private boolean searchOnlyUsers;
     private SearchActivityRecyclerViewAdapter adapter;
@@ -230,7 +230,7 @@ public class SearchActivity extends BaseActivity {
         });
 
         binding.searchEditTextSearchActivity.setOnEditorActionListener((v, actionId, event) -> {
-            if ((actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH) || (event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN )) {
+            if ((actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH) || (event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN)) {
                 if (!binding.searchEditTextSearchActivity.getText().toString().isEmpty()) {
                     search(binding.searchEditTextSearchActivity.getText().toString());
                     return true;
@@ -264,13 +264,13 @@ public class SearchActivity extends BaseActivity {
         });
 
         if (savedInstanceState != null) {
-            subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
-            subredditIsUser = savedInstanceState.getBoolean(SUBREDDIT_IS_USER_STATE);
+            searchInSubredditOrUserName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
+            searchInIsUser = savedInstanceState.getBoolean(SUBREDDIT_IS_USER_STATE);
 
-            if (subredditName == null) {
+            if (searchInSubredditOrUserName == null) {
                 binding.subredditNameTextViewSearchActivity.setText(R.string.all_subreddits);
             } else {
-                binding.subredditNameTextViewSearchActivity.setText(subredditName);
+                binding.subredditNameTextViewSearchActivity.setText(searchInSubredditOrUserName);
             }
         } else {
             query = getIntent().getStringExtra(EXTRA_QUERY);
@@ -288,10 +288,10 @@ public class SearchActivity extends BaseActivity {
         }
 
         Intent intent = getIntent();
-        if (intent.hasExtra(EXTRA_SUBREDDIT_NAME)) {
-            subredditName = intent.getStringExtra(EXTRA_SUBREDDIT_NAME);
-            binding.subredditNameTextViewSearchActivity.setText(subredditName);
-            subredditIsUser = intent.getBooleanExtra(EXTRA_SUBREDDIT_IS_USER, false);
+        if (intent.hasExtra(EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME)) {
+            searchInSubredditOrUserName = intent.getStringExtra(EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME);
+            binding.subredditNameTextViewSearchActivity.setText(searchInSubredditOrUserName);
+            searchInIsUser = intent.getBooleanExtra(EXTRA_SEARCH_IN_SUBREDDIT_IS_USER, false);
         }
     }
 
@@ -299,8 +299,10 @@ public class SearchActivity extends BaseActivity {
         if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             adapter = new SearchActivityRecyclerViewAdapter(this, mCustomThemeWrapper, new SearchActivityRecyclerViewAdapter.ItemOnClickListener() {
                 @Override
-                public void onClick(String query) {
-                    search(query);
+                public void onClick(RecentSearchQuery recentSearchQuery) {
+                    searchInSubredditOrUserName = recentSearchQuery.getSearchInSubredditOrUserName();
+                    searchInIsUser = recentSearchQuery.isSearchInIsUser();
+                    search(recentSearchQuery.getSearchQuery());
                 }
 
                 @Override
@@ -374,12 +376,9 @@ public class SearchActivity extends BaseActivity {
         } else {
             Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
             intent.putExtra(SearchResultActivity.EXTRA_QUERY, query);
-            if (subredditName != null) {
-                if (subredditIsUser) {
-                    intent.putExtra(SearchResultActivity.EXTRA_SUBREDDIT_NAME, "u_" + subredditName);
-                } else {
-                    intent.putExtra(SearchResultActivity.EXTRA_SUBREDDIT_NAME, subredditName);
-                }
+            if (searchInSubredditOrUserName != null) {
+                intent.putExtra(SearchResultActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, searchInSubredditOrUserName);
+                intent.putExtra(SearchResultActivity.EXTRA_SEARCH_IN_SUBREDDIT_IS_USER, searchInIsUser);
             }
             startActivity(intent);
             finish();
@@ -443,13 +442,13 @@ public class SearchActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == SUBREDDIT_SELECTION_REQUEST_CODE) {
-                subredditName = data.getStringExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
-                subredditIsUser = data.getBooleanExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_IS_USER, false);
+                searchInSubredditOrUserName = data.getStringExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
+                searchInIsUser = data.getBooleanExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_IS_USER, false);
 
-                if (subredditName == null) {
+                if (searchInSubredditOrUserName == null) {
                     binding.subredditNameTextViewSearchActivity.setText(R.string.all_subreddits);
                 } else {
-                    binding.subredditNameTextViewSearchActivity.setText(subredditName);
+                    binding.subredditNameTextViewSearchActivity.setText(searchInSubredditOrUserName);
                 }
             } else if (requestCode == SUBREDDIT_SEARCH_REQUEST_CODE) {
                 Intent returnIntent = new Intent();
@@ -496,8 +495,8 @@ public class SearchActivity extends BaseActivity {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(SUBREDDIT_NAME_STATE, subredditName);
-        outState.putBoolean(SUBREDDIT_IS_USER_STATE, subredditIsUser);
+        outState.putString(SUBREDDIT_NAME_STATE, searchInSubredditOrUserName);
+        outState.putBoolean(SUBREDDIT_IS_USER_STATE, searchInIsUser);
     }
 
     @Override

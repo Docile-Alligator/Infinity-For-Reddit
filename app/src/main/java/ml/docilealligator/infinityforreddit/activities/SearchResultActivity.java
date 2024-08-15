@@ -83,7 +83,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
     static final String EXTRA_QUERY = "EQ";
     static final String EXTRA_TRENDING_SOURCE = "ETS";
-    static final String EXTRA_SUBREDDIT_NAME = "ESN";
+    static final String EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME = "ESISOUN";
+    public static final String EXTRA_SEARCH_IN_SUBREDDIT_IS_USER = "ESISIU";
 
     private static final String INSERT_SEARCH_QUERY_SUCCESS_STATE = "ISQSS";
 
@@ -116,7 +117,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     Executor executor;
     private Call<String> subredditAutocompleteCall;
     private String mQuery;
-    private String mSubredditName;
+    private String mSearchInSubredditOrUserName;
+    private boolean mSearchInIsUser;
     private boolean mInsertSearchQuerySuccess;
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
@@ -173,7 +175,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         Intent intent = getIntent();
         String query = intent.getStringExtra(EXTRA_QUERY);
 
-        mSubredditName = intent.getStringExtra(EXTRA_SUBREDDIT_NAME);
+        mSearchInSubredditOrUserName = intent.getStringExtra(EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME);
+        mSearchInIsUser = intent.getBooleanExtra(EXTRA_SEARCH_IN_SUBREDDIT_IS_USER, false);
 
         if (query != null) {
             mQuery = query;
@@ -325,8 +328,9 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 }
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH: {
                     Intent intent = new Intent(this, SearchActivity.class);
-                    if (mSubredditName != null && !mSubredditName.equals("")) {
-                        intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, mSubredditName);
+                    if (mSearchInSubredditOrUserName != null && !mSearchInSubredditOrUserName.equals("")) {
+                        intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, mSearchInSubredditOrUserName);
+                        intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_IS_USER, mSearchInIsUser);
                     }
                     startActivity(intent);
                     break;
@@ -372,7 +376,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
         if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)&& mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SEARCH_HISTORY, true) && !mInsertSearchQuerySuccess && mQuery != null) {
             InsertRecentSearchQuery.insertRecentSearchQueryListener(executor, new Handler(getMainLooper()),
-                    mRedditDataRoomDatabase, accountName, mQuery, () -> mInsertSearchQuerySuccess = true);
+                    mRedditDataRoomDatabase, accountName, mQuery, mSearchInSubredditOrUserName, mSearchInIsUser,
+                    () -> mInsertSearchQuerySuccess = true);
         }
     }
 
@@ -412,8 +417,9 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             return true;
         } else if (itemId == R.id.action_search_search_result_activity) {
             Intent intent = new Intent(this, SearchActivity.class);
-            if (mSubredditName != null && !mSubredditName.equals("")) {
-                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, mSubredditName);
+            if (mSearchInSubredditOrUserName != null && !mSearchInSubredditOrUserName.equals("")) {
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, mSearchInSubredditOrUserName);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_IS_USER, mSearchInIsUser);
             }
             intent.putExtra(SearchActivity.EXTRA_QUERY, mQuery);
             finish();
@@ -524,8 +530,9 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_SEARCH:
                 Intent intent = new Intent(this, SearchActivity.class);
-                if (mSubredditName != null && !mSubredditName.equals("")) {
-                    intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, mSubredditName);
+                if (mSearchInSubredditOrUserName != null && !mSearchInSubredditOrUserName.equals("")) {
+                    intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, mSearchInSubredditOrUserName);
+                    intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_IS_USER, mSearchInIsUser);
                 }
                 startActivity(intent);
                 break;
@@ -755,7 +762,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     PostFragment mFragment = new PostFragment();
                     Bundle bundle = new Bundle();
                     bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SEARCH);
-                    bundle.putString(PostFragment.EXTRA_NAME, mSubredditName);
+                    bundle.putString(PostFragment.EXTRA_NAME, mSearchInIsUser ? "u_" + mSearchInSubredditOrUserName : mSearchInSubredditOrUserName);
                     bundle.putString(PostFragment.EXTRA_QUERY, mQuery);
                     bundle.putString(PostFragment.EXTRA_TRENDING_SOURCE, getIntent().getStringExtra(EXTRA_TRENDING_SOURCE));
                     mFragment.setArguments(bundle);

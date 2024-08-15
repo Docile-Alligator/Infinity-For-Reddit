@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.recentsearchquery;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -17,12 +18,20 @@ public class RecentSearchQuery {
     @NonNull
     @ColumnInfo(name = "search_query")
     private String searchQuery;
+    @Nullable
+    @ColumnInfo(name = "search_in_subreddit_or_user_name")
+    private String searchInSubredditOrUserName;
+    @ColumnInfo(name = "search_in_is_user")
+    private boolean searchInIsUser;
     @ColumnInfo(name = "time")
     private long time;
 
-    public RecentSearchQuery(@NonNull String username, @NonNull String searchQuery) {
+    public RecentSearchQuery(@NonNull String username, @NonNull String searchQuery,
+                             @Nullable String searchInSubredditOrUserName, boolean searchInIsUser) {
         this.username = username;
         this.searchQuery = searchQuery;
+        this.searchInSubredditOrUserName = searchInSubredditOrUserName;
+        this.searchInIsUser = searchInIsUser;
         this.time = System.currentTimeMillis();
     }
 
@@ -42,6 +51,23 @@ public class RecentSearchQuery {
 
     public void setSearchQuery(@NonNull String searchQuery) {
         this.searchQuery = searchQuery;
+    }
+
+    @Nullable
+    public String getSearchInSubredditOrUserName() {
+        return searchInSubredditOrUserName;
+    }
+
+    public void setSearchInSubredditOrUserName(@Nullable String searchInSubredditOrUserName) {
+        this.searchInSubredditOrUserName = searchInSubredditOrUserName;
+    }
+
+    public boolean isSearchInIsUser() {
+        return searchInIsUser;
+    }
+
+    public void setSearchInIsUser(boolean searchInIsUser) {
+        this.searchInIsUser = searchInIsUser;
     }
 
     public long getTime() {

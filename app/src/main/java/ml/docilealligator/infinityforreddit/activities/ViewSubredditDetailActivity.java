@@ -610,7 +610,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SEARCH: {
                 Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, subredditName);
                 startActivity(intent);
                 break;
             }
@@ -874,7 +874,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 }
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH: {
                     Intent intent = new Intent(this, SearchActivity.class);
-                    intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                    intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, subredditName);
                     startActivity(intent);
                     break;
                 }
@@ -1087,7 +1087,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             return true;
         } else if (itemId == R.id.action_search_view_subreddit_detail_activity) {
             Intent intent = new Intent(this, SearchActivity.class);
-            intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+            intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, subredditName);
             startActivity(intent);
             return true;
         } else if (itemId == R.id.action_refresh_view_subreddit_detail_activity) {
@@ -1338,7 +1338,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_SEARCH:
                 Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, subredditName);
                 startActivity(intent);
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_GO_TO_SUBREDDIT: {
