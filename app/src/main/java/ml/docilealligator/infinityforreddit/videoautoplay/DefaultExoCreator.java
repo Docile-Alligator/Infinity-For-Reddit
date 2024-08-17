@@ -25,23 +25,23 @@ import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.RenderersFactory;
-import com.google.android.exoplayer2.source.LoadEventInfo;
-import com.google.android.exoplayer2.source.MediaLoadData;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.MediaSourceEventListener;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSource;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
-import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
-import com.google.android.exoplayer2.util.Util;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.common.util.Util;
+import androidx.media3.datasource.DataSource;
+import androidx.media3.datasource.DefaultDataSource;
+import androidx.media3.datasource.DefaultHttpDataSource;
+import androidx.media3.datasource.cache.CacheDataSource;
+import androidx.media3.exoplayer.DefaultLoadControl;
+import androidx.media3.exoplayer.DefaultRenderersFactory;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.RenderersFactory;
+import androidx.media3.exoplayer.source.LoadEventInfo;
+import androidx.media3.exoplayer.source.MediaLoadData;
+import androidx.media3.exoplayer.source.MediaSource;
+import androidx.media3.exoplayer.source.MediaSourceEventListener;
+import androidx.media3.exoplayer.trackselection.DefaultTrackSelector;
+import androidx.media3.exoplayer.trackselection.TrackSelector;
+import androidx.media3.exoplayer.upstream.DefaultBandwidthMeter;
 
 import java.io.IOException;
 
@@ -54,13 +54,13 @@ import ml.docilealligator.infinityforreddit.utils.APIUtils;
  * @since 3.4.0
  */
 
+@UnstableApi
 @SuppressWarnings({"unused", "WeakerAccess"}) //
 public class DefaultExoCreator implements ExoCreator, MediaSourceEventListener {
 
     final ToroExo toro;  // per application
     final Config config;
     private final TrackSelector trackSelector;  // 'maybe' stateless
-    private final LoadControl loadControl;  // stateless
     private final MediaSourceBuilder mediaSourceBuilder;  // stateless
     private final RenderersFactory renderersFactory;  // stateless
     private final DataSource.Factory mediaDataSourceFactory;  // stateless
@@ -69,8 +69,7 @@ public class DefaultExoCreator implements ExoCreator, MediaSourceEventListener {
     public DefaultExoCreator(@NonNull ToroExo toro, @NonNull Config config) {
         this.toro = checkNotNull(toro);
         this.config = checkNotNull(config);
-        trackSelector = new DefaultTrackSelector();
-        loadControl = config.loadControl;
+        trackSelector = new DefaultTrackSelector(toro.context);
         mediaSourceBuilder = config.mediaSourceBuilder;
 
         DefaultRenderersFactory tempFactory = new DefaultRenderersFactory(this.toro.context);
@@ -102,7 +101,6 @@ public class DefaultExoCreator implements ExoCreator, MediaSourceEventListener {
 
         if (!toro.equals(that.toro)) return false;
         if (!trackSelector.equals(that.trackSelector)) return false;
-        if (!loadControl.equals(that.loadControl)) return false;
         if (!mediaSourceBuilder.equals(that.mediaSourceBuilder)) return false;
         if (!renderersFactory.equals(that.renderersFactory)) return false;
         if (!mediaDataSourceFactory.equals(that.mediaDataSourceFactory)) return false;
@@ -113,7 +111,6 @@ public class DefaultExoCreator implements ExoCreator, MediaSourceEventListener {
     public int hashCode() {
         int result = toro.hashCode();
         result = 31 * result + trackSelector.hashCode();
-        result = 31 * result + loadControl.hashCode();
         result = 31 * result + mediaSourceBuilder.hashCode();
         result = 31 * result + renderersFactory.hashCode();
         result = 31 * result + mediaDataSourceFactory.hashCode();
@@ -134,7 +131,7 @@ public class DefaultExoCreator implements ExoCreator, MediaSourceEventListener {
     @NonNull
     @Override
     public ExoPlayer createPlayer() {
-        return new ToroExoPlayer(toro.context, renderersFactory, trackSelector, loadControl,
+        return new ToroExoPlayer(toro.context, renderersFactory, trackSelector, new DefaultLoadControl(),
                 new DefaultBandwidthMeter.Builder(toro.context).build(), Util.getCurrentOrMainLooper()).getPlayer();
     }
 

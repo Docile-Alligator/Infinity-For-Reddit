@@ -4,38 +4,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.checkbox.MaterialCheckBox;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ActivitySuicidePreventionBinding;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class SuicidePreventionActivity extends BaseActivity {
 
     static final String EXTRA_QUERY = "EQ";
     static final String EXTRA_RETURN_QUERY = "ERQ";
-    @BindView(R.id.linear_layout_suicide_prevention_activity)
-    LinearLayout linearLayout;
-    @BindView(R.id.quote_text_view_suicide_prevention_activity)
-    TextView quoteTextView;
-    @BindView(R.id.linear_layout_check_box_wrapper_suicide_prevention_activity)
-    LinearLayout checkBoxWrapperlinearLayout;
-    @BindView(R.id.do_not_show_this_again_check_box)
-    MaterialCheckBox doNotShowThisAgainCheckBox;
-    @BindView(R.id.do_not_show_this_again_text_view)
-    TextView doNotShowThisAgainTextView;
-    @BindView(R.id.continue_button_suicide_prevention_activity)
-    MaterialButton continueButton;
+
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
@@ -44,23 +26,25 @@ public class SuicidePreventionActivity extends BaseActivity {
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    private ActivitySuicidePreventionBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplicationContext()).getAppComponent().inject(this);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_suicide_prevention);
 
-        ButterKnife.bind(this);
+        binding = ActivitySuicidePreventionBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         applyCustomTheme();
 
-        checkBoxWrapperlinearLayout.setOnClickListener(view -> {
-            doNotShowThisAgainCheckBox.performClick();
+        binding.linearLayoutCheckBoxWrapperSuicidePreventionActivity.setOnClickListener(view -> {
+            binding.doNotShowThisAgainCheckBox.performClick();
         });
 
-        continueButton.setOnClickListener(view -> {
-            if (doNotShowThisAgainCheckBox.isChecked()) {
+        binding.continueButtonSuicidePreventionActivity.setOnClickListener(view -> {
+            if (binding.doNotShowThisAgainCheckBox.isChecked()) {
                 mSharedPreferences.edit().putBoolean(SharedPreferencesUtils.SHOW_SUICIDE_PREVENTION_ACTIVITY, false).apply();
             }
             Intent returnIntent = new Intent();
@@ -87,15 +71,15 @@ public class SuicidePreventionActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        linearLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        quoteTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
-        doNotShowThisAgainTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
-        continueButton.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme()));
-        continueButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
+        binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        binding.quoteTextViewSuicidePreventionActivity.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        binding.doNotShowThisAgainTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        binding.continueButtonSuicidePreventionActivity.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme()));
+        binding.continueButtonSuicidePreventionActivity.setTextColor(mCustomThemeWrapper.getButtonTextColor());
         if (typeface != null) {
-            quoteTextView.setTypeface(typeface);
-            doNotShowThisAgainTextView.setTypeface(typeface);
-            continueButton.setTypeface(typeface);
+            binding.quoteTextViewSuicidePreventionActivity.setTypeface(typeface);
+            binding.doNotShowThisAgainTextView.setTypeface(typeface);
+            binding.continueButtonSuicidePreventionActivity.setTypeface(typeface);
         }
     }
 }

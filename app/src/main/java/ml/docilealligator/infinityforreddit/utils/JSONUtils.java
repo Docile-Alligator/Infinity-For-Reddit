@@ -195,6 +195,7 @@ public class JSONUtils {
     public static final String SUGGESTED_SORT_KEY = "suggested_sort";
     public static final String P_KEY = "p";
     public static final String VARIANTS_KEY = "variants";
+    public static final String PAGE_KEY = "page";
 
     @Nullable
     public static Map<String, MediaMetadata> parseMediaMetadata(JSONObject data) {

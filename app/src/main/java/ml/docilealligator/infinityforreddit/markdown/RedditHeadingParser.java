@@ -4,7 +4,12 @@ import org.commonmark.internal.util.Parsing;
 import org.commonmark.node.Block;
 import org.commonmark.node.Heading;
 import org.commonmark.parser.InlineParser;
-import org.commonmark.parser.block.*;
+import org.commonmark.parser.block.AbstractBlockParser;
+import org.commonmark.parser.block.AbstractBlockParserFactory;
+import org.commonmark.parser.block.BlockContinue;
+import org.commonmark.parser.block.BlockStart;
+import org.commonmark.parser.block.MatchedBlockParser;
+import org.commonmark.parser.block.ParserState;
 
 /**
  * This is a copy of {@link org.commonmark.internal.HeadingParser} with a parsing change

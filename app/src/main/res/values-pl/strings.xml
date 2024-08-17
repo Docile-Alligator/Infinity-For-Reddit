@@ -963,8 +963,6 @@ użytkownika / multireddita"</string>
     <string name="settings_hide_the_number_of_comments">"Ukryj liczbę komentarzy"</string>
     <string name="post_layout_gallery">"Layout galerii"</string>
     <string name="post_layout_card_2">"Layout karty 2"</string>
-    <string name="have_trouble_login_title">"Problem z logowaniem"</string>
-    <string name="have_trouble_login_message">"Chcesz spróbować innej opcji logowania?"</string>
     <string name="vote">"Zagłosuj"</string>
     <string name="action_share_link">"Zapisz link"</string>
     <string name="action_copy_link">"Skopiuj link"</string>
@@ -1044,9 +1042,7 @@ użytkownika / multireddita"</string>
 Nadal chcesz ją włączyć?"</string>
     <string name="reply">"Odpowiedz"</string>
     <string name="post_gallery_activity_label">"Post z galerią zdjęć"</string>
-    <string name="trending_activity_label">"Popularne"</string>
     <string name="action_share_post_link">"Udostępnij link do postu"</string>
-    <string name="trending">"Popularne"</string>
     <string name="receive_post_reply_notifications">"Otrzymuj powiadomienia o odpowiedziach na post"</string>
     <string name="bottom_sheet_post_gallery">"Galeria"</string>
     <string name="label_reddit">"Reddit"</string>

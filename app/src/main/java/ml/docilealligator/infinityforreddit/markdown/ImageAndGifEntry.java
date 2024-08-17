@@ -53,8 +53,10 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
     private final int primaryTextColor;
     private final int postContentColor;
     private final int linkColor;
+    private final boolean canShowImage;
+    private final boolean canShowGif;
 
-    public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide,
+    public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide, int embeddedMediaType,
                             OnItemClickListener onItemClickListener) {
         this.baseActivity = baseActivity;
         this.glide = glide;
@@ -66,6 +68,8 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
         primaryTextColor = baseActivity.getCustomThemeWrapper().getPrimaryTextColor();
         postContentColor = baseActivity.getCustomThemeWrapper().getPostContentColor();
         linkColor = baseActivity.getCustomThemeWrapper().getLinkColor();
+        canShowImage = SharedPreferencesUtils.canShowImage(embeddedMediaType);
+        canShowGif = SharedPreferencesUtils.canShowGif(embeddedMediaType);
 
         String dataSavingModeString = sharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
         if (dataSavingModeString.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ALWAYS)) {
@@ -76,13 +80,13 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
         disableImagePreview = sharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_IMAGE_PREVIEW, false);
     }
 
-    public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide, boolean blurImage,
-                            OnItemClickListener onItemClickListener) {
-        this(baseActivity, glide, onItemClickListener);
+    public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide, int embeddedMediaType,
+                            boolean blurImage, OnItemClickListener onItemClickListener) {
+        this(baseActivity, glide, embeddedMediaType, onItemClickListener);
         this.blurImage = blurImage;
     }
 
-    public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide, boolean dataSavingMode,
+    public ImageAndGifEntry(BaseActivity baseActivity, RequestManager glide, int embeddedMediaType, boolean dataSavingMode,
                             boolean disableImagePreview, boolean blurImage,
                             OnItemClickListener onItemClickListener) {
         this.baseActivity = baseActivity;
@@ -98,6 +102,8 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
         primaryTextColor = baseActivity.getCustomThemeWrapper().getPrimaryTextColor();
         postContentColor = baseActivity.getCustomThemeWrapper().getPostContentColor();
         linkColor = baseActivity.getCustomThemeWrapper().getLinkColor();
+        canShowImage = SharedPreferencesUtils.canShowImage(embeddedMediaType);
+        canShowGif = SharedPreferencesUtils.canShowGif(embeddedMediaType);
     }
 
     @NonNull
@@ -125,7 +131,7 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
 
         RequestBuilder<Drawable> imageRequestBuilder;
         if (dataSavingMode) {
-            if (disableImagePreview) {
+            if (disableImagePreview || (node.mediaMetadata.isGIF && !canShowGif) || (!node.mediaMetadata.isGIF && !canShowImage)) {
                 holder.binding.imageWrapperRelativeLayoutMarkdownImageAndGifBlock.setVisibility(View.GONE);
                 holder.binding.captionTextViewMarkdownImageAndGifBlock.setVisibility(View.VISIBLE);
                 holder.binding.captionTextViewMarkdownImageAndGifBlock.setGravity(Gravity.NO_GRAVITY);

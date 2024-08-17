@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.Material3.DayNight">
@@ -524,12 +524,12 @@
     </style>
 
     <style name="ToroMediaButton.Play">
-        <item name="android:src">@drawable/exo_controls_play</item>
+        <item name="android:src">@drawable/ic_play_arrow_24dp</item>
         <item name="android:contentDescription">@string/exo_controls_play_description</item>
     </style>
 
     <style name="ToroMediaButton.Pause">
-        <item name="android:src">@drawable/exo_controls_pause</item>
+        <item name="android:src">@drawable/ic_pause_24dp</item>
         <item name="android:contentDescription">@string/exo_controls_pause_description</item>
     </style>
 

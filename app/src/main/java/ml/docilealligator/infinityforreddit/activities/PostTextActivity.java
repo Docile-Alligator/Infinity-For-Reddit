@@ -1,6 +1,9 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -9,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +21,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -514,7 +517,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
             subredditName = binding.subredditNameTextViewPostTextActivity.getText().toString();
         }
 
-        Intent intent = new Intent(this, SubmitPostService.class);
+        /*Intent intent = new Intent(this, SubmitPostService.class);
         intent.putExtra(SubmitPostService.EXTRA_ACCOUNT, selectedAccount);
         intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
         intent.putExtra(SubmitPostService.EXTRA_TITLE, binding.postTitleEditTextPostTextActivity.getText().toString());
@@ -530,7 +533,39 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
         intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
         intent.putExtra(SubmitPostService.EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS, binding.receivePostReplyNotificationsSwitchMaterialPostTextActivity.isChecked());
         intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TEXT_OR_LINK);
-        ContextCompat.startForegroundService(this, intent);
+        ContextCompat.startForegroundService(this, intent);*/
+
+        int contentEstimatedBytes = 0;
+        PersistableBundle extras = new PersistableBundle();
+        extras.putString(SubmitPostService.EXTRA_ACCOUNT, selectedAccount.getJSONModel());
+        extras.putString(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
+
+        String title = binding.postTitleEditTextPostTextActivity.getText().toString();
+        contentEstimatedBytes += title.length() * 2;
+        extras.putString(SubmitPostService.EXTRA_TITLE, title);
+
+        String content = binding.postTextContentEditTextPostTextActivity.getText().toString();
+        contentEstimatedBytes += content.length() * 2;
+        extras.putString(SubmitPostService.EXTRA_CONTENT, content);
+
+        if (!uploadedImages.isEmpty()) {
+            extras.putInt(SubmitPostService.EXTRA_IS_RICHTEXT_JSON, 1);
+            String uploadedImagesJSON = UploadedImage.getArrayListJSONModel(uploadedImages);
+            contentEstimatedBytes += uploadedImagesJSON.length() * 2;
+            extras.putString(SubmitPostService.EXTRA_UPLOADED_IMAGES, uploadedImagesJSON);
+        }
+
+        extras.putString(SubmitPostService.EXTRA_KIND, APIUtils.KIND_SELF);
+        if (flair != null) {
+            extras.putString(SubmitPostService.EXTRA_FLAIR, flair.getJSONModel());
+        }
+        extras.putInt(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler ? 1 : 0);
+        extras.putInt(SubmitPostService.EXTRA_IS_NSFW, isNSFW ? 1 : 0);
+        extras.putInt(SubmitPostService.EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS, binding.receivePostReplyNotificationsSwitchMaterialPostTextActivity.isChecked() ? 1 : 0);
+        extras.putInt(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TEXT_OR_LINK);
+
+        JobInfo jobInfo = SubmitPostService.constructJobInfo(this, contentEstimatedBytes, extras);
+        ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
     }
 
     @Override

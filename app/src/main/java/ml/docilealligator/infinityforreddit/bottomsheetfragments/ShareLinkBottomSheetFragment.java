@@ -8,17 +8,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.databinding.FragmentShareLinkBottomSheetBinding;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
@@ -30,19 +28,6 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
     public static final String EXTRA_MEDIA_LINK = "EML";
     public static final String EXTRA_MEDIA_TYPE = "EMT";
 
-    @BindView(R.id.post_link_text_view_share_link_bottom_sheet_fragment)
-    TextView postLinkTextView;
-    @BindView(R.id.share_post_link_text_view_share_link_bottom_sheet_fragment)
-    TextView sharePostLinkTextView;
-    @BindView(R.id.copy_post_link_text_view_share_link_bottom_sheet_fragment)
-    TextView copyPostLinkTextView;
-    @BindView(R.id.media_link_text_view_share_link_bottom_sheet_fragment)
-    TextView mediaLinkTextView;
-    @BindView(R.id.share_media_link_text_view_share_link_bottom_sheet_fragment)
-    TextView shareMediaLinkTextView;
-    @BindView(R.id.copy_media_link_text_view_share_link_bottom_sheet_fragment)
-    TextView copyMediaLinkTextView;
-
     private BaseActivity activity;
 
     public ShareLinkBottomSheetFragment() {
@@ -51,75 +36,73 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_share_link_bottom_sheet, container, false);
-
-        ButterKnife.bind(this, rootView);
+        FragmentShareLinkBottomSheetBinding binding = FragmentShareLinkBottomSheetBinding.inflate(inflater, container, false);
 
         String postLink = getArguments().getString(EXTRA_POST_LINK);
         String mediaLink = getArguments().containsKey(EXTRA_MEDIA_LINK) ? getArguments().getString(EXTRA_MEDIA_LINK) : null;
 
-        postLinkTextView.setText(postLink);
+        binding.postLinkTextViewShareLinkBottomSheetFragment.setText(postLink);
 
         if (mediaLink != null) {
-            mediaLinkTextView.setVisibility(View.VISIBLE);
-            shareMediaLinkTextView.setVisibility(View.VISIBLE);
-            copyMediaLinkTextView.setVisibility(View.VISIBLE);
+            binding.mediaLinkTextViewShareLinkBottomSheetFragment.setVisibility(View.VISIBLE);
+            binding.shareMediaLinkTextViewShareLinkBottomSheetFragment.setVisibility(View.VISIBLE);
+            binding.copyMediaLinkTextViewShareLinkBottomSheetFragment.setVisibility(View.VISIBLE);
 
-            mediaLinkTextView.setText(mediaLink);
+            binding.mediaLinkTextViewShareLinkBottomSheetFragment.setText(mediaLink);
 
             int mediaType = getArguments().getInt(EXTRA_MEDIA_TYPE);
             switch (mediaType) {
                 case Post.IMAGE_TYPE:
-                    shareMediaLinkTextView.setText(R.string.share_image_link);
-                    copyMediaLinkTextView.setText(R.string.copy_image_link);
-                    shareMediaLinkTextView.setCompoundDrawablesWithIntrinsicBounds(
+                    binding.shareMediaLinkTextViewShareLinkBottomSheetFragment.setText(R.string.share_image_link);
+                    binding.copyMediaLinkTextViewShareLinkBottomSheetFragment.setText(R.string.copy_image_link);
+                    binding.shareMediaLinkTextViewShareLinkBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(
                             activity.getDrawable(R.drawable.ic_image_24dp), null, null, null);
                     break;
                 case Post.GIF_TYPE:
-                    shareMediaLinkTextView.setText(R.string.share_gif_link);
-                    copyMediaLinkTextView.setText(R.string.copy_gif_link);
-                    shareMediaLinkTextView.setCompoundDrawablesWithIntrinsicBounds(
+                    binding.shareMediaLinkTextViewShareLinkBottomSheetFragment.setText(R.string.share_gif_link);
+                    binding.copyMediaLinkTextViewShareLinkBottomSheetFragment.setText(R.string.copy_gif_link);
+                    binding.shareMediaLinkTextViewShareLinkBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(
                             activity.getDrawable(R.drawable.ic_image_24dp), null, null, null);
                     break;
                 case Post.VIDEO_TYPE:
-                    shareMediaLinkTextView.setText(R.string.share_video_link);
-                    copyMediaLinkTextView.setText(R.string.copy_video_link);
-                    shareMediaLinkTextView.setCompoundDrawablesWithIntrinsicBounds(
+                    binding.shareMediaLinkTextViewShareLinkBottomSheetFragment.setText(R.string.share_video_link);
+                    binding.copyMediaLinkTextViewShareLinkBottomSheetFragment.setText(R.string.copy_video_link);
+                    binding.shareMediaLinkTextViewShareLinkBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(
                             activity.getDrawable(R.drawable.ic_outline_video_24dp), null, null, null);
                     break;
                 case Post.LINK_TYPE:
                 case Post.NO_PREVIEW_LINK_TYPE:
-                    shareMediaLinkTextView.setText(R.string.share_link);
-                    copyMediaLinkTextView.setText(R.string.copy_link);
+                    binding.shareMediaLinkTextViewShareLinkBottomSheetFragment.setText(R.string.share_link);
+                    binding.copyMediaLinkTextViewShareLinkBottomSheetFragment.setText(R.string.copy_link);
                     break;
             }
 
-            shareMediaLinkTextView.setOnClickListener(view -> {
+            binding.shareMediaLinkTextViewShareLinkBottomSheetFragment.setOnClickListener(view -> {
                 shareLink(mediaLink);
                 dismiss();
             });
-            copyMediaLinkTextView.setOnClickListener(view -> {
+            binding.copyMediaLinkTextViewShareLinkBottomSheetFragment.setOnClickListener(view -> {
                 copyLink(mediaLink);
                 dismiss();
             });
         }
 
-        sharePostLinkTextView.setOnClickListener(view -> {
+        binding.sharePostLinkTextViewShareLinkBottomSheetFragment.setOnClickListener(view -> {
             shareLink(postLink);
             dismiss();
         });
-        copyPostLinkTextView.setOnClickListener(view -> {
+        binding.copyPostLinkTextViewShareLinkBottomSheetFragment.setOnClickListener(view -> {
             copyLink(postLink);
             dismiss();
         });
 
         if (activity.typeface != null) {
-            Utils.setFontToAllTextViews(rootView, activity.typeface);
+            Utils.setFontToAllTextViews(binding.getRoot(), activity.typeface);
         }
-        return rootView;
+        return binding.getRoot();
     }
 
     private void shareLink(String link) {

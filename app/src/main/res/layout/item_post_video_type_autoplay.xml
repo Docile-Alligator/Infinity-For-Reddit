@@ -184,20 +184,22 @@
 
         </com.nex3z.flowlayout.FlowLayout>
 
-        <com.google.android.exoplayer2.ui.AspectRatioFrameLayout
+        <androidx.media3.ui.AspectRatioFrameLayout
             android:id="@+id/aspect_ratio_frame_layout_item_post_video_type_autoplay"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="#000000"
             app:resize_mode="fixed_width">
 
-            <com.google.android.exoplayer2.ui.PlayerView
+            <androidx.media3.ui.PlayerView
                 android:id="@+id/player_view_item_post_video_type_autoplay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
                 app:show_timeout="1500"
                 app:auto_show="false"
-                app:controller_layout_id="@layout/exo_autoplay_playback_control_view" />
+                app:controller_layout_id="@layout/exo_autoplay_playback_control_view"
+                app:animation_enabled="false" />
 
             <pl.droidsonroids.gif.GifImageView
                 android:id="@+id/preview_image_view_item_post_video_type_autoplay"
@@ -216,7 +218,7 @@
                 android:src="@drawable/ic_error_white_36dp"
                 android:visibility="gone" />
 
-        </com.google.android.exoplayer2.ui.AspectRatioFrameLayout>
+        </androidx.media3.ui.AspectRatioFrameLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottom_constraint_layout_item_post_video_type_autoplay"

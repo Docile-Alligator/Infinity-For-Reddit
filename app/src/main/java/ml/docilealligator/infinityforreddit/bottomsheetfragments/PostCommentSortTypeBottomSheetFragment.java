@@ -8,19 +8,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.databinding.FragmentPostCommentSortTypeBottomSheetBinding;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 /**
@@ -30,22 +28,6 @@ public class PostCommentSortTypeBottomSheetFragment extends LandscapeExpandedRou
 
     public static final String EXTRA_CURRENT_SORT_TYPE = "ECST";
 
-    @BindView(R.id.best_type_text_view_post_comment_sort_type_bottom_sheet_fragment)
-    TextView confidenceTypeTextView;
-    @BindView(R.id.top_type_text_view_post_comment_sort_type_bottom_sheet_fragment)
-    TextView topTypeTextView;
-    @BindView(R.id.new_type_text_view_post_comment_sort_type_bottom_sheet_fragment)
-    TextView newTypeTextView;
-    @BindView(R.id.controversial_type_text_view_post_comment_sort_type_bottom_sheet_fragment)
-    TextView controversialTypeTextView;
-    @BindView(R.id.old_type_text_view_post_comment_sort_type_bottom_sheet_fragment)
-    TextView oldTypeTextView;
-    @BindView(R.id.random_type_text_view_post_comment_sort_type_bottom_sheet_fragment)
-    TextView randomTypeTextView;
-    @BindView(R.id.qa_type_text_view_post_comment_sort_type_bottom_sheet_fragment)
-    TextView qaTypeTextView;
-    @BindView(R.id.live_type_text_view_post_comment_sort_type_bottom_sheet_fragment)
-    TextView liveTypeTextView;
     private BaseActivity activity;
 
     public PostCommentSortTypeBottomSheetFragment() {
@@ -62,81 +44,80 @@ public class PostCommentSortTypeBottomSheetFragment extends LandscapeExpandedRou
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_post_comment_sort_type_bottom_sheet, container, false);
-        ButterKnife.bind(this, rootView);
+        FragmentPostCommentSortTypeBottomSheetBinding binding = FragmentPostCommentSortTypeBottomSheetBinding.inflate(inflater, container, false);
 
         SortType.Type currentSortType = (SortType.Type) getArguments().getSerializable(EXTRA_CURRENT_SORT_TYPE);
         if (currentSortType.equals(SortType.Type.BEST) || currentSortType.equals(SortType.Type.CONFIDENCE)) {
-            confidenceTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(confidenceTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+            binding.bestTypeTextViewPostCommentSortTypeBottomSheetFragment.setCompoundDrawablesRelativeWithIntrinsicBounds(binding.bestTypeTextViewPostCommentSortTypeBottomSheetFragment.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
         } else if (currentSortType.equals(SortType.Type.TOP)) {
-            topTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(topTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+            binding.topTypeTextViewPostCommentSortTypeBottomSheetFragment.setCompoundDrawablesRelativeWithIntrinsicBounds(binding.topTypeTextViewPostCommentSortTypeBottomSheetFragment.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
         } else if (currentSortType.equals(SortType.Type.NEW)) {
-            newTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(newTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+            binding.newTypeTextViewPostCommentSortTypeBottomSheetFragment.setCompoundDrawablesRelativeWithIntrinsicBounds(binding.newTypeTextViewPostCommentSortTypeBottomSheetFragment.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
         } else if (currentSortType.equals(SortType.Type.CONTROVERSIAL)) {
-            controversialTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(controversialTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+            binding.controversialTypeTextViewPostCommentSortTypeBottomSheetFragment.setCompoundDrawablesRelativeWithIntrinsicBounds(binding.controversialTypeTextViewPostCommentSortTypeBottomSheetFragment.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
         } else if (currentSortType.equals(SortType.Type.OLD)) {
-            oldTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(oldTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+            binding.oldTypeTextViewPostCommentSortTypeBottomSheetFragment.setCompoundDrawablesRelativeWithIntrinsicBounds(binding.oldTypeTextViewPostCommentSortTypeBottomSheetFragment.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
         } else if (currentSortType.equals(SortType.Type.RANDOM)) {
-            randomTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(randomTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+            binding.randomTypeTextViewPostCommentSortTypeBottomSheetFragment.setCompoundDrawablesRelativeWithIntrinsicBounds(binding.randomTypeTextViewPostCommentSortTypeBottomSheetFragment.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
         } else if (currentSortType.equals(SortType.Type.QA)) {
-            qaTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(qaTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+            binding.qaTypeTextViewPostCommentSortTypeBottomSheetFragment.setCompoundDrawablesRelativeWithIntrinsicBounds(binding.qaTypeTextViewPostCommentSortTypeBottomSheetFragment.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
         } else if (currentSortType.equals(SortType.Type.LIVE)) {
-            liveTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(liveTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+            binding.liveTypeTextViewPostCommentSortTypeBottomSheetFragment.setCompoundDrawablesRelativeWithIntrinsicBounds(binding.liveTypeTextViewPostCommentSortTypeBottomSheetFragment.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
-            rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
+            binding.getRoot().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
 
-        confidenceTypeTextView.setOnClickListener(view -> {
+        binding.bestTypeTextViewPostCommentSortTypeBottomSheetFragment.setOnClickListener(view -> {
             ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.CONFIDENCE));
             dismiss();
         });
 
-        topTypeTextView.setOnClickListener(view -> {
+        binding.topTypeTextViewPostCommentSortTypeBottomSheetFragment.setOnClickListener(view -> {
             ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.TOP));
             dismiss();
         });
 
-        newTypeTextView.setOnClickListener(view -> {
+        binding.newTypeTextViewPostCommentSortTypeBottomSheetFragment.setOnClickListener(view -> {
             ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.NEW));
             dismiss();
         });
 
-        controversialTypeTextView.setOnClickListener(view -> {
+        binding.controversialTypeTextViewPostCommentSortTypeBottomSheetFragment.setOnClickListener(view -> {
             ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.CONTROVERSIAL));
             dismiss();
         });
 
-        oldTypeTextView.setOnClickListener(view -> {
+        binding.oldTypeTextViewPostCommentSortTypeBottomSheetFragment.setOnClickListener(view -> {
             ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.OLD));
             dismiss();
         });
 
-        randomTypeTextView.setOnClickListener(view -> {
+        binding.randomTypeTextViewPostCommentSortTypeBottomSheetFragment.setOnClickListener(view -> {
             ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.RANDOM));
             dismiss();
         });
 
-        qaTypeTextView.setOnClickListener(view -> {
+        binding.qaTypeTextViewPostCommentSortTypeBottomSheetFragment.setOnClickListener(view -> {
             ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.QA));
             dismiss();
         });
 
-        liveTypeTextView.setOnClickListener(view -> {
+        binding.liveTypeTextViewPostCommentSortTypeBottomSheetFragment.setOnClickListener(view -> {
             ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.LIVE));
             dismiss();
         });
 
         if (activity.typeface != null) {
-            Utils.setFontToAllTextViews(rootView, activity.typeface);
+            Utils.setFontToAllTextViews(binding.getRoot(), activity.typeface);
         }
 
-        return rootView;
+        return binding.getRoot();
     }
 
     @Override

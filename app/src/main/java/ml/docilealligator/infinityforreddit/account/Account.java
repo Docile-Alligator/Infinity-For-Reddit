@@ -9,6 +9,9 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+
 @Entity(tableName = "accounts")
 public class Account implements Parcelable {
     public static final String ANONYMOUS_ACCOUNT = "-";
@@ -124,5 +127,13 @@ public class Account implements Parcelable {
         dest.writeString(refreshToken);
         dest.writeString(code);
         dest.writeByte((byte) (isCurrentUser ? 1 : 0));
+    }
+
+    public String getJSONModel() {
+        return new Gson().toJson(this);
+    }
+
+    public static Account fromJson(String json) throws JsonParseException {
+        return new Gson().fromJson(json, Account.class);
     }
 }

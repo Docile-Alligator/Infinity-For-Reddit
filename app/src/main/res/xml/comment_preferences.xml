@@ -63,4 +63,12 @@
         app:title="@string/settings_show_fewer_toolbar_options_threshold_title"
         app:singleLineTitle="false" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+        app:defaultValue="15"
+        app:entries="@array/settings_embedded_media_type"
+        app:entryValues="@array/settings_embedded_media_type_values"
+        app:key="embedded_media_type"
+        app:title="@string/settings_embedded_media_type_title"
+        app:useSimpleSummaryProvider="true" />
+
 </PreferenceScreen>

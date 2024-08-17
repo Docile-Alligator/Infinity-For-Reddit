@@ -1,33 +1,29 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.FrameLayout.LayoutParams;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.greenrobot.eventbus.EventBus;
@@ -36,8 +32,6 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
@@ -54,7 +48,6 @@ import ml.docilealligator.infinityforreddit.user.UserViewModel;
 import ml.docilealligator.infinityforreddit.utils.EditProfileUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
-import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 public class EditProfileActivity extends BaseActivity {
@@ -84,6 +77,7 @@ public class EditProfileActivity extends BaseActivity {
         setImmersiveModeNotApplicable();
 
         super.onCreate(savedInstanceState);
+
         binding = ActivityEditProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -110,7 +104,7 @@ public class EditProfileActivity extends BaseActivity {
 
         final RequestManager glide = Glide.with(this);
         final UserViewModel.Factory userViewModelFactory =
-                new UserViewModel.Factory(getApplication(), mRedditDataRoomDatabase, accountName);
+                new UserViewModel.Factory(mRedditDataRoomDatabase, accountName);
         final UserViewModel userViewModel =
                 new ViewModelProvider(this, userViewModelFactory).get(UserViewModel.class);
 
@@ -217,7 +211,7 @@ public class EditProfileActivity extends BaseActivity {
         if (resultCode != RESULT_OK || data == null || accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             return;
         }
-        Intent intent = new Intent(this, EditProfileService.class);
+        /*Intent intent = new Intent(this, EditProfileService.class);
         intent.setData(data.getData());
         intent.putExtra(EditProfileService.EXTRA_ACCOUNT_NAME, accountName);
         intent.putExtra(EditProfileService.EXTRA_ACCESS_TOKEN, accessToken);
@@ -231,6 +225,32 @@ public class EditProfileActivity extends BaseActivity {
                 intent.putExtra(EditProfileService.EXTRA_POST_TYPE, EditProfileService.EXTRA_POST_TYPE_CHANGE_AVATAR);
                 ContextCompat.startForegroundService(this, intent);
                 break;
+            default:
+                break;
+        }*/
+
+        int contentEstimatedBytes = 0;
+        PersistableBundle extras = new PersistableBundle();
+        extras.putString(EditProfileService.EXTRA_MEDIA_URI, data.getData().toString());
+        extras.putString(EditProfileService.EXTRA_ACCOUNT_NAME, accountName);
+        extras.putString(EditProfileService.EXTRA_ACCESS_TOKEN, accessToken);
+        switch (requestCode) {
+            case PICK_IMAGE_BANNER_REQUEST_CODE: {
+                extras.putInt(EditProfileService.EXTRA_POST_TYPE, EditProfileService.EXTRA_POST_TYPE_CHANGE_BANNER);
+
+                //TODO: contentEstimatedBytes
+                JobInfo jobInfo = EditProfileService.constructJobInfo(this, 500000, extras);
+                ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
+                break;
+            }
+            case PICK_IMAGE_AVATAR_REQUEST_CODE: {
+                extras.putInt(EditProfileService.EXTRA_POST_TYPE, EditProfileService.EXTRA_POST_TYPE_CHANGE_AVATAR);
+
+                //TODO: contentEstimatedBytes
+                JobInfo jobInfo = EditProfileService.constructJobInfo(this, 500000, extras);
+                ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
+                break;
+            }
             default:
                 break;
         }
@@ -260,14 +280,24 @@ public class EditProfileActivity extends BaseActivity {
             }
             if (aboutYou == null || displayName == null) return false; //
 
-            Intent intent = new Intent(this, EditProfileService.class);
+            /*Intent intent = new Intent(this, EditProfileService.class);
             intent.putExtra(EditProfileService.EXTRA_ACCOUNT_NAME, accountName);
             intent.putExtra(EditProfileService.EXTRA_ACCESS_TOKEN, accessToken);
             intent.putExtra(EditProfileService.EXTRA_DISPLAY_NAME, displayName); //
             intent.putExtra(EditProfileService.EXTRA_ABOUT_YOU, aboutYou); //
             intent.putExtra(EditProfileService.EXTRA_POST_TYPE, EditProfileService.EXTRA_POST_TYPE_SAVE_EDIT_PROFILE);
 
-            ContextCompat.startForegroundService(this, intent);
+            ContextCompat.startForegroundService(this, intent);*/
+
+            PersistableBundle extras = new PersistableBundle();
+            extras.putString(EditProfileService.EXTRA_ACCOUNT_NAME, accountName);
+            extras.putString(EditProfileService.EXTRA_ACCESS_TOKEN, accessToken);
+            extras.putString(EditProfileService.EXTRA_DISPLAY_NAME, displayName);
+            extras.putString(EditProfileService.EXTRA_ABOUT_YOU, aboutYou);
+            extras.putInt(EditProfileService.EXTRA_POST_TYPE, EditProfileService.EXTRA_POST_TYPE_SAVE_EDIT_PROFILE);
+
+            JobInfo jobInfo = EditProfileService.constructJobInfo(this, 1000, extras);
+            ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
             return true;
         }
         return false;

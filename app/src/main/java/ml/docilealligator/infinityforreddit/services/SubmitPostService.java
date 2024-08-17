@@ -1,21 +1,21 @@
 package ml.docilealligator.infinityforreddit.services;
 
 import android.app.Notification;
-import android.app.Service;
-import android.content.Intent;
+import android.app.job.JobInfo;
+import android.app.job.JobParameters;
+import android.app.job.JobService;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.net.NetworkCapabilities;
+import android.net.NetworkRequest;
 import android.net.Uri;
-import android.os.Bundle;
+import android.os.Build;
 import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
-import android.os.Process;
+import android.os.PersistableBundle;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
@@ -68,7 +68,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class SubmitPostService extends Service {
+public class SubmitPostService extends JobService {
     public static final String EXTRA_ACCOUNT = "EA";
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_TITLE = "ET";
@@ -84,14 +84,15 @@ public class SubmitPostService extends Service {
     public static final String EXTRA_IS_NSFW = "EIN";
     public static final String EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS = "ERPRN";
     public static final String EXTRA_POST_TYPE = "EPT";
+    public static final String EXTRA_MEDIA_URI = "EMU";
     public static final int EXTRA_POST_TEXT_OR_LINK = 0;
     public static final int EXTRA_POST_TYPE_IMAGE = 1;
     public static final int EXTRA_POST_TYPE_VIDEO = 2;
     public static final int EXTRA_POST_TYPE_GALLERY = 3;
     public static final int EXTRA_POST_TYPE_POLL = 4;
     public static final int EXTRA_POST_TYPE_CROSSPOST = 5;
+    private static int JOB_ID = 1000;
 
-    private static final String EXTRA_MEDIA_URI = "EMU";
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -114,49 +115,126 @@ public class SubmitPostService extends Service {
     @Inject
     Executor mExecutor;
     private Handler handler;
-    private ServiceHandler serviceHandler;
 
     public SubmitPostService() {
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    public static JobInfo constructJobInfo(Context context, long contentEstimatedBytes, PersistableBundle extras) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            return new JobInfo.Builder(JOB_ID++, new ComponentName(context, SubmitPostService.class))
+                    .setUserInitiated(true)
+                    .setRequiredNetwork(new NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build())
+                    .setEstimatedNetworkBytes(0, contentEstimatedBytes + 500)
+                    .setExtras(extras)
+                    .build();
+        } else {
+            return new JobInfo.Builder(JOB_ID++, new ComponentName(context, SubmitPostService.class))
+                    .setExtras(extras)
+                    .build();
+        }
     }
 
-    // Handler that receives messages from the thread
-    private final class ServiceHandler extends Handler {
-        public ServiceHandler(Looper looper) {
-            super(looper);
+    @Override
+    public boolean onStartJob(JobParameters params) {
+        NotificationChannelCompat serviceChannel =
+                new NotificationChannelCompat.Builder(
+                        NotificationUtils.CHANNEL_SUBMIT_POST,
+                        NotificationManagerCompat.IMPORTANCE_LOW)
+                        .setName(NotificationUtils.CHANNEL_SUBMIT_POST)
+                        .build();
+
+        NotificationManagerCompat manager = NotificationManagerCompat.from(this);
+        manager.createNotificationChannel(serviceChannel);
+
+        int randomNotificationIdOffset = new Random().nextInt(10000);
+        PersistableBundle bundle = params.getExtras();
+        int postType = bundle.getInt(EXTRA_POST_TYPE, EXTRA_POST_TEXT_OR_LINK);
+
+        if (postType == EXTRA_POST_TEXT_OR_LINK) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                setNotification(params,
+                        NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                        createNotification(R.string.posting),
+                        JobService.JOB_END_NOTIFICATION_POLICY_REMOVE);
+            } else {
+                manager.notify(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                        createNotification(R.string.posting));
+            }
+        } else if (postType == EXTRA_POST_TYPE_CROSSPOST) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                setNotification(params,
+                        NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                        createNotification(R.string.posting),
+                        JobService.JOB_END_NOTIFICATION_POLICY_REMOVE);
+            } else {
+                manager.notify(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                        createNotification(R.string.posting));
+            }
+        } else if (postType == EXTRA_POST_TYPE_IMAGE) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                setNotification(params,
+                        NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                        createNotification(R.string.posting_image),
+                        JobService.JOB_END_NOTIFICATION_POLICY_REMOVE);
+            } else {
+                manager.notify(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                        createNotification(R.string.posting_image));
+            }
+        } else if (postType == EXTRA_POST_TYPE_VIDEO) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                setNotification(params,
+                        NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                        createNotification(R.string.posting_video),
+                        JobService.JOB_END_NOTIFICATION_POLICY_REMOVE);
+            } else {
+                manager.notify(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                        createNotification(R.string.posting_video));
+            }
+        } else if (postType == EXTRA_POST_TYPE_GALLERY) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                setNotification(params,
+                        NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                        createNotification(R.string.posting_gallery),
+                        JobService.JOB_END_NOTIFICATION_POLICY_REMOVE);
+            } else {
+                manager.notify(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                        createNotification(R.string.posting_gallery));
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                setNotification(params,
+                        NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                        createNotification(R.string.posting_poll),
+                        JobService.JOB_END_NOTIFICATION_POLICY_REMOVE);
+            } else {
+                manager.notify(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                        createNotification(R.string.posting_poll));
+            }
         }
 
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            Bundle bundle = msg.getData();
-            Account account = bundle.getParcelable(EXTRA_ACCOUNT);
+        mExecutor.execute(() -> {
+            Account account = Account.fromJson(bundle.getString(EXTRA_ACCOUNT));
             String subredditName = bundle.getString(EXTRA_SUBREDDIT_NAME);
             String title = bundle.getString(EXTRA_TITLE);
-            Flair flair = bundle.getParcelable(EXTRA_FLAIR);
-            boolean isSpoiler = bundle.getBoolean(EXTRA_IS_SPOILER, false);
-            boolean isNSFW = bundle.getBoolean(EXTRA_IS_NSFW, false);
-            boolean receivePostReplyNotifications = bundle.getBoolean(EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS, true);
-            int postType = bundle.getInt(EXTRA_POST_TYPE, EXTRA_POST_TEXT_OR_LINK);
+            Flair flair = Flair.fromJson(bundle.getString(EXTRA_FLAIR));
+            boolean isSpoiler = bundle.getInt(EXTRA_IS_SPOILER, 0) == 1;
+            boolean isNSFW = bundle.getInt(EXTRA_IS_NSFW, 0) == 1;
+            boolean receivePostReplyNotifications = bundle.getInt(EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS, 1) == 1;
 
             Retrofit newAuthenticatorOauthRetrofit = mOauthRetrofit.newBuilder().client(new OkHttpClient.Builder().authenticator(new AnyAccountAccessTokenAuthenticator(mRetrofit, mRedditDataRoomDatabase, account, mCurrentAccountSharedPreferences))
-                    .connectTimeout(30, TimeUnit.SECONDS)
-                    .readTimeout(30, TimeUnit.SECONDS)
-                    .writeTimeout(30, TimeUnit.SECONDS)
-                    .connectionPool(new ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
-                    .build())
+                            .connectTimeout(30, TimeUnit.SECONDS)
+                            .readTimeout(30, TimeUnit.SECONDS)
+                            .writeTimeout(30, TimeUnit.SECONDS)
+                            .connectionPool(new ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
+                            .build())
                     .build();
 
             if (postType == EXTRA_POST_TEXT_OR_LINK) {
                 String content = bundle.getString(EXTRA_CONTENT, "");
-                boolean isRichTextJSON = bundle.getBoolean(EXTRA_IS_RICHTEXT_JSON);
+                boolean isRichTextJSON = bundle.getInt(EXTRA_IS_RICHTEXT_JSON, 0) == 1;
                 String kind = bundle.getString(EXTRA_KIND);
                 if (isRichTextJSON) {
-                    List<UploadedImage> uploadedImages = bundle.getParcelableArrayList(EXTRA_UPLOADED_IMAGES);
+                    List<UploadedImage> uploadedImages = UploadedImage.fromListJson(bundle.getString(EXTRA_UPLOADED_IMAGES));
                     try {
                         content = new RichTextJSONConverter().constructRichTextJSON(SubmitPostService.this, content, uploadedImages);
                     } catch (JSONException e) {
@@ -164,79 +242,39 @@ public class SubmitPostService extends Service {
                         return;
                     }
                 }
-                submitTextOrLinkPost(newAuthenticatorOauthRetrofit, account, subredditName, title, content,
+                submitTextOrLinkPost(params, newAuthenticatorOauthRetrofit, account, subredditName, title, content,
                         bundle.getString(EXTRA_URL), flair, isSpoiler, isNSFW,
                         receivePostReplyNotifications, isRichTextJSON, kind);
             } else if (postType == EXTRA_POST_TYPE_CROSSPOST) {
-                submitCrosspost(mExecutor, handler, newAuthenticatorOauthRetrofit, account, subredditName, title,
+                submitCrosspost(params, mExecutor, handler, newAuthenticatorOauthRetrofit, account, subredditName, title,
                         bundle.getString(EXTRA_CONTENT), flair, isSpoiler, isNSFW, receivePostReplyNotifications);
             } else if (postType == EXTRA_POST_TYPE_IMAGE) {
                 Uri mediaUri = Uri.parse(bundle.getString(EXTRA_MEDIA_URI));
-                submitImagePost(newAuthenticatorOauthRetrofit, account, mediaUri, subredditName, title,
+                submitImagePost(params, newAuthenticatorOauthRetrofit, account, mediaUri, subredditName, title,
                         bundle.getString(EXTRA_CONTENT), flair, isSpoiler, isNSFW, receivePostReplyNotifications);
             } else if (postType == EXTRA_POST_TYPE_VIDEO) {
                 Uri mediaUri = Uri.parse(bundle.getString(EXTRA_MEDIA_URI));
-                submitVideoPost(newAuthenticatorOauthRetrofit, account, mediaUri, subredditName, title,
+                submitVideoPost(params, newAuthenticatorOauthRetrofit, account, mediaUri, subredditName, title,
                         bundle.getString(EXTRA_CONTENT), flair, isSpoiler, isNSFW, receivePostReplyNotifications);
             } else if (postType == EXTRA_POST_TYPE_GALLERY) {
-                submitGalleryPost(newAuthenticatorOauthRetrofit, account, bundle.getString(EXTRA_REDDIT_GALLERY_PAYLOAD));
+                submitGalleryPost(params, newAuthenticatorOauthRetrofit, account, bundle.getString(EXTRA_REDDIT_GALLERY_PAYLOAD));
             } else {
-                submitPollPost(newAuthenticatorOauthRetrofit, account, bundle.getString(EXTRA_POLL_PAYLOAD));
+                submitPollPost(params, newAuthenticatorOauthRetrofit, account, bundle.getString(EXTRA_POLL_PAYLOAD));
             }
-        }
+        });
+
+        return true;
+    }
+
+    @Override
+    public boolean onStopJob(JobParameters params) {
+        return false;
     }
 
     @Override
     public void onCreate() {
         ((Infinity) getApplication()).getAppComponent().inject(this);
-        // Start up the thread running the service. Note that we create a
-        // separate thread because the service normally runs in the process's
-        // main thread, which we don't want to block. We also make it
-        // background priority so CPU-intensive work doesn't disrupt our UI.
         handler = new Handler();
-        HandlerThread thread = new HandlerThread("ServiceStartArguments",
-                Process.THREAD_PRIORITY_BACKGROUND);
-        thread.start();
-
-        // Get the HandlerThread's Looper and use it for our Handler
-        serviceHandler = new ServiceHandler(thread.getLooper());
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        NotificationChannelCompat serviceChannel =
-                new NotificationChannelCompat.Builder(
-                        NotificationUtils.CHANNEL_SUBMIT_POST,
-                        NotificationManagerCompat.IMPORTANCE_LOW)
-                .setName(NotificationUtils.CHANNEL_SUBMIT_POST)
-                .build();
-
-        NotificationManagerCompat manager = NotificationManagerCompat.from(this);
-        manager.createNotificationChannel(serviceChannel);
-
-        int randomNotificationIdOffset = new Random().nextInt(10000);
-        int postType = intent.getIntExtra(EXTRA_POST_TYPE, EXTRA_POST_TEXT_OR_LINK);
-        Bundle bundle = intent.getExtras();
-
-        if (postType == EXTRA_POST_TEXT_OR_LINK) {
-            startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset, createNotification(R.string.posting));
-        } else if (postType == EXTRA_POST_TYPE_CROSSPOST) {
-            startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset, createNotification(R.string.posting));
-        } else if (postType == EXTRA_POST_TYPE_IMAGE) {
-            bundle.putString(EXTRA_MEDIA_URI, intent.getData().toString());
-            startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset, createNotification(R.string.posting_image));
-        } else if (postType == EXTRA_POST_TYPE_VIDEO) {
-            bundle.putString(EXTRA_MEDIA_URI, intent.getData().toString());
-            startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset, createNotification(R.string.posting_video));
-        } else {
-            startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset, createNotification(R.string.posting_gallery));
-        }
-
-        Message msg = serviceHandler.obtainMessage();
-        msg.setData(bundle);
-        serviceHandler.sendMessage(msg);
-
-        return START_NOT_STICKY;
     }
 
     private Notification createNotification(int stringResId) {
@@ -248,7 +286,7 @@ public class SubmitPostService extends Service {
                 .build();
     }
 
-    private void submitTextOrLinkPost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount,
+    private void submitTextOrLinkPost(JobParameters parameters, Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount,
                                       String subredditName, String title, String content, @Nullable String url,
                                       Flair flair, boolean isSpoiler, boolean isNSFW,
                                       boolean receivePostReplyNotifications, boolean isRichtextJSON,
@@ -260,19 +298,19 @@ public class SubmitPostService extends Service {
                     public void submitSuccessful(Post post) {
                         handler.post(() -> EventBus.getDefault().post(new SubmitTextOrLinkPostEvent(true, post, null)));
 
-                        stopService();
+                        jobFinished(parameters, false);
                     }
 
                     @Override
                     public void submitFailed(@Nullable String errorMessage) {
                         handler.post(() -> EventBus.getDefault().post(new SubmitTextOrLinkPostEvent(false, null, errorMessage)));
 
-                        stopService();
+                        jobFinished(parameters, false);
                     }
                 });
     }
 
-    private void submitCrosspost(Executor executor, Handler handler, Retrofit newAuthenticatorOauthRetrofit,
+    private void submitCrosspost(JobParameters parameters, Executor executor, Handler handler, Retrofit newAuthenticatorOauthRetrofit,
                                  Account selectedAccount, String subredditName,
                                  String title, String content, Flair flair, boolean isSpoiler, boolean isNSFW,
                                  boolean receivePostReplyNotifications) {
@@ -283,19 +321,19 @@ public class SubmitPostService extends Service {
                     public void submitSuccessful(Post post) {
                         handler.post(() -> EventBus.getDefault().post(new SubmitCrosspostEvent(true, post, null)));
 
-                        stopService();
+                        jobFinished(parameters, false);
                     }
 
                     @Override
                     public void submitFailed(@Nullable String errorMessage) {
                         handler.post(() -> EventBus.getDefault().post(new SubmitCrosspostEvent(false, null, errorMessage)));
 
-                        stopService();
+                        jobFinished(parameters, false);
                     }
                 });
     }
 
-    private void submitImagePost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, Uri mediaUri,
+    private void submitImagePost(JobParameters parameters, Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, Uri mediaUri,
                                  String subredditName, String title, String content, Flair flair,
                                  boolean isSpoiler, boolean isNSFW, boolean receivePostReplyNotifications) {
         try {
@@ -310,24 +348,24 @@ public class SubmitPostService extends Service {
                                 Toast.makeText(SubmitPostService.this, R.string.image_is_processing, Toast.LENGTH_SHORT).show();
                             });
 
-                            stopService();
+                            jobFinished(parameters, false);
                         }
 
                         @Override
                         public void submitFailed(@Nullable String errorMessage) {
                             handler.post(() -> EventBus.getDefault().post(new SubmitImagePostEvent(false, errorMessage)));
 
-                            stopService();
+                            jobFinished(parameters, false);
                         }
                     });
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             handler.post(() -> EventBus.getDefault().post(new SubmitImagePostEvent(false, getString(R.string.error_processing_image))));
-            stopService();
+            jobFinished(parameters, false);
         }
     }
 
-    private void submitVideoPost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, Uri mediaUri,
+    private void submitVideoPost(JobParameters parameters, Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, Uri mediaUri,
                                  String subredditName, String title, String content, Flair flair,
                                  boolean isSpoiler, boolean isNSFW, boolean receivePostReplyNotifications) {
         try {
@@ -361,30 +399,30 @@ public class SubmitPostService extends Service {
                                 });
 
 
-                                stopService();
+                                jobFinished(parameters, false);
                             }
 
                             @Override
                             public void submitFailed(@Nullable String errorMessage) {
                                 handler.post(() -> EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(false, false, errorMessage)));
 
-                                stopService();
+                                jobFinished(parameters, false);
                             }
                         });
             } else {
                 handler.post(() -> EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(false, true, null)));
 
-                stopService();
+                jobFinished(parameters, false);
             }
         } catch (IOException | InterruptedException | ExecutionException e) {
             e.printStackTrace();
             handler.post(() -> EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(false, true, null)));
 
-            stopService();
+            jobFinished(parameters, false);
         }
     }
 
-    private void submitGalleryPost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, String payload) {
+    private void submitGalleryPost(JobParameters parameters, Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, String payload) {
         try {
             Response<String> response = newAuthenticatorOauthRetrofit.create(RedditAPI.class).submitGalleryPost(APIUtils.getOAuthHeader(selectedAccount.getAccessToken()), payload).execute();
             if (response.isSuccessful()) {
@@ -416,11 +454,11 @@ public class SubmitPostService extends Service {
             e.printStackTrace();
             handler.post(() -> EventBus.getDefault().post(new SubmitGalleryPostEvent(false, null, e.getMessage())));
         } finally {
-            stopService();
+            jobFinished(parameters, false);
         }
     }
 
-    private void submitPollPost(Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, String payload) {
+    private void submitPollPost(JobParameters parameters, Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, String payload) {
         try {
             Response<String> response = newAuthenticatorOauthRetrofit.create(RedditAPI.class).submitPollPost(APIUtils.getOAuthHeader(selectedAccount.getAccessToken()), payload).execute();
             if (response.isSuccessful()) {
@@ -452,7 +490,7 @@ public class SubmitPostService extends Service {
             e.printStackTrace();
             handler.post(() -> EventBus.getDefault().post(new SubmitPollPostEvent(false, null, e.getMessage())));
         } finally {
-            stopService();
+            jobFinished(parameters, false);
         }
     }
 

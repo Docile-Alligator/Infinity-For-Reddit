@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.concurrent.Executor;
@@ -12,12 +11,11 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.RandomBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ActivityFetchRandomSubredditOrPostBinding;
 import ml.docilealligator.infinityforreddit.post.FetchPost;
 import retrofit2.Retrofit;
 
@@ -25,8 +23,6 @@ public class FetchRandomSubredditOrPostActivity extends BaseActivity {
 
     public static final String EXTRA_RANDOM_OPTION = "ERO";
 
-    @BindView(R.id.relative_layout_fetch_random_subreddit_or_post_activity)
-    RelativeLayout relativeLayout;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -41,14 +37,15 @@ public class FetchRandomSubredditOrPostActivity extends BaseActivity {
     @Inject
     Executor mExecutor;
     private boolean isCanceled = false;
+    private ActivityFetchRandomSubredditOrPostBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplicationContext()).getAppComponent().inject(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fetch_random_subreddit_or_post);
 
-        ButterKnife.bind(this);
+        binding = ActivityFetchRandomSubredditOrPostBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         int option = getIntent().getIntExtra(EXTRA_RANDOM_OPTION, RandomBottomSheetFragment.RANDOM_SUBREDDIT);
 
@@ -109,6 +106,6 @@ public class FetchRandomSubredditOrPostActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        relativeLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
     }
 }

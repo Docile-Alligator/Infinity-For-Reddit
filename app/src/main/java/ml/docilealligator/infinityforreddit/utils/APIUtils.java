@@ -5,6 +5,7 @@ import android.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
+import ml.docilealligator.infinityforreddit.BuildConfig;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -23,6 +24,7 @@ public class APIUtils {
     public static final String PUSHSHIFT_API_BASE_URI = "https://api.pushshift.io/";
     public static final String REVEDDIT_API_BASE_URI = "https://api.reveddit.com/";
     public static final String STREAMABLE_API_BASE_URI = "https://api.streamable.com";
+    public static final String ONLINE_CUSTOM_THEMES_API_BASE_URI = "http://127.0.0.1";
 
     public static final String CLIENT_ID_KEY = "client_id";
     public static final String CLIENT_SECRET_KEY = "client_secret";
@@ -45,7 +47,7 @@ public class APIUtils {
     public static final String AUTHORIZATION_KEY = "Authorization";
     public static final String AUTHORIZATION_BASE = "bearer ";
     public static final String USER_AGENT_KEY = "User-Agent";
-    public static final String USER_AGENT = "android:ml.docilealligator.infinityforreddit:v6.2.5 (by /u/Hostilenemy)";
+    public static final String USER_AGENT = "android:ml.docilealligator.infinityforreddit:" + BuildConfig.VERSION_NAME + " (by /u/Hostilenemy)";
 
     public static final String GRANT_TYPE_KEY = "grant_type";
     public static final String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";

@@ -5,16 +5,10 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,12 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.checkbox.MaterialCheckBox;
 
 import java.util.concurrent.Executor;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
@@ -35,9 +26,11 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsFollowingUser;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ItemFooterErrorBinding;
+import ml.docilealligator.infinityforreddit.databinding.ItemFooterLoadingBinding;
+import ml.docilealligator.infinityforreddit.databinding.ItemUserListingBinding;
 import ml.docilealligator.infinityforreddit.user.UserData;
 import ml.docilealligator.infinityforreddit.user.UserFollowing;
-import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, RecyclerView.ViewHolder> {
@@ -100,14 +93,11 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_DATA) {
-            ConstraintLayout constraintLayout = (ConstraintLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user_listing, parent, false);
-            return new DataViewHolder(constraintLayout);
+            return new DataViewHolder(ItemUserListingBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         } else if (viewType == VIEW_TYPE_ERROR) {
-            RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_error, parent, false);
-            return new UserListingRecyclerViewAdapter.ErrorViewHolder(relativeLayout);
+            return new UserListingRecyclerViewAdapter.ErrorViewHolder(ItemFooterErrorBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         } else {
-            RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_loading, parent, false);
-            return new UserListingRecyclerViewAdapter.LoadingViewHolder(relativeLayout);
+            return new UserListingRecyclerViewAdapter.LoadingViewHolder(ItemFooterLoadingBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         }
     }
 
@@ -116,9 +106,9 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
         if (holder instanceof DataViewHolder) {
             UserData userData = getItem(position);
             if (userData != null) {
-                ((DataViewHolder) holder).constraintLayout.setOnClickListener(view -> {
+                ((DataViewHolder) holder).itemView.setOnClickListener(view -> {
                     if (isMultiSelection) {
-                        ((DataViewHolder) holder).checkBox.performClick();
+                        ((DataViewHolder) holder).binding.checkboxItemUserListing.performClick();
                     } else {
                         callback.userSelected(userData.getName(), userData.getIconUrl());
                     }
@@ -129,33 +119,33 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                             .error(glide.load(R.drawable.subreddit_default_icon)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                            .into(((DataViewHolder) holder).iconGifImageView);
+                            .into(((DataViewHolder) holder).binding.userIconGifImageViewItemUserListing);
                 } else {
                     glide.load(R.drawable.subreddit_default_icon)
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                            .into(((DataViewHolder) holder).iconGifImageView);
+                            .into(((DataViewHolder) holder).binding.userIconGifImageViewItemUserListing);
                 }
 
-                ((DataViewHolder) holder).userNameTextView.setText(userData.getName());
+                ((DataViewHolder) holder).binding.userNameTextViewItemUserListing.setText(userData.getName());
 
                 if (!isMultiSelection) {
                     CheckIsFollowingUser.checkIsFollowingUser(executor, new Handler(), redditDataRoomDatabase,
                             userData.getName(), accountName, new CheckIsFollowingUser.CheckIsFollowingUserListener() {
                                 @Override
                                 public void isSubscribed() {
-                                    ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
+                                    ((DataViewHolder) holder).binding.subscribeImageViewItemUserListing.setVisibility(View.GONE);
                                 }
 
                                 @Override
                                 public void isNotSubscribed() {
-                                    ((DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
-                                    ((DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
+                                    ((DataViewHolder) holder).binding.subscribeImageViewItemUserListing.setVisibility(View.VISIBLE);
+                                    ((DataViewHolder) holder).binding.subscribeImageViewItemUserListing.setOnClickListener(view -> {
                                         UserFollowing.followUser(oauthRetrofit, retrofit,
                                                 accessToken, userData.getName(), accountName, redditDataRoomDatabase,
                                                 new UserFollowing.UserFollowingListener() {
                                                     @Override
                                                     public void onUserFollowingSuccess() {
-                                                        ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
+                                                        ((DataViewHolder) holder).binding.subscribeImageViewItemUserListing.setVisibility(View.GONE);
                                                         Toast.makeText(activity, R.string.followed, Toast.LENGTH_SHORT).show();
                                                     }
 
@@ -168,7 +158,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
                                 }
                             });
                 } else {
-                    ((DataViewHolder) holder).checkBox.setOnCheckedChangeListener((compoundButton, b) -> userData.setSelected(b));
+                    ((DataViewHolder) holder).binding.checkboxItemUserListing.setOnCheckedChangeListener((compoundButton, b) -> userData.setSelected(b));
                 }
             }
         }
@@ -219,8 +209,8 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof DataViewHolder) {
-            glide.clear(((DataViewHolder) holder).iconGifImageView);
-            ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
+            glide.clear(((DataViewHolder) holder).binding.userIconGifImageViewItemUserListing);
+            ((DataViewHolder) holder).binding.subscribeImageViewItemUserListing.setVisibility(View.GONE);
         }
     }
 
@@ -231,63 +221,50 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     }
 
     class DataViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.constraint_layout_item_user_listing)
-        ConstraintLayout constraintLayout;
-        @BindView(R.id.user_icon_gif_image_view_item_user_listing)
-        GifImageView iconGifImageView;
-        @BindView(R.id.user_name_text_view_item_user_listing)
-        TextView userNameTextView;
-        @BindView(R.id.subscribe_image_view_item_user_listing)
-        ImageView subscribeButton;
-        @BindView(R.id.checkbox__item_user_listing)
-        MaterialCheckBox checkBox;
+        ItemUserListingBinding binding;
 
-        DataViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            userNameTextView.setTextColor(primaryTextColor);
-            subscribeButton.setColorFilter(unsubscribedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        DataViewHolder(@NonNull ItemUserListingBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            binding.userNameTextViewItemUserListing.setTextColor(primaryTextColor);
+            binding.subscribeImageViewItemUserListing.setColorFilter(unsubscribedColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
             if (activity.typeface != null) {
-                userNameTextView.setTypeface(activity.typeface);
+                binding.userNameTextViewItemUserListing.setTypeface(activity.typeface);
             }
 
             if (isMultiSelection) {
-                checkBox.setVisibility(View.VISIBLE);
+                binding.checkboxItemUserListing.setVisibility(View.VISIBLE);
             }
         }
     }
 
     class ErrorViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.error_text_view_item_footer_error)
-        TextView errorTextView;
-        @BindView(R.id.retry_button_item_footer_error)
-        Button retryButton;
+        ItemFooterErrorBinding binding;
 
-        ErrorViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            retryButton.setOnClickListener(view -> callback.retryLoadingMore());
-            errorTextView.setText(R.string.load_comments_failed);
-            errorTextView.setTextColor(primaryTextColor);
-            retryButton.setTextColor(buttonTextColor);
-            retryButton.setBackgroundTintList(ColorStateList.valueOf(colorPrimaryLightTheme));
+        ErrorViewHolder(@NonNull ItemFooterErrorBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            binding.retryButtonItemFooterError.setOnClickListener(view -> callback.retryLoadingMore());
+            binding.errorTextViewItemFooterError.setText(R.string.load_comments_failed);
+            binding.errorTextViewItemFooterError.setTextColor(primaryTextColor);
+            binding.retryButtonItemFooterError.setTextColor(buttonTextColor);
+            binding.retryButtonItemFooterError.setBackgroundTintList(ColorStateList.valueOf(colorPrimaryLightTheme));
 
             if (activity.typeface != null) {
-                retryButton.setTypeface(activity.typeface);
-                errorTextView.setTypeface(activity.typeface);
+                binding.retryButtonItemFooterError.setTypeface(activity.typeface);
+                binding.errorTextViewItemFooterError.setTypeface(activity.typeface);
             }
         }
     }
 
     class LoadingViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.progress_bar_item_footer_loading)
-        ProgressBar progressBar;
+        ItemFooterLoadingBinding binding;
 
-        LoadingViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            progressBar.setIndeterminateTintList(ColorStateList.valueOf(colorAccent));
+        LoadingViewHolder(@NonNull ItemFooterLoadingBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            binding.progressBarItemFooterLoading.setIndeterminateTintList(ColorStateList.valueOf(colorAccent));
         }
     }
 }

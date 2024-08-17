@@ -31,6 +31,9 @@ public interface AccountDao {
     @Query("DELETE FROM accounts WHERE is_current_user = 1 AND username != '-'")
     void deleteCurrentAccount();
 
+    @Query("DELETE FROM accounts WHERE username = :accountName")
+    void deleteAccount(String accountName);
+
     @Query("DELETE FROM accounts WHERE username != '-'")
     void deleteAllAccounts();
 

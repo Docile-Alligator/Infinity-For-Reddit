@@ -54,6 +54,7 @@ public class Comment implements Parcelable {
     private boolean saved;
     private boolean isExpanded;
     private boolean hasExpandedBefore;
+    private boolean isFilteredOut;
     private ArrayList<Comment> children;
     private ArrayList<String> moreChildrenIds;
     private int placeholderType;
@@ -141,6 +142,7 @@ public class Comment implements Parcelable {
         scoreHidden = in.readByte() != 0;
         isExpanded = in.readByte() != 0;
         hasExpandedBefore = in.readByte() != 0;
+        isFilteredOut = in.readByte() != 0;
         children = new ArrayList<>();
         in.readTypedList(children, Comment.CREATOR);
         moreChildrenIds = new ArrayList<>();
@@ -306,6 +308,14 @@ public class Comment implements Parcelable {
         return hasExpandedBefore;
     }
 
+    public boolean isFilteredOut() {
+        return isFilteredOut;
+    }
+
+    public void setIsFilteredOut(boolean isFilteredOut) {
+        this.isFilteredOut = isFilteredOut;
+    }
+
     public int getVoteType() {
         return voteType;
     }
@@ -436,6 +446,7 @@ public class Comment implements Parcelable {
         parcel.writeByte((byte) (scoreHidden ? 1 : 0));
         parcel.writeByte((byte) (isExpanded ? 1 : 0));
         parcel.writeByte((byte) (hasExpandedBefore ? 1 : 0));
+        parcel.writeByte((byte) (isFilteredOut ? 1 : 0));
         parcel.writeTypedList(children);
         parcel.writeStringList(moreChildrenIds);
         parcel.writeInt(placeholderType);

@@ -60,11 +60,11 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesB
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.comment.SendComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
-import ml.docilealligator.infinityforreddit.markdown.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCommentBinding;
+import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.markdown.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.markdown.EmoteCloseBracketInlineProcessor;
 import ml.docilealligator.infinityforreddit.markdown.EmotePlugin;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
@@ -216,18 +216,19 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                 }
             };
             EmoteCloseBracketInlineProcessor emoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
-            emotePlugin = EmotePlugin.create(this, mediaMetadata -> {
-                Intent imageIntent = new Intent(this, ViewImageOrGifActivity.class);
-                if (mediaMetadata.isGIF) {
-                    imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, mediaMetadata.original.url);
-                } else {
-                    imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, mediaMetadata.original.url);
-                }
-                imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, intent.getStringExtra(EXTRA_SUBREDDIT_NAME_KEY));
-                imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mediaMetadata.fileName);
-            });
+            emotePlugin = EmotePlugin.create(this, SharedPreferencesUtils.EMBEDDED_MEDIA_ALL,
+                    mediaMetadata -> {
+                        Intent imageIntent = new Intent(this, ViewImageOrGifActivity.class);
+                        if (mediaMetadata.isGIF) {
+                            imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, mediaMetadata.original.url);
+                        } else {
+                            imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, mediaMetadata.original.url);
+                        }
+                        imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, intent.getStringExtra(EXTRA_SUBREDDIT_NAME_KEY));
+                        imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mediaMetadata.fileName);
+                    });
             ImageAndGifPlugin imageAndGifPlugin = new ImageAndGifPlugin();
-            imageAndGifEntry = new ImageAndGifEntry(this, mGlide, mediaMetadata -> {
+            imageAndGifEntry = new ImageAndGifEntry(this, mGlide, SharedPreferencesUtils.EMBEDDED_MEDIA_ALL, mediaMetadata -> {
                 Intent imageIntent = new Intent(this, ViewImageOrGifActivity.class);
                 if (mediaMetadata.isGIF) {
                     imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, mediaMetadata.original.url);
@@ -240,7 +241,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             Markwon postBodyMarkwon = MarkdownUtils.createFullRedditMarkwon(this,
                     miscPlugin, emoteCloseBracketInlineProcessor, emotePlugin, imageAndGifPlugin, parentTextColor,
                     parentSpoilerBackgroundColor, null);
-            CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAndImagesAdapter(imageAndGifEntry);
+            CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAndImagesAdapter(this, imageAndGifEntry);
             markwonAdapter.setOnLongClickListener(view -> {
                 Utils.hideKeyboard(CommentActivity.this);
                 CopyTextBottomSheetFragment.show(getSupportFragmentManager(),

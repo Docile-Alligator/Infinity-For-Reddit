@@ -16,7 +16,7 @@
 
 package ml.docilealligator.infinityforreddit.videoautoplay;
 
-import static com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo.RENDERER_SUPPORT_UNSUPPORTED_TRACKS;
+import static androidx.media3.exoplayer.trackselection.MappingTrackSelector.MappedTrackInfo.RENDERER_SUPPORT_UNSUPPORTED_TRACKS;
 import static ml.docilealligator.infinityforreddit.videoautoplay.ToroExo.toro;
 
 import android.net.Uri;
@@ -24,18 +24,20 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
+import androidx.media3.common.C;
+import androidx.media3.common.PlaybackException;
+import androidx.media3.common.Player;
+import androidx.media3.common.Tracks;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.exoplayer.ExoPlaybackException;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.source.BehindLiveWindowException;
+import androidx.media3.exoplayer.trackselection.DefaultTrackSelector;
+import androidx.media3.exoplayer.trackselection.MappingTrackSelector;
+import androidx.media3.exoplayer.trackselection.TrackSelector;
+import androidx.media3.ui.PlayerView;
 
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.PlaybackException;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Tracks;
-import com.google.android.exoplayer2.source.BehindLiveWindowException;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.common.collect.ImmutableList;
 
 import ml.docilealligator.infinityforreddit.R;
@@ -48,6 +50,7 @@ import ml.docilealligator.infinityforreddit.R;
  * @since 3.4.0
  */
 
+@OptIn(markerClass = UnstableApi.class)
 @SuppressWarnings("WeakerAccess")
 public class ExoPlayable extends PlayableImpl {
 
@@ -62,7 +65,7 @@ public class ExoPlayable extends PlayableImpl {
 
     /**
      * Construct an instance of {@link ExoPlayable} from an {@link ExoCreator} and {@link Uri}. The
-     * {@link ExoCreator} is used to request {@link SimpleExoPlayer} instance, while {@link Uri}
+     * {@link ExoCreator} is used to request {@link ExoPlayer} instance, while {@link Uri}
      * defines the media to play.
      *
      * @param creator the {@link ExoCreator} instance.
@@ -132,7 +135,7 @@ public class ExoPlayable extends PlayableImpl {
             if (!(creator instanceof DefaultExoCreator)) return;
             TrackSelector selector = ((DefaultExoCreator) creator).getTrackSelector();
             if (selector instanceof DefaultTrackSelector) {
-                MappedTrackInfo trackInfo = ((DefaultTrackSelector) selector).getCurrentMappedTrackInfo();
+                MappingTrackSelector.MappedTrackInfo trackInfo = ((DefaultTrackSelector) selector).getCurrentMappedTrackInfo();
                 if (trackInfo != null) {
                     if (trackInfo.getTypeSupport(C.TRACK_TYPE_VIDEO) == RENDERER_SUPPORT_UNSUPPORTED_TRACKS) {
                         onErrorMessage(toro.getString(R.string.error_unsupported_video));

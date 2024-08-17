@@ -56,13 +56,6 @@
             android:layout_centerInParent="true"
             android:src="@drawable/ic_play_arrow_24dp" />
 
-        <ImageView android:id="@id/exo_pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/ic_pause_24dp" />
-
         <ImageView
             android:id="@+id/mute_exo_playback_control_view"
             android:layout_width="wrap_content"
@@ -82,7 +75,7 @@
 
     </RelativeLayout>
 
-    <com.google.android.exoplayer2.ui.DefaultTimeBar
+    <androidx.media3.ui.DefaultTimeBar
         android:id="@id/exo_progress"
         android:layout_width="wrap_content"
         android:layout_height="26dp"/>

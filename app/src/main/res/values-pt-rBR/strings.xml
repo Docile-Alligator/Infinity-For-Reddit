@@ -950,8 +950,6 @@ A reprodução automática de vídeos fica desativada."</string>
     <string name="settings_hide_the_number_of_comments">"Ocultar o Número de Comentários"</string>
     <string name="post_layout_gallery">"Estrutura de galeria"</string>
     <string name="post_layout_card_2">"Estrutura de cartão 2"</string>
-    <string name="have_trouble_login_title">"Tendo problemas para autenticar"</string>
-    <string name="have_trouble_login_message">"Você quer tentar outra forma de autenticar?"</string>
     <string name="vote">"Votar"</string>
     <string name="action_share_link">"Compartilhar Link"</string>
     <string name="action_copy_link">"Copiar Link"</string>
@@ -1032,9 +1030,7 @@ A reprodução automática de vídeos fica desativada."</string>
 Ainda quer a ativar?"</string>
     <string name="reply">"Responder"</string>
     <string name="post_gallery_activity_label">"Postar galeria"</string>
-    <string name="trending_activity_label">"Tendências"</string>
     <string name="action_share_post_link">"Compartilhar link da postagem"</string>
-    <string name="trending">"Em alta"</string>
     <string name="receive_post_reply_notifications">"Receber notificações de respostas às postagens"</string>
     <string name="bottom_sheet_post_gallery">"Galeria"</string>
     <string name="posting_gallery">"Postando galeria"</string>

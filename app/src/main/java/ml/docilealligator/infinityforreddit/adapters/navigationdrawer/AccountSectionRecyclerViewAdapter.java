@@ -3,21 +3,18 @@ package ml.docilealligator.infinityforreddit.adapters.navigationdrawer;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.InboxActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ItemNavDrawerMenuGroupTitleBinding;
+import ml.docilealligator.infinityforreddit.databinding.ItemNavDrawerMenuItemBinding;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class AccountSectionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -57,22 +54,22 @@ public class AccountSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_MENU_GROUP_TITLE) {
-            return new MenuGroupTitleViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_nav_drawer_menu_group_title, parent, false));
+            return new MenuGroupTitleViewHolder(ItemNavDrawerMenuGroupTitleBinding
+                    .inflate(LayoutInflater.from(parent.getContext()), parent, false));
         } else {
-            return new MenuItemViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_nav_drawer_menu_item, parent, false));
+            return new MenuItemViewHolder(ItemNavDrawerMenuItemBinding
+                    .inflate(LayoutInflater.from(parent.getContext()), parent, false));
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MenuGroupTitleViewHolder) {
-            ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.label_account);
+            ((MenuGroupTitleViewHolder) holder).binding.titleTextViewItemNavDrawerMenuGroupTitle.setText(R.string.label_account);
             if (collapseAccountSection) {
-                ((MenuGroupTitleViewHolder) holder).collapseIndicatorImageView.setImageResource(R.drawable.ic_baseline_arrow_drop_up_24dp);
+                ((MenuGroupTitleViewHolder) holder).binding.collapseIndicatorImageViewItemNavDrawerMenuGroupTitle.setImageResource(R.drawable.ic_baseline_arrow_drop_up_24dp);
             } else {
-                ((MenuGroupTitleViewHolder) holder).collapseIndicatorImageView.setImageResource(R.drawable.ic_baseline_arrow_drop_down_24dp);
+                ((MenuGroupTitleViewHolder) holder).binding.collapseIndicatorImageViewItemNavDrawerMenuGroupTitle.setImageResource(R.drawable.ic_baseline_arrow_drop_down_24dp);
             }
 
             holder.itemView.setOnClickListener(view -> {
@@ -107,11 +104,11 @@ public class AccountSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     case 4:
                         setOnClickListener = false;
                         if (inboxCount > 0) {
-                            ((MenuItemViewHolder) holder).menuTextView.setText(baseActivity.getString(R.string.inbox_with_count, inboxCount));
+                            ((MenuItemViewHolder) holder).binding.textViewItemNavDrawerMenuItem.setText(baseActivity.getString(R.string.inbox_with_count, inboxCount));
                         } else {
-                            ((MenuItemViewHolder) holder).menuTextView.setText(R.string.inbox);
+                            ((MenuItemViewHolder) holder).binding.textViewItemNavDrawerMenuItem.setText(R.string.inbox);
                         }
-                        ((MenuItemViewHolder) holder).imageView.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_inbox_24dp));
+                        ((MenuItemViewHolder) holder).binding.imageViewItemNavDrawerMenuItem.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_inbox_24dp));
                         holder.itemView.setOnClickListener(view -> {
                             Intent intent = new Intent(baseActivity, InboxActivity.class);
                             baseActivity.startActivity(intent);
@@ -139,8 +136,8 @@ public class AccountSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             }
 
             if (stringId != 0) {
-                ((MenuItemViewHolder) holder).menuTextView.setText(stringId);
-                ((MenuItemViewHolder) holder).imageView.setImageDrawable(ContextCompat.getDrawable(baseActivity, drawableId));
+                ((MenuItemViewHolder) holder).binding.textViewItemNavDrawerMenuItem.setText(stringId);
+                ((MenuItemViewHolder) holder).binding.imageViewItemNavDrawerMenuItem.setImageDrawable(ContextCompat.getDrawable(baseActivity, drawableId));
             }
             if (setOnClickListener) {
                 int finalStringId = stringId;
@@ -164,36 +161,30 @@ public class AccountSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     }
 
     class MenuGroupTitleViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.title_text_view_item_nav_drawer_menu_group_title)
-        TextView titleTextView;
-        @BindView(R.id.collapse_indicator_image_view_item_nav_drawer_menu_group_title)
-        ImageView collapseIndicatorImageView;
+        ItemNavDrawerMenuGroupTitleBinding binding;
 
-        MenuGroupTitleViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        MenuGroupTitleViewHolder(@NonNull ItemNavDrawerMenuGroupTitleBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
             if (baseActivity.typeface != null) {
-                titleTextView.setTypeface(baseActivity.typeface);
+                binding.titleTextViewItemNavDrawerMenuGroupTitle.setTypeface(baseActivity.typeface);
             }
-            titleTextView.setTextColor(secondaryTextColor);
-            collapseIndicatorImageView.setColorFilter(secondaryTextColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            binding.titleTextViewItemNavDrawerMenuGroupTitle.setTextColor(secondaryTextColor);
+            binding.collapseIndicatorImageViewItemNavDrawerMenuGroupTitle.setColorFilter(secondaryTextColor, android.graphics.PorterDuff.Mode.SRC_IN);
         }
     }
 
     class MenuItemViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.image_view_item_nav_drawer_menu_item)
-        ImageView imageView;
-        @BindView(R.id.text_view_item_nav_drawer_menu_item)
-        TextView menuTextView;
+        ItemNavDrawerMenuItemBinding binding;
 
-        MenuItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        MenuItemViewHolder(@NonNull ItemNavDrawerMenuItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
             if (baseActivity.typeface != null) {
-                menuTextView.setTypeface(baseActivity.typeface);
+                binding.textViewItemNavDrawerMenuItem.setTypeface(baseActivity.typeface);
             }
-            menuTextView.setTextColor(primaryTextColor);
-            imageView.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            binding.textViewItemNavDrawerMenuItem.setTextColor(primaryTextColor);
+            binding.imageViewItemNavDrawerMenuItem.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         }
     }
 }

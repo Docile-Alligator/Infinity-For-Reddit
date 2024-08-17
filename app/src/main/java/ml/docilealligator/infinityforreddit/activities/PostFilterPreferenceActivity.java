@@ -7,16 +7,10 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -24,19 +18,18 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.adapters.PostFilterWithUsageRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostFilterOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ActivityPostFilterPreferenceBinding;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.postfilter.DeletePostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilterWithUsageViewModel;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterWithUsage;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilterWithUsageViewModel;
 
 public class PostFilterPreferenceActivity extends BaseActivity {
 
@@ -44,18 +37,6 @@ public class PostFilterPreferenceActivity extends BaseActivity {
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_USER_NAME = "EUN";
 
-    @BindView(R.id.coordinator_layout_post_filter_preference_activity)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_post_filter_preference_activity)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.collapsing_toolbar_layout_post_filter_preference_activity)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.toolbar_post_filter_preference_activity)
-    Toolbar toolbar;
-    @BindView(R.id.recycler_view_post_filter_preference_activity)
-    RecyclerView recyclerView;
-    @BindView(R.id.fab_post_filter_preference_activity)
-    FloatingActionButton fab;
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;
@@ -70,6 +51,7 @@ public class PostFilterPreferenceActivity extends BaseActivity {
     Executor executor;
     public PostFilterWithUsageViewModel postFilterWithUsageViewModel;
     private PostFilterWithUsageRecyclerViewAdapter adapter;
+    private ActivityPostFilterPreferenceBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,20 +60,20 @@ public class PostFilterPreferenceActivity extends BaseActivity {
         setImmersiveModeNotApplicable();
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_filter_preference);
 
-        ButterKnife.bind(this);
+        binding = ActivityPostFilterPreferenceBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         applyCustomTheme();
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbarPostFilterPreferenceActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Post post = getIntent().getParcelableExtra(EXTRA_POST);
         String subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
         String username = getIntent().getStringExtra(EXTRA_USER_NAME);
 
-        fab.setOnClickListener(view -> {
+        binding.fabPostFilterPreferenceActivity.setOnClickListener(view -> {
             if (post != null) {
                 showPostFilterOptions(post, null);
             } else if (subredditName != null) {
@@ -121,7 +103,7 @@ public class PostFilterPreferenceActivity extends BaseActivity {
             }
         });
 
-        recyclerView.setAdapter(adapter);
+        binding.recyclerViewPostFilterPreferenceActivity.setAdapter(adapter);
 
         postFilterWithUsageViewModel = new ViewModelProvider(this,
                 new PostFilterWithUsageViewModel.Factory(redditDataRoomDatabase)).get(PostFilterWithUsageViewModel.class);
@@ -227,9 +209,10 @@ public class PostFilterPreferenceActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
-        applyFABTheme(fab);
-        coordinatorLayout.setBackgroundColor(customThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutPostFilterPreferenceActivity,
+                binding.collapsingToolbarLayoutPostFilterPreferenceActivity, binding.toolbarPostFilterPreferenceActivity);
+        applyFABTheme(binding.fabPostFilterPreferenceActivity);
+        binding.getRoot().setBackgroundColor(customThemeWrapper.getBackgroundColor());
     }
 
     @Override

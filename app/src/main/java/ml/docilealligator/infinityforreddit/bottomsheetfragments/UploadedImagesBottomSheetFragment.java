@@ -28,10 +28,12 @@ public class UploadedImagesBottomSheetFragment extends LandscapeExpandedRoundedB
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         FragmentUploadedImagesBottomSheetBinding binding = FragmentUploadedImagesBottomSheetBinding.inflate(inflater, container, false);
+
+        binding.getRoot().setNestedScrollingEnabled(true);
 
         binding.uploadButtonUploadedImagesBottomSheetFragment.setOnClickListener(view -> {
             activity.uploadImage();

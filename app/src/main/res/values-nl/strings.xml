@@ -971,7 +971,6 @@ Automatisch afspelen van video is uitgeschakeld."</string>
     <string name="settings_hide_the_number_of_comments">"Verberg het aantal reacties"</string>
     <string name="post_layout_gallery">"Gallerij Lay-Out"</string>
     <string name="post_layout_card_2">"Kaart Lay-Out 2"</string>
-    <string name="have_trouble_login_message">"Wil je op een andere manier inloggen?"</string>
     <string name="vote">"Stem"</string>
     <string name="action_share_link">"Link Delen"</string>
     <string name="action_copy_link">"Link Kopiëren"</string>
@@ -1022,7 +1021,7 @@ Automatisch afspelen van video is uitgeschakeld."</string>
     <string name="action_delete_logs">"Verwijder logs"</string>
 
     <!-- Fuzzy -->
-    <string name="inbox_with_count">"Postvak IN"</string>
+    <string name="inbox_with_count">"Postvak IN (%1$,d)"</string>
     <string name="comment_continue_thread">"Ga verder met draad"</string>
     <string name="settings_swipe_vertically_to_go_back_from_media_title">"Omhoog swipen om terug te gaan van foto's en gif's"</string>
     <string name="settings_hide_post_flair">"Verberg Post Flair"</string>
@@ -1042,9 +1041,7 @@ Automatisch afspelen van video is uitgeschakeld."</string>
 Wil je het nog steeds activeren?"</string>
     <string name="reply">"Antwoord"</string>
     <string name="post_gallery_activity_label">"Gallerijpost"</string>
-    <string name="trending_activity_label">"Trending"</string>
     <string name="action_share_post_link">"Deel Post Link"</string>
-    <string name="trending">"Trending"</string>
     <string name="receive_post_reply_notifications">"Ontvang Post Reactie Notificaties"</string>
     <string name="bottom_sheet_post_gallery">"Gallerij"</string>
     <string name="posting_gallery">"Post gallerij"</string>

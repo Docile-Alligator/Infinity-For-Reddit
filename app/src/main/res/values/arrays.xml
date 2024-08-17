@@ -692,4 +692,37 @@
         <item>1</item>
     </string-array>
 
+    <string-array name="save_theme_options">
+        <item>@string/save_locally</item>
+        <item>@string/save_online</item>
+        <item>@string/save_locally_and_online</item>
+    </string-array>
+
+    <string-array name="settings_embedded_media_type">
+        <item>@string/all</item>
+        <item>@string/image_and_gif</item>
+        <item>@string/image_and_emote</item>
+        <item>@string/gif_and_emote</item>
+        <item>@string/image_embedded_media</item>
+        <item>@string/gif</item>
+        <item>@string/emote</item>
+        <item>@string/none</item>
+    </string-array>
+
+    <string-array name="settings_embedded_media_type_values">
+        <item>15</item>
+        <item>7</item>
+        <item>6</item>
+        <item>5</item>
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+        <item>0</item>
+    </string-array>
+
+    <string-array name="comment_filter_display_mode">
+        <item>@string/comment_filter_display_mode_remove_comments</item>
+        <item>@string/comment_filter_display_mode_fully_collapse_comments</item>
+    </string-array>
+
 </resources>

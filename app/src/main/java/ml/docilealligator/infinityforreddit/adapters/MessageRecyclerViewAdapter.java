@@ -8,9 +8,6 @@ import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.paging.PagedListAdapter;
@@ -21,8 +18,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
@@ -40,6 +35,9 @@ import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPrivateMessagesActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ItemFooterErrorBinding;
+import ml.docilealligator.infinityforreddit.databinding.ItemFooterLoadingBinding;
+import ml.docilealligator.infinityforreddit.databinding.ItemMessageBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
 import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
@@ -143,11 +141,11 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_DATA) {
-            return new DataViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, parent, false));
+            return new DataViewHolder(ItemMessageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         } else if (viewType == VIEW_TYPE_ERROR) {
-            return new ErrorViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_error, parent, false));
+            return new ErrorViewHolder(ItemFooterErrorBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         } else {
-            return new LoadingViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_loading, parent, false));
+            return new LoadingViewHolder(ItemFooterLoadingBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         }
     }
 
@@ -173,15 +171,15 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 }
 
                 if (message.wasComment()) {
-                    ((DataViewHolder) holder).titleTextView.setText(message.getTitle());
+                    ((DataViewHolder) holder).binding.titleTextViewItemMessage.setText(message.getTitle());
                 } else {
-                    ((DataViewHolder) holder).titleTextView.setVisibility(View.GONE);
+                    ((DataViewHolder) holder).binding.titleTextViewItemMessage.setVisibility(View.GONE);
                 }
 
-                ((DataViewHolder) holder).authorTextView.setText(displayedMessage.getAuthor());
+                ((DataViewHolder) holder).binding.authorTextViewItemMessage.setText(displayedMessage.getAuthor());
                 String subject = displayedMessage.getSubject().substring(0, 1).toUpperCase() + displayedMessage.getSubject().substring(1);
-                ((DataViewHolder) holder).subjectTextView.setText(subject);
-                mMarkwon.setMarkdown(((DataViewHolder) holder).contentCustomMarkwonView, displayedMessage.getBody());
+                ((DataViewHolder) holder).binding.subjectTextViewItemMessage.setText(subject);
+                mMarkwon.setMarkdown(((DataViewHolder) holder).binding.contentCustomMarkwonViewItemMessage, displayedMessage.getBody());
 
                 holder.itemView.setOnClickListener(view -> {
                     if (mMessageType == FetchMessage.MESSAGE_TYPE_INBOX
@@ -217,7 +215,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                     }
                 });
 
-                ((DataViewHolder) holder).authorTextView.setOnClickListener(view -> {
+                ((DataViewHolder) holder).binding.authorTextViewItemMessage.setOnClickListener(view -> {
                     if (message.isAuthorDeleted()) {
                         return;
                     }
@@ -256,7 +254,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         super.onViewRecycled(holder);
         if (holder instanceof DataViewHolder) {
             ((DataViewHolder) holder).itemView.setBackgroundColor(mMessageBackgroundColor);
-            ((DataViewHolder) holder).titleTextView.setVisibility(View.VISIBLE);
+            ((DataViewHolder) holder).binding.titleTextViewItemMessage.setVisibility(View.VISIBLE);
         }
     }
 
@@ -298,34 +296,27 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
     }
 
     class DataViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.author_text_view_item_message)
-        TextView authorTextView;
-        @BindView(R.id.subject_text_view_item_message)
-        TextView subjectTextView;
-        @BindView(R.id.title_text_view_item_message)
-        TextView titleTextView;
-        @BindView(R.id.content_custom_markwon_view_item_message)
-        TextView contentCustomMarkwonView;
+        ItemMessageBinding binding;
 
-        DataViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        DataViewHolder(@NonNull ItemMessageBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
             if (mActivity.typeface != null) {
-                authorTextView.setTypeface(mActivity.typeface);
-                subjectTextView.setTypeface(mActivity.typeface);
-                titleTextView.setTypeface(mActivity.titleTypeface);
-                contentCustomMarkwonView.setTypeface(mActivity.contentTypeface);
+                binding.authorTextViewItemMessage.setTypeface(mActivity.typeface);
+                binding.subjectTextViewItemMessage.setTypeface(mActivity.typeface);
+                binding.titleTextViewItemMessage.setTypeface(mActivity.titleTypeface);
+                binding.contentCustomMarkwonViewItemMessage.setTypeface(mActivity.contentTypeface);
             }
             itemView.setBackgroundColor(mMessageBackgroundColor);
-            authorTextView.setTextColor(mUsernameColor);
-            subjectTextView.setTextColor(mPrimaryTextColor);
-            titleTextView.setTextColor(mPrimaryTextColor);
-            contentCustomMarkwonView.setTextColor(mSecondaryTextColor);
+            binding.authorTextViewItemMessage.setTextColor(mUsernameColor);
+            binding.subjectTextViewItemMessage.setTextColor(mPrimaryTextColor);
+            binding.titleTextViewItemMessage.setTextColor(mPrimaryTextColor);
+            binding.contentCustomMarkwonViewItemMessage.setTextColor(mSecondaryTextColor);
 
-            contentCustomMarkwonView.setMovementMethod(LinkMovementMethod.getInstance());
+            binding.contentCustomMarkwonViewItemMessage.setMovementMethod(LinkMovementMethod.getInstance());
 
-            contentCustomMarkwonView.setOnClickListener(view -> {
-                if (contentCustomMarkwonView.getSelectionStart() == -1 && contentCustomMarkwonView.getSelectionEnd() == -1) {
+            binding.contentCustomMarkwonViewItemMessage.setOnClickListener(view -> {
+                if (binding.contentCustomMarkwonViewItemMessage.getSelectionStart() == -1 && binding.contentCustomMarkwonViewItemMessage.getSelectionEnd() == -1) {
                     itemView.performClick();
                 }
             });
@@ -333,34 +324,30 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
     }
 
     class ErrorViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.error_text_view_item_footer_error)
-        TextView errorTextView;
-        @BindView(R.id.retry_button_item_footer_error)
-        Button retryButton;
+        ItemFooterErrorBinding binding;
 
-        ErrorViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        ErrorViewHolder(@NonNull ItemFooterErrorBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
             if (mActivity.typeface != null) {
-                errorTextView.setTypeface(mActivity.typeface);
-                retryButton.setTypeface(mActivity.typeface);
+                binding.errorTextViewItemFooterError.setTypeface(mActivity.typeface);
+                binding.retryButtonItemFooterError.setTypeface(mActivity.typeface);
             }
-            errorTextView.setText(R.string.load_comments_failed);
-            errorTextView.setTextColor(mSecondaryTextColor);
-            retryButton.setOnClickListener(view -> mRetryLoadingMoreCallback.retryLoadingMore());
-            retryButton.setBackgroundTintList(ColorStateList.valueOf(mColorPrimaryLightTheme));
-            retryButton.setTextColor(mButtonTextColor);
+            binding.errorTextViewItemFooterError.setText(R.string.load_comments_failed);
+            binding.errorTextViewItemFooterError.setTextColor(mSecondaryTextColor);
+            binding.retryButtonItemFooterError.setOnClickListener(view -> mRetryLoadingMoreCallback.retryLoadingMore());
+            binding.retryButtonItemFooterError.setBackgroundTintList(ColorStateList.valueOf(mColorPrimaryLightTheme));
+            binding.retryButtonItemFooterError.setTextColor(mButtonTextColor);
         }
     }
 
     class LoadingViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.progress_bar_item_footer_loading)
-        ProgressBar progressBar;
+        ItemFooterLoadingBinding binding;
 
-        LoadingViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
+        LoadingViewHolder(@NonNull ItemFooterLoadingBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            binding.progressBarItemFooterLoading.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
         }
     }
 }

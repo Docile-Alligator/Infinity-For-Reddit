@@ -943,8 +943,6 @@ Videó autómatikus lejátszása le van tiltva."</string>
     <string name="settings_hide_the_number_of_comments">"Kommentek számának elrejtése"</string>
     <string name="post_layout_gallery">"Galléria elrendezés"</string>
     <string name="post_layout_card_2">"Kártya elrendezés 2"</string>
-    <string name="have_trouble_login_title">"Probléma a bejelentkezésnél"</string>
-    <string name="have_trouble_login_message">"Megpróbálsz máshogy bejelentkezni?"</string>
     <string name="vote">"Szavazás"</string>
     <string name="action_share_link">"Link megosztása"</string>
     <string name="action_copy_link">"Link másolása"</string>

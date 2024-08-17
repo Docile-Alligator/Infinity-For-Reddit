@@ -37,7 +37,7 @@
             app:strokeWidth="0dp"
             app:iconSize="24dp"
             app:iconTint="@null"
-            app:backgroundTint="#22FFFFFF"
+            app:backgroundTint="#444141"
             android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -52,17 +52,17 @@
             app:icon="@drawable/ic_fast_rewind_24dp"
             app:iconSize="24dp"
             app:iconTint="@null"
-            app:backgroundTint="#22FFFFFF"
+            app:backgroundTint="#444141"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/exo_play"
+            app:layout_constraintEnd_toStartOf="@+id/exo_play_pause_button_exo_playback_control_view"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
             style="?attr/materialIconButtonOutlinedStyle" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@id/exo_play"
+            android:id="@+id/exo_play_pause_button_exo_playback_control_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:strokeWidth="0dp"
@@ -72,25 +72,9 @@
             app:backgroundTint="@color/colorAccent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/exo_pause"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/exo_rew"
-            style="?attr/materialIconButtonOutlinedStyle" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@id/exo_pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:strokeWidth="0dp"
-            app:icon="@drawable/ic_pause_24dp"
-            app:iconSize="36dp"
-            app:iconTint="@null"
-            app:backgroundTint="@color/colorAccent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/exo_ffwd"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/exo_play"
+            app:layout_constraintStart_toEndOf="@+id/exo_rew"
             style="?attr/materialIconButtonOutlinedStyle" />
 
         <com.google.android.material.button.MaterialButton
@@ -101,12 +85,12 @@
             app:icon="@drawable/ic_fast_forward_24dp"
             app:iconSize="24dp"
             app:iconTint="@null"
-            app:backgroundTint="#22FFFFFF"
+            app:backgroundTint="#444141"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/exo_pause"
+            app:layout_constraintStart_toEndOf="@+id/exo_play_pause_button_exo_playback_control_view"
             style="?attr/materialIconButtonOutlinedStyle" />
 
         <com.google.android.material.button.MaterialButton
@@ -118,7 +102,7 @@
             app:icon="@drawable/ic_video_quality_24dp"
             app:iconSize="24dp"
             app:iconTint="@null"
-            app:backgroundTint="#22FFFFFF"
+            app:backgroundTint="#444141"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -144,7 +128,7 @@
             android:textColor="#FFFFFF"
             android:fontFamily="?attr/font_family" />
 
-        <com.google.android.exoplayer2.ui.DefaultTimeBar
+        <androidx.media3.ui.DefaultTimeBar
             android:id="@id/exo_progress"
             android:layout_width="0dp"
             android:layout_weight="1"

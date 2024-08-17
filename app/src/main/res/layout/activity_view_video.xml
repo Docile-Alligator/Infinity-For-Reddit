@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/hauler_view_view_video_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
@@ -22,11 +21,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.google.android.exoplayer2.ui.PlayerView
+            <androidx.media3.ui.PlayerView
                 android:id="@+id/player_view_view_video_activity"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:controller_layout_id="@layout/exo_playback_control_view"/>
+                android:animateLayoutChanges="true"
+                app:controller_layout_id="@layout/exo_playback_control_view"
+                app:animation_enabled="false" />
 
             <ProgressBar
                 android:id="@+id/progress_bar_view_video_activity"

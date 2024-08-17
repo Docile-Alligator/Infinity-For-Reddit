@@ -5,6 +5,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Map;
 
 import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -15,6 +16,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -282,10 +284,13 @@ public interface RedditAPI {
     ListenableFuture<Response<String>> getSubredditBestPostsListenableFuture(@Path("subredditName") String subredditName, @Path("sortType") SortType.Type sortType,
                                                                              @Query("t") SortType.Time sortTime, @Query("after") String lastItem);
 
-    @GET("user/{username}/{where}.json?&type=links&raw_json=1&limit=100")
-    ListenableFuture<Response<String>> getUserPostsOauthListenableFuture(@Path("username") String username, @Path("where") String where,
-                                   @Query("after") String lastItem, @Query("sort") SortType.Type sortType,
-                                   @Query("t") SortType.Time sortTime, @HeaderMap Map<String, String> headers);
+    @GET("user/{username}/{where}.json?type=links&raw_json=1&limit=100")
+    ListenableFuture<Response<String>> getUserPostsOauthListenableFuture(@Header(APIUtils.AUTHORIZATION_KEY) String authorization,
+                                                                         @Path("username") String username,
+                                                                         @Path("where") String where,
+                                                                         @Query("after") String lastItem,
+                                                                         @Query("sort") SortType.Type sortType,
+                                                                         @Query("t") SortType.Time sortTime);
 
     @GET("user/{username}/submitted.json?raw_json=1&limit=100")
     ListenableFuture<Response<String>> getUserPostsListenableFuture(@Path("username") String username, @Query("after") String lastItem,

@@ -1,6 +1,9 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -12,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -587,7 +591,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
                 subredditName = binding.subredditNameTextViewPostGalleryActivity.getText().toString();
             }
 
-            Intent intent = new Intent(this, SubmitPostService.class);
+            /*Intent intent = new Intent(this, SubmitPostService.class);
             intent.putExtra(SubmitPostService.EXTRA_ACCOUNT, selectedAccount);
             intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
             intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_GALLERY);
@@ -601,7 +605,26 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
                     binding.receivePostReplyNotificationsSwitchMaterialPostGalleryActivity.isChecked(), flair, items);
             intent.putExtra(SubmitPostService.EXTRA_REDDIT_GALLERY_PAYLOAD, new Gson().toJson(payload));
 
-            ContextCompat.startForegroundService(this, intent);
+            ContextCompat.startForegroundService(this, intent);*/
+
+            PersistableBundle extras = new PersistableBundle();
+            extras.putString(SubmitPostService.EXTRA_ACCOUNT, selectedAccount.getJSONModel());
+            extras.putString(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
+            extras.putInt(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_GALLERY);
+            ArrayList<RedditGalleryPayload.Item> items = new ArrayList<>();
+            for (RedditGallerySubmissionRecyclerViewAdapter.RedditGalleryImageInfo i : redditGalleryImageInfoList) {
+                items.add(i.payload);
+            }
+            RedditGalleryPayload payload = new RedditGalleryPayload(subredditName, subredditIsUser ? "profile" : "subreddit",
+                    binding.postTitleEditTextPostGalleryActivity.getText().toString(),
+                    binding.postContentEditTextPostGalleryActivity.getText().toString(), isSpoiler, isNSFW,
+                    binding.receivePostReplyNotificationsSwitchMaterialPostGalleryActivity.isChecked(), flair, items);
+
+            String payloadJSON = new Gson().toJson(payload);
+            extras.putString(SubmitPostService.EXTRA_REDDIT_GALLERY_PAYLOAD, payloadJSON);
+
+            JobInfo jobInfo = SubmitPostService.constructJobInfo(this, payloadJSON.length() * 2L, extras);
+            ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
 
             return true;
         }

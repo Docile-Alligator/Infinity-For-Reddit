@@ -1,6 +1,9 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -12,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -615,7 +619,7 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
 
         mPostingSnackbar.show();
 
-        Intent intent = new Intent(this, SubmitPostService.class);
+        /*Intent intent = new Intent(this, SubmitPostService.class);
         intent.putExtra(SubmitPostService.EXTRA_ACCOUNT, selectedAccount);
         intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
         intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_POLL);
@@ -648,7 +652,45 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
         }
         intent.putExtra(SubmitPostService.EXTRA_POLL_PAYLOAD, new Gson().toJson(payload));
 
-        ContextCompat.startForegroundService(this, intent);
+        ContextCompat.startForegroundService(this, intent);*/
+
+        PersistableBundle extras = new PersistableBundle();
+        extras.putString(SubmitPostService.EXTRA_ACCOUNT, selectedAccount.getJSONModel());
+        extras.putString(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
+        extras.putInt(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_POLL);
+
+        PollPayload payload;
+        if (!binding.postContentEditTextPostPollActivity.getText().toString().isEmpty()) {
+            if (uploadedImages.isEmpty()) {
+                payload = new PollPayload(subredditName, binding.postTitleEditTextPostPollActivity.getText().toString(),
+                        optionList.toArray(new String[0]), (int) binding.votingLengthSliderPostPollActivity.getValue(), isNSFW, isSpoiler, flair,
+                        null, binding.postContentEditTextPostPollActivity.getText().toString(),
+                        binding.receivePostReplyNotificationsSwitchMaterialPostPollActivity.isChecked(),
+                        subredditIsUser ? "profile" : "subreddit");
+            } else {
+                try {
+                    payload = new PollPayload(subredditName, binding.postTitleEditTextPostPollActivity.getText().toString(),
+                            optionList.toArray(new String[0]), (int) binding.votingLengthSliderPostPollActivity.getValue(), isNSFW, isSpoiler, flair,
+                            new RichTextJSONConverter().constructRichTextJSON(this,
+                                    binding.postContentEditTextPostPollActivity.getText().toString(), uploadedImages),
+                            null, binding.receivePostReplyNotificationsSwitchMaterialPostPollActivity.isChecked(),
+                            subredditIsUser ? "profile" : "subreddit");
+                } catch (JSONException e) {
+                    Snackbar.make(binding.coordinatorLayoutPostPollActivity, R.string.convert_to_richtext_json_failed, Snackbar.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+        } else {
+            payload = new PollPayload(subredditName, binding.postTitleEditTextPostPollActivity.getText().toString(),
+                    optionList.toArray(new String[0]), (int) binding.votingLengthSliderPostPollActivity.getValue(), isNSFW, isSpoiler, flair,
+                    binding.receivePostReplyNotificationsSwitchMaterialPostPollActivity.isChecked(),
+                    subredditIsUser ? "profile" : "subreddit");
+        }
+        String payloadJSON = new Gson().toJson(payload);
+        extras.putString(SubmitPostService.EXTRA_POLL_PAYLOAD, payloadJSON);
+
+        JobInfo jobInfo = SubmitPostService.constructJobInfo(this, payloadJSON.length() * 2L, extras);
+        ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
     }
 
     @Override

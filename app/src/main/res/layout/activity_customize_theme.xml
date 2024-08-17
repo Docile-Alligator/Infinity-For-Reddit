@@ -41,4 +41,11 @@
         app:layoutManager="ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <ProgressBar
+        android:id="@+id/progress_bar_customize_theme_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

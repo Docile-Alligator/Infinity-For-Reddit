@@ -211,8 +211,8 @@
                         android:hint="@string/post_title_hint"
                         android:inputType="textCapSentences|textMultiLine"
                         android:padding="16dp"
-                        android:textColor="?attr/primaryTextColor"
                         android:textSize="?attr/title_font_18"
+                        android:textStyle="bold"
                         android:fontFamily="?attr/title_font_family" />
 
                     <com.google.android.material.button.MaterialButton

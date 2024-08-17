@@ -3,6 +3,13 @@ package ml.docilealligator.infinityforreddit;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class UploadedImage implements Parcelable {
     public String imageName;
     public String imageUrlOrKey;
@@ -49,5 +56,13 @@ public class UploadedImage implements Parcelable {
         parcel.writeString(imageName);
         parcel.writeString(imageUrlOrKey);
         parcel.writeString(caption);
+    }
+
+    public static String getArrayListJSONModel(ArrayList<UploadedImage> uploadedImages) {
+        return new Gson().toJson(uploadedImages, new TypeToken<List<UploadedImage>>(){}.getType());
+    }
+
+    public static List<UploadedImage> fromListJson(String json) throws JsonParseException {
+        return new Gson().fromJson(json, new TypeToken<List<UploadedImage>>(){}.getType());
     }
 }

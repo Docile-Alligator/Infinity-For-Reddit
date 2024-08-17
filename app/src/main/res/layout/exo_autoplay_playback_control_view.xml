@@ -23,7 +23,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/frame_layout" />
+        app:layout_constraintEnd_toStartOf="@id/exo_play" />
+
+    <ImageView
+        android:id="@id/exo_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_play_arrow_24dp"
+        android:background="@drawable/exo_player_control_button_circular_background"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
         android:id="@+id/fullscreen_exo_playback_control_view"
@@ -37,39 +52,8 @@
         android:focusable="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/frame_layout"
+        app:layout_constraintStart_toEndOf="@id/exo_play"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <FrameLayout
-        android:id="@+id/frame_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageView android:id="@id/exo_play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/ic_play_arrow_24dp"
-            android:background="@drawable/exo_player_control_button_circular_background"
-            android:clickable="true"
-            android:focusable="true" />
-
-        <ImageView android:id="@id/exo_pause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/ic_pause_24dp"
-            android:background="@drawable/exo_player_control_button_circular_background"
-            android:clickable="true"
-            android:focusable="true" />
-
-    </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -105,7 +89,7 @@
             app:layout_constraintBottom_toTopOf="@id/exo_progress"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <com.google.android.exoplayer2.ui.DefaultTimeBar
+        <androidx.media3.ui.DefaultTimeBar
             android:id="@id/exo_progress"
             android:layout_width="match_parent"
             android:layout_height="24dp"

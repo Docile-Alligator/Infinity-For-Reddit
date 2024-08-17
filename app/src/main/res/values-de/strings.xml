@@ -1001,8 +1001,6 @@ Automatisches Abspielen von Videos ist deaktiviert."</string>
     <string name="settings_hide_the_number_of_comments">"Anzahl der Kommentare verstecken"</string>
     <string name="post_layout_gallery">"Galerie-Ansicht"</string>
     <string name="post_layout_card_2">"Karten-Ansicht 2"</string>
-    <string name="have_trouble_login_title">"Probleme beim Anmelden"</string>
-    <string name="have_trouble_login_message">"Möchtest du eine andere Anmeldungs-Art versuchen?"</string>
     <string name="vote">"Abstimmen"</string>
     <string name="action_share_link">"Link teilen"</string>
     <string name="action_copy_link">"Link kopieren"</string>
@@ -1093,9 +1091,7 @@ Automatisches Abspielen von Videos ist deaktiviert."</string>
 Möchtest du trotzdem fortfahren?"</string>
     <string name="reply">"Antworten"</string>
     <string name="post_gallery_activity_label">"Galeriebeitrag"</string>
-    <string name="trending_activity_label">"Trending"</string>
     <string name="action_share_post_link">"Teile Beitragslink"</string>
-    <string name="trending">"Trending"</string>
     <string name="receive_post_reply_notifications">"Benachrichtigungen für Antworten auf Beiträge empfangen"</string>
     <string name="bottom_sheet_post_gallery">"Galerie"</string>
     <string name="posting_gallery">"Posts Galerie"</string>

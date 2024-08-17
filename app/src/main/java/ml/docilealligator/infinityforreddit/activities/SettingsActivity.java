@@ -22,7 +22,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -62,8 +61,6 @@ public class SettingsActivity extends BaseActivity implements
 
         binding = ActivitySettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
 
@@ -151,7 +148,7 @@ public class SettingsActivity extends BaseActivity implements
     }
 
     @Override
-    public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference pref) {
+    public boolean onPreferenceStartFragment(@NonNull PreferenceFragmentCompat caller, Preference pref) {
         // Instantiate the new Fragment
         final Bundle args = pref.getExtras();
         final Fragment fragment = getSupportFragmentManager().getFragmentFactory().instantiate(

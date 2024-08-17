@@ -1,51 +1,54 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
 import android.Manifest;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.OptIn;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.PlaybackParameters;
+import androidx.media3.common.Player;
+import androidx.media3.common.Tracks;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.common.util.Util;
+import androidx.media3.datasource.DataSource;
+import androidx.media3.datasource.DefaultHttpDataSource;
+import androidx.media3.datasource.cache.CacheDataSource;
+import androidx.media3.datasource.cache.SimpleCache;
+import androidx.media3.exoplayer.DefaultRenderersFactory;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.source.ProgressiveMediaSource;
+import androidx.media3.exoplayer.trackselection.DefaultTrackSelector;
+import androidx.media3.exoplayer.trackselection.TrackSelector;
+import androidx.media3.ui.PlayerView;
 
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.PlaybackParameters;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.Tracks;
-import com.google.android.exoplayer2.source.ProgressiveMediaSource;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
-import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
-import com.google.android.exoplayer2.upstream.cache.SimpleCache;
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
 import com.google.common.collect.ImmutableList;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity;
@@ -67,20 +70,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     private static final String IS_MUTE_STATE = "IMS";
     private static final String POSITION_STATE = "PS";
     private static final String PLAYBACK_SPEED_STATE = "PSS";
-    @BindView(R.id.player_view_view_reddit_gallery_video_fragment)
-    PlayerView videoPlayerView;
-    @BindView(R.id.mute_exo_playback_control_view)
-    ImageButton muteButton;
-    @BindView(R.id.bottom_navigation_exo_playback_control_view)
-    BottomAppBar bottomAppBar;
-    @BindView(R.id.title_text_view_exo_playback_control_view)
-    TextView titleTextView;
-    @BindView(R.id.back_button_exo_playback_control_view)
-    MaterialButton backButton;
-    @BindView(R.id.download_image_view_exo_playback_control_view)
-    MaterialButton downloadButton;
-    @BindView(R.id.playback_speed_image_view_exo_playback_control_view)
-    MaterialButton playbackSpeedButton;
+
     private ViewRedditGalleryActivity activity;
     private Post.Gallery galleryVideo;
     private String subredditName;
@@ -94,27 +84,28 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @UnstableApi
     @Inject
     SimpleCache mSimpleCache;
+    private ViewRedditGalleryVideoFragmentBindingAdapter binding;
 
     public ViewRedditGalleryVideoFragment() {
         // Required empty public constructor
     }
 
 
+    @OptIn(markerClass = UnstableApi.class)
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_view_reddit_gallery_video, container, false);
+        binding = new ViewRedditGalleryVideoFragmentBindingAdapter(ml.docilealligator.infinityforreddit.databinding.FragmentViewRedditGalleryVideoBinding.inflate(inflater, container, false));
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
-
-        ButterKnife.bind(this, rootView);
 
         setHasOptionsMenu(true);
 
         if (activity.typeface != null) {
-            titleTextView.setTypeface(activity.typeface);
+            binding.getTitleTextView().setTypeface(activity.typeface);
         }
 
         activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -127,19 +118,19 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || getResources().getBoolean(R.bool.isTablet)) {
                 //Set player controller bottom margin in order to display it above the navbar
                 int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-                LinearLayout controllerLinearLayout = rootView.findViewById(R.id.linear_layout_exo_playback_control_view);
+                LinearLayout controllerLinearLayout = binding.getRoot().findViewById(R.id.linear_layout_exo_playback_control_view);
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
                 params.bottomMargin = getResources().getDimensionPixelSize(resourceId);
             } else {
                 //Set player controller right margin in order to display it above the navbar
                 int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-                LinearLayout controllerLinearLayout = rootView.findViewById(R.id.linear_layout_exo_playback_control_view);
+                LinearLayout controllerLinearLayout = binding.getRoot().findViewById(R.id.linear_layout_exo_playback_control_view);
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
                 params.rightMargin = getResources().getDimensionPixelSize(resourceId);
             }
         }
 
-        videoPlayerView.setControllerVisibilityListener(visibility -> {
+        binding.getPlayerView().setControllerVisibilityListener((PlayerView.ControllerVisibilityListener) visibility -> {
             switch (visibility) {
                 case View.GONE:
                     activity.getWindow().getDecorView().setSystemUiVisibility(
@@ -159,8 +150,11 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         });
 
         TrackSelector trackSelector = new DefaultTrackSelector(activity);
-        player = new ExoPlayer.Builder(activity).setTrackSelector(trackSelector).build();
-        videoPlayerView.setPlayer(player);
+        player = new ExoPlayer.Builder(activity)
+                .setTrackSelector(trackSelector)
+                .setRenderersFactory(new DefaultRenderersFactory(activity).setEnableDecoderFallback(true))
+                .build();
+        binding.getPlayerView().setPlayer(player);
         dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
                 .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
         player.prepare();
@@ -172,27 +166,27 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_PLAYBACK_SPEED, "100"));
         preparePlayer(savedInstanceState);
 
-        titleTextView.setText(getString(R.string.view_reddit_gallery_activity_video_label,
+        binding.getTitleTextView().setText(getString(R.string.view_reddit_gallery_activity_video_label,
                 getArguments().getInt(EXTRA_INDEX) + 1, getArguments().getInt(EXTRA_MEDIA_COUNT)));
 
         if (activity.isUseBottomAppBar()) {
-            bottomAppBar.setVisibility(View.VISIBLE);
-            backButton.setOnClickListener(view -> {
+            binding.getBottomAppBar().setVisibility(View.VISIBLE);
+            binding.getBackButton().setOnClickListener(view -> {
                 activity.finish();
             });
-            downloadButton.setOnClickListener(view -> {
+            binding.getDownloadButton().setOnClickListener(view -> {
                 if (isDownloading) {
                     return;
                 }
                 isDownloading = true;
                 requestPermissionAndDownload();
             });
-            playbackSpeedButton.setOnClickListener(view -> {
+            binding.getPlaybackSpeedButton().setOnClickListener(view -> {
                 changePlaybackSpeed();
             });
         }
 
-        return rootView;
+        return binding.getRoot();
     }
 
     private void changePlaybackSpeed() {
@@ -265,13 +259,25 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     private void download() {
         isDownloading = false;
 
-        Intent intent = new Intent(activity, DownloadMediaService.class);
+        /*Intent intent = new Intent(activity, DownloadMediaService.class);
         intent.putExtra(DownloadMediaService.EXTRA_URL, galleryVideo.url);
         intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
         intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, galleryVideo.fileName);
         intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
         intent.putExtra(DownloadMediaService.EXTRA_IS_NSFW, isNsfw);
-        ContextCompat.startForegroundService(activity, intent);
+        ContextCompat.startForegroundService(activity, intent);*/
+
+        PersistableBundle extras = new PersistableBundle();
+        extras.putString(DownloadMediaService.EXTRA_URL, galleryVideo.url);
+        extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
+        extras.putString(DownloadMediaService.EXTRA_FILE_NAME, galleryVideo.fileName);
+        extras.putString(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
+        extras.putInt(DownloadMediaService.EXTRA_IS_NSFW, isNsfw ? 1 : 0);
+
+        //TODO: contentEstimatedBytes
+        JobInfo jobInfo = DownloadMediaService.constructJobInfo(activity, 5000000, extras);
+        ((JobScheduler) activity.getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
+
         Toast.makeText(activity, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 
@@ -293,20 +299,37 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
             isMute = savedInstanceState.getBoolean(IS_MUTE_STATE);
             if (isMute) {
                 player.setVolume(0f);
-                muteButton.setImageResource(R.drawable.ic_mute_24dp);
+                binding.getMuteButton().setImageResource(R.drawable.ic_mute_24dp);
             } else {
                 player.setVolume(1f);
-                muteButton.setImageResource(R.drawable.ic_unmute_24dp);
+                binding.getMuteButton().setImageResource(R.drawable.ic_unmute_24dp);
             }
         } else if (muteVideo) {
             isMute = true;
             player.setVolume(0f);
-            muteButton.setImageResource(R.drawable.ic_mute_24dp);
+            binding.getMuteButton().setImageResource(R.drawable.ic_mute_24dp);
         } else {
-            muteButton.setImageResource(R.drawable.ic_unmute_24dp);
+            binding.getMuteButton().setImageResource(R.drawable.ic_unmute_24dp);
         }
 
+        MaterialButton playPauseButton = binding.getRoot().findViewById(R.id.exo_play_pause_button_exo_playback_control_view);
+        Drawable playDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_24dp, null);
+        Drawable pauseDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pause_24dp, null);
+        playPauseButton.setOnClickListener(view -> {
+            Util.handlePlayPauseButtonAction(player);
+        });
+
         player.addListener(new Player.Listener() {
+            @Override
+            public void onEvents(@NonNull Player player, @NonNull Player.Events events) {
+                if (events.containsAny(
+                        Player.EVENT_PLAY_WHEN_READY_CHANGED,
+                        Player.EVENT_PLAYBACK_STATE_CHANGED,
+                        Player.EVENT_PLAYBACK_SUPPRESSION_REASON_CHANGED)) {
+                    playPauseButton.setIcon(Util.shouldShowPlayButton(player) ? playDrawable : pauseDrawable);
+                }
+            }
+
             @Override
             public void onTracksChanged(@NonNull Tracks tracks) {
                 ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
@@ -314,23 +337,23 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
                     for (int i = 0; i < trackGroups.size(); i++) {
                         String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
                         if (mimeType != null && mimeType.contains("audio")) {
-                            muteButton.setVisibility(View.VISIBLE);
-                            muteButton.setOnClickListener(view -> {
+                            binding.getMuteButton().setVisibility(View.VISIBLE);
+                            binding.getMuteButton().setOnClickListener(view -> {
                                 if (isMute) {
                                     isMute = false;
                                     player.setVolume(1f);
-                                    muteButton.setImageResource(R.drawable.ic_unmute_24dp);
+                                    binding.getMuteButton().setImageResource(R.drawable.ic_unmute_24dp);
                                 } else {
                                     isMute = true;
                                     player.setVolume(0f);
-                                    muteButton.setImageResource(R.drawable.ic_mute_24dp);
+                                    binding.getMuteButton().setImageResource(R.drawable.ic_mute_24dp);
                                 }
                             });
                             break;
                         }
                     }
                 } else {
-                    muteButton.setVisibility(View.GONE);
+                    binding.getMuteButton().setVisibility(View.GONE);
                 }
             }
         });
@@ -363,7 +386,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         player.seekToDefaultPosition();
-        player.stop(true);
+        player.stop();
         player.release();
     }
 

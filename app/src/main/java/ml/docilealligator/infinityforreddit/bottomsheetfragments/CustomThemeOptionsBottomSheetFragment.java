@@ -1,22 +1,19 @@
 package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.activities.CustomizeThemeActivity;
+import ml.docilealligator.infinityforreddit.customtheme.OnlineCustomThemeMetadata;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.databinding.FragmentCustomThemeOptionsBottomSheetBinding;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 /**
@@ -25,17 +22,11 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 public class CustomThemeOptionsBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     public static final String EXTRA_THEME_NAME = "ETN";
-    @BindView(R.id.theme_name_text_view_custom_theme_options_bottom_sheet_fragment)
-    TextView themeNameTextView;
-    @BindView(R.id.edit_theme_text_view_custom_theme_options_bottom_sheet_fragment)
-    TextView editThemeTextView;
-    @BindView(R.id.share_theme_text_view_custom_theme_options_bottom_sheet_fragment)
-    TextView shareThemeTextView;
-    @BindView(R.id.change_theme_name_text_view_custom_theme_options_bottom_sheet_fragment)
-    TextView changeThemeNameTextView;
-    @BindView(R.id.delete_theme_text_view_custom_theme_options_bottom_sheet_fragment)
-    TextView deleteTextView;
+    public static final String EXTRA_ONLINE_CUSTOM_THEME_METADATA = "ECT";
+    public static final String EXTRA_INDEX_IN_THEME_LIST = "EIITL";
+
     private String themeName;
+    private OnlineCustomThemeMetadata onlineCustomThemeMetadata;
     private BaseActivity activity;
 
     public CustomThemeOptionsBottomSheetFragment() {
@@ -43,47 +34,52 @@ public class CustomThemeOptionsBottomSheetFragment extends LandscapeExpandedRoun
     }
 
     public interface CustomThemeOptionsBottomSheetFragmentListener {
+        void editTheme(String themeName, @Nullable OnlineCustomThemeMetadata onlineCustomThemeMetadata, int indexInThemeList);
         void changeName(String oldThemeName);
         void shareTheme(String themeName);
+        void shareTheme(OnlineCustomThemeMetadata onlineCustomThemeMetadata);
         void delete(String themeName);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_custom_theme_options_bottom_sheet, container, false);
-        ButterKnife.bind(this, rootView);
+        FragmentCustomThemeOptionsBottomSheetBinding binding = FragmentCustomThemeOptionsBottomSheetBinding.inflate(inflater, container, false);
 
         themeName = getArguments().getString(EXTRA_THEME_NAME);
-        themeNameTextView.setText(themeName);
+        onlineCustomThemeMetadata = getArguments().getParcelable(EXTRA_ONLINE_CUSTOM_THEME_METADATA);
 
-        editThemeTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(activity, CustomizeThemeActivity.class);
-            intent.putExtra(CustomizeThemeActivity.EXTRA_THEME_NAME, themeName);
-            startActivity(intent);
+        binding.themeNameTextViewCustomThemeOptionsBottomSheetFragment.setText(themeName);
+
+        binding.editThemeTextViewCustomThemeOptionsBottomSheetFragment.setOnClickListener(view -> {
+            ((CustomThemeOptionsBottomSheetFragmentListener) activity).editTheme(themeName, onlineCustomThemeMetadata, getArguments().getInt(EXTRA_INDEX_IN_THEME_LIST, -1));
             dismiss();
         });
 
-        shareThemeTextView.setOnClickListener(view -> {
-            ((CustomThemeOptionsBottomSheetFragmentListener) activity).shareTheme(themeName);
+        binding.shareThemeTextViewCustomThemeOptionsBottomSheetFragment.setOnClickListener(view -> {
+            if (onlineCustomThemeMetadata != null) {
+                ((CustomThemeOptionsBottomSheetFragmentListener) activity).shareTheme(onlineCustomThemeMetadata);
+            } else {
+                ((CustomThemeOptionsBottomSheetFragmentListener) activity).shareTheme(themeName);
+            }
             dismiss();
         });
 
-        changeThemeNameTextView.setOnClickListener(view -> {
+        binding.changeThemeNameTextViewCustomThemeOptionsBottomSheetFragment.setOnClickListener(view -> {
             ((CustomThemeOptionsBottomSheetFragmentListener) activity).changeName(themeName);
             dismiss();
         });
 
-        deleteTextView.setOnClickListener(view -> {
+        binding.deleteThemeTextViewCustomThemeOptionsBottomSheetFragment.setOnClickListener(view -> {
             ((CustomThemeOptionsBottomSheetFragmentListener) activity).delete(themeName);
             dismiss();
         });
 
         if (activity.typeface != null) {
-            Utils.setFontToAllTextViews(rootView, activity.typeface);
+            Utils.setFontToAllTextViews(binding.getRoot(), activity.typeface);
         }
 
-        return rootView;
+        return binding.getRoot();
     }
 
     @Override

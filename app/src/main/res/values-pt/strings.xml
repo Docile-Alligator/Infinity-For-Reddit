@@ -959,8 +959,6 @@ Reprodução automática de vídeos desativada."</string>
     <string name="settings_hide_the_number_of_comments">"Esconder Número de Comentários"</string>
     <string name="post_layout_gallery">"Galeria"</string>
     <string name="post_layout_card_2">"Cartão 2"</string>
-    <string name="have_trouble_login_title">"Dificuldades ao Iniciar Sessão"</string>
-    <string name="have_trouble_login_message">"Quer tentar iniciar sessão de outra forma?"</string>
     <string name="vote">"Votar"</string>
     <string name="action_share_link">"Partilhar Ligação"</string>
     <string name="action_copy_link">"Copiar Ligação"</string>
@@ -1053,9 +1051,7 @@ Reprodução automática de vídeos desativada."</string>
 Ainda deseja ativar esta opção?"</string>
     <string name="reply">"Responder"</string>
     <string name="post_gallery_activity_label">"Publicação de Galeria"</string>
-    <string name="trending_activity_label">"Tendências"</string>
     <string name="action_share_post_link">"Partilhar Endereço da Publicação"</string>
-    <string name="trending">"Tendências"</string>
     <string name="receive_post_reply_notifications">"Receber notificações de respostas de publicações"</string>
     <string name="bottom_sheet_post_gallery">"Galeria"</string>
     <string name="posting_gallery">"A Publicar Galeria"</string>

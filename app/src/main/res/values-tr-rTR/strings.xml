@@ -980,8 +980,6 @@ Otomatik video oynatma kapatılır."</string>
     <string name="settings_hide_the_number_of_comments">"Yorum Sayısını Gizle"</string>
     <string name="post_layout_gallery">"Galeri Düzeni"</string>
     <string name="post_layout_card_2">"Kart Düzeni 2"</string>
-    <string name="have_trouble_login_title">"Giriş Yapmakta Sorun Yaşanıyor"</string>
-    <string name="have_trouble_login_message">"Giriş yapmanın başka bir yolunu denemek ister misiniz?"</string>
     <string name="vote">"Oy"</string>
     <string name="action_share_link">"Bağlantıyı Paylaş"</string>
     <string name="action_copy_link">"Bağlantıyı Kopyala"</string>
@@ -1074,9 +1072,7 @@ Otomatik video oynatma kapatılır."</string>
 Yine de etkinleştirmek istiyor musunuz?"</string>
     <string name="reply">"Yanıtla"</string>
     <string name="post_gallery_activity_label">"Galeri Gönderisi"</string>
-    <string name="trending_activity_label">"Trendler"</string>
     <string name="action_share_post_link">"Gönderi Bağlantısını Paylaş"</string>
-    <string name="trending">"Trendler"</string>
     <string name="receive_post_reply_notifications">"Gönderi yanıtlanınca bildirimlerini al"</string>
     <string name="bottom_sheet_post_gallery">"Galeri"</string>
     <string name="posting_gallery">"Galeri Paylaşma"</string>

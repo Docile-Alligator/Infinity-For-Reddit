@@ -123,6 +123,10 @@ public class SliderPanel extends FrameLayout {
         return defaultSlidrInterface;
     }
 
+    public boolean isLocked() {
+        return isLocked;
+    }
+
 
     private final SlidrInterface defaultSlidrInterface = new SlidrInterface() {
 

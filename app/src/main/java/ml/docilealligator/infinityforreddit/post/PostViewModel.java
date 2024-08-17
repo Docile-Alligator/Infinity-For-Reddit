@@ -235,6 +235,7 @@ public class PostViewModel extends ViewModel {
             case PostPagingSource.TYPE_SUBREDDIT:
             case PostPagingSource.TYPE_MULTI_REDDIT:
             case PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE:
+            case PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT:
                 paging3PagingSource = new PostPagingSource(executor, retrofit, accessToken, accountName,
                         sharedPreferences, postFeedScrolledPositionSharedPreferences, name, postType,
                         sortType, postFilter, readPostList);
@@ -386,7 +387,7 @@ public class PostViewModel extends ViewModel {
                 return (T) new PostViewModel(executor, retrofit, accessToken, accountName, sharedPreferences,
                         postFeedScrolledPositionSharedPreferences, postHistorySharedPreferences, name,
                         postType, sortType, postFilter, readPostList);
-            } else if (postType == PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE) {
+            } else if (postType == PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE || postType == PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT) {
                 return (T) new PostViewModel(executor, retrofit, null, null, sharedPreferences,
                         null, null, name, postType, sortType,
                         postFilter, null);

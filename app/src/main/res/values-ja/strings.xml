@@ -1034,8 +1034,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_hide_the_number_of_comments">"コメント数を非表示にする"</string>
     <string name="post_layout_gallery">"ギャラリーレイアウト"</string>
     <string name="post_layout_card_2">"カードレイアウト2"</string>
-    <string name="have_trouble_login_title">"ログインに問題が発生"</string>
-    <string name="have_trouble_login_message">"別のログイン方法を試しますか？"</string>
     <string name="vote">"投票"</string>
     <string name="action_share_link">"リンクを共有"</string>
     <string name="action_copy_link">"リンクをコピー"</string>
@@ -1104,7 +1102,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 それでも有効にしますか？"</string>
     <string name="reply">"返信"</string>
     <string name="post_gallery_activity_label">"ギャラリー投稿"</string>
-    <string name="trending_activity_label">"トレンド"</string>
     <string name="action_share_post_link">"投稿リンクを共有"</string>
     <string name="bottom_sheet_post_gallery">"ギャラリー"</string>
     <string name="posting_gallery">"ギャラリーを投稿"</string>

@@ -964,8 +964,6 @@ Automatické přehrávání videí je zakázáno."</string>
     <string name="settings_hide_the_number_of_comments">"Skrýt počet komentářů"</string>
     <string name="post_layout_gallery">"Rozložení galerie"</string>
     <string name="post_layout_card_2">"Rozložení karet 2"</string>
-    <string name="have_trouble_login_title">"Problémy s přihlášením"</string>
-    <string name="have_trouble_login_message">"Chcete zkusit jiný způsob přihlášení?"</string>
     <string name="vote">"Hlasovat"</string>
     <string name="action_share_link">"Sdílet odkaz"</string>
     <string name="action_copy_link">"Zkopírovat odkaz"</string>
@@ -1054,9 +1052,7 @@ Automatické přehrávání videí je zakázáno."</string>
 Stále chcete tuto možnost povolit?"</string>
     <string name="reply">"Odpovědět"</string>
     <string name="post_gallery_activity_label">"Příspěvek galerie"</string>
-    <string name="trending_activity_label">"Trendy"</string>
     <string name="action_share_post_link">"Sdílet odkaz příspěvku"</string>
-    <string name="trending">"Trendy"</string>
     <string name="receive_post_reply_notifications">"Získávat oznámení o odpovědích na příspěvek"</string>
     <string name="bottom_sheet_post_gallery">"Galerie"</string>
     <string name="posting_gallery">"Galerie příspěvků"</string>

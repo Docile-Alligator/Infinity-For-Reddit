@@ -1012,8 +1012,6 @@ https://s3.eu-west-1.amazonaws.com/po-pub/i/hJAe7sMhrfJzqjhp9VkDQOVC.PNG -->
     <string name="settings_hide_the_number_of_comments">"Ocultar el número de comentarios"</string>
     <string name="post_layout_gallery">"Diseño de galería"</string>
     <string name="post_layout_card_2">"Diseño de tarjeta 2"</string>
-    <string name="have_trouble_login_title">"Tenemos problemas para iniciar sesión"</string>
-    <string name="have_trouble_login_message">"¿Quieres probar otra manera de iniciar sesión?"</string>
     <string name="vote">"Votar"</string>
     <string name="action_share_link">"Compartir enlace"</string>
     <string name="action_copy_link">"Copiar enlace"</string>
@@ -1104,9 +1102,7 @@ https://s3.eu-west-1.amazonaws.com/po-pub/i/hJAe7sMhrfJzqjhp9VkDQOVC.PNG -->
 ¿Seguro que quieres activarlo?"</string>
     <string name="reply">"Responder"</string>
     <string name="post_gallery_activity_label">"Publicación de galería"</string>
-    <string name="trending_activity_label">"Tendencias"</string>
     <string name="action_share_post_link">"Compartir enlace de publicación"</string>
-    <string name="trending">"Tendencias"</string>
     <string name="receive_post_reply_notifications">"Recibir notificaciones de respuesta a publicaciones"</string>
     <string name="bottom_sheet_post_gallery">"Galería"</string>
     <string name="posting_gallery">"Publicación de galería"</string>

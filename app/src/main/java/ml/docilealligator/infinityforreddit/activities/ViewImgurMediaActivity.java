@@ -11,8 +11,6 @@ import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,9 +32,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import app.futured.hauler.DragDirection;
-import app.futured.hauler.HaulerView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
 import ml.docilealligator.infinityforreddit.ImgurMedia;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -44,7 +39,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 import ml.docilealligator.infinityforreddit.WallpaperSetter;
 import ml.docilealligator.infinityforreddit.apis.ImgurAPI;
-import ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed;
+import ml.docilealligator.infinityforreddit.databinding.ActivityViewImgurMediaBinding;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.font.FontFamily;
@@ -71,14 +66,6 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     public static final int IMGUR_TYPE_IMAGE = 2;
     private static final String IMGUR_IMAGES_STATE = "IIS";
 
-    @BindView(R.id.hauler_view_view_imgur_media_activity)
-    HaulerView haulerView;
-    @BindView(R.id.progress_bar_view_imgur_media_activity)
-    ProgressBar progressBar;
-    @BindView(R.id.view_pager_view_imgur_media_activity)
-    ViewPagerBugFixed viewPager;
-    @BindView(R.id.load_image_error_linear_layout_view_imgur_media_activity)
-    LinearLayout errorLinearLayout;
     public Typeface typeface;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ArrayList<ImgurMedia> images;
@@ -91,6 +78,7 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     SharedPreferences sharedPreferences;
     @Inject
     Executor executor;
+    private ActivityViewImgurMediaBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,9 +106,8 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
         getTheme().applyStyle(ContentFontFamily.valueOf(sharedPreferences
                 .getString(SharedPreferencesUtils.CONTENT_FONT_FAMILY_KEY, ContentFontFamily.Default.name())).getResId(), true);
 
-        setContentView(R.layout.activity_view_imgur_media);
-
-        ButterKnife.bind(this);
+        binding = ActivityViewImgurMediaBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -150,23 +137,23 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
         }
 
         if (sharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_VERTICALLY_TO_GO_BACK_FROM_MEDIA, true)) {
-            haulerView.setOnDragDismissedListener(dragDirection -> {
+            binding.getRoot().setOnDragDismissedListener(dragDirection -> {
                 int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
                 finish();
                 overridePendingTransition(0, slide);
             });
         } else {
-            haulerView.setDragEnabled(false);
+            binding.getRoot().setDragEnabled(false);
         }
 
         if (images == null) {
             fetchImgurMedia(imgurId);
         } else {
-            progressBar.setVisibility(View.GONE);
+            binding.progressBarViewImgurMediaActivity.setVisibility(View.GONE);
             setupViewPager();
         }
 
-        errorLinearLayout.setOnClickListener(view -> fetchImgurMedia(imgurId));
+        binding.loadImageErrorLinearLayoutViewImgurMediaActivity.setOnClickListener(view -> fetchImgurMedia(imgurId));
     }
 
     public boolean isUseBottomAppBar() {
@@ -174,8 +161,8 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     }
 
     private void fetchImgurMedia(String imgurId) {
-        errorLinearLayout.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
+        binding.loadImageErrorLinearLayoutViewImgurMediaActivity.setVisibility(View.GONE);
+        binding.progressBarViewImgurMediaActivity.setVisibility(View.VISIBLE);
         switch (getIntent().getIntExtra(EXTRA_IMGUR_TYPE, IMGUR_TYPE_IMAGE)) {
             case IMGUR_TYPE_GALLERY:
                 imgurRetrofit.create(ImgurAPI.class).getGalleryImages(APIUtils.IMGUR_CLIENT_ID, imgurId)
@@ -187,27 +174,27 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
                                         @Override
                                         public void success(ArrayList<ImgurMedia> images) {
                                             ViewImgurMediaActivity.this.images = images;
-                                            progressBar.setVisibility(View.GONE);
-                                            errorLinearLayout.setVisibility(View.GONE);
+                                            binding.progressBarViewImgurMediaActivity.setVisibility(View.GONE);
+                                            binding.loadImageErrorLinearLayoutViewImgurMediaActivity.setVisibility(View.GONE);
                                             setupViewPager();
                                         }
 
                                         @Override
                                         public void failed() {
-                                            progressBar.setVisibility(View.GONE);
-                                            errorLinearLayout.setVisibility(View.VISIBLE);
+                                            binding.progressBarViewImgurMediaActivity.setVisibility(View.GONE);
+                                            binding.loadImageErrorLinearLayoutViewImgurMediaActivity.setVisibility(View.VISIBLE);
                                         }
                                     }).execute();
                                 } else {
-                                    progressBar.setVisibility(View.GONE);
-                                    errorLinearLayout.setVisibility(View.VISIBLE);
+                                    binding.progressBarViewImgurMediaActivity.setVisibility(View.GONE);
+                                    binding.loadImageErrorLinearLayoutViewImgurMediaActivity.setVisibility(View.VISIBLE);
                                 }
                             }
 
                             @Override
                             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                                progressBar.setVisibility(View.GONE);
-                                errorLinearLayout.setVisibility(View.VISIBLE);
+                                binding.progressBarViewImgurMediaActivity.setVisibility(View.GONE);
+                                binding.loadImageErrorLinearLayoutViewImgurMediaActivity.setVisibility(View.VISIBLE);
                             }
                         });
                 break;
@@ -221,27 +208,27 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
                                         @Override
                                         public void success(ArrayList<ImgurMedia> images) {
                                             ViewImgurMediaActivity.this.images = images;
-                                            progressBar.setVisibility(View.GONE);
-                                            errorLinearLayout.setVisibility(View.GONE);
+                                            binding.progressBarViewImgurMediaActivity.setVisibility(View.GONE);
+                                            binding.loadImageErrorLinearLayoutViewImgurMediaActivity.setVisibility(View.GONE);
                                             setupViewPager();
                                         }
 
                                         @Override
                                         public void failed() {
-                                            progressBar.setVisibility(View.GONE);
-                                            errorLinearLayout.setVisibility(View.VISIBLE);
+                                            binding.progressBarViewImgurMediaActivity.setVisibility(View.GONE);
+                                            binding.loadImageErrorLinearLayoutViewImgurMediaActivity.setVisibility(View.VISIBLE);
                                         }
                                     }).execute();
                                 } else {
-                                    progressBar.setVisibility(View.GONE);
-                                    errorLinearLayout.setVisibility(View.VISIBLE);
+                                    binding.progressBarViewImgurMediaActivity.setVisibility(View.GONE);
+                                    binding.loadImageErrorLinearLayoutViewImgurMediaActivity.setVisibility(View.VISIBLE);
                                 }
                             }
 
                             @Override
                             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                                progressBar.setVisibility(View.GONE);
-                                errorLinearLayout.setVisibility(View.VISIBLE);
+                                binding.progressBarViewImgurMediaActivity.setVisibility(View.GONE);
+                                binding.loadImageErrorLinearLayoutViewImgurMediaActivity.setVisibility(View.VISIBLE);
                             }
                         });
                 break;
@@ -256,27 +243,27 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
                                         public void success(ImgurMedia image) {
                                             ViewImgurMediaActivity.this.images = new ArrayList<>();
                                             ViewImgurMediaActivity.this.images.add(image);
-                                            progressBar.setVisibility(View.GONE);
-                                            errorLinearLayout.setVisibility(View.GONE);
+                                            binding.progressBarViewImgurMediaActivity.setVisibility(View.GONE);
+                                            binding.loadImageErrorLinearLayoutViewImgurMediaActivity.setVisibility(View.GONE);
                                             setupViewPager();
                                         }
 
                                         @Override
                                         public void failed() {
-                                            progressBar.setVisibility(View.GONE);
-                                            errorLinearLayout.setVisibility(View.VISIBLE);
+                                            binding.progressBarViewImgurMediaActivity.setVisibility(View.GONE);
+                                            binding.loadImageErrorLinearLayoutViewImgurMediaActivity.setVisibility(View.VISIBLE);
                                         }
                                     }).execute();
                                 } else {
-                                    progressBar.setVisibility(View.GONE);
-                                    errorLinearLayout.setVisibility(View.VISIBLE);
+                                    binding.progressBarViewImgurMediaActivity.setVisibility(View.GONE);
+                                    binding.loadImageErrorLinearLayoutViewImgurMediaActivity.setVisibility(View.VISIBLE);
                                 }
                             }
 
                             @Override
                             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                                progressBar.setVisibility(View.GONE);
-                                errorLinearLayout.setVisibility(View.VISIBLE);
+                                binding.progressBarViewImgurMediaActivity.setVisibility(View.GONE);
+                                binding.loadImageErrorLinearLayoutViewImgurMediaActivity.setVisibility(View.VISIBLE);
                             }
                         });
                 break;
@@ -286,7 +273,7 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     private void setupViewPager() {
         if (!useBottomAppBar) {
             setToolbarTitle(0);
-            viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            binding.viewPagerViewImgurMediaActivity.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
                 @Override
                 public void onPageSelected(int position) {
                     setToolbarTitle(position);
@@ -294,8 +281,8 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
             });
         }
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(sectionsPagerAdapter);
-        viewPager.setOffscreenPageLimit(3);
+        binding.viewPagerViewImgurMediaActivity.setAdapter(sectionsPagerAdapter);
+        binding.viewPagerViewImgurMediaActivity.setOffscreenPageLimit(3);
     }
 
     private void setToolbarTitle(int position) {
@@ -384,7 +371,7 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     }
 
     public int getCurrentPagePosition() {
-        return viewPager.getCurrentItem();
+        return binding.viewPagerViewImgurMediaActivity.getCurrentItem();
     }
 
     @Override

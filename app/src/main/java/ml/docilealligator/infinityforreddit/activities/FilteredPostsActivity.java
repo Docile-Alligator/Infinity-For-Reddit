@@ -12,13 +12,8 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -28,8 +23,6 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -48,6 +41,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomS
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UserThingSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.databinding.ActivityFilteredThingBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -74,16 +68,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     private static final String FRAGMENT_OUT_STATE = "FOS";
     private static final int CUSTOMIZE_POST_FILTER_ACTIVITY_REQUEST_CODE = 1000;
 
-    @BindView(R.id.coordinator_layout_filtered_thing_activity)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_filtered_posts_activity)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.collapsing_toolbar_layout_filtered_posts_activity)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.toolbar_filtered_posts_activity)
-    Toolbar toolbar;
-    @BindView(R.id.fab_filtered_thing_activity)
-    FloatingActionButton fab;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -109,6 +93,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     private PostFragment mFragment;
     private Menu mMenu;
     private boolean isNsfwSubreddit = false;
+    private ActivityFilteredThingBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,9 +101,8 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_filtered_thing);
-
-        ButterKnife.bind(this);
+        binding = ActivityFilteredThingBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         EventBus.getDefault().register(this);
 
@@ -132,7 +116,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
             Window window = getWindow();
 
             if (isChangeStatusBarIconColor()) {
-                addOnOffsetChangedListener(appBarLayout);
+                addOnOffsetChangedListener(binding.appbarLayoutFilteredPostsActivity);
             }
 
             if (isImmersiveInterface()) {
@@ -141,20 +125,20 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
-                adjustToolbar(toolbar);
+                adjustToolbar(binding.toolbarFilteredPostsActivity);
 
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {
-                    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) binding.fabFilteredThingActivity.getLayoutParams();
                     params.bottomMargin += navBarHeight;
-                    fab.setLayoutParams(params);
+                    binding.fabFilteredThingActivity.setLayoutParams(params);
                 }
             }
         }
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbarFilteredPostsActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setToolbarGoToTop(toolbar);
+        setToolbarGoToTop(binding.toolbarFilteredPostsActivity);
 
         name = getIntent().getStringExtra(EXTRA_NAME);
         postType = getIntent().getIntExtra(EXTRA_POST_TYPE, PostPagingSource.TYPE_FRONT_PAGE);
@@ -266,9 +250,10 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
 
     @Override
     protected void applyCustomTheme() {
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
-        applyFABTheme(fab);
+        binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutFilteredPostsActivity,
+                binding.collapsingToolbarLayoutFilteredPostsActivity, binding.toolbarFilteredPostsActivity);
+        applyFABTheme(binding.fabFilteredThingActivity);
     }
 
     private void bindView(PostFilter postFilter, boolean initializeFragment) {
@@ -288,7 +273,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                     getSupportActionBar().setTitle(subredditNamePrefixed);
 
                     mSubredditViewModel = new ViewModelProvider(this,
-                            new SubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, name))
+                            new SubredditViewModel.Factory(mRedditDataRoomDatabase, name))
                             .get(SubredditViewModel.class);
                     mSubredditViewModel.getSubredditLiveData().observe(this, subredditData -> {
                         if (subredditData != null) {
@@ -334,7 +319,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();
         }
 
-        fab.setOnClickListener(view -> {
+        binding.fabFilteredThingActivity.setOnClickListener(view -> {
             Intent intent = new Intent(this, CustomizePostFilterActivity.class);
             if (mFragment != null) {
                 intent.putExtra(CustomizePostFilterActivity.EXTRA_POST_FILTER, mFragment.getPostFilter());
@@ -343,7 +328,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         });
 
         if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-            fab.setOnLongClickListener(view -> {
+            binding.fabFilteredThingActivity.setOnLongClickListener(view -> {
                 FilteredThingFABMoreOptionsBottomSheetFragment filteredThingFABMoreOptionsBottomSheetFragment
                         = new FilteredThingFABMoreOptionsBottomSheetFragment();
                 filteredThingFABMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), filteredThingFABMoreOptionsBottomSheetFragment.getTag());
@@ -494,12 +479,12 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
 
     @Override
     public void contentScrollUp() {
-        fab.show();
+        binding.fabFilteredThingActivity.show();
     }
 
     @Override
     public void contentScrollDown() {
-        fab.hide();
+        binding.fabFilteredThingActivity.hide();
     }
 
     public boolean isNsfwSubreddit() {

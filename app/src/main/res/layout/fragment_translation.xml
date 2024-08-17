@@ -4,6 +4,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/recycler_view_translation_fragment"
     app:layoutManager="ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed"
     tools:context=".settings.TranslationFragment" />

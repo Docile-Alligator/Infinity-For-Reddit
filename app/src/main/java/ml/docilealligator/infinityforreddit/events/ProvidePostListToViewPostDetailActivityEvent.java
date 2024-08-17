@@ -11,6 +11,7 @@ public class ProvidePostListToViewPostDetailActivityEvent {
     public ArrayList<Post> posts;
     public int postType;
     public String subredditName;
+    public String concatenatedSubredditNames;
     public String username;
     public String userWhere;
     public String multiPath;
@@ -21,13 +22,16 @@ public class ProvidePostListToViewPostDetailActivityEvent {
     public ArrayList<String> readPostList;
 
     public ProvidePostListToViewPostDetailActivityEvent(long postFragmentId, ArrayList<Post> posts, int postType,
-                                                        String subredditName, String username, String userWhere,
+                                                        String subredditName, String concatenatedSubredditNames,
+                                                        String username, String userWhere,
                                                         String multiPath, String query, String trendingSource,
-                                                        PostFilter postFilter, SortType sortType, ArrayList<String> readPostList) {
+                                                        PostFilter postFilter, SortType sortType,
+                                                        ArrayList<String> readPostList) {
         this.postFragmentId = postFragmentId;
         this.posts = posts;
         this.postType = postType;
         this.subredditName = subredditName;
+        this.concatenatedSubredditNames = concatenatedSubredditNames;
         this.username = username;
         this.userWhere = userWhere;
         this.multiPath = multiPath;

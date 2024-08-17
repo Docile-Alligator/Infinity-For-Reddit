@@ -1,33 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="12dp"
     android:clickable="true"
     android:focusable="true"
-    android:background="?attr/selectableItemBackground">
+    style="?attr/materialCardViewFilledStyle">
 
-    <TextView
-        android:id="@+id/recent_search_query_text_view_item_recent_search_query"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:fontFamily="?attr/font_family"
-        android:textSize="?attr/font_default"
-        android:padding="16dp"
-        android:drawablePadding="16dp" />
+        android:orientation="vertical">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/delete_button_item_recent_search_query"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:padding="16dp"
-        app:strokeWidth="0dp"
-        app:iconSize="24dp"
-        app:iconTint="@null"
-        style="?attr/materialIconButtonOutlinedStyle" />
+        <TextView
+            android:id="@+id/recent_search_query_text_view_item_recent_search_query"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="?attr/font_family"
+            android:textSize="?attr/font_default"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/recent_search_query_where_text_view_item_recent_search_query"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="?attr/font_family"
+            android:textSize="?attr/font_default"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

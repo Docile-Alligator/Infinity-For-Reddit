@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.biometric.BiometricManager;
@@ -24,15 +23,13 @@ import com.bumptech.glide.request.RequestOptions;
 
 import java.util.concurrent.Executor;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.NavHeaderMainBinding;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import pl.droidsonroids.gif.GifImageView;
 
 public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final BaseActivity baseActivity;
@@ -72,58 +69,58 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new NavHeaderViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.nav_header_main, parent, false));
+        return new NavHeaderViewHolder(NavHeaderMainBinding
+                .inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof NavHeaderViewHolder) {
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((NavHeaderViewHolder) holder).profileImageView.getLayoutParams();
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((NavHeaderViewHolder) holder).binding.profileImageViewNavHeaderMain.getLayoutParams();
             if (showAvatarOnTheRightInTheNavigationDrawer) {
                 params.addRule(RelativeLayout.ALIGN_PARENT_END);
             } else {
                 params.removeRule(RelativeLayout.ALIGN_PARENT_END);
             }
-            ((NavHeaderViewHolder) holder).profileImageView.setLayoutParams(params);
+            ((NavHeaderViewHolder) holder).binding.profileImageViewNavHeaderMain.setLayoutParams(params);
             if (isLoggedIn) {
                 if (hideKarma) {
-                    int karmaTextHeight = ((NavHeaderViewHolder) holder).karmaTextView.getHeight();
-                    ((NavHeaderViewHolder) holder).karmaTextView.setVisibility(View.GONE);
-                    ((NavHeaderViewHolder) holder).accountNameTextView.setTranslationY(karmaTextHeight / 2);
+                    int karmaTextHeight = ((NavHeaderViewHolder) holder).binding.karmaTextViewNavHeaderMain.getHeight();
+                    ((NavHeaderViewHolder) holder).binding.karmaTextViewNavHeaderMain.setVisibility(View.GONE);
+                    ((NavHeaderViewHolder) holder).binding.nameTextViewNavHeaderMain.setTranslationY(karmaTextHeight / 2);
                 } else {
-                    ((NavHeaderViewHolder) holder).karmaTextView.setVisibility(View.VISIBLE);
-                    ((NavHeaderViewHolder) holder).karmaTextView.setText(baseActivity.getString(R.string.karma_info, karma));
-                    ((NavHeaderViewHolder) holder).accountNameTextView.setTranslationY(0);
+                    ((NavHeaderViewHolder) holder).binding.karmaTextViewNavHeaderMain.setVisibility(View.VISIBLE);
+                    ((NavHeaderViewHolder) holder).binding.karmaTextViewNavHeaderMain.setText(baseActivity.getString(R.string.karma_info, karma));
+                    ((NavHeaderViewHolder) holder).binding.nameTextViewNavHeaderMain.setTranslationY(0);
                 }
-                ((NavHeaderViewHolder) holder).accountNameTextView.setText(accountName);
+                ((NavHeaderViewHolder) holder).binding.nameTextViewNavHeaderMain.setText(accountName);
                 if (profileImageUrl != null && !profileImageUrl.equals("")) {
                     glide.load(profileImageUrl)
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
                             .error(glide.load(R.drawable.subreddit_default_icon)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0))))
-                            .into(((NavHeaderViewHolder) holder).profileImageView);
+                            .into(((NavHeaderViewHolder) holder).binding.profileImageViewNavHeaderMain);
                 } else {
                     glide.load(R.drawable.subreddit_default_icon)
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
-                            .into(((NavHeaderViewHolder) holder).profileImageView);
+                            .into(((NavHeaderViewHolder) holder).binding.profileImageViewNavHeaderMain);
                 }
 
                 if (bannerImageUrl != null && !bannerImageUrl.equals("")) {
-                    glide.load(bannerImageUrl).into(((NavHeaderViewHolder) holder).bannerImageView);
+                    glide.load(bannerImageUrl).into(((NavHeaderViewHolder) holder).binding.bannerImageViewNavHeaderMain);
                 }
             } else {
-                ((NavHeaderViewHolder) holder).karmaTextView.setText(R.string.press_here_to_login);
-                ((NavHeaderViewHolder) holder).accountNameTextView.setText(R.string.anonymous_account);
+                ((NavHeaderViewHolder) holder).binding.karmaTextViewNavHeaderMain.setText(R.string.press_here_to_login);
+                ((NavHeaderViewHolder) holder).binding.nameTextViewNavHeaderMain.setText(R.string.anonymous_account);
                 glide.load(R.drawable.subreddit_default_icon)
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
-                        .into(((NavHeaderViewHolder) holder).profileImageView);
+                        .into(((NavHeaderViewHolder) holder).binding.profileImageViewNavHeaderMain);
             }
 
             if (isInMainPage) {
-                ((NavHeaderViewHolder) holder).dropIconImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_arrow_drop_down_24dp));
+                ((NavHeaderViewHolder) holder).binding.accountSwitcherImageViewNavHeaderMain.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_arrow_drop_down_24dp));
             } else {
-                ((NavHeaderViewHolder) holder).dropIconImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_arrow_drop_up_24dp));
+                ((NavHeaderViewHolder) holder).binding.accountSwitcherImageViewNavHeaderMain.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_arrow_drop_up_24dp));
             }
 
             holder.itemView.setOnClickListener(view -> {
@@ -139,7 +136,7 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                                         @NonNull BiometricPrompt.AuthenticationResult result) {
                                     super.onAuthenticationSucceeded(result);
                                     pageToggle.openAccountSection();
-                                    openAccountSection(((NavHeaderViewHolder) holder).dropIconImageView);
+                                    openAccountSection(((NavHeaderViewHolder) holder).binding.accountSwitcherImageViewNavHeaderMain);
                                 }
                             });
 
@@ -151,14 +148,14 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                             biometricPrompt.authenticate(promptInfo);
                         } else {
                             pageToggle.openAccountSection();
-                            openAccountSection(((NavHeaderViewHolder) holder).dropIconImageView);
+                            openAccountSection(((NavHeaderViewHolder) holder).binding.accountSwitcherImageViewNavHeaderMain);
                         }
                     } else {
                         pageToggle.openAccountSection();
-                        openAccountSection(((NavHeaderViewHolder) holder).dropIconImageView);
+                        openAccountSection(((NavHeaderViewHolder) holder).binding.accountSwitcherImageViewNavHeaderMain);
                     }
                 } else {
-                    ((NavHeaderViewHolder) holder).dropIconImageView.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_arrow_drop_down_24dp, null));
+                    ((NavHeaderViewHolder) holder).binding.accountSwitcherImageViewNavHeaderMain.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_arrow_drop_down_24dp, null));
                     pageToggle.closeAccountSectionWithoutChangeIconResource();
                     closeAccountSectionWithoutChangeIconResource(false);
                 }
@@ -207,30 +204,21 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     }
 
     class NavHeaderViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.name_text_view_nav_header_main)
-        TextView accountNameTextView;
-        @BindView(R.id.karma_text_view_nav_header_main)
-        TextView karmaTextView;
-        @BindView(R.id.profile_image_view_nav_header_main)
-        GifImageView profileImageView;
-        @BindView(R.id.banner_image_view_nav_header_main)
-        ImageView bannerImageView;
-        @BindView(R.id.account_switcher_image_view_nav_header_main)
-        ImageView dropIconImageView;
+        NavHeaderMainBinding binding;
 
-        NavHeaderViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
+        NavHeaderViewHolder(@NonNull NavHeaderMainBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
 
             if (baseActivity.typeface != null) {
-                accountNameTextView.setTypeface(baseActivity.typeface);
-                karmaTextView.setTypeface(baseActivity.typeface);
+                binding.nameTextViewNavHeaderMain.setTypeface(baseActivity.typeface);
+                binding.karmaTextViewNavHeaderMain.setTypeface(baseActivity.typeface);
             }
 
             itemView.setBackgroundColor(customThemeWrapper.getColorPrimary());
-            accountNameTextView.setTextColor(customThemeWrapper.getToolbarPrimaryTextAndIconColor());
-            karmaTextView.setTextColor(customThemeWrapper.getToolbarSecondaryTextColor());
-            dropIconImageView.setColorFilter(customThemeWrapper.getToolbarPrimaryTextAndIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
+            binding.nameTextViewNavHeaderMain.setTextColor(customThemeWrapper.getToolbarPrimaryTextAndIconColor());
+            binding.karmaTextViewNavHeaderMain.setTextColor(customThemeWrapper.getToolbarSecondaryTextColor());
+            binding.accountSwitcherImageViewNavHeaderMain.setColorFilter(customThemeWrapper.getToolbarPrimaryTextAndIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
         }
     }
 

@@ -1070,8 +1070,6 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
 
     <!-- Fuzzy -->
     <string name="post_layout_card_2">"Disposition Carte 2"</string>
-    <string name="have_trouble_login_title">"Problème de connexion"</string>
-    <string name="have_trouble_login_message">"Voulez vous essayer un autre moyen d'identification ?"</string>
     <string name="vote">"Vote"</string>
     <string name="action_share_link">"Partager le Lien"</string>
     <string name="action_copy_link">"Copier le Lien"</string>
@@ -1170,9 +1168,7 @@ Vous voulez toujours l'activer ?"</string>
 
     <!-- Fuzzy -->
     <string name="post_gallery_activity_label">"Publier une galerie"</string>
-    <string name="trending_activity_label">"Tendance"</string>
     <string name="action_share_post_link">"Partager le lien du Post"</string>
-    <string name="trending">"Tendance"</string>
     <string name="receive_post_reply_notifications">"Recevoir des notifications de réponse de publication"</string>
     <string name="bottom_sheet_post_gallery">"Gallerie"</string>
     <string name="posting_gallery">"Publication de la galerie"</string>

@@ -191,8 +191,13 @@ public class ParseComment {
         for (int i = 0; i < actualCommentLength; i++) {
             JSONObject data = comments.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
             Comment singleComment = parseSingleComment(data, depth);
+            boolean isFilteredOut = false;
             if (!CommentFilter.isCommentAllowed(singleComment, commentFilter)) {
-                continue;
+                if (commentFilter.displayMode == CommentFilter.DisplayMode.REMOVE_COMMENT) {
+                    continue;
+                }
+
+                isFilteredOut = true;
             }
 
             if (data.get(JSONUtils.REPLIES_KEY) instanceof JSONObject) {
@@ -207,6 +212,7 @@ public class ParseComment {
                 singleComment.setChildCount(getChildCount(singleComment));
             }
 
+            singleComment.setIsFilteredOut(isFilteredOut);
             newCommentData.add(singleComment);
         }
     }
@@ -226,18 +232,22 @@ public class ParseComment {
                                        boolean setExpanded) {
         for (Comment c : comments) {
             visibleComments.add(c);
-            if (c.hasReply()) {
-                if (setExpanded) {
+            if (!c.isFilteredOut()) {
+                if (c.hasReply()) {
+                    if (setExpanded) {
+                        c.setExpanded(true);
+                    }
+                    expandChildren(c.getChildren(), visibleComments, setExpanded);
+                } else {
                     c.setExpanded(true);
                 }
-                expandChildren(c.getChildren(), visibleComments, setExpanded);
-            } else {
-                c.setExpanded(true);
             }
             if (c.hasMoreChildrenIds() && !c.getMoreChildrenIds().isEmpty()) {
                 //Add a load more placeholder
                 Comment placeholder = new Comment(c.getFullName(), c.getDepth() + 1, Comment.PLACEHOLDER_LOAD_MORE_COMMENTS);
-                visibleComments.add(placeholder);
+                if (!c.isFilteredOut()) {
+                    visibleComments.add(placeholder);
+                }
                 c.addChild(placeholder, c.getChildren().size());
             }
         }

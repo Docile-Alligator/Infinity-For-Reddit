@@ -956,8 +956,6 @@ Redarea automată a videoclipurilor este dezactivată."</string>
     <string name="settings_hide_the_number_of_comments">"Ascunde Numărul de Comentarii"</string>
     <string name="post_layout_gallery">"Aspectul Galeriei"</string>
     <string name="post_layout_card_2">"Aspect Card 2"</string>
-    <string name="have_trouble_login_title">"Există Probleme de Autentificare"</string>
-    <string name="have_trouble_login_message">"Dorești să încerci o altă modalitate de autentificare?"</string>
     <string name="vote">"Votează"</string>
     <string name="action_share_link">"Partajează link"</string>
     <string name="action_copy_link">"Copie Link-ul"</string>
@@ -1044,9 +1042,7 @@ Redarea automată a videoclipurilor este dezactivată."</string>
 Încă dorești să-l activezi?"</string>
     <string name="reply">"Răspunde"</string>
     <string name="post_gallery_activity_label">"Postare Galerie"</string>
-    <string name="trending_activity_label">"În Tendințe"</string>
     <string name="action_share_post_link">"Partajează link postare"</string>
-    <string name="trending">"În Tendințe"</string>
     <string name="receive_post_reply_notifications">"Primește notificări de răspuns la postări"</string>
     <string name="bottom_sheet_post_gallery">"Galerie"</string>
     <string name="posting_gallery">"Galeria de Postări"</string>

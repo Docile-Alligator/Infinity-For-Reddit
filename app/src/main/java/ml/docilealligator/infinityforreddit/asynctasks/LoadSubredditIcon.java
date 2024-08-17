@@ -27,21 +27,23 @@ public class LoadSubredditIcon {
                 String iconImageUrl = subredditDao.getSubredditData(subredditName).getIconUrl();
                 handler.post(() -> loadSubredditIconAsyncTaskListener.loadIconSuccess(iconImageUrl));
             } else {
-                handler.post(() -> FetchSubredditData.fetchSubredditData(accountName.equals(Account.ANONYMOUS_ACCOUNT) ? null : oauthRetrofit, retrofit, subredditName, accessToken, new FetchSubredditData.FetchSubredditDataListener() {
-                    @Override
-                    public void onFetchSubredditDataSuccess(SubredditData subredditData1, int nCurrentOnlineSubscribers) {
-                        ArrayList<SubredditData> singleSubredditDataList = new ArrayList<>();
-                        singleSubredditDataList.add(subredditData1);
-                        InsertSubscribedThings.insertSubscribedThings(executor, handler, redditDataRoomDatabase, accountName,
-                                null, null, singleSubredditDataList,
-                                () -> loadSubredditIconAsyncTaskListener.loadIconSuccess(subredditData1.getIconUrl()));
-                    }
+                handler.post(() -> FetchSubredditData.fetchSubredditData(executor, handler,
+                        accountName.equals(Account.ANONYMOUS_ACCOUNT) ? null : oauthRetrofit, retrofit,
+                        subredditName, accessToken, new FetchSubredditData.FetchSubredditDataListener() {
+                            @Override
+                            public void onFetchSubredditDataSuccess(SubredditData subredditData1, int nCurrentOnlineSubscribers) {
+                                ArrayList<SubredditData> singleSubredditDataList = new ArrayList<>();
+                                singleSubredditDataList.add(subredditData1);
+                                InsertSubscribedThings.insertSubscribedThings(executor, handler, redditDataRoomDatabase, accountName,
+                                        null, null, singleSubredditDataList,
+                                        () -> loadSubredditIconAsyncTaskListener.loadIconSuccess(subredditData1.getIconUrl()));
+                            }
 
-                    @Override
-                    public void onFetchSubredditDataFail(boolean isQuarantined) {
-                        loadSubredditIconAsyncTaskListener.loadIconSuccess(null);
-                    }
-                }));
+                            @Override
+                            public void onFetchSubredditDataFail(boolean isQuarantined) {
+                                loadSubredditIconAsyncTaskListener.loadIconSuccess(null);
+                            }
+                        }));
             }
         });
     }

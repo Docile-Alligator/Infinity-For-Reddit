@@ -1,21 +1,23 @@
 package ml.docilealligator.infinityforreddit.services;
 
 import android.app.Notification;
-import android.app.Service;
-import android.content.Intent;
+import android.app.job.JobInfo;
+import android.app.job.JobParameters;
+import android.app.job.JobService;
+import android.content.ComponentName;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.NetworkCapabilities;
+import android.net.NetworkRequest;
 import android.net.Uri;
-import android.os.Bundle;
+import android.os.Build;
 import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
-import android.os.Process;
+import android.os.PersistableBundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -27,6 +29,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.FileNotFoundException;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -42,46 +45,58 @@ import ml.docilealligator.infinityforreddit.utils.EditProfileUtils;
 import ml.docilealligator.infinityforreddit.utils.NotificationUtils;
 import retrofit2.Retrofit;
 
-public class EditProfileService extends Service {
+public class EditProfileService extends JobService {
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_ACCOUNT_NAME = "EAN";
     public static final String EXTRA_DISPLAY_NAME = "EDN";
     public static final String EXTRA_ABOUT_YOU = "EAY";
     public static final String EXTRA_POST_TYPE = "EPT";
+    public static final String EXTRA_MEDIA_URI = "EU";
 
     public static final int EXTRA_POST_TYPE_UNKNOWN = 0x500;
     public static final int EXTRA_POST_TYPE_CHANGE_BANNER = 0x501;
     public static final int EXTRA_POST_TYPE_CHANGE_AVATAR = 0x502;
     public static final int EXTRA_POST_TYPE_SAVE_EDIT_PROFILE = 0x503;
 
-    private static final String EXTRA_MEDIA_URI = "EU";
-
     private static final int MAX_BANNER_WIDTH = 1280;
     private static final int MIN_BANNER_WIDTH = 640;
     private static final int AVATAR_SIZE = 256;
+
+    private static int JOB_ID = 10000;
+
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private Handler handler;
-    private ServiceHandler serviceHandler;
+
+    public static JobInfo constructJobInfo(Context context, long contentEstimatedBytes, PersistableBundle extras) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            return new JobInfo.Builder(JOB_ID++, new ComponentName(context, EditProfileService.class))
+                    .setUserInitiated(true)
+                    .setRequiredNetwork(new NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build())
+                    .setEstimatedNetworkBytes(0, contentEstimatedBytes + 500)
+                    .setExtras(extras)
+                    .build();
+        } else {
+            return new JobInfo.Builder(JOB_ID++, new ComponentName(context, EditProfileService.class))
+                    .setExtras(extras)
+                    .build();
+        }
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
         ((Infinity) getApplication()).getAppComponent().inject(this);
         handler = new Handler();
-        HandlerThread thread = new HandlerThread("ServiceStartArguments",
-                Process.THREAD_PRIORITY_BACKGROUND);
-        thread.start();
-        serviceHandler = new ServiceHandler(thread.getLooper());
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        ((Infinity) getApplication()).getAppComponent().inject(this);
-
+    public boolean onStartJob(JobParameters params) {
         NotificationChannelCompat serviceChannel =
                 new NotificationChannelCompat.Builder(
                         NotificationUtils.CHANNEL_SUBMIT_POST,
@@ -93,114 +108,144 @@ public class EditProfileService extends Service {
         manager.createNotificationChannel(serviceChannel);
 
         int randomNotificationIdOffset = new Random().nextInt(10000);
-        Bundle bundle = intent.getExtras();
-        final int postType = intent.getIntExtra(EXTRA_POST_TYPE, EXTRA_POST_TYPE_UNKNOWN);
+
+        PersistableBundle bundle = params.getExtras();
+        String accessToken = bundle.getString(EXTRA_ACCESS_TOKEN);
+        String accountName = bundle.getString(EXTRA_ACCOUNT_NAME);
+        final int postType = bundle.getInt(EXTRA_POST_TYPE, EXTRA_POST_TYPE_UNKNOWN);
         switch (postType) {
             case EXTRA_POST_TYPE_CHANGE_BANNER:
-                bundle.putString(EXTRA_MEDIA_URI, intent.getData().toString());
-                startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
-                        createNotification(R.string.submit_change_banner));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    setNotification(params,
+                            NotificationUtils.EDIT_PROFILE_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                            createNotification(R.string.submit_change_banner),
+                            JobService.JOB_END_NOTIFICATION_POLICY_REMOVE);
+                } else {
+                    manager.notify(NotificationUtils.EDIT_PROFILE_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                            createNotification(R.string.submit_change_banner));
+                }
                 break;
             case EXTRA_POST_TYPE_CHANGE_AVATAR:
-                bundle.putString(EXTRA_MEDIA_URI, intent.getData().toString());
-                startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
-                        createNotification(R.string.submit_change_avatar));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    setNotification(params,
+                            NotificationUtils.EDIT_PROFILE_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                            createNotification(R.string.submit_change_avatar),
+                            JobService.JOB_END_NOTIFICATION_POLICY_REMOVE);
+                } else {
+                    manager.notify(NotificationUtils.EDIT_PROFILE_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                            createNotification(R.string.submit_change_avatar));
+                }
                 break;
             case EXTRA_POST_TYPE_SAVE_EDIT_PROFILE:
-                startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
-                        createNotification(R.string.submit_save_profile));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    setNotification(params,
+                            NotificationUtils.EDIT_PROFILE_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                            createNotification(R.string.submit_save_profile),
+                            JobService.JOB_END_NOTIFICATION_POLICY_REMOVE);
+                } else {
+                    manager.notify(NotificationUtils.EDIT_PROFILE_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset,
+                            createNotification(R.string.submit_save_profile));
+                }
                 break;
             default:
             case EXTRA_POST_TYPE_UNKNOWN:
-                break;
+                return false;
         }
 
-        Message msg = serviceHandler.obtainMessage();
-        msg.setData(bundle);
-        serviceHandler.sendMessage(msg);
-        return START_NOT_STICKY;
+        mExecutor.execute(() -> {
+            switch (postType) {
+                case EXTRA_POST_TYPE_CHANGE_BANNER:
+                    submitChangeBannerSync(params, accessToken,
+                            Uri.parse(bundle.getString(EXTRA_MEDIA_URI)),
+                            accountName);
+                    break;
+                case EXTRA_POST_TYPE_CHANGE_AVATAR:
+                    submitChangeAvatarSync(params, accessToken,
+                            Uri.parse(bundle.getString(EXTRA_MEDIA_URI)),
+                            accountName);
+                    break;
+                case EXTRA_POST_TYPE_SAVE_EDIT_PROFILE:
+                    submitSaveEditProfileSync(
+                            params,
+                            accessToken,
+                            accountName,
+                            bundle.getString(EXTRA_DISPLAY_NAME),
+                            bundle.getString(EXTRA_ABOUT_YOU)
+                    );
+                    break;
+            }
+        });
+
+        return true;
     }
 
-    @Nullable
     @Override
-    public IBinder onBind(Intent intent) {
-        return null;
+    public boolean onStopJob(JobParameters params) {
+        return false;
     }
 
-    private void submitChangeBanner(String accessToken, Uri mediaUri, String accountName) {
+    @WorkerThread
+    private void submitChangeBannerSync(JobParameters parameters, String accessToken, Uri mediaUri, String accountName) {
         try {
             final int width = getWidthBanner(mediaUri);
             final int height = Math.round(width * 3 / 10f); // ratio 10:3
             CropTransformation bannerCrop = new CropTransformation(width, height, CropTransformation.CropType.CENTER);
             Bitmap resource = Glide.with(this).asBitmap().skipMemoryCache(true)
                     .load(mediaUri).transform(bannerCrop).submit().get();
-            EditProfileUtils.uploadBanner(mOauthRetrofit, accessToken, accountName, resource, new EditProfileUtils.EditProfileUtilsListener() {
-                @Override
-                public void success() {
-                    handler.post(() -> EventBus.getDefault().post(new SubmitChangeBannerEvent(true, "")));
-                    stopService();
-                }
-
-                @Override
-                public void failed(String message) {
-                    handler.post(() -> EventBus.getDefault().post(new SubmitChangeBannerEvent(false, message)));
-                    stopService();
-                }
-            });
+            String potentialError = EditProfileUtils.uploadBannerSync(mOauthRetrofit, accessToken, accountName, resource);
+            if (potentialError == null) {
+                //Successful
+                handler.post(() -> EventBus.getDefault().post(new SubmitChangeBannerEvent(true, "")));
+                jobFinished(parameters, false);
+            } else {
+                handler.post(() -> EventBus.getDefault().post(new SubmitChangeBannerEvent(false, potentialError)));
+                jobFinished(parameters, false);
+            }
         } catch (InterruptedException | ExecutionException | FileNotFoundException e) {
             e.printStackTrace();
-            stopService();
+            handler.post(() -> EventBus.getDefault().post(new SubmitChangeBannerEvent(false, e.getLocalizedMessage())));
+            jobFinished(parameters, false);
         }
     }
 
-    private void submitChangeAvatar(String accessToken, Uri mediaUri, String accountName) {
+    @WorkerThread
+    private void submitChangeAvatarSync(JobParameters parameters, String accessToken, Uri mediaUri, String accountName) {
         try {
             final CropTransformation avatarCrop = new CropTransformation(AVATAR_SIZE, AVATAR_SIZE, CropTransformation.CropType.CENTER);
             final Bitmap resource = Glide.with(this).asBitmap().skipMemoryCache(true)
                     .load(mediaUri).transform(avatarCrop).submit().get();
-            EditProfileUtils.uploadAvatar(mOauthRetrofit, accessToken, accountName, resource, new EditProfileUtils.EditProfileUtilsListener() {
-                @Override
-                public void success() {
-                    handler.post(() -> EventBus.getDefault().post(new SubmitChangeAvatarEvent(true, "")));
-                    stopService();
-                }
-
-                @Override
-                public void failed(String message) {
-                    handler.post(() -> EventBus.getDefault().post(new SubmitChangeAvatarEvent(false, message)));
-                    stopService();
-                }
-            });
+            String potentialError = EditProfileUtils.uploadAvatarSync(mOauthRetrofit, accessToken, accountName, resource);
+            if (potentialError == null) {
+                //Successful
+                handler.post(() -> EventBus.getDefault().post(new SubmitChangeAvatarEvent(true, "")));
+                jobFinished(parameters, false);
+            } else {
+                handler.post(() -> EventBus.getDefault().post(new SubmitChangeAvatarEvent(false, potentialError)));
+                jobFinished(parameters, false);
+            }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
-            stopService();
+            handler.post(() -> EventBus.getDefault().post(new SubmitChangeAvatarEvent(false, e.getLocalizedMessage())));
+            jobFinished(parameters, false);
         }
     }
 
-    private void submitSaveEditProfile(@Nullable String accessToken,
-                                       @NonNull String accountName,
-                                       String displayName,
-                                       String publicDesc
+    @WorkerThread
+    private void submitSaveEditProfileSync(JobParameters parameters, @Nullable String accessToken,
+                                           @NonNull String accountName,
+                                           String displayName,
+                                           String publicDesc
     ) {
-        EditProfileUtils.updateProfile(mOauthRetrofit,
-                accessToken,
-                accountName,
-                displayName,
-                publicDesc,
-                new EditProfileUtils.EditProfileUtilsListener() {
-                    @Override
-                    public void success() {
-                        handler.post(() -> EventBus.getDefault().post(new SubmitSaveProfileEvent(true, "")));
-                        stopService();
-                    }
-
-                    @Override
-                    public void failed(String message) {
-                        handler.post(() -> EventBus.getDefault().post(new SubmitSaveProfileEvent(false, message)));
-                        stopService();
-                    }
-                });
-
+        String potentialError = EditProfileUtils.updateProfileSync(mOauthRetrofit, accessToken, accountName,
+                displayName, publicDesc);
+        if (potentialError == null) {
+            //Successful
+            handler.post(() -> EventBus.getDefault().post(new SubmitSaveProfileEvent(true, "")));
+            jobFinished(parameters, false);
+        } else {
+            handler.post(() -> EventBus.getDefault().post(new SubmitSaveProfileEvent(false, potentialError)));
+            jobFinished(parameters, false);
+        }
     }
 
     private Notification createNotification(int stringResId) {
@@ -212,54 +257,10 @@ public class EditProfileService extends Service {
                 .build();
     }
 
-    private void stopService() {
-        stopForeground(true);
-        stopSelf();
-    }
-
-
     private int getWidthBanner(Uri mediaUri) throws FileNotFoundException {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeStream(getContentResolver().openInputStream(mediaUri), null, options);
         return Math.max(Math.min(options.outWidth, MAX_BANNER_WIDTH), MIN_BANNER_WIDTH);
-    }
-
-    private class ServiceHandler extends Handler {
-        public ServiceHandler(Looper looper) {
-            super(looper);
-        }
-
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            Bundle bundle = msg.getData();
-            String accessToken = bundle.getString(EXTRA_ACCESS_TOKEN);
-            String accountName = bundle.getString(EXTRA_ACCOUNT_NAME);
-            final int postType = bundle.getInt(EXTRA_POST_TYPE, EXTRA_POST_TYPE_UNKNOWN);
-            switch (postType) {
-                case EXTRA_POST_TYPE_CHANGE_BANNER:
-                    submitChangeBanner(accessToken,
-                            Uri.parse(bundle.getString(EXTRA_MEDIA_URI)),
-                            accountName);
-                    break;
-                case EXTRA_POST_TYPE_CHANGE_AVATAR:
-                    submitChangeAvatar(accessToken,
-                            Uri.parse(bundle.getString(EXTRA_MEDIA_URI)),
-                            accountName);
-                    break;
-                case EXTRA_POST_TYPE_SAVE_EDIT_PROFILE:
-                    submitSaveEditProfile(
-                            accessToken,
-                            accountName,
-                            bundle.getString(EXTRA_DISPLAY_NAME),
-                            bundle.getString(EXTRA_ABOUT_YOU)
-                    );
-                    break;
-                default:
-                case EXTRA_POST_TYPE_UNKNOWN:
-                    break;
-            }
-        }
     }
 }

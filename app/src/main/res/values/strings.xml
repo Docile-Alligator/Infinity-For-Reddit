@@ -40,7 +40,6 @@
     <string name="search_users_result_activity_label">Users</string>
     <string name="multireddit_selection_activity_label">Select a Multireddit</string>
     <string name="post_gallery_activity_label">Gallery Post</string>
-    <string name="trending_activity_label">Trending</string>
     <string name="wiki_activity_label">Wiki</string>
     <string name="edit_profile_activity_label">Edit Profile</string>
     <string name="post_poll_activity_label">Poll Post</string>
@@ -141,7 +140,6 @@
     <string name="history">History</string>
     <string name="inbox">Inbox</string>
     <string name="inbox_with_count">Inbox (%1$,d)</string>
-    <string name="trending">Trending</string>
     <string name="upvoted">Upvoted</string>
     <string name="downvoted">Downvoted</string>
     <string name="hidden">Hidden</string>
@@ -313,6 +311,7 @@
     <string name="posting_video">Posting Video</string>
     <string name="posting_image">Posting Image</string>
     <string name="posting_gallery">Posting Gallery</string>
+    <string name="posting_poll">Posting Poll</string>
     <string name="please_wait">Please wait</string>
 
     <string name="add_account">Add an account</string>
@@ -647,6 +646,7 @@
     <string name="settings_hide_fab_in_post_feed">Hide FAB in Post Feed</string>
     <string name="settings_comment_divider_type">Comment Divider Type</string>
     <string name="settings_comment_filter_title">Comment Filter</string>
+    <string name="settings_embedded_media_type_title">Embedded Media Type</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -961,6 +961,7 @@
     <string name="theme_copied">Copied! Paste and share it to other people.</string>
     <string name="copy_theme_faied">Cannot copy the theme configuration</string>
     <string name="cannot_find_theme">Cannot find this theme</string>
+    <string name="cannot_download_theme_data">Cannot download theme data</string>
     <string name="import_theme">Import Theme</string>
     <string name="no_data_in_clipboard">Cannot find data in clipboard</string>
     <string name="import_theme_success">Import theme successfully</string>
@@ -969,6 +970,14 @@
     <string name="duplicate_theme_name_dialog_message">A theme in the database is also called %1$s. Do you want to change the name of this imported theme?</string>
     <string name="rename">Rename</string>
     <string name="override">Override</string>
+    <string name="save_theme_options_title">Save options</string>
+    <string name="save_theme_options_message">You uploaded this theme so you can make changes.</string>
+    <string name="save_locally">Save locally</string>
+    <string name="save_online">Save online</string>
+    <string name="save_locally_and_online">Save both locally and online</string>
+    <string name="theme_saved_locally">Theme saved locally</string>
+    <string name="theme_saved_online">Theme saved online</string>
+    <string name="upload_theme_failed">Failed to upload this theme. Try again later.</string>
 
     <string name="color_picker">Color Picker</string>
     <string name="invalid_color">Invalid Color</string>
@@ -1054,7 +1063,7 @@
 
     <string name="top_score">%1$s pts</string>
 
-    <string name="login_activity_2fa_prompt">If you have 2-factor authentication enabled, kindly type your password like the following: &lt;password&gt;:&lt;2FA code&gt;.\nExample: yourpass:123456</string>
+    <string name="login_activity_2fa_prompt">2-factor authentication: &lt;password&gt;:&lt;2FA code&gt;.\nExample: yourpass:123456\nGoogle login or having trouble login: click the bottom right button.</string>
 
     <string name="block_user">Block User</string>
     <string name="block_user_success">Blocked</string>
@@ -1162,8 +1171,8 @@
 
     <string name="choose_a_user">Choose a user</string>
 
-    <string name="have_trouble_login_title">Having Trouble Login</string>
-    <string name="have_trouble_login_message">Do you want to try another way to login?</string>
+    <string name="open_login_page">Open login page</string>
+    <string name="custom_tab_not_available">Chrome custom tab not available. Is Chrome or Firefox installed?</string>
 
     <string name="vote">Vote</string>
 
@@ -1269,9 +1278,9 @@
     <string name="app_lock_timeout_24_hours">24 hours</string>
 
     <!--EditProfileService Notification-->
-    <string name="submit_change_avatar">Submit Change Avatar</string>
-    <string name="submit_change_banner">Submit Change Banner</string>
-    <string name="submit_save_profile">Submit Save Profile</string>
+    <string name="submit_change_avatar">Changing Avatar</string>
+    <string name="submit_change_banner">Changing Banner</string>
+    <string name="submit_save_profile">Saving Profile</string>
 
     <!--EditProfileActivity-->
     <string name="action_edit_profile">Edit Profile</string>
@@ -1288,7 +1297,7 @@
     <string name="message_remove_banner_failed">Failed to remove banner %s</string>
     <string name="message_change_avatar_success">Change avatar successfully</string>
     <string name="message_change_avatar_failed">Failed to change avatar %s</string>
-    <string name="message_change_banner_success">Changing banner successfully</string>
+    <string name="message_change_banner_success">Change banner successfully</string>
     <string name="message_change_banner_failed">Failed to change banner %s</string>
     <string name="message_save_profile_success">Save profile successfully</string>
     <string name="message_save_profile_failed">Failed to save profile %s</string>
@@ -1385,5 +1394,19 @@
 
     <string name="add_to_comment_filter">Add to Comment Filter</string>
     <string name="cannot_edit_post_with_images">Editing posts with images is not allowed.</string>
+
+    <string name="local">Local</string>
+    <string name="online">Online</string>
+
+    <string name="image_and_gif">Image and GIF</string>
+    <string name="image_and_emote">Image and emote</string>
+    <string name="gif_and_emote">GIF and emote</string>
+    <string name="image_embedded_media">Image</string>
+    <string name="emote">Emote</string>
+    <string name="none">None</string>
+
+    <string name="comment_filter_display_mode">Display mode</string>
+    <string name="comment_filter_display_mode_remove_comments">Remove comments</string>
+    <string name="comment_filter_display_mode_fully_collapse_comments">Fully collapse comments</string>
 
 </resources>

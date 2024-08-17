@@ -973,8 +973,6 @@ Tự động phát video bị tắt."</string>
     <string name="settings_hide_the_number_of_comments">"Ẩn số lượng bình luận"</string>
     <string name="post_layout_gallery">"Bố cục bộ sưu tập"</string>
     <string name="post_layout_card_2">"Bố cục thẻ 2"</string>
-    <string name="have_trouble_login_title">"Đang gặp rắc rối khi đăng nhập"</string>
-    <string name="have_trouble_login_message">"Bạn có muốn thử một cách khác để đăng nhập không?"</string>
     <string name="vote">"Vote"</string>
     <string name="action_share_link">"Chia sẻ liên kết"</string>
     <string name="action_copy_link">"Sao chép liên kết"</string>
@@ -1067,9 +1065,7 @@ Tự động phát video bị tắt."</string>
 Bạn có vẫn muốn bật tuỳ chọn này không?"</string>
     <string name="reply">"Trả lời"</string>
     <string name="post_gallery_activity_label">"Bài đăng bộ sưu tập"</string>
-    <string name="trending_activity_label">"Trending"</string>
     <string name="action_share_post_link">"Chia sẻ đường link bài đăng"</string>
-    <string name="trending">"Trending"</string>
     <string name="receive_post_reply_notifications">"Nhận thông báo trả lời trong bài đăng"</string>
     <string name="bottom_sheet_post_gallery">"Bộ sưu tập"</string>
     <string name="posting_gallery">"Đăng bộ sưu tập"</string>
