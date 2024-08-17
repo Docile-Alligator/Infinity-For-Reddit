@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -16,11 +15,6 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -272,17 +266,17 @@ public class SearchActivity extends BaseActivity {
                     .setTitle(R.string.confirm)
                     .setMessage(R.string.confirm_delete_all_recent_searches)
                     .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-                        hideKeyboard(true);
+                        Utils.hideKeyboard(SearchActivity.this);
+
                         executor.execute(() -> {
                             List<RecentSearchQuery> deletedQueries = mRedditDataRoomDatabase.recentSearchQueryDao().getAllRecentSearchQueries(accountName);
                             mRedditDataRoomDatabase.recentSearchQueryDao().deleteAllRecentSearchQueries(accountName);
-                            view.post(() -> Snackbar.make(view, R.string.deleted_all_recent_search, Snackbar.LENGTH_LONG)
+                            handler.post(() -> Snackbar.make(view, R.string.all_recent_searches_deleted, Snackbar.LENGTH_LONG)
                                     .setAction(R.string.undo, v -> executor.execute(() -> mRedditDataRoomDatabase.recentSearchQueryDao().insertAll(deletedQueries)))
                                     .addCallback(new Snackbar.Callback() {
                                         @Override
                                         public void onDismissed(Snackbar transientBottomBar, int event) {
-                                            super.onDismissed(transientBottomBar, event);
-                                            hideKeyboard(false);
+                                            Utils.showKeyboard(SearchActivity.this, handler, binding.searchEditTextSearchActivity);
                                         }
                                     })
                                     .show());
@@ -336,16 +330,16 @@ public class SearchActivity extends BaseActivity {
 
                 @Override
                 public void onDelete(RecentSearchQuery recentSearchQuery) {
-                    hideKeyboard(true);
+                    Utils.hideKeyboard(SearchActivity.this);
+
                     executor.execute(() -> {
                         mRedditDataRoomDatabase.recentSearchQueryDao().deleteRecentSearchQueries(recentSearchQuery);
-                        Snackbar.make(appBarLayout, R.string.deleted_recent_search, Snackbar.LENGTH_SHORT)
+                        Snackbar.make(binding.getRoot(), R.string.recent_search_deleted, Snackbar.LENGTH_SHORT)
                                 .setAction(R.string.undo, v -> executor.execute(() -> mRedditDataRoomDatabase.recentSearchQueryDao().insert(recentSearchQuery)))
                                 .addCallback(new Snackbar.Callback() {
                                     @Override
                                     public void onDismissed(Snackbar transientBottomBar, int event) {
-                                        super.onDismissed(transientBottomBar, event);
-                                        hideKeyboard(false);
+                                        Utils.showKeyboard(SearchActivity.this, handler, binding.searchEditTextSearchActivity);
                                     }
                                 })
                                 .show();
@@ -391,15 +385,6 @@ public class SearchActivity extends BaseActivity {
                     adapter.setRecentSearchQueries(recentSearchQueries);
                 });
             }
-        }
-    }
-
-    private void hideKeyboard(Boolean hide) {
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (hide) imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            else imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
         }
     }
 

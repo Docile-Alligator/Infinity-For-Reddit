@@ -265,8 +265,8 @@
 
     <string name="confirm">Confirm</string>
     <string name="confirm_delete_all_recent_searches">Are you sure you want to delete all recent search queries?</string>
-    <string name="deleted_all_recent_search">Deleted all recent searches</string>
-    <string name="deleted_recent_search">Deleted recent search</string>
+    <string name="all_recent_searches_deleted">All recent searches deleted</string>
+    <string name="recent_search_deleted">Recent search Deleted</string>
     <string name="undo">Undo</string>
 
     <string name="sort_best">Best</string>
