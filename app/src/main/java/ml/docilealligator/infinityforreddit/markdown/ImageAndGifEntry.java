@@ -131,18 +131,16 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
 
         RequestBuilder<Drawable> imageRequestBuilder;
         if (dataSavingMode) {
-            if (disableImagePreview || (node.mediaMetadata.isGIF && !canShowGif) || (!node.mediaMetadata.isGIF && !canShowImage)) {
-                holder.binding.imageWrapperRelativeLayoutMarkdownImageAndGifBlock.setVisibility(View.GONE);
-                holder.binding.captionTextViewMarkdownImageAndGifBlock.setVisibility(View.VISIBLE);
-                holder.binding.captionTextViewMarkdownImageAndGifBlock.setGravity(Gravity.NO_GRAVITY);
-                SpannableString spannableString = new SpannableString(node.mediaMetadata.caption == null ? node.mediaMetadata.original.url : node.mediaMetadata.caption);
-                spannableString.setSpan(new URLSpan(node.mediaMetadata.original.url), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                holder.binding.captionTextViewMarkdownImageAndGifBlock.setText(spannableString);
+            if (disableImagePreview) {
+                showImageAsUrl(holder, node);
                 return;
             } else {
                 imageRequestBuilder = glide.load(node.mediaMetadata.downscaled.url).listener(holder.requestListener);
                 holder.binding.imageViewMarkdownImageAndGifBlock.setRatio((float) node.mediaMetadata.downscaled.y / node.mediaMetadata.downscaled.x);
             }
+        } else if ((node.mediaMetadata.isGIF && !canShowGif) || (!node.mediaMetadata.isGIF && !canShowImage)) {
+            showImageAsUrl(holder, node);
+            return;
         } else {
             imageRequestBuilder = glide.load(node.mediaMetadata.original.url).listener(holder.requestListener);
             holder.binding.imageViewMarkdownImageAndGifBlock.setRatio((float) node.mediaMetadata.original.y / node.mediaMetadata.original.x);
@@ -169,6 +167,15 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
             holder.binding.captionTextViewMarkdownImageAndGifBlock.setVisibility(View.VISIBLE);
             holder.binding.captionTextViewMarkdownImageAndGifBlock.setText(node.mediaMetadata.caption);
         }
+    }
+
+    private void showImageAsUrl(@NonNull Holder holder, @NonNull ImageAndGifBlock node) {
+        holder.binding.imageWrapperRelativeLayoutMarkdownImageAndGifBlock.setVisibility(View.GONE);
+        holder.binding.captionTextViewMarkdownImageAndGifBlock.setVisibility(View.VISIBLE);
+        holder.binding.captionTextViewMarkdownImageAndGifBlock.setGravity(Gravity.NO_GRAVITY);
+        SpannableString spannableString = new SpannableString(node.mediaMetadata.caption == null ? node.mediaMetadata.original.url : node.mediaMetadata.caption);
+        spannableString.setSpan(new URLSpan(node.mediaMetadata.original.url), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        holder.binding.captionTextViewMarkdownImageAndGifBlock.setText(spannableString);
     }
 
     @Override
