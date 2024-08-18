@@ -280,7 +280,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             @Override
             public void onDrawerClosed(View drawerView) {
                 if (adapter != null) {
-                    adapter.closeAccountSectionWithoutChangeIconResource(true);
+                    adapter.closeAccountManagement(true);
                 }
             }
         });
