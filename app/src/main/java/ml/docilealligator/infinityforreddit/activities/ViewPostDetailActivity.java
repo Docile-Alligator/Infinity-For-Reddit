@@ -280,6 +280,9 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                 binding.fabViewPostDetailActivity.setCoordinates();
             }
         });
+
+        sectionsPagerAdapter = new SectionsPagerAdapter(this);
+
         checkNewAccountAndBindView(savedInstanceState);
     }
 
@@ -361,7 +364,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     private void bindView(Bundle savedInstanceState) {
-        sectionsPagerAdapter = new SectionsPagerAdapter(this);
         binding.viewPager2ViewPostDetailActivity.setAdapter(sectionsPagerAdapter);
         if (savedInstanceState == null) {
             binding.viewPager2ViewPostDetailActivity.setCurrentItem(getIntent().getIntExtra(EXTRA_POST_LIST_POSITION, 0), false);

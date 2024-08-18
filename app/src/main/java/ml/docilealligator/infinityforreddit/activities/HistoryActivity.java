@@ -137,7 +137,6 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
         sectionsPagerAdapter = new SectionsPagerAdapter(this);
         binding.tabLayoutTabLayoutHistoryActivityActivity.setVisibility(View.GONE);
         binding.viewPagerHistoryActivity.setAdapter(sectionsPagerAdapter);
-        binding.viewPagerHistoryActivity.setOffscreenPageLimit(2);
         //viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
         binding.viewPagerHistoryActivity.setUserInputEnabled(false);
         /*new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {

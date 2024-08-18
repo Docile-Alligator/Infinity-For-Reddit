@@ -317,6 +317,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             }
         }
 
+        sectionsPagerAdapter = new SectionsPagerAdapter(this);
+
         checkNewAccountAndBindView();
 
         fetchSubredditData();
@@ -1023,7 +1025,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     }
                 });
 
-        sectionsPagerAdapter = new SectionsPagerAdapter(this);
         binding.viewPagerViewSubredditDetailActivity.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -1043,7 +1044,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             }
         });
         binding.viewPagerViewSubredditDetailActivity.setAdapter(sectionsPagerAdapter);
-        binding.viewPagerViewSubredditDetailActivity.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
         binding.viewPagerViewSubredditDetailActivity.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
         new TabLayoutMediator(binding.tabLayoutViewSubredditDetailActivity, binding.viewPagerViewSubredditDetailActivity, (tab, position) -> {
             switch (position) {

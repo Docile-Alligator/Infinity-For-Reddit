@@ -227,7 +227,6 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     private void bindView(Bundle savedInstanceState) {
         sectionsPagerAdapter = new SectionsPagerAdapter(this);
         binding.viewPagerSearchResultActivity.setAdapter(sectionsPagerAdapter);
-        binding.viewPagerSearchResultActivity.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
         binding.viewPagerSearchResultActivity.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
         binding.viewPagerSearchResultActivity.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override

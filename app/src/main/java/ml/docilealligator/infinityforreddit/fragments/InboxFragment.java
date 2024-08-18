@@ -215,8 +215,8 @@ public class InboxFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
     @Override

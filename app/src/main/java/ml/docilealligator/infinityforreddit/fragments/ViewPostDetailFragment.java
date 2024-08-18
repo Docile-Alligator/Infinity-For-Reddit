@@ -1196,8 +1196,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         Bridge.clear(this);
+        super.onDestroyView();
     }
 
     @Override

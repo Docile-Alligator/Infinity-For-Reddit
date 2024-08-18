@@ -326,8 +326,8 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
     public void changeSortType(SortType sortType) {

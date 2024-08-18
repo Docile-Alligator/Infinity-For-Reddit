@@ -140,6 +140,9 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         } else {
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
         }
+
+        sectionsPagerAdapter = new SectionsPagerAdapter(this);
+
         getCurrentAccountAndFetchMessage(savedInstanceState);
 
         binding.viewPagerInboxActivity.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -237,7 +240,6 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     }
 
     private void bindView(Bundle savedInstanceState) {
-        sectionsPagerAdapter = new SectionsPagerAdapter(this);
         binding.viewPagerInboxActivity.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -249,7 +251,6 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             }
         });
         binding.viewPagerInboxActivity.setAdapter(sectionsPagerAdapter);
-        binding.viewPagerInboxActivity.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
         new TabLayoutMediator(binding.tabLayoutInboxActivity, binding.viewPagerInboxActivity, (tab, position) -> {
             switch (position) {
                 case 0:

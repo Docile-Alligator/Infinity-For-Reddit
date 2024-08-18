@@ -238,6 +238,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
         }
 
+        sectionsPagerAdapter = new SectionsPagerAdapter(this);
+
         checkNewAccountAndInitializeViewPager();
 
         fetchUserInfo();
@@ -629,9 +631,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     private void initializeViewPager() {
-        sectionsPagerAdapter = new SectionsPagerAdapter(this);
         binding.viewPagerViewUserDetailActivity.setAdapter(sectionsPagerAdapter);
-        binding.viewPagerViewUserDetailActivity.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
         binding.viewPagerViewUserDetailActivity.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
         new TabLayoutMediator(binding.tabLayoutViewUserDetailActivity, binding.viewPagerViewUserDetailActivity, (tab, position) -> {
             switch (position) {
