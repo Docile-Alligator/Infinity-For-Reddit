@@ -101,27 +101,27 @@ public class CustomizePostFilterActivity extends BaseActivity {
         fromSettings = getIntent().getBooleanExtra(EXTRA_FROM_SETTINGS, false);
 
         binding.postTypeTextLinearLayoutCustomizePostFilterActivity.setOnClickListener(view -> {
-            binding.postTypeTextCheckBoxCustomizePostFilterActivity.performClick();
+            binding.postTypeTextSwitchCustomizePostFilterActivity.performClick();
         });
 
         binding.postTypeLinkLinearLayoutCustomizePostFilterActivity.setOnClickListener(view -> {
-            binding.postTypeLinkCheckBoxCustomizePostFilterActivity.performClick();
+            binding.postTypeLinkSwitchCustomizePostFilterActivity.performClick();
         });
 
         binding.postTypeImageLinearLayoutCustomizePostFilterActivity.setOnClickListener(view -> {
-            binding.postTypeImageCheckBoxCustomizePostFilterActivity.performClick();
+            binding.postTypeImageSwitchCustomizePostFilterActivity.performClick();
         });
 
         binding.postTypeGifLinearLayoutCustomizePostFilterActivity.setOnClickListener(view -> {
-            binding.postTypeGifCheckBoxCustomizePostFilterActivity.performClick();
+            binding.postTypeGifSwitchCustomizePostFilterActivity.performClick();
         });
 
         binding.postTypeVideoLinearLayoutCustomizePostFilterActivity.setOnClickListener(view -> {
-            binding.postTypeVideoCheckBoxCustomizePostFilterActivity.performClick();
+            binding.postTypeVideoSwitchCustomizePostFilterActivity.performClick();
         });
 
         binding.postTypeGalleryLinearLayoutCustomizePostFilterActivity.setOnClickListener(view -> {
-            binding.postTypeGalleryCheckBoxCustomizePostFilterActivity.performClick();
+            binding.postTypeGallerySwitchCustomizePostFilterActivity.performClick();
         });
 
         binding.onlyNsfwLinearLayoutCustomizePostFilterActivity.setOnClickListener(view -> {
@@ -172,12 +172,12 @@ public class CustomizePostFilterActivity extends BaseActivity {
 
     private void bindView() {
         binding.nameTextInputEditTextCustomizePostFilterActivity.setText(postFilter.name);
-        binding.postTypeTextCheckBoxCustomizePostFilterActivity.setChecked(postFilter.containTextType);
-        binding.postTypeLinkCheckBoxCustomizePostFilterActivity.setChecked(postFilter.containLinkType);
-        binding.postTypeImageCheckBoxCustomizePostFilterActivity.setChecked(postFilter.containImageType);
-        binding.postTypeGifCheckBoxCustomizePostFilterActivity.setChecked(postFilter.containGifType);
-        binding.postTypeVideoCheckBoxCustomizePostFilterActivity.setChecked(postFilter.containVideoType);
-        binding.postTypeGalleryCheckBoxCustomizePostFilterActivity.setChecked(postFilter.containGalleryType);
+        binding.postTypeTextSwitchCustomizePostFilterActivity.setChecked(postFilter.containTextType);
+        binding.postTypeLinkSwitchCustomizePostFilterActivity.setChecked(postFilter.containLinkType);
+        binding.postTypeImageSwitchCustomizePostFilterActivity.setChecked(postFilter.containImageType);
+        binding.postTypeGifSwitchCustomizePostFilterActivity.setChecked(postFilter.containGifType);
+        binding.postTypeVideoSwitchCustomizePostFilterActivity.setChecked(postFilter.containVideoType);
+        binding.postTypeGallerySwitchCustomizePostFilterActivity.setChecked(postFilter.containGalleryType);
         binding.onlyNsfwSwitchCustomizePostFilterActivity.setChecked(postFilter.onlyNSFW);
         binding.onlySpoilerSwitchCustomizePostFilterActivity.setChecked(postFilter.onlySpoiler);
         binding.titleExcludesStringsTextInputEditTextCustomizePostFilterActivity.setText(postFilter.postTitleExcludesStrings);
@@ -266,13 +266,21 @@ public class CustomizePostFilterActivity extends BaseActivity {
         binding.nameTextInputLayoutCustomizePostFilterActivity.setBoxStrokeColor(primaryTextColor);
         binding.nameTextInputLayoutCustomizePostFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         binding.nameTextInputEditTextCustomizePostFilterActivity.setTextColor(primaryTextColor);
+        binding.postTypeTextTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_text_24dp, primaryIconColor), null, null, null);
         binding.postTypeTextTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
+        binding.postTypeLinkTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_link, primaryIconColor), null, null, null);
         binding.postTypeLinkTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
+        binding.postTypeImageTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_image_24dp, primaryIconColor), null, null, null);
         binding.postTypeImageTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
+        binding.postTypeGifTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_image_24dp, primaryIconColor), null, null, null);
         binding.postTypeGifTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
+        binding.postTypeVideoTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_outline_video_24dp, primaryIconColor), null, null, null);
         binding.postTypeVideoTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
+        binding.postTypeGalleryTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_gallery_24dp, primaryIconColor), null, null, null);
         binding.postTypeGalleryTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
+        binding.onlyNsfwTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_nsfw_on_24dp, primaryIconColor), null, null, null);
         binding.onlyNsfwTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
+        binding.onlySpoilerTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_spoiler_black_24dp, primaryIconColor), null, null, null);
         binding.onlySpoilerTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
         binding.titleExcludesStringsTextInputLayoutCustomizePostFilterActivity.setBoxStrokeColor(primaryTextColor);
         binding.titleExcludesStringsTextInputLayoutCustomizePostFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
@@ -523,12 +531,12 @@ public class CustomizePostFilterActivity extends BaseActivity {
         postFilter.containFlairs = binding.containsFlairsTextInputEditTextCustomizePostFilterActivity.getText().toString();
         postFilter.excludeDomains = binding.excludeDomainsTextInputEditTextCustomizePostFilterActivity.getText().toString();
         postFilter.containDomains = binding.containDomainsTextInputEditTextCustomizePostFilterActivity.getText().toString();
-        postFilter.containTextType = binding.postTypeTextCheckBoxCustomizePostFilterActivity.isChecked();
-        postFilter.containLinkType = binding.postTypeLinkCheckBoxCustomizePostFilterActivity.isChecked();
-        postFilter.containImageType = binding.postTypeImageCheckBoxCustomizePostFilterActivity.isChecked();
-        postFilter.containGifType = binding.postTypeGifCheckBoxCustomizePostFilterActivity.isChecked();
-        postFilter.containVideoType = binding.postTypeVideoCheckBoxCustomizePostFilterActivity.isChecked();
-        postFilter.containGalleryType = binding.postTypeGalleryCheckBoxCustomizePostFilterActivity.isChecked();
+        postFilter.containTextType = binding.postTypeTextSwitchCustomizePostFilterActivity.isChecked();
+        postFilter.containLinkType = binding.postTypeLinkSwitchCustomizePostFilterActivity.isChecked();
+        postFilter.containImageType = binding.postTypeImageSwitchCustomizePostFilterActivity.isChecked();
+        postFilter.containGifType = binding.postTypeGifSwitchCustomizePostFilterActivity.isChecked();
+        postFilter.containVideoType = binding.postTypeVideoSwitchCustomizePostFilterActivity.isChecked();
+        postFilter.containGalleryType = binding.postTypeGallerySwitchCustomizePostFilterActivity.isChecked();
         postFilter.onlyNSFW = binding.onlyNsfwSwitchCustomizePostFilterActivity.isChecked();
         postFilter.onlySpoiler = binding.onlySpoilerSwitchCustomizePostFilterActivity.isChecked();
     }

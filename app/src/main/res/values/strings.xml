@@ -1153,6 +1153,7 @@
     <string name="edit_post_filter_name_of_usage_info">Leave it blank to apply this post filter to all the subreddits / users / multireddits</string>
     <string name="click_to_apply_post_filter">Click here to apply it to some post feeds</string>
     <string name="post_filter_usage_embedded_more_count">and %1$d more</string>
+    <string name="post_filter_post_type_explanation">To see certain types of posts, please turn on the switch corresponding to the types.</string>
 
     <string name="excludes_strings_hint">Exclude keywords (key1,key2)</string>
     <string name="comment_filter_name_hint">Comment Filter Name</string>

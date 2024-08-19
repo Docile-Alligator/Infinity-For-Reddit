@@ -64,14 +64,27 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <TextView
+                android:id="@+id/post_type_explanation_text_view_customize_post_filter_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:text="@string/post_filter_post_type_explanation"
+                android:textSize="?attr/font_default"
+                android:textColor="?attr/primaryTextColor"
+                android:fontFamily="?attr/font_family" />
+
             <LinearLayout
                 android:id="@+id/post_type_text_linear_layout_customize_post_filter_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:paddingStart="32dp"
-                android:paddingEnd="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:background="?attr/selectableItemBackground">
@@ -82,12 +95,13 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
+                    android:drawablePadding="32dp"
                     android:text="@string/bottom_sheet_post_text"
                     android:fontFamily="?attr/font_default"
                     android:textSize="?attr/font_default" />
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/post_type_text_check_box_customize_post_filter_activity"
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/post_type_text_switch_customize_post_filter_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical" />
@@ -100,8 +114,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:paddingStart="32dp"
-                android:paddingEnd="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:background="?attr/selectableItemBackground">
@@ -112,12 +126,13 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
+                    android:drawablePadding="32dp"
                     android:text="@string/bottom_sheet_post_link"
                     android:fontFamily="?attr/font_default"
                     android:textSize="?attr/font_default" />
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/post_type_link_check_box_customize_post_filter_activity"
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/post_type_link_switch_customize_post_filter_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical" />
@@ -130,8 +145,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:paddingStart="32dp"
-                android:paddingEnd="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:background="?attr/selectableItemBackground">
@@ -142,12 +157,13 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
+                    android:drawablePadding="32dp"
                     android:text="@string/bottom_sheet_post_image"
                     android:fontFamily="?attr/font_default"
                     android:textSize="?attr/font_default" />
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/post_type_image_check_box_customize_post_filter_activity"
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/post_type_image_switch_customize_post_filter_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical" />
@@ -160,8 +176,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:paddingStart="32dp"
-                android:paddingEnd="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:background="?attr/selectableItemBackground">
@@ -172,12 +188,13 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
+                    android:drawablePadding="32dp"
                     android:text="@string/post_type_gif"
                     android:fontFamily="?attr/font_default"
                     android:textSize="?attr/font_default" />
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/post_type_gif_check_box_customize_post_filter_activity"
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/post_type_gif_switch_customize_post_filter_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical" />
@@ -190,8 +207,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:paddingStart="32dp"
-                android:paddingEnd="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:background="?attr/selectableItemBackground">
@@ -202,12 +219,13 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
+                    android:drawablePadding="32dp"
                     android:text="@string/bottom_sheet_post_video"
                     android:fontFamily="?attr/font_default"
                     android:textSize="?attr/font_default" />
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/post_type_video_check_box_customize_post_filter_activity"
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/post_type_video_switch_customize_post_filter_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical" />
@@ -220,8 +238,8 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:paddingStart="32dp"
-                android:paddingEnd="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:background="?attr/selectableItemBackground">
@@ -232,12 +250,13 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
+                    android:drawablePadding="32dp"
                     android:text="@string/post_type_gallery"
                     android:fontFamily="?attr/font_default"
                     android:textSize="?attr/font_default" />
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/post_type_gallery_check_box_customize_post_filter_activity"
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/post_type_gallery_switch_customize_post_filter_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical" />
@@ -250,7 +269,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:paddingStart="32dp"
+                android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:clickable="true"
                 android:focusable="true"
@@ -262,6 +281,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
+                    android:drawablePadding="32dp"
                     android:text="@string/only_nsfw"
                     android:fontFamily="?attr/font_default"
                     android:textSize="?attr/font_default" />
@@ -280,7 +300,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
-                android:paddingStart="32dp"
+                android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:clickable="true"
                 android:focusable="true"
@@ -292,6 +312,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
+                    android:drawablePadding="32dp"
                     android:text="@string/only_spoiler"
                     android:fontFamily="?attr/font_default"
                     android:textSize="?attr/font_default" />
