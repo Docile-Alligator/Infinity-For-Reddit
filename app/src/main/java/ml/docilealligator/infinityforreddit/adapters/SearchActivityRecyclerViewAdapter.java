@@ -58,12 +58,12 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
                                 .setTextColor(userTextColor);
                         ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
-                                .setText("u/" + recentSearchQuery.getSearchQuery());
+                                .setText("u/" + recentSearchQuery.getSearchInSubredditOrUserName());
                     } else {
                         ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
                                 .setTextColor(subredditTextColor);
                         ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
-                                .setText("r/" + recentSearchQuery.getSearchQuery());
+                                .setText("r/" + recentSearchQuery.getSearchInSubredditOrUserName());
                     }
                 } else {
                     ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
