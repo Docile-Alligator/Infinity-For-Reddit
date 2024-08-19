@@ -46,7 +46,7 @@
     <string name="history_activity_label">History</string>
     <string name="subscription_activity_label">Subscription</string>
     <string name="comment_filter_preference_activity_label">Comment Filter</string>
-    <string name="customize_comment_filter_activity_label">Customize Post Filter</string>
+    <string name="customize_comment_filter_activity_label">Customize Comment Filter</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
