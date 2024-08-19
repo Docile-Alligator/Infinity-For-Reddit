@@ -263,7 +263,6 @@ public class CustomizePostFilterActivity extends BaseActivity {
                 binding.collapsingToolbarLayoutCustomizePostFilterActivity, binding.toolbarCustomizePostFilterActivity);
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         int primaryIconColor = mCustomThemeWrapper.getPrimaryIconColor();
-        Drawable cursorDrawable = Utils.getTintedDrawable(this, R.drawable.edit_text_cursor, primaryTextColor);
         binding.nameTextInputLayoutCustomizePostFilterActivity.setBoxStrokeColor(primaryTextColor);
         binding.nameTextInputLayoutCustomizePostFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         binding.nameTextInputEditTextCustomizePostFilterActivity.setTextColor(primaryTextColor);
@@ -321,21 +320,21 @@ public class CustomizePostFilterActivity extends BaseActivity {
         binding.maxCommentsTextInputEditTextCustomizePostFilterActivity.setTextColor(primaryTextColor);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            binding.nameTextInputEditTextCustomizePostFilterActivity.setTextCursorDrawable(cursorDrawable);
-            binding.titleExcludesStringsTextInputEditTextCustomizePostFilterActivity.setTextCursorDrawable(cursorDrawable);
-            binding.titleContainsStringsTextInputEditTextCustomizePostFilterActivity.setTextCursorDrawable(cursorDrawable);
-            binding.titleExcludesRegexTextInputEditTextCustomizePostFilterActivity.setTextCursorDrawable(cursorDrawable);
-            binding.titleContainsRegexTextInputEditTextCustomizePostFilterActivity.setTextCursorDrawable(cursorDrawable);
-            binding.excludesSubredditsTextInputEditTextCustomizePostFilterActivity.setTextCursorDrawable(cursorDrawable);
-            binding.excludesUsersTextInputEditTextCustomizePostFilterActivity.setTextCursorDrawable(cursorDrawable);
-            binding.excludesFlairsTextInputEditTextCustomizePostFilterActivity.setTextCursorDrawable(cursorDrawable);
-            binding.containsFlairsTextInputEditTextCustomizePostFilterActivity.setTextCursorDrawable(cursorDrawable);
-            binding.excludeDomainsTextInputEditTextCustomizePostFilterActivity.setTextCursorDrawable(cursorDrawable);
-            binding.containDomainsTextInputEditTextCustomizePostFilterActivity.setTextCursorDrawable(cursorDrawable);
-            binding.minVoteTextInputEditTextCustomizePostFilterActivity.setTextCursorDrawable(cursorDrawable);
-            binding.maxVoteTextInputEditTextCustomizePostFilterActivity.setTextCursorDrawable(cursorDrawable);
-            binding.minCommentsTextInputEditTextCustomizePostFilterActivity.setTextCursorDrawable(cursorDrawable);
-            binding.maxCommentsTextInputEditTextCustomizePostFilterActivity.setTextCursorDrawable(cursorDrawable);
+            binding.nameTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.titleExcludesStringsTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.titleContainsStringsTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.titleExcludesRegexTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.titleContainsRegexTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.excludesSubredditsTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.excludesUsersTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.excludesFlairsTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.containsFlairsTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.excludeDomainsTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.containDomainsTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.minVoteTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.maxVoteTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.minCommentsTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.maxCommentsTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
         } else {
             setCursorDrawableColor(binding.nameTextInputEditTextCustomizePostFilterActivity, primaryTextColor);
             setCursorDrawableColor(binding.titleExcludesStringsTextInputEditTextCustomizePostFilterActivity, primaryTextColor);
@@ -357,7 +356,9 @@ public class CustomizePostFilterActivity extends BaseActivity {
         if (typeface != null) {
             Utils.setFontToAllTextViews(binding.coordinatorLayoutCustomizePostFilterActivity, typeface);
         }
-    }                    void setCursorDrawableColor(EditText editText, int color) {
+    }
+
+    private void setCursorDrawableColor(EditText editText, int color) {
         try {
             Field fCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
             fCursorDrawableRes.setAccessible(true);

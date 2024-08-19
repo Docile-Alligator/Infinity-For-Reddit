@@ -433,13 +433,12 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
         binding.option6TextInputLayoutEditTextPostPollActivity.setTextColor(primaryTextColor);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            Drawable cursorDrawable = Utils.getTintedDrawable(this, R.drawable.edit_text_cursor, primaryTextColor);
-            binding.option1TextInputLayoutEditTextPostPollActivity.setTextCursorDrawable(cursorDrawable);
-            binding.option2TextInputLayoutEditTextPostPollActivity.setTextCursorDrawable(cursorDrawable);
-            binding.option3TextInputLayoutEditTextPostPollActivity.setTextCursorDrawable(cursorDrawable);
-            binding.option4TextInputLayoutEditTextPostPollActivity.setTextCursorDrawable(cursorDrawable);
-            binding.option5TextInputLayoutEditTextPostPollActivity.setTextCursorDrawable(cursorDrawable);
-            binding.option6TextInputLayoutEditTextPostPollActivity.setTextCursorDrawable(cursorDrawable);
+            binding.option1TextInputLayoutPostPollActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.option2TextInputLayoutPostPollActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.option3TextInputLayoutPostPollActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.option4TextInputLayoutPostPollActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.option5TextInputLayoutPostPollActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.option6TextInputLayoutPostPollActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
         } else {
             setCursorDrawableColor(binding.option1TextInputLayoutEditTextPostPollActivity, primaryTextColor);
             setCursorDrawableColor(binding.option2TextInputLayoutEditTextPostPollActivity, primaryTextColor);
