@@ -1153,6 +1153,7 @@
     <string name="edit_post_filter_name_of_usage_info">Leave it blank to apply this post filter to all the subreddits / users / multireddits</string>
     <string name="click_to_apply_post_filter">Click here to apply it to some post feeds</string>
     <string name="post_filter_usage_embedded_more_count">and %1$d more</string>
+    <string name="post_filter_name_explanation">The post filter name should be unique.</string>
     <string name="post_filter_post_type_explanation">To see certain types of posts, please turn on the switch corresponding to the types.</string>
     <string name="post_filter_only_nsfw_spoiler_explanation">To only see NSFW or spoiler posts, please turn on the corresponding switch.</string>
     <string name="post_filter_title_excludes_strings_explanation">Posts will be filtered out if they contain the following keywords in their title.</string>

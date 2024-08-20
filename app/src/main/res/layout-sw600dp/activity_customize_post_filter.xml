@@ -50,26 +50,57 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/name_text_input_layout_customize_post_filter_activity"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/name_card_view_customize_post_filter_activity"
+                    style="?attr/materialCardViewFilledStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="12dp">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/name_text_input_edit_text_customize_post_filter_activity"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="?attr/font_family"
-                        android:textSize="?attr/font_default"
-                        android:hint="@string/post_filter_name_hint"
-                        android:maxLines="10" />
+                        android:orientation="vertical">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <TextView
+                            android:id="@+id/name_explanation_text_view_customize_post_filter_activity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="?attr/font_family"
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:paddingEnd="16dp"
+                            android:paddingBottom="8dp"
+                            android:text="@string/post_filter_post_type_explanation"
+                            android:textColor="?attr/primaryTextColor"
+                            android:textSize="?attr/font_default" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/name_text_input_layout_customize_post_filter_activity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="16dp"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/name_text_input_edit_text_customize_post_filter_activity"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="?attr/font_family"
+                                android:textSize="?attr/font_default"
+                                android:hint="@string/post_filter_name_hint"
+                                android:maxLines="10" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/post_type_card_view_customize_post_filter_activity"
