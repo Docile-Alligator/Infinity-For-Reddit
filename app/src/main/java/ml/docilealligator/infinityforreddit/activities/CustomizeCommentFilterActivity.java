@@ -183,6 +183,10 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
         binding.nameTextInputLayoutCustomizeCommentFilterActivity.setBoxStrokeColor(primaryTextColor);
         binding.nameTextInputLayoutCustomizeCommentFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         binding.nameTextInputEditTextCustomizeCommentFilterActivity.setTextColor(primaryTextColor);
+
+        int filledCardViewBackgroundColor = mCustomThemeWrapper.getFilledCardViewBackgroundColor();
+        binding.displayModeCardViewCustomizePostFilterActivity.setCardBackgroundColor(filledCardViewBackgroundColor);
+        binding.displayModeExplanationTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
         binding.displayModeTitleTextViewCustomizeCommentFilterActivity.setTextColor(primaryTextColor);
         binding.displayModeSpinnerCustomizeCommentFilterActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -198,15 +202,25 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
 
             }
         });
+
+        binding.excludeStringsCardViewCustomizePostFilterActivity.setCardBackgroundColor(filledCardViewBackgroundColor);
+        binding.excludeStringsExplanationTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
         binding.excludeStringsTextInputLayoutCustomizeCommentFilterActivity.setBoxStrokeColor(primaryTextColor);
         binding.excludeStringsTextInputLayoutCustomizeCommentFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         binding.excludeStringsTextInputEditTextCustomizeCommentFilterActivity.setTextColor(primaryTextColor);
+
+        binding.excludeUsersCardViewCustomizePostFilterActivity.setCardBackgroundColor(filledCardViewBackgroundColor);
+        binding.excludeUsersExplanationTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
         binding.excludeUsersTextInputLayoutCustomizeCommentFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         binding.excludeUsersTextInputEditTextCustomizeCommentFilterActivity.setTextColor(primaryTextColor);
         binding.addUsersImageViewCustomizeCommentFilterActivity.setImageDrawable(Utils.getTintedDrawable(this, R.drawable.ic_add_24dp, primaryIconColor));
+
+        binding.voteCardViewCustomizePostFilterActivity.setCardBackgroundColor(filledCardViewBackgroundColor);
+        binding.minVoteExplanationTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
         binding.minVoteTextInputLayoutCustomizeCommentFilterActivity.setBoxStrokeColor(primaryTextColor);
         binding.minVoteTextInputLayoutCustomizeCommentFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         binding.minVoteTextInputEditTextCustomizeCommentFilterActivity.setTextColor(primaryTextColor);
+        binding.maxVoteExplanationTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
         binding.maxVoteTextInputLayoutCustomizeCommentFilterActivity.setBoxStrokeColor(primaryTextColor);
         binding.maxVoteTextInputLayoutCustomizeCommentFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         binding.maxVoteTextInputEditTextCustomizeCommentFilterActivity.setTextColor(primaryTextColor);
