@@ -180,11 +180,14 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCustomizeCommentFilterActivity, binding.collapsingToolbarLayoutCustomizeCommentFilterActivity, binding.toolbarCustomizeCommentFilterActivity);
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         int primaryIconColor = mCustomThemeWrapper.getPrimaryIconColor();
+        int filledCardViewBackgroundColor = mCustomThemeWrapper.getFilledCardViewBackgroundColor();
+
+        binding.nameCardViewCustomizePostFilterActivity.setCardBackgroundColor(filledCardViewBackgroundColor);
+        binding.nameExplanationTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
         binding.nameTextInputLayoutCustomizeCommentFilterActivity.setBoxStrokeColor(primaryTextColor);
         binding.nameTextInputLayoutCustomizeCommentFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         binding.nameTextInputEditTextCustomizeCommentFilterActivity.setTextColor(primaryTextColor);
 
-        int filledCardViewBackgroundColor = mCustomThemeWrapper.getFilledCardViewBackgroundColor();
         binding.displayModeCardViewCustomizePostFilterActivity.setCardBackgroundColor(filledCardViewBackgroundColor);
         binding.displayModeExplanationTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
         binding.displayModeTitleTextViewCustomizeCommentFilterActivity.setTextColor(primaryTextColor);

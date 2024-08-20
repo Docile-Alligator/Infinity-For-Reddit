@@ -1424,7 +1424,8 @@
     <string name="comment_filter_display_mode">Display mode</string>
     <string name="comment_filter_display_mode_remove_comments">Remove comments</string>
     <string name="comment_filter_display_mode_fully_collapse_comments">Fully collapse comments</string>
-    <string name="comment_filter_display_mode_explanation">Filtered out comments will be shown as the following selected option</string>
+    <string name="comment_filter_name_explanation">The comment filter name should be unique.</string>
+    <string name="comment_filter_display_mode_explanation">Filtered out comments will be shown as the following selected option.</string>
     <string name="comment_filter_exclude_strings_explanation">Comments will be filtered out if they contain the following keywords.</string>
     <string name="comment_filter_exclude_users_explanation">Comments will be filtered out if they were submitted by the following users.</string>
     <string name="comment_filter_min_vote_explanation">Comments that have a score lower than the following value will be filtered out (-1 means no restriction).</string>
