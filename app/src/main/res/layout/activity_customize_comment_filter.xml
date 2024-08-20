@@ -65,24 +65,26 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="20dp">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="20dp">
 
                 <TextView
                     android:id="@+id/display_mode_title_text_view_customize_comment_filter_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
+                    android:layout_gravity="center_vertical"
                     android:text="@string/comment_filter_display_mode"
                     android:textSize="?attr/font_default"
                     android:fontFamily="?attr/font_family" />
 
-                <Spinner
+                <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/display_mode_spinner_customize_comment_filter_activity"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
                     android:entries="@array/comment_filter_display_mode" />
 
             </LinearLayout>

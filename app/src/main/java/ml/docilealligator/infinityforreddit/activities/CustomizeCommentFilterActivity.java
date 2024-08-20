@@ -48,6 +48,7 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
     public static final String RETURN_EXTRA_COMMENT_FILTER = "RECF";
     private static final String COMMENT_FILTER_STATE = "CFS";
     private static final String ORIGINAL_NAME_STATE = "ONS";
+    private static final String DISPLAY_MODE_SELECTED_ITEM_INDEX_STATE = "DMSIIS";
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -122,6 +123,7 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
         if (savedInstanceState != null) {
             commentFilter = savedInstanceState.getParcelable(COMMENT_FILTER_STATE);
             originalName = savedInstanceState.getString(ORIGINAL_NAME_STATE);
+            binding.displayModeSpinnerCustomizeCommentFilterActivity.setSelection(savedInstanceState.getInt(DISPLAY_MODE_SELECTED_ITEM_INDEX_STATE), false);
         } else {
             commentFilter = getIntent().getParcelableExtra(EXTRA_COMMENT_FILTER);
             if (commentFilter == null) {
@@ -185,7 +187,10 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
         binding.displayModeSpinnerCustomizeCommentFilterActivity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ((TextView) parent.getChildAt(0)).setTextColor(primaryTextColor);
+                View child = parent.getChildAt(0);
+                if (child instanceof TextView) {
+                    ((TextView) child).setTextColor(primaryTextColor);
+                }
             }
 
             @Override
@@ -326,5 +331,6 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
         super.onSaveInstanceState(outState);
         outState.putParcelable(COMMENT_FILTER_STATE, commentFilter);
         outState.putString(ORIGINAL_NAME_STATE, originalName);
+        outState.putInt(DISPLAY_MODE_SELECTED_ITEM_INDEX_STATE, binding.displayModeSpinnerCustomizeCommentFilterActivity.getSelectedItemPosition());
     }
 }
