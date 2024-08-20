@@ -1154,6 +1154,21 @@
     <string name="click_to_apply_post_filter">Click here to apply it to some post feeds</string>
     <string name="post_filter_usage_embedded_more_count">and %1$d more</string>
     <string name="post_filter_post_type_explanation">To see certain types of posts, please turn on the switch corresponding to the types.</string>
+    <string name="post_filter_only_nsfw_spoiler_explanation">To only see NSFW or spoiler posts, please turn on the corresponding switch.</string>
+    <string name="post_filter_title_excludes_strings_explanation">Posts will be filtered out if they contain the following keywords in their title.</string>
+    <string name="post_filter_title_contains_strings_explanation">Posts will be filtered out if they do not contain the following keywords in their title.</string>
+    <string name="post_filter_title_excludes_regex_explanation">Posts will be filtered out if their title matches the following regular expression.</string>
+    <string name="post_filter_title_contains_regex_explanation">Posts will be filtered out if their title does not match the following regular expression.</string>
+    <string name="post_filter_exclude_subreddits_explanation">Posts from the following subreddits will be filtered out.</string>
+    <string name="post_filter_exclude_users_explanation">Posts submitted by the following users will be filtered out.</string>
+    <string name="post_filter_exclude_flairs_explanation">Posts that have the following flairs will be filtered out.</string>
+    <string name="post_filter_contain_flairs_explanation">Posts that do not have the following flairs will be filtered out.</string>
+    <string name="post_filter_exclude_domains_explanation">Link posts that have the following urls will be filtered out.</string>
+    <string name="post_filter_contain_domains_explanation">Link posts that do not have the following urls will be filtered out.</string>
+    <string name="post_filter_min_vote_explanation">Posts that have a score lower than the following value will be filtered out (-1 means no restriction).</string>
+    <string name="post_filter_max_vote_explanation">Posts that have a score higher than the following value will be filtered out (-1 means no restriction).</string>
+    <string name="post_filter_min_comments_explanation">Posts will be filtered out if the number of their comments is less than the following value. (-1 means no restriction).</string>
+    <string name="post_filter_max_comments_explanation">Posts will be filtered out if the number of their comments is larger than the following value. (-1 means no restriction).</string>
 
     <string name="excludes_strings_hint">Exclude keywords (key1,key2)</string>
     <string name="comment_filter_name_hint">Comment Filter Name</string>

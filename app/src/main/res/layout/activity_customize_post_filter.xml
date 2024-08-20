@@ -64,597 +64,972 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/post_type_explanation_text_view_customize_post_filter_activity"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/post_type_card_view_customize_post_filter_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:text="@string/post_filter_post_type_explanation"
-                android:textSize="?attr/font_default"
-                android:textColor="?attr/primaryTextColor"
-                android:fontFamily="?attr/font_family" />
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="12dp"
+                style="?attr/materialCardViewFilledStyle">
 
-            <LinearLayout
-                android:id="@+id/post_type_text_linear_layout_customize_post_filter_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <TextView
-                    android:id="@+id/post_type_text_text_view_customize_post_filter_activity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:drawablePadding="32dp"
-                    android:text="@string/bottom_sheet_post_text"
-                    android:fontFamily="?attr/font_default"
-                    android:textSize="?attr/font_default" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/post_type_text_switch_customize_post_filter_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/post_type_link_linear_layout_customize_post_filter_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <TextView
-                    android:id="@+id/post_type_link_text_view_customize_post_filter_activity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:drawablePadding="32dp"
-                    android:text="@string/bottom_sheet_post_link"
-                    android:fontFamily="?attr/font_default"
-                    android:textSize="?attr/font_default" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/post_type_link_switch_customize_post_filter_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/post_type_image_linear_layout_customize_post_filter_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <TextView
-                    android:id="@+id/post_type_image_text_view_customize_post_filter_activity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:drawablePadding="32dp"
-                    android:text="@string/bottom_sheet_post_image"
-                    android:fontFamily="?attr/font_default"
-                    android:textSize="?attr/font_default" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/post_type_image_switch_customize_post_filter_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/post_type_gif_linear_layout_customize_post_filter_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <TextView
-                    android:id="@+id/post_type_gif_text_view_customize_post_filter_activity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:drawablePadding="32dp"
-                    android:text="@string/post_type_gif"
-                    android:fontFamily="?attr/font_default"
-                    android:textSize="?attr/font_default" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/post_type_gif_switch_customize_post_filter_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/post_type_video_linear_layout_customize_post_filter_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <TextView
-                    android:id="@+id/post_type_video_text_view_customize_post_filter_activity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:drawablePadding="32dp"
-                    android:text="@string/bottom_sheet_post_video"
-                    android:fontFamily="?attr/font_default"
-                    android:textSize="?attr/font_default" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/post_type_video_switch_customize_post_filter_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/post_type_gallery_linear_layout_customize_post_filter_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <TextView
-                    android:id="@+id/post_type_gallery_text_view_customize_post_filter_activity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:drawablePadding="32dp"
-                    android:text="@string/post_type_gallery"
-                    android:fontFamily="?attr/font_default"
-                    android:textSize="?attr/font_default" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/post_type_gallery_switch_customize_post_filter_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/only_nsfw_linear_layout_customize_post_filter_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <TextView
-                    android:id="@+id/only_nsfw_text_view_customize_post_filter_activity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:drawablePadding="32dp"
-                    android:text="@string/only_nsfw"
-                    android:fontFamily="?attr/font_default"
-                    android:textSize="?attr/font_default" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/only_nsfw_switch_customize_post_filter_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/only_spoiler_linear_layout_customize_post_filter_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <TextView
-                    android:id="@+id/only_spoiler_text_view_customize_post_filter_activity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center_vertical"
-                    android:drawablePadding="32dp"
-                    android:text="@string/only_spoiler"
-                    android:fontFamily="?attr/font_default"
-                    android:textSize="?attr/font_default" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/only_spoiler_switch_customize_post_filter_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical" />
-
-            </LinearLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/title_excludes_strings_text_input_layout_customize_post_filter_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/title_excludes_strings_text_input_edit_text_customize_post_filter_activity"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="?attr/font_family"
-                    android:textSize="?attr/font_default"
-                    android:hint="@string/title_excludes_strings_hint"
-                    android:maxLines="10" />
+                    android:orientation="vertical">
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/title_contains_strings_text_input_layout_customize_post_filter_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/title_contains_strings_text_input_edit_text_customize_post_filter_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="?attr/font_family"
-                    android:textSize="?attr/font_default"
-                    android:hint="@string/title_contains_strings_hint"
-                    android:maxLines="10" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/title_excludes_regex_text_input_layout_customize_post_filter_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/title_excludes_regex_text_input_edit_text_customize_post_filter_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="?attr/font_family"
-                    android:textSize="?attr/font_default"
-                    android:hint="@string/title_excludes_regex_hint"
-                    android:maxLines="10" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/title_contains_regex_text_input_layout_customize_post_filter_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/title_contains_regex_text_input_edit_text_customize_post_filter_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="?attr/font_family"
-                    android:textSize="?attr/font_default"
-                    android:hint="@string/title_contains_regex_hint"
-                    android:maxLines="10" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/excludes_subreddits_text_input_layout_customize_post_filter_activity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:layout_marginStart="16dp"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/excludes_subreddits_text_input_edit_text_customize_post_filter_activity"
+                    <TextView
+                        android:id="@+id/post_type_explanation_text_view_customize_post_filter_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="?attr/font_family"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/post_filter_post_type_explanation"
                         android:textSize="?attr/font_default"
-                        android:hint="@string/exclude_subreddits_hint"
-                        android:maxLines="10" />
+                        android:textColor="?attr/primaryTextColor"
+                        android:fontFamily="?attr/font_family" />
 
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <ImageView
-                    android:id="@+id/add_subreddits_image_view_customize_post_filter_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:padding="16dp"
-                    android:background="?actionBarItemBackground"
-                    android:clickable="true"
-                    android:focusable="true" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/excludes_users_text_input_layout_customize_post_filter_activity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:layout_marginStart="16dp"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/excludes_users_text_input_edit_text_customize_post_filter_activity"
+                    <LinearLayout
+                        android:id="@+id/post_type_text_linear_layout_customize_post_filter_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="?attr/font_family"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+
+                        <TextView
+                            android:id="@+id/post_type_text_text_view_customize_post_filter_activity"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"
+                            android:drawablePadding="32dp"
+                            android:text="@string/bottom_sheet_post_text"
+                            android:fontFamily="?attr/font_default"
+                            android:textSize="?attr/font_default" />
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/post_type_text_switch_customize_post_filter_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/post_type_link_linear_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+
+                        <TextView
+                            android:id="@+id/post_type_link_text_view_customize_post_filter_activity"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"
+                            android:drawablePadding="32dp"
+                            android:text="@string/bottom_sheet_post_link"
+                            android:fontFamily="?attr/font_default"
+                            android:textSize="?attr/font_default" />
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/post_type_link_switch_customize_post_filter_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/post_type_image_linear_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+
+                        <TextView
+                            android:id="@+id/post_type_image_text_view_customize_post_filter_activity"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"
+                            android:drawablePadding="32dp"
+                            android:text="@string/bottom_sheet_post_image"
+                            android:fontFamily="?attr/font_default"
+                            android:textSize="?attr/font_default" />
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/post_type_image_switch_customize_post_filter_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/post_type_gif_linear_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+
+                        <TextView
+                            android:id="@+id/post_type_gif_text_view_customize_post_filter_activity"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"
+                            android:drawablePadding="32dp"
+                            android:text="@string/post_type_gif"
+                            android:fontFamily="?attr/font_default"
+                            android:textSize="?attr/font_default" />
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/post_type_gif_switch_customize_post_filter_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/post_type_video_linear_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+
+                        <TextView
+                            android:id="@+id/post_type_video_text_view_customize_post_filter_activity"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"
+                            android:drawablePadding="32dp"
+                            android:text="@string/bottom_sheet_post_video"
+                            android:fontFamily="?attr/font_default"
+                            android:textSize="?attr/font_default" />
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/post_type_video_switch_customize_post_filter_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/post_type_gallery_linear_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+
+                        <TextView
+                            android:id="@+id/post_type_gallery_text_view_customize_post_filter_activity"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"
+                            android:drawablePadding="32dp"
+                            android:text="@string/post_type_gallery"
+                            android:fontFamily="?attr/font_default"
+                            android:textSize="?attr/font_default" />
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/post_type_gallery_switch_customize_post_filter_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/only_nsfw_spoiler_card_view_customize_post_filter_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="12dp"
+                style="?attr/materialCardViewFilledStyle">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/only_nsfw_spoiler_explanation_text_view_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/post_filter_only_nsfw_spoiler_explanation"
                         android:textSize="?attr/font_default"
-                        android:hint="@string/exclude_users_hint"
-                        android:maxLines="10" />
+                        android:textColor="?attr/primaryTextColor"
+                        android:fontFamily="?attr/font_family" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                    <LinearLayout
+                        android:id="@+id/only_nsfw_linear_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
 
-                <ImageView
-                    android:id="@+id/add_users_image_view_customize_post_filter_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:padding="16dp"
-                    android:background="?actionBarItemBackground"
-                    android:clickable="true"
-                    android:focusable="true" />
+                        <TextView
+                            android:id="@+id/only_nsfw_text_view_customize_post_filter_activity"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"
+                            android:drawablePadding="32dp"
+                            android:text="@string/only_nsfw"
+                            android:fontFamily="?attr/font_default"
+                            android:textSize="?attr/font_default" />
 
-            </LinearLayout>
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/only_nsfw_switch_customize_post_filter_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/excludes_flairs_text_input_layout_customize_post_filter_activity"
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/only_spoiler_linear_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+
+                        <TextView
+                            android:id="@+id/only_spoiler_text_view_customize_post_filter_activity"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"
+                            android:drawablePadding="32dp"
+                            android:text="@string/only_spoiler"
+                            android:fontFamily="?attr/font_default"
+                            android:textSize="?attr/font_default" />
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/only_spoiler_switch_customize_post_filter_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/title_strings_card_view_customize_post_filter_activity"
+                style="?attr/materialCardViewFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="12dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/excludes_flairs_text_input_edit_text_customize_post_filter_activity"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="?attr/font_family"
-                    android:textSize="?attr/font_default"
-                    android:hint="@string/exclude_flairs_hint"
-                    android:maxLines="10" />
+                    android:orientation="vertical">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:id="@+id/title_exclude_strings_explanation_text_view_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/post_filter_title_excludes_strings_explanation"
+                        android:textSize="?attr/font_default"
+                        android:textColor="?attr/primaryTextColor"
+                        android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/contains_flairs_text_input_layout_customize_post_filter_activity"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/title_excludes_strings_text_input_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/title_excludes_strings_text_input_edit_text_customize_post_filter_activity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="?attr/font_family"
+                            android:textSize="?attr/font_default"
+                            android:hint="@string/title_excludes_strings_hint"
+                            android:maxLines="10" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/title_contains_strings_explanation_text_view_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/post_filter_title_contains_strings_explanation"
+                        android:textSize="?attr/font_default"
+                        android:textColor="?attr/primaryTextColor"
+                        android:fontFamily="?attr/font_family" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/title_contains_strings_text_input_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/title_contains_strings_text_input_edit_text_customize_post_filter_activity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="?attr/font_family"
+                            android:textSize="?attr/font_default"
+                            android:hint="@string/title_contains_strings_hint"
+                            android:maxLines="10" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/title_regex_card_view_customize_post_filter_activity"
+                style="?attr/materialCardViewFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="12dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/contains_flairs_text_input_edit_text_customize_post_filter_activity"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="?attr/font_family"
-                    android:textSize="?attr/font_default"
-                    android:hint="@string/contain_flairs_hint"
-                    android:maxLines="10" />
+                    android:orientation="vertical">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:id="@+id/title_excludes_regex_explanation_text_view_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/post_filter_title_excludes_regex_explanation"
+                        android:textSize="?attr/font_default"
+                        android:textColor="?attr/primaryTextColor"
+                        android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/exclude_domains_text_input_layout_customize_post_filter_activity"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/title_excludes_regex_text_input_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/title_excludes_regex_text_input_edit_text_customize_post_filter_activity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="?attr/font_family"
+                            android:textSize="?attr/font_default"
+                            android:hint="@string/title_excludes_regex_hint"
+                            android:maxLines="10" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/title_contains_regex_explanation_text_view_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/post_filter_title_contains_regex_explanation"
+                        android:textSize="?attr/font_default"
+                        android:textColor="?attr/primaryTextColor"
+                        android:fontFamily="?attr/font_family" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/title_contains_regex_text_input_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/title_contains_regex_text_input_edit_text_customize_post_filter_activity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="?attr/font_family"
+                            android:textSize="?attr/font_default"
+                            android:hint="@string/title_contains_regex_hint"
+                            android:maxLines="10" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/subreddits_users_card_view_customize_post_filter_activity"
+                style="?attr/materialCardViewFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="12dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/exclude_domains_text_input_edit_text_customize_post_filter_activity"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="?attr/font_family"
-                    android:textSize="?attr/font_default"
-                    android:hint="@string/exclude_domains_hint"
-                    android:maxLines="10" />
+                    android:orientation="vertical">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:id="@+id/exclude_subreddits_explanation_text_view_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/post_filter_exclude_subreddits_explanation"
+                        android:textSize="?attr/font_default"
+                        android:textColor="?attr/primaryTextColor"
+                        android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/contain_domains_text_input_layout_customize_post_filter_activity"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/excludes_subreddits_text_input_layout_customize_post_filter_activity"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:layout_marginStart="16dp"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/excludes_subreddits_text_input_edit_text_customize_post_filter_activity"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="?attr/font_family"
+                                android:textSize="?attr/font_default"
+                                android:hint="@string/exclude_subreddits_hint"
+                                android:maxLines="10" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <ImageView
+                            android:id="@+id/add_subreddits_image_view_customize_post_filter_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="16dp"
+                            android:background="?actionBarItemBackground"
+                            android:clickable="true"
+                            android:focusable="true" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/exclude_users_explanation_text_view_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/post_filter_exclude_users_explanation"
+                        android:textSize="?attr/font_default"
+                        android:textColor="?attr/primaryTextColor"
+                        android:fontFamily="?attr/font_family" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/excludes_users_text_input_layout_customize_post_filter_activity"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="16dp"
+                            android:layout_marginStart="16dp"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/excludes_users_text_input_edit_text_customize_post_filter_activity"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="?attr/font_family"
+                                android:textSize="?attr/font_default"
+                                android:hint="@string/exclude_users_hint"
+                                android:maxLines="10" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <ImageView
+                            android:id="@+id/add_users_image_view_customize_post_filter_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:padding="16dp"
+                            android:background="?actionBarItemBackground"
+                            android:clickable="true"
+                            android:focusable="true" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/flairs_card_view_customize_post_filter_activity"
+                style="?attr/materialCardViewFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="12dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/contain_domains_text_input_edit_text_customize_post_filter_activity"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="?attr/font_family"
-                    android:textSize="?attr/font_default"
-                    android:hint="@string/contain_domains_hint"
-                    android:maxLines="10" />
+                    android:orientation="vertical">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:id="@+id/exclude_flairs_explanation_text_view_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/post_filter_exclude_flairs_explanation"
+                        android:textSize="?attr/font_default"
+                        android:textColor="?attr/primaryTextColor"
+                        android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/min_vote_text_input_layout_customize_post_filter_activity"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/excludes_flairs_text_input_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/excludes_flairs_text_input_edit_text_customize_post_filter_activity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="?attr/font_family"
+                            android:textSize="?attr/font_default"
+                            android:hint="@string/exclude_flairs_hint"
+                            android:maxLines="10" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/contain_flairs_explanation_text_view_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/post_filter_contain_flairs_explanation"
+                        android:textSize="?attr/font_default"
+                        android:textColor="?attr/primaryTextColor"
+                        android:fontFamily="?attr/font_family" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/contains_flairs_text_input_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/contains_flairs_text_input_edit_text_customize_post_filter_activity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="?attr/font_family"
+                            android:textSize="?attr/font_default"
+                            android:hint="@string/contain_flairs_hint"
+                            android:maxLines="10" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/domains_card_view_customize_post_filter_activity"
+                style="?attr/materialCardViewFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="12dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/min_vote_text_input_edit_text_customize_post_filter_activity"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberSigned"
-                    android:fontFamily="?attr/font_family"
-                    android:textSize="?attr/font_default"
-                    android:hint="@string/min_vote_hint"
-                    android:maxLines="1" />
+                    android:orientation="vertical">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:id="@+id/exclude_domains_explanation_text_view_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/post_filter_exclude_domains_explanation"
+                        android:textSize="?attr/font_default"
+                        android:textColor="?attr/primaryTextColor"
+                        android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/max_vote_text_input_layout_customize_post_filter_activity"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/exclude_domains_text_input_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/exclude_domains_text_input_edit_text_customize_post_filter_activity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="?attr/font_family"
+                            android:textSize="?attr/font_default"
+                            android:hint="@string/exclude_domains_hint"
+                            android:maxLines="10" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/contain_domains_explanation_text_view_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/post_filter_contain_domains_explanation"
+                        android:textSize="?attr/font_default"
+                        android:textColor="?attr/primaryTextColor"
+                        android:fontFamily="?attr/font_family" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/contain_domains_text_input_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/contain_domains_text_input_edit_text_customize_post_filter_activity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="?attr/font_family"
+                            android:textSize="?attr/font_default"
+                            android:hint="@string/contain_domains_hint"
+                            android:maxLines="10" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/vote_card_view_customize_post_filter_activity"
+                style="?attr/materialCardViewFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="12dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/max_vote_text_input_edit_text_customize_post_filter_activity"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberSigned"
-                    android:fontFamily="?attr/font_family"
-                    android:textSize="?attr/font_default"
-                    android:hint="@string/max_vote_hint"
-                    android:maxLines="1" />
+                    android:orientation="vertical">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:id="@+id/min_vote_explanation_text_view_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/post_filter_min_vote_explanation"
+                        android:textSize="?attr/font_default"
+                        android:textColor="?attr/primaryTextColor"
+                        android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/min_comments_text_input_layout_customize_post_filter_activity"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/min_vote_text_input_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/min_vote_text_input_edit_text_customize_post_filter_activity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberSigned"
+                            android:fontFamily="?attr/font_family"
+                            android:textSize="?attr/font_default"
+                            android:hint="@string/min_vote_hint"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/max_vote_explanation_text_view_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/post_filter_max_vote_explanation"
+                        android:textSize="?attr/font_default"
+                        android:textColor="?attr/primaryTextColor"
+                        android:fontFamily="?attr/font_family" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/max_vote_text_input_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/max_vote_text_input_edit_text_customize_post_filter_activity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberSigned"
+                            android:fontFamily="?attr/font_family"
+                            android:textSize="?attr/font_default"
+                            android:hint="@string/max_vote_hint"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/comments_card_view_customize_post_filter_activity"
+                style="?attr/materialCardViewFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="12dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/min_comments_text_input_edit_text_customize_post_filter_activity"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberSigned"
-                    android:fontFamily="?attr/font_family"
-                    android:textSize="?attr/font_default"
-                    android:hint="@string/min_comments_hint"
-                    android:maxLines="1" />
+                    android:orientation="vertical">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <TextView
+                        android:id="@+id/min_comments_explanation_text_view_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/post_filter_min_comments_explanation"
+                        android:textSize="?attr/font_default"
+                        android:textColor="?attr/primaryTextColor"
+                        android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/max_comments_text_input_layout_customize_post_filter_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/min_comments_text_input_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/max_comments_text_input_edit_text_customize_post_filter_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberSigned"
-                    android:fontFamily="?attr/font_family"
-                    android:textSize="?attr/font_default"
-                    android:hint="@string/max_comments_hint"
-                    android:maxLines="1" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/min_comments_text_input_edit_text_customize_post_filter_activity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberSigned"
+                            android:fontFamily="?attr/font_family"
+                            android:textSize="?attr/font_default"
+                            android:hint="@string/min_comments_hint"
+                            android:maxLines="1" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/max_comments_explanation_text_view_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:text="@string/post_filter_max_comments_explanation"
+                        android:textSize="?attr/font_default"
+                        android:textColor="?attr/primaryTextColor"
+                        android:fontFamily="?attr/font_family" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/max_comments_text_input_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/max_comments_text_input_edit_text_customize_post_filter_activity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberSigned"
+                            android:fontFamily="?attr/font_family"
+                            android:textSize="?attr/font_default"
+                            android:hint="@string/max_comments_hint"
+                            android:maxLines="1" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
         
