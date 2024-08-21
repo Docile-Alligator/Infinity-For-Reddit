@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.ItemRecentSearchQueryBinding;
@@ -54,7 +55,7 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 RecentSearchQuery recentSearchQuery = recentSearchQueries.get(position);
                 ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryTextViewItemRecentSearchQuery.setText(recentSearchQuery.getSearchQuery());
                 if (recentSearchQuery.getSearchInSubredditOrUserName() != null && !recentSearchQuery.getSearchInSubredditOrUserName().isEmpty()) {
-                    if (recentSearchQuery.isSearchInIsUser()) {
+                    if (recentSearchQuery.getSearchInThingType() == SelectThingReturnKey.THING_TYPE.USER) {
                         ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
                                 .setTextColor(userTextColor);
                         ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery

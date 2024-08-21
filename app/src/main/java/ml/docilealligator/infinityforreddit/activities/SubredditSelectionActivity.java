@@ -31,6 +31,7 @@ import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThings;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -52,7 +53,7 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
     public static final String EXTRA_EXTRA_CLEAR_SELECTION = "EECS";
     public static final String EXTRA_RETURN_SUBREDDIT_NAME = "ERSN";
     public static final String EXTRA_RETURN_SUBREDDIT_ICON_URL = "ERSIURL";
-    public static final String EXTRA_RETURN_SUBREDDIT_IS_USER = "ERSIU";
+    public static final String EXTRA_RETURN_THING_TYPE = "ERTT";
 
     private static final int SUBREDDIT_SEARCH_REQUEST_CODE = 0;
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
@@ -254,7 +255,7 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_NAME, name);
                 returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_ICON_URL, iconUrl);
-                returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_IS_USER, false);
+                returnIntent.putExtra(EXTRA_RETURN_THING_TYPE, SelectThingReturnKey.THING_TYPE.SUBREDDIT);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }

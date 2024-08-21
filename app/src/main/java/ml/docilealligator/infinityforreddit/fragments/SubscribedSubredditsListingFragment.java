@@ -110,7 +110,7 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME, name);
                         returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON, iconUrl);
-                        returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_IS_USER, subredditIsUser);
+                        returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_THING_TYPE, subredditIsUser ? SelectThingReturnKey.THING_TYPE.USER : SelectThingReturnKey.THING_TYPE.SUBREDDIT);
                         mActivity.setResult(Activity.RESULT_OK, returnIntent);
                         mActivity.finish();
                     });

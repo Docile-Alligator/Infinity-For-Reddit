@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit.activities;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,8 +38,6 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 public class MultiredditSelectionActivity extends BaseActivity implements ActivityToolbarInterface {
-
-    public static final String EXTRA_RETURN_MULTIREDDIT = "ERM";
 
     private static final String INSERT_SUBSCRIBED_MULTIREDDIT_STATE = "ISSS";
     private static final String FRAGMENT_OUT_STATE = "FOS";
@@ -182,13 +178,6 @@ public class MultiredditSelectionActivity extends BaseActivity implements Activi
         }
 
         return false;
-    }
-
-    public void getSelectedMultireddit(MultiReddit multiReddit) {
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra(EXTRA_RETURN_MULTIREDDIT, multiReddit);
-        setResult(Activity.RESULT_OK, returnIntent);
-        finish();
     }
 
     @Override

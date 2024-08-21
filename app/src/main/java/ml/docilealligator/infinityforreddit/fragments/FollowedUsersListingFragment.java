@@ -106,7 +106,7 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
                     if (getArguments().getBoolean(EXTRA_IS_USER_SELECTION)) {
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME, subscribedUserData.getName());
-                        returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_IS_USER, true);
+                        returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_THING_TYPE, SelectThingReturnKey.THING_TYPE.USER);
                         mActivity.setResult(Activity.RESULT_OK, returnIntent);
                         mActivity.finish();
                     } else {

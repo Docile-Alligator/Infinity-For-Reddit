@@ -25,6 +25,7 @@ import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.MultiredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.activities.SearchActivity;
@@ -571,8 +572,8 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                         tab1CurrentName = data.getStringExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
                         binding.tab1NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab1CurrentName);
                         mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, tab1CurrentName).apply();
-                    } else if (data.hasExtra(MultiredditSelectionActivity.EXTRA_RETURN_MULTIREDDIT)) {
-                        MultiReddit multireddit = data.getParcelableExtra(MultiredditSelectionActivity.EXTRA_RETURN_MULTIREDDIT);
+                    } else if (data.hasExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT)) {
+                        MultiReddit multireddit = data.getParcelableExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT);
                         if (multireddit != null) {
                             tab1CurrentName = multireddit.getPath();
                             binding.tab1NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab1CurrentName);
@@ -589,8 +590,8 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                         tab2CurrentName = data.getStringExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
                         binding.tab2NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab2CurrentName);
                         mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, tab2CurrentName).apply();
-                    } else if (data.hasExtra(MultiredditSelectionActivity.EXTRA_RETURN_MULTIREDDIT)) {
-                        MultiReddit multireddit = data.getParcelableExtra(MultiredditSelectionActivity.EXTRA_RETURN_MULTIREDDIT);
+                    } else if (data.hasExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT)) {
+                        MultiReddit multireddit = data.getParcelableExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT);
                         if (multireddit != null) {
                             tab2CurrentName = multireddit.getPath();
                             binding.tab2NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab2CurrentName);
@@ -607,8 +608,8 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                         tab3CurrentName = data.getStringExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
                         binding.tab3NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab3CurrentName);
                         mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, tab3CurrentName).apply();
-                    } else if (data.hasExtra(MultiredditSelectionActivity.EXTRA_RETURN_MULTIREDDIT)) {
-                        MultiReddit multireddit = data.getParcelableExtra(MultiredditSelectionActivity.EXTRA_RETURN_MULTIREDDIT);
+                    } else if (data.hasExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT)) {
+                        MultiReddit multireddit = data.getParcelableExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT);
                         if (multireddit != null) {
                             tab3CurrentName = multireddit.getPath();
                             binding.tab3NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab3CurrentName);

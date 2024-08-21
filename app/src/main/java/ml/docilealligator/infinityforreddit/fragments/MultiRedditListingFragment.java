@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,9 +29,9 @@ import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.activities.MultiredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewMultiRedditDetailActivity;
 import ml.docilealligator.infinityforreddit.adapters.MultiRedditListingRecyclerViewAdapter;
@@ -105,8 +106,12 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
                 mActivity.accountName, new MultiRedditListingRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onClick(MultiReddit multiReddit) {
-                if (mActivity instanceof MultiredditSelectionActivity) {
-                    ((MultiredditSelectionActivity) mActivity).getSelectedMultireddit(multiReddit);
+                if (isGettingMultiredditInfo) {
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT, multiReddit);
+                    returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_THING_TYPE, SelectThingReturnKey.THING_TYPE.MULTIREDDIT);
+                    mActivity.setResult(Activity.RESULT_OK, returnIntent);
+                    mActivity.finish();
                 } else {
                     Intent intent = new Intent(mActivity, ViewMultiRedditDetailActivity.class);
                     intent.putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_DATA, multiReddit);

@@ -67,6 +67,7 @@ import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.account.Account;
@@ -828,7 +829,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH: {
                     Intent intent = new Intent(this, SearchActivity.class);
                     intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, username);
-                    intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_IS_USER, true);
+                    intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_THING_TYPE, SelectThingReturnKey.THING_TYPE.USER);
                     startActivity(intent);
                     break;
                 }
@@ -918,7 +919,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SEARCH: {
                 Intent intent = new Intent(this, SearchActivity.class);
                 intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, username);
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_IS_USER, true);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_THING_TYPE, SelectThingReturnKey.THING_TYPE.USER);
                 startActivity(intent);
                 break;
             }
@@ -1097,7 +1098,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         } else if (itemId == R.id.action_search_view_user_detail_activity) {
             Intent intent = new Intent(this, SearchActivity.class);
             intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, username);
-            intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_IS_USER, true);
+            intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_THING_TYPE, SelectThingReturnKey.THING_TYPE.USER);
             startActivity(intent);
             return true;
         } else if (itemId == R.id.action_refresh_view_user_detail_activity) {
@@ -1191,7 +1192,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 }
             } else if (requestCode == ADD_TO_MULTIREDDIT_REQUEST_CODE) {
                 if (data != null) {
-                    MultiReddit multiReddit = data.getParcelableExtra(MultiredditSelectionActivity.EXTRA_RETURN_MULTIREDDIT);
+                    MultiReddit multiReddit = data.getParcelableExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT);
                     if (multiReddit != null) {
                         AddSubredditOrUserToMultiReddit.addSubredditOrUserToMultiReddit(mOauthRetrofit,
                                 accessToken, multiReddit.getPath(), "u_" + username,
@@ -1283,7 +1284,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_SEARCH:
                 Intent intent = new Intent(this, SearchActivity.class);
                 intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, username);
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_IS_USER, true);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_THING_TYPE, SelectThingReturnKey.THING_TYPE.USER);
                 startActivity(intent);
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_GO_TO_SUBREDDIT: {

@@ -50,6 +50,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivitySearchBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQuery;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQueryViewModel;
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
@@ -66,7 +67,7 @@ public class SearchActivity extends BaseActivity {
 
     public static final String EXTRA_QUERY = "EQ";
     public static final String EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME = "ESISOUN";
-    public static final String EXTRA_SEARCH_IN_SUBREDDIT_IS_USER = "ESISIU";
+    public static final String EXTRA_SEARCH_IN_THING_TYPE = "ESITY";
     public static final String EXTRA_SEARCH_ONLY_SUBREDDITS = "ESOS";
     public static final String EXTRA_SEARCH_ONLY_USERS = "ESOU";
     public static final String EXTRA_SEARCH_SUBREDDITS_AND_USERS = "ESSAU";
@@ -80,7 +81,7 @@ public class SearchActivity extends BaseActivity {
     public static final int SUICIDE_PREVENTION_ACTIVITY_REQUEST_CODE = 101;
 
     private static final String SUBREDDIT_NAME_STATE = "SNS";
-    private static final String SUBREDDIT_IS_USER_STATE = "SIUS";
+    private static final String SEARCH_IN_THING_TYPE_STATE = "SITTS";
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
     private static final int SUBREDDIT_SEARCH_REQUEST_CODE = 1;
@@ -106,7 +107,9 @@ public class SearchActivity extends BaseActivity {
     Executor executor;
     private String query;
     private String searchInSubredditOrUserName;
-    private boolean searchInIsUser;
+    private MultiReddit searchInMultiReddit;
+    @SelectThingReturnKey.THING_TYPE
+    private int searchInThingType;
     private boolean searchOnlySubreddits;
     private boolean searchOnlyUsers;
     private boolean searchSubredditsAndUsers;
@@ -298,7 +301,7 @@ public class SearchActivity extends BaseActivity {
 
         if (savedInstanceState != null) {
             searchInSubredditOrUserName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
-            searchInIsUser = savedInstanceState.getBoolean(SUBREDDIT_IS_USER_STATE);
+            searchInThingType = savedInstanceState.getInt(SEARCH_IN_THING_TYPE_STATE);
 
             if (searchInSubredditOrUserName == null) {
                 binding.subredditNameTextViewSearchActivity.setText(R.string.all_subreddits);
@@ -317,7 +320,7 @@ public class SearchActivity extends BaseActivity {
             }
 
             searchInSubredditOrUserName = returnIntent.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
-            searchInIsUser = returnIntent.getBooleanExtra(SelectThingReturnKey.RETURN_EXTRA_IS_USER, false);
+            searchInThingType = returnIntent.getIntExtra(SelectThingReturnKey.RETURN_EXTRA_THING_TYPE, SelectThingReturnKey.THING_TYPE.SUBREDDIT);
 
             if (searchInSubredditOrUserName == null) {
                 binding.subredditNameTextViewSearchActivity.setText(R.string.all_subreddits);
@@ -345,7 +348,7 @@ public class SearchActivity extends BaseActivity {
         if (intent.hasExtra(EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME)) {
             searchInSubredditOrUserName = intent.getStringExtra(EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME);
             binding.subredditNameTextViewSearchActivity.setText(searchInSubredditOrUserName);
-            searchInIsUser = intent.getBooleanExtra(EXTRA_SEARCH_IN_SUBREDDIT_IS_USER, false);
+            searchInThingType = intent.getIntExtra(EXTRA_SEARCH_IN_THING_TYPE, SelectThingReturnKey.THING_TYPE.SUBREDDIT);
         }
     }
 
@@ -355,7 +358,7 @@ public class SearchActivity extends BaseActivity {
                 @Override
                 public void onClick(RecentSearchQuery recentSearchQuery) {
                     searchInSubredditOrUserName = recentSearchQuery.getSearchInSubredditOrUserName();
-                    searchInIsUser = recentSearchQuery.isSearchInIsUser();
+                    searchInThingType = recentSearchQuery.getSearchInThingType();
                     search(recentSearchQuery.getSearchQuery());
                 }
 
@@ -450,7 +453,7 @@ public class SearchActivity extends BaseActivity {
             intent.putExtra(SearchResultActivity.EXTRA_QUERY, query);
             if (searchInSubredditOrUserName != null) {
                 intent.putExtra(SearchResultActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, searchInSubredditOrUserName);
-                intent.putExtra(SearchResultActivity.EXTRA_SEARCH_IN_SUBREDDIT_IS_USER, searchInIsUser);
+                intent.putExtra(SearchResultActivity.EXTRA_SEARCH_IN_THING_TYPE, searchInThingType);
             }
             startActivity(intent);
             finish();
@@ -515,7 +518,7 @@ public class SearchActivity extends BaseActivity {
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == SUBREDDIT_SELECTION_REQUEST_CODE) {
                 searchInSubredditOrUserName = data.getStringExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
-                searchInIsUser = data.getBooleanExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_IS_USER, false);
+                searchInThingType = data.getIntExtra(SubredditSelectionActivity.EXTRA_RETURN_THING_TYPE, SelectThingReturnKey.THING_TYPE.SUBREDDIT);
 
                 if (searchInSubredditOrUserName == null) {
                     binding.subredditNameTextViewSearchActivity.setText(R.string.all_subreddits);
@@ -568,7 +571,7 @@ public class SearchActivity extends BaseActivity {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(SUBREDDIT_NAME_STATE, searchInSubredditOrUserName);
-        outState.putBoolean(SUBREDDIT_IS_USER_STATE, searchInIsUser);
+        outState.putInt(SEARCH_IN_THING_TYPE_STATE, searchInThingType);
     }
 
     @Override

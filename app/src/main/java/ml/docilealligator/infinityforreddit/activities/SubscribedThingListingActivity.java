@@ -490,6 +490,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
 
             MultiRedditListingFragment fragment = new MultiRedditListingFragment();
             Bundle bundle = new Bundle();
+            bundle.putBoolean(MultiRedditListingFragment.EXTRA_IS_GETTING_MULTIREDDIT_INFO, isThingSelectionMode);
             fragment.setArguments(bundle);
             return fragment;
         }
