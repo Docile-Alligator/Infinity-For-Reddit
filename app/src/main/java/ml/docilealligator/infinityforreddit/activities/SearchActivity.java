@@ -120,7 +120,7 @@ public class SearchActivity extends BaseActivity {
     private Call<String> subredditAutocompleteCall;
     RecentSearchQueryViewModel mRecentSearchQueryViewModel;
     private ActivityResultLauncher<Intent> requestThingSelectionForCurrentActivityLauncher;
-    private ActivityResultLauncher<Intent> requestThingSelectionForOtherActivityLauncher;
+    private ActivityResultLauncher<Intent> requestThingSelectionForAnotherActivityLauncher;
     private ActivitySearchBinding binding;
 
     @Override
@@ -315,21 +315,30 @@ public class SearchActivity extends BaseActivity {
 
         requestThingSelectionForCurrentActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             Intent returnIntent = result.getData();
-            if (returnIntent == null) {
+            if (returnIntent == null || returnIntent.getExtras() == null) {
                 return;
             }
 
             searchInSubredditOrUserName = returnIntent.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
             searchInThingType = returnIntent.getIntExtra(SelectThingReturnKey.RETURN_EXTRA_THING_TYPE, SelectThingReturnKey.THING_TYPE.SUBREDDIT);
+            searchInMultiReddit = returnIntent.getExtras().getParcelable(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT);
 
-            if (searchInSubredditOrUserName == null) {
-                binding.subredditNameTextViewSearchActivity.setText(R.string.all_subreddits);
-            } else {
-                binding.subredditNameTextViewSearchActivity.setText(searchInSubredditOrUserName);
+            switch (searchInThingType) {
+                case SelectThingReturnKey.THING_TYPE.SUBREDDIT:
+                case SelectThingReturnKey.THING_TYPE.USER:
+                    if (searchInSubredditOrUserName == null) {
+                        binding.subredditNameTextViewSearchActivity.setText(R.string.all_subreddits);
+                    } else {
+                        binding.subredditNameTextViewSearchActivity.setText(searchInSubredditOrUserName);
+                    }
+                    break;
+                case SelectThingReturnKey.THING_TYPE.MULTIREDDIT:
+                    binding.subredditNameTextViewSearchActivity.setText(searchInMultiReddit.getDisplayName());
+
             }
         });
 
-        requestThingSelectionForOtherActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        requestThingSelectionForAnotherActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             setResult(RESULT_OK, result.getData());
             finish();
         });
@@ -447,7 +456,7 @@ public class SearchActivity extends BaseActivity {
             Intent intent = new Intent(this, SearchResultActivity.class);
             intent.putExtra(SearchResultActivity.EXTRA_QUERY, query);
             intent.putExtra(SearchResultActivity.EXTRA_SHOULD_RETURN_SUBREDDIT_AND_USER_NAME, true);
-            requestThingSelectionForOtherActivityLauncher.launch(intent);
+            requestThingSelectionForAnotherActivityLauncher.launch(intent);
         } else {
             Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
             intent.putExtra(SearchResultActivity.EXTRA_QUERY, query);
