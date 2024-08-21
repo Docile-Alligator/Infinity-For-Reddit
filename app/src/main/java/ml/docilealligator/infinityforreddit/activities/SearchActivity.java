@@ -116,7 +116,8 @@ public class SearchActivity extends BaseActivity {
     private Runnable autoCompleteRunnable;
     private Call<String> subredditAutocompleteCall;
     RecentSearchQueryViewModel mRecentSearchQueryViewModel;
-    private ActivityResultLauncher<Intent> requestThingSelectionLauncher;
+    private ActivityResultLauncher<Intent> requestThingSelectionForCurrentActivityLauncher;
+    private ActivityResultLauncher<Intent> requestThingSelectionForOtherActivityLauncher;
     private ActivitySearchBinding binding;
 
     @Override
@@ -151,7 +152,7 @@ public class SearchActivity extends BaseActivity {
             binding.searchEditTextSearchActivity.setHint(R.string.search_only_subreddits_hint);
         } else if (searchOnlyUsers) {
             binding.searchEditTextSearchActivity.setHint(R.string.search_only_users_hint);
-        } else {
+        } else if (searchSubredditsAndUsers) {
             binding.searchEditTextSearchActivity.setHint(R.string.search_subreddits_and_users_hint);
         }
 
@@ -309,7 +310,7 @@ public class SearchActivity extends BaseActivity {
         }
         bindView();
 
-        requestThingSelectionLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+        requestThingSelectionForCurrentActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             Intent returnIntent = result.getData();
             if (returnIntent == null) {
                 return;
@@ -325,13 +326,18 @@ public class SearchActivity extends BaseActivity {
             }
         });
 
+        requestThingSelectionForOtherActivityLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            setResult(RESULT_OK, result.getData());
+            finish();
+        });
+
         if (searchOnlySubreddits || searchOnlyUsers || searchSubredditsAndUsers) {
             binding.subredditNameRelativeLayoutSearchActivity.setVisibility(View.GONE);
         } else {
             binding.subredditNameRelativeLayoutSearchActivity.setOnClickListener(view -> {
                 Intent intent = new Intent(this, SubscribedThingListingActivity.class);
                 intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_MODE, true);
-                requestThingSelectionLauncher.launch(intent);
+                requestThingSelectionForCurrentActivityLauncher.launch(intent);
             });
         }
 
@@ -438,7 +444,7 @@ public class SearchActivity extends BaseActivity {
             Intent intent = new Intent(this, SearchResultActivity.class);
             intent.putExtra(SearchResultActivity.EXTRA_QUERY, query);
             intent.putExtra(SearchResultActivity.EXTRA_SHOULD_RETURN_SUBREDDIT_AND_USER_NAME, true);
-            startActivity(intent);
+            requestThingSelectionForOtherActivityLauncher.launch(intent);
         } else {
             Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
             intent.putExtra(SearchResultActivity.EXTRA_QUERY, query);
