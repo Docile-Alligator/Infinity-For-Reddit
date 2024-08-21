@@ -65,6 +65,7 @@ import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.fragments.SubredditListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.UserListingFragment;
+import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.recentsearchquery.InsertRecentSearchQuery;
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
@@ -85,8 +86,9 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     public static final String EXTRA_QUERY = "EQ";
     public static final String EXTRA_TRENDING_SOURCE = "ETS";
     public static final String EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME = "ESISOUN";
-    public static final String EXTRA_SHOULD_RETURN_SUBREDDIT_AND_USER_NAME = "ESRSAUN";
+    public static final String EXTRA_SEARCH_IN_MULTIREDDIT = "ESIM";
     public static final String EXTRA_SEARCH_IN_THING_TYPE = "ESITT";
+    public static final String EXTRA_SHOULD_RETURN_SUBREDDIT_AND_USER_NAME = "ESRSAUN";
 
     private static final String INSERT_SEARCH_QUERY_SUCCESS_STATE = "ISQSS";
 
@@ -121,6 +123,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     private Call<String> subredditAutocompleteCall;
     private String mQuery;
     private String mSearchInSubredditOrUserName;
+    private MultiReddit mSearchInMultiReddit;
     @SelectThingReturnKey.THING_TYPE
     private int mSearchInThingType;
     private boolean mInsertSearchQuerySuccess;
@@ -181,6 +184,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         String query = intent.getStringExtra(EXTRA_QUERY);
 
         mSearchInSubredditOrUserName = intent.getStringExtra(EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME);
+        mSearchInMultiReddit = intent.getParcelableExtra(EXTRA_SEARCH_IN_MULTIREDDIT);
         mSearchInThingType = intent.getIntExtra(EXTRA_SEARCH_IN_THING_TYPE, SelectThingReturnKey.THING_TYPE.SUBREDDIT);
         mReturnSubredditAndUserName = intent.getBooleanExtra(EXTRA_SHOULD_RETURN_SUBREDDIT_AND_USER_NAME, false);
 
@@ -343,6 +347,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     Intent intent = new Intent(this, SearchActivity.class);
                     if (mSearchInSubredditOrUserName != null && !mSearchInSubredditOrUserName.equals("")) {
                         intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, mSearchInSubredditOrUserName);
+                        intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_MULTIREDDIT, mSearchInMultiReddit);
                         intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_THING_TYPE, mSearchInThingType);
                     }
                     startActivity(intent);
@@ -432,6 +437,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             Intent intent = new Intent(this, SearchActivity.class);
             if (mSearchInSubredditOrUserName != null && !mSearchInSubredditOrUserName.equals("")) {
                 intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, mSearchInSubredditOrUserName);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_MULTIREDDIT, mSearchInMultiReddit);
                 intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_THING_TYPE, mSearchInThingType);
             }
             intent.putExtra(SearchActivity.EXTRA_QUERY, mQuery);
@@ -545,6 +551,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 Intent intent = new Intent(this, SearchActivity.class);
                 if (mSearchInSubredditOrUserName != null && !mSearchInSubredditOrUserName.equals("")) {
                     intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, mSearchInSubredditOrUserName);
+                    intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_MULTIREDDIT, mSearchInMultiReddit);
                     intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_THING_TYPE, mSearchInThingType);
                 }
                 startActivity(intent);
