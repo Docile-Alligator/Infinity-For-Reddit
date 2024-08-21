@@ -345,11 +345,9 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 }
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH: {
                     Intent intent = new Intent(this, SearchActivity.class);
-                    if (mSearchInSubredditOrUserName != null && !mSearchInSubredditOrUserName.equals("")) {
-                        intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, mSearchInSubredditOrUserName);
-                        intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_MULTIREDDIT, mSearchInMultiReddit);
-                        intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_THING_TYPE, mSearchInThingType);
-                    }
+                    intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, mSearchInSubredditOrUserName);
+                    intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_MULTIREDDIT, mSearchInMultiReddit);
+                    intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_THING_TYPE, mSearchInThingType);
                     startActivity(intent);
                     break;
                 }
@@ -435,11 +433,9 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             return true;
         } else if (itemId == R.id.action_search_search_result_activity) {
             Intent intent = new Intent(this, SearchActivity.class);
-            if (mSearchInSubredditOrUserName != null && !mSearchInSubredditOrUserName.equals("")) {
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, mSearchInSubredditOrUserName);
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_MULTIREDDIT, mSearchInMultiReddit);
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_THING_TYPE, mSearchInThingType);
-            }
+            intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, mSearchInSubredditOrUserName);
+            intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_MULTIREDDIT, mSearchInMultiReddit);
+            intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_THING_TYPE, mSearchInThingType);
             intent.putExtra(SearchActivity.EXTRA_QUERY, mQuery);
             finish();
             startActivity(intent);
@@ -549,11 +545,9 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_SEARCH:
                 Intent intent = new Intent(this, SearchActivity.class);
-                if (mSearchInSubredditOrUserName != null && !mSearchInSubredditOrUserName.equals("")) {
-                    intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, mSearchInSubredditOrUserName);
-                    intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_MULTIREDDIT, mSearchInMultiReddit);
-                    intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_THING_TYPE, mSearchInThingType);
-                }
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, mSearchInSubredditOrUserName);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_MULTIREDDIT, mSearchInMultiReddit);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_THING_TYPE, mSearchInThingType);
                 startActivity(intent);
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_GO_TO_SUBREDDIT: {

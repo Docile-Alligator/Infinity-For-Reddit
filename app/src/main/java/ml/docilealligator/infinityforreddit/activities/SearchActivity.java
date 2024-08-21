@@ -309,6 +309,14 @@ public class SearchActivity extends BaseActivity {
             setSearchInThingText();
         } else {
             query = getIntent().getStringExtra(EXTRA_QUERY);
+            searchInSubredditOrUserName = getIntent().getStringExtra(EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME);
+            searchInMultiReddit = getIntent().getParcelableExtra(EXTRA_SEARCH_IN_MULTIREDDIT);
+            searchInThingType = getIntent().getIntExtra(EXTRA_SEARCH_IN_THING_TYPE, SelectThingReturnKey.THING_TYPE.SUBREDDIT);
+            if (searchInSubredditOrUserName != null) {
+                binding.subredditNameTextViewSearchActivity.setText(searchInSubredditOrUserName);
+            } else if (searchInMultiReddit != null) {
+                binding.subredditNameTextViewSearchActivity.setText(searchInMultiReddit.getDisplayName());
+            }
         }
         bindView();
 
@@ -338,16 +346,6 @@ public class SearchActivity extends BaseActivity {
                 intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_MODE, true);
                 requestThingSelectionForCurrentActivityLauncher.launch(intent);
             });
-        }
-
-        Intent intent = getIntent();
-        searchInSubredditOrUserName = intent.getStringExtra(EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME);
-        searchInMultiReddit = intent.getParcelableExtra(EXTRA_SEARCH_IN_MULTIREDDIT);
-        searchInThingType = intent.getIntExtra(EXTRA_SEARCH_IN_THING_TYPE, SelectThingReturnKey.THING_TYPE.SUBREDDIT);
-        if (searchInSubredditOrUserName != null) {
-            binding.subredditNameTextViewSearchActivity.setText(searchInSubredditOrUserName);
-        } else if (searchInMultiReddit != null) {
-            binding.subredditNameTextViewSearchActivity.setText(searchInMultiReddit.getDisplayName());
         }
     }
 
@@ -450,11 +448,9 @@ public class SearchActivity extends BaseActivity {
         } else {
             Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
             intent.putExtra(SearchResultActivity.EXTRA_QUERY, query);
-            if (searchInSubredditOrUserName != null) {
-                intent.putExtra(SearchResultActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, searchInSubredditOrUserName);
-                intent.putExtra(SearchResultActivity.EXTRA_SEARCH_IN_MULTIREDDIT, searchInMultiReddit);
-                intent.putExtra(SearchResultActivity.EXTRA_SEARCH_IN_THING_TYPE, searchInThingType);
-            }
+            intent.putExtra(SearchResultActivity.EXTRA_SEARCH_IN_SUBREDDIT_OR_USER_NAME, searchInSubredditOrUserName);
+            intent.putExtra(SearchResultActivity.EXTRA_SEARCH_IN_MULTIREDDIT, searchInMultiReddit);
+            intent.putExtra(SearchResultActivity.EXTRA_SEARCH_IN_THING_TYPE, searchInThingType);
             startActivity(intent);
             finish();
         }
