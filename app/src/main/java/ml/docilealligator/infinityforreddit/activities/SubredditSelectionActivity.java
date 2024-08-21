@@ -245,15 +245,6 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
         return false;
     }
 
-    public void getSelectedSubreddit(String name, String iconUrl, boolean subredditIsUser) {
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_NAME, name);
-        returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_ICON_URL, iconUrl);
-        returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_IS_USER, subredditIsUser);
-        setResult(Activity.RESULT_OK, returnIntent);
-        finish();
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == SUBREDDIT_SEARCH_REQUEST_CODE) {

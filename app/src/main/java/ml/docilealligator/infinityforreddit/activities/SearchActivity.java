@@ -16,6 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.inputmethod.EditorInfoCompat;
@@ -39,6 +41,7 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.SearchActivityRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.adapters.SubredditAutocompleteRecyclerViewAdapter;
@@ -66,6 +69,7 @@ public class SearchActivity extends BaseActivity {
     public static final String EXTRA_SEARCH_IN_SUBREDDIT_IS_USER = "ESISIU";
     public static final String EXTRA_SEARCH_ONLY_SUBREDDITS = "ESOS";
     public static final String EXTRA_SEARCH_ONLY_USERS = "ESOU";
+    public static final String EXTRA_SEARCH_SUBREDDITS_AND_USERS = "ESSAU";
     public static final String EXTRA_RETURN_SUBREDDIT_NAME = "ERSN";
     public static final String EXTRA_RETURN_SUBREDDIT_ICON_URL = "ERSIU";
     public static final String RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES = "RESSN";
@@ -105,12 +109,14 @@ public class SearchActivity extends BaseActivity {
     private boolean searchInIsUser;
     private boolean searchOnlySubreddits;
     private boolean searchOnlyUsers;
+    private boolean searchSubredditsAndUsers;
     private SearchActivityRecyclerViewAdapter adapter;
     private SubredditAutocompleteRecyclerViewAdapter subredditAutocompleteRecyclerViewAdapter;
     private Handler handler;
     private Runnable autoCompleteRunnable;
     private Call<String> subredditAutocompleteCall;
     RecentSearchQueryViewModel mRecentSearchQueryViewModel;
+    private ActivityResultLauncher<Intent> requestThingSelectionLauncher;
     private ActivitySearchBinding binding;
 
     @Override
@@ -139,18 +145,21 @@ public class SearchActivity extends BaseActivity {
 
         searchOnlySubreddits = getIntent().getBooleanExtra(EXTRA_SEARCH_ONLY_SUBREDDITS, false);
         searchOnlyUsers = getIntent().getBooleanExtra(EXTRA_SEARCH_ONLY_USERS, false);
+        searchSubredditsAndUsers = getIntent().getBooleanExtra(EXTRA_SEARCH_SUBREDDITS_AND_USERS, false);
 
         if (searchOnlySubreddits) {
-            binding.searchEditTextSearchActivity.setHint(getText(R.string.search_only_subreddits_hint));
+            binding.searchEditTextSearchActivity.setHint(R.string.search_only_subreddits_hint);
         } else if (searchOnlyUsers) {
-            binding.searchEditTextSearchActivity.setHint(getText(R.string.search_only_users_hint));
+            binding.searchEditTextSearchActivity.setHint(R.string.search_only_users_hint);
+        } else {
+            binding.searchEditTextSearchActivity.setHint(R.string.search_subreddits_and_users_hint);
         }
 
         boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
 
         subredditAutocompleteRecyclerViewAdapter = new SubredditAutocompleteRecyclerViewAdapter(this,
                 mCustomThemeWrapper, subredditData -> {
-            if (searchOnlySubreddits) {
+            if (searchOnlySubreddits || searchSubredditsAndUsers) {
                 Intent returnIntent = new Intent();
                 if (getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false)) {
                     ArrayList<String> subredditNameList = new ArrayList<>();
@@ -300,13 +309,29 @@ public class SearchActivity extends BaseActivity {
         }
         bindView();
 
-        if (searchOnlySubreddits || searchOnlyUsers) {
+        requestThingSelectionLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            Intent returnIntent = result.getData();
+            if (returnIntent == null) {
+                return;
+            }
+
+            searchInSubredditOrUserName = returnIntent.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
+            searchInIsUser = returnIntent.getBooleanExtra(SelectThingReturnKey.RETURN_EXTRA_IS_USER, false);
+
+            if (searchInSubredditOrUserName == null) {
+                binding.subredditNameTextViewSearchActivity.setText(R.string.all_subreddits);
+            } else {
+                binding.subredditNameTextViewSearchActivity.setText(searchInSubredditOrUserName);
+            }
+        });
+
+        if (searchOnlySubreddits || searchOnlyUsers || searchSubredditsAndUsers) {
             binding.subredditNameRelativeLayoutSearchActivity.setVisibility(View.GONE);
         } else {
             binding.subredditNameRelativeLayoutSearchActivity.setOnClickListener(view -> {
-                Intent intent = new Intent(this, SubredditSelectionActivity.class);
-                intent.putExtra(SubredditSelectionActivity.EXTRA_EXTRA_CLEAR_SELECTION, true);
-                startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
+                Intent intent = new Intent(this, SubscribedThingListingActivity.class);
+                intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_MODE, true);
+                requestThingSelectionLauncher.launch(intent);
             });
         }
 
@@ -409,6 +434,11 @@ public class SearchActivity extends BaseActivity {
             intent.putExtra(SearchUsersResultActivity.EXTRA_QUERY, query);
             intent.putExtra(SearchUsersResultActivity.EXTRA_IS_MULTI_SELECTION, getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false));
             startActivityForResult(intent, USER_SEARCH_REQUEST_CODE);
+        } else if (searchSubredditsAndUsers) {
+            Intent intent = new Intent(this, SearchResultActivity.class);
+            intent.putExtra(SearchResultActivity.EXTRA_QUERY, query);
+            intent.putExtra(SearchResultActivity.EXTRA_SHOULD_RETURN_SUBREDDIT_AND_USER_NAME, true);
+            startActivity(intent);
         } else {
             Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
             intent.putExtra(SearchResultActivity.EXTRA_QUERY, query);
@@ -491,8 +521,8 @@ public class SearchActivity extends BaseActivity {
                 if (getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false)) {
                     returnIntent.putStringArrayListExtra(RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES, data.getStringArrayListExtra(SearchSubredditsResultActivity.RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES));
                 } else {
-                    String name = data.getStringExtra(SearchSubredditsResultActivity.EXTRA_RETURN_SUBREDDIT_NAME);
-                    String iconUrl = data.getStringExtra(SearchSubredditsResultActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL);
+                    String name = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
+                    String iconUrl = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON);
                     returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_NAME, name);
                     returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_ICON_URL, iconUrl);
                 }
@@ -503,8 +533,8 @@ public class SearchActivity extends BaseActivity {
                 if (getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false)) {
                     returnIntent.putStringArrayListExtra(RETURN_EXTRA_SELECTED_USERNAMES, data.getStringArrayListExtra(SearchUsersResultActivity.RETURN_EXTRA_SELECTED_USERNAMES));
                 } else {
-                    String username = data.getStringExtra(SearchUsersResultActivity.EXTRA_RETURN_USER_NAME);
-                    String iconUrl = data.getStringExtra(SearchUsersResultActivity.EXTRA_RETURN_USER_ICON_URL);
+                    String username = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
+                    String iconUrl = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON);
                     returnIntent.putExtra(EXTRA_RETURN_USER_NAME, username);
                     returnIntent.putExtra(EXTRA_RETURN_USER_ICON_URL, iconUrl);
                 }

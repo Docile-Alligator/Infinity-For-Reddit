@@ -17,6 +17,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.inputmethod.EditorInfoCompat;
@@ -68,6 +70,7 @@ import retrofit2.Retrofit;
 public class SubscribedThingListingActivity extends BaseActivity implements ActivityToolbarInterface {
 
     public static final String EXTRA_SHOW_MULTIREDDITS = "ESM";
+    public static final String EXTRA_THING_SELECTION_MODE = "ETSM";
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
     private static final String INSERT_MULTIREDDIT_STATE = "IMS";
 
@@ -86,11 +89,13 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private boolean mInsertSuccess = false;
-    private boolean mInsertMultiredditSuccess = false;
-    private boolean showMultiReddits = false;
+    private boolean mInsertSuccess;
+    private boolean mInsertMultiredditSuccess;
+    private boolean showMultiReddits;
+    private boolean isThingSelectionMode;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private Menu mMenu;
+    private ActivityResultLauncher<Intent> requestSearchThingLauncher;
     private ActivitySubscribedThingListingBinding binding;
 
     @Override
@@ -145,6 +150,8 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
             showMultiReddits = getIntent().getBooleanExtra(EXTRA_SHOW_MULTIREDDITS, false);
         }
 
+        isThingSelectionMode = getIntent().getBooleanExtra(EXTRA_THING_SELECTION_MODE, false);
+
         if (accountName.equals(Account.ANONYMOUS_ACCOUNT) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             binding.searchEditTextSubscribedThingListingActivity.setImeOptions(binding.searchEditTextSubscribedThingListingActivity.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
         }
@@ -165,6 +172,12 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                 sectionsPagerAdapter.changeSearchQuery(editable.toString());
             }
         });
+
+        requestSearchThingLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            setResult(RESULT_OK, result.getData());
+            finish();
+        });
+
         initializeViewPagerAndLoadSubscriptions();
     }
 
@@ -241,6 +254,13 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_search_subscribed_thing_listing_activity) {
+            if (isThingSelectionMode) {
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_SUBREDDITS_AND_USERS, true);
+                requestSearchThingLauncher.launch(intent);
+                return true;
+            }
+
             item.setVisible(false);
             binding.searchEditTextSubscribedThingListingActivity.setVisibility(View.VISIBLE);
             binding.searchEditTextSubscribedThingListingActivity.requestFocus();
@@ -454,27 +474,29 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                     SubscribedSubredditsListingFragment fragment = new SubscribedSubredditsListingFragment();
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, false);
+                    bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, isThingSelectionMode);
+                    bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_EXTRA_CLEAR_SELECTION, isThingSelectionMode);
                     fragment.setArguments(bundle);
                     return fragment;
                 }
                 case 1: {
                     FollowedUsersListingFragment fragment = new FollowedUsersListingFragment();
                     Bundle bundle = new Bundle();
-                    fragment.setArguments(bundle);
-                    return fragment;
-                }
-                default: {
-                    MultiRedditListingFragment fragment = new MultiRedditListingFragment();
-                    Bundle bundle = new Bundle();
+                    bundle.putBoolean(FollowedUsersListingFragment.EXTRA_IS_USER_SELECTION, isThingSelectionMode);
                     fragment.setArguments(bundle);
                     return fragment;
                 }
             }
+
+            MultiRedditListingFragment fragment = new MultiRedditListingFragment();
+            Bundle bundle = new Bundle();
+            fragment.setArguments(bundle);
+            return fragment;
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return isThingSelectionMode && Account.ANONYMOUS_ACCOUNT.equals(accountName) ? 2 : 3;
         }
 
         @Override
