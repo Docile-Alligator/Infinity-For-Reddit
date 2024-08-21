@@ -423,7 +423,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE recent_search_queries ADD COLUMN search_in_subreddit_or_user_name TEXT");
-            database.execSQL("ALTER TABLE recent_search_queries ADD COLUMN search_in_is_user INTEGER DEFAULT 0 NOT NULL");
+            database.execSQL("ALTER TABLE recent_search_queries ADD COLUMN search_in_thing_type INTEGER DEFAULT 0 NOT NULL");
         }
     };
 }
