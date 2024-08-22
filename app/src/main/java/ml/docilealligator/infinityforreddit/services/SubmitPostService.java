@@ -129,6 +129,7 @@ public class SubmitPostService extends JobService {
                     .build();
         } else {
             return new JobInfo.Builder(JOB_ID++, new ComponentName(context, SubmitPostService.class))
+                    .setOverrideDeadline(0)
                     .setExtras(extras)
                     .build();
         }

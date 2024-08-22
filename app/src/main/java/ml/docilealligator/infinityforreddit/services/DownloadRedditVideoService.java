@@ -103,6 +103,7 @@ public class DownloadRedditVideoService extends JobService {
                     .build();
         } else {
             return new JobInfo.Builder(JOB_ID++, new ComponentName(context, DownloadRedditVideoService.class))
+                    .setOverrideDeadline(0)
                     .setExtras(extras)
                     .build();
         }
