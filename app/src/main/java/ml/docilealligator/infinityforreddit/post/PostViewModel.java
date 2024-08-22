@@ -51,6 +51,7 @@ public class PostViewModel extends ViewModel {
     private final MutableLiveData<PostFilter> postFilterLiveData;
     private final SortTypeAndPostFilterLiveData sortTypeAndPostFilterLiveData;
 
+    // PostPagingSource.TYPE_FRONT_PAGE
     public PostViewModel(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                          SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                          @Nullable SharedPreferences postHistorySharedPreferences, int postType,
@@ -90,6 +91,7 @@ public class PostViewModel extends ViewModel {
                 && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));
     }
 
+    // PostPagingSource.TYPE_SUBREDDIT || PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE || PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT
     public PostViewModel(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                          SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                          @Nullable SharedPreferences postHistorySharedPreferences, String subredditName, int postType,
@@ -105,6 +107,48 @@ public class PostViewModel extends ViewModel {
         this.postFilter = postFilter;
         this.readPostList = readPostList;
         this.name = subredditName;
+
+        sortTypeLiveData = new MutableLiveData<>(sortType);
+        postFilterLiveData = new MutableLiveData<>(postFilter);
+
+        sortTypeAndPostFilterLiveData = new SortTypeAndPostFilterLiveData(sortTypeLiveData, postFilterLiveData);
+
+        Pager<String, Post> pager = new Pager<>(new PagingConfig(100, 4, false, 10), this::returnPagingSoruce);
+
+        posts = Transformations.switchMap(sortTypeAndPostFilterLiveData, sortAndPostFilter -> {
+            changeSortTypeAndPostFilter(
+                    sortTypeLiveData.getValue(), postFilterLiveData.getValue());
+            return PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
+        });
+
+        postsWithReadPostsHidden = PagingLiveData.cachedIn(Transformations.switchMap(currentlyReadPostIdsLiveData,
+                currentlyReadPostIds -> Transformations.map(
+                        posts,
+                        postPagingData -> PagingDataTransforms.filter(
+                                postPagingData, executor,
+                                post -> !post.isRead() || !currentlyReadPostIdsLiveData.getValue()))), ViewModelKt.getViewModelScope(this));
+
+        currentlyReadPostIdsLiveData.setValue(postHistorySharedPreferences != null
+                && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));
+    }
+
+    // PostPagingSource.TYPE_MULTI_REDDIT
+    public PostViewModel(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
+                         SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
+                         @Nullable SharedPreferences postHistorySharedPreferences, String multiredditPath, String query, int postType,
+                         SortType sortType, PostFilter postFilter, List<String> readPostList) {
+        this.executor = executor;
+        this.retrofit = retrofit;
+        this.accessToken = accessToken;
+        this.accountName = accountName;
+        this.sharedPreferences = sharedPreferences;
+        this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
+        this.postType = postType;
+        this.sortType = sortType;
+        this.postFilter = postFilter;
+        this.readPostList = readPostList;
+        this.name = multiredditPath;
+        this.query = query;
 
         sortTypeLiveData = new MutableLiveData<>(sortType);
         postFilterLiveData = new MutableLiveData<>(postFilter);
@@ -173,6 +217,7 @@ public class PostViewModel extends ViewModel {
                 && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));
     }
 
+    // postType == PostPagingSource.TYPE_SEARCH
     public PostViewModel(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                          SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                          @Nullable SharedPreferences postHistorySharedPreferences, String subredditName, String query,
@@ -233,11 +278,15 @@ public class PostViewModel extends ViewModel {
                         postFilter, readPostList);
                 break;
             case PostPagingSource.TYPE_SUBREDDIT:
-            case PostPagingSource.TYPE_MULTI_REDDIT:
             case PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE:
             case PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT:
                 paging3PagingSource = new PostPagingSource(executor, retrofit, accessToken, accountName,
                         sharedPreferences, postFeedScrolledPositionSharedPreferences, name, postType,
+                        sortType, postFilter, readPostList);
+                break;
+            case PostPagingSource.TYPE_MULTI_REDDIT:
+                paging3PagingSource = new PostPagingSource(executor, retrofit, accessToken, accountName,
+                        sharedPreferences, postFeedScrolledPositionSharedPreferences, name, query, postType,
                         sortType, postFilter, readPostList);
                 break;
             case PostPagingSource.TYPE_SEARCH:
@@ -285,6 +334,7 @@ public class PostViewModel extends ViewModel {
         private String userWhere;
         private List<String> readPostList;
 
+        // Front page
         public Factory(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                        SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                        SharedPreferences postHistorySharedPreferences, int postType, SortType sortType,
@@ -302,6 +352,7 @@ public class PostViewModel extends ViewModel {
             this.readPostList = readPostList;
         }
 
+        // PostPagingSource.TYPE_SUBREDDIT
         public Factory(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                        SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                        SharedPreferences postHistorySharedPreferences, String name, int postType, SortType sortType,
@@ -314,6 +365,26 @@ public class PostViewModel extends ViewModel {
             this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
             this.postHistorySharedPreferences = postHistorySharedPreferences;
             this.name = name;
+            this.postType = postType;
+            this.sortType = sortType;
+            this.postFilter = postFilter;
+            this.readPostList = readPostList;
+        }
+
+        // PostPagingSource.TYPE_MULTI_REDDIT
+        public Factory(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
+                       SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
+                       SharedPreferences postHistorySharedPreferences, String name, String query, int postType, SortType sortType,
+                       PostFilter postFilter, List<String> readPostList) {
+            this.executor = executor;
+            this.retrofit = retrofit;
+            this.accessToken = accessToken;
+            this.accountName = accountName;
+            this.sharedPreferences = sharedPreferences;
+            this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
+            this.postHistorySharedPreferences = postHistorySharedPreferences;
+            this.name = name;
+            this.query = query;
             this.postType = postType;
             this.sortType = sortType;
             this.postFilter = postFilter;
@@ -340,6 +411,7 @@ public class PostViewModel extends ViewModel {
             this.readPostList = readPostList;
         }
 
+        // PostPagingSource.TYPE_SEARCH
         public Factory(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                        SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                        SharedPreferences postHistorySharedPreferences, String name, String query, String trendingSource,
@@ -383,9 +455,13 @@ public class PostViewModel extends ViewModel {
                 return (T) new PostViewModel(executor, retrofit, accessToken, accountName, sharedPreferences,
                         postFeedScrolledPositionSharedPreferences, postHistorySharedPreferences, name, query,
                         trendingSource, postType, sortType, postFilter, readPostList);
-            } else if (postType == PostPagingSource.TYPE_SUBREDDIT || postType == PostPagingSource.TYPE_MULTI_REDDIT) {
+            } else if (postType == PostPagingSource.TYPE_SUBREDDIT) {
                 return (T) new PostViewModel(executor, retrofit, accessToken, accountName, sharedPreferences,
                         postFeedScrolledPositionSharedPreferences, postHistorySharedPreferences, name,
+                        postType, sortType, postFilter, readPostList);
+            } else if (postType == PostPagingSource.TYPE_MULTI_REDDIT) {
+                return (T) new PostViewModel(executor, retrofit, accessToken, accountName, sharedPreferences,
+                        postFeedScrolledPositionSharedPreferences, postHistorySharedPreferences, name, query,
                         postType, sortType, postFilter, readPostList);
             } else if (postType == PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE || postType == PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT) {
                 return (T) new PostViewModel(executor, retrofit, null, null, sharedPreferences,

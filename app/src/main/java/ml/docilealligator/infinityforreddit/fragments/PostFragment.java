@@ -558,8 +558,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
         } else if (postType == PostPagingSource.TYPE_MULTI_REDDIT) {
             multiRedditPath = getArguments().getString(EXTRA_NAME);
+            query = getArguments().getString(EXTRA_QUERY);
             if (savedInstanceState == null) {
-                postFragmentId += multiRedditPath.hashCode();
+                postFragmentId += multiRedditPath.hashCode() + (query == null ? 0 : query.hashCode());
             }
 
             usage = PostFilterUsage.MULTIREDDIT_TYPE;
@@ -592,6 +593,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 public void typeChipClicked(int filter) {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_QUERY, query);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE_FILTER, filter);
                     startActivity(intent);
@@ -601,6 +603,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 public void flairChipClicked(String flair) {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_QUERY, query);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_CONTAIN_FLAIR, flair);
                     startActivity(intent);
@@ -610,6 +613,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 public void nsfwChipClicked() {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_QUERY, query);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE_FILTER, Post.NSFW_TYPE);
                     startActivity(intent);
@@ -1190,7 +1194,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         } else if (postType == PostPagingSource.TYPE_MULTI_REDDIT) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
                     activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, activity.accessToken, activity.accountName, mSharedPreferences, mPostFeedScrolledPositionSharedPreferences,
-                    mPostHistorySharedPreferences, multiRedditPath, postType, sortType, postFilter, readPosts))
+                    mPostHistorySharedPreferences, multiRedditPath, query, postType, sortType, postFilter, readPosts))
                     .get(PostViewModel.class);
         } else if (postType == PostPagingSource.TYPE_USER) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
@@ -1208,7 +1212,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     private void initializeAndBindPostViewModelForAnonymous(String concatenatedSubredditNames) {
-        //For anonymous user
         if (postType == PostPagingSource.TYPE_SEARCH) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
                     mRetrofit, null, activity.accountName, mSharedPreferences,
@@ -1669,6 +1672,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         } else if (postType == PostPagingSource.TYPE_MULTI_REDDIT || postType == PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT) {
             Intent intent = new Intent(activity, CustomizePostFilterActivity.class);
             intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
+            intent.putExtra(FilteredPostsActivity.EXTRA_QUERY, query);
             intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
             intent.putExtra(CustomizePostFilterActivity.EXTRA_START_FILTERED_POSTS_WHEN_FINISH, true);
             startActivity(intent);

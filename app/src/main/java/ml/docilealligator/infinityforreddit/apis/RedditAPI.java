@@ -320,12 +320,27 @@ public interface RedditAPI {
 
     @GET("{multipath}?raw_json=1&limit=100")
     ListenableFuture<Response<String>> getMultiRedditPostsListenableFuture(@Path(value = "multipath", encoded = true) String multiPath,
+                                                                           @Path(value = "sortType", encoded = true) SortType.Type sortType,
                                                                            @Query("after") String after, @Query("t") SortType.Time sortTime);
 
-    @GET("{multipath}.json?raw_json=1&limit=100")
+    @GET("{multipath}/{sortType}.json?raw_json=1&limit=100")
     ListenableFuture<Response<String>> getMultiRedditPostsOauthListenableFuture(@Path(value = "multipath", encoded = true) String multiPath,
-                                          @Query("after") String after, @Query("t") SortType.Time sortTime,
-                                          @HeaderMap Map<String, String> headers);
+                                                                                @Path(value = "sortType", encoded = true) SortType.Type sortType,
+                                                                                @Query("after") String after, @Query("t") SortType.Time sortTime,
+                                                                                @HeaderMap Map<String, String> headers);
+
+    @GET("{multipath}/search.json?raw_json=1&limit=100&type=link&restrict_sr=on&sr_detail=true&include_over_18=1&always_show_media=1")
+    ListenableFuture<Response<String>> searchMultiRedditPostsListenableFuture(@Path(value = "multipath", encoded = true) String multiPath, @Query("q") String query,
+                                                                              @Query("after") String after,
+                                                                              @Query("sort") SortType.Type sortType,
+                                                                              @Query("t") SortType.Time sortTime);
+
+    @GET("{multipath}/search.json?raw_json=1&limit=100&type=link&restrict_sr=on&sr_detail=true&include_over_18=1&always_show_media=1")
+    ListenableFuture<Response<String>> searchMultiRedditPostsOauthListenableFuture(@Path(value = "multipath", encoded = true) String multiPath, @Query("q") String query,
+                                                                                   @Query("after") String after,
+                                                                                   @Query("sort") SortType.Type sortType,
+                                                                                   @Query("t") SortType.Time sortTime,
+                                                                                   @HeaderMap Map<String, String> headers);
 
     @GET("{sortType}?raw_json=1&limit=100")
     Call<String> getBestPosts(@Path("sortType") SortType.Type sortType, @Query("t") SortType.Time sortTime,

@@ -804,8 +804,19 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         private Fragment createPostFragment() {
             PostFragment mFragment = new PostFragment();
             Bundle bundle = new Bundle();
-            bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SEARCH);
-            bundle.putString(PostFragment.EXTRA_NAME, mSearchInThingType == SelectThingReturnKey.THING_TYPE.USER ? "u_" + mSearchInSubredditOrUserName : mSearchInSubredditOrUserName);
+            switch (mSearchInThingType) {
+                case SelectThingReturnKey.THING_TYPE.SUBREDDIT:
+                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SEARCH);
+                    bundle.putString(PostFragment.EXTRA_NAME, mSearchInSubredditOrUserName);
+                    break;
+                case SelectThingReturnKey.THING_TYPE.USER:
+                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SEARCH);
+                    bundle.putString(PostFragment.EXTRA_NAME, "u_" + mSearchInSubredditOrUserName);
+                    break;
+                case SelectThingReturnKey.THING_TYPE.MULTIREDDIT:
+                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_MULTI_REDDIT);
+                    bundle.putString(PostFragment.EXTRA_NAME, mSearchInMultiReddit.getPath());
+            }
             bundle.putString(PostFragment.EXTRA_QUERY, mQuery);
             bundle.putString(PostFragment.EXTRA_TRENDING_SOURCE, getIntent().getStringExtra(EXTRA_TRENDING_SOURCE));
             mFragment.setArguments(bundle);
