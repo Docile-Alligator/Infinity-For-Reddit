@@ -72,8 +72,6 @@ public class SearchActivity extends BaseActivity {
     public static final String EXTRA_SEARCH_ONLY_SUBREDDITS = "ESOS";
     public static final String EXTRA_SEARCH_ONLY_USERS = "ESOU";
     public static final String EXTRA_SEARCH_SUBREDDITS_AND_USERS = "ESSAU";
-    public static final String EXTRA_RETURN_SUBREDDIT_NAME = "ERSN";
-    public static final String EXTRA_RETURN_SUBREDDIT_ICON_URL = "ERSIU";
     public static final String RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES = "RESSN";
     public static final String RETURN_EXTRA_SELECTED_USERNAMES = "RESU";
     public static final String EXTRA_RETURN_USER_NAME = "ERUN";
@@ -172,8 +170,8 @@ public class SearchActivity extends BaseActivity {
                     subredditNameList.add(subredditData.getName());
                     returnIntent.putStringArrayListExtra(RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES, subredditNameList);
                 } else {
-                    returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_NAME, subredditData.getName());
-                    returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_ICON_URL, subredditData.getIconUrl());
+                    returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME, subredditData.getName());
+                    returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON, subredditData.getIconUrl());
                 }
                 setResult(Activity.RESULT_OK, returnIntent);
             } else {
@@ -533,8 +531,8 @@ public class SearchActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == SUBREDDIT_SELECTION_REQUEST_CODE) {
-                searchInSubredditOrUserName = data.getStringExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
-                searchInThingType = data.getIntExtra(SubredditSelectionActivity.EXTRA_RETURN_THING_TYPE, SelectThingReturnKey.THING_TYPE.SUBREDDIT);
+                searchInSubredditOrUserName = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
+                searchInThingType = data.getIntExtra(SelectThingReturnKey.RETURN_EXTRA_THING_TYPE, SelectThingReturnKey.THING_TYPE.SUBREDDIT);
 
                 setSearchInThingText();
             } else if (requestCode == SUBREDDIT_SEARCH_REQUEST_CODE) {
@@ -542,10 +540,8 @@ public class SearchActivity extends BaseActivity {
                 if (getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false)) {
                     returnIntent.putStringArrayListExtra(RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES, data.getStringArrayListExtra(SearchSubredditsResultActivity.RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES));
                 } else {
-                    String name = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
-                    String iconUrl = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON);
-                    returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_NAME, name);
-                    returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_ICON_URL, iconUrl);
+                    returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME, data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME));
+                    returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON, data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON));
                 }
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();

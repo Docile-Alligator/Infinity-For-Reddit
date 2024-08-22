@@ -630,10 +630,10 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SUBREDDIT_SELECTION_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                subredditName = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
-                iconUrl = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL);
+                subredditName = data.getExtras().getString(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
+                iconUrl = data.getExtras().getString(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON);
                 subredditSelected = true;
-                subredditIsUser = data.getIntExtra(SubredditSelectionActivity.EXTRA_RETURN_THING_TYPE, SelectThingReturnKey.THING_TYPE.SUBREDDIT) == SelectThingReturnKey.THING_TYPE.USER;
+                subredditIsUser = data.getIntExtra(SelectThingReturnKey.RETURN_EXTRA_THING_TYPE, SelectThingReturnKey.THING_TYPE.SUBREDDIT) == SelectThingReturnKey.THING_TYPE.USER;
 
                 binding.subredditNameTextViewPostImageActivity.setTextColor(primaryTextColor);
                 binding.subredditNameTextViewPostImageActivity.setText(subredditName);

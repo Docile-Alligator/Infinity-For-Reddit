@@ -566,10 +566,11 @@ public class CustomizeMainPageTabsFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && data != null) {
+            int thingType = data.getIntExtra(SelectThingReturnKey.RETURN_EXTRA_THING_TYPE, SelectThingReturnKey.THING_TYPE.SUBREDDIT);
             switch (requestCode) {
                 case 0:
-                    if (data.hasExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME)) {
-                        tab1CurrentName = data.getStringExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
+                    if (thingType == SelectThingReturnKey.THING_TYPE.SUBREDDIT) {
+                        tab1CurrentName = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
                         binding.tab1NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab1CurrentName);
                         mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, tab1CurrentName).apply();
                     } else if (data.hasExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT)) {
@@ -579,15 +580,15 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                             binding.tab1NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab1CurrentName);
                             mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, tab1CurrentName).apply();
                         }
-                    } else if (data.hasExtra(SearchActivity.EXTRA_RETURN_USER_NAME)) {
+                    } else if (thingType == SelectThingReturnKey.THING_TYPE.USER) {
                         tab1CurrentName = data.getStringExtra(SearchActivity.EXTRA_RETURN_USER_NAME);
                         binding.tab1NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab1CurrentName);
                         mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, tab1CurrentName).apply();
                     }
                     break;
                 case 1:
-                    if (data.hasExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME)) {
-                        tab2CurrentName = data.getStringExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
+                    if (thingType == SelectThingReturnKey.THING_TYPE.SUBREDDIT) {
+                        tab2CurrentName = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
                         binding.tab2NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab2CurrentName);
                         mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, tab2CurrentName).apply();
                     } else if (data.hasExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT)) {
@@ -597,15 +598,15 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                             binding.tab2NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab2CurrentName);
                             mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, tab2CurrentName).apply();
                         }
-                    } else if (data.hasExtra(SearchActivity.EXTRA_RETURN_USER_NAME)) {
+                    } else if (thingType == SelectThingReturnKey.THING_TYPE.USER) {
                         tab2CurrentName = data.getStringExtra(SearchActivity.EXTRA_RETURN_USER_NAME);
                         binding.tab2NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab2CurrentName);
                         mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, tab2CurrentName).apply();
                     }
                     break;
                 case 2:
-                    if (data.hasExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME)) {
-                        tab3CurrentName = data.getStringExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
+                    if (thingType == SelectThingReturnKey.THING_TYPE.SUBREDDIT) {
+                        tab3CurrentName = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
                         binding.tab3NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab3CurrentName);
                         mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, tab3CurrentName).apply();
                     } else if (data.hasExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT)) {
@@ -615,7 +616,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                             binding.tab3NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab3CurrentName);
                             mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, tab3CurrentName).apply();
                         }
-                    } else if (data.hasExtra(SearchActivity.EXTRA_RETURN_USER_NAME)) {
+                    } else if (thingType == SelectThingReturnKey.THING_TYPE.USER) {
                         tab3CurrentName = data.getStringExtra(SearchActivity.EXTRA_RETURN_USER_NAME);
                         binding.tab3NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab3CurrentName);
                         mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, tab3CurrentName).apply();
