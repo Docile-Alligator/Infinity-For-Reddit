@@ -22,6 +22,12 @@ public class RecentSearchQuery {
     @Nullable
     @ColumnInfo(name = "search_in_subreddit_or_user_name")
     private String searchInSubredditOrUserName;
+    @Nullable
+    @ColumnInfo(name = "search_in_multireddit_path")
+    private String multiRedditPath;
+    @Nullable
+    @ColumnInfo(name = "search_in_multireddit_display_name")
+    private String multiRedditDisplayName;
     @SelectThingReturnKey.THING_TYPE
     @ColumnInfo(name = "search_in_thing_type")
     private int searchInThingType;
@@ -29,11 +35,15 @@ public class RecentSearchQuery {
     private long time;
 
     public RecentSearchQuery(@NonNull String username, @NonNull String searchQuery,
-                             @Nullable String searchInSubredditOrUserName, @SelectThingReturnKey.THING_TYPE int searchInThingType) {
+                             @Nullable String searchInSubredditOrUserName, @Nullable String multiRedditPath,
+                             @Nullable String multiRedditDisplayName,
+                             @SelectThingReturnKey.THING_TYPE int searchInThingType) {
         this.username = username;
         this.searchQuery = searchQuery;
         this.searchInSubredditOrUserName = searchInSubredditOrUserName;
         this.searchInThingType = searchInThingType;
+        this.multiRedditPath = multiRedditPath;
+        this.multiRedditDisplayName = multiRedditDisplayName;
         this.time = System.currentTimeMillis();
     }
 
@@ -62,6 +72,24 @@ public class RecentSearchQuery {
 
     public void setSearchInSubredditOrUserName(@Nullable String searchInSubredditOrUserName) {
         this.searchInSubredditOrUserName = searchInSubredditOrUserName;
+    }
+
+    @Nullable
+    public String getMultiRedditPath() {
+        return multiRedditPath;
+    }
+
+    public void setMultiRedditPath(@Nullable String multiRedditPath) {
+        this.multiRedditPath = multiRedditPath;
+    }
+
+    @Nullable
+    public String getMultiRedditDisplayName() {
+        return multiRedditDisplayName;
+    }
+
+    public void setMultiRedditDisplayName(@Nullable String multiRedditDisplayName) {
+        this.multiRedditDisplayName = multiRedditDisplayName;
     }
 
     @SelectThingReturnKey.THING_TYPE

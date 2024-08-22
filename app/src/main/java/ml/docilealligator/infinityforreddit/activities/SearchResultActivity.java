@@ -392,8 +392,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
         if (!accountName.equals(Account.ANONYMOUS_ACCOUNT) && mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SEARCH_HISTORY, true) && !mInsertSearchQuerySuccess && mQuery != null) {
             InsertRecentSearchQuery.insertRecentSearchQueryListener(executor, new Handler(getMainLooper()),
-                    mRedditDataRoomDatabase, accountName, mQuery, mSearchInSubredditOrUserName, mSearchInThingType,
-                    () -> mInsertSearchQuerySuccess = true);
+                    mRedditDataRoomDatabase, accountName, mQuery, mSearchInSubredditOrUserName, mSearchInMultiReddit,
+                    mSearchInThingType, () -> mInsertSearchQuerySuccess = true);
         }
     }
 

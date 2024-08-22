@@ -733,11 +733,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         } else if (itemId == R.id.action_search_view_multi_reddit_detail_activity) {
             Intent intent = new Intent(this, SearchActivity.class);
             if (multiReddit == null) {
-                MultiReddit dummyMultiReddit = new MultiReddit(multiPath,
-                        multiPath.substring(multiPath.lastIndexOf("/", multiPath.length() - 2) + 1),
-                        multiPath, null, null, null, null, Account.ANONYMOUS_ACCOUNT,
-                        0, 0, true, false, false);
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_MULTIREDDIT, dummyMultiReddit);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_MULTIREDDIT, MultiReddit.getDummyMultiReddit(multiPath));
             } else {
                 intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_MULTIREDDIT, multiReddit);
             }

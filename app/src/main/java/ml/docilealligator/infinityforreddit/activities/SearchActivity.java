@@ -355,6 +355,10 @@ public class SearchActivity extends BaseActivity {
                 @Override
                 public void onClick(RecentSearchQuery recentSearchQuery) {
                     searchInSubredditOrUserName = recentSearchQuery.getSearchInSubredditOrUserName();
+                    searchInMultiReddit = MultiReddit.getDummyMultiReddit(recentSearchQuery.getMultiRedditPath());
+                    if (searchInMultiReddit != null && recentSearchQuery.getMultiRedditDisplayName() != null) {
+                        searchInMultiReddit.setDisplayName(recentSearchQuery.getMultiRedditDisplayName());
+                    }
                     searchInThingType = recentSearchQuery.getSearchInThingType();
                     search(recentSearchQuery.getSearchQuery());
                 }

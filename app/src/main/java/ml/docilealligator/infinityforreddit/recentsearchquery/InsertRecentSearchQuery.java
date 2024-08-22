@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 
 public class InsertRecentSearchQuery {
     public interface InsertRecentSearchQueryListener {
@@ -17,6 +18,7 @@ public class InsertRecentSearchQuery {
                                                        String username,
                                                        String recentSearchQuery,
                                                        String searchInSubredditOrUserName,
+                                                       MultiReddit searchInMultiReddit,
                                                        int searchInThingType,
                                                        InsertRecentSearchQueryListener insertRecentSearchQueryListener) {
         executor.execute(() -> {
@@ -28,7 +30,14 @@ public class InsertRecentSearchQuery {
                 }
             }
 
-            recentSearchQueryDao.insert(new RecentSearchQuery(username, recentSearchQuery, searchInSubredditOrUserName, searchInThingType));
+            if (searchInMultiReddit == null) {
+                recentSearchQueryDao.insert(new RecentSearchQuery(username, recentSearchQuery,
+                        searchInSubredditOrUserName, null, null, searchInThingType));
+            } else {
+                recentSearchQueryDao.insert(new RecentSearchQuery(username, recentSearchQuery,
+                        searchInSubredditOrUserName, searchInMultiReddit.getPath(),
+                        searchInMultiReddit.getDisplayName(), searchInThingType));
+            }
 
             handler.post(insertRecentSearchQueryListener::success);
         });

@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -255,5 +256,16 @@ public class MultiReddit implements Parcelable {
         parcel.writeByte((byte) (isSubscriber ? 1 : 0));
         parcel.writeByte((byte) (isFavorite ? 1 : 0));
         parcel.writeStringList(subreddits);
+    }
+
+    @Nullable
+    public static MultiReddit getDummyMultiReddit(@Nullable String multiPath) {
+        if (multiPath == null) {
+            return null;
+        }
+        return new MultiReddit(multiPath,
+                multiPath.substring(multiPath.lastIndexOf("/", multiPath.length() - 2) + 1),
+                multiPath, null, null, null, null, Account.ANONYMOUS_ACCOUNT,
+                0, 0, true, false, false);
     }
 }

@@ -54,23 +54,31 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             if (recentSearchQueries != null && !recentSearchQueries.isEmpty() && position < recentSearchQueries.size()) {
                 RecentSearchQuery recentSearchQuery = recentSearchQueries.get(position);
                 ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryTextViewItemRecentSearchQuery.setText(recentSearchQuery.getSearchQuery());
-                if (recentSearchQuery.getSearchInSubredditOrUserName() != null && !recentSearchQuery.getSearchInSubredditOrUserName().isEmpty()) {
-                    if (recentSearchQuery.getSearchInThingType() == SelectThingReturnKey.THING_TYPE.USER) {
+                switch (recentSearchQuery.getSearchInThingType()) {
+                    case SelectThingReturnKey.THING_TYPE.SUBREDDIT:
+                        if (recentSearchQuery.getSearchInSubredditOrUserName() != null && !recentSearchQuery.getSearchInSubredditOrUserName().isEmpty()) {
+                            ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
+                                    .setTextColor(subredditTextColor);
+                            ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
+                                    .setText("r/" + recentSearchQuery.getSearchInSubredditOrUserName());
+                        } else {
+                            ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
+                                    .setTextColor(secondaryTextColor);
+                            ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
+                                    .setText(R.string.all_subreddits);
+                        }
+                        break;
+                    case SelectThingReturnKey.THING_TYPE.USER:
                         ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
                                 .setTextColor(userTextColor);
                         ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
                                 .setText("u/" + recentSearchQuery.getSearchInSubredditOrUserName());
-                    } else {
+                        break;
+                    case SelectThingReturnKey.THING_TYPE.MULTIREDDIT:
                         ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
-                                .setTextColor(subredditTextColor);
+                                .setTextColor(secondaryTextColor);
                         ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
-                                .setText("r/" + recentSearchQuery.getSearchInSubredditOrUserName());
-                    }
-                } else {
-                    ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
-                            .setTextColor(secondaryTextColor);
-                    ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryWhereTextViewItemRecentSearchQuery
-                            .setText(R.string.all_subreddits);
+                                .setText(recentSearchQuery.getMultiRedditDisplayName());
                 }
                 holder.itemView.postDelayed(() -> {
                     ((RecentSearchQueryViewHolder) holder).binding.recentSearchQueryTextViewItemRecentSearchQuery.setSelected(true);
