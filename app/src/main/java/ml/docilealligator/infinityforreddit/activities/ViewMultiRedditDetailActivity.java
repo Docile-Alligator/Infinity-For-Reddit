@@ -41,6 +41,7 @@ import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.account.Account;
@@ -116,6 +117,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
+    private MultiReddit multiReddit;
     private String multiPath;
     private Fragment mFragment;
     private int fabOption;
@@ -185,7 +187,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
             }
         }
 
-        MultiReddit multiReddit = getIntent().getParcelableExtra(EXTRA_MULTIREDDIT_DATA);
+        multiReddit = getIntent().getParcelableExtra(EXTRA_MULTIREDDIT_DATA);
         if (multiReddit == null) {
             multiPath = getIntent().getStringExtra(EXTRA_MULTIREDDIT_PATH);
             if (multiPath != null) {
@@ -730,6 +732,16 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
             return true;
         } else if (itemId == R.id.action_search_view_multi_reddit_detail_activity) {
             Intent intent = new Intent(this, SearchActivity.class);
+            if (multiReddit == null) {
+                MultiReddit dummyMultiReddit = new MultiReddit(multiPath,
+                        multiPath.substring(multiPath.lastIndexOf("/", multiPath.length() - 2) + 1),
+                        multiPath, null, null, null, null, Account.ANONYMOUS_ACCOUNT,
+                        0, 0, true, false, false);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_MULTIREDDIT, dummyMultiReddit);
+            } else {
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_MULTIREDDIT, multiReddit);
+            }
+            intent.putExtra(SearchActivity.EXTRA_SEARCH_IN_THING_TYPE, SelectThingReturnKey.THING_TYPE.MULTIREDDIT);
             startActivity(intent);
             return true;
         } else if (itemId == R.id.action_refresh_view_multi_reddit_detail_activity) {
