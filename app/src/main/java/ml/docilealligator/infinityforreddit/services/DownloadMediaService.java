@@ -95,6 +95,7 @@ public class DownloadMediaService extends JobService {
                     .build();
         } else {
             return new JobInfo.Builder(JOB_ID++, new ComponentName(context, DownloadMediaService.class))
+                    .setOverrideDeadline(0)
                     .setExtras(extras)
                     .build();
         }

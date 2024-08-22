@@ -83,6 +83,7 @@ public class EditProfileService extends JobService {
                     .build();
         } else {
             return new JobInfo.Builder(JOB_ID++, new ComponentName(context, EditProfileService.class))
+                    .setOverrideDeadline(0)
                     .setExtras(extras)
                     .build();
         }
