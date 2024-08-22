@@ -581,7 +581,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                             mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, tab1CurrentName).apply();
                         }
                     } else if (thingType == SelectThingReturnKey.THING_TYPE.USER) {
-                        tab1CurrentName = data.getStringExtra(SearchActivity.EXTRA_RETURN_USER_NAME);
+                        tab1CurrentName = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
                         binding.tab1NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab1CurrentName);
                         mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, tab1CurrentName).apply();
                     }
@@ -599,7 +599,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                             mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, tab2CurrentName).apply();
                         }
                     } else if (thingType == SelectThingReturnKey.THING_TYPE.USER) {
-                        tab2CurrentName = data.getStringExtra(SearchActivity.EXTRA_RETURN_USER_NAME);
+                        tab2CurrentName = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
                         binding.tab2NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab2CurrentName);
                         mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, tab2CurrentName).apply();
                     }
@@ -617,7 +617,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                             mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, tab3CurrentName).apply();
                         }
                     } else if (thingType == SelectThingReturnKey.THING_TYPE.USER) {
-                        tab3CurrentName = data.getStringExtra(SearchActivity.EXTRA_RETURN_USER_NAME);
+                        tab3CurrentName = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
                         binding.tab3NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab3CurrentName);
                         mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, tab3CurrentName).apply();
                     }

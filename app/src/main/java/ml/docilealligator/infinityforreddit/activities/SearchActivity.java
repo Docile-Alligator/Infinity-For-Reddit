@@ -74,8 +74,6 @@ public class SearchActivity extends BaseActivity {
     public static final String EXTRA_SEARCH_SUBREDDITS_AND_USERS = "ESSAU";
     public static final String RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES = "RESSN";
     public static final String RETURN_EXTRA_SELECTED_USERNAMES = "RESU";
-    public static final String EXTRA_RETURN_USER_NAME = "ERUN";
-    public static final String EXTRA_RETURN_USER_ICON_URL = "ERUIU";
     public static final String EXTRA_IS_MULTI_SELECTION = "EIMS";
     public static final int SUICIDE_PREVENTION_ACTIVITY_REQUEST_CODE = 101;
 
@@ -83,7 +81,6 @@ public class SearchActivity extends BaseActivity {
     private static final String SEARCH_IN_THING_TYPE_STATE = "SITTS";
     private static final String SEARCH_IN_MULTIREDDIT_STATE = "SIMS";
 
-    private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
     private static final int SUBREDDIT_SEARCH_REQUEST_CODE = 1;
     private static final int USER_SEARCH_REQUEST_CODE = 2;
 
@@ -325,8 +322,8 @@ public class SearchActivity extends BaseActivity {
             }
 
             searchInSubredditOrUserName = returnIntent.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
-            searchInThingType = returnIntent.getIntExtra(SelectThingReturnKey.RETURN_EXTRA_THING_TYPE, SelectThingReturnKey.THING_TYPE.SUBREDDIT);
             searchInMultiReddit = returnIntent.getParcelableExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT);
+            searchInThingType = returnIntent.getIntExtra(SelectThingReturnKey.RETURN_EXTRA_THING_TYPE, SelectThingReturnKey.THING_TYPE.SUBREDDIT);
 
             setSearchInThingText();
         });
@@ -530,18 +527,14 @@ public class SearchActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (resultCode == RESULT_OK && data != null) {
-            if (requestCode == SUBREDDIT_SELECTION_REQUEST_CODE) {
-                searchInSubredditOrUserName = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
-                searchInThingType = data.getIntExtra(SelectThingReturnKey.RETURN_EXTRA_THING_TYPE, SelectThingReturnKey.THING_TYPE.SUBREDDIT);
-
-                setSearchInThingText();
-            } else if (requestCode == SUBREDDIT_SEARCH_REQUEST_CODE) {
+            if (requestCode == SUBREDDIT_SEARCH_REQUEST_CODE) {
                 Intent returnIntent = new Intent();
                 if (getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false)) {
                     returnIntent.putStringArrayListExtra(RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES, data.getStringArrayListExtra(SearchSubredditsResultActivity.RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES));
                 } else {
                     returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME, data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME));
                     returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON, data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON));
+                    returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_THING_TYPE, SelectThingReturnKey.THING_TYPE.SUBREDDIT);
                 }
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
@@ -550,10 +543,9 @@ public class SearchActivity extends BaseActivity {
                 if (getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false)) {
                     returnIntent.putStringArrayListExtra(RETURN_EXTRA_SELECTED_USERNAMES, data.getStringArrayListExtra(SearchUsersResultActivity.RETURN_EXTRA_SELECTED_USERNAMES));
                 } else {
-                    String username = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
-                    String iconUrl = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON);
-                    returnIntent.putExtra(EXTRA_RETURN_USER_NAME, username);
-                    returnIntent.putExtra(EXTRA_RETURN_USER_ICON_URL, iconUrl);
+                    returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME, data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME));
+                    returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON, data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON));
+                    returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_THING_TYPE, SelectThingReturnKey.THING_TYPE.USER);
                 }
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
