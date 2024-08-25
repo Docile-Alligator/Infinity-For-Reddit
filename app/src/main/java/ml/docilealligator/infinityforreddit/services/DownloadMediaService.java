@@ -14,14 +14,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaScannerConnection;
-import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
@@ -89,7 +87,7 @@ public class DownloadMediaService extends JobService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             return new JobInfo.Builder(JOB_ID++, new ComponentName(context, DownloadMediaService.class))
                     .setUserInitiated(true)
-                    .setRequiredNetwork(new NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build())
+                    .setRequiredNetwork(new NetworkRequest.Builder().clearCapabilities().build())
                     .setEstimatedNetworkBytes(0, contentEstimatedBytes + 500)
                     .setExtras(extras)
                     .build();
