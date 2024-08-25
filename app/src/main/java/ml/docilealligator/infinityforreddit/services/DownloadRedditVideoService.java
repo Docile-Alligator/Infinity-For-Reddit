@@ -18,7 +18,6 @@ import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
 import android.media.MediaScannerConnection;
-import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Build;
@@ -97,7 +96,7 @@ public class DownloadRedditVideoService extends JobService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             return new JobInfo.Builder(JOB_ID++, new ComponentName(context, DownloadRedditVideoService.class))
                     .setUserInitiated(true)
-                    .setRequiredNetwork(new NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build())
+                    .setRequiredNetwork(new NetworkRequest.Builder().clearCapabilities().build())
                     .setEstimatedNetworkBytes(0, contentEstimatedBytes + 500)
                     .setExtras(extras)
                     .build();

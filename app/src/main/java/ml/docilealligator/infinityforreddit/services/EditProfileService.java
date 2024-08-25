@@ -8,7 +8,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Build;
@@ -77,7 +76,7 @@ public class EditProfileService extends JobService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             return new JobInfo.Builder(JOB_ID++, new ComponentName(context, EditProfileService.class))
                     .setUserInitiated(true)
-                    .setRequiredNetwork(new NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build())
+                    .setRequiredNetwork(new NetworkRequest.Builder().clearCapabilities().build())
                     .setEstimatedNetworkBytes(0, contentEstimatedBytes + 500)
                     .setExtras(extras)
                     .build();
