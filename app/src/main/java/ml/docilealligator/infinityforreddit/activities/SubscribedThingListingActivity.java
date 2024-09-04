@@ -191,12 +191,8 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         isThingSelectionMode = getIntent().getBooleanExtra(EXTRA_THING_SELECTION_MODE, false);
         thingSelectionType = getIntent().getIntExtra(EXTRA_THING_SELECTION_TYPE, EXTRA_THING_SELECTION_TYPE_ALL);
 
-        if (isThingSelectionMode) {
-            switch (thingSelectionType) {
-                case EXTRA_THING_SELECTION_TYPE_SUBREDDIT:
-                    getSupportActionBar().setTitle(R.string.subreddit_selection_activity_label);
-                    break;
-            }
+        if (isThingSelectionMode && thingSelectionType == EXTRA_THING_SELECTION_TYPE_SUBREDDIT) {
+            getSupportActionBar().setTitle(R.string.subreddit_selection_activity_label);
         }
 
         if (isThingSelectionMode && thingSelectionType != EXTRA_THING_SELECTION_TYPE_ALL) {

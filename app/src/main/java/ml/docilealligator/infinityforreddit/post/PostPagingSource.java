@@ -118,7 +118,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         this.sharedPreferences = sharedPreferences;
         this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
         if (path.endsWith("/")) {
-            multiRedditPath = path.substring(0, multiRedditPath.length() - 1);
+            multiRedditPath = path.substring(0, path.length() - 1);
         } else {
             multiRedditPath = path;
         }
