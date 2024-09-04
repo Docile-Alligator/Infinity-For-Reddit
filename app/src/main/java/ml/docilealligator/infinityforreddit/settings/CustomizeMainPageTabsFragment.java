@@ -30,7 +30,7 @@ import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.MultiredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.activities.SearchActivity;
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
-import ml.docilealligator.infinityforreddit.activities.SubredditSelectionActivity;
+import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.databinding.FragmentCustomizeMainPageTabsBinding;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -502,7 +502,10 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             case 0:
                 switch (tab1CurrentPostType) {
                     case 3: {
-                        Intent intent = new Intent(activity, SubredditSelectionActivity.class);
+                        Intent intent = new Intent(activity, SubscribedThingListingActivity.class);
+                        intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_MODE, true);
+                        intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE,
+                                SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE_SUBREDDIT);
                         startActivityForResult(intent, tab);
                         break;
                     }
@@ -522,7 +525,10 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             case 1:
                 switch (tab2CurrentPostType) {
                     case 3: {
-                        Intent intent = new Intent(activity, SubredditSelectionActivity.class);
+                        Intent intent = new Intent(activity, SubscribedThingListingActivity.class);
+                        intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_MODE, true);
+                        intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE,
+                                SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE_SUBREDDIT);
                         startActivityForResult(intent, tab);
                         break;
                     }
@@ -542,7 +548,10 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             case 2:
                 switch (tab3CurrentPostType) {
                     case 3: {
-                        Intent intent = new Intent(activity, SubredditSelectionActivity.class);
+                        Intent intent = new Intent(activity, SubscribedThingListingActivity.class);
+                        intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_MODE, true);
+                        intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE,
+                                SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE_SUBREDDIT);
                         startActivityForResult(intent, tab);
                         break;
                     }

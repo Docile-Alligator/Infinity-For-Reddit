@@ -36,11 +36,13 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
+import ml.docilealligator.infinityforreddit.AnyAccountAccessTokenAuthenticator;
 import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -67,6 +69,8 @@ import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubred
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import okhttp3.ConnectionPool;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
 public class SubscribedThingListingActivity extends BaseActivity implements ActivityToolbarInterface {
@@ -74,12 +78,17 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     public static final String EXTRA_SHOW_MULTIREDDITS = "ESM";
     public static final String EXTRA_THING_SELECTION_MODE = "ETSM";
     public static final String EXTRA_THING_SELECTION_TYPE = "ETST";
+    public static final String EXTRA_SPECIFIED_ACCOUNT = "ESA";
+    public static final String EXTRA_EXTRA_CLEAR_SELECTION = "EECS";
     public static final int EXTRA_THING_SELECTION_TYPE_ALL = 0;
     public static final int EXTRA_THING_SELECTION_TYPE_SUBREDDIT = 1;
     public static final int EXTRA_THING_SELECTION_TYPE_USER = 2;
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
     private static final String INSERT_MULTIREDDIT_STATE = "IMS";
 
+    @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -100,6 +109,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     private boolean showMultiReddits;
     private boolean isThingSelectionMode;
     private int thingSelectionType;
+    private String mAccountProfileImageUrl;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private Menu mMenu;
     private ActivityResultLauncher<Intent> requestSearchThingLauncher;
@@ -150,6 +160,27 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setToolbarGoToTop(binding.toolbarSubscribedThingListingActivity);
 
+        if (getIntent().hasExtra(EXTRA_SPECIFIED_ACCOUNT)) {
+            Account specifiedAccount = getIntent().getParcelableExtra(EXTRA_SPECIFIED_ACCOUNT);
+            if (specifiedAccount != null) {
+                accessToken = specifiedAccount.getAccessToken();
+                accountName = specifiedAccount.getAccountName();
+                mAccountProfileImageUrl = specifiedAccount.getProfileImageUrl();
+
+                mOauthRetrofit = mOauthRetrofit.newBuilder().client(new OkHttpClient.Builder().authenticator(new AnyAccountAccessTokenAuthenticator(mRetrofit, mRedditDataRoomDatabase, specifiedAccount, mCurrentAccountSharedPreferences))
+                                .connectTimeout(30, TimeUnit.SECONDS)
+                                .readTimeout(30, TimeUnit.SECONDS)
+                                .writeTimeout(30, TimeUnit.SECONDS)
+                                .connectionPool(new ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
+                                .build())
+                        .build();
+            } else {
+                mAccountProfileImageUrl = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_IMAGE_URL, null);
+            }
+        } else {
+            mAccountProfileImageUrl = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_IMAGE_URL, null);
+        }
+
         if (savedInstanceState != null) {
             mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
             mInsertMultiredditSuccess = savedInstanceState.getBoolean(INSERT_MULTIREDDIT_STATE);
@@ -159,6 +190,10 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
 
         isThingSelectionMode = getIntent().getBooleanExtra(EXTRA_THING_SELECTION_MODE, false);
         thingSelectionType = getIntent().getIntExtra(EXTRA_THING_SELECTION_TYPE, EXTRA_THING_SELECTION_TYPE_ALL);
+
+        if (isThingSelectionMode && thingSelectionType != EXTRA_THING_SELECTION_TYPE_ALL) {
+            binding.tabLayoutSubscribedThingListingActivity.setVisibility(View.GONE);
+        }
 
         if (accountName.equals(Account.ANONYMOUS_ACCOUNT) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             binding.searchEditTextSubscribedThingListingActivity.setImeOptions(binding.searchEditTextSubscribedThingListingActivity.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
@@ -515,9 +550,9 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
             SubscribedSubredditsListingFragment fragment = new SubscribedSubredditsListingFragment();
             Bundle bundle = new Bundle();
             bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, isThingSelectionMode);
-            bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_EXTRA_CLEAR_SELECTION, isThingSelectionMode);
-            bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_PROFILE_IMAGE_URL,
-                    mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_IMAGE_URL, null));
+            bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_EXTRA_CLEAR_SELECTION,
+                    isThingSelectionMode && getIntent().getBooleanExtra(EXTRA_EXTRA_CLEAR_SELECTION, false));
+            bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_PROFILE_IMAGE_URL, mAccountProfileImageUrl);
             fragment.setArguments(bundle);
             return fragment;
         }

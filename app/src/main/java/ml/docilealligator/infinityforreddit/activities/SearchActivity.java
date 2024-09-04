@@ -339,6 +339,7 @@ public class SearchActivity extends BaseActivity {
             binding.subredditNameRelativeLayoutSearchActivity.setOnClickListener(view -> {
                 Intent intent = new Intent(this, SubscribedThingListingActivity.class);
                 intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_MODE, true);
+                intent.putExtra(SubscribedThingListingActivity.EXTRA_EXTRA_CLEAR_SELECTION, true);
                 requestThingSelectionForCurrentActivityLauncher.launch(intent);
             });
         }
