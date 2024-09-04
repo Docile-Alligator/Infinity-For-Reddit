@@ -476,6 +476,8 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                     bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, false);
                     bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, isThingSelectionMode);
                     bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_EXTRA_CLEAR_SELECTION, isThingSelectionMode);
+                    bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_PROFILE_IMAGE_URL,
+                            mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_IMAGE_URL, null));
                     fragment.setArguments(bundle);
                     return fragment;
                 }
