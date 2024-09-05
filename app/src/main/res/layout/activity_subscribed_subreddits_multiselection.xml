@@ -61,7 +61,8 @@
         <ImageView
             android:id="@+id/no_subscriptions_image_view_subscribed_subreddits_multiselection_activity"
             android:layout_width="150dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/content_description_no_subscriptions_indicator" />
 
         <TextView
             android:id="@+id/error_text_view_subscribed_subreddits_multiselection_activity"
