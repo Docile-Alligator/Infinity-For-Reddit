@@ -1433,4 +1433,26 @@
     <string name="comment_filter_min_vote_explanation">Comments that have a score lower than the following value will be filtered out (-1 means no restriction).</string>
     <string name="comment_filter_max_vote_explanation">Comments that have a score higher than the following value will be filtered out (-1 means no restriction).</string>
 
+    <string name="content_description_create_comment_filter">Create comment filter</string>
+    <string name="content_description_add_comment_filter_usage">Apply comment filter to somewhere</string>
+    <string name="content_description_comment_filter_add_user">Add a user to comment filter</string>
+    <string name="content_description_create_custom_theme">Create custom theme</string>
+    <string name="content_description_create_post_filter">Create post filter</string>
+    <string name="content_description_add_post_filter_usage">Apply post filter to somewhere</string>
+    <string name="content_description_post_filter_add_subreddit">Add a subreddit to post filter</string>
+    <string name="content_description_post_filter_add_user">Add a user to post filter</string>
+    <string name="content_description_change_banner">Change banner</string>
+    <string name="content_description_change_avatar">Change avatar</string>
+    <string name="content_description_customize_post_filter">Customize post filter</string>
+    <string name="content_description_compose_message">Compose message</string>
+    <string name="content_description_alternative_login_method">Alternative login method</string>
+    <string name="content_description_capture_photo">Capture photo</string>
+    <string name="content_description_select_image">Select image</string>
+    <string name="content_description_selected_image">Selected image</string>
+    <string name="content_description_record_video">Record video</string>
+    <string name="content_description_select_video">Select video</string>
+    <string name="content_description_delete_texts">Delete texts</string>
+    <string name="content_description_handle_link">Handle link</string>
+
+
 </resources>

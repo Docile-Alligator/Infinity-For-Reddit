@@ -46,7 +46,8 @@
                     android:src="@drawable/ic_cancel_24dp"
                     android:clickable="true"
                     android:focusable="true"
-                    android:background="?attr/actionBarItemBackground" />
+                    android:background="?attr/actionBarItemBackground"
+                    android:contentDescription="@string/content_description_delete_texts" />
 
                 <ImageView
                     android:id="@+id/link_handler_image_view_search_activity"
@@ -56,7 +57,8 @@
                     android:src="@drawable/ic_open_link_24dp"
                     android:clickable="true"
                     android:focusable="true"
-                    android:background="?attr/actionBarItemBackground" />
+                    android:background="?attr/actionBarItemBackground"
+                    android:contentDescription="@string/content_description_handle_link" />
 
             </LinearLayout>
 
