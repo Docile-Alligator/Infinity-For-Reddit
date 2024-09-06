@@ -233,6 +233,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:src="@drawable/ic_outline_add_a_photo_24dp"
+                        android:contentDescription="@string/content_description_capture_photo"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/select_from_library_fab_post_image_activity"
                         app:layout_constraintHorizontal_chainStyle="spread"
@@ -246,6 +247,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="16dp"
                         android:src="@drawable/ic_outline_select_photo_24dp"
+                        android:contentDescription="@string/content_description_select_image"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_chainStyle="spread"
@@ -272,7 +274,8 @@
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
                     android:scaleType="fitStart"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    android:contentDescription="@string/content_description_selected_image" />
 
             </LinearLayout>
 

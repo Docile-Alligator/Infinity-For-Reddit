@@ -286,7 +286,8 @@
                                 android:padding="16dp"
                                 android:background="?actionBarItemBackground"
                                 android:clickable="true"
-                                android:focusable="true" />
+                                android:focusable="true"
+                                android:contentDescription="@string/content_description_comment_filter_add_user" />
 
                         </LinearLayout>
 

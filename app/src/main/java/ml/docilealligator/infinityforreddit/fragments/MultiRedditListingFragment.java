@@ -146,8 +146,8 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
                 new MultiRedditViewModel.Factory(mRedditDataRoomDatabase, mActivity.accountName))
                 .get(MultiRedditViewModel.class);
 
-        mMultiRedditViewModel.getAllMultiReddits().observe(getViewLifecycleOwner(), subscribedUserData -> {
-            if (subscribedUserData == null || subscribedUserData.size() == 0) {
+        mMultiRedditViewModel.getAllMultiReddits().observe(getViewLifecycleOwner(), multiReddits -> {
+            if (multiReddits == null || multiReddits.size() == 0) {
                 binding.recyclerViewMultiRedditListingFragment.setVisibility(View.GONE);
                 binding.fetchMultiRedditListingInfoLinearLayoutMultiRedditListingFragment.setVisibility(View.VISIBLE);
                 mGlide.load(R.drawable.error_image).into(binding.fetchMultiRedditListingInfoImageViewMultiRedditListingFragment);
@@ -156,16 +156,16 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
                 binding.recyclerViewMultiRedditListingFragment.setVisibility(View.VISIBLE);
                 mGlide.clear(binding.fetchMultiRedditListingInfoImageViewMultiRedditListingFragment);
             }
-            adapter.setMultiReddits(subscribedUserData);
+            adapter.setMultiReddits(multiReddits);
         });
 
-        mMultiRedditViewModel.getAllFavoriteMultiReddits().observe(getViewLifecycleOwner(), favoriteSubscribedUserData -> {
-            if (favoriteSubscribedUserData != null && favoriteSubscribedUserData.size() > 0) {
+        mMultiRedditViewModel.getAllFavoriteMultiReddits().observe(getViewLifecycleOwner(), favoriteMultiReddits -> {
+            if (favoriteMultiReddits != null && favoriteMultiReddits.size() > 0) {
                 binding.fetchMultiRedditListingInfoLinearLayoutMultiRedditListingFragment.setVisibility(View.GONE);
                 binding.recyclerViewMultiRedditListingFragment.setVisibility(View.VISIBLE);
                 mGlide.clear(binding.fetchMultiRedditListingInfoImageViewMultiRedditListingFragment);
             }
-            adapter.setFavoriteMultiReddits(favoriteSubscribedUserData);
+            adapter.setFavoriteMultiReddits(favoriteMultiReddits);
         });
 
         return binding.getRoot();

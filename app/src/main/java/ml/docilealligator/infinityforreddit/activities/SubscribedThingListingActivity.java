@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.fragment.app.Fragment;
@@ -33,12 +34,15 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
+import ml.docilealligator.infinityforreddit.AnyAccountAccessTokenAuthenticator;
 import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -65,15 +69,26 @@ import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubred
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import okhttp3.ConnectionPool;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
 public class SubscribedThingListingActivity extends BaseActivity implements ActivityToolbarInterface {
 
     public static final String EXTRA_SHOW_MULTIREDDITS = "ESM";
     public static final String EXTRA_THING_SELECTION_MODE = "ETSM";
+    public static final String EXTRA_THING_SELECTION_TYPE = "ETST";
+    public static final String EXTRA_SPECIFIED_ACCOUNT = "ESA";
+    public static final String EXTRA_EXTRA_CLEAR_SELECTION = "EECS";
+    public static final int EXTRA_THING_SELECTION_TYPE_ALL = 0;
+    public static final int EXTRA_THING_SELECTION_TYPE_SUBREDDIT = 1;
+    public static final int EXTRA_THING_SELECTION_TYPE_USER = 2;
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
     private static final String INSERT_MULTIREDDIT_STATE = "IMS";
 
+    @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -93,6 +108,8 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     private boolean mInsertMultiredditSuccess;
     private boolean showMultiReddits;
     private boolean isThingSelectionMode;
+    private int thingSelectionType;
+    private String mAccountProfileImageUrl;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private Menu mMenu;
     private ActivityResultLauncher<Intent> requestSearchThingLauncher;
@@ -143,6 +160,27 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setToolbarGoToTop(binding.toolbarSubscribedThingListingActivity);
 
+        if (getIntent().hasExtra(EXTRA_SPECIFIED_ACCOUNT)) {
+            Account specifiedAccount = getIntent().getParcelableExtra(EXTRA_SPECIFIED_ACCOUNT);
+            if (specifiedAccount != null) {
+                accessToken = specifiedAccount.getAccessToken();
+                accountName = specifiedAccount.getAccountName();
+                mAccountProfileImageUrl = specifiedAccount.getProfileImageUrl();
+
+                mOauthRetrofit = mOauthRetrofit.newBuilder().client(new OkHttpClient.Builder().authenticator(new AnyAccountAccessTokenAuthenticator(mRetrofit, mRedditDataRoomDatabase, specifiedAccount, mCurrentAccountSharedPreferences))
+                                .connectTimeout(30, TimeUnit.SECONDS)
+                                .readTimeout(30, TimeUnit.SECONDS)
+                                .writeTimeout(30, TimeUnit.SECONDS)
+                                .connectionPool(new ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
+                                .build())
+                        .build();
+            } else {
+                mAccountProfileImageUrl = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_IMAGE_URL, null);
+            }
+        } else {
+            mAccountProfileImageUrl = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_IMAGE_URL, null);
+        }
+
         if (savedInstanceState != null) {
             mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
             mInsertMultiredditSuccess = savedInstanceState.getBoolean(INSERT_MULTIREDDIT_STATE);
@@ -151,6 +189,15 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         }
 
         isThingSelectionMode = getIntent().getBooleanExtra(EXTRA_THING_SELECTION_MODE, false);
+        thingSelectionType = getIntent().getIntExtra(EXTRA_THING_SELECTION_TYPE, EXTRA_THING_SELECTION_TYPE_ALL);
+
+        if (isThingSelectionMode && thingSelectionType == EXTRA_THING_SELECTION_TYPE_SUBREDDIT) {
+            getSupportActionBar().setTitle(R.string.subreddit_selection_activity_label);
+        }
+
+        if (isThingSelectionMode && thingSelectionType != EXTRA_THING_SELECTION_TYPE_ALL) {
+            binding.tabLayoutSubscribedThingListingActivity.setVisibility(View.GONE);
+        }
 
         if (accountName.equals(Account.ANONYMOUS_ACCOUNT) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             binding.searchEditTextSubscribedThingListingActivity.setImeOptions(binding.searchEditTextSubscribedThingListingActivity.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
@@ -256,7 +303,13 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         if (item.getItemId() == R.id.action_search_subscribed_thing_listing_activity) {
             if (isThingSelectionMode) {
                 Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_SUBREDDITS_AND_USERS, true);
+                if (thingSelectionType == EXTRA_THING_SELECTION_TYPE_SUBREDDIT) {
+                    intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, true);
+                } else if (thingSelectionType == EXTRA_THING_SELECTION_TYPE_USER) {
+                    intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_USERS, true);
+                } else {
+                    intent.putExtra(SearchActivity.EXTRA_SEARCH_SUBREDDITS_AND_USERS, true);
+                }
                 requestSearchThingLauncher.launch(intent);
                 return true;
             }
@@ -469,25 +522,56 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         @NonNull
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
-                case 0: {
-                    SubscribedSubredditsListingFragment fragment = new SubscribedSubredditsListingFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, false);
-                    bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, isThingSelectionMode);
-                    bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_EXTRA_CLEAR_SELECTION, isThingSelectionMode);
-                    fragment.setArguments(bundle);
-                    return fragment;
-                }
-                case 1: {
-                    FollowedUsersListingFragment fragment = new FollowedUsersListingFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean(FollowedUsersListingFragment.EXTRA_IS_USER_SELECTION, isThingSelectionMode);
-                    fragment.setArguments(bundle);
-                    return fragment;
+            if (isThingSelectionMode) {
+                switch (thingSelectionType) {
+                    case EXTRA_THING_SELECTION_TYPE_SUBREDDIT:
+                        return getSubscribedSubredditListingFragment();
+                    case EXTRA_THING_SELECTION_TYPE_USER:
+                        return getFollowedUserFragment();
+                    default:
+                        switch (position) {
+                            case 0:
+                                return getSubscribedSubredditListingFragment();
+                            case 1:
+                                return getFollowedUserFragment();
+                            default:
+                                return getMultiRedditListingFragment();
+                        }
                 }
             }
+            switch (position) {
+                case 0:
+                    return getSubscribedSubredditListingFragment();
+                case 1:
+                    return getFollowedUserFragment();
+                default:
+                    return getMultiRedditListingFragment();
+            }
+        }
 
+        @NonNull
+        private Fragment getSubscribedSubredditListingFragment() {
+            SubscribedSubredditsListingFragment fragment = new SubscribedSubredditsListingFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, isThingSelectionMode);
+            bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_EXTRA_CLEAR_SELECTION,
+                    isThingSelectionMode && getIntent().getBooleanExtra(EXTRA_EXTRA_CLEAR_SELECTION, false));
+            bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_PROFILE_IMAGE_URL, mAccountProfileImageUrl);
+            fragment.setArguments(bundle);
+            return fragment;
+        }
+
+        @NonNull
+        private Fragment getFollowedUserFragment() {
+            FollowedUsersListingFragment fragment = new FollowedUsersListingFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(FollowedUsersListingFragment.EXTRA_IS_USER_SELECTION, isThingSelectionMode);
+            fragment.setArguments(bundle);
+            return fragment;
+        }
+
+        @NonNull
+        private Fragment getMultiRedditListingFragment() {
             MultiRedditListingFragment fragment = new MultiRedditListingFragment();
             Bundle bundle = new Bundle();
             bundle.putBoolean(MultiRedditListingFragment.EXTRA_IS_GETTING_MULTIREDDIT_INFO, isThingSelectionMode);
@@ -497,11 +581,37 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
 
         @Override
         public int getCount() {
-            return isThingSelectionMode && Account.ANONYMOUS_ACCOUNT.equals(accountName) ? 2 : 3;
+            if (isThingSelectionMode) {
+                switch (thingSelectionType) {
+                    case EXTRA_THING_SELECTION_TYPE_ALL:
+                        return Account.ANONYMOUS_ACCOUNT.equals(accountName) ? 2 : 3;
+                    case EXTRA_THING_SELECTION_TYPE_SUBREDDIT:
+                    case EXTRA_THING_SELECTION_TYPE_USER:
+                        return 1;
+                }
+            }
+            return 3;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
+            if (isThingSelectionMode) {
+                switch (thingSelectionType) {
+                    case EXTRA_THING_SELECTION_TYPE_ALL:
+                        switch (position) {
+                            case 0:
+                                return Utils.getTabTextWithCustomFont(typeface, getString(R.string.subreddits));
+                            case 1:
+                                return Utils.getTabTextWithCustomFont(typeface, getString(R.string.users));
+                            case 2:
+                                return Utils.getTabTextWithCustomFont(typeface, getString(R.string.multi_reddits));
+                        }
+                    case EXTRA_THING_SELECTION_TYPE_SUBREDDIT:
+                        return Utils.getTabTextWithCustomFont(typeface, getString(R.string.subreddits));
+                    case EXTRA_THING_SELECTION_TYPE_USER:
+                        return Utils.getTabTextWithCustomFont(typeface, getString(R.string.users));
+                }
+            }
             switch (position) {
                 case 0:
                     return Utils.getTabTextWithCustomFont(typeface, getString(R.string.subreddits));
@@ -544,13 +654,24 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
             }
         }
 
+        @Nullable
+        Fragment getCurrentFragment() {
+            List<Fragment> fragments = getSupportFragmentManager().getFragments();
+            if (binding.viewPagerSubscribedThingListingActivity.getCurrentItem() < fragments.size()) {
+                return fragments.get(binding.viewPagerSubscribedThingListingActivity.getCurrentItem());
+            }
+
+            return null;
+        }
+
         void goBackToTop() {
-            if (binding.viewPagerSubscribedThingListingActivity.getCurrentItem() == 0) {
-                subscribedSubredditsListingFragment.goBackToTop();
-            } else if (binding.viewPagerSubscribedThingListingActivity.getCurrentItem() == 1) {
-                followedUsersListingFragment.goBackToTop();
-            } else {
-                multiRedditListingFragment.goBackToTop();
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof SubscribedSubredditsListingFragment) {
+                ((SubscribedSubredditsListingFragment) fragment).goBackToTop();
+            } else if (fragment instanceof FollowedUsersListingFragment) {
+                ((FollowedUsersListingFragment) fragment).goBackToTop();
+            } else if (fragment instanceof MultiRedditListingFragment) {
+                ((MultiRedditListingFragment) fragment).goBackToTop();
             }
         }
 

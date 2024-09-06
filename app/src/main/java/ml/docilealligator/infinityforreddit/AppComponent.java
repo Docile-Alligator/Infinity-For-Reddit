@@ -52,7 +52,6 @@ import ml.docilealligator.infinityforreddit.activities.SendPrivateMessageActivit
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.activities.SubmitCrosspostActivity;
 import ml.docilealligator.infinityforreddit.activities.SubredditMultiselectionActivity;
-import ml.docilealligator.infinityforreddit.activities.SubredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.activities.SuicidePreventionActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewImageOrGifActivity;
@@ -155,8 +154,6 @@ public interface AppComponent {
     void inject(SearchSubredditsResultActivity searchSubredditsResultActivity);
 
     void inject(FollowedUsersListingFragment followedUsersListingFragment);
-
-    void inject(SubredditSelectionActivity subredditSelectionActivity);
 
     void inject(EditPostActivity editPostActivity);
 

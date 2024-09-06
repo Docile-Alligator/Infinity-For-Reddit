@@ -335,10 +335,12 @@ public class SearchActivity extends BaseActivity {
 
         if (searchOnlySubreddits || searchOnlyUsers || searchSubredditsAndUsers) {
             binding.subredditNameRelativeLayoutSearchActivity.setVisibility(View.GONE);
+            binding.dividerSearchActivity.setVisibility(View.GONE);
         } else {
             binding.subredditNameRelativeLayoutSearchActivity.setOnClickListener(view -> {
                 Intent intent = new Intent(this, SubscribedThingListingActivity.class);
                 intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_MODE, true);
+                intent.putExtra(SubscribedThingListingActivity.EXTRA_EXTRA_CLEAR_SELECTION, true);
                 requestThingSelectionForCurrentActivityLauncher.launch(intent);
             });
         }
@@ -395,7 +397,7 @@ public class SearchActivity extends BaseActivity {
                         outRect.left = halfSpacing;
                         outRect.right = spacing;
                     }
-                    outRect.bottom = spacing;
+                    outRect.top = spacing;
                 }
             });
 
@@ -408,8 +410,10 @@ public class SearchActivity extends BaseActivity {
 
                 mRecentSearchQueryViewModel.getAllRecentSearchQueries().observe(this, recentSearchQueries -> {
                     if (recentSearchQueries != null && !recentSearchQueries.isEmpty()) {
+                        binding.dividerSearchActivity.setVisibility(View.VISIBLE);
                         binding.deleteAllRecentSearchesButtonSearchActivity.setVisibility(View.VISIBLE);
                     } else {
+                        binding.dividerSearchActivity.setVisibility(View.GONE);
                         binding.deleteAllRecentSearchesButtonSearchActivity.setVisibility(View.GONE);
                     }
                     adapter.setRecentSearchQueries(recentSearchQueries);
@@ -497,8 +501,9 @@ public class SearchActivity extends BaseActivity {
         binding.linkHandlerImageViewSearchActivity.setColorFilter(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
         int colorAccent = mCustomThemeWrapper.getColorAccent();
         binding.searchInTextViewSearchActivity.setTextColor(colorAccent);
-        binding.deleteAllRecentSearchesButtonSearchActivity.setIconTint(ColorStateList.valueOf(mCustomThemeWrapper.getPrimaryIconColor()));
         binding.subredditNameTextViewSearchActivity.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        binding.deleteAllRecentSearchesButtonSearchActivity.setIconTint(ColorStateList.valueOf(mCustomThemeWrapper.getPrimaryIconColor()));
+        binding.dividerSearchActivity.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
         if (typeface != null) {
             Utils.setFontToAllTextViews(binding.getRoot(), typeface);
         }

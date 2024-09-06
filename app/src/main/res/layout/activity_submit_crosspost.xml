@@ -242,7 +242,8 @@
                     android:layout_margin="16dp"
                     android:layout_gravity="start"
                     android:background="@drawable/play_button_round_background"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    android:contentDescription="@string/content_description_video_indicator" />
 
             </FrameLayout>
 
