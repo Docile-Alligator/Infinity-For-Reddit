@@ -145,8 +145,8 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
                 getResources().getConfiguration().locale, privateMessage, accountName, mCustomThemeWrapper);
         mLinearLayoutManager = new LinearLayoutManagerBugFixed(this);
         mLinearLayoutManager.setStackFromEnd(true);
-        binding.recyclerViewViewPrivateMessages.setLayoutManager(mLinearLayoutManager);
-        binding.recyclerViewViewPrivateMessages.setAdapter(mAdapter);
+        binding.recyclerViewViewPrivateMessagesActivity.setLayoutManager(mLinearLayoutManager);
+        binding.recyclerViewViewPrivateMessagesActivity.setAdapter(mAdapter);
         goToBottom();
         binding.sendImageViewViewPrivateMessagesActivity.setOnClickListener(view -> {
             if (!isSendingMessage) {
@@ -233,7 +233,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     }
 
     public void delayTransition() {
-        TransitionManager.beginDelayedTransition(binding.recyclerViewViewPrivateMessages, new AutoTransition());
+        TransitionManager.beginDelayedTransition(binding.recyclerViewViewPrivateMessagesActivity, new AutoTransition());
     }
 
     private void goToBottom() {
@@ -286,11 +286,10 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutViewPrivateMessagesActivity,
                 null, binding.toolbarViewPrivateMessagesActivity);
-        binding.editTextDividerViewPrivateMessagesActivity.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
+        binding.cardViewViewPrivateMessagesActivity.setCardBackgroundColor(mCustomThemeWrapper.getFilledCardViewBackgroundColor());
         binding.editTextViewPrivateMessagesActivity.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
         mSecondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
         binding.editTextViewPrivateMessagesActivity.setHintTextColor(mSecondaryTextColor);
-        binding.editTextWrapperLinearLayoutViewPrivateMessagesActivity.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         mSendMessageIconColor = mCustomThemeWrapper.getSendMessageIconColor();
         binding.sendImageViewViewPrivateMessagesActivity.setColorFilter(mSendMessageIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         if (typeface != null) {

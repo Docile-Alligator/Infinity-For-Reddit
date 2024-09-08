@@ -30,22 +30,19 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" >
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_view_private_messages"
+            android:id="@+id/recycler_view_view_private_messages_activity"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:clipToPadding="false" />
 
-        <LinearLayout
-            android:id="@+id/edit_text_wrapper_linear_layout_view_private_messages_activity"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_view_view_private_messages_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <View
-                android:id="@+id/edit_text_divider_view_private_messages_activity"
-                android:layout_width="match_parent"
-                android:layout_height="1dp" />
+            android:layout_margin="8dp"
+            app:cardCornerRadius="48dp"
+            style="?attr/materialCardViewFilledStyle">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -57,6 +54,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
                     android:background="#00000000"
                     android:fontFamily="?attr/font_family"
                     android:hint="@string/message"
@@ -80,7 +78,7 @@
 
             </LinearLayout>
 
-        </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 
