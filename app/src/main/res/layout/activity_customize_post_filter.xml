@@ -68,7 +68,7 @@
                         android:paddingTop="8dp"
                         android:paddingEnd="16dp"
                         android:paddingBottom="8dp"
-                        android:text="@string/post_filter_post_type_explanation"
+                        android:text="@string/post_filter_name_explanation"
                         android:textColor="?attr/primaryTextColor"
                         android:textSize="?attr/font_default" />
 
