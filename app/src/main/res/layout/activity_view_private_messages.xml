@@ -60,7 +60,10 @@
                     android:hint="@string/message"
                     android:inputType="textMultiLine"
                     android:maxLines="3"
-                    android:padding="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:paddingStart="32dp"
+                    android:paddingEnd="16dp"
                     android:textColor="?attr/primaryTextColor"
                     android:textSize="?attr/font_default" />
 
