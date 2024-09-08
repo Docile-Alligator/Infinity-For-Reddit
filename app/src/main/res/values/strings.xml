@@ -1473,7 +1473,18 @@
     <string name="content_description_download">Download</string>
     <string name="content_description_share">Share</string>
     <string name="content_description_set_as_wallpaper">Set as wallpaper</string>
-
-
+    <string name="content_description_previous_result">Go to previous result</string>
+    <string name="content_description_next_result">Go to next result</string>
+    <string name="content_description_close_search_panel">Close search panel</string>
+    <string name="content_description_send_message">Send message</string>
+    <string name="content_description_home">Home</string>
+    <string name="content_description_subscriptions">Subscriptions</string>
+    <string name="content_description_inbox">Inbox</string>
+    <string name="content_description_profile">Profile</string>
+    <string name="content_description_multireddits">Multireddits</string>
+    <string name="content_description_upvoted">Upvoted</string>
+    <string name="content_description_downvoted">Downvoted</string>
+    <string name="content_description_hidden">Hidden</string>
+    <string name="content_description_saved">Saved</string>
 
 </resources>

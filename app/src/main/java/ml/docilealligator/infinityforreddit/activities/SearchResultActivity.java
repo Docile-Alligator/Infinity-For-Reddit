@@ -280,61 +280,51 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         switch (fabOption) {
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH:
                 binding.fabSearchResultActivity.setImageResource(R.drawable.ic_refresh_24dp);
-                binding.fabSearchResultActivity.setContentDescription(getString(R.string.content_description_refresh));
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE:
                 binding.fabSearchResultActivity.setImageResource(R.drawable.ic_sort_toolbar_24dp);
-                binding.fabSearchResultActivity.setContentDescription(getString(R.string.content_description_change_sort_type));
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT:
                 binding.fabSearchResultActivity.setImageResource(R.drawable.ic_post_layout_24dp);
-                binding.fabSearchResultActivity.setContentDescription(getString(R.string.content_description_change_post_layout));
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH:
                 binding.fabSearchResultActivity.setImageResource(R.drawable.ic_search_24dp);
-                binding.fabSearchResultActivity.setContentDescription(getString(R.string.content_description_search));
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_SUBREDDIT:
                 binding.fabSearchResultActivity.setImageResource(R.drawable.ic_subreddit_24dp);
-                binding.fabSearchResultActivity.setContentDescription(getString(R.string.content_description_go_to_subreddit));
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_USER:
                 binding.fabSearchResultActivity.setImageResource(R.drawable.ic_user_24dp);
-                binding.fabSearchResultActivity.setContentDescription(getString(R.string.content_description_go_to_user));
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_RANDOM:
                 binding.fabSearchResultActivity.setImageResource(R.drawable.ic_random_24dp);
-                binding.fabSearchResultActivity.setContentDescription(getString(R.string.content_description_random));
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
                 if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                     binding.fabSearchResultActivity.setImageResource(R.drawable.ic_filter_24dp);
                     fabOption = SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS;
-                    binding.fabSearchResultActivity.setContentDescription(getString(R.string.content_description_filter_posts));
                 } else {
                     binding.fabSearchResultActivity.setImageResource(R.drawable.ic_hide_read_posts_24dp);
-                    binding.fabSearchResultActivity.setContentDescription(getString(R.string.content_description_hide_read_posts));
                 }
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
                 binding.fabSearchResultActivity.setImageResource(R.drawable.ic_filter_24dp);
-                binding.fabSearchResultActivity.setContentDescription(getString(R.string.content_description_filter_posts));
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_TOP:
                 binding.fabSearchResultActivity.setImageResource(R.drawable.ic_keyboard_double_arrow_up_24);
-                binding.fabSearchResultActivity.setContentDescription(getString(R.string.content_description_go_to_top));
                 break;
             default:
                 if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                     binding.fabSearchResultActivity.setImageResource(R.drawable.ic_filter_24dp);
                     fabOption = SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS;
-                    binding.fabSearchResultActivity.setContentDescription(getString(R.string.content_description_filter_posts));
                 } else {
                     binding.fabSearchResultActivity.setImageResource(R.drawable.ic_add_day_night_24dp);
-                    binding.fabSearchResultActivity.setContentDescription(getString(R.string.content_description_submit_post));
                 }
                 break;
         }
+
+        setOtherActivitiesFabContentDescription(binding.fabSearchResultActivity, fabOption);
+
         binding.fabSearchResultActivity.setOnClickListener(view -> {
             switch (fabOption) {
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH: {

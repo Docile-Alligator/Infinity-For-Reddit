@@ -75,7 +75,8 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:scaleType="center"
-                    android:src="@drawable/ic_send_black_24dp" />
+                    android:src="@drawable/ic_send_black_24dp"
+                    android:contentDescription="@string/content_description_send_message" />
 
             </LinearLayout>
 

@@ -61,7 +61,8 @@
         <ImageView
             android:id="@+id/fetch_wiki_image_view_wiki_activity"
             android:layout_width="150dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:contentDescription="@null" />
 
         <TextView
             android:id="@+id/fetch_wiki_text_view_wiki_activity"

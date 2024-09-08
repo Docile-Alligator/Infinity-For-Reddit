@@ -184,6 +184,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:visibility="gone"
-        app:layout_anchor="@id/bottom_app_bar_bottom_app_bar" />
+        app:layout_anchor="@id/bottom_app_bar_bottom_app_bar"
+        android:contentDescription="@null" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
