@@ -102,13 +102,13 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
             newY = Math.max(layoutParams.topMargin, newY); // Don't allow the FAB past the top of the parent
             newY = Math.min(parentHeight - viewHeight - layoutParams.bottomMargin, newY); // Don't allow the FAB past the bottom of the parent
 
+            saveCoordinates(newX, newY);
+
             view.animate()
                     .x(newX)
                     .y(newY)
                     .setDuration(0)
                     .start();
-
-            saveCoordinates(newX, newY);
             return true;
         } else if (action == MotionEvent.ACTION_UP) {
             if (longClicked) {
@@ -175,6 +175,29 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
                         postDetailsSharedPreferences.getFloat(SharedPreferencesUtils.getPostDetailFabLandscapeY(display), 0));
             }
         }
+    }
+
+    public void resetCoordinates() {
+        if (portrait) {
+            if (postDetailsSharedPreferences != null) {
+                postDetailsSharedPreferences
+                        .edit()
+                        .remove(SharedPreferencesUtils.getPostDetailFabPortraitX(display))
+                        .remove(SharedPreferencesUtils.getPostDetailFabPortraitY(display))
+                        .apply();
+            }
+        } else {
+            if (postDetailsSharedPreferences != null) {
+                postDetailsSharedPreferences
+                        .edit()
+                        .remove(SharedPreferencesUtils.getPostDetailFabLandscapeX(display))
+                        .remove(SharedPreferencesUtils.getPostDetailFabLandscapeY(display))
+                        .apply();
+            }
+        }
+
+        setTranslationX(0);
+        setTranslationY(0);
     }
 
     private void saveCoordinates(float x, float y) {

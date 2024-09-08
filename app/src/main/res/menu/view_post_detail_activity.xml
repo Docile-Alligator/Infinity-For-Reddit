@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_reset_fab_position_view_post_detail_activity"
+        android:orderInCategory="100"
+        android:title="@string/action_reset_fab_position"
+        app:showAsAction="never" />
+</menu>

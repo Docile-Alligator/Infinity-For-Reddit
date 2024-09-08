@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -287,9 +288,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     public void setTitle(String title) {
-        if (binding.toolbarViewPostDetailActivity != null) {
-            binding.toolbarViewPostDetailActivity.setTitle(title);
-        }
+        binding.toolbarViewPostDetailActivity.setTitle(title);
     }
 
     public void showFab() {
@@ -738,9 +737,19 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.view_post_detail_activity, menu);
+        applyMenuItemTheme(menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
+            return true;
+        } else if (item.getItemId() == R.id.action_reset_fab_position_view_post_detail_activity) {
+            binding.fabViewPostDetailActivity.resetCoordinates();
             return true;
         }
         return false;
