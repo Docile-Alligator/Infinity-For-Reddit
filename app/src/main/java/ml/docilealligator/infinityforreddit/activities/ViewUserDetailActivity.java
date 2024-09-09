@@ -22,6 +22,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -126,7 +128,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
     public static final int EDIT_COMMENT_REQUEST_CODE = 300;
-    public static final int ADD_TO_MULTIREDDIT_REQUEST_CODE = 400;
 
     private static final String FETCH_USER_INFO_STATE = "FSIS";
     private static final String MESSAGE_FULLNAME_STATE = "MFS";
@@ -190,6 +191,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private String mNewAccountName;
     //private MaterialAlertDialogBuilder nsfwWarningBuilder;
     private ActivityViewUserDetailBinding binding;
+    private ActivityResultLauncher<Intent> requestMultiredditSelectionLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -541,6 +543,31 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                         userData.getLinkKarma(), userData.getCommentKarma(), userData.getAwarderKarma(), userData.getAwardeeKarma()
                 );
                 karmaInfoBottomSheetFragment.show(getSupportFragmentManager(), karmaInfoBottomSheetFragment.getTag());
+            }
+        });
+
+        requestMultiredditSelectionLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            Intent data = result.getData();
+            if (data != null) {
+                MultiReddit multiReddit = data.getParcelableExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT);
+                if (multiReddit != null) {
+                    AddSubredditOrUserToMultiReddit.addSubredditOrUserToMultiReddit(mOauthRetrofit,
+                            accessToken, multiReddit.getPath(), "u_" + username,
+                            new AddSubredditOrUserToMultiReddit.AddSubredditOrUserToMultiRedditListener() {
+                                @Override
+                                public void success() {
+                                    Toast.makeText(ViewUserDetailActivity.this,
+                                            getString(R.string.add_subreddit_or_user_to_multireddit_success, username, multiReddit.getDisplayName()), Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void failed(int code) {
+                                    Toast.makeText(ViewUserDetailActivity.this,
+                                            getString(R.string.add_subreddit_or_user_to_multireddit_failed, username, multiReddit.getDisplayName()), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                }
+
             }
         });
     }
@@ -1146,8 +1173,11 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
                 return true;
             }
-            Intent intent = new Intent(this, MultiredditSelectionActivity.class);
-            startActivityForResult(intent, ADD_TO_MULTIREDDIT_REQUEST_CODE);
+            Intent intent = new Intent(this, SubscribedThingListingActivity.class);
+            intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_MODE, true);
+            intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE,
+                    SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE_MULTIREDDIT);
+            requestMultiredditSelectionLauncher.launch(intent);
         } else if (itemId == R.id.action_add_to_post_filter_view_user_detail_activity) {
             Intent intent = new Intent(this, PostFilterPreferenceActivity.class);
             intent.putExtra(PostFilterPreferenceActivity.EXTRA_USER_NAME, username);
@@ -1200,28 +1230,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                                 data.getStringExtra(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT_CONTENT),
                                 data.getExtras().getInt(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT_POSITION));
                     }
-                }
-            } else if (requestCode == ADD_TO_MULTIREDDIT_REQUEST_CODE) {
-                if (data != null) {
-                    MultiReddit multiReddit = data.getParcelableExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT);
-                    if (multiReddit != null) {
-                        AddSubredditOrUserToMultiReddit.addSubredditOrUserToMultiReddit(mOauthRetrofit,
-                                accessToken, multiReddit.getPath(), "u_" + username,
-                                new AddSubredditOrUserToMultiReddit.AddSubredditOrUserToMultiRedditListener() {
-                                    @Override
-                                    public void success() {
-                                        Toast.makeText(ViewUserDetailActivity.this,
-                                                getString(R.string.add_subreddit_or_user_to_multireddit_success, username, multiReddit.getDisplayName()), Toast.LENGTH_LONG).show();
-                                    }
-
-                                    @Override
-                                    public void failed(int code) {
-                                        Toast.makeText(ViewUserDetailActivity.this,
-                                                getString(R.string.add_subreddit_or_user_to_multireddit_failed, username, multiReddit.getDisplayName()), Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                    }
-
                 }
             }
         }

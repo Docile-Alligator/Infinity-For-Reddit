@@ -142,7 +142,7 @@ public class MultiredditSelectionActivity extends BaseActivity implements Activi
         if (initializeFragment) {
             mFragment = new MultiRedditListingFragment();
             Bundle bundle = new Bundle();
-            bundle.putBoolean(MultiRedditListingFragment.EXTRA_IS_GETTING_MULTIREDDIT_INFO, true);
+            bundle.putBoolean(MultiRedditListingFragment.EXTRA_IS_MULTIREDDIT_SELECTION, true);
             mFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_multireddit_selection_activity, mFragment).commit();
         }

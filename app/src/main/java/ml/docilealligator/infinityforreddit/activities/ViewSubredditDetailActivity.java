@@ -24,6 +24,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -76,10 +78,10 @@ import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.SubredditAutocompleteRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.asynctasks.AccountManagement;
 import ml.docilealligator.infinityforreddit.asynctasks.AddSubredditOrUserToMultiReddit;
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsSubscribedToSubreddit;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubredditData;
-import ml.docilealligator.infinityforreddit.asynctasks.AccountManagement;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
@@ -132,7 +134,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private static final String CURRENT_ONLINE_SUBSCRIBERS_STATE = "COSS";
     private static final String MESSAGE_FULLNAME_STATE = "MFS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
-    private static final int ADD_TO_MULTIREDDIT_REQUEST_CODE = 1;
     public SubredditViewModel mSubredditViewModel;
 
     @Inject
@@ -195,6 +196,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private MaterialAlertDialogBuilder nsfwWarningBuilder;
     private Bitmap subredditIconBitmap;
     private ActivityViewSubredditDetailBinding binding;
+    private ActivityResultLauncher<Intent> requestMultiredditSelectionLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -451,6 +453,31 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                         nsfwWarningBuilder.show();
                     }
                 }
+            }
+        });
+
+        requestMultiredditSelectionLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            Intent data = result.getData();
+            if (data != null) {
+                MultiReddit multiReddit = data.getParcelableExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT);
+                if (multiReddit != null) {
+                    AddSubredditOrUserToMultiReddit.addSubredditOrUserToMultiReddit(mOauthRetrofit,
+                            accessToken, multiReddit.getPath(), subredditName,
+                            new AddSubredditOrUserToMultiReddit.AddSubredditOrUserToMultiRedditListener() {
+                                @Override
+                                public void success() {
+                                    Toast.makeText(ViewSubredditDetailActivity.this,
+                                            getString(R.string.add_subreddit_or_user_to_multireddit_success, subredditName, multiReddit.getDisplayName()), Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void failed(int code) {
+                                    Toast.makeText(ViewSubredditDetailActivity.this,
+                                            getString(R.string.add_subreddit_or_user_to_multireddit_failed, subredditName, multiReddit.getDisplayName()), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                }
+
             }
         });
     }
@@ -1126,8 +1153,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
                 return true;
             }
-            Intent intent = new Intent(this, MultiredditSelectionActivity.class);
-            startActivityForResult(intent, ADD_TO_MULTIREDDIT_REQUEST_CODE);
+            Intent intent = new Intent(this, SubscribedThingListingActivity.class);
+            intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_MODE, true);
+            intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE, SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE_MULTIREDDIT);
+            requestMultiredditSelectionLauncher.launch(intent);
         } else if (itemId == R.id.action_add_to_post_filter_view_subreddit_detail_activity) {
             Intent intent = new Intent(this, PostFilterPreferenceActivity.class);
             intent.putExtra(PostFilterPreferenceActivity.EXTRA_SUBREDDIT_NAME, subredditName);
@@ -1159,34 +1188,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             return ShortcutManager.requestPinShortcut(this, subredditName, icon);
         }
         return false;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD_TO_MULTIREDDIT_REQUEST_CODE && resultCode == RESULT_OK) {
-            if (data != null) {
-                MultiReddit multiReddit = data.getParcelableExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT);
-                if (multiReddit != null) {
-                    AddSubredditOrUserToMultiReddit.addSubredditOrUserToMultiReddit(mOauthRetrofit,
-                            accessToken, multiReddit.getPath(), subredditName,
-                            new AddSubredditOrUserToMultiReddit.AddSubredditOrUserToMultiRedditListener() {
-                                @Override
-                                public void success() {
-                                    Toast.makeText(ViewSubredditDetailActivity.this,
-                                            getString(R.string.add_subreddit_or_user_to_multireddit_success, subredditName, multiReddit.getDisplayName()), Toast.LENGTH_LONG).show();
-                                }
-
-                                @Override
-                                public void failed(int code) {
-                                    Toast.makeText(ViewSubredditDetailActivity.this,
-                                            getString(R.string.add_subreddit_or_user_to_multireddit_failed, subredditName, multiReddit.getDisplayName()), Toast.LENGTH_LONG).show();
-                                }
-                            });
-                }
-
-            }
-        }
     }
 
     @Override

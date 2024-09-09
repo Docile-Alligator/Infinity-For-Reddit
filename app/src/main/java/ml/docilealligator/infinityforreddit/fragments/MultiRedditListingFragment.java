@@ -46,7 +46,7 @@ import retrofit2.Retrofit;
 
 public class MultiRedditListingFragment extends Fragment implements FragmentCommunicator {
 
-    public static final String EXTRA_IS_GETTING_MULTIREDDIT_INFO = "EIGMI";
+    public static final String EXTRA_IS_MULTIREDDIT_SELECTION = "EIMS";
 
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
@@ -91,7 +91,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
             }
         }
 
-        boolean isGettingMultiredditInfo = getArguments().getBoolean(EXTRA_IS_GETTING_MULTIREDDIT_INFO, false);
+        boolean isGettingMultiredditInfo = getArguments().getBoolean(EXTRA_IS_MULTIREDDIT_SELECTION, false);
 
         if (mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             binding.swipeRefreshLayoutMultiRedditListingFragment.setEnabled(false);

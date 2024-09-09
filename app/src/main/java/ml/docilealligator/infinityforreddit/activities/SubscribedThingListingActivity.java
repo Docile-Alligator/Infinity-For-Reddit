@@ -83,6 +83,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     public static final int EXTRA_THING_SELECTION_TYPE_ALL = 0;
     public static final int EXTRA_THING_SELECTION_TYPE_SUBREDDIT = 1;
     public static final int EXTRA_THING_SELECTION_TYPE_USER = 2;
+    public static final int EXTRA_THING_SELECTION_TYPE_MULTIREDDIT = 3;
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
     private static final String INSERT_MULTIREDDIT_STATE = "IMS";
 
@@ -191,8 +192,12 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         isThingSelectionMode = getIntent().getBooleanExtra(EXTRA_THING_SELECTION_MODE, false);
         thingSelectionType = getIntent().getIntExtra(EXTRA_THING_SELECTION_TYPE, EXTRA_THING_SELECTION_TYPE_ALL);
 
-        if (isThingSelectionMode && thingSelectionType == EXTRA_THING_SELECTION_TYPE_SUBREDDIT) {
-            getSupportActionBar().setTitle(R.string.subreddit_selection_activity_label);
+        if (isThingSelectionMode) {
+            if (thingSelectionType == EXTRA_THING_SELECTION_TYPE_SUBREDDIT) {
+                getSupportActionBar().setTitle(R.string.subreddit_selection_activity_label);
+            } else if (thingSelectionType == EXTRA_THING_SELECTION_TYPE_MULTIREDDIT) {
+                getSupportActionBar().setTitle(R.string.multireddit_selection_activity_label);
+            }
         }
 
         if (isThingSelectionMode && thingSelectionType != EXTRA_THING_SELECTION_TYPE_ALL) {
@@ -307,7 +312,17 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                     intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, true);
                 } else if (thingSelectionType == EXTRA_THING_SELECTION_TYPE_USER) {
                     intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_USERS, true);
-                } else {
+                } else if (thingSelectionType == EXTRA_THING_SELECTION_TYPE_MULTIREDDIT) {
+                    item.setVisible(false);
+                    binding.searchEditTextSubscribedThingListingActivity.setVisibility(View.VISIBLE);
+                    binding.searchEditTextSubscribedThingListingActivity.requestFocus();
+                    if (binding.searchEditTextSubscribedThingListingActivity.requestFocus()) {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(binding.searchEditTextSubscribedThingListingActivity, InputMethodManager.SHOW_IMPLICIT);
+                    }
+                    return true;
+                }
+                else {
                     intent.putExtra(SearchActivity.EXTRA_SEARCH_SUBREDDITS_AND_USERS, true);
                 }
                 requestSearchThingLauncher.launch(intent);
@@ -511,8 +526,11 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        @Nullable
         private SubscribedSubredditsListingFragment subscribedSubredditsListingFragment;
+        @Nullable
         private FollowedUsersListingFragment followedUsersListingFragment;
+        @Nullable
         private MultiRedditListingFragment multiRedditListingFragment;
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -528,6 +546,8 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                         return getSubscribedSubredditListingFragment();
                     case EXTRA_THING_SELECTION_TYPE_USER:
                         return getFollowedUserFragment();
+                    case EXTRA_THING_SELECTION_TYPE_MULTIREDDIT:
+                        return getMultiRedditListingFragment();
                     default:
                         switch (position) {
                             case 0:
@@ -574,7 +594,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         private Fragment getMultiRedditListingFragment() {
             MultiRedditListingFragment fragment = new MultiRedditListingFragment();
             Bundle bundle = new Bundle();
-            bundle.putBoolean(MultiRedditListingFragment.EXTRA_IS_GETTING_MULTIREDDIT_INFO, isThingSelectionMode);
+            bundle.putBoolean(MultiRedditListingFragment.EXTRA_IS_MULTIREDDIT_SELECTION, isThingSelectionMode);
             fragment.setArguments(bundle);
             return fragment;
         }
@@ -587,6 +607,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                         return Account.ANONYMOUS_ACCOUNT.equals(accountName) ? 2 : 3;
                     case EXTRA_THING_SELECTION_TYPE_SUBREDDIT:
                     case EXTRA_THING_SELECTION_TYPE_USER:
+                    case EXTRA_THING_SELECTION_TYPE_MULTIREDDIT:
                         return 1;
                 }
             }
@@ -610,6 +631,8 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                         return Utils.getTabTextWithCustomFont(typeface, getString(R.string.subreddits));
                     case EXTRA_THING_SELECTION_TYPE_USER:
                         return Utils.getTabTextWithCustomFont(typeface, getString(R.string.users));
+                    case EXTRA_THING_SELECTION_TYPE_MULTIREDDIT:
+                        return Utils.getTabTextWithCustomFont(typeface, getString(R.string.multi_reddits));
                 }
             }
             switch (position) {
@@ -628,11 +651,11 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
             Fragment fragment = (Fragment) super.instantiateItem(container, position);
-            if (position == 0) {
+            if (fragment instanceof SubscribedSubredditsListingFragment) {
                 subscribedSubredditsListingFragment = (SubscribedSubredditsListingFragment) fragment;
-            } else if (position == 1) {
+            } else if (fragment instanceof FollowedUsersListingFragment) {
                 followedUsersListingFragment = (FollowedUsersListingFragment) fragment;
-            } else {
+            } else if (fragment instanceof MultiRedditListingFragment) {
                 multiRedditListingFragment = (MultiRedditListingFragment) fragment;
             }
 
