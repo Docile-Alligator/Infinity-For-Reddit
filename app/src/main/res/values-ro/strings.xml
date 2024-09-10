@@ -144,7 +144,6 @@ Apăsați pentru reîncercare."</string>
     <string name="follow_failed">"Urmărire eșuată"</string>
     <string name="unfollowed">"Urmărire anulată"</string>
     <string name="unfollow_failed">"Eșuare anulare urmărire"</string>
-    <string name="content_description_banner_imageview">"Banner subreddit"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Căutați orice"</string>
     <string name="no_posts_no_lazy_mode">"Nicio postare disponibilă"</string>

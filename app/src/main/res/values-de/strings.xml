@@ -142,7 +142,6 @@ Tippen für Neuversuch."</string>
     <string name="follow_failed">"Folgen fehlgeschlagen"</string>
     <string name="unfollowed">"Entfolgt"</string>
     <string name="unfollow_failed">"Entfolgen fehlgeschlagen"</string>
-    <string name="content_description_banner_imageview">"Subreddit Banner-Bild"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Alles durchsuchen"</string>
     <string name="no_posts_no_lazy_mode">"Keine Beiträge verfügbar"</string>

@@ -137,7 +137,6 @@
     <string name="follow_failed">"பின்தொடர்தல் தோல்வி"</string>
     <string name="unfollowed">"பின்தொடர்நீக்கம்"</string>
     <string name="unfollow_failed">"பின்தொடர்நீக்கம் தோல்வி"</string>
-    <string name="content_description_banner_imageview">"துணைரெட்டிட் பதாகைப் படம்"</string>
     <string name="search_hint">"எதையும் தேடு"</string>
     <string name="no_posts_no_lazy_mode">"இடுகைகள் ஏதுமில்லை"</string>
     <string name="lazy_mode_stop">"சோம்பல் பயன்முறை நின்றது"</string>

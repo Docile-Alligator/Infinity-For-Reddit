@@ -141,7 +141,6 @@ This translation does it work well in this kinda format. People use "since" in s
     <string name="follow_failed">"Takip edilemedi"</string>
     <string name="unfollowed">"Takip bırakıldı"</string>
     <string name="unfollow_failed">"Takip bırakılamadı"</string>
-    <string name="content_description_banner_imageview">"Subreddit Banner Resmi"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Bir şey arayın"</string>
     <string name="no_posts_no_lazy_mode">"Hiç gönderi yok"</string>

@@ -142,7 +142,6 @@ Toque para tentar de novo."</string>
     <string name="follow_failed">"Erro ao seguir"</string>
     <string name="unfollowed">"Parou de Seguir"</string>
     <string name="unfollow_failed">"Erro ao parar de seguir"</string>
-    <string name="content_description_banner_imageview">"Imagem do cartaz do subreddit"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Busque qualquer coisa"</string>
     <string name="no_posts_no_lazy_mode">"Sem postagens disponíveis"</string>

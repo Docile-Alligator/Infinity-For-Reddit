@@ -144,7 +144,6 @@
     <string name="follow_failed">"Не вдалося стежити"</string>
     <string name="unfollowed">"Не відстежується"</string>
     <string name="unfollow_failed">"Не вдалося не відстежувати"</string>
-    <string name="content_description_banner_imageview">"Зображення банера сабредиту"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Шукати все"</string>
     <string name="no_posts_no_lazy_mode">"Нема доступних дописів"</string>

@@ -140,7 +140,6 @@
     <string name="follow_failed">"Theo dõi thất bại"</string>
     <string name="unfollowed">"Đã hủy theo dõi"</string>
     <string name="unfollow_failed">"Hủy theo dõi thất bại"</string>
-    <string name="content_description_banner_imageview">"Ảnh bìa của Subreddit"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Tìm bất cứ thứ gì"</string>
     <string name="no_posts_no_lazy_mode">"Không bài đăng nào có sẵn"</string>

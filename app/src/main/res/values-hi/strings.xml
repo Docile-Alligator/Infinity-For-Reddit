@@ -155,7 +155,6 @@
     <string name="follow_failed">"अनुसरण असफल"</string>
     <string name="unfollowed">"अनफॉलोड"</string>
     <string name="unfollow_failed">"अ-अनुसरण असफल"</string>
-    <string name="content_description_banner_imageview">"सबरैडिट बैनर चित्र"</string>
     <string name="app_label">"इनफिनिटी"</string>
     <string name="search_hint">"कुछ खोजिए"</string>
     <string name="no_posts_no_lazy_mode">"कोई पोस्ट उपलब्ध नहीं"</string>

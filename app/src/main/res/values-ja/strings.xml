@@ -157,7 +157,6 @@
     <string name="follow_failed">"フォローに失敗しました"</string>
     <string name="unfollowed">"フォローを解除しました"</string>
     <string name="unfollow_failed">"フォローの解除に失敗しました"</string>
-    <string name="content_description_banner_imageview">"Subredditのバナー画像"</string>
     <string name="app_label">"ホーム - Infinity"</string>
     <string name="search_hint">"何でも検索してみてください"</string>
     <string name="no_posts_no_lazy_mode">"投稿がありません"</string>

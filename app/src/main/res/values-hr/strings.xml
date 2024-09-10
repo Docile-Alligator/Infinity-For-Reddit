@@ -142,7 +142,6 @@
     <string name="follow_failed">"Praćenje nije uspjelo"</string>
     <string name="unfollowed">"Odpraćeno"</string>
     <string name="unfollow_failed">"Odpraćenje nije uspjelo"</string>
-    <string name="content_description_banner_imageview">"Slika podreddita"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Pretražite nešto"</string>
     <string name="no_posts_no_lazy_mode">"Nema dostupnih objava"</string>

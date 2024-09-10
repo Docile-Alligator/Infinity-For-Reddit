@@ -152,7 +152,6 @@ Appuyez pour réessayer."</string>
     <string name="follow_failed">"Échec du suivi"</string>
     <string name="unfollowed">"Suivi annulé"</string>
     <string name="unfollow_failed">"Echec de l'annulation du suivi"</string>
-    <string name="content_description_banner_imageview">"Image de la bannière du subreddit"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Rechercher n'importe quoi"</string>
     <string name="no_posts_no_lazy_mode">"Aucune publication disponible"</string>

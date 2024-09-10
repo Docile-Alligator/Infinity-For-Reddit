@@ -150,7 +150,6 @@ Toca para reintentar."</string>
     <string name="follow_failed">"No fue posible seguir"</string>
     <string name="unfollowed">"Dejó de Seguir"</string>
     <string name="unfollow_failed">"Error al dejar de seguir"</string>
-    <string name="content_description_banner_imageview">"Imagen de portada del subreddit"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Busca cualquier cosa"</string>
     <string name="no_posts_no_lazy_mode">"No hay publicaciones disponibles"</string>

@@ -124,7 +124,6 @@
     <string name="follow_failed">"Követés sikertelen"</string>
     <string name="unfollowed">"Követés megszüntetve"</string>
     <string name="unfollow_failed">"Követés megszüntetése sikertelen"</string>
-    <string name="content_description_banner_imageview">"Subreddit borítóképe"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Keressen bármire"</string>
     <string name="no_posts_no_lazy_mode">"Nincs rendelkezésre álló bejegyzés"</string>

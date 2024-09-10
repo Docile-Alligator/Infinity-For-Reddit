@@ -120,7 +120,6 @@
     <string name="follow_failed">"Η παρακολούθηση απέτυχε"</string>
     <string name="unfollowed">"Καταργήθηκε η παρακολούθηση"</string>
     <string name="unfollow_failed">"Η κατάργηση παρακολούθησης απέτυχε"</string>
-    <string name="content_description_banner_imageview">"Εικόνα Μπάνερ Subreddit"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Αναζήτηση"</string>
     <string name="no_posts_no_lazy_mode">"Καμία ανάρτηση"</string>

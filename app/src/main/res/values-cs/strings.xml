@@ -144,7 +144,6 @@
     <string name="follow_failed">"Sledování selhalo"</string>
     <string name="unfollowed">"Sledování zrušeno"</string>
     <string name="unfollow_failed">"Rušení sledování selhalo"</string>
-    <string name="content_description_banner_imageview">"Bannerový obrázek subredditu"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Hledat cokoli"</string>
     <string name="no_posts_no_lazy_mode">"Nejsou dostupné žádné příspěvky"</string>

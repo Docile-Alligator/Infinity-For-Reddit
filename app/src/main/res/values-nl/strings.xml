@@ -141,7 +141,6 @@ Druk om opnieuw te proberen."</string>
     <string name="follow_failed">"Het volgen is mislukt"</string>
     <string name="unfollowed">"Ontvolgd"</string>
     <string name="unfollow_failed">"Het ontvolgen is mislukt"</string>
-    <string name="content_description_banner_imageview">"Omslagfoto van subreddit"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Zoek iets"</string>
     <string name="no_posts_no_lazy_mode">"Geen berichten beschikbaar"</string>

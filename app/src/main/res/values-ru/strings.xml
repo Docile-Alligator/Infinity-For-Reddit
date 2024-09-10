@@ -147,7 +147,6 @@
     <string name="follow_failed">"Невозможно начать следить"</string>
     <string name="unfollowed">"Вы не следите"</string>
     <string name="unfollow_failed">"Невозможно отписаться"</string>
-    <string name="content_description_banner_imageview">"Изображение баннера сабреддита"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Ищите что угодно"</string>
     <string name="no_posts_no_lazy_mode">"Нет доступных постов"</string>

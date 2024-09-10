@@ -614,7 +614,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         collapsedTabTextColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTextColor();
         collapsedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabIndicator();
         collapsedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabBackground();
-        binding.toolbarLinearLayoutViewUserDetailActivity.setBackgroundColor(expandedTabBackgroundColor);
+        binding.toolbarConstraintLayoutViewUserDetailActivity.setBackgroundColor(expandedTabBackgroundColor);
         unsubscribedColor = mCustomThemeWrapper.getUnsubscribed();
         subscribedColor = mCustomThemeWrapper.getSubscribed();
         binding.userNameTextViewViewUserDetailActivity.setTextColor(mCustomThemeWrapper.getUsername());

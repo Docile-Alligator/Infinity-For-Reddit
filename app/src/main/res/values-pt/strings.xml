@@ -144,7 +144,6 @@ Toque para tentar novamente."</string>
     <string name="follow_failed">"Falhou ao Seguir"</string>
     <string name="unfollowed">"Deixado de Seguir"</string>
     <string name="unfollow_failed">"Falhou ao Deixar de Seguir"</string>
-    <string name="content_description_banner_imageview">"Imagem Estandarte da Comunidade"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Pesquisar por qualquer coisa"</string>
     <string name="no_posts_no_lazy_mode">"Sem publicações disponíveis"</string>

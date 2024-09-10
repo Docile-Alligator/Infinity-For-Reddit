@@ -126,7 +126,6 @@ Tocca per riprovare."</string>
     <string name="follow_failed">"Errore nel seguire"</string>
     <string name="unfollowed">"Smesso di seguire"</string>
     <string name="unfollow_failed">"Disiscrizione non riuscita"</string>
-    <string name="content_description_banner_imageview">"Banner subreddit"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Cerca qualcosa"</string>
     <string name="no_posts_no_lazy_mode">"Nessun post disponibile"</string>

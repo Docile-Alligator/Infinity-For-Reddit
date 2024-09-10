@@ -144,7 +144,6 @@
     <string name="follow_failed">"팔로우 실패"</string>
     <string name="unfollowed">"언팔로우됨"</string>
     <string name="unfollow_failed">"언팔로우 실패"</string>
-    <string name="content_description_banner_imageview">"서브레딧 배너 사진"</string>
     <string name="app_label">"인피니티"</string>
     <string name="search_hint">"아무거나 검색"</string>
     <string name="no_posts_no_lazy_mode">"글 없음"</string>

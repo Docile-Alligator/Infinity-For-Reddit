@@ -139,7 +139,6 @@ Naciśnij, aby spróbować ponownie."</string>
     <string name="follow_failed">"Nie udało się zaobserwować"</string>
     <string name="unfollowed">"Przestano obserwować"</string>
     <string name="unfollow_failed">"Nie udało się przestać obserwować"</string>
-    <string name="content_description_banner_imageview">"Banner subreddita"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Wyszukaj cokolwiek"</string>
     <string name="no_posts_no_lazy_mode">"Nie znaleziono postów"</string>

@@ -140,7 +140,6 @@
     <string name="unfollow_failed">"取消关注失败"</string>
 
     <!-- 参考国内一些评论，将“Subreddit”翻译为“社区” -->
-    <string name="content_description_banner_imageview">"版块横幅图片"</string>
 
     <!-- 这个感觉不必翻译 -->
     <string name="app_label">"Infinity"</string>
