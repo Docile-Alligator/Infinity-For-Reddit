@@ -20,8 +20,8 @@ Infinity for Reddit is available on Google Play and F-Droid
   <a href="https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit">
       <img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
       </a>  
-      <a href="https://f-droid.org/packages/ml.docilealligator.infinityforreddit/">
-          <img alt="Get it on F-Droid" height="80" src="https://f-droid.org/badge/get-it-on.png" />
+      <a href="https://apt.izzysoft.de/fdroid/index/apk/ml.docilealligator.infinityforreddit.patreon">
+          <img alt="Get it on F-Droid" height="80" src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" />
   </a>
 
 </div>
