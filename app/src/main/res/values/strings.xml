@@ -736,6 +736,7 @@
     <string name="device_default">Device Default</string>
     <string name="set_by_battery_saver">Set by Battery Saver</string>
 
+    <string name="multi_reddit_name_explanation">The name should be unique.</string>
     <string name="multi_reddit_name_hint">Name (Max 50 Characters)</string>
     <string name="multi_reddit_description_hint">Description</string>
     <string name="private_multi_reddit">Private</string>
