@@ -524,7 +524,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         collapsedTabTextColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTextColor();
         collapsedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabIndicator();
         collapsedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabBackground();
-        binding.toolbarLinearLayoutViewSubredditDetailActivity.setBackgroundColor(expandedTabBackgroundColor);
+        binding.toolbarConstraintLayoutViewSubredditDetailActivity.setBackgroundColor(expandedTabBackgroundColor);
         binding.subredditNameTextViewViewSubredditDetailActivity.setTextColor(mCustomThemeWrapper.getSubreddit());
         binding.subscribeSubredditChipViewSubredditDetailActivity.setTextColor(mCustomThemeWrapper.getChipTextColor());
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
