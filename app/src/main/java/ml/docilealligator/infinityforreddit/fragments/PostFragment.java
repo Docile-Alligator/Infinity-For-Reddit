@@ -1036,7 +1036,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             @Override
             public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
                 if (!(viewHolder instanceof PostRecyclerViewAdapter.PostBaseViewHolder) &&
-                        !(viewHolder instanceof PostRecyclerViewAdapter.PostCompactBaseViewHolder)) {
+                        !(viewHolder instanceof PostRecyclerViewAdapter.PostCompactBaseViewHolder) &&
+                        !(viewHolder instanceof PostRecyclerViewAdapter.PostMaterial3CardBaseViewHolder)) {
                     return makeMovementFlags(0, 0);
                 } else if (viewHolder instanceof PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) {
                     if (((PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) viewHolder).isSwipeLocked()) {

@@ -441,7 +441,8 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
             @Override
             public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
                 if (!(viewHolder instanceof HistoryPostRecyclerViewAdapter.PostBaseViewHolder) &&
-                        !(viewHolder instanceof HistoryPostRecyclerViewAdapter.PostCompactBaseViewHolder)) {
+                        !(viewHolder instanceof HistoryPostRecyclerViewAdapter.PostCompactBaseViewHolder) &&
+                        !(viewHolder instanceof HistoryPostRecyclerViewAdapter.PostMaterial3CardBaseViewHolder)) {
                     return makeMovementFlags(0, 0);
                 } else if (viewHolder instanceof HistoryPostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) {
                     if (((HistoryPostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) viewHolder).isSwipeLocked()) {
