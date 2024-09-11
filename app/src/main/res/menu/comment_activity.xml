@@ -5,7 +5,7 @@
         android:id="@+id/action_preview_comment_activity"
         android:orderInCategory="1"
         android:title="@string/action_preview"
-        android:icon="@drawable/ic_preview_24dp"
+        android:icon="@drawable/ic_preview_day_night_24dp"
         app:showAsAction="ifRoom" />
 
     <item

@@ -5,6 +5,6 @@
         android:id="@+id/action_refresh_trending_activity"
         android:orderInCategory="1"
         android:title="@string/action_refresh"
-        android:icon="@drawable/ic_refresh_24dp"
+        android:icon="@drawable/ic_refresh_day_night_24dp"
         app:showAsAction="ifRoom" />
 </menu>

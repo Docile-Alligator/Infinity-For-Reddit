@@ -103,29 +103,29 @@ public class PreferenceSectionRecyclerViewAdapter extends RecyclerView.Adapter<R
                     setOnClickListener = false;
                     if (isNSFWEnabled) {
                         stringId = R.string.disable_nsfw;
-                        drawableId = R.drawable.ic_nsfw_off_24dp;
+                        drawableId = R.drawable.ic_nsfw_off_day_night_24dp;
                     } else {
                         stringId = R.string.enable_nsfw;
-                        drawableId = R.drawable.ic_nsfw_on_24dp;
+                        drawableId = R.drawable.ic_nsfw_on_day_night_24dp;
                     }
 
                     holder.itemView.setOnClickListener(view -> {
                         if (isNSFWEnabled) {
                             isNSFWEnabled = false;
                             ((MenuItemViewHolder) holder).binding.textViewItemNavDrawerMenuItem.setText(R.string.enable_nsfw);
-                            ((MenuItemViewHolder) holder).binding.imageViewItemNavDrawerMenuItem.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_nsfw_on_24dp));
+                            ((MenuItemViewHolder) holder).binding.imageViewItemNavDrawerMenuItem.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_nsfw_on_day_night_24dp));
                             itemClickListener.onMenuClick(R.string.disable_nsfw);
                         } else {
                             isNSFWEnabled = true;
                             ((MenuItemViewHolder) holder).binding.textViewItemNavDrawerMenuItem.setText(R.string.disable_nsfw);
-                            ((MenuItemViewHolder) holder).binding.imageViewItemNavDrawerMenuItem.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_nsfw_off_24dp));
+                            ((MenuItemViewHolder) holder).binding.imageViewItemNavDrawerMenuItem.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_nsfw_off_day_night_24dp));
                             itemClickListener.onMenuClick(R.string.enable_nsfw);
                         }
                     });
                     break;
                 case 3:
                     stringId = R.string.settings;
-                    drawableId = R.drawable.ic_settings_24dp;
+                    drawableId = R.drawable.ic_settings_day_night_24dp;
             }
 
             if (stringId != 0) {

@@ -172,14 +172,14 @@
                 android:id="@+id/locked_image_view_item_post_gallery_type"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_outline_lock_24dp"
+                android:src="@drawable/ic_lock_day_night_24dp"
                 android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/crosspost_image_view_item_post_gallery_type"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/crosspost"
+                android:src="@drawable/ic_crosspost_24dp"
                 android:visibility="gone" />
 
         </com.nex3z.flowlayout.FlowLayout>
@@ -214,7 +214,7 @@
             android:id="@+id/no_preview_image_view_item_post_gallery_type"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:src="@drawable/ic_gallery_24dp"
+            android:src="@drawable/ic_gallery_day_night_24dp"
             android:scaleType="center"
             android:visibility="gone" />
 

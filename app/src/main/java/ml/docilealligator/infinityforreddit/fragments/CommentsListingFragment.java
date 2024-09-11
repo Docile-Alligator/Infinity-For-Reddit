@@ -338,18 +338,18 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     private void initializeSwipeActionDrawable() {
         if (swipeRightAction == SharedPreferencesUtils.SWIPE_ACITON_DOWNVOTE) {
             backgroundSwipeRight = new ColorDrawable(customThemeWrapper.getDownvoted());
-            drawableSwipeRight = ResourcesCompat.getDrawable(mActivity.getResources(), R.drawable.ic_arrow_downward_black_24dp, null);
+            drawableSwipeRight = ResourcesCompat.getDrawable(mActivity.getResources(), R.drawable.ic_arrow_downward_day_night_24dp, null);
         } else {
             backgroundSwipeRight = new ColorDrawable(customThemeWrapper.getUpvoted());
-            drawableSwipeRight = ResourcesCompat.getDrawable(mActivity.getResources(), R.drawable.ic_arrow_upward_black_24dp, null);
+            drawableSwipeRight = ResourcesCompat.getDrawable(mActivity.getResources(), R.drawable.ic_arrow_upward_day_night_24dp, null);
         }
 
         if (swipeLeftAction == SharedPreferencesUtils.SWIPE_ACITON_UPVOTE) {
             backgroundSwipeLeft = new ColorDrawable(customThemeWrapper.getUpvoted());
-            drawableSwipeLeft = ResourcesCompat.getDrawable(mActivity.getResources(), R.drawable.ic_arrow_upward_black_24dp, null);
+            drawableSwipeLeft = ResourcesCompat.getDrawable(mActivity.getResources(), R.drawable.ic_arrow_upward_day_night_24dp, null);
         } else {
             backgroundSwipeLeft = new ColorDrawable(customThemeWrapper.getDownvoted());
-            drawableSwipeLeft = ResourcesCompat.getDrawable(mActivity.getResources(), R.drawable.ic_arrow_downward_black_24dp, null);
+            drawableSwipeLeft = ResourcesCompat.getDrawable(mActivity.getResources(), R.drawable.ic_arrow_downward_day_night_24dp, null);
         }
     }
 

@@ -1488,4 +1488,6 @@
     <string name="content_description_hidden">Hidden</string>
     <string name="content_description_saved">Saved</string>
 
+    <string name="comment">Comment</string>
+
 </resources>

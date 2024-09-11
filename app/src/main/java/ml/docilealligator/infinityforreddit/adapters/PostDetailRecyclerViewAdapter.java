@@ -808,7 +808,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     String noPreviewLinkDomain = Uri.parse(mPost.getUrl()).getHost();
                     ((PostDetailNoPreviewViewHolder) holder).binding.linkTextViewItemPostDetailNoPreview.setVisibility(View.VISIBLE);
                     ((PostDetailNoPreviewViewHolder) holder).binding.linkTextViewItemPostDetailNoPreview.setText(noPreviewLinkDomain);
-                    ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_link);
+                    ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_link_day_night_24dp);
                 } else {
                     ((PostDetailNoPreviewViewHolder) holder).binding.linkTextViewItemPostDetailNoPreview.setVisibility(View.GONE);
                     switch (mPost.getPostType()) {
@@ -816,32 +816,32 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             if (!mHidePostType) {
                                 ((PostDetailNoPreviewViewHolder) holder).binding.typeTextViewItemPostDetailNoPreview.setText(R.string.video);
                             }
-                            ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_outline_video_24dp);
+                            ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_video_day_night_24dp);
                             break;
                         case Post.IMAGE_TYPE:
                             if (!mHidePostType) {
                                 ((PostDetailNoPreviewViewHolder) holder).binding.typeTextViewItemPostDetailNoPreview.setText(R.string.image);
                             }
-                            ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_image_24dp);
+                            ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
                             break;
                         case Post.GIF_TYPE:
                             if (!mHidePostType) {
                                 ((PostDetailNoPreviewViewHolder) holder).binding.typeTextViewItemPostDetailNoPreview.setText(R.string.gif);
                             }
-                            ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_image_24dp);
+                            ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
                             break;
                         case Post.GALLERY_TYPE:
                             if (!mHidePostType) {
                                 ((PostDetailNoPreviewViewHolder) holder).binding.typeTextViewItemPostDetailNoPreview.setText(R.string.gallery);
                             }
-                            ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_gallery_24dp);
+                            ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_gallery_day_night_24dp);
                             break;
                     }
                 }
             } else if (holder instanceof PostDetailGalleryViewHolder) {
                 if (mDataSavingMode && mDisableImagePreview) {
                     ((PostDetailGalleryViewHolder) holder).binding.noPreviewPostTypeImageViewItemPostDetailGallery.setVisibility(View.VISIBLE);
-                    ((PostDetailGalleryViewHolder) holder).binding.noPreviewPostTypeImageViewItemPostDetailGallery.setImageResource(R.drawable.ic_gallery_24dp);
+                    ((PostDetailGalleryViewHolder) holder).binding.noPreviewPostTypeImageViewItemPostDetailGallery.setImageResource(R.drawable.ic_gallery_day_night_24dp);
                 } else {
                     ((PostDetailGalleryViewHolder) holder).binding.galleryFrameLayoutItemPostDetailGallery.setVisibility(View.VISIBLE);
                     ((PostDetailGalleryViewHolder) holder).binding.imageIndexTextViewItemPostDetailGallery.setText(mActivity.getString(R.string.image_index_in_gallery, 1, mPost.getGallery().size()));
@@ -1679,7 +1679,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             archivedImageView.setColorFilter(mArchivedTintColor, PorterDuff.Mode.SRC_IN);
             lockedImageView.setColorFilter(mLockedTintColor, PorterDuff.Mode.SRC_IN);
             crosspostImageView.setColorFilter(mCrosspostTintColor, PorterDuff.Mode.SRC_IN);
-            Drawable upvoteRatioDrawable = Utils.getTintedDrawable(mActivity, R.drawable.ic_upvote_ratio, mUpvoteRatioTintColor);
+            Drawable upvoteRatioDrawable = Utils.getTintedDrawable(mActivity, R.drawable.ic_upvote_ratio_18dp, mUpvoteRatioTintColor);
             upvoteRatioTextView.setCompoundDrawablesWithIntrinsicBounds(
                     upvoteRatioDrawable, null, null, null);
             upvoteRatioTextView.setTextColor(mSecondaryTextColor);

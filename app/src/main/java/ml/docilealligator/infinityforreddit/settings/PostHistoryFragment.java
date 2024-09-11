@@ -92,7 +92,7 @@ public class PostHistoryFragment extends Fragment {
 
     private void applyCustomTheme() {
         binding.infoTextViewPostHistoryFragment.setTextColor(activity.customThemeWrapper.getSecondaryTextColor());
-        Drawable infoDrawable = Utils.getTintedDrawable(activity, R.drawable.ic_info_preference_24dp, activity.customThemeWrapper.getPrimaryIconColor());
+        Drawable infoDrawable = Utils.getTintedDrawable(activity, R.drawable.ic_info_preference_day_night_24dp, activity.customThemeWrapper.getPrimaryIconColor());
         binding.infoTextViewPostHistoryFragment.setCompoundDrawablesWithIntrinsicBounds(infoDrawable, null, null, null);
         int primaryTextColor = activity.customThemeWrapper.getPrimaryTextColor();
         binding.markPostsAsReadTextViewPostHistoryFragment.setTextColor(primaryTextColor);

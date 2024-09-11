@@ -85,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:padding="16dp"
-                android:src="@drawable/ic_wallpaper_white_24dp"
+                android:src="@drawable/ic_wallpaper_24dp"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
         </LinearLayout>

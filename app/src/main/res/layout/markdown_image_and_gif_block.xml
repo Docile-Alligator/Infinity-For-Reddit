@@ -34,7 +34,7 @@
             android:text="@string/error_loading_image_tap_to_retry"
             android:textSize="?attr/font_default"
             android:visibility="gone"
-            app:drawableTopCompat="@drawable/ic_error_outline_black_24dp" />
+            app:drawableTopCompat="@drawable/ic_error_outline_black_day_night_24dp" />
 
     </FrameLayout>
 

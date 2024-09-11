@@ -534,12 +534,12 @@
     </style>
 
     <style name="ToroMediaButton.VolumeUp">
-        <item name="android:src">@drawable/ic_volume_up_black_24dp</item>
+        <item name="android:src">@drawable/ic_volume_up_32dp</item>
         <item name="android:contentDescription">@string/exo_controls_volume_up_description</item>
     </style>
 
     <style name="ToroMediaButton.VolumeOff">
-        <item name="android:src">@drawable/ic_volume_off_black_24dp</item>
+        <item name="android:src">@drawable/ic_volume_off_32dp</item>
         <item name="android:contentDescription">@string/exo_controls_volume_off_description</item>
     </style>
 

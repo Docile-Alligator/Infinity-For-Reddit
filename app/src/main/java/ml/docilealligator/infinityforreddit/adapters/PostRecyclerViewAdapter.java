@@ -88,6 +88,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.apis.RedgifsAPI;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareLinkBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
@@ -893,29 +894,29 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostWithPreviewTypeViewHolder) holder).binding.linkTextViewItemPostWithPreview.setText(domain);
                         if (post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
                             ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setVisibility(View.VISIBLE);
-                            ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_link);
+                            ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_link_day_night_24dp);
                         }
                     }
 
                     if (mDataSavingMode && mDisableImagePreview) {
                         ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setVisibility(View.VISIBLE);
                         if (post.getPostType() == Post.VIDEO_TYPE) {
-                            ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_outline_video_24dp);
+                            ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_video_day_night_24dp);
                             ((PostWithPreviewTypeViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostWithPreview.setVisibility(View.GONE);
                         } else if (post.getPostType() == Post.IMAGE_TYPE || post.getPostType() == Post.GIF_TYPE) {
-                            ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_image_24dp);
+                            ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
                             ((PostWithPreviewTypeViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostWithPreview.setVisibility(View.GONE);
                         } else if (post.getPostType() == Post.LINK_TYPE) {
-                            ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_link);
+                            ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_link_day_night_24dp);
                         }
                     } else if (mDataSavingMode && mOnlyDisablePreviewInVideoAndGifPosts && (post.getPostType() == Post.VIDEO_TYPE || post.getPostType() == Post.GIF_TYPE)) {
                         ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setVisibility(View.VISIBLE);
-                        ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_outline_video_24dp);
+                        ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_video_day_night_24dp);
                         ((PostWithPreviewTypeViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostWithPreview.setVisibility(View.GONE);
                     } else {
                         if (post.getPostType() == Post.GIF_TYPE && ((post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(mAutoplay && mAutoplayNsfwVideos)) || (post.isSpoiler() && mNeedBlurSpoiler))) {
                             ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setVisibility(View.VISIBLE);
-                            ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_image_24dp);
+                            ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
                             ((PostWithPreviewTypeViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostWithPreview.setVisibility(View.GONE);
                         } else {
                             Post.Preview preview = getSuitablePreview(post.getPreviews());
@@ -941,15 +942,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             } else {
                                 ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setVisibility(View.VISIBLE);
                                 if (post.getPostType() == Post.VIDEO_TYPE) {
-                                    ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_outline_video_24dp);
+                                    ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_video_day_night_24dp);
                                     ((PostWithPreviewTypeViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostWithPreview.setVisibility(View.GONE);
                                 } else if (post.getPostType() == Post.IMAGE_TYPE || post.getPostType() == Post.GIF_TYPE) {
-                                    ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_image_24dp);
+                                    ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
                                     ((PostWithPreviewTypeViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostWithPreview.setVisibility(View.GONE);
                                 } else if (post.getPostType() == Post.LINK_TYPE) {
-                                    ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_link);
+                                    ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_link_day_night_24dp);
                                 } else if (post.getPostType() == Post.GALLERY_TYPE) {
-                                    ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_gallery_24dp);
+                                    ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_gallery_day_night_24dp);
                                 }
                             }
                         }
@@ -957,7 +958,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 } else if (holder instanceof PostBaseGalleryTypeViewHolder) {
                     if (mDataSavingMode && mDisableImagePreview) {
                         ((PostBaseGalleryTypeViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
-                        ((PostBaseGalleryTypeViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                        ((PostBaseGalleryTypeViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_day_night_24dp);
                     } else {
                         ((PostBaseGalleryTypeViewHolder) holder).frameLayout.setVisibility(View.VISIBLE);
                         ((PostBaseGalleryTypeViewHolder) holder).imageIndexTextView.setText(mActivity.getString(R.string.image_index_in_gallery, 1, post.getGallery().size()));
@@ -1073,35 +1074,35 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostCard2WithPreviewViewHolder) holder).binding.linkTextViewItemPostCard2WithPreview.setText(domain);
                         if (post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
                             ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setVisibility(View.VISIBLE);
-                            ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_link);
+                            ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_link_day_night_24dp);
                         }
                     } else if (post.getPostType() == Post.GALLERY_TYPE) {
                         ((PostCard2WithPreviewViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.gallery));
                         ((PostCard2WithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard2WithPreview.setVisibility(View.VISIBLE);
-                        ((PostCard2WithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard2WithPreview.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_gallery_24dp));
+                        ((PostCard2WithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard2WithPreview.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_gallery_day_night_24dp));
                     }
 
                     if (mDataSavingMode && mDisableImagePreview) {
                         ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setVisibility(View.VISIBLE);
                         if (post.getPostType() == Post.VIDEO_TYPE) {
-                            ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_outline_video_24dp);
+                            ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_video_day_night_24dp);
                             ((PostCard2WithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard2WithPreview.setVisibility(View.GONE);
                         } else if (post.getPostType() == Post.IMAGE_TYPE || post.getPostType() == Post.GIF_TYPE) {
-                            ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_image_24dp);
+                            ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
                             ((PostCard2WithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard2WithPreview.setVisibility(View.GONE);
                         } else if (post.getPostType() == Post.LINK_TYPE) {
-                            ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_link);
+                            ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_link_day_night_24dp);
                         } else if (post.getPostType() == Post.GALLERY_TYPE) {
-                            ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_gallery_24dp);
+                            ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_gallery_day_night_24dp);
                         }
                     } else if (mDataSavingMode && mOnlyDisablePreviewInVideoAndGifPosts && (post.getPostType() == Post.VIDEO_TYPE || post.getPostType() == Post.GIF_TYPE)) {
                         ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setVisibility(View.VISIBLE);
-                        ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_outline_video_24dp);
+                        ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_video_day_night_24dp);
                         ((PostCard2WithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard2WithPreview.setVisibility(View.GONE);
                     } else {
                         if (post.getPostType() == Post.GIF_TYPE && ((post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(mAutoplay && mAutoplayNsfwVideos)) || (post.isSpoiler() && mNeedBlurSpoiler))) {
                             ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setVisibility(View.VISIBLE);
-                            ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_image_24dp);
+                            ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
                             ((PostCard2WithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard2WithPreview.setVisibility(View.GONE);
                         } else {
                             Post.Preview preview = getSuitablePreview(post.getPreviews());
@@ -1126,15 +1127,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             } else {
                                 ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setVisibility(View.VISIBLE);
                                 if (post.getPostType() == Post.VIDEO_TYPE) {
-                                    ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_outline_video_24dp);
+                                    ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_video_day_night_24dp);
                                     ((PostCard2WithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard2WithPreview.setVisibility(View.GONE);
                                 } else if (post.getPostType() == Post.IMAGE_TYPE || post.getPostType() == Post.GIF_TYPE) {
-                                    ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_image_24dp);
+                                    ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
                                     ((PostCard2WithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard2WithPreview.setVisibility(View.GONE);
                                 } else if (post.getPostType() == Post.LINK_TYPE) {
-                                    ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_link);
+                                    ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_link_day_night_24dp);
                                 } else if (post.getPostType() == Post.GALLERY_TYPE) {
-                                    ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_gallery_24dp);
+                                    ((PostCard2WithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setImageResource(R.drawable.ic_gallery_day_night_24dp);
                                 }
                             }
                         }
@@ -1357,7 +1358,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     ((PostCompactBaseViewHolder) holder).relativeLayout.setVisibility(View.VISIBLE);
                     if (post.getPostType() == Post.GALLERY_TYPE && post.getPreviews() != null && post.getPreviews().isEmpty()) {
                         ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.VISIBLE);
-                        ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                        ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_gallery_day_night_24dp);
                     }
                     if (post.getPreviews() != null && !post.getPreviews().isEmpty()) {
                         ((PostCompactBaseViewHolder) holder).imageView.setVisibility(View.VISIBLE);
@@ -1394,14 +1395,14 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostCompactBaseViewHolder) holder).typeTextView.setText(R.string.image);
                         if (mDataSavingMode && mDisableImagePreview) {
                             ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.VISIBLE);
-                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_image_24dp);
+                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_image_day_night_24dp);
                         }
                         break;
                     case Post.LINK_TYPE:
                         ((PostCompactBaseViewHolder) holder).typeTextView.setText(R.string.link);
                         if (mDataSavingMode && mDisableImagePreview) {
                             ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.VISIBLE);
-                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_link);
+                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_link_day_night_24dp);
                         }
 
                         ((PostCompactBaseViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
@@ -1412,7 +1413,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostCompactBaseViewHolder) holder).typeTextView.setText(R.string.gif);
                         if (mDataSavingMode && (mDisableImagePreview || mOnlyDisablePreviewInVideoAndGifPosts)) {
                             ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.VISIBLE);
-                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_image_24dp);
+                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_image_day_night_24dp);
                         } else {
                             ((PostCompactBaseViewHolder) holder).playButtonImageView.setVisibility(View.VISIBLE);
                             ((PostCompactBaseViewHolder) holder).playButtonImageView.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_play_circle_24dp));
@@ -1422,7 +1423,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostCompactBaseViewHolder) holder).typeTextView.setText(R.string.video);
                         if (mDataSavingMode && (mDisableImagePreview || mOnlyDisablePreviewInVideoAndGifPosts)) {
                             ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.VISIBLE);
-                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_outline_video_24dp);
+                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_video_day_night_24dp);
                         } else {
                             ((PostCompactBaseViewHolder) holder).playButtonImageView.setVisibility(View.VISIBLE);
                             ((PostCompactBaseViewHolder) holder).playButtonImageView.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_play_circle_24dp));
@@ -1436,16 +1437,16 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         String noPreviewLinkDomain = Uri.parse(noPreviewLinkUrl).getHost();
                         ((PostCompactBaseViewHolder) holder).linkTextView.setText(noPreviewLinkDomain);
                         ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.VISIBLE);
-                        ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_link);
+                        ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_link_day_night_24dp);
                         break;
                     case Post.GALLERY_TYPE:
                         ((PostCompactBaseViewHolder) holder).typeTextView.setText(R.string.gallery);
                         if (mDataSavingMode && mDisableImagePreview) {
                             ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.VISIBLE);
-                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_gallery_day_night_24dp);
                         } else {
                             ((PostCompactBaseViewHolder) holder).playButtonImageView.setVisibility(View.VISIBLE);
-                            ((PostCompactBaseViewHolder) holder).playButtonImageView.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_gallery_24dp));
+                            ((PostCompactBaseViewHolder) holder).playButtonImageView.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_gallery_day_night_24dp));
                         }
                         break;
                     case Post.TEXT_TYPE:
@@ -1482,15 +1483,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((post.getPostType() == Post.VIDEO_TYPE || post.getPostType() == Post.GIF_TYPE) && mOnlyDisablePreviewInVideoAndGifPosts))) {
                     ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setVisibility(View.VISIBLE);
                     if (post.getPostType() == Post.VIDEO_TYPE) {
-                        ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_outline_video_24dp);
+                        ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_video_day_night_24dp);
                         ((PostGalleryViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostGallery.setVisibility(View.GONE);
                     } else if (post.getPostType() == Post.IMAGE_TYPE || post.getPostType() == Post.GIF_TYPE) {
-                        ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_image_24dp);
+                        ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_image_day_night_24dp);
                         ((PostGalleryViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostGallery.setVisibility(View.GONE);
                     } else if (post.getPostType() == Post.LINK_TYPE) {
-                        ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_link);
+                        ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_link_day_night_24dp);
                     } else if (post.getPostType() == Post.GALLERY_TYPE) {
-                        ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_gallery_24dp);
+                        ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_gallery_day_night_24dp);
                     }
                 } else {
                     switch (post.getPostType()) {
@@ -1517,14 +1518,14 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 });
                             } else {
                                 ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setVisibility(View.VISIBLE);
-                                ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_image_24dp);
+                                ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_image_day_night_24dp);
                             }
                             break;
                         }
                         case Post.GIF_TYPE: {
                             if (post.getPostType() == Post.GIF_TYPE && ((post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(mAutoplay && mAutoplayNsfwVideos)) || (post.isSpoiler() && mNeedBlurSpoiler))) {
                                 ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setVisibility(View.VISIBLE);
-                                ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_image_24dp);
+                                ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_image_day_night_24dp);
                             } else {
                                 Post.Preview preview = getSuitablePreview(post.getPreviews());
                                 ((PostGalleryViewHolder) holder).preview = preview;
@@ -1550,7 +1551,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                     });
                                 } else {
                                     ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setVisibility(View.VISIBLE);
-                                    ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_image_24dp);
+                                    ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_image_day_night_24dp);
                                 }
                             }
                             break;
@@ -1580,7 +1581,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 });
                             } else {
                                 ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setVisibility(View.VISIBLE);
-                                ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_outline_video_24dp);
+                                ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_video_day_night_24dp);
                             }
                             break;
                         }
@@ -1590,7 +1591,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             if (preview != null) {
                                 ((PostGalleryViewHolder) holder).binding.imageViewItemPostGallery.setVisibility(View.VISIBLE);
                                 ((PostGalleryViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostGallery.setVisibility(View.VISIBLE);
-                                ((PostGalleryViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostGallery.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_link_post_type_indicator));
+                                ((PostGalleryViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostGallery.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_link_post_type_indicator_day_night_24dp));
 
                                 if (mFixedHeightPreviewInCard || (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0)) {
                                     int height = (int) (400 * mScale);
@@ -1609,13 +1610,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 });
                             } else {
                                 ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setVisibility(View.VISIBLE);
-                                ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_link);
+                                ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_link_day_night_24dp);
                             }
                             break;
                         }
                         case Post.NO_PREVIEW_LINK_TYPE: {
                             ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setVisibility(View.VISIBLE);
-                            ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_link);
+                            ((PostGalleryViewHolder) holder).binding.imageViewNoPreviewItemPostGallery.setImageResource(R.drawable.ic_link_day_night_24dp);
                             break;
                         }
                         case Post.TEXT_TYPE: {
@@ -1637,7 +1638,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
                 if (mDataSavingMode && mDisableImagePreview) {
                     ((PostGalleryBaseGalleryTypeViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
-                    ((PostGalleryBaseGalleryTypeViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                    ((PostGalleryBaseGalleryTypeViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_day_night_24dp);
                 } else {
                     Post.Preview preview = getSuitablePreview(post.getPreviews());
                     ((PostGalleryBaseGalleryTypeViewHolder) holder).preview = preview;
@@ -1919,29 +1920,29 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostMaterial3CardWithPreviewViewHolder) holder).binding.linkTextViewItemPostCard3WithPreview.setText(domain);
                         if (post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
                             ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setVisibility(View.VISIBLE);
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_link);
+                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_link_day_night_24dp);
                         }
                     }
 
                     if (mDataSavingMode && mDisableImagePreview) {
                         ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setVisibility(View.VISIBLE);
                         if (post.getPostType() == Post.VIDEO_TYPE) {
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_outline_video_24dp);
+                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_video_day_night_24dp);
                             ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setVisibility(View.GONE);
                         } else if (post.getPostType() == Post.IMAGE_TYPE || post.getPostType() == Post.GIF_TYPE) {
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_image_24dp);
+                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
                             ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setVisibility(View.GONE);
                         } else if (post.getPostType() == Post.LINK_TYPE) {
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_link);
+                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_link_day_night_24dp);
                         }
                     } else if (mDataSavingMode && mOnlyDisablePreviewInVideoAndGifPosts && (post.getPostType() == Post.VIDEO_TYPE || post.getPostType() == Post.GIF_TYPE)) {
                         ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setVisibility(View.VISIBLE);
-                        ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_outline_video_24dp);
+                        ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_video_day_night_24dp);
                         ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setVisibility(View.GONE);
                     } else {
                         if (post.getPostType() == Post.GIF_TYPE && ((post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(mAutoplay && mAutoplayNsfwVideos)) || (post.isSpoiler() && mNeedBlurSpoiler))) {
                             ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setVisibility(View.VISIBLE);
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_image_24dp);
+                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
                             ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setVisibility(View.GONE);
                         } else {
                             Post.Preview preview = getSuitablePreview(post.getPreviews());
@@ -1967,15 +1968,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             } else {
                                 ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setVisibility(View.VISIBLE);
                                 if (post.getPostType() == Post.VIDEO_TYPE) {
-                                    ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_outline_video_24dp);
+                                    ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_video_day_night_24dp);
                                     ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setVisibility(View.GONE);
                                 } else if (post.getPostType() == Post.IMAGE_TYPE || post.getPostType() == Post.GIF_TYPE) {
-                                    ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_image_24dp);
+                                    ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
                                     ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setVisibility(View.GONE);
                                 } else if (post.getPostType() == Post.LINK_TYPE) {
-                                    ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_link);
+                                    ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_link_day_night_24dp);
                                 } else if (post.getPostType() == Post.GALLERY_TYPE) {
-                                    ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_gallery_24dp);
+                                    ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_gallery_day_night_24dp);
                                 }
                             }
                         }
@@ -1983,7 +1984,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 } else if (holder instanceof PostMaterial3CardBaseGalleryTypeViewHolder) {
                     if (mDataSavingMode && mDisableImagePreview) {
                         ((PostMaterial3CardBaseGalleryTypeViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
-                        ((PostMaterial3CardBaseGalleryTypeViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                        ((PostMaterial3CardBaseGalleryTypeViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_day_night_24dp);
                     } else {
                         ((PostMaterial3CardBaseGalleryTypeViewHolder) holder).frameLayout.setVisibility(View.VISIBLE);
                         ((PostMaterial3CardBaseGalleryTypeViewHolder) holder).imageIndexTextView.setText(mActivity.getString(R.string.image_index_in_gallery, 1, post.getGallery().size()));
@@ -2073,7 +2074,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
 
                 RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(postCompactThumbnailPreviewUrl)
-                        .error(R.drawable.ic_error_outline_black_24dp).listener(((PostCompactBaseViewHolder) holder).requestListener);
+                        .error(R.drawable.ic_error_outline_black_day_night_24dp).listener(((PostCompactBaseViewHolder) holder).requestListener);
                 if ((post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit())) || (post.isSpoiler() && mNeedBlurSpoiler)) {
                     imageRequestBuilder
                             .transform(new BlurTransformation(50, 2)).into(((PostCompactBaseViewHolder) holder).imageView);
@@ -2823,6 +2824,17 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         openViewPostDetailActivity(post, getBindingAdapterPosition());
                     }
                 }
+            });
+
+            itemView.setOnLongClickListener(v -> {
+                Post post = getItem(getBindingAdapterPosition());
+                if (post == null) {
+                    return false;
+                }
+
+                PostOptionsBottomSheetFragment postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(post);
+                postOptionsBottomSheetFragment.show(mActivity.getSupportFragmentManager(), postOptionsBottomSheetFragment.getTag());
+                return true;
             });
 
             itemView.setOnTouchListener((v, event) -> {

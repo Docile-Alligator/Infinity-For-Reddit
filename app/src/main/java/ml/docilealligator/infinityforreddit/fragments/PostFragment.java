@@ -1387,18 +1387,18 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private void initializeSwipeActionDrawable() {
         if (swipeRightAction == SharedPreferencesUtils.SWIPE_ACITON_DOWNVOTE) {
             backgroundSwipeRight = new ColorDrawable(mCustomThemeWrapper.getDownvoted());
-            drawableSwipeRight = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_downward_black_24dp, null);
+            drawableSwipeRight = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_downward_day_night_24dp, null);
         } else {
             backgroundSwipeRight = new ColorDrawable(mCustomThemeWrapper.getUpvoted());
-            drawableSwipeRight = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_upward_black_24dp, null);
+            drawableSwipeRight = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_upward_day_night_24dp, null);
         }
 
         if (swipeLeftAction == SharedPreferencesUtils.SWIPE_ACITON_UPVOTE) {
             backgroundSwipeLeft = new ColorDrawable(mCustomThemeWrapper.getUpvoted());
-            drawableSwipeLeft = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_upward_black_24dp, null);
+            drawableSwipeLeft = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_upward_day_night_24dp, null);
         } else {
             backgroundSwipeLeft = new ColorDrawable(mCustomThemeWrapper.getDownvoted());
-            drawableSwipeLeft = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_downward_black_24dp, null);
+            drawableSwipeLeft = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_downward_day_night_24dp, null);
         }
     }
 

@@ -703,45 +703,45 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private int getBottomAppBarOptionDrawableResource(int option) {
         switch (option) {
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HOME:
-                return R.drawable.ic_home_black_24dp;
+                return R.drawable.ic_home_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS:
-                return R.drawable.ic_subscritptions_bottom_app_bar_24dp;
+                return R.drawable.ic_subscriptions_bottom_app_bar_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX:
-                return R.drawable.ic_inbox_24dp;
+                return R.drawable.ic_inbox_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_MULTIREDDITS:
-                return R.drawable.ic_multi_reddit_24dp;
+                return R.drawable.ic_multi_reddit_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBMIT_POSTS:
                 return R.drawable.ic_add_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_REFRESH:
-                return R.drawable.ic_refresh_24dp;
+                return R.drawable.ic_refresh_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_CHANGE_SORT_TYPE:
                 return R.drawable.ic_sort_toolbar_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_CHANGE_POST_LAYOUT:
-                return R.drawable.ic_post_layout_24dp;
+                return R.drawable.ic_post_layout_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SEARCH:
-                return R.drawable.ic_search_24dp;
+                return R.drawable.ic_search_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_SUBREDDIT:
-                return R.drawable.ic_subreddit_24dp;
+                return R.drawable.ic_subreddit_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_USER:
-                return R.drawable.ic_user_24dp;
+                return R.drawable.ic_user_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_RANDOM:
-                return R.drawable.ic_random_24dp;
+                return R.drawable.ic_random_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HIDE_READ_POSTS:
-                return R.drawable.ic_hide_read_posts_24dp;
+                return R.drawable.ic_hide_read_posts_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_FILTER_POSTS:
-                return R.drawable.ic_filter_24dp;
+                return R.drawable.ic_filter_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_UPVOTED:
-                return R.drawable.ic_arrow_upward_black_24dp;
+                return R.drawable.ic_arrow_upward_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_DOWNVOTED:
-                return R.drawable.ic_arrow_downward_black_24dp;
+                return R.drawable.ic_arrow_downward_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HIDDEN:
-                return R.drawable.ic_outline_lock_24dp;
+                return R.drawable.ic_lock_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SAVED:
-                return R.drawable.ic_outline_bookmarks_24dp;
+                return R.drawable.ic_bookmarks_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_TOP:
-                return R.drawable.ic_keyboard_double_arrow_up_24;
+                return R.drawable.ic_keyboard_double_arrow_up_day_night_24dp;
             default:
-                return R.drawable.ic_account_circle_24dp;
+                return R.drawable.ic_account_circle_day_night_24dp;
         }
     }
 
@@ -851,43 +851,43 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         fabOption = mBottomAppBarSharedPreference.getInt((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? Account.ANONYMOUS_ACCOUNT : "") + SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
         switch (fabOption) {
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH:
-                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_refresh_24dp);
+                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_refresh_day_night_24dp);
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE:
                 navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_sort_toolbar_24dp);
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT:
-                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_post_layout_24dp);
+                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_post_layout_day_night_24dp);
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH:
-                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_search_24dp);
+                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_search_day_night_24dp);
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_SUBREDDIT:
-                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_subreddit_24dp);
+                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_subreddit_day_night_24dp);
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_USER:
-                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_user_24dp);
+                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_user_day_night_24dp);
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_RANDOM:
-                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_random_24dp);
+                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_random_day_night_24dp);
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
                 if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                    navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_filter_24dp);
+                    navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_filter_day_night_24dp);
                     fabOption = SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS;
                 } else {
-                    navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_hide_read_posts_24dp);
+                    navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_hide_read_posts_day_night_24dp);
                 }
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
-                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_filter_24dp);
+                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_filter_day_night_24dp);
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_TOP:
-                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_keyboard_double_arrow_up_24);
+                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_keyboard_double_arrow_up_day_night_24dp);
                 break;
             default:
                 if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                    navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_filter_24dp);
+                    navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_filter_day_night_24dp);
                     fabOption = SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS;
                 } else {
                     navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_add_day_night_24dp);

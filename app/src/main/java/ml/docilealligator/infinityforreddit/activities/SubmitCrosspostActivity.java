@@ -254,7 +254,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
                     binding.playButtonImageViewSubmitCrosspostActivity.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_play_circle_36dp));
                 } else if (post.getPostType() == Post.GALLERY_TYPE) {
                     binding.playButtonImageViewSubmitCrosspostActivity.setVisibility(View.VISIBLE);
-                    binding.playButtonImageViewSubmitCrosspostActivity.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_gallery_24dp));
+                    binding.playButtonImageViewSubmitCrosspostActivity.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_gallery_day_night_24dp));
                 }
             }
         }

@@ -182,14 +182,14 @@
             android:id="@+id/locked_image_view_item_post_detail_video_autoplay"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/ic_outline_lock_24dp"
+            android:src="@drawable/ic_lock_day_night_24dp"
             android:visibility="gone" />
 
         <ImageView
             android:id="@+id/crosspost_image_view_item_post_detail_video_autoplay"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/crosspost"
+            android:src="@drawable/ic_crosspost_24dp"
             android:visibility="gone" />
 
     </com.nex3z.flowlayout.FlowLayout>

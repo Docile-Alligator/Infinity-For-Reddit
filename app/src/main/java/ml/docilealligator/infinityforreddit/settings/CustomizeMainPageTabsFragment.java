@@ -401,7 +401,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
         int colorAccent = activity.customThemeWrapper.getColorAccent();
         int primaryIconColor = activity.customThemeWrapper.getPrimaryIconColor();
         binding.infoTextViewCustomizeMainPageTabsFragment.setTextColor(secondaryTextColor);
-        Drawable infoDrawable = Utils.getTintedDrawable(activity, R.drawable.ic_info_preference_24dp, secondaryTextColor);
+        Drawable infoDrawable = Utils.getTintedDrawable(activity, R.drawable.ic_info_preference_day_night_24dp, secondaryTextColor);
         binding.infoTextViewCustomizeMainPageTabsFragment.setCompoundDrawablesWithIntrinsicBounds(infoDrawable, null, null, null);
         binding.tabCountTitleTextViewCustomizeMainPageTabsFragment.setTextColor(primaryTextColor);
         binding.tabCountTextViewCustomizeMainPageTabsFragment.setTextColor(secondaryTextColor);

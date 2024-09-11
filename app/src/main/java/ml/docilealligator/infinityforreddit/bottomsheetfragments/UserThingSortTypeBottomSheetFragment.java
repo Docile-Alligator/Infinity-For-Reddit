@@ -50,13 +50,13 @@ public class UserThingSortTypeBottomSheetFragment extends LandscapeExpandedRound
 
         String currentSortType = getArguments().getString(EXTRA_CURRENT_SORT_TYPE);
         if (currentSortType.equals(SortType.Type.NEW.fullName)) {
-            binding.newTypeTextViewUserThingSortTypeBottomSheetFragment.setCompoundDrawablesRelativeWithIntrinsicBounds(binding.newTypeTextViewUserThingSortTypeBottomSheetFragment.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+            binding.newTypeTextViewUserThingSortTypeBottomSheetFragment.setCompoundDrawablesRelativeWithIntrinsicBounds(binding.newTypeTextViewUserThingSortTypeBottomSheetFragment.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_check_circle_day_night_24dp), null);
         } else if (currentSortType.equals(SortType.Type.HOT.fullName)) {
-            binding.hotTypeTextViewUserThingSortTypeBottomSheetFragment.setCompoundDrawablesRelativeWithIntrinsicBounds(binding.hotTypeTextViewUserThingSortTypeBottomSheetFragment.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+            binding.hotTypeTextViewUserThingSortTypeBottomSheetFragment.setCompoundDrawablesRelativeWithIntrinsicBounds(binding.hotTypeTextViewUserThingSortTypeBottomSheetFragment.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_check_circle_day_night_24dp), null);
         } else if (currentSortType.equals(SortType.Type.TOP.fullName)) {
-            binding.topTypeTextViewUserThingSortTypeBottomSheetFragment.setCompoundDrawablesRelativeWithIntrinsicBounds(binding.topTypeTextViewUserThingSortTypeBottomSheetFragment.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+            binding.topTypeTextViewUserThingSortTypeBottomSheetFragment.setCompoundDrawablesRelativeWithIntrinsicBounds(binding.topTypeTextViewUserThingSortTypeBottomSheetFragment.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_check_circle_day_night_24dp), null);
         } else if (currentSortType.equals(SortType.Type.CONTROVERSIAL.fullName)) {
-            binding.controversialTypeTextViewUserThingSortTypeBottomSheetFragment.setCompoundDrawablesRelativeWithIntrinsicBounds(binding.controversialTypeTextViewUserThingSortTypeBottomSheetFragment.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+            binding.controversialTypeTextViewUserThingSortTypeBottomSheetFragment.setCompoundDrawablesRelativeWithIntrinsicBounds(binding.controversialTypeTextViewUserThingSortTypeBottomSheetFragment.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_check_circle_day_night_24dp), null);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O

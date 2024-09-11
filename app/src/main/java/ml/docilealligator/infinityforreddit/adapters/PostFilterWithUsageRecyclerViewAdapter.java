@@ -109,7 +109,7 @@ public class PostFilterWithUsageRecyclerViewAdapter extends RecyclerView.Adapter
             super(itemView);
             TextView infoTextView = itemView.findViewById(R.id.info_text_view_item_filter_fragment_header);
             infoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
-            infoTextView.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(activity, R.drawable.ic_info_preference_24dp, activity.customThemeWrapper.getPrimaryIconColor()), null, null, null);
+            infoTextView.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(activity, R.drawable.ic_info_preference_day_night_24dp, activity.customThemeWrapper.getPrimaryIconColor()), null, null, null);
         }
     }
 }

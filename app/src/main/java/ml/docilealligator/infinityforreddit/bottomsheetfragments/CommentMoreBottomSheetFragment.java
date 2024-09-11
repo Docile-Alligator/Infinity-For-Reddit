@@ -113,10 +113,10 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
             binding.replyTextViewCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
             binding.saveTextViewCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
             if (comment.isSaved()) {
-                binding.saveTextViewCommentMoreBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(activity, R.drawable.ic_bookmark_24dp), null, null, null);
+                binding.saveTextViewCommentMoreBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(activity, R.drawable.ic_bookmark_day_night_24dp), null, null, null);
                 binding.saveTextViewCommentMoreBottomSheetFragment.setText(R.string.unsave_comment);
             } else {
-                binding.saveTextViewCommentMoreBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(activity, R.drawable.ic_bookmark_border_24dp), null, null, null);
+                binding.saveTextViewCommentMoreBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(activity, R.drawable.ic_bookmark_border_day_night_24dp), null, null, null);
                 binding.saveTextViewCommentMoreBottomSheetFragment.setText(R.string.save_comment);
             }
             binding.replyTextViewCommentMoreBottomSheetFragment.setOnClickListener(view -> {

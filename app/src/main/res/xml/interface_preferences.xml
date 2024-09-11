@@ -3,7 +3,7 @@
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:title="@string/settings_font_title"
-        app:icon="@drawable/ic_font_size_24dp"
+        app:icon="@drawable/ic_font_size_day_night_24dp"
         app:fragment="ml.docilealligator.infinityforreddit.settings.FontPreferenceFragment" />
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference

@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:src="@drawable/ic_round_copy_16"
+        android:src="@drawable/ic_copy_16dp"
         android:clickable="true"
         android:focusable="true"
         android:background="?attr/actionBarItemBackground"

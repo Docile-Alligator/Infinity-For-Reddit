@@ -88,7 +88,7 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
                     ((MarkdownBottomBarItemViewHolder) holder).imageView.setImageResource(R.drawable.ic_ordered_list_black_24dp);
                     break;
                 case UNORDERED_LIST:
-                    ((MarkdownBottomBarItemViewHolder) holder).imageView.setImageResource(R.drawable.ic_unordered_list_black_24dp);
+                    ((MarkdownBottomBarItemViewHolder) holder).imageView.setImageResource(R.drawable.ic_unordered_list_24dp);
                     break;
                 case SPOILER:
                     ((MarkdownBottomBarItemViewHolder) holder).imageView.setImageResource(R.drawable.ic_spoiler_black_24dp);
@@ -100,7 +100,7 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
                     ((MarkdownBottomBarItemViewHolder) holder).imageView.setImageResource(R.drawable.ic_code_24dp);
                     break;
                 case UPLOAD_IMAGE:
-                    ((MarkdownBottomBarItemViewHolder) holder).imageView.setImageResource(R.drawable.ic_image_24dp);
+                    ((MarkdownBottomBarItemViewHolder) holder).imageView.setImageResource(R.drawable.ic_image_day_night_24dp);
                     break;
             }
         }

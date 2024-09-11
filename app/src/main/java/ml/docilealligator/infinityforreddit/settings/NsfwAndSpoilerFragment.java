@@ -156,7 +156,7 @@ public class NsfwAndSpoilerFragment extends Fragment {
 
     private void applyCustomTheme() {
         int primaryTextColor = activity.customThemeWrapper.getPrimaryTextColor();
-        binding.enableNsfwTextViewNsfwAndSpoilerFragment.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(activity, R.drawable.ic_nsfw_on_24dp, activity.customThemeWrapper.getPrimaryIconColor()), null, null, null);
+        binding.enableNsfwTextViewNsfwAndSpoilerFragment.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(activity, R.drawable.ic_nsfw_on_day_night_24dp, activity.customThemeWrapper.getPrimaryIconColor()), null, null, null);
         binding.enableNsfwTextViewNsfwAndSpoilerFragment.setTextColor(primaryTextColor);
         binding.blurNsfwTextViewNsfwAndSpoilerFragment.setTextColor(primaryTextColor);
         binding.doNotBlurNsfwTextViewNsfwAndSpoilerFragment.setTextColor(primaryTextColor);

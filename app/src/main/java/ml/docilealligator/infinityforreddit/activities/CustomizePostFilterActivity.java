@@ -264,22 +264,22 @@ public class CustomizePostFilterActivity extends BaseActivity {
 
         binding.postTypeCardViewCustomizePostFilterActivity.setCardBackgroundColor(filledCardViewBackgroundColor);
         binding.postTypeExplanationTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
-        binding.postTypeTextTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_text_24dp, primaryIconColor), null, null, null);
+        binding.postTypeTextTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_text_day_night_24dp, primaryIconColor), null, null, null);
         binding.postTypeTextTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
-        binding.postTypeLinkTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_link, primaryIconColor), null, null, null);
+        binding.postTypeLinkTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_link_day_night_24dp, primaryIconColor), null, null, null);
         binding.postTypeLinkTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
-        binding.postTypeImageTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_image_24dp, primaryIconColor), null, null, null);
+        binding.postTypeImageTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_image_day_night_24dp, primaryIconColor), null, null, null);
         binding.postTypeImageTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
-        binding.postTypeGifTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_image_24dp, primaryIconColor), null, null, null);
+        binding.postTypeGifTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_image_day_night_24dp, primaryIconColor), null, null, null);
         binding.postTypeGifTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
-        binding.postTypeVideoTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_outline_video_24dp, primaryIconColor), null, null, null);
+        binding.postTypeVideoTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_video_day_night_24dp, primaryIconColor), null, null, null);
         binding.postTypeVideoTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
-        binding.postTypeGalleryTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_gallery_24dp, primaryIconColor), null, null, null);
+        binding.postTypeGalleryTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_gallery_day_night_24dp, primaryIconColor), null, null, null);
         binding.postTypeGalleryTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
 
         binding.onlyNsfwSpoilerCardViewCustomizePostFilterActivity.setCardBackgroundColor(filledCardViewBackgroundColor);
         binding.onlyNsfwSpoilerExplanationTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
-        binding.onlyNsfwTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_nsfw_on_24dp, primaryIconColor), null, null, null);
+        binding.onlyNsfwTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_nsfw_on_day_night_24dp, primaryIconColor), null, null, null);
         binding.onlyNsfwTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
         binding.onlySpoilerTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_spoiler_black_24dp, primaryIconColor), null, null, null);
         binding.onlySpoilerTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);

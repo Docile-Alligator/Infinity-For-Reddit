@@ -31,7 +31,7 @@
         android:layout_height="24dp"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="16dp"
-        android:src="@drawable/ic_share_24dp"
+        android:src="@drawable/ic_share_day_night_24dp"
         android:background="?attr/selectableItemBackgroundBorderless" />
 
     <ImageView

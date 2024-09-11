@@ -69,7 +69,7 @@
                         android:padding="8dp"
                         android:background="@drawable/ic_dot_outline"
                         android:contentDescription="@string/content_description_change_banner"
-                        app:srcCompat="@drawable/ic_outline_add_a_photo_day_night_24dp" />
+                        app:srcCompat="@drawable/ic_add_a_photo_day_night_24dp" />
 
                 </FrameLayout>
 
@@ -95,7 +95,7 @@
                         android:padding="8dp"
                         android:background="@drawable/ic_dot_outline"
                         android:contentDescription="@string/content_description_change_avatar"
-                        app:srcCompat="@drawable/ic_outline_add_a_photo_day_night_24dp" />
+                        app:srcCompat="@drawable/ic_add_a_photo_day_night_24dp" />
 
                 </FrameLayout>
 
