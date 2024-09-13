@@ -107,6 +107,19 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
                     }
                 });
             }
+
+            if (comment.getAuthor().equals(activity.accountName)) {
+                binding.notificationViewCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
+                binding.notificationViewCommentMoreBottomSheetFragment.setText(comment.isSendReplies() ? R.string.disable_reply_notifications : R.string.enable_reply_notifications);
+                binding.notificationViewCommentMoreBottomSheetFragment.setOnClickListener(view -> {
+                    dismiss();
+                    if (activity instanceof ViewPostDetailActivity) {
+                        ((ViewPostDetailActivity) activity).toggleReplyNotifications(comment, bundle.getInt(EXTRA_POSITION));
+                    } else if (activity instanceof ViewUserDetailActivity) {
+                        ((ViewUserDetailActivity) activity).toggleReplyNotifications(comment, bundle.getInt(EXTRA_POSITION));
+                    }
+                });
+            }
         }
 
         if (showReplyAndSaveOption) {

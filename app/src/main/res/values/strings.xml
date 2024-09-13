@@ -1489,5 +1489,11 @@
     <string name="content_description_saved">Saved</string>
 
     <string name="comment">Comment</string>
+    <string name="enable_reply_notifications">Receive reply notifications</string>
+    <string name="disable_reply_notifications">Disable reply notifications</string>
+    <string name="reply_notifications_enabled">Reply notifications enabled</string>
+    <string name="reply_notifications_disabled">Reply notifications disabled</string>
+    <string name="toggle_reply_notifications_failed">Toggle reply notifications failed</string>
+    <string name="cannot_find_comment">Cannot find comment</string>
 
 </resources>

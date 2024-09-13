@@ -10,10 +10,12 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
@@ -39,10 +41,12 @@ import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.ReplyNotificationsToggle;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.adapters.CommentsListingRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.comment.CommentViewModel;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
@@ -399,6 +403,24 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         if (mAdapter != null) {
             mAdapter.editComment(commentMarkdown, position);
         }
+    }
+
+    public void toggleReplyNotifications(Comment comment, int position) {
+        ReplyNotificationsToggle.toggleEnableNotification(new Handler(Looper.getMainLooper()), mOauthRetrofit,
+                mActivity.accessToken, comment, new ReplyNotificationsToggle.SendNotificationListener() {
+                    @Override
+                    public void onSuccess() {
+                        Toast.makeText(mActivity,
+                                comment.isSendReplies() ? R.string.reply_notifications_disabled : R.string.reply_notifications_enabled,
+                                Toast.LENGTH_SHORT).show();
+                        mAdapter.toggleReplyNotifications(position);
+                    }
+
+                    @Override
+                    public void onError() {
+                        Toast.makeText(mActivity, R.string.toggle_reply_notifications_failed, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Subscribe

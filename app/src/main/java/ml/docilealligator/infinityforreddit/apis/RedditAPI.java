@@ -422,4 +422,8 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("/api/morechildren.json?raw_json=1&api_type=json")
     Call<String> moreChildrenOauth(@Field("link_id") String linkId, @Field("children") String children, @Field("sort") SortType.Type sort, @HeaderMap Map<String, String> headers);
+
+    @FormUrlEncoded
+    @POST("/api/sendreplies")
+    Call<String> toggleRepliesNotification(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

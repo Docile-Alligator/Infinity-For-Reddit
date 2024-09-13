@@ -1088,6 +1088,15 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         }
     }
 
+    public void toggleReplyNotifications(String fullName, int position) {
+        if (mVisibleComments != null && position >= 0 && position < mVisibleComments.size()) {
+            if (mVisibleComments.get(position).getFullName().equals(fullName)) {
+                mVisibleComments.get(position).toggleSendReplies();
+            }
+        }
+        //TODO The comment's position may change
+    }
+
     public int getNextParentCommentPosition(int currentPosition) {
         if (mVisibleComments != null && !mVisibleComments.isEmpty()) {
             if (mIsSingleCommentThreadMode) {

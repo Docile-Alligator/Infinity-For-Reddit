@@ -68,6 +68,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveThing;
+import ml.docilealligator.infinityforreddit.ReplyNotificationsToggle;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
@@ -1805,6 +1806,24 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 }))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
+    }
+
+    public void toggleReplyNotifications(Comment comment, int position) {
+        ReplyNotificationsToggle.toggleEnableNotification(new Handler(Looper.getMainLooper()), mOauthRetrofit,
+                activity.accessToken, comment, new ReplyNotificationsToggle.SendNotificationListener() {
+                    @Override
+                    public void onSuccess() {
+                        Toast.makeText(activity,
+                                comment.isSendReplies() ? R.string.reply_notifications_disabled : R.string.reply_notifications_enabled,
+                                Toast.LENGTH_SHORT).show();
+                        mCommentsAdapter.toggleReplyNotifications(comment.getFullName(), position);
+                    }
+
+                    @Override
+                    public void onError() {
+                        Toast.makeText(activity, R.string.toggle_reply_notifications_failed, Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void changeToNormalThreadMode() {

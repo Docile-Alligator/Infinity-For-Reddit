@@ -373,6 +373,14 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         }
     }
 
+    public void toggleReplyNotifications(int position) {
+        Comment comment = getItem(position);
+        if (comment != null) {
+            comment.toggleSendReplies();
+            notifyItemChanged(position);
+        }
+    }
+
     public void setCanStartActivity(boolean canStartActivity) {
         this.canStartActivity = canStartActivity;
     }

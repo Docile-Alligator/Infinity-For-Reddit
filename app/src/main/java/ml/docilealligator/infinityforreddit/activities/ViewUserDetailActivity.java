@@ -75,9 +75,9 @@ import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.SubredditAutocompleteRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.asynctasks.AccountManagement;
 import ml.docilealligator.infinityforreddit.asynctasks.AddSubredditOrUserToMultiReddit;
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsFollowingUser;
-import ml.docilealligator.infinityforreddit.asynctasks.AccountManagement;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.KarmaInfoBottomSheetFragment;
@@ -87,6 +87,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.RandomBottomShe
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UserThingSortTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.NavigationWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
@@ -1110,6 +1111,10 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 .show();
     }
 
+    public void toggleReplyNotifications(Comment comment, int position) {
+        sectionsPagerAdapter.toggleCommentReplyNotification(comment, position);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_user_detail_activity, menu);
@@ -1736,6 +1741,18 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     ((PostFragment) fragment).filterPosts();
                 }
             }
+        }
+
+        void toggleCommentReplyNotification(Comment comment, int position) {
+            if (fragmentManager != null) {
+                Fragment fragment = fragmentManager.findFragmentByTag("f1");
+                if (fragment instanceof CommentsListingFragment) {
+                    ((CommentsListingFragment) fragment).toggleReplyNotifications(comment, position);
+                    return;
+                }
+            }
+
+            Toast.makeText(ViewUserDetailActivity.this, R.string.cannot_find_comment, Toast.LENGTH_SHORT).show();
         }
     }
 

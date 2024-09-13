@@ -298,6 +298,7 @@ public class ParseComment {
         long submitTime = singleCommentData.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
         boolean scoreHidden = singleCommentData.getBoolean(JSONUtils.SCORE_HIDDEN_KEY);
         boolean saved = singleCommentData.getBoolean(JSONUtils.SAVED_KEY);
+        boolean sendReplies = singleCommentData.getBoolean(JSONUtils.SEND_REPLIES_KEY);
 
         if (singleCommentData.has(JSONUtils.DEPTH_KEY)) {
             depth = singleCommentData.getInt(JSONUtils.DEPTH_KEY);
@@ -312,7 +313,7 @@ public class ParseComment {
         return new Comment(id, fullName, author, authorFlair, authorFlairHTMLBuilder.toString(),
                 linkAuthor, submitTime, commentMarkdown, commentRawText,
                 linkId, subredditName, parentId, score, voteType, isSubmitter, distinguished,
-                permalink, depth, collapsed, hasReply, scoreHidden, saved, edited,
+                permalink, depth, collapsed, hasReply, scoreHidden, saved, sendReplies, edited,
                 mediaMetadataMap);
     }
 
