@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import javax.inject.Inject;
 
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.LoadingMorePostsStatus;
+import ml.docilealligator.infinityforreddit.post.LoadingMorePostsStatus;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;

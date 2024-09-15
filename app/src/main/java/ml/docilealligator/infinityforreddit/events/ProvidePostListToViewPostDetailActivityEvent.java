@@ -2,7 +2,7 @@ package ml.docilealligator.infinityforreddit.events;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 

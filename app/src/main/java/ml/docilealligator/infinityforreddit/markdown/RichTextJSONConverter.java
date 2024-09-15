@@ -47,7 +47,7 @@ import java.util.Stack;
 
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonReducer;
-import ml.docilealligator.infinityforreddit.UploadedImage;
+import ml.docilealligator.infinityforreddit.thing.UploadedImage;
 
 public class RichTextJSONConverter implements Visitor {
     private static final int BOLD = 1;

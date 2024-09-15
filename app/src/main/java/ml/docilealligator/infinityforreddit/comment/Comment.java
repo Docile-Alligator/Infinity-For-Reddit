@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import ml.docilealligator.infinityforreddit.BuildConfig;
-import ml.docilealligator.infinityforreddit.MediaMetadata;
+import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 
 public class Comment implements Parcelable {

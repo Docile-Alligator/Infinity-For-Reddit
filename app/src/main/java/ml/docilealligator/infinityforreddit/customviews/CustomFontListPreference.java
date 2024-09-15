@@ -11,7 +11,7 @@ import androidx.preference.ListPreference;
 import androidx.preference.PreferenceViewHolder;
 
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
-import ml.docilealligator.infinityforreddit.CustomThemeWrapperReceiver;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapperReceiver;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 
 public class CustomFontListPreference extends ListPreference implements CustomFontReceiver, CustomThemeWrapperReceiver {

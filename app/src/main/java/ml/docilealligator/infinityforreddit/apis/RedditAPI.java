@@ -4,7 +4,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.Map;
 
-import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
