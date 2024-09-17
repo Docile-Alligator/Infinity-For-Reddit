@@ -2836,7 +2836,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     return false;
                 }
 
-                PostOptionsBottomSheetFragment postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(post);
+                PostOptionsBottomSheetFragment postOptionsBottomSheetFragment;
+                if (post.getPostType() == Post.GALLERY_TYPE && this instanceof PostBaseGalleryTypeViewHolder) {
+                    postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(post,
+                            ((LinearLayoutManagerBugFixed) ((PostBaseGalleryTypeViewHolder) this).galleryRecyclerView.getLayoutManager()).findFirstVisibleItemPosition());
+                } else {
+                    postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(post);
+                }
                 postOptionsBottomSheetFragment.show(mActivity.getSupportFragmentManager(), postOptionsBottomSheetFragment.getTag());
                 return true;
             });

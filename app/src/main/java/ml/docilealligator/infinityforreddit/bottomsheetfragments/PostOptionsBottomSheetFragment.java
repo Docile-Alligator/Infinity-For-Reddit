@@ -56,6 +56,15 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
      * @param post Post
      * @return A new instance of fragment PostOptionsBottomSheetFragment.
      */
+    public static PostOptionsBottomSheetFragment newInstance(Post post, int galleryIndex) {
+        PostOptionsBottomSheetFragment fragment = new PostOptionsBottomSheetFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(EXTRA_POST, post);
+        args.putInt(EXTRA_GALLERY_INDEX, galleryIndex);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     public static PostOptionsBottomSheetFragment newInstance(Post post) {
         PostOptionsBottomSheetFragment fragment = new PostOptionsBottomSheetFragment();
         Bundle args = new Bundle();
