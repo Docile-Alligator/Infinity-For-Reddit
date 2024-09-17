@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
@@ -33,6 +34,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.Executor;
 
@@ -71,6 +73,10 @@ public class DownloadMediaService extends JobService {
     public static final int EXTRA_MEDIA_TYPE_GIF = 1;
     public static final int EXTRA_MEDIA_TYPE_VIDEO = 2;
 
+    public static final String EXTRA_ALL_GALLERY_IMAGE_URLS = "EAGIU";
+    public static final String EXTRA_ALL_GALLERY_IMAGE_MEDIA_TYPES = "EAGIMT";
+    public static final String EXTRA_ALL_GALLERY_IMAGE_FILE_NAMES = "EAGIFN";
+
     private static final int NO_ERROR = -1;
     private static final int ERROR_CANNOT_GET_DESTINATION_DIRECTORY = 0;
     private static final int ERROR_FILE_CANNOT_DOWNLOAD = 1;
@@ -103,65 +109,131 @@ public class DownloadMediaService extends JobService {
     public DownloadMediaService() {
     }
 
+    /**
+     *
+     * @param context
+     * @param contentEstimatedBytes
+     * @param post
+     * @param galleryIndex if post is not a gallery post, then galleryIndex should be 0
+     * @return JobInfo for DownloadMediaService
+     */
     public static JobInfo constructJobInfo(Context context, long contentEstimatedBytes, Post post, int galleryIndex) {
         PersistableBundle extras = new PersistableBundle();
         if (post.getPostType() == Post.IMAGE_TYPE) {
-            extras.putString(DownloadMediaService.EXTRA_URL, post.getUrl());
-            extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
-            extras.putString(DownloadMediaService.EXTRA_FILE_NAME, post.getSubredditName()
+            extras.putString(EXTRA_URL, post.getUrl());
+            extras.putInt(EXTRA_MEDIA_TYPE, EXTRA_MEDIA_TYPE_IMAGE);
+            extras.putString(EXTRA_FILE_NAME, post.getSubredditName()
                     + "-" + post.getId() + ".jpg");
-            extras.putString(DownloadMediaService.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
-            extras.putInt(DownloadMediaService.EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
+            extras.putString(EXTRA_SUBREDDIT_NAME, post.getSubredditName());
+            extras.putInt(EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
         } else if (post.getPostType() == Post.GIF_TYPE) {
-            extras.putString(DownloadMediaService.EXTRA_URL, post.getVideoUrl());
-            extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_GIF);
-            extras.putString(DownloadMediaService.EXTRA_FILE_NAME, post.getSubredditName() + "-" + post.getId() + ".gif");
-            extras.putString(DownloadMediaService.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
-            extras.putInt(DownloadMediaService.EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
+            extras.putString(EXTRA_URL, post.getVideoUrl());
+            extras.putInt(EXTRA_MEDIA_TYPE, EXTRA_MEDIA_TYPE_GIF);
+            extras.putString(EXTRA_FILE_NAME, post.getSubredditName() + "-" + post.getId() + ".gif");
+            extras.putString(EXTRA_SUBREDDIT_NAME, post.getSubredditName());
+            extras.putInt(EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
         } else if (post.getPostType() == Post.VIDEO_TYPE) {
             if (post.isStreamable()) {
                 if (post.isLoadRedgifsOrStreamableVideoSuccess()) {
-                    extras.putString(DownloadMediaService.EXTRA_URL, post.getVideoUrl());
+                    extras.putString(EXTRA_URL, post.getVideoUrl());
                 } else {
-                    extras.putString(DownloadMediaService.EXTRA_REDGIFS_ID, post.getRedgifsId());
+                    extras.putString(EXTRA_REDGIFS_ID, post.getRedgifsId());
                 }
 
-                extras.putString(DownloadMediaService.EXTRA_FILE_NAME, "Streamable-" + post.getStreamableShortCode() + ".mp4");
+                extras.putString(EXTRA_FILE_NAME, "Streamable-" + post.getStreamableShortCode() + ".mp4");
             } else if (post.isRedgifs()) {
                 if (post.isLoadRedgifsOrStreamableVideoSuccess()) {
-                    extras.putString(DownloadMediaService.EXTRA_URL, post.getVideoUrl());
+                    extras.putString(EXTRA_URL, post.getVideoUrl());
                 } else {
-                    extras.putString(DownloadMediaService.EXTRA_STREAMABLE_SHORT_CODE, post.getStreamableShortCode());
+                    extras.putString(EXTRA_STREAMABLE_SHORT_CODE, post.getStreamableShortCode());
                 }
 
                 String redgifsId = post.getRedgifsId();
                 if (redgifsId != null && redgifsId.contains("-")) {
                     redgifsId = redgifsId.substring(0, redgifsId.indexOf('-'));
                 }
-                extras.putString(DownloadMediaService.EXTRA_FILE_NAME, "Redgifs-" + redgifsId + ".mp4");
+                extras.putString(EXTRA_FILE_NAME, "Redgifs-" + redgifsId + ".mp4");
             } else if (post.isImgur()) {
-                extras.putString(DownloadMediaService.EXTRA_URL, post.getVideoUrl());
-                extras.putString(DownloadMediaService.EXTRA_FILE_NAME, "Imgur-" + FilenameUtils.getName(post.getVideoUrl()));
+                extras.putString(EXTRA_URL, post.getVideoUrl());
+                extras.putString(EXTRA_FILE_NAME, "Imgur-" + FilenameUtils.getName(post.getVideoUrl()));
             }
 
-            extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
-            extras.putString(DownloadMediaService.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
-            extras.putInt(DownloadMediaService.EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
+            extras.putInt(EXTRA_MEDIA_TYPE, EXTRA_MEDIA_TYPE_VIDEO);
+            extras.putString(EXTRA_SUBREDDIT_NAME, post.getSubredditName());
+            extras.putInt(EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
         } else if (post.getPostType() == Post.GALLERY_TYPE) {
             Post.Gallery media = post.getGallery().get(galleryIndex);
             if (media.mediaType == Post.Gallery.TYPE_VIDEO) {
-                extras.putString(DownloadMediaService.EXTRA_URL, media.url);
-                extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
-                extras.putString(DownloadMediaService.EXTRA_FILE_NAME, media.fileName);
-                extras.putString(DownloadMediaService.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
-                extras.putInt(DownloadMediaService.EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
+                extras.putString(EXTRA_URL, media.url);
+                extras.putInt(EXTRA_MEDIA_TYPE, EXTRA_MEDIA_TYPE_VIDEO);
+                extras.putString(EXTRA_FILE_NAME, media.fileName);
+                extras.putString(EXTRA_SUBREDDIT_NAME, post.getSubredditName());
+                extras.putInt(EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
             } else {
-                extras.putString(DownloadMediaService.EXTRA_URL, media.hasFallback() ? media.fallbackUrl : media.url); // Retrieve original instead of the one additionally compressed by reddit
-                extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, media.mediaType == Post.Gallery.TYPE_GIF ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF: DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
-                extras.putString(DownloadMediaService.EXTRA_FILE_NAME, media.fileName);
-                extras.putString(DownloadMediaService.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
-                extras.putInt(DownloadMediaService.EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
+                extras.putString(EXTRA_URL, media.hasFallback() ? media.fallbackUrl : media.url); // Retrieve original instead of the one additionally compressed by reddit
+                extras.putInt(EXTRA_MEDIA_TYPE, media.mediaType == Post.Gallery.TYPE_GIF ? EXTRA_MEDIA_TYPE_GIF: EXTRA_MEDIA_TYPE_IMAGE);
+                extras.putString(EXTRA_FILE_NAME, media.fileName);
+                extras.putString(EXTRA_SUBREDDIT_NAME, post.getSubredditName());
+                extras.putInt(EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
             }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            return new JobInfo.Builder(JOB_ID++, new ComponentName(context, DownloadMediaService.class))
+                    .setUserInitiated(true)
+                    .setRequiredNetwork(new NetworkRequest.Builder().clearCapabilities().build())
+                    .setEstimatedNetworkBytes(0, contentEstimatedBytes + 500)
+                    .setExtras(extras)
+                    .build();
+        } else {
+            return new JobInfo.Builder(JOB_ID++, new ComponentName(context, DownloadMediaService.class))
+                    .setOverrideDeadline(0)
+                    .setExtras(extras)
+                    .build();
+        }
+    }
+
+    public static JobInfo constructGalleryDownloadAllImagesJobInfo(Context context, long contentEstimatedBytes, Post post) {
+        PersistableBundle extras = new PersistableBundle();
+        if (post.getPostType() == Post.GALLERY_TYPE) {
+            extras.putString(EXTRA_SUBREDDIT_NAME, post.getSubredditName());
+            extras.putInt(EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
+
+            ArrayList<Post.Gallery> gallery = post.getGallery();
+
+            StringBuilder concatUrlsBuilder = new StringBuilder();
+            StringBuilder concatMediaTypesBuilder = new StringBuilder();
+            StringBuilder concatFileNamesBuilder = new StringBuilder();
+
+            for (int i = 0; i < gallery.size(); i++) {
+                Post.Gallery media = gallery.get(i);
+
+                if (media.mediaType == Post.Gallery.TYPE_VIDEO) {
+                    concatUrlsBuilder.append(media.url).append(" ");
+                    concatMediaTypesBuilder.append(EXTRA_MEDIA_TYPE_VIDEO).append(" ");
+                    concatFileNamesBuilder.append(media.fileName).append(" ");
+                } else {
+                    concatUrlsBuilder.append(media.hasFallback() ? media.fallbackUrl : media.url).append(" "); // Retrieve original instead of the one additionally compressed by reddit
+                    concatMediaTypesBuilder.append(media.mediaType == Post.Gallery.TYPE_GIF ? EXTRA_MEDIA_TYPE_GIF: EXTRA_MEDIA_TYPE_IMAGE).append(" ");
+                    concatFileNamesBuilder.append(media.fileName).append(" ");
+                }
+            }
+
+            if (concatUrlsBuilder.length() > 0) {
+                concatUrlsBuilder.deleteCharAt(concatUrlsBuilder.length() - 1);
+            }
+
+            if (concatMediaTypesBuilder.length() > 0) {
+                concatMediaTypesBuilder.deleteCharAt(concatMediaTypesBuilder.length() - 1);
+            }
+
+            if (concatFileNamesBuilder.length() > 0) {
+                concatFileNamesBuilder.deleteCharAt(concatFileNamesBuilder.length() - 1);
+            }
+
+            extras.putString(EXTRA_ALL_GALLERY_IMAGE_URLS, concatUrlsBuilder.toString());
+            extras.putString(EXTRA_ALL_GALLERY_IMAGE_MEDIA_TYPES, concatMediaTypesBuilder.toString());
+            extras.putString(EXTRA_ALL_GALLERY_IMAGE_FILE_NAMES, concatFileNamesBuilder.toString());
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
@@ -181,12 +253,12 @@ public class DownloadMediaService extends JobService {
 
     public static JobInfo constructJobInfo(Context context, long contentEstimatedBytes, ImgurMedia imgurMedia) {
         PersistableBundle extras = new PersistableBundle();
-        extras.putString(DownloadMediaService.EXTRA_URL, imgurMedia.getLink());
-        extras.putString(DownloadMediaService.EXTRA_FILE_NAME, imgurMedia.getFileName());
+        extras.putString(EXTRA_URL, imgurMedia.getLink());
+        extras.putString(EXTRA_FILE_NAME, imgurMedia.getFileName());
         if (imgurMedia.getType() == ImgurMedia.TYPE_VIDEO) {
-            extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
+            extras.putInt(EXTRA_MEDIA_TYPE, EXTRA_MEDIA_TYPE_VIDEO);
         } else {
-            extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
+            extras.putInt(EXTRA_MEDIA_TYPE, EXTRA_MEDIA_TYPE_IMAGE);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
@@ -224,12 +296,13 @@ public class DownloadMediaService extends JobService {
     public void onCreate() {
         ((Infinity) getApplication()).getAppComponent().inject(this);
         notificationManager = NotificationManagerCompat.from(this);
+        Log.i("asdfasdf", "s " + JOB_ID);
     }
 
     @Override
     public boolean onStartJob(JobParameters params) {
-        PersistableBundle intent = params.getExtras();
-        int mediaType = intent.getInt(EXTRA_MEDIA_TYPE, EXTRA_MEDIA_TYPE_IMAGE);
+        PersistableBundle extras = params.getExtras();
+        int mediaType = extras.getInt(EXTRA_MEDIA_TYPE, EXTRA_MEDIA_TYPE_IMAGE);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, getNotificationChannelId(mediaType));
 
         NotificationChannelCompat serviceChannel =
@@ -241,194 +314,67 @@ public class DownloadMediaService extends JobService {
         notificationManager.createNotificationChannel(serviceChannel);
 
         int randomNotificationIdOffset = new Random().nextInt(10000);
-        switch (intent.getInt(EXTRA_MEDIA_TYPE, EXTRA_MEDIA_TYPE_IMAGE)) {
+        switch (extras.getInt(EXTRA_MEDIA_TYPE, EXTRA_MEDIA_TYPE_IMAGE)) {
             case EXTRA_MEDIA_TYPE_GIF:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                     setNotification(params,
                             NotificationUtils.DOWNLOAD_GIF_NOTIFICATION_ID + randomNotificationIdOffset,
-                            createNotification(builder, intent.getString(EXTRA_FILE_NAME)),
+                            createNotification(builder, extras.getString(EXTRA_FILE_NAME)),
                             JobService.JOB_END_NOTIFICATION_POLICY_DETACH);
                 } else {
                     notificationManager.notify(NotificationUtils.DOWNLOAD_GIF_NOTIFICATION_ID + randomNotificationIdOffset,
-                            createNotification(builder, intent.getString(EXTRA_FILE_NAME)));
+                            createNotification(builder, extras.getString(EXTRA_FILE_NAME)));
                 }
                 break;
             case EXTRA_MEDIA_TYPE_VIDEO:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                     setNotification(params,
                             NotificationUtils.DOWNLOAD_VIDEO_NOTIFICATION_ID + randomNotificationIdOffset,
-                            createNotification(builder, intent.getString(EXTRA_FILE_NAME)),
+                            createNotification(builder, extras.getString(EXTRA_FILE_NAME)),
                             JobService.JOB_END_NOTIFICATION_POLICY_DETACH);
                 } else {
                     notificationManager.notify(NotificationUtils.DOWNLOAD_VIDEO_NOTIFICATION_ID + randomNotificationIdOffset,
-                            createNotification(builder, intent.getString(EXTRA_FILE_NAME)));
+                            createNotification(builder, extras.getString(EXTRA_FILE_NAME)));
                 }
                 break;
             default:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                     setNotification(params,
                             NotificationUtils.DOWNLOAD_IMAGE_NOTIFICATION_ID + randomNotificationIdOffset,
-                            createNotification(builder, intent.getString(EXTRA_FILE_NAME)),
+                            createNotification(builder, extras.getString(EXTRA_FILE_NAME)),
                             JobService.JOB_END_NOTIFICATION_POLICY_DETACH);
                 } else {
                     notificationManager.notify(NotificationUtils.DOWNLOAD_IMAGE_NOTIFICATION_ID + randomNotificationIdOffset,
-                            createNotification(builder, intent.getString(EXTRA_FILE_NAME)));
+                            createNotification(builder, extras.getString(EXTRA_FILE_NAME)));
                 }
         }
 
         mExecutor.execute(() -> {
-            String fileUrl = intent.getString(EXTRA_URL);
-            String fileName = intent.getString(EXTRA_FILE_NAME);
-            String subredditName = intent.getString(EXTRA_SUBREDDIT_NAME);
-            boolean isNsfw = intent.getInt(EXTRA_IS_NSFW, 0) == 1;
-            String mimeType = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? "video/*" : "image/*";
+            String subredditName = extras.getString(EXTRA_SUBREDDIT_NAME);
+            boolean isNsfw = extras.getInt(EXTRA_IS_NSFW, 0) == 1;
 
-            if (fileUrl == null) {
-                // Only Redgifs and Streamble video can go inside this if clause.
-                String redgifsId = intent.getString(EXTRA_REDGIFS_ID, null);
-                String streamableShortCode = intent.getString(EXTRA_STREAMABLE_SHORT_CODE, null);
-                fileUrl = VideoLinkFetcher.fetchVideoLinkSync(mRedgifsRetrofit, mStreamableApiProvider, mCurrentAccountSharedPreferences,
-                        redgifsId == null ? ViewVideoActivity.VIDEO_TYPE_STREAMABLE : ViewVideoActivity.VIDEO_TYPE_REDGIFS,
-                        redgifsId, streamableShortCode);
+            if (extras.containsKey(EXTRA_ALL_GALLERY_IMAGE_URLS)) {
+                // Download all images in a gallery post
+                String concatUrls = extras.getString(EXTRA_ALL_GALLERY_IMAGE_URLS);
+                String concatMediaTypes = extras.getString(EXTRA_ALL_GALLERY_IMAGE_MEDIA_TYPES);
+                String concatFileNames = extras.getString(EXTRA_ALL_GALLERY_IMAGE_FILE_NAMES);
 
-                if (fileUrl == null) {
-                    downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
-                            null,
-                            redgifsId == null ? ERROR_FILE_CANNOT_FETCH_STREAMABLE_VIDEO_LINK : ERROR_FILE_CANNOT_FETCH_REDGIFS_VIDEO_LINK);
-                    return;
+                String[] urls = concatUrls.split(" ");
+                String[] mediaTypes = concatMediaTypes.split(" ");
+                String[] fileNames = concatFileNames.split(" ");
+
+                for (int i = 0; i < urls.length; i++) {
+                    String mimeType = Integer.parseInt(mediaTypes[i]) == EXTRA_MEDIA_TYPE_VIDEO ? "video/*" : "image/*";
+                    downloadMedia(params, urls[i], extras, builder, mediaType, randomNotificationIdOffset, fileNames[i],
+                            mimeType, subredditName, isNsfw);
                 }
-            }
+            } else {
+                String fileUrl = extras.getString(EXTRA_URL);
+                String fileName = extras.getString(EXTRA_FILE_NAME);
+                String mimeType = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? "video/*" : "image/*";
 
-            final DownloadProgressResponseBody.ProgressListener progressListener = new DownloadProgressResponseBody.ProgressListener() {
-                long time = 0;
-
-                @Override public void update(long bytesRead, long contentLength, boolean done) {
-                    if (!done) {
-                        if (contentLength != -1) {
-                            long currentTime = System.currentTimeMillis();
-                            if (currentTime - time > 1000) {
-                                time = currentTime;
-                                updateNotification(builder, mediaType, 0,
-                                        (int) ((100 * bytesRead) / contentLength), randomNotificationIdOffset, null, null);
-                            }
-                        }
-                    }
-                }
-            };
-
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .addNetworkInterceptor(chain -> {
-                        okhttp3.Response originalResponse = chain.proceed(chain.request());
-                        return originalResponse.newBuilder()
-                                .body(new DownloadProgressResponseBody(originalResponse.body(), progressListener))
-                                .build();
-                    })
-                    .addInterceptor(chain -> chain.proceed(
-                            chain.request()
-                                    .newBuilder()
-                                    .header("User-Agent", APIUtils.USER_AGENT)
-                                    .build()
-                    ))
-                    .build();
-
-            retrofit = retrofit.newBuilder().client(client).build();
-
-            boolean separateDownloadFolder = mSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_FOLDER_FOR_EACH_SUBREDDIT, false);
-
-            Response<ResponseBody> response;
-            String destinationFileUriString = null;
-            boolean isDefaultDestination = true;
-            try {
-                response = retrofit.create(DownloadFile.class).downloadFile(fileUrl).execute();
-                if (response.isSuccessful() && response.body() != null) {
-                    String destinationFileDirectory = getDownloadLocation(mediaType, isNsfw);
-                    if (destinationFileDirectory.equals("")) {
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                            File directory = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                            if (directory != null) {
-                                String directoryPath = separateDownloadFolder && subredditName != null && !subredditName.equals("") ? directory.getAbsolutePath() + "/Infinity/" + subredditName + "/" : directory.getAbsolutePath() + "/Infinity/";
-                                File infinityDir = new File(directoryPath);
-                                if (!infinityDir.exists() && !infinityDir.mkdirs()) {
-                                    downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
-                                            null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
-                                    return;
-                                }
-                                destinationFileUriString = directoryPath + fileName;
-                            } else {
-                                downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
-                                        null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
-                                return;
-                            }
-                        } else {
-                            String dir = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? Environment.DIRECTORY_MOVIES : Environment.DIRECTORY_PICTURES;
-                            destinationFileUriString = separateDownloadFolder && subredditName != null && !subredditName.equals("") ? dir + "/Infinity/" + subredditName + "/" : dir + "/Infinity/";
-                        }
-                    } else {
-                        isDefaultDestination = false;
-                        DocumentFile picFile;
-                        DocumentFile dir;
-                        if (separateDownloadFolder && subredditName != null && !subredditName.equals("")) {
-                            dir = DocumentFile.fromTreeUri(DownloadMediaService.this, Uri.parse(destinationFileDirectory));
-                            if (dir == null) {
-                                downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
-                                        null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
-                                return;
-                            }
-                            dir = dir.findFile(subredditName);
-                            if (dir == null) {
-                                dir = DocumentFile.fromTreeUri(DownloadMediaService.this, Uri.parse(destinationFileDirectory)).createDirectory(subredditName);
-                                if (dir == null) {
-                                    downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
-                                            null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
-                                    return;
-                                }
-                            }
-                        } else {
-                            dir = DocumentFile.fromTreeUri(DownloadMediaService.this, Uri.parse(destinationFileDirectory));
-                            if (dir == null) {
-                                downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
-                                        null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
-                                return;
-                            }
-                        }
-                        DocumentFile checkForDuplicates = dir.findFile(fileName);
-                        int extensionPosition = fileName.lastIndexOf('.');
-                        String extension = fileName.substring(extensionPosition);
-                        int num = 1;
-                        while (checkForDuplicates != null) {
-                            fileName = fileName.substring(0, extensionPosition) + " (" + num + ")" + extension;
-                            checkForDuplicates = dir.findFile(fileName);
-                            num++;
-                        }
-                        picFile = dir.createFile(mimeType, fileName);
-                        if (picFile == null) {
-                            downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
-                                    null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
-                            return;
-                        }
-                        destinationFileUriString = picFile.getUri().toString();
-                    }
-                } else {
-                    downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType, null,
-                            ERROR_FILE_CANNOT_DOWNLOAD);
-                    return;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType, null,
-                        ERROR_FILE_CANNOT_DOWNLOAD);
-                return;
-            }
-
-            try {
-                Uri destinationFileUri = writeResponseBodyToDisk(response.body(), isDefaultDestination, destinationFileUriString,
-                        fileName, mediaType);
-                downloadFinished(params, builder, mediaType, randomNotificationIdOffset,
-                        mimeType, destinationFileUri, NO_ERROR);
-            } catch (IOException e) {
-                e.printStackTrace();
-                downloadFinished(params, builder, mediaType, randomNotificationIdOffset,
-                        mimeType, null, ERROR_FILE_CANNOT_SAVE);
+                downloadMedia(params, fileUrl, extras, builder, mediaType, randomNotificationIdOffset, fileName,
+                        mimeType, subredditName, isNsfw);
             }
         });
 
@@ -438,6 +384,158 @@ public class DownloadMediaService extends JobService {
     @Override
     public boolean onStopJob(JobParameters params) {
         return false;
+    }
+
+    private void downloadMedia(JobParameters params, String fileUrl, PersistableBundle intent,
+                               NotificationCompat.Builder builder, int mediaType, int randomNotificationIdOffset,
+                               String fileName, String mimeType, String subredditName, boolean isNsfw) {
+        if (fileUrl == null) {
+            // Only Redgifs and Streamble video can go inside this if clause.
+            String redgifsId = intent.getString(EXTRA_REDGIFS_ID, null);
+            String streamableShortCode = intent.getString(EXTRA_STREAMABLE_SHORT_CODE, null);
+            fileUrl = VideoLinkFetcher.fetchVideoLinkSync(mRedgifsRetrofit, mStreamableApiProvider, mCurrentAccountSharedPreferences,
+                    redgifsId == null ? ViewVideoActivity.VIDEO_TYPE_STREAMABLE : ViewVideoActivity.VIDEO_TYPE_REDGIFS,
+                    redgifsId, streamableShortCode);
+
+            if (fileUrl == null) {
+                downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
+                        null,
+                        redgifsId == null ? ERROR_FILE_CANNOT_FETCH_STREAMABLE_VIDEO_LINK : ERROR_FILE_CANNOT_FETCH_REDGIFS_VIDEO_LINK);
+                return;
+            }
+        }
+
+        final DownloadProgressResponseBody.ProgressListener progressListener = new DownloadProgressResponseBody.ProgressListener() {
+            long time = 0;
+
+            @Override public void update(long bytesRead, long contentLength, boolean done) {
+                if (!done) {
+                    if (contentLength != -1) {
+                        long currentTime = System.currentTimeMillis();
+                        if (currentTime - time > 1000) {
+                            time = currentTime;
+                            updateNotification(builder, mediaType, 0,
+                                    (int) ((100 * bytesRead) / contentLength), randomNotificationIdOffset, null, null);
+                        }
+                    }
+                }
+            }
+        };
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addNetworkInterceptor(chain -> {
+                    okhttp3.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                            .body(new DownloadProgressResponseBody(originalResponse.body(), progressListener))
+                            .build();
+                })
+                .addInterceptor(chain -> chain.proceed(
+                        chain.request()
+                                .newBuilder()
+                                .header("User-Agent", APIUtils.USER_AGENT)
+                                .build()
+                ))
+                .build();
+
+        retrofit = retrofit.newBuilder().client(client).build();
+
+        boolean separateDownloadFolder = mSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_FOLDER_FOR_EACH_SUBREDDIT, false);
+
+        Response<ResponseBody> response;
+        String destinationFileUriString = null;
+        boolean isDefaultDestination = true;
+        try {
+            response = retrofit.create(DownloadFile.class).downloadFile(fileUrl).execute();
+            if (response.isSuccessful() && response.body() != null) {
+                String destinationFileDirectory = getDownloadLocation(mediaType, isNsfw);
+                if (destinationFileDirectory.equals("")) {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                        File directory = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                        if (directory != null) {
+                            String directoryPath = separateDownloadFolder && subredditName != null && !subredditName.equals("") ? directory.getAbsolutePath() + "/Infinity/" + subredditName + "/" : directory.getAbsolutePath() + "/Infinity/";
+                            File infinityDir = new File(directoryPath);
+                            if (!infinityDir.exists() && !infinityDir.mkdirs()) {
+                                downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
+                                        null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
+                                return;
+                            }
+                            destinationFileUriString = directoryPath + fileName;
+                        } else {
+                            downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
+                                    null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
+                            return;
+                        }
+                    } else {
+                        String dir = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? Environment.DIRECTORY_MOVIES : Environment.DIRECTORY_PICTURES;
+                        destinationFileUriString = separateDownloadFolder && subredditName != null && !subredditName.equals("") ? dir + "/Infinity/" + subredditName + "/" : dir + "/Infinity/";
+                    }
+                } else {
+                    isDefaultDestination = false;
+                    DocumentFile picFile;
+                    DocumentFile dir;
+                    if (separateDownloadFolder && subredditName != null && !subredditName.equals("")) {
+                        dir = DocumentFile.fromTreeUri(DownloadMediaService.this, Uri.parse(destinationFileDirectory));
+                        if (dir == null) {
+                            downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
+                                    null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
+                            return;
+                        }
+                        dir = dir.findFile(subredditName);
+                        if (dir == null) {
+                            dir = DocumentFile.fromTreeUri(DownloadMediaService.this, Uri.parse(destinationFileDirectory)).createDirectory(subredditName);
+                            if (dir == null) {
+                                downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
+                                        null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
+                                return;
+                            }
+                        }
+                    } else {
+                        dir = DocumentFile.fromTreeUri(DownloadMediaService.this, Uri.parse(destinationFileDirectory));
+                        if (dir == null) {
+                            downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
+                                    null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
+                            return;
+                        }
+                    }
+                    DocumentFile checkForDuplicates = dir.findFile(fileName);
+                    int extensionPosition = fileName.lastIndexOf('.');
+                    String extension = fileName.substring(extensionPosition);
+                    int num = 1;
+                    while (checkForDuplicates != null) {
+                        fileName = fileName.substring(0, extensionPosition) + " (" + num + ")" + extension;
+                        checkForDuplicates = dir.findFile(fileName);
+                        num++;
+                    }
+                    picFile = dir.createFile(mimeType, fileName);
+                    if (picFile == null) {
+                        downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
+                                null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
+                        return;
+                    }
+                    destinationFileUriString = picFile.getUri().toString();
+                }
+            } else {
+                downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType, null,
+                        ERROR_FILE_CANNOT_DOWNLOAD);
+                return;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType, null,
+                    ERROR_FILE_CANNOT_DOWNLOAD);
+            return;
+        }
+
+        try {
+            Uri destinationFileUri = writeResponseBodyToDisk(response.body(), isDefaultDestination, destinationFileUriString,
+                    fileName, mediaType);
+            downloadFinished(params, builder, mediaType, randomNotificationIdOffset,
+                    mimeType, destinationFileUri, NO_ERROR);
+        } catch (IOException e) {
+            e.printStackTrace();
+            downloadFinished(params, builder, mediaType, randomNotificationIdOffset,
+                    mimeType, null, ERROR_FILE_CANNOT_SAVE);
+        }
     }
 
     private Notification createNotification(NotificationCompat.Builder builder, String fileName) {

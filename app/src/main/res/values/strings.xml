@@ -99,6 +99,7 @@
     <string name="action_more_options">More Options</string>
     <string name="action_add_to_home_screen">Add to Home screen</string>
     <string name="action_reset_fab_position">Reset FAB position</string>
+    <string name="action_download_gallery">Download gallery</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
