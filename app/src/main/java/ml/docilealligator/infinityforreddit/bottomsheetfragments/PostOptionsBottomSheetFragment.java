@@ -9,6 +9,7 @@ import android.os.PersistableBundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
@@ -98,6 +99,7 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
 
             if (binding.downloadTextViewPostOptionsBottomSheetFragment.getVisibility() == View.VISIBLE) {
                 binding.downloadTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {
+                    Toast.makeText(mBaseActivity, R.string.download_started, Toast.LENGTH_SHORT).show();
                     if (mPost.getPostType() == Post.VIDEO_TYPE) {
                         if (!mPost.isRedgifs() && !mPost.isStreamable() && !mPost.isImgur()) {
                             PersistableBundle extras = new PersistableBundle();
