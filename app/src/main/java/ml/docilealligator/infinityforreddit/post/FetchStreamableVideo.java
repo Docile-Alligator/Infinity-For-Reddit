@@ -12,6 +12,7 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Provider;
 
+import ml.docilealligator.infinityforreddit.FetchVideoLinkListener;
 import ml.docilealligator.infinityforreddit.thing.StreamableVideo;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
@@ -19,13 +20,8 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class FetchStreamableVideo {
-    public interface FetchStreamableVideoListener {
-        void success(StreamableVideo streamableVideo);
-        void failed();
-    }
-
     public static void fetchStreamableVideo(Executor executor, Handler handler, Provider<StreamableAPI> streamableApiProvider,
-                                            String videoUrl, FetchStreamableVideoListener fetchStreamableVideoListener) {
+                                            String videoUrl, FetchVideoLinkListener fetchVideoLinkListener) {
         executor.execute(() -> {
             try {
                 Response<String> response = streamableApiProvider.get().getStreamableData(videoUrl).execute();
@@ -39,23 +35,23 @@ public class FetchStreamableVideo {
                         mp4MobileTemp = parseMedia(filesObject.getJSONObject(JSONUtils.MP4_MOBILE_KEY));
                     }
                     if (mp4 == null && mp4MobileTemp == null) {
-                        handler.post(fetchStreamableVideoListener::failed);
+                        handler.post(() -> fetchVideoLinkListener.failed(null));
                         return;
                     }
                     StreamableVideo.Media mp4Mobile = mp4MobileTemp;
-                    handler.post(() -> fetchStreamableVideoListener.success(new StreamableVideo(title, mp4, mp4Mobile)));
+                    handler.post(() -> fetchVideoLinkListener.onFetchStreamableVideoLinkSuccess(new StreamableVideo(title, mp4, mp4Mobile)));
                 } else {
-                    handler.post(fetchStreamableVideoListener::failed);
+                    handler.post(() -> fetchVideoLinkListener.failed(null));
                 }
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
-                handler.post(fetchStreamableVideoListener::failed);
+                handler.post(() -> fetchVideoLinkListener.failed(null));
             }
         });
     }
 
     public static void fetchStreamableVideoInRecyclerViewAdapter(Executor executor, Handler handler, Call<String> streamableCall,
-                                                                 FetchStreamableVideoListener fetchStreamableVideoListener) {
+                                                                 FetchVideoLinkListener fetchVideoLinkListener) {
         executor.execute(() -> {
             try {
                 Response<String> response = streamableCall.execute();
@@ -69,17 +65,17 @@ public class FetchStreamableVideo {
                         mp4MobileTemp = parseMedia(filesObject.getJSONObject(JSONUtils.MP4_MOBILE_KEY));
                     }
                     if (mp4 == null && mp4MobileTemp == null) {
-                        handler.post(fetchStreamableVideoListener::failed);
+                        handler.post(() -> fetchVideoLinkListener.failed(null));
                         return;
                     }
                     StreamableVideo.Media mp4Mobile = mp4MobileTemp;
-                    handler.post(() -> fetchStreamableVideoListener.success(new StreamableVideo(title, mp4, mp4Mobile)));
+                    handler.post(() -> fetchVideoLinkListener.onFetchStreamableVideoLinkSuccess(new StreamableVideo(title, mp4, mp4Mobile)));
                 } else {
-                    handler.post(fetchStreamableVideoListener::failed);
+                    handler.post(() -> fetchVideoLinkListener.failed(null));
                 }
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
-                handler.post(fetchStreamableVideoListener::failed);
+                handler.post(() -> fetchVideoLinkListener.failed(null));
             }
         });
     }

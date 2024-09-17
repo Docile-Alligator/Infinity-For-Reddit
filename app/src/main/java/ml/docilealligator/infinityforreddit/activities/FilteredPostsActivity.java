@@ -159,6 +159,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                     postFilter.containGalleryType = false;
                     break;
                 case Post.LINK_TYPE:
+                case Post.NO_PREVIEW_LINK_TYPE:
                     postFilter.containTextType = false;
                     postFilter.containLinkType = true;
                     postFilter.containImageType = false;

@@ -224,12 +224,6 @@ public class ViewImgurImageFragment extends Fragment {
     private void download() {
         isDownloading = false;
 
-        /*Intent intent = new Intent(activity, DownloadMediaService.class);
-        intent.putExtra(DownloadMediaService.EXTRA_URL, imgurMedia.getLink());
-        intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
-        intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, imgurMedia.getFileName());
-        ContextCompat.startForegroundService(activity, intent);*/
-
         PersistableBundle extras = new PersistableBundle();
         extras.putString(DownloadMediaService.EXTRA_URL, imgurMedia.getLink());
         extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);

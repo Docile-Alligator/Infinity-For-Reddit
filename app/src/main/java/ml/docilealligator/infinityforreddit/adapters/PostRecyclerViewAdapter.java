@@ -68,6 +68,7 @@ import javax.inject.Provider;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import ml.docilealligator.infinityforreddit.FetchVideoLinkListener;
 import ml.docilealligator.infinityforreddit.thing.FetchRedgifsVideoLinks;
 import ml.docilealligator.infinityforreddit.post.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
@@ -524,6 +525,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -588,6 +590,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof PostBaseViewHolder) {
@@ -829,9 +832,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                                 post.getRedgifsId(), APIUtils.USER_AGENT);
                         FetchRedgifsVideoLinks.fetchRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
                                 ((PostBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall,
-                                new FetchRedgifsVideoLinks.FetchRedgifsVideoLinksListener() {
+                                new FetchVideoLinkListener() {
                                     @Override
-                                    public void success(String webm, String mp4) {
+                                    public void onFetchRedgifsVideoLinkSuccess(String webm, String mp4) {
                                         post.setVideoDownloadUrl(mp4);
                                         post.setVideoUrl(mp4);
                                         post.setLoadRedgifsOrStreamableVideoSuccess(true);
@@ -841,7 +844,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                     }
 
                                     @Override
-                                    public void failed(int errorCode) {
+                                    public void failed(@Nullable Integer messageRes) {
                                         if (position == holder.getBindingAdapterPosition()) {
                                             ((PostBaseVideoAutoplayViewHolder) holder).loadFallbackDirectVideo();
                                         }
@@ -852,9 +855,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 mStreamableApiProvider.get().getStreamableData(post.getStreamableShortCode());
                         FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, new Handler(),
                                 ((PostBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall,
-                                new FetchStreamableVideo.FetchStreamableVideoListener() {
+                                new FetchVideoLinkListener() {
                                     @Override
-                                    public void success(StreamableVideo streamableVideo) {
+                                    public void onFetchStreamableVideoLinkSuccess(StreamableVideo streamableVideo) {
                                         StreamableVideo.Media media = streamableVideo.mp4 == null ? streamableVideo.mp4Mobile : streamableVideo.mp4;
                                         post.setVideoDownloadUrl(media.url);
                                         post.setVideoUrl(media.url);
@@ -865,7 +868,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                     }
 
                                     @Override
-                                    public void failed() {
+                                    public void failed(@Nullable Integer messageRes) {
                                         if (position == holder.getBindingAdapterPosition()) {
                                             ((PostBaseVideoAutoplayViewHolder) holder).loadFallbackDirectVideo();
                                         }
@@ -1009,9 +1012,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                         post.getRedgifsId(), APIUtils.USER_AGENT);
                         FetchRedgifsVideoLinks.fetchRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
                                 ((PostCard2BaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall,
-                                new FetchRedgifsVideoLinks.FetchRedgifsVideoLinksListener() {
+                                new FetchVideoLinkListener() {
                                     @Override
-                                    public void success(String webm, String mp4) {
+                                    public void onFetchRedgifsVideoLinkSuccess(String webm, String mp4) {
                                         post.setVideoDownloadUrl(mp4);
                                         post.setVideoUrl(mp4);
                                         post.setLoadRedgifsOrStreamableVideoSuccess(true);
@@ -1021,7 +1024,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                     }
 
                                     @Override
-                                    public void failed(int errorCode) {
+                                    public void failed(@Nullable Integer messageRes) {
                                         if (position == holder.getBindingAdapterPosition()) {
                                             ((PostCard2BaseVideoAutoplayViewHolder) holder).loadFallbackDirectVideo();
                                         }
@@ -1032,9 +1035,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 mStreamableApiProvider.get().getStreamableData(post.getStreamableShortCode());
                         FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, new Handler(),
                                 ((PostCard2BaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall,
-                                new FetchStreamableVideo.FetchStreamableVideoListener() {
+                                new FetchVideoLinkListener() {
                                     @Override
-                                    public void success(StreamableVideo streamableVideo) {
+                                    public void onFetchStreamableVideoLinkSuccess(StreamableVideo streamableVideo) {
                                         StreamableVideo.Media media = streamableVideo.mp4 == null ? streamableVideo.mp4Mobile : streamableVideo.mp4;
                                         post.setVideoDownloadUrl(media.url);
                                         post.setVideoUrl(media.url);
@@ -1045,7 +1048,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                     }
 
                                     @Override
-                                    public void failed() {
+                                    public void failed(@Nullable Integer messageRes) {
                                         if (position == holder.getBindingAdapterPosition()) {
                                             ((PostCard2BaseVideoAutoplayViewHolder) holder).loadFallbackDirectVideo();
                                         }
@@ -1860,9 +1863,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                         post.getRedgifsId(), APIUtils.USER_AGENT);
                         FetchRedgifsVideoLinks.fetchRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
                                 ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall,
-                                new FetchRedgifsVideoLinks.FetchRedgifsVideoLinksListener() {
+                                new FetchVideoLinkListener() {
                                     @Override
-                                    public void success(String webm, String mp4) {
+                                    public void onFetchRedgifsVideoLinkSuccess(String webm, String mp4) {
                                         post.setVideoDownloadUrl(mp4);
                                         post.setVideoUrl(mp4);
                                         post.setLoadRedgifsOrStreamableVideoSuccess(true);
@@ -1872,7 +1875,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                     }
 
                                     @Override
-                                    public void failed(int errorCode) {
+                                    public void failed(@Nullable Integer messageRes) {
                                         if (position == holder.getBindingAdapterPosition()) {
                                             ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).loadFallbackDirectVideo();
                                         }
@@ -1883,9 +1886,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 mStreamableApiProvider.get().getStreamableData(post.getStreamableShortCode());
                         FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, new Handler(),
                                 ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall,
-                                new FetchStreamableVideo.FetchStreamableVideoListener() {
+                                new FetchVideoLinkListener() {
                                     @Override
-                                    public void success(StreamableVideo streamableVideo) {
+                                    public void onFetchStreamableVideoLinkSuccess(StreamableVideo streamableVideo) {
                                         StreamableVideo.Media media = streamableVideo.mp4 == null ? streamableVideo.mp4Mobile : streamableVideo.mp4;
                                         post.setVideoDownloadUrl(media.url);
                                         post.setVideoUrl(media.url);
@@ -1896,7 +1899,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                     }
 
                                     @Override
-                                    public void failed() {
+                                    public void failed(@Nullable Integer messageRes) {
                                         if (position == holder.getBindingAdapterPosition()) {
                                             ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).loadFallbackDirectVideo();
                                         }
@@ -2303,6 +2306,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         this.mEasierToWatchInFullScreen = easierToWatchInFullScreen;
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof PostBaseViewHolder) {
@@ -3297,6 +3301,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     }
 
+    @UnstableApi
     class PostBaseVideoAutoplayViewHolder extends PostBaseViewHolder implements ToroPlayer {
         AspectRatioFrameLayout aspectRatioFrameLayout;
         GifImageView previewImageView;
@@ -3495,6 +3500,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             return helper != null && mediaUri != null ? helper.getLatestPlaybackInfo() : new PlaybackInfo();
         }
 
+        @OptIn(markerClass = UnstableApi.class)
         @Override
         public void initialize(@NonNull Container container, @NonNull PlaybackInfo playbackInfo) {
             if (this.container == null) {
@@ -3604,6 +3610,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     }
 
+    @UnstableApi
     class PostVideoAutoplayViewHolder extends PostBaseVideoAutoplayViewHolder {
         PostVideoAutoplayViewHolder(ItemPostVideoTypeAutoplayBinding binding) {
             super(binding.getRoot(),
@@ -3638,6 +3645,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     }
 
+    @UnstableApi
     class PostVideoAutoplayLegacyControllerViewHolder extends PostBaseVideoAutoplayViewHolder {
         PostVideoAutoplayLegacyControllerViewHolder(ItemPostVideoTypeAutoplayLegacyControllerBinding binding) {
             super(binding.getRoot(),
@@ -4991,6 +4999,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     }
 
+    @UnstableApi
     class PostCard2BaseVideoAutoplayViewHolder extends PostBaseViewHolder implements ToroPlayer {
         AspectRatioFrameLayout aspectRatioFrameLayout;
         GifImageView previewImageView;
@@ -5303,6 +5312,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     }
 
+    @UnstableApi
     class PostCard2VideoAutoplayViewHolder extends PostCard2BaseVideoAutoplayViewHolder {
         PostCard2VideoAutoplayViewHolder(ItemPostCard2VideoAutoplayBinding binding) {
             super(binding.getRoot(),
@@ -5338,6 +5348,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     }
 
+    @UnstableApi
     class PostCard2VideoAutoplayLegacyControllerViewHolder extends PostCard2BaseVideoAutoplayViewHolder {
         PostCard2VideoAutoplayLegacyControllerViewHolder(ItemPostCard2VideoAutoplayLegacyControllerBinding binding) {
             super(binding.getRoot(),
@@ -6025,6 +6036,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     }
 
+    @UnstableApi
     class PostMaterial3CardBaseVideoAutoplayViewHolder extends PostMaterial3CardBaseViewHolder implements ToroPlayer {
         AspectRatioFrameLayout aspectRatioFrameLayout;
         GifImageView previewImageView;
@@ -6317,6 +6329,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     }
 
+    @UnstableApi
     class PostMaterial3CardVideoAutoplayViewHolder extends PostMaterial3CardBaseVideoAutoplayViewHolder {
         PostMaterial3CardVideoAutoplayViewHolder(ItemPostCard3VideoTypeAutoplayBinding binding) {
             super(binding.getRoot(),
@@ -6344,6 +6357,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     }
 
+    @UnstableApi
     class PostMaterial3CardVideoAutoplayLegacyControllerViewHolder extends PostMaterial3CardBaseVideoAutoplayViewHolder {
         PostMaterial3CardVideoAutoplayLegacyControllerViewHolder(ItemPostCard3VideoTypeAutoplayLegacyControllerBinding binding) {
             super(binding.getRoot(),

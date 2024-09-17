@@ -166,7 +166,7 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
         switch (getIntent().getIntExtra(EXTRA_IMGUR_TYPE, IMGUR_TYPE_IMAGE)) {
             case IMGUR_TYPE_GALLERY:
                 imgurRetrofit.create(ImgurAPI.class).getGalleryImages(APIUtils.IMGUR_CLIENT_ID, imgurId)
-                        .enqueue(new Callback<String>() {
+                        .enqueue(new Callback<>() {
                             @Override
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                                 if (response.isSuccessful()) {

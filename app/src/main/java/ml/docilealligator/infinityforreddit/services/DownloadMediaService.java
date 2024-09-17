@@ -31,6 +31,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executor;
 
@@ -43,6 +44,8 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.apis.DownloadFile;
 import ml.docilealligator.infinityforreddit.broadcastreceivers.DownloadedMediaDeleteActionBroadcastReceiver;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.post.ImgurMedia;
+import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.NotificationUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -81,6 +84,90 @@ public class DownloadMediaService extends JobService {
     private NotificationManagerCompat notificationManager;
 
     public DownloadMediaService() {
+    }
+
+    public static JobInfo constructJobInfo(Context context, long contentEstimatedBytes, Post post, int galleryIndex) {
+        PersistableBundle extras = new PersistableBundle();
+        if (post.getPostType() == Post.IMAGE_TYPE) {
+            extras.putString(DownloadMediaService.EXTRA_URL, post.getUrl());
+            extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
+            extras.putString(DownloadMediaService.EXTRA_FILE_NAME, post.getSubredditName()
+                    + "-" + post.getId() + ".jpg");
+            extras.putString(DownloadMediaService.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
+            extras.putInt(DownloadMediaService.EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
+        } else if (post.getPostType() == Post.GIF_TYPE) {
+            extras.putString(DownloadMediaService.EXTRA_URL, post.getVideoUrl());
+            extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_GIF);
+            extras.putString(DownloadMediaService.EXTRA_FILE_NAME, post.getSubredditName() + "-" + post.getId() + ".gif");
+            extras.putString(DownloadMediaService.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
+            extras.putInt(DownloadMediaService.EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
+        } else if (post.getPostType() == Post.VIDEO_TYPE) {
+            if (post.isImgur() || post.isRedgifs() || post.isStreamable()) {
+                //TODO fetch download links first
+                /*extras.putString(DownloadMediaService.EXTRA_URL, post.getVideoDownloadUrl());
+                extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
+                extras.putString(DownloadMediaService.EXTRA_FILE_NAME, videoFileName);
+
+                extras.putString(DownloadMediaService.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
+                extras.putInt(DownloadMediaService.EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);*/
+            }
+        } else if (post.getPostType() == Post.GALLERY_TYPE) {
+            Post.Gallery media = post.getGallery().get(galleryIndex);
+            if (media.mediaType == Post.Gallery.TYPE_VIDEO) {
+                extras.putString(DownloadMediaService.EXTRA_URL, media.url);
+                extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
+                extras.putString(DownloadMediaService.EXTRA_FILE_NAME, media.fileName);
+                extras.putString(DownloadMediaService.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
+                extras.putInt(DownloadMediaService.EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
+            } else {
+                extras.putString(DownloadMediaService.EXTRA_URL, media.hasFallback() ? media.fallbackUrl : media.url); // Retrieve original instead of the one additionally compressed by reddit
+                extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, media.mediaType == Post.Gallery.TYPE_GIF ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF: DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
+                extras.putString(DownloadMediaService.EXTRA_FILE_NAME, media.fileName);
+                extras.putString(DownloadMediaService.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
+                extras.putInt(DownloadMediaService.EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            return new JobInfo.Builder(JOB_ID++, new ComponentName(context, DownloadMediaService.class))
+                    .setUserInitiated(true)
+                    .setRequiredNetwork(new NetworkRequest.Builder().clearCapabilities().build())
+                    .setEstimatedNetworkBytes(0, contentEstimatedBytes + 500)
+                    .setExtras(extras)
+                    .build();
+        } else {
+            return new JobInfo.Builder(JOB_ID++, new ComponentName(context, DownloadMediaService.class))
+                    .setOverrideDeadline(0)
+                    .setExtras(extras)
+                    .build();
+        }
+    }
+
+    public static JobInfo constructJobInfo(Context context, long contentEstimatedBytes, ImgurMedia imgurMedia) {
+        PersistableBundle extras = new PersistableBundle();
+        if (imgurMedia.getType() == ImgurMedia.TYPE_VIDEO) {
+            extras.putString(DownloadMediaService.EXTRA_URL, imgurMedia.getLink());
+            extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
+            extras.putString(DownloadMediaService.EXTRA_FILE_NAME, imgurMedia.getFileName());
+        } else {
+            extras.putString(DownloadMediaService.EXTRA_URL, imgurMedia.getLink());
+            extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
+            extras.putString(DownloadMediaService.EXTRA_FILE_NAME, imgurMedia.getFileName());
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            return new JobInfo.Builder(JOB_ID++, new ComponentName(context, DownloadMediaService.class))
+                    .setUserInitiated(true)
+                    .setRequiredNetwork(new NetworkRequest.Builder().clearCapabilities().build())
+                    .setEstimatedNetworkBytes(0, contentEstimatedBytes + 500)
+                    .setExtras(extras)
+                    .build();
+        } else {
+            return new JobInfo.Builder(JOB_ID++, new ComponentName(context, DownloadMediaService.class))
+                    .setOverrideDeadline(0)
+                    .setExtras(extras)
+                    .build();
+        }
     }
 
     public static JobInfo constructJobInfo(Context context, long contentEstimatedBytes, PersistableBundle extras) {

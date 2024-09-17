@@ -66,6 +66,7 @@ import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import ml.docilealligator.infinityforreddit.FetchVideoLinkListener;
 import ml.docilealligator.infinityforreddit.thing.FetchRedgifsVideoLinks;
 import ml.docilealligator.infinityforreddit.post.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.R;
@@ -722,9 +723,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                             mPost.getRedgifsId(), APIUtils.USER_AGENT);
                     FetchRedgifsVideoLinks.fetchRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
                             ((PostDetailBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall,
-                            new FetchRedgifsVideoLinks.FetchRedgifsVideoLinksListener() {
+                            new FetchVideoLinkListener() {
                                 @Override
-                                public void success(String webm, String mp4) {
+                                public void onFetchRedgifsVideoLinkSuccess(String webm, String mp4) {
                                     mPost.setVideoDownloadUrl(mp4);
                                     mPost.setVideoUrl(mp4);
                                     mPost.setLoadRedgifsOrStreamableVideoSuccess(true);
@@ -732,7 +733,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                 }
 
                                 @Override
-                                public void failed(int errorCode) {
+                                public void failed(@Nullable Integer messageRes) {
                                     ((PostDetailBaseVideoAutoplayViewHolder) holder).loadFallbackDirectVideo();
                                 }
                             });
@@ -741,9 +742,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             mStreamableApiProvider.get().getStreamableData(mPost.getStreamableShortCode());
                     FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, new Handler(),
                             ((PostDetailBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall,
-                            new FetchStreamableVideo.FetchStreamableVideoListener() {
+                            new FetchVideoLinkListener() {
                                 @Override
-                                public void success(StreamableVideo streamableVideo) {
+                                public void onFetchStreamableVideoLinkSuccess(StreamableVideo streamableVideo) {
                                     StreamableVideo.Media media = streamableVideo.mp4 == null ? streamableVideo.mp4Mobile : streamableVideo.mp4;
                                     mPost.setVideoDownloadUrl(media.url);
                                     mPost.setVideoUrl(media.url);
@@ -752,7 +753,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                 }
 
                                 @Override
-                                public void failed() {
+                                public void failed(@Nullable Integer messageRes) {
                                     ((PostDetailBaseVideoAutoplayViewHolder) holder).loadFallbackDirectVideo();
                                 }
                             });
