@@ -4,7 +4,9 @@ import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 
+import java.io.IOException;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.account.Account;
@@ -50,6 +52,29 @@ public class FetchPost {
                 fetchPostListener.fetchPostFailed();
             }
         });
+    }
+
+    @WorkerThread
+    @Nullable
+    public static Post fetchPostSync(Retrofit retrofit, String id, @Nullable String accessToken,
+                                 @NonNull String accountName) {
+        Call<String> postCall;
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            postCall = retrofit.create(RedditAPI.class).getPost(id);
+        } else {
+            postCall = retrofit.create(RedditAPI.class).getPostOauth(id, APIUtils.getOAuthHeader(accessToken));
+        }
+        try {
+            Response<String> response = postCall.execute();
+            if (response.isSuccessful()) {
+                return ParsePost.parsePostSync(response.body());
+            } else {
+                return null;
+            }
+
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     public static void fetchRandomPost(Executor executor, Handler handler, Retrofit retrofit, boolean isNSFW,

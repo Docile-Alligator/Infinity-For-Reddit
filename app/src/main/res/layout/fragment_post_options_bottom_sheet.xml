@@ -91,6 +91,27 @@
             app:drawableTint="?attr/primaryTextColor" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/download_text_view_post_options_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_download_day_night_24dp"
+            android:drawablePadding="48dp"
+            android:focusable="true"
+            android:fontFamily="?attr/font_family"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:text="@string/action_crosspost"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:visibility="gone"
+            app:drawableTint="?attr/primaryTextColor" />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/report_text_view_post_options_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -26,22 +26,27 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.documentfile.provider.DocumentFile;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import ml.docilealligator.infinityforreddit.DownloadProgressResponseBody;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.VideoLinkFetcher;
+import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.apis.DownloadFile;
+import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.broadcastreceivers.DownloadedMediaDeleteActionBroadcastReceiver;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.post.ImgurMedia;
@@ -60,6 +65,8 @@ public class DownloadMediaService extends JobService {
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_MEDIA_TYPE = "EIG";
     public static final String EXTRA_IS_NSFW = "EIN";
+    public static final String EXTRA_REDGIFS_ID = "EGI";
+    public static final String EXTRA_STREAMABLE_SHORT_CODE = "ESSC";
     public static final int EXTRA_MEDIA_TYPE_IMAGE = 0;
     public static final int EXTRA_MEDIA_TYPE_GIF = 1;
     public static final int EXTRA_MEDIA_TYPE_VIDEO = 2;
@@ -68,6 +75,8 @@ public class DownloadMediaService extends JobService {
     private static final int ERROR_CANNOT_GET_DESTINATION_DIRECTORY = 0;
     private static final int ERROR_FILE_CANNOT_DOWNLOAD = 1;
     private static final int ERROR_FILE_CANNOT_SAVE = 2;
+    private static final int ERROR_FILE_CANNOT_FETCH_REDGIFS_VIDEO_LINK = 3;
+    private static final int ERROR_FILE_CANNOT_FETCH_STREAMABLE_VIDEO_LINK = 4;
 
     private static int JOB_ID = 20000;
 
@@ -75,8 +84,16 @@ public class DownloadMediaService extends JobService {
     @Named("download_media")
     Retrofit retrofit;
     @Inject
+    @Named("redgifs")
+    Retrofit mRedgifsRetrofit;
+    @Inject
+    Provider<StreamableAPI> mStreamableApiProvider;
+    @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
@@ -102,15 +119,34 @@ public class DownloadMediaService extends JobService {
             extras.putString(DownloadMediaService.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
             extras.putInt(DownloadMediaService.EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
         } else if (post.getPostType() == Post.VIDEO_TYPE) {
-            if (post.isImgur() || post.isRedgifs() || post.isStreamable()) {
-                //TODO fetch download links first
-                /*extras.putString(DownloadMediaService.EXTRA_URL, post.getVideoDownloadUrl());
-                extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
-                extras.putString(DownloadMediaService.EXTRA_FILE_NAME, videoFileName);
+            if (post.isStreamable()) {
+                if (post.isLoadRedgifsOrStreamableVideoSuccess()) {
+                    extras.putString(DownloadMediaService.EXTRA_URL, post.getVideoUrl());
+                } else {
+                    extras.putString(DownloadMediaService.EXTRA_REDGIFS_ID, post.getRedgifsId());
+                }
 
-                extras.putString(DownloadMediaService.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
-                extras.putInt(DownloadMediaService.EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);*/
+                extras.putString(DownloadMediaService.EXTRA_FILE_NAME, "Streamable-" + post.getStreamableShortCode() + ".mp4");
+            } else if (post.isRedgifs()) {
+                if (post.isLoadRedgifsOrStreamableVideoSuccess()) {
+                    extras.putString(DownloadMediaService.EXTRA_URL, post.getVideoUrl());
+                } else {
+                    extras.putString(DownloadMediaService.EXTRA_STREAMABLE_SHORT_CODE, post.getStreamableShortCode());
+                }
+
+                String redgifsId = post.getRedgifsId();
+                if (redgifsId != null && redgifsId.contains("-")) {
+                    redgifsId = redgifsId.substring(0, redgifsId.indexOf('-'));
+                }
+                extras.putString(DownloadMediaService.EXTRA_FILE_NAME, "Redgifs-" + redgifsId + ".mp4");
+            } else if (post.isImgur()) {
+                extras.putString(DownloadMediaService.EXTRA_URL, post.getVideoUrl());
+                extras.putString(DownloadMediaService.EXTRA_FILE_NAME, "Imgur-" + FilenameUtils.getName(post.getVideoUrl()));
             }
+
+            extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
+            extras.putString(DownloadMediaService.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
+            extras.putInt(DownloadMediaService.EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
         } else if (post.getPostType() == Post.GALLERY_TYPE) {
             Post.Gallery media = post.getGallery().get(galleryIndex);
             if (media.mediaType == Post.Gallery.TYPE_VIDEO) {
@@ -145,14 +181,12 @@ public class DownloadMediaService extends JobService {
 
     public static JobInfo constructJobInfo(Context context, long contentEstimatedBytes, ImgurMedia imgurMedia) {
         PersistableBundle extras = new PersistableBundle();
+        extras.putString(DownloadMediaService.EXTRA_URL, imgurMedia.getLink());
+        extras.putString(DownloadMediaService.EXTRA_FILE_NAME, imgurMedia.getFileName());
         if (imgurMedia.getType() == ImgurMedia.TYPE_VIDEO) {
-            extras.putString(DownloadMediaService.EXTRA_URL, imgurMedia.getLink());
             extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
-            extras.putString(DownloadMediaService.EXTRA_FILE_NAME, imgurMedia.getFileName());
         } else {
-            extras.putString(DownloadMediaService.EXTRA_URL, imgurMedia.getLink());
             extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
-            extras.putString(DownloadMediaService.EXTRA_FILE_NAME, imgurMedia.getFileName());
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
@@ -248,6 +282,22 @@ public class DownloadMediaService extends JobService {
             String subredditName = intent.getString(EXTRA_SUBREDDIT_NAME);
             boolean isNsfw = intent.getInt(EXTRA_IS_NSFW, 0) == 1;
             String mimeType = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? "video/*" : "image/*";
+
+            if (fileUrl == null) {
+                // Only Redgifs and Streamble video can go inside this if clause.
+                String redgifsId = intent.getString(EXTRA_REDGIFS_ID, null);
+                String streamableShortCode = intent.getString(EXTRA_STREAMABLE_SHORT_CODE, null);
+                fileUrl = VideoLinkFetcher.fetchVideoLinkSync(mRedgifsRetrofit, mStreamableApiProvider, mCurrentAccountSharedPreferences,
+                        redgifsId == null ? ViewVideoActivity.VIDEO_TYPE_STREAMABLE : ViewVideoActivity.VIDEO_TYPE_REDGIFS,
+                        redgifsId, streamableShortCode);
+
+                if (fileUrl == null) {
+                    downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
+                            null,
+                            redgifsId == null ? ERROR_FILE_CANNOT_FETCH_STREAMABLE_VIDEO_LINK : ERROR_FILE_CANNOT_FETCH_REDGIFS_VIDEO_LINK);
+                    return;
+                }
+            }
 
             final DownloadProgressResponseBody.ProgressListener progressListener = new DownloadProgressResponseBody.ProgressListener() {
                 long time = 0;
@@ -584,6 +634,14 @@ public class DownloadMediaService extends JobService {
                     break;
                 case ERROR_FILE_CANNOT_SAVE:
                     updateNotification(builder, mediaType, R.string.downloading_media_failed_cannot_save_to_destination_directory,
+                            -1, randomNotificationIdOffset, null, null);
+                    break;
+                case ERROR_FILE_CANNOT_FETCH_REDGIFS_VIDEO_LINK:
+                    updateNotification(builder, mediaType, R.string.downloading_media_failed_cannot_fetch_redgifs_url,
+                            -1, randomNotificationIdOffset, null, null);
+                    break;
+                case ERROR_FILE_CANNOT_FETCH_STREAMABLE_VIDEO_LINK:
+                    updateNotification(builder, mediaType, R.string.downloading_media_failed_cannot_fetch_streamable_url,
                             -1, randomNotificationIdOffset, null, null);
                     break;
             }

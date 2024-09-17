@@ -1,8 +1,11 @@
 package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +27,8 @@ import ml.docilealligator.infinityforreddit.activities.SubmitCrosspostActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.databinding.FragmentPostOptionsBottomSheetBinding;
 import ml.docilealligator.infinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
+import ml.docilealligator.infinityforreddit.services.DownloadRedditVideoService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +38,7 @@ import ml.docilealligator.infinityforreddit.post.Post;
 public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     private static final String EXTRA_POST = "EP";
+    private static final String EXTRA_GALLERY_INDEX = "EGI";
 
     private BaseActivity mBaseActivity;
     private Post mPost;
@@ -76,13 +82,44 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
         if (mPost != null) {
             switch (mPost.getPostType()) {
                 case Post.IMAGE_TYPE:
+                case Post.GALLERY_TYPE:
+                    binding.downloadTextViewPostOptionsBottomSheetFragment.setVisibility(View.VISIBLE);
+                    binding.downloadTextViewPostOptionsBottomSheetFragment.setText(R.string.download_image);
                     break;
                 case Post.GIF_TYPE:
+                    binding.downloadTextViewPostOptionsBottomSheetFragment.setVisibility(View.VISIBLE);
+                    binding.downloadTextViewPostOptionsBottomSheetFragment.setText(R.string.download_gif);
                     break;
                 case Post.VIDEO_TYPE:
+                    binding.downloadTextViewPostOptionsBottomSheetFragment.setVisibility(View.VISIBLE);
+                    binding.downloadTextViewPostOptionsBottomSheetFragment.setText(R.string.download_video);
                     break;
-                case Post.GALLERY_TYPE:
-                    break;
+            }
+
+            if (binding.downloadTextViewPostOptionsBottomSheetFragment.getVisibility() == View.VISIBLE) {
+                binding.downloadTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {
+                    if (mPost.getPostType() == Post.VIDEO_TYPE) {
+                        if (!mPost.isRedgifs() && !mPost.isStreamable() && !mPost.isImgur()) {
+                            PersistableBundle extras = new PersistableBundle();
+                            extras.putString(DownloadRedditVideoService.EXTRA_VIDEO_URL, mPost.getVideoDownloadUrl());
+                            extras.putString(DownloadRedditVideoService.EXTRA_POST_ID, mPost.getId());
+                            extras.putString(DownloadRedditVideoService.EXTRA_SUBREDDIT, mPost.getSubredditName());
+                            extras.putInt(DownloadRedditVideoService.EXTRA_IS_NSFW, mPost.isNSFW() ? 1 : 0);
+
+                            //TODO: contentEstimatedBytes
+                            JobInfo jobInfo = DownloadRedditVideoService.constructJobInfo(mBaseActivity, 5000000, extras);
+                            ((JobScheduler) mBaseActivity.getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
+
+                            dismiss();
+                            return;
+                        }
+                    }
+
+                    JobInfo jobInfo = DownloadMediaService.constructJobInfo(mBaseActivity, 5000000, mPost, getArguments().getInt(EXTRA_GALLERY_INDEX, 0));
+                    ((JobScheduler) mBaseActivity.getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
+
+                    dismiss();
+                });
             }
 
             binding.addToPostFilterTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {

@@ -475,25 +475,22 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         } else {
             PlayerView videoPlayerView = findViewById(R.id.player_view_view_video_activity);
             videoPlayerView.setPlayer(player);
-            videoPlayerView.setControllerVisibilityListener(new PlayerView.ControllerVisibilityListener() {
-                @Override
-                public void onVisibilityChanged(int visibility) {
-                    switch (visibility) {
-                        case View.GONE:
-                            getWindow().getDecorView().setSystemUiVisibility(
-                                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-                                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
-                            break;
-                        case View.VISIBLE:
-                            getWindow().getDecorView().setSystemUiVisibility(
-                                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-                    }
+            videoPlayerView.setControllerVisibilityListener((PlayerView.ControllerVisibilityListener) visibility -> {
+                switch (visibility) {
+                    case View.GONE:
+                        getWindow().getDecorView().setSystemUiVisibility(
+                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                        break;
+                    case View.VISIBLE:
+                        getWindow().getDecorView().setSystemUiVisibility(
+                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
                 }
             });
         }
@@ -622,7 +619,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             if (videoType == VIDEO_TYPE_DIRECT) {
                 videoFileName = FilenameUtils.getName(videoDownloadUrl);
             } else {
-                videoFileName = "imgur-" + FilenameUtils.getName(videoDownloadUrl);
+                videoFileName = "Imgur-" + FilenameUtils.getName(videoDownloadUrl);
             }
         } else {
             videoDownloadUrl = intent.getStringExtra(EXTRA_VIDEO_DOWNLOAD_URL);
@@ -665,7 +662,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                             binding.getProgressBar().setVisibility(View.GONE);
                             mVideoUri = Uri.parse(videoUrl);
                             ViewVideoActivity.this.videoDownloadUrl = videoDownloadUrl;
-                            videoFileName = "imgur-" + FilenameUtils.getName(videoDownloadUrl);
+                            videoFileName = "Imgur-" + FilenameUtils.getName(videoDownloadUrl);
                             // Prepare the player with the source.
                             player.prepare();
                             player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));

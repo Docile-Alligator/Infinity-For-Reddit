@@ -7,6 +7,7 @@ import android.os.Handler;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
+import androidx.annotation.WorkerThread;
 import androidx.media3.common.util.UnstableApi;
 
 import org.apache.commons.io.FilenameUtils;
@@ -24,6 +25,7 @@ import ml.docilealligator.infinityforreddit.post.FetchPost;
 import ml.docilealligator.infinityforreddit.post.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.thing.FetchRedgifsVideoLinks;
+import ml.docilealligator.infinityforreddit.thing.StreamableVideo;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,6 +51,22 @@ public class VideoLinkFetcher {
                         currentAccountSharedPreferences, vRedditItUrl, fetchVideoLinkListener);
                 break;
         }
+    }
+
+    @WorkerThread
+    @Nullable
+    public static String fetchVideoLinkSync(Retrofit redgifsRetrofit, Provider<StreamableAPI> streamableApiProvider,
+                                      SharedPreferences currentAccountSharedPreferences, int videoType,
+                                      @Nullable String redgifsId, @Nullable String shortCode) {
+        if (videoType == ViewVideoActivity.VIDEO_TYPE_STREAMABLE) {
+            StreamableVideo streamableVideo = FetchStreamableVideo.fetchStreamableVideoSync(streamableApiProvider, shortCode);
+            return streamableVideo == null ? null : (streamableVideo.mp4 == null ? null : streamableVideo.mp4.url);
+        } else if (videoType == ViewVideoActivity.VIDEO_TYPE_REDGIFS) {
+            return FetchRedgifsVideoLinks.fetchRedgifsVideoLinkSync(redgifsRetrofit,
+                    currentAccountSharedPreferences, redgifsId);
+        }
+
+        return null;
     }
 
     public static void loadVReddItVideo(Executor executor, Handler handler, Retrofit retrofit, Retrofit mVReddItRetrofit,
@@ -87,7 +105,7 @@ public class VideoLinkFetcher {
                                             FetchStreamableVideo.fetchStreamableVideo(executor, handler, streamableApiProvider, shortCode, fetchVideoLinkListener);
                                         } else if (post.isImgur()) {
                                             String videoDownloadUrl = post.getVideoDownloadUrl();
-                                            String videoFileName = "imgur-" + FilenameUtils.getName(videoDownloadUrl);
+                                            String videoFileName = "Imgur-" + FilenameUtils.getName(videoDownloadUrl);
                                             fetchVideoLinkListener.onFetchImgurVideoLinkSuccess(post.getVideoUrl(), post.getVideoDownloadUrl(), videoFileName);
                                         } else {
                                             if (post.getVideoUrl() != null) {

@@ -3,6 +3,9 @@ package ml.docilealligator.infinityforreddit.thing;
 import android.content.SharedPreferences;
 import android.os.Handler;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,8 +28,12 @@ public class FetchRedgifsVideoLinks {
                                               FetchVideoLinkListener fetchVideoLinkListener) {
         executor.execute(() -> {
             try {
-                Response<String> response = redgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(APIUtils.getRedgifsOAuthHeader(currentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")),
-                         redgifsId, APIUtils.USER_AGENT).execute();
+                Response<String> response = redgifsRetrofit
+                        .create(RedgifsAPI.class)
+                        .getRedgifsData(
+                                APIUtils.getRedgifsOAuthHeader(currentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")),
+                                redgifsId, APIUtils.USER_AGENT)
+                        .execute();
                 if (response.isSuccessful()) {
                     parseRedgifsVideoLinks(handler, response.body(), fetchVideoLinkListener);
                 } else {
@@ -37,6 +44,29 @@ public class FetchRedgifsVideoLinks {
                 handler.post(() -> fetchVideoLinkListener.failed(null));
             }
         });
+    }
+
+    @WorkerThread
+    @Nullable
+    public static String fetchRedgifsVideoLinkSync(Retrofit redgifsRetrofit,
+                                              SharedPreferences currentAccountSharedPreferences,
+                                              String redgifsId) {
+        try {
+            Response<String> response = redgifsRetrofit
+                    .create(RedgifsAPI.class)
+                    .getRedgifsData(
+                            APIUtils.getRedgifsOAuthHeader(currentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")),
+                            redgifsId, APIUtils.USER_AGENT)
+                    .execute();
+            if (response.isSuccessful()) {
+                return parseRedgifsVideoLinks(response.body());
+            } else {
+                return null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static void fetchRedgifsVideoLinksInRecyclerViewAdapter(Executor executor, Handler handler,
@@ -66,6 +96,17 @@ public class FetchRedgifsVideoLinks {
         } catch (JSONException e) {
             e.printStackTrace();
             handler.post(() -> fetchVideoLinkListener.failed(null));
+        }
+    }
+
+    @Nullable
+    private static String parseRedgifsVideoLinks(String response) {
+        try {
+            return new JSONObject(response).getJSONObject(JSONUtils.GIF_KEY).getJSONObject(JSONUtils.URLS_KEY)
+                    .getString(JSONUtils.HD_KEY);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

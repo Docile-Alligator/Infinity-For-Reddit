@@ -5,6 +5,9 @@ import android.os.Handler;
 import android.text.Html;
 import android.text.TextUtils;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -82,9 +85,6 @@ public class ParsePost {
 
 
     public static void parsePost(Executor executor, Handler handler, String response, ParsePostListener parsePostListener) {
-        PostFilter postFilter = new PostFilter();
-        postFilter.allowNSFW = true;
-
         executor.execute(() -> {
             try {
                 JSONArray allData = new JSONArray(response).getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
@@ -100,6 +100,22 @@ public class ParsePost {
                 handler.post(parsePostListener::onParsePostFail);
             }
         });
+    }
+
+    @WorkerThread
+    @Nullable
+    public static Post parsePostSync(String response) {
+        try {
+            JSONArray allData = new JSONArray(response).getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+            if (allData.length() == 0) {
+                return null;
+            }
+            JSONObject data = allData.getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY);
+            return parseBasicData(data);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static void parseRandomPost(Executor executor, Handler handler, String response, boolean isNSFW,

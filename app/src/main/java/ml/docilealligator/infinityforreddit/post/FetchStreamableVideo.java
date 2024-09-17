@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.post;
 import android.os.Handler;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,6 +49,35 @@ public class FetchStreamableVideo {
                 handler.post(() -> fetchVideoLinkListener.failed(null));
             }
         });
+    }
+
+    @WorkerThread
+    @Nullable
+    public static StreamableVideo fetchStreamableVideoSync(Provider<StreamableAPI> streamableApiProvider,
+                                            String videoUrl) {
+        try {
+            Response<String> response = streamableApiProvider.get().getStreamableData(videoUrl).execute();
+            if (response.isSuccessful()) {
+                JSONObject jsonObject = new JSONObject(response.body());
+                String title = jsonObject.getString(JSONUtils.TITLE_KEY);
+                JSONObject filesObject = jsonObject.getJSONObject(JSONUtils.FILES_KEY);
+                StreamableVideo.Media mp4 = parseMedia(filesObject.getJSONObject(JSONUtils.MP4_KEY));
+                StreamableVideo.Media mp4MobileTemp = null;
+                if (filesObject.has(JSONUtils.MP4_MOBILE_KEY)) {
+                    mp4MobileTemp = parseMedia(filesObject.getJSONObject(JSONUtils.MP4_MOBILE_KEY));
+                }
+                if (mp4 == null && mp4MobileTemp == null) {
+                    return null;
+                }
+                StreamableVideo.Media mp4Mobile = mp4MobileTemp;
+                return new StreamableVideo(title, mp4, mp4Mobile);
+            } else {
+                return null;
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static void fetchStreamableVideoInRecyclerViewAdapter(Executor executor, Handler handler, Call<String> streamableCall,
