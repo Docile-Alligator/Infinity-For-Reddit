@@ -126,7 +126,7 @@
             android:paddingTop="16dp"
             android:paddingEnd="32dp"
             android:paddingBottom="16dp"
-            android:text="@string/action_download_gallery"
+            android:text="@string/action_download_all_gallery_media"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:visibility="gone"

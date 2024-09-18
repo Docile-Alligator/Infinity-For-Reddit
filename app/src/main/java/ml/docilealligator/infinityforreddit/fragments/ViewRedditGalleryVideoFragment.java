@@ -214,7 +214,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
             requestPermissionAndDownload();
             return true;
         } else if (item.getItemId() == R.id.action_playback_speed_view_reddit_gallery_video_fragment) {
-
+            changePlaybackSpeed();
             return true;
         }
         return false;

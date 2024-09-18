@@ -2537,9 +2537,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                 mActivity.startActivity(intent);
             } else if (post.getPostType() == Post.GALLERY_TYPE) {
                 Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
-                intent.putParcelableArrayListExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, post.getGallery());
-                intent.putExtra(ViewRedditGalleryActivity.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
-                intent.putExtra(ViewRedditGalleryActivity.EXTRA_IS_NSFW, post.isNSFW());
+                intent.putExtra(ViewRedditGalleryActivity.EXTRA_POST, post);
                 intent.putExtra(ViewRedditGalleryActivity.EXTRA_GALLERY_ITEM_INDEX, galleryItemIndex);
                 mActivity.startActivity(intent);
             }
