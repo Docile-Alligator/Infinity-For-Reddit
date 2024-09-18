@@ -223,7 +223,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
             return true;
         } else if (item.getItemId() == R.id.action_download_all_gallery_media_view_reddit_gallery_activity) {
             //TODO: contentEstimatedBytes
-            JobInfo jobInfo = DownloadMediaService.constructGalleryDownloadAllImagesJobInfo(this, 5000000, post);
+            JobInfo jobInfo = DownloadMediaService.constructGalleryDownloadAllMediaJobInfo(this, 5000000L * gallery.size(), post);
             ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
 
             Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();

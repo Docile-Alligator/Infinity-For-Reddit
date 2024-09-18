@@ -100,6 +100,7 @@
     <string name="action_add_to_home_screen">Add to Home screen</string>
     <string name="action_reset_fab_position">Reset FAB position</string>
     <string name="action_download_all_gallery_media">Download All Gallery Media</string>
+    <string name="action_download_all_imgur_album_media">Download All Imgur Album Media</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -1051,9 +1052,11 @@
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">Download failed: cannot access destination directory</string>
     <string name="downloading_media_failed_cannot_download_media">Download failed</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">Download failed: cannot save the file to destination directory</string>
-    <string name="downloading_media_failed_cannot_fetch_redgifs_url">Download failed: cannot fetch Redgifs video url</string>
-    <string name="downloading_media_failed_cannot_fetch_streamable_url">Download failed: cannot fetch Streamable video url</string>
+    <string name="download_media_failed_cannot_fetch_redgifs_url">Download failed: cannot fetch Redgifs video url</string>
+    <string name="download_media_failed_cannot_fetch_streamable_url">Download failed: cannot fetch Streamable video url</string>
+    <string name="download_media_failed_invalid_argument">Invalid argument</string>
     <string name="download_all_gallery_media_notification_title">All Gallery Media</string>
+    <string name="download_all_imgur_album_media_notification_title">All Imgur Album Media</string>
     <string name="download_gallery_failed_some_images">Downloaded. Some media failed to download.</string>
 
     <string name="wallpaper_set">Wallpaper set</string>

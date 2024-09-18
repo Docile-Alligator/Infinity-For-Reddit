@@ -136,7 +136,7 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
             if (mPost.getPostType() == Post.GALLERY_TYPE) {
                 binding.downloadAllTextViewPostOptionsBottomSheetFragment.setVisibility(View.VISIBLE);
                 binding.downloadAllTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {
-                    JobInfo jobInfo = DownloadMediaService.constructGalleryDownloadAllImagesJobInfo(mBaseActivity, 5000000, mPost);
+                    JobInfo jobInfo = DownloadMediaService.constructGalleryDownloadAllMediaJobInfo(mBaseActivity, 5000000, mPost);
                     ((JobScheduler) mBaseActivity.getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
 
                     dismiss();
