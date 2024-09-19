@@ -1229,9 +1229,15 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             if (requestCode == EDIT_COMMENT_REQUEST_CODE) {
                 if (data != null) {
                     if (sectionsPagerAdapter != null) {
-                        sectionsPagerAdapter.editComment(
-                                data.getStringExtra(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT_CONTENT),
-                                data.getExtras().getInt(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT_POSITION));
+                        if (data.hasExtra(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT)) {
+                            sectionsPagerAdapter.editComment(
+                                    (Comment) data.getParcelableExtra(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT),
+                                    data.getIntExtra(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT_POSITION, -1));
+                        } else {
+                            sectionsPagerAdapter.editComment(
+                                    data.getStringExtra(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT_CONTENT),
+                                    data.getIntExtra(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT_POSITION, -1));
+                        }
                     }
                 }
             }
@@ -1710,6 +1716,15 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 } else if (fragment instanceof CommentsListingFragment) {
                     SortType sortType = ((CommentsListingFragment) fragment).getSortType();
                     Utils.displaySortTypeInToolbar(sortType, binding.toolbarViewUserDetailActivity);
+                }
+            }
+        }
+
+        void editComment(Comment comment, int position) {
+            if (fragmentManager != null) {
+                Fragment fragment = fragmentManager.findFragmentByTag("f1");
+                if (fragment instanceof CommentsListingFragment) {
+                    ((CommentsListingFragment) fragment).editComment(comment, position);
                 }
             }
         }

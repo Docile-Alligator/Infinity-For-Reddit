@@ -749,9 +749,15 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
     }
 
-    public void editComment(String commentAuthor, String commentContentMarkdown, int position) {
+    public void editComment(Comment comment, int position) {
         if (mCommentsAdapter != null) {
-            mCommentsAdapter.editComment(commentAuthor,
+            mCommentsAdapter.editComment(comment, position);
+        }
+    }
+
+    public void editComment(String commentContentMarkdown, int position) {
+        if (mCommentsAdapter != null) {
+            mCommentsAdapter.editComment(
                     commentContentMarkdown,
                     position);
         }

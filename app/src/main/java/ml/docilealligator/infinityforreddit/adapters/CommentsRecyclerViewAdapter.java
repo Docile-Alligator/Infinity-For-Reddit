@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1052,18 +1053,31 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         }
     }
 
-    public void editComment(String commentAuthor, String commentContentMarkdown, int position) {
-        if (commentAuthor != null) {
-            mVisibleComments.get(position).setAuthor(commentAuthor);
+    public void editComment(Comment comment, int position) {
+        if (position < mVisibleComments.size() && position >= 0) {
+            Comment oldComment = mVisibleComments.get(position);
+            if (oldComment.getId().equals(comment.getId())) {
+                oldComment.setCommentMarkdown(comment.getCommentMarkdown());
+                oldComment.setMediaMetadataMap(comment.getMediaMetadataMap());
+
+                if (mIsSingleCommentThreadMode) {
+                    notifyItemChanged(position + 1);
+                    Log.i("asdfasdf", "asdf");
+                } else {
+                    notifyItemChanged(position);
+                }
+            }
         }
+    }
 
-        mVisibleComments.get(position).setSubmittedByAuthor(mVisibleComments.get(position).isSubmitter());
-
-        mVisibleComments.get(position).setCommentMarkdown(commentContentMarkdown);
-        if (mIsSingleCommentThreadMode) {
-            notifyItemChanged(position + 1);
-        } else {
-            notifyItemChanged(position);
+    public void editComment(String commentContentMarkdown, int position) {
+        if (position < mVisibleComments.size() && position >= 0) {
+            mVisibleComments.get(position).setCommentMarkdown(commentContentMarkdown);
+            if (mIsSingleCommentThreadMode) {
+                notifyItemChanged(position + 1);
+            } else {
+                notifyItemChanged(position);
+            }
         }
     }
 

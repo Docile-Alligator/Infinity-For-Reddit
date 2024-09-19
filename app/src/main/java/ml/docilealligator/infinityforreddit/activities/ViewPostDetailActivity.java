@@ -405,11 +405,20 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         return isNsfwSubreddit;
     }
 
-    private void editComment(String commentAuthor, String commentContentMarkdown, int position) {
+    private void editComment(Comment comment, int position) {
         if (sectionsPagerAdapter != null) {
             ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
             if (fragment != null) {
-                fragment.editComment(commentAuthor, commentContentMarkdown, position);
+                fragment.editComment(comment, position);
+            }
+        }
+    }
+
+    private void editComment(String commentContentMarkdown, int position) {
+        if (sectionsPagerAdapter != null) {
+            ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
+            if (fragment != null) {
+                fragment.editComment(commentContentMarkdown, position);
             }
         }
     }
@@ -768,9 +777,13 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EDIT_COMMENT_REQUEST_CODE) {
             if (data != null && resultCode == Activity.RESULT_OK) {
-                editComment(null,
-                        data.getStringExtra(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT_CONTENT),
-                        data.getExtras().getInt(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT_POSITION));
+                if (data.hasExtra(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT)) {
+                    editComment((Comment) data.getParcelableExtra(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT),
+                            data.getIntExtra(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT_POSITION, -1));
+                } else {
+                    editComment(data.getStringExtra(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT_CONTENT),
+                            data.getIntExtra(EditCommentActivity.RETURN_EXTRA_EDITED_COMMENT_POSITION, -1));
+                }
             }
         } else if (requestCode == CommentActivity.WRITE_COMMENT_REQUEST_CODE) {
             if (data != null && resultCode == Activity.RESULT_OK) {

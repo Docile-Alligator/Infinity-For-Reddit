@@ -426,6 +426,10 @@ public class Comment implements Parcelable {
         return mediaMetadataMap;
     }
 
+    public void setMediaMetadataMap(Map<String, MediaMetadata> mediaMetadataMap) {
+        this.mediaMetadataMap = mediaMetadataMap;
+    }
+
     @Override
     public int describeContents() {
         return 0;

@@ -253,7 +253,7 @@ public class ParseComment {
         }
     }
 
-    static Comment parseSingleComment(JSONObject singleCommentData, int depth) throws JSONException {
+    public static Comment parseSingleComment(JSONObject singleCommentData, int depth) throws JSONException {
         String id = singleCommentData.getString(JSONUtils.ID_KEY);
         String fullName = singleCommentData.getString(JSONUtils.NAME_KEY);
         String author = singleCommentData.getString(JSONUtils.AUTHOR_KEY);

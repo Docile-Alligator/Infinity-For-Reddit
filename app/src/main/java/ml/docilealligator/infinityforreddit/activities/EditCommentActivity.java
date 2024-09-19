@@ -28,6 +28,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,23 +41,23 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.thing.GiphyGif;
-import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.thing.UploadedImage;
 import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.comment.Comment;
+import ml.docilealligator.infinityforreddit.comment.ParseComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.ActivityEditCommentBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.RichTextJSONConverter;
+import ml.docilealligator.infinityforreddit.thing.GiphyGif;
+import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
+import ml.docilealligator.infinityforreddit.thing.UploadedImage;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
@@ -67,6 +68,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
     public static final String EXTRA_FULLNAME = "EF";
     public static final String EXTRA_MEDIA_METADATA_LIST = "EMML";
     public static final String EXTRA_POSITION = "EP";
+    public static final String RETURN_EXTRA_EDITED_COMMENT = "REEC";
     public static final String RETURN_EXTRA_EDITED_COMMENT_CONTENT = "REECC";
     public static final String RETURN_EXTRA_EDITED_COMMENT_POSITION = "REECP";
 
@@ -266,33 +268,51 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
                 params.put(APIUtils.TEXT_KEY, content);
             }
 
-            mOauthRetrofit.create(RedditAPI.class)
-                    .editPostOrComment(APIUtils.getOAuthHeader(mAccessToken), params)
-                    .enqueue(new Callback<>() {
-                        @Override
-                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+            Handler handler = new Handler(getMainLooper());
+            mExecutor.execute(() -> {
+                try {
+                    Response<String> response = mOauthRetrofit.create(RedditAPI.class)
+                            .editPostOrComment(APIUtils.getOAuthHeader(mAccessToken), params).execute();
+                    if (response.isSuccessful()) {
+                        Comment comment = ParseComment.parseSingleComment(new JSONObject(response.body()), 0);
+                        handler.post(() -> {
                             isSubmitting = false;
-                            if (response.isSuccessful()) {
-                                Toast.makeText(EditCommentActivity.this, R.string.edit_success, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditCommentActivity.this, R.string.edit_success, Toast.LENGTH_SHORT).show();
 
-                                Intent returnIntent = new Intent();
-                                returnIntent.putExtra(RETURN_EXTRA_EDITED_COMMENT_CONTENT, Utils.modifyMarkdown(content));
-                                returnIntent.putExtra(RETURN_EXTRA_EDITED_COMMENT_POSITION, getIntent().getExtras().getInt(EXTRA_POSITION));
-                                setResult(RESULT_OK, returnIntent);
+                            Intent returnIntent = new Intent();
+                            returnIntent.putExtra(RETURN_EXTRA_EDITED_COMMENT, comment);
+                            returnIntent.putExtra(RETURN_EXTRA_EDITED_COMMENT_POSITION, getIntent().getExtras().getInt(EXTRA_POSITION));
+                            setResult(RESULT_OK, returnIntent);
 
-                                finish();
-                            } else {
-                                Snackbar.make(binding.coordinatorLayoutEditCommentActivity, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                            finish();
+                        });
+                    } else {
+                        handler.post(() -> {
                             isSubmitting = false;
                             Snackbar.make(binding.coordinatorLayoutEditCommentActivity, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
-                        }
+                        });
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    handler.post(() -> {
+                        isSubmitting = false;
+                        Snackbar.make(binding.coordinatorLayoutEditCommentActivity, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
                     });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    handler.post(() -> {
+                        isSubmitting = false;
+                        Toast.makeText(EditCommentActivity.this, R.string.edit_success, Toast.LENGTH_SHORT).show();
 
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra(RETURN_EXTRA_EDITED_COMMENT_CONTENT, Utils.modifyMarkdown(content));
+                        returnIntent.putExtra(RETURN_EXTRA_EDITED_COMMENT_POSITION, getIntent().getExtras().getInt(EXTRA_POSITION));
+                        setResult(RESULT_OK, returnIntent);
+
+                        finish();
+                    });
+                }
+            });
         }
     }
 

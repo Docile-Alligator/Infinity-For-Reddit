@@ -398,6 +398,12 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         return sortType;
     }
 
+    public void editComment(Comment comment, int position) {
+        if (mAdapter != null) {
+            mAdapter.editComment(comment, position);
+        }
+    }
+
     public void editComment(String commentMarkdown, int position) {
         if (mAdapter != null) {
             mAdapter.editComment(commentMarkdown, position);

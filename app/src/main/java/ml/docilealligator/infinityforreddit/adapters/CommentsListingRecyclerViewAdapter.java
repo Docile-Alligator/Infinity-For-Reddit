@@ -365,6 +365,15 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         }
     }
 
+    public void editComment(Comment comment, int position) {
+        Comment oldComment = getItem(position);
+        if (oldComment != null) {
+            oldComment.setCommentMarkdown(comment.getCommentMarkdown());
+            oldComment.setMediaMetadataMap(comment.getMediaMetadataMap());
+            notifyItemChanged(position);
+        }
+    }
+
     public void editComment(String commentContentMarkdown, int position) {
         Comment comment = getItem(position);
         if (comment != null) {
