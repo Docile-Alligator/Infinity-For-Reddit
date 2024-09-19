@@ -344,7 +344,7 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
                 });
 
         binding.markdownBottomBarRecyclerViewPostPollActivity.setLayoutManager(new LinearLayoutManagerBugFixed(this,
-                LinearLayoutManager.HORIZONTAL, false));
+                LinearLayoutManager.HORIZONTAL, true).setStackFromEndAndReturnCurrentObject());
         binding.markdownBottomBarRecyclerViewPostPollActivity.setAdapter(adapter);
     }
 

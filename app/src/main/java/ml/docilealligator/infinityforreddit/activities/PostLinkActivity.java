@@ -357,7 +357,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         });
 
         binding.markdownBottomBarRecyclerViewPostLinkActivity.setLayoutManager(new LinearLayoutManagerBugFixed(this,
-                LinearLayoutManager.HORIZONTAL, false));
+                LinearLayoutManager.HORIZONTAL, true).setStackFromEndAndReturnCurrentObject());
         binding.markdownBottomBarRecyclerViewPostLinkActivity.setAdapter(adapter);
     }
 

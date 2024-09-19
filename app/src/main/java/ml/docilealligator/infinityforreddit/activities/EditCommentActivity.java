@@ -164,7 +164,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
         });
 
         binding.markdownBottomBarRecyclerViewEditCommentActivity.setLayoutManager(new LinearLayoutManagerBugFixed(this,
-                LinearLayoutManager.HORIZONTAL, false));
+                LinearLayoutManager.HORIZONTAL, true).setStackFromEndAndReturnCurrentObject());
         binding.markdownBottomBarRecyclerViewEditCommentActivity.setAdapter(adapter);
 
         binding.commentEditTextEditCommentActivity.requestFocus();

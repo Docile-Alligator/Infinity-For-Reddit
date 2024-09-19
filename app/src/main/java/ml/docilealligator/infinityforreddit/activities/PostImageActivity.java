@@ -355,7 +355,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
         });
 
         binding.markdownBottomBarRecyclerViewPostImageActivity.setLayoutManager(new LinearLayoutManagerBugFixed(this,
-                LinearLayoutManager.HORIZONTAL, false));
+                LinearLayoutManager.HORIZONTAL, true).setStackFromEndAndReturnCurrentObject());
         binding.markdownBottomBarRecyclerViewPostImageActivity.setAdapter(adapter);
     }
 

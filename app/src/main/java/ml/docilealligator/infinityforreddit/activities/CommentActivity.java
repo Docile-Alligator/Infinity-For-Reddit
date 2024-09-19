@@ -315,7 +315,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                 });
 
         binding.commentMarkdownBottomBarRecyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this,
-                LinearLayoutManagerBugFixed.HORIZONTAL, false));
+                LinearLayoutManagerBugFixed.HORIZONTAL, true).setStackFromEndAndReturnCurrentObject());
         binding.commentMarkdownBottomBarRecyclerView.setAdapter(adapter);
 
         binding.commentAccountLinearLayout.setOnClickListener(view -> {

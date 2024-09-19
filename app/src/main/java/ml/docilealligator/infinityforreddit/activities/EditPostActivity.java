@@ -145,7 +145,7 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
         });
 
         binding.markdownBottomBarRecyclerViewEditPostActivity.setLayoutManager(new LinearLayoutManagerBugFixed(this,
-                LinearLayoutManagerBugFixed.HORIZONTAL, false));
+                LinearLayoutManagerBugFixed.HORIZONTAL, true).setStackFromEndAndReturnCurrentObject());
         binding.markdownBottomBarRecyclerViewEditPostActivity.setAdapter(adapter);
 
         binding.postContentEditTextEditPostActivity.requestFocus();

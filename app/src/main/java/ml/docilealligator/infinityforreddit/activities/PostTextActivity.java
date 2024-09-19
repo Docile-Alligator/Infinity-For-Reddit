@@ -341,7 +341,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
                 });
 
         binding.markdownBottomBarRecyclerViewPostTextActivity.setLayoutManager(new LinearLayoutManagerBugFixed(this,
-                LinearLayoutManager.HORIZONTAL, false));
+                LinearLayoutManager.HORIZONTAL, true).setStackFromEndAndReturnCurrentObject());
         binding.markdownBottomBarRecyclerViewPostTextActivity.setAdapter(adapter);
     }
 
