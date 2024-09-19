@@ -81,7 +81,8 @@ import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
-public class CommentActivity extends BaseActivity implements UploadImageEnabledActivity, AccountChooserBottomSheetFragment.AccountChooserListener, GiphyDialogFragment.GifSelectionListener {
+public class CommentActivity extends BaseActivity implements UploadImageEnabledActivity,
+        AccountChooserBottomSheetFragment.AccountChooserListener, GiphyDialogFragment.GifSelectionListener {
 
     public static final String EXTRA_COMMENT_PARENT_TITLE_KEY = "ECPTK";
     public static final String EXTRA_COMMENT_PARENT_BODY_KEY = "ECPBK";
@@ -99,6 +100,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
 
     private static final String SELECTED_ACCOUNT_STATE = "SAS";
     private static final String UPLOADED_IMAGES_STATE = "UIS";
+    private static final String GIPHY_GIF_STATE = "GGS";
 
     @Inject
     @Named("no_oauth")
@@ -272,6 +274,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         if (savedInstanceState != null) {
             selectedAccount = savedInstanceState.getParcelable(SELECTED_ACCOUNT_STATE);
             uploadedImages = savedInstanceState.getParcelableArrayList(UPLOADED_IMAGES_STATE);
+            giphyGif = savedInstanceState.getParcelable(GIPHY_GIF_STATE);
 
             if (selectedAccount != null) {
                 mGlide.load(selectedAccount.getProfileImageUrl())
@@ -353,6 +356,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         super.onSaveInstanceState(outState);
         outState.putParcelable(SELECTED_ACCOUNT_STATE, selectedAccount);
         outState.putParcelableArrayList(UPLOADED_IMAGES_STATE, uploadedImages);
+        outState.putParcelable(GIPHY_GIF_STATE, giphyGif);
     }
 
     @Override
@@ -621,7 +625,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
 
     @Override
     public void onGifSelected(@NonNull Media media, @Nullable String s, @NonNull GPHContentType gphContentType) {
-        this.giphyGif = new GiphyGif(media.getId());
+        this.giphyGif = new GiphyGif(media.getId(), true);
 
         int start = Math.max(binding.commentCommentEditText.getSelectionStart(), 0);
         int end = Math.max(binding.commentCommentEditText.getSelectionEnd(), 0);

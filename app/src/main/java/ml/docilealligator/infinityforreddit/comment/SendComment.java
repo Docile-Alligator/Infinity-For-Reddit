@@ -37,7 +37,8 @@ public class SendComment {
         params.put(APIUtils.RETURN_RTJSON_KEY, "true");
         if (!uploadedImages.isEmpty() || giphyGif != null) {
             try {
-                params.put(APIUtils.RICHTEXT_JSON_KEY, new RichTextJSONConverter().constructRichTextJSON(context, commentMarkdown, uploadedImages, giphyGif));
+                params.put(APIUtils.RICHTEXT_JSON_KEY, new RichTextJSONConverter().constructRichTextJSON(
+                        context, commentMarkdown, uploadedImages, giphyGif));
                 params.put(APIUtils.TEXT_KEY, "");
             } catch (JSONException e) {
                 sendCommentListener.sendCommentFailed(context.getString(R.string.convert_to_richtext_json_failed));

@@ -128,12 +128,22 @@ public class RichTextJSONConverter implements Visitor {
         return richText.toString();
     }
 
+    /**
+     *
+     * @param context
+     * @param markdown
+     * @param uploadedImages
+     * @param giphyGif
+     * @param uploadedImagesMap this is for editing comment with giphy gifs. Too lazy to convert UploadedImage to GiphyGif.
+     * @return
+     * @throws JSONException
+     */
     public String constructRichTextJSON(Context context, String markdown,
                                         List<UploadedImage> uploadedImages, @Nullable GiphyGif giphyGif) throws JSONException {
         UploadedImagePlugin uploadedImagePlugin = new UploadedImagePlugin();
         uploadedImagePlugin.setUploadedImages(uploadedImages);
         Markwon markwon = MarkdownUtils.createContentSubmissionRedditMarkwon(
-                context, uploadedImagePlugin, new GiphyGifPlugin(giphyGif));
+                context, uploadedImagePlugin, new GiphyGifPlugin(giphyGif, uploadedImages));
 
         List<Node> nodes = MarkwonReducer.directChildren().reduce(markwon.parse(markdown));
 
