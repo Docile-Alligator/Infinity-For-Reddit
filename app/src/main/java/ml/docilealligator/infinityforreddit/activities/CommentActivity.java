@@ -25,6 +25,10 @@ import androidx.core.content.FileProvider;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.giphy.sdk.core.models.Media;
+import com.giphy.sdk.ui.GPHContentType;
+import com.giphy.sdk.ui.Giphy;
+import com.giphy.sdk.ui.views.GiphyDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -46,11 +50,9 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.network.AnyAccountAccessTokenAuthenticator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.thing.UploadedImage;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.AccountChooserBottomSheetFragment;
@@ -69,13 +71,17 @@ import ml.docilealligator.infinityforreddit.markdown.EmotePlugin;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
+import ml.docilealligator.infinityforreddit.network.AnyAccountAccessTokenAuthenticator;
+import ml.docilealligator.infinityforreddit.thing.GiphyGif;
+import ml.docilealligator.infinityforreddit.thing.UploadedImage;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
-public class CommentActivity extends BaseActivity implements UploadImageEnabledActivity, AccountChooserBottomSheetFragment.AccountChooserListener {
+public class CommentActivity extends BaseActivity implements UploadImageEnabledActivity, AccountChooserBottomSheetFragment.AccountChooserListener, GiphyDialogFragment.GifSelectionListener {
 
     public static final String EXTRA_COMMENT_PARENT_TITLE_KEY = "ECPTK";
     public static final String EXTRA_COMMENT_PARENT_BODY_KEY = "ECPBK";
@@ -124,6 +130,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     private boolean isReplying;
     private Uri capturedImageUri;
     private ArrayList<UploadedImage> uploadedImages = new ArrayList<>();
+    private GiphyGif giphyGif;
     private Menu mMenu;
 
     /**
@@ -282,7 +289,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         }
 
         MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(
-                mCustomThemeWrapper, true,
+                mCustomThemeWrapper, true, true,
                 new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
                     @Override
                     public void onClick(int item) {
@@ -300,6 +307,11 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                         fragment.setArguments(arguments);
                         fragment.show(getSupportFragmentManager(), fragment.getTag());
                     }
+
+                    @Override
+                    public void onSelectGiphyGif() {
+                        GiphyDialogFragment.Companion.newInstance().show(getSupportFragmentManager(), "giphy_dialog");
+                    }
                 });
 
         binding.commentMarkdownBottomBarRecyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this,
@@ -313,6 +325,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
 
         binding.commentCommentEditText.requestFocus();
         Utils.showKeyboard(this, new Handler(), binding.commentCommentEditText);
+
+        Giphy.INSTANCE.configure(this, APIUtils.GIPHY_GIF_API_KEY);
     }
 
     private void loadCurrentAccount() {
@@ -438,7 +452,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     .build())
                     .build();
             SendComment.sendComment(this, mExecutor, new Handler(), binding.commentCommentEditText.getText().toString(),
-                    parentFullname, parentDepth, uploadedImages, newAuthenticatorOauthRetrofit, selectedAccount,
+                    parentFullname, parentDepth, uploadedImages, giphyGif, newAuthenticatorOauthRetrofit, selectedAccount,
                     new SendComment.SendCommentListener() {
                         @Override
                         public void sendCommentSuccess(Comment comment) {
@@ -598,5 +612,33 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
 
             binding.commentAccountNameTextView.setText(selectedAccount.getAccountName());
         }
+    }
+
+    @Override
+    public void didSearchTerm(@NonNull String s) {
+
+    }
+
+    @Override
+    public void onGifSelected(@NonNull Media media, @Nullable String s, @NonNull GPHContentType gphContentType) {
+        this.giphyGif = new GiphyGif(media.getId());
+
+        int start = Math.max(binding.commentCommentEditText.getSelectionStart(), 0);
+        int end = Math.max(binding.commentCommentEditText.getSelectionEnd(), 0);
+        int realStart = Math.min(start, end);
+        if (realStart > 0 && binding.commentCommentEditText.getText().toString().charAt(realStart - 1) != '\n') {
+            binding.commentCommentEditText.getText().replace(realStart, Math.max(start, end),
+                    "\n![gif](" + giphyGif.id + ")\n",
+                    0, "\n![gif]()\n".length() + giphyGif.id.length());
+        } else {
+            binding.commentCommentEditText.getText().replace(realStart, Math.max(start, end),
+                    "![gif](" + giphyGif.id + ")\n",
+                    0, "![gif]()\n".length() + giphyGif.id.length());
+        }
+    }
+
+    @Override
+    public void onDismissed(@NonNull GPHContentType gphContentType) {
+
     }
 }

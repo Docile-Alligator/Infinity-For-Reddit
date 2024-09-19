@@ -191,6 +191,8 @@ dependencies {
 
     implementation 'androidx.core:core-splashscreen:1.0.1'
 
+    implementation 'com.giphy.sdk:ui:2.3.15'
+
 
 /**** Builds and flavors ****/
     // debugImplementation because LeakCanary should only run in debug builds.

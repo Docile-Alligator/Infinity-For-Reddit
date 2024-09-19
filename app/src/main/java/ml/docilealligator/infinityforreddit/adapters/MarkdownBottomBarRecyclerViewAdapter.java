@@ -31,28 +31,38 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
     public static final int QUOTE = 9;
     public static final int CODE_BLOCK = 10;
     public static final int UPLOAD_IMAGE = 11;
+    public static final int GIPHY_GIF = 12;
 
     private static final int ITEM_COUNT = 11;
 
     private final CustomThemeWrapper customThemeWrapper;
     private final boolean canUploadImage;
+    private final boolean canSendGiphyGIf;
     private final ItemClickListener itemClickListener;
 
     public interface ItemClickListener {
         void onClick(int item);
         void onUploadImage();
+        default void onSelectGiphyGif() {}
     }
 
     public MarkdownBottomBarRecyclerViewAdapter(CustomThemeWrapper customThemeWrapper,
                                                 ItemClickListener itemClickListener) {
-        this(customThemeWrapper, false, itemClickListener);
+        this(customThemeWrapper, false, false, itemClickListener);
     }
 
     public MarkdownBottomBarRecyclerViewAdapter(CustomThemeWrapper customThemeWrapper,
                                                 boolean canUploadImage,
                                                 ItemClickListener itemClickListener) {
+        this(customThemeWrapper, canUploadImage, false, itemClickListener);
+    }
+
+    public MarkdownBottomBarRecyclerViewAdapter(CustomThemeWrapper customThemeWrapper,
+                                                boolean canUploadImage, boolean canSendGiphyGif,
+                                                ItemClickListener itemClickListener) {
         this.customThemeWrapper = customThemeWrapper;
         this.canUploadImage = canUploadImage;
+        this.canSendGiphyGIf = canSendGiphyGif;
         this.itemClickListener = itemClickListener;
     }
 
@@ -102,13 +112,16 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
                 case UPLOAD_IMAGE:
                     ((MarkdownBottomBarItemViewHolder) holder).imageView.setImageResource(R.drawable.ic_image_day_night_24dp);
                     break;
+                case GIPHY_GIF:
+                    ((MarkdownBottomBarItemViewHolder) holder).imageView.setImageResource(R.drawable.ic_gif_24dp);
+                    break;
             }
         }
     }
 
     @Override
     public int getItemCount() {
-        return canUploadImage ? ITEM_COUNT + 1 : ITEM_COUNT;
+        return canUploadImage ? (canSendGiphyGIf ? ITEM_COUNT + 2 : ITEM_COUNT + 1) : ITEM_COUNT;
     }
 
     public static void bindEditTextWithItemClickListener(Activity activity, EditText commentEditText, int item) {
@@ -324,6 +337,8 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
                 int position = getBindingAdapterPosition();
                 if (position == UPLOAD_IMAGE) {
                     itemClickListener.onUploadImage();
+                } else if (position == GIPHY_GIF) {
+                    itemClickListener.onSelectGiphyGif();
                 } else {
                     itemClickListener.onClick(position);
                 }
