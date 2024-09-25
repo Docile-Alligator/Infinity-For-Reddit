@@ -1255,11 +1255,11 @@
     <string name="uploaded_images">Uploaded Images</string>
     <string name="uploaded_images_explanation">This is an experimental feature, and here are some things you need to know:\n
         1. Uploaded images will not be shown in the text editor, and instead, a piece of text will be inserted as a block,
-    with a format similar to ![](XXXXX). XXXXX is the image id, and it should not be modified. To add a caption for
-    your image, simply type between the brackets. Example: ![This is a caption](XXXXX). Note that the caption will be treated
-    as plain text.\n
+        with a format similar to ![](XXXXX). XXXXX is the image id, and it should not be modified. To add a caption for
+        your image, simply type between the brackets. Example: ![This is a caption](XXXXX). Note that the caption will be treated
+        as plain text.\n
         2. To write a superscript, please use ^(), and put the texts inside the parentheses, instead of only
-    using a single ^. For simplicity, click the superscript option in the formatting tools to insert a superscript.\n
+        using a single ^. For simplicity, click the superscript option in the formatting tools to insert a superscript.\n
         3. This feature converts your markdown to rich text format and some formatting may be lost in the process.\n
         4. Uploaded images may not be shown on the preview screen.\n
         5. You cannot edit a submitted post with embedded images in it.\n
@@ -1271,6 +1271,17 @@
     <string name="upload_image_success">Upload image successfully. Click the image button again to see the uploaded images.</string>
     <string name="get_image_bitmap_failed">Unable to get the bitmap of the image</string>
     <string name="upload_image_failed">Unable to upload the image</string>
+    <string name="select_giphy_gif">Select a Giphy GIF</string>
+    <string name="select_giphy_gif_explanation">This is an experimental feature, and here are some things you need to know:\n
+        1. Giphy gifs will not be shown in the text editor, and instead, a piece of text will be inserted as a block,
+        with a format similar to ![gif](XXXXX). XXXXX is the Giphy gif id, and it should not be modified.\n
+        2. You can only insert one Giphy gif per comment.\n
+        3. To write a superscript, please use ^(), and put the texts inside the parentheses, instead of only
+        using a single ^. For simplicity, click the superscript option in the formatting tools to insert a superscript.\n
+        4. This feature converts your markdown to rich text format and some formatting may be lost in the process.\n
+        5. Giphy gifs may not be shown on the preview screen.\n
+        6. Please do not change your account using the account chooser on the editing screen. You should switch
+        your account in the navigation drawer on the main screen.</string>
 
     <string name="search_comments">Search Comments</string>
 

@@ -57,6 +57,7 @@ import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.AccountChooserBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.GiphyGifInfoBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.comment.SendComment;
@@ -313,7 +314,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
 
                     @Override
                     public void onSelectGiphyGif() {
-                        GiphyDialogFragment.Companion.newInstance().show(getSupportFragmentManager(), "giphy_dialog");
+                        GiphyGifInfoBottomSheetFragment fragment = new GiphyGifInfoBottomSheetFragment();
+                        fragment.show(getSupportFragmentManager(), fragment.getTag());
                     }
                 });
 
