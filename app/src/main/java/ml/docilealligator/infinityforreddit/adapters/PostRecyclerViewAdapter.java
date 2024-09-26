@@ -1769,30 +1769,30 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
 
                 if (holder instanceof PostMaterial3CardBaseVideoAutoplayViewHolder) {
-                    ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.VISIBLE);
+                    ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView.setVisibility(View.VISIBLE);
                     Post.Preview preview = getSuitablePreview(post.getPreviews());
                     if (!mFixedHeightPreviewInCard && preview != null) {
-                        ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio((float) preview.getPreviewWidth() / preview.getPreviewHeight());
-                        mGlide.load(preview.getPreviewUrl()).centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).previewImageView);
+                        ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.aspectRatioFrameLayout.setAspectRatio((float) preview.getPreviewWidth() / preview.getPreviewHeight());
+                        mGlide.load(preview.getPreviewUrl()).centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView);
                     } else {
-                        ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio(1);
+                        ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.aspectRatioFrameLayout.setAspectRatio(1);
                     }
-                    if (!((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).isManuallyPaused) {
+                    if (!((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.isManuallyPaused) {
                         if (mFragment.getMasterMutingOption() == null) {
-                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
+                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
                         } else {
-                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
+                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
                         }
                     }
 
                     if (post.isRedgifs() && !post.isLoadRedgifsOrStreamableVideoSuccess()) {
-                        ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall =
+                        ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall =
                                 mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(
                                         APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences
                                                 .getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")),
                                         post.getRedgifsId(), APIUtils.USER_AGENT);
                         FetchRedgifsVideoLinks.fetchRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
-                                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall,
+                                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall,
                                 new FetchVideoLinkListener() {
                                     @Override
                                     public void onFetchRedgifsVideoLinkSuccess(String webm, String mp4) {
@@ -1800,22 +1800,22 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                         post.setVideoUrl(mp4);
                                         post.setLoadRedgifsOrStreamableVideoSuccess(true);
                                         if (position == holder.getBindingAdapterPosition()) {
-                                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
+                                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.bindVideoUri(Uri.parse(post.getVideoUrl()));
                                         }
                                     }
 
                                     @Override
                                     public void failed(@Nullable Integer messageRes) {
                                         if (position == holder.getBindingAdapterPosition()) {
-                                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).loadFallbackDirectVideo();
+                                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.loadFallbackDirectVideo();
                                         }
                                     }
                                 });
                     } else if(post.isStreamable() && !post.isLoadRedgifsOrStreamableVideoSuccess()) {
-                        ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall =
+                        ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall =
                                 mStreamableApiProvider.get().getStreamableData(post.getStreamableShortCode());
                         FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, new Handler(),
-                                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall,
+                                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall,
                                 new FetchVideoLinkListener() {
                                     @Override
                                     public void onFetchStreamableVideoLinkSuccess(StreamableVideo streamableVideo) {
@@ -1824,19 +1824,19 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                         post.setVideoUrl(media.url);
                                         post.setLoadRedgifsOrStreamableVideoSuccess(true);
                                         if (position == holder.getBindingAdapterPosition()) {
-                                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
+                                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.bindVideoUri(Uri.parse(post.getVideoUrl()));
                                         }
                                     }
 
                                     @Override
                                     public void failed(@Nullable Integer messageRes) {
                                         if (position == holder.getBindingAdapterPosition()) {
-                                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).loadFallbackDirectVideo();
+                                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.loadFallbackDirectVideo();
                                         }
                                     }
                                 });
                     } else {
-                        ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
+                        ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.bindVideoUri(Uri.parse(post.getVideoUrl()));
                     }
                 } else if (holder instanceof PostMaterial3CardWithPreviewViewHolder) {
                     if (post.getPostType() == Post.VIDEO_TYPE) {
@@ -2385,18 +2385,18 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mGlide.clear(((PostMaterial3CardBaseViewHolder) holder).iconGifImageView);
             ((PostMaterial3CardBaseViewHolder) holder).titleTextView.setTextColor(mPostTitleColor);
             if (holder instanceof PostMaterial3CardBaseVideoAutoplayViewHolder) {
-                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).mediaUri = null;
-                if (((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall != null && !((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall.isCanceled()) {
-                    ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall.cancel();
-                    ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall = null;
+                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.mediaUri = null;
+                if (((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall != null && !((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall.isCanceled()) {
+                    ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall.cancel();
+                    ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall = null;
                 }
-                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).errorLoadingRedgifsImageView.setVisibility(View.GONE);
-                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).muteButton.setVisibility(View.GONE);
-                if (!((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).isManuallyPaused) {
-                    ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).resetVolume();
+                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.errorLoadingRedgifsImageView.setVisibility(View.GONE);
+                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.muteButton.setVisibility(View.GONE);
+                if (!((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.isManuallyPaused) {
+                    ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.resetVolume();
                 }
-                mGlide.clear(((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).previewImageView);
-                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.GONE);
+                mGlide.clear(((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView);
+                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView.setVisibility(View.GONE);
             } else if (holder instanceof PostMaterial3CardWithPreviewViewHolder) {
                 mGlide.clear(((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewItemPostCard3WithPreview);
                 ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewItemPostCard3WithPreview.setVisibility(View.GONE);
@@ -3224,7 +3224,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         public VideoAutoplayImpl(View itemView, AspectRatioFrameLayout aspectRatioFrameLayout,
                                  GifImageView previewImageView, ImageView errorLoadingRedgifsImageView,
                                  PlayerView videoPlayer, ImageView muteButton, ImageView fullscreenButton,
-                                 ImageView playPauseButton,
+                                 ImageView playPauseButton, DefaultTimeBar progressBar,
                                  Drawable playDrawable, Drawable pauseDrawable) {
             this.itemView = itemView;
             this.aspectRatioFrameLayout = aspectRatioFrameLayout;
@@ -3236,6 +3236,75 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             this.playPauseButton = playPauseButton;
             this.playDrawable = playDrawable;
             this.pauseDrawable = pauseDrawable;
+
+            aspectRatioFrameLayout.setOnClickListener(null);
+
+            muteButton.setOnClickListener(view -> {
+                if (helper != null) {
+                    if (helper.getVolume() != 0) {
+                        muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_mute_24dp));
+                        helper.setVolume(0f);
+                        volume = 0f;
+                        mFragment.videoAutoplayChangeMutingOption(true);
+                    } else {
+                        muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_unmute_24dp));
+                        helper.setVolume(1f);
+                        volume = 1f;
+                        mFragment.videoAutoplayChangeMutingOption(false);
+                    }
+                }
+            });
+
+            fullscreenButton.setOnClickListener(view -> {
+                Post post = getPost();
+                if (post != null) {
+                    markPostRead(post, true);
+
+                    if (helper != null) {
+                        openMedia(post, helper.getLatestPlaybackInfo().getResumePosition());
+                    } else {
+                        openMedia(post, -1);
+                    }
+                }
+            });
+
+            playPauseButton.setOnClickListener(view -> {
+                if (isPlaying()) {
+                    pause();
+                    isManuallyPaused = true;
+                    savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+                } else {
+                    isManuallyPaused = false;
+                    play();
+                }
+            });
+
+            progressBar.addListener(new TimeBar.OnScrubListener() {
+                @Override
+                public void onScrubStart(TimeBar timeBar, long position) {
+
+                }
+
+                @Override
+                public void onScrubMove(TimeBar timeBar, long position) {
+
+                }
+
+                @Override
+                public void onScrubStop(TimeBar timeBar, long position, boolean canceled) {
+                    if (!canceled) {
+                        savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+                    }
+                }
+            });
+
+            previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
+
+            videoPlayer.setOnClickListener(view -> {
+                if (mEasierToWatchInFullScreen && videoPlayer.isControllerFullyVisible()) {
+                    fullscreenButton.performClick();
+                }
+            });
         }
 
         void bindVideoUri(Uri videoUri) {
@@ -3385,6 +3454,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
 
         abstract Post getPost();
+
+        abstract void markPostRead(Post post, boolean changePostItemColor);
     }
 
     public class PostBaseViewHolder extends PostViewHolder {
@@ -3622,24 +3693,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
     @UnstableApi
     class PostBaseVideoAutoplayViewHolder extends PostBaseViewHolder implements ToroPlayer {
-        /*AspectRatioFrameLayout aspectRatioFrameLayout;
-        GifImageView previewImageView;
-        ImageView errorLoadingRedgifsImageView;
-        PlayerView videoPlayer;
-        ImageView muteButton;
-        ImageView fullscreenButton;
-        ImageView playPauseButton;
-        DefaultTimeBar progressBar;
-        @Nullable
-        Container container;
-        @Nullable
-        ExoPlayerViewHelper helper;
-        private Uri mediaUri;
-        private float volume;
-        public Call<String> fetchRedgifsOrStreamableVideoCall;
-        private boolean isManuallyPaused;
-        private Drawable playDrawable;
-        private Drawable pauseDrawable;*/
         VideoAutoplayImpl toroPlayer;
 
         @OptIn(markerClass = UnstableApi.class)
@@ -3697,6 +3750,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
             toroPlayer = new VideoAutoplayImpl(rootView, aspectRatioFrameLayout, previewImageView,
                     errorLoadingRedgifsImageView, videoPlayer, muteButton, fullscreenButton, playPauseButton,
+                    progressBar,
                     AppCompatResources.getDrawable(mActivity, R.drawable.ic_play_arrow_24dp),
                     AppCompatResources.getDrawable(mActivity, R.drawable.ic_pause_24dp)) {
                 @Override
@@ -3708,91 +3762,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 Post getPost() {
                     return post;
                 }
+
+                @Override
+                void markPostRead(Post post, boolean changePostItemColor) {
+                    PostBaseVideoAutoplayViewHolder.this.markPostRead(post, changePostItemColor);
+                }
             };
-
-            /*this.aspectRatioFrameLayout = aspectRatioFrameLayout;
-            this.previewImageView = previewImageView;
-            this.errorLoadingRedgifsImageView = errorLoadingRedgifsImageView;
-            this.videoPlayer = videoPlayer;
-            this.muteButton = muteButton;
-            this.fullscreenButton = fullscreenButton;
-            this.playPauseButton = playPauseButton;
-            this.progressBar = progressBar;
-            playDrawable = AppCompatResources.getDrawable(mActivity, R.drawable.ic_play_arrow_24dp);
-            pauseDrawable = AppCompatResources.getDrawable(mActivity, R.drawable.ic_pause_24dp);*/
-
-            aspectRatioFrameLayout.setOnClickListener(null);
-
-            muteButton.setOnClickListener(view -> {
-                if (toroPlayer.helper != null) {
-                    if (toroPlayer.helper.getVolume() != 0) {
-                        muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_mute_24dp));
-                        toroPlayer.helper.setVolume(0f);
-                        toroPlayer.volume = 0f;
-                        mFragment.videoAutoplayChangeMutingOption(true);
-                    } else {
-                        muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_unmute_24dp));
-                        toroPlayer.helper.setVolume(1f);
-                        toroPlayer.volume = 1f;
-                        mFragment.videoAutoplayChangeMutingOption(false);
-                    }
-                }
-            });
-
-            fullscreenButton.setOnClickListener(view -> {
-                int position = getBindingAdapterPosition();
-                if (position < 0) {
-                    return;
-                }
-                Post post = getItem(position);
-                if (post != null) {
-                    markPostRead(post, true);
-
-                    if (toroPlayer.helper != null) {
-                        openMedia(post, toroPlayer.helper.getLatestPlaybackInfo().getResumePosition());
-                    } else {
-                        openMedia(post, -1);
-                    }
-                }
-            });
-
-            playPauseButton.setOnClickListener(view -> {
-                if (isPlaying()) {
-                    pause();
-                    toroPlayer.isManuallyPaused = true;
-                    toroPlayer.savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
-                } else {
-                    toroPlayer.isManuallyPaused = false;
-                    play();
-                }
-            });
-
-            progressBar.addListener(new TimeBar.OnScrubListener() {
-                @Override
-                public void onScrubStart(TimeBar timeBar, long position) {
-
-                }
-
-                @Override
-                public void onScrubMove(TimeBar timeBar, long position) {
-
-                }
-
-                @Override
-                public void onScrubStop(TimeBar timeBar, long position, boolean canceled) {
-                    if (!canceled) {
-                        toroPlayer.savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
-                    }
-                }
-            });
-
-            previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
-
-            videoPlayer.setOnClickListener(view -> {
-                if (mEasierToWatchInFullScreen && videoPlayer.isControllerFullyVisible()) {
-                    fullscreenButton.performClick();
-                }
-            });
         }
 
         @NonNull
@@ -3841,155 +3816,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         public int getPlayerOrder() {
             return toroPlayer.getPlayerOrder();
         }
-
-        /*void bindVideoUri(Uri videoUri) {
-            mediaUri = videoUri;
-        }
-
-        void setVolume(float volume) {
-            this.volume = volume;
-        }
-
-        void resetVolume() {
-            volume = 0f;
-        }
-
-        private void savePlaybackInfo(int order, @Nullable PlaybackInfo playbackInfo) {
-            if (container != null) container.savePlaybackInfo(order, playbackInfo);
-        }
-
-        void loadFallbackDirectVideo() {
-            if (post.getVideoFallBackDirectUrl() != null) {
-                mediaUri = Uri.parse(post.getVideoFallBackDirectUrl());
-                post.setVideoDownloadUrl(post.getVideoFallBackDirectUrl());
-                post.setVideoUrl(post.getVideoFallBackDirectUrl());
-                post.setLoadRedgifsOrStreamableVideoSuccess(true);
-                if (container != null) {
-                    container.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
-                }
-            }
-        }
-
-        @NonNull
-        @Override
-        public View getPlayerView() {
-            return videoPlayer;
-        }
-
-        @NonNull
-        @Override
-        public PlaybackInfo getCurrentPlaybackInfo() {
-            return helper != null && mediaUri != null ? helper.getLatestPlaybackInfo() : new PlaybackInfo();
-        }
-
-        @OptIn(markerClass = UnstableApi.class)
-        @Override
-        public void initialize(@NonNull Container container, @NonNull PlaybackInfo playbackInfo) {
-            if (this.container == null) {
-                this.container = container;
-            }
-            if (mediaUri == null) {
-                return;
-            }
-            if (helper == null) {
-                helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
-                helper.addEventListener(new Playable.DefaultEventListener() {
-                    @Override
-                    public void onEvents(@NonNull Player player, @NonNull Player.Events events) {
-                        if (events.containsAny(
-                                Player.EVENT_PLAY_WHEN_READY_CHANGED,
-                                Player.EVENT_PLAYBACK_STATE_CHANGED,
-                                Player.EVENT_PLAYBACK_SUPPRESSION_REASON_CHANGED)) {
-                            playPauseButton.setImageDrawable(Util.shouldShowPlayButton(player) ? playDrawable : pauseDrawable);
-                        }
-                    }
-
-                    @Override
-                    public void onTracksChanged(@NonNull Tracks tracks) {
-                        ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
-                        if (!trackGroups.isEmpty()) {
-                            for (int i = 0; i < trackGroups.size(); i++) {
-                                String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
-                                if (mimeType != null && mimeType.contains("audio")) {
-                                    if (mFragment.getMasterMutingOption() != null) {
-                                        volume = mFragment.getMasterMutingOption() ? 0f : 1f;
-                                    }
-                                    helper.setVolume(volume);
-                                    muteButton.setVisibility(View.VISIBLE);
-                                    if (volume != 0f) {
-                                        muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_unmute_24dp));
-                                    } else {
-                                        muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_mute_24dp));
-                                    }
-                                    break;
-                                }
-                            }
-                        } else {
-                            muteButton.setVisibility(View.GONE);
-                        }
-                    }
-
-                    @Override
-                    public void onRenderedFirstFrame() {
-                        mGlide.clear(previewImageView);
-                        previewImageView.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onPlayerError(@NonNull PlaybackException error) {
-                        if (post.getVideoFallBackDirectUrl() == null || post.getVideoFallBackDirectUrl().equals(mediaUri.toString())) {
-                            errorLoadingRedgifsImageView.setVisibility(View.VISIBLE);
-                        } else {
-                            loadFallbackDirectVideo();
-                        }
-                    }
-                });
-            }
-            helper.initialize(container, playbackInfo);
-        }
-
-        @Override
-        public void play() {
-            if (helper != null && mediaUri != null) {
-                if (!isPlaying() && isManuallyPaused) {
-                    helper.play();
-                    pause();
-                    helper.setVolume(volume);
-                } else {
-                    helper.play();
-                }
-            }
-        }
-
-        @Override
-        public void pause() {
-            if (helper != null) helper.pause();
-        }
-
-        @Override
-        public boolean isPlaying() {
-            return helper != null && helper.isPlaying();
-        }
-
-        @Override
-        public void release() {
-            if (helper != null) {
-                helper.release();
-                helper = null;
-            }
-            isManuallyPaused = false;
-            container = null;
-        }
-
-        @Override
-        public boolean wantsToPlay() {
-            return canPlayVideo && mediaUri != null && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
-        }
-
-        @Override
-        public int getPlayerOrder() {
-            return getBindingAdapterPosition();
-        }*/
     }
 
     @UnstableApi
@@ -5390,24 +5216,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
     @UnstableApi
     class PostMaterial3CardBaseVideoAutoplayViewHolder extends PostMaterial3CardBaseViewHolder implements ToroPlayer {
-        AspectRatioFrameLayout aspectRatioFrameLayout;
-        GifImageView previewImageView;
-        ImageView errorLoadingRedgifsImageView;
-        PlayerView videoPlayer;
-        ImageView muteButton;
-        ImageView fullscreenButton;
-        ImageView playPauseButton;
-        DefaultTimeBar progressBar;
-        @Nullable
-        Container container;
-        @Nullable
-        ExoPlayerViewHelper helper;
-        private Uri mediaUri;
-        private float volume;
-        public Call<String> fetchRedgifsOrStreamableVideoCall;
-        private boolean isManuallyPaused;
-        private Drawable playDrawable;
-        private Drawable pauseDrawable;
+        VideoAutoplayImpl toroPlayer;
 
         PostMaterial3CardBaseVideoAutoplayViewHolder(View rootView,
                                                      AspectRatioGifImageView iconGifImageView,
@@ -5447,237 +5256,73 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     saveButton,
                     shareButton);
 
-            this.aspectRatioFrameLayout = aspectRatioFrameLayout;
-            this.previewImageView = previewImageView;
-            this.errorLoadingRedgifsImageView = errorLoadingRedgifsImageView;
-            this.videoPlayer = videoPlayer;
-            this.muteButton = muteButton;
-            this.fullscreenButton = fullscreenButton;
-            this.playPauseButton = playPauseButton;
-            this.progressBar = progressBar;
-            playDrawable = AppCompatResources.getDrawable(mActivity, R.drawable.ic_play_arrow_24dp);
-            pauseDrawable = AppCompatResources.getDrawable(mActivity, R.drawable.ic_pause_24dp);
-
-            aspectRatioFrameLayout.setOnClickListener(null);
-
-            muteButton.setOnClickListener(view -> {
-                if (helper != null) {
-                    if (helper.getVolume() != 0) {
-                        muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_mute_24dp));
-                        helper.setVolume(0f);
-                        volume = 0f;
-                        mFragment.videoAutoplayChangeMutingOption(true);
-                    } else {
-                        muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_unmute_24dp));
-                        helper.setVolume(1f);
-                        volume = 1f;
-                        mFragment.videoAutoplayChangeMutingOption(false);
-                    }
-                }
-            });
-
-            fullscreenButton.setOnClickListener(view -> {
-                int position = getBindingAdapterPosition();
-                if (position < 0) {
-                    return;
-                }
-                Post post = getItem(position);
-                if (post != null) {
-                    markPostRead(post, true);
-
-                    if (helper != null) {
-                        openMedia(post, helper.getLatestPlaybackInfo().getResumePosition());
-                    } else {
-                        openMedia(post, -1);
-                    }
-                }
-            });
-
-            playPauseButton.setOnClickListener(view -> {
-                if (isPlaying()) {
-                    pause();
-                    isManuallyPaused = true;
-                    savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
-                } else {
-                    isManuallyPaused = false;
-                    play();
-                }
-            });
-
-            progressBar.addListener(new TimeBar.OnScrubListener() {
+            toroPlayer = new VideoAutoplayImpl(rootView, aspectRatioFrameLayout, previewImageView,
+                    errorLoadingRedgifsImageView, videoPlayer, muteButton, fullscreenButton, playPauseButton,
+                    progressBar,
+                    AppCompatResources.getDrawable(mActivity, R.drawable.ic_play_arrow_24dp),
+                    AppCompatResources.getDrawable(mActivity, R.drawable.ic_pause_24dp)) {
                 @Override
-                public void onScrubStart(TimeBar timeBar, long position) {
-
+                public int getPlayerOrder() {
+                    return getBindingAdapterPosition();
                 }
 
                 @Override
-                public void onScrubMove(TimeBar timeBar, long position) {
-
+                Post getPost() {
+                    return post;
                 }
 
                 @Override
-                public void onScrubStop(TimeBar timeBar, long position, boolean canceled) {
-                    if (!canceled) {
-                        savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
-                    }
+                void markPostRead(Post post, boolean changePostItemColor) {
+                    PostMaterial3CardBaseVideoAutoplayViewHolder.this.markPostRead(post, changePostItemColor);
                 }
-            });
-
-            previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
-
-            videoPlayer.setOnClickListener(view -> {
-                if (mEasierToWatchInFullScreen && videoPlayer.isControllerFullyVisible()) {
-                    fullscreenButton.performClick();
-                }
-            });
-        }
-
-        void bindVideoUri(Uri videoUri) {
-            mediaUri = videoUri;
-        }
-
-        void setVolume(float volume) {
-            this.volume = volume;
-        }
-
-        void resetVolume() {
-            volume = 0f;
-        }
-
-        private void savePlaybackInfo(int order, @Nullable PlaybackInfo playbackInfo) {
-            if (container != null) container.savePlaybackInfo(order, playbackInfo);
-        }
-
-        void loadFallbackDirectVideo() {
-            if (post.getVideoFallBackDirectUrl() != null) {
-                mediaUri = Uri.parse(post.getVideoFallBackDirectUrl());
-                post.setVideoDownloadUrl(post.getVideoFallBackDirectUrl());
-                post.setVideoUrl(post.getVideoFallBackDirectUrl());
-                post.setLoadRedgifsOrStreamableVideoSuccess(true);
-                if (container != null) {
-                    container.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
-                }
-            }
+            };
         }
 
         @NonNull
         @Override
         public View getPlayerView() {
-            return videoPlayer;
+            return toroPlayer.getPlayerView();
         }
 
         @NonNull
         @Override
         public PlaybackInfo getCurrentPlaybackInfo() {
-            return helper != null && mediaUri != null ? helper.getLatestPlaybackInfo() : new PlaybackInfo();
+            return toroPlayer.getCurrentPlaybackInfo();
         }
 
         @Override
         public void initialize(@NonNull Container container, @NonNull PlaybackInfo playbackInfo) {
-            if (mediaUri == null) {
-                return;
-            }
-            if (this.container == null) {
-                this.container = container;
-            }
-            if (helper == null) {
-                helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
-                helper.addEventListener(new Playable.DefaultEventListener() {
-                    @Override
-                    public void onEvents(@NonNull Player player, @NonNull Player.Events events) {
-                        if (events.containsAny(
-                                Player.EVENT_PLAY_WHEN_READY_CHANGED,
-                                Player.EVENT_PLAYBACK_STATE_CHANGED,
-                                Player.EVENT_PLAYBACK_SUPPRESSION_REASON_CHANGED)) {
-                            playPauseButton.setImageDrawable(Util.shouldShowPlayButton(player) ? playDrawable : pauseDrawable);
-                        }
-                    }
-
-                    @Override
-                    public void onTracksChanged(@NonNull Tracks tracks) {
-                        ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
-                        if (!trackGroups.isEmpty()) {
-                            for (int i = 0; i < trackGroups.size(); i++) {
-                                String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
-                                if (mimeType != null && mimeType.contains("audio")) {
-                                    if (mFragment.getMasterMutingOption() != null) {
-                                        volume = mFragment.getMasterMutingOption() ? 0f : 1f;
-                                    }
-                                    helper.setVolume(volume);
-                                    muteButton.setVisibility(View.VISIBLE);
-                                    if (volume != 0f) {
-                                        muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_unmute_24dp));
-                                    } else {
-                                        muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_mute_24dp));
-                                    }
-                                    break;
-                                }
-                            }
-                        } else {
-                            muteButton.setVisibility(View.GONE);
-                        }
-                    }
-
-                    @Override
-                    public void onRenderedFirstFrame() {
-                        mGlide.clear(previewImageView);
-                        previewImageView.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onPlayerError(@NonNull PlaybackException error) {
-                        if (post.getVideoFallBackDirectUrl() == null || post.getVideoFallBackDirectUrl().equals(mediaUri.toString())) {
-                            errorLoadingRedgifsImageView.setVisibility(View.VISIBLE);
-                        } else {
-                            loadFallbackDirectVideo();
-                        }
-                    }
-                });
-            }
-            helper.initialize(container, playbackInfo);
+            toroPlayer.initialize(container, playbackInfo);
         }
 
         @Override
         public void play() {
-            if (helper != null && mediaUri != null) {
-                if (!isPlaying() && isManuallyPaused) {
-                    helper.play();
-                    pause();
-                    helper.setVolume(volume);
-                } else {
-                    helper.play();
-                }
-            }
+            toroPlayer.play();
         }
 
         @Override
         public void pause() {
-            if (helper != null) helper.pause();
+            toroPlayer.pause();
         }
 
         @Override
         public boolean isPlaying() {
-            return helper != null && helper.isPlaying();
+            return toroPlayer.isPlaying();
         }
 
         @Override
         public void release() {
-            if (helper != null) {
-                helper.release();
-                helper = null;
-            }
-            isManuallyPaused = false;
-            container = null;
+            toroPlayer.release();
         }
 
         @Override
         public boolean wantsToPlay() {
-            return canPlayVideo && mediaUri != null && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
+            return toroPlayer.wantsToPlay();
         }
 
         @Override
         public int getPlayerOrder() {
-            return getBindingAdapterPosition();
+            return toroPlayer.getPlayerOrder();
         }
     }
 
