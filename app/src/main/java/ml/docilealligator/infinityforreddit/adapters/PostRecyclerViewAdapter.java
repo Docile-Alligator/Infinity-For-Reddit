@@ -808,30 +808,30 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
 
                 if (holder instanceof PostBaseVideoAutoplayViewHolder) {
-                    ((PostBaseVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.VISIBLE);
+                    ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView.setVisibility(View.VISIBLE);
                     Post.Preview preview = getSuitablePreview(post.getPreviews());
                     if (!mFixedHeightPreviewInCard && preview != null) {
-                        ((PostBaseVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio((float) preview.getPreviewWidth() / preview.getPreviewHeight());
-                        mGlide.load(preview.getPreviewUrl()).centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostBaseVideoAutoplayViewHolder) holder).previewImageView);
+                        ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.aspectRatioFrameLayout.setAspectRatio((float) preview.getPreviewWidth() / preview.getPreviewHeight());
+                        mGlide.load(preview.getPreviewUrl()).centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView);
                     } else {
-                        ((PostBaseVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio(1);
+                        ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.aspectRatioFrameLayout.setAspectRatio(1);
                     }
-                    if (!((PostBaseVideoAutoplayViewHolder) holder).isManuallyPaused) {
+                    if (!((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.isManuallyPaused) {
                         if (mFragment.getMasterMutingOption() == null) {
-                            ((PostBaseVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
+                            ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
                         } else {
-                            ((PostBaseVideoAutoplayViewHolder) holder).setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
+                            ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
                         }
                     }
 
                     if (post.isRedgifs() && !post.isLoadRedgifsOrStreamableVideoSuccess()) {
-                        ((PostBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall =
+                        ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall =
                                 mRedgifsRetrofit.create(RedgifsAPI.class)
                                         .getRedgifsData(APIUtils.getRedgifsOAuthHeader(
                                                 mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")),
                                                 post.getRedgifsId(), APIUtils.USER_AGENT);
                         FetchRedgifsVideoLinks.fetchRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
-                                ((PostBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall,
+                                ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall,
                                 new FetchVideoLinkListener() {
                                     @Override
                                     public void onFetchRedgifsVideoLinkSuccess(String webm, String mp4) {
@@ -839,22 +839,22 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                         post.setVideoUrl(mp4);
                                         post.setLoadRedgifsOrStreamableVideoSuccess(true);
                                         if (position == holder.getBindingAdapterPosition()) {
-                                            ((PostBaseVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
+                                            ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.bindVideoUri(Uri.parse(post.getVideoUrl()));
                                         }
                                     }
 
                                     @Override
                                     public void failed(@Nullable Integer messageRes) {
                                         if (position == holder.getBindingAdapterPosition()) {
-                                            ((PostBaseVideoAutoplayViewHolder) holder).loadFallbackDirectVideo();
+                                            ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.loadFallbackDirectVideo();
                                         }
                                     }
                                 });
                     } else if(post.isStreamable() && !post.isLoadRedgifsOrStreamableVideoSuccess()) {
-                        ((PostBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall =
+                        ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall =
                                 mStreamableApiProvider.get().getStreamableData(post.getStreamableShortCode());
                         FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, new Handler(),
-                                ((PostBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall,
+                                ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall,
                                 new FetchVideoLinkListener() {
                                     @Override
                                     public void onFetchStreamableVideoLinkSuccess(StreamableVideo streamableVideo) {
@@ -863,19 +863,19 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                         post.setVideoUrl(media.url);
                                         post.setLoadRedgifsOrStreamableVideoSuccess(true);
                                         if (position == holder.getBindingAdapterPosition()) {
-                                            ((PostBaseVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
+                                            ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.bindVideoUri(Uri.parse(post.getVideoUrl()));
                                         }
                                     }
 
                                     @Override
                                     public void failed(@Nullable Integer messageRes) {
                                         if (position == holder.getBindingAdapterPosition()) {
-                                            ((PostBaseVideoAutoplayViewHolder) holder).loadFallbackDirectVideo();
+                                            ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.loadFallbackDirectVideo();
                                         }
                                     }
                                 });
                     } else {
-                        ((PostBaseVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
+                        ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.bindVideoUri(Uri.parse(post.getVideoUrl()));
                     }
                 } else if (holder instanceof PostWithPreviewTypeViewHolder) {
                     if (post.getPostType() == Post.VIDEO_TYPE) {
@@ -2255,18 +2255,19 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mGlide.clear(((PostBaseViewHolder) holder).iconGifImageView);
             ((PostBaseViewHolder) holder).titleTextView.setTextColor(mPostTitleColor);
             if (holder instanceof PostBaseVideoAutoplayViewHolder) {
-                ((PostBaseVideoAutoplayViewHolder) holder).mediaUri = null;
-                if (((PostBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall != null && !((PostBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall.isCanceled()) {
-                    ((PostBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall.cancel();
-                    ((PostBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall = null;
+                ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.mediaUri = null;
+                if (((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall != null
+                        && !((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall.isCanceled()) {
+                    ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall.cancel();
+                    ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall = null;
                 }
-                ((PostBaseVideoAutoplayViewHolder) holder).errorLoadingRedgifsImageView.setVisibility(View.GONE);
-                ((PostBaseVideoAutoplayViewHolder) holder).muteButton.setVisibility(View.GONE);
-                if (!((PostBaseVideoAutoplayViewHolder) holder).isManuallyPaused) {
-                    ((PostBaseVideoAutoplayViewHolder) holder).resetVolume();
+                ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.errorLoadingRedgifsImageView.setVisibility(View.GONE);
+                ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.muteButton.setVisibility(View.GONE);
+                if (!((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.isManuallyPaused) {
+                    ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.resetVolume();
                 }
-                mGlide.clear(((PostBaseVideoAutoplayViewHolder) holder).previewImageView);
-                ((PostBaseVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.GONE);
+                mGlide.clear(((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView);
+                ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView.setVisibility(View.GONE);
             } else if (holder instanceof PostWithPreviewTypeViewHolder) {
                 mGlide.clear(((PostWithPreviewTypeViewHolder) holder).binding.imageViewItemPostWithPreview);
                 ((PostWithPreviewTypeViewHolder) holder).binding.imageViewItemPostWithPreview.setVisibility(View.GONE);
@@ -2692,7 +2693,100 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
 
         void setBaseView(AspectRatioGifImageView iconGifImageView,
+                         TextView subredditTextView,
+                         TextView userTextView,
+                         CustomTextView typeTextView,
+                         CustomTextView nsfwTextView,
+                         CustomTextView flairTextView,
+                         MaterialButton upvoteButton,
+                         TextView scoreTextView,
+                         MaterialButton downvoteButton,
+                         MaterialButton commentsCountButton,
+                         MaterialButton saveButton,
+                         MaterialButton shareButton) {
+            this.iconGifImageView = iconGifImageView;
+            this.upvoteButton = upvoteButton;
+            this.scoreTextView = scoreTextView;
+            this.downvoteButton = downvoteButton;
+            this.commentsCountButton = commentsCountButton;
+            this.saveButton = saveButton;
+            this.shareButton = shareButton;
+
+            if (mDisplaySubredditName) {
+                subredditTextView.setOnClickListener(view -> {
+                    int position = getBindingAdapterPosition();
+                    if (position < 0) {
+                        return;
+                    }
+                    Post post = getItem(position);
+                    if (post != null) {
+                        if (canStartActivity) {
+                            canStartActivity = false;
+                            Intent intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                                    post.getSubredditName());
+                            mActivity.startActivity(intent);
+                        }
+                    }
+                });
+
+                iconGifImageView.setOnClickListener(view -> subredditTextView.performClick());
+            } else {
+                subredditTextView.setOnClickListener(view -> {
+                    int position = getBindingAdapterPosition();
+                    if (position < 0) {
+                        return;
+                    }
+                    Post post = getItem(position);
+                    if (post != null) {
+                        if (canStartActivity) {
+                            canStartActivity = false;
+                            Intent intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                                    post.getSubredditName());
+                            mActivity.startActivity(intent);
+                        }
+                    }
+                });
+
+                iconGifImageView.setOnClickListener(view -> userTextView.performClick());
+            }
+
+            userTextView.setOnClickListener(view -> {
+                if (!canStartActivity) {
+                    return;
+                }
+                int position = getBindingAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
+                if (post == null || post.isAuthorDeleted()) {
+                    return;
+                }
+                canStartActivity = false;
+                Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
+                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, post.getAuthor());
+                mActivity.startActivity(intent);
+            });
+
+            setOnClickListeners(
+                    typeTextView,
+                    nsfwTextView,
+                    flairTextView,
+                    upvoteButton,
+                    scoreTextView,
+                    downvoteButton,
+                    commentsCountButton,
+                    saveButton,
+                    shareButton);
+        }
+
+        void setBaseView(AspectRatioGifImageView iconGifImageView,
                          TextView nameTextView,
+                         CustomTextView typeTextView,
+                         CustomTextView nsfwTextView,
+                         CustomTextView flairTextView,
                          MaterialButton upvoteButton,
                          TextView scoreTextView,
                          MaterialButton downvoteButton,
@@ -2730,7 +2824,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
             iconGifImageView.setOnClickListener(view -> nameTextView.performClick());
 
-            setOnClickListeners(upvoteButton,
+            setOnClickListeners(typeTextView,
+                    nsfwTextView,
+                    flairTextView,
+                    upvoteButton,
                     scoreTextView,
                     downvoteButton,
                     commentsCountButton,
@@ -3049,7 +3146,245 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             });
         }
 
+        void setOnClickListeners(CustomTextView typeTextView,
+                                 CustomTextView nsfwTextView,
+                                 CustomTextView flairTextView,
+                                 MaterialButton upvoteButton,
+                                 TextView scoreTextView,
+                                 MaterialButton downvoteButton,
+                                 MaterialButton commentsCountButton,
+                                 MaterialButton saveButton,
+                                 MaterialButton shareButton) {
+            setOnClickListeners(upvoteButton,
+                    scoreTextView,
+                    downvoteButton,
+                    commentsCountButton,
+                    saveButton,
+                    shareButton);
+
+            if (!(mActivity instanceof FilteredPostsActivity)) {
+                nsfwTextView.setOnClickListener(view -> {
+                    int position = getBindingAdapterPosition();
+                    if (position < 0) {
+                        return;
+                    }
+                    Post post = getItem(position);
+                    if (post != null) {
+                        mCallback.nsfwChipClicked();
+                    }
+                });
+                typeTextView.setOnClickListener(view -> {
+                    int position = getBindingAdapterPosition();
+                    if (position < 0) {
+                        return;
+                    }
+                    Post post = getItem(position);
+                    if (post != null) {
+                        mCallback.typeChipClicked(post.getPostType());
+                    }
+                });
+
+                flairTextView.setOnClickListener(view -> {
+                    int position = getBindingAdapterPosition();
+                    if (position < 0) {
+                        return;
+                    }
+                    Post post = getItem(position);
+                    if (post != null) {
+                        mCallback.flairChipClicked(post.getFlair());
+                    }
+                });
+            }
+        }
+
         abstract void markPostRead(Post post, boolean changePostItemColor);
+    }
+
+    @UnstableApi
+    public abstract class VideoAutoplayImpl implements ToroPlayer {
+        View itemView;
+        AspectRatioFrameLayout aspectRatioFrameLayout;
+        GifImageView previewImageView;
+        ImageView errorLoadingRedgifsImageView;
+        PlayerView videoPlayer;
+        ImageView muteButton;
+        ImageView fullscreenButton;
+        ImageView playPauseButton;
+        @Nullable
+        Container container;
+        @Nullable
+        ExoPlayerViewHelper helper;
+        private Uri mediaUri;
+        private float volume;
+        public Call<String> fetchRedgifsOrStreamableVideoCall;
+        private boolean isManuallyPaused;
+        private Drawable playDrawable;
+        private Drawable pauseDrawable;
+
+        public VideoAutoplayImpl(View itemView, AspectRatioFrameLayout aspectRatioFrameLayout,
+                                 GifImageView previewImageView, ImageView errorLoadingRedgifsImageView,
+                                 PlayerView videoPlayer, ImageView muteButton, ImageView fullscreenButton,
+                                 ImageView playPauseButton,
+                                 Drawable playDrawable, Drawable pauseDrawable) {
+            this.itemView = itemView;
+            this.aspectRatioFrameLayout = aspectRatioFrameLayout;
+            this.previewImageView = previewImageView;
+            this.errorLoadingRedgifsImageView = errorLoadingRedgifsImageView;
+            this.videoPlayer = videoPlayer;
+            this.muteButton = muteButton;
+            this.fullscreenButton = fullscreenButton;
+            this.playPauseButton = playPauseButton;
+            this.playDrawable = playDrawable;
+            this.pauseDrawable = pauseDrawable;
+        }
+
+        void bindVideoUri(Uri videoUri) {
+            mediaUri = videoUri;
+        }
+
+        void setVolume(float volume) {
+            this.volume = volume;
+        }
+
+        void resetVolume() {
+            volume = 0f;
+        }
+
+        private void savePlaybackInfo(int order, @Nullable PlaybackInfo playbackInfo) {
+            if (container != null) container.savePlaybackInfo(order, playbackInfo);
+        }
+
+        void loadFallbackDirectVideo() {
+            Post post = getPost();
+            if (post.getVideoFallBackDirectUrl() != null) {
+                mediaUri = Uri.parse(post.getVideoFallBackDirectUrl());
+                post.setVideoDownloadUrl(post.getVideoFallBackDirectUrl());
+                post.setVideoUrl(post.getVideoFallBackDirectUrl());
+                post.setLoadRedgifsOrStreamableVideoSuccess(true);
+                if (container != null) {
+                    container.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
+                }
+            }
+        }
+
+        @NonNull
+        @Override
+        public View getPlayerView() {
+            return videoPlayer;
+        }
+
+        @NonNull
+        @Override
+        public PlaybackInfo getCurrentPlaybackInfo() {
+            return helper != null && mediaUri != null ? helper.getLatestPlaybackInfo() : new PlaybackInfo();
+        }
+
+        @OptIn(markerClass = UnstableApi.class)
+        @Override
+        public void initialize(@NonNull Container container, @NonNull PlaybackInfo playbackInfo) {
+            if (this.container == null) {
+                this.container = container;
+            }
+            if (mediaUri == null) {
+                return;
+            }
+            if (helper == null) {
+                helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
+                helper.addEventListener(new Playable.DefaultEventListener() {
+                    @Override
+                    public void onEvents(@NonNull Player player, @NonNull Player.Events events) {
+                        if (events.containsAny(
+                                Player.EVENT_PLAY_WHEN_READY_CHANGED,
+                                Player.EVENT_PLAYBACK_STATE_CHANGED,
+                                Player.EVENT_PLAYBACK_SUPPRESSION_REASON_CHANGED)) {
+                            playPauseButton.setImageDrawable(Util.shouldShowPlayButton(player) ? playDrawable : pauseDrawable);
+                        }
+                    }
+
+                    @Override
+                    public void onTracksChanged(@NonNull Tracks tracks) {
+                        ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
+                        if (!trackGroups.isEmpty()) {
+                            for (int i = 0; i < trackGroups.size(); i++) {
+                                String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
+                                if (mimeType != null && mimeType.contains("audio")) {
+                                    if (mFragment.getMasterMutingOption() != null) {
+                                        volume = mFragment.getMasterMutingOption() ? 0f : 1f;
+                                    }
+                                    helper.setVolume(volume);
+                                    muteButton.setVisibility(View.VISIBLE);
+                                    if (volume != 0f) {
+                                        muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_unmute_24dp));
+                                    } else {
+                                        muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_mute_24dp));
+                                    }
+                                    break;
+                                }
+                            }
+                        } else {
+                            muteButton.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onRenderedFirstFrame() {
+                        mGlide.clear(previewImageView);
+                        previewImageView.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onPlayerError(@NonNull PlaybackException error) {
+                        Post post = getPost();
+                        if (post.getVideoFallBackDirectUrl() == null || post.getVideoFallBackDirectUrl().equals(mediaUri.toString())) {
+                            errorLoadingRedgifsImageView.setVisibility(View.VISIBLE);
+                        } else {
+                            loadFallbackDirectVideo();
+                        }
+                    }
+                });
+            }
+            helper.initialize(container, playbackInfo);
+        }
+
+        @Override
+        public void play() {
+            if (helper != null && mediaUri != null) {
+                if (!isPlaying() && isManuallyPaused) {
+                    helper.play();
+                    pause();
+                    helper.setVolume(volume);
+                } else {
+                    helper.play();
+                }
+            }
+        }
+
+        @Override
+        public void pause() {
+            if (helper != null) helper.pause();
+        }
+
+        @Override
+        public boolean isPlaying() {
+            return helper != null && helper.isPlaying();
+        }
+
+        @Override
+        public void release() {
+            if (helper != null) {
+                helper.release();
+                helper = null;
+            }
+            isManuallyPaused = false;
+            container = null;
+        }
+
+        @Override
+        public boolean wantsToPlay() {
+            return canPlayVideo && mediaUri != null && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
+        }
+
+        abstract Post getPost();
     }
 
     public class PostBaseViewHolder extends PostViewHolder {
@@ -3099,6 +3434,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             super.setBaseView(iconGifImageView,
                     subredditTextView,
                     userTextView,
+                    typeTextView,
+                    nsfwTextView,
+                    flairTextView,
                     upvoteButton,
                     scoreTextView,
                     downvoteButton,
@@ -3229,40 +3567,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
                 return false;
             });
-
-            if (!(mActivity instanceof FilteredPostsActivity)) {
-                nsfwTextView.setOnClickListener(view -> {
-                    int position = getBindingAdapterPosition();
-                    if (position < 0) {
-                        return;
-                    }
-                    Post post = getItem(position);
-                    if (post != null) {
-                        mCallback.nsfwChipClicked();
-                    }
-                });
-                typeTextView.setOnClickListener(view -> {
-                    int position = getBindingAdapterPosition();
-                    if (position < 0) {
-                        return;
-                    }
-                    Post post = getItem(position);
-                    if (post != null) {
-                        mCallback.typeChipClicked(post.getPostType());
-                    }
-                });
-
-                flairTextView.setOnClickListener(view -> {
-                    int position = getBindingAdapterPosition();
-                    if (position < 0) {
-                        return;
-                    }
-                    Post post = getItem(position);
-                    if (post != null) {
-                        mCallback.flairChipClicked(post.getFlair());
-                    }
-                });
-            }
         }
 
         void setBaseView(AspectRatioGifImageView iconGifImageView,
@@ -3318,7 +3622,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
     @UnstableApi
     class PostBaseVideoAutoplayViewHolder extends PostBaseViewHolder implements ToroPlayer {
-        AspectRatioFrameLayout aspectRatioFrameLayout;
+        /*AspectRatioFrameLayout aspectRatioFrameLayout;
         GifImageView previewImageView;
         ImageView errorLoadingRedgifsImageView;
         PlayerView videoPlayer;
@@ -3335,7 +3639,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         public Call<String> fetchRedgifsOrStreamableVideoCall;
         private boolean isManuallyPaused;
         private Drawable playDrawable;
-        private Drawable pauseDrawable;
+        private Drawable pauseDrawable;*/
+        VideoAutoplayImpl toroPlayer;
 
         @OptIn(markerClass = UnstableApi.class)
         PostBaseVideoAutoplayViewHolder(View rootView,
@@ -3390,7 +3695,22 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     saveButton,
                     shareButton);
 
-            this.aspectRatioFrameLayout = aspectRatioFrameLayout;
+            toroPlayer = new VideoAutoplayImpl(rootView, aspectRatioFrameLayout, previewImageView,
+                    errorLoadingRedgifsImageView, videoPlayer, muteButton, fullscreenButton, playPauseButton,
+                    AppCompatResources.getDrawable(mActivity, R.drawable.ic_play_arrow_24dp),
+                    AppCompatResources.getDrawable(mActivity, R.drawable.ic_pause_24dp)) {
+                @Override
+                public int getPlayerOrder() {
+                    return getBindingAdapterPosition();
+                }
+
+                @Override
+                Post getPost() {
+                    return post;
+                }
+            };
+
+            /*this.aspectRatioFrameLayout = aspectRatioFrameLayout;
             this.previewImageView = previewImageView;
             this.errorLoadingRedgifsImageView = errorLoadingRedgifsImageView;
             this.videoPlayer = videoPlayer;
@@ -3399,21 +3719,21 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             this.playPauseButton = playPauseButton;
             this.progressBar = progressBar;
             playDrawable = AppCompatResources.getDrawable(mActivity, R.drawable.ic_play_arrow_24dp);
-            pauseDrawable = AppCompatResources.getDrawable(mActivity, R.drawable.ic_pause_24dp);
+            pauseDrawable = AppCompatResources.getDrawable(mActivity, R.drawable.ic_pause_24dp);*/
 
             aspectRatioFrameLayout.setOnClickListener(null);
 
             muteButton.setOnClickListener(view -> {
-                if (helper != null) {
-                    if (helper.getVolume() != 0) {
+                if (toroPlayer.helper != null) {
+                    if (toroPlayer.helper.getVolume() != 0) {
                         muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_mute_24dp));
-                        helper.setVolume(0f);
-                        volume = 0f;
+                        toroPlayer.helper.setVolume(0f);
+                        toroPlayer.volume = 0f;
                         mFragment.videoAutoplayChangeMutingOption(true);
                     } else {
                         muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_unmute_24dp));
-                        helper.setVolume(1f);
-                        volume = 1f;
+                        toroPlayer.helper.setVolume(1f);
+                        toroPlayer.volume = 1f;
                         mFragment.videoAutoplayChangeMutingOption(false);
                     }
                 }
@@ -3428,8 +3748,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 if (post != null) {
                     markPostRead(post, true);
 
-                    if (helper != null) {
-                        openMedia(post, helper.getLatestPlaybackInfo().getResumePosition());
+                    if (toroPlayer.helper != null) {
+                        openMedia(post, toroPlayer.helper.getLatestPlaybackInfo().getResumePosition());
                     } else {
                         openMedia(post, -1);
                     }
@@ -3439,10 +3759,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             playPauseButton.setOnClickListener(view -> {
                 if (isPlaying()) {
                     pause();
-                    isManuallyPaused = true;
-                    savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+                    toroPlayer.isManuallyPaused = true;
+                    toroPlayer.savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
                 } else {
-                    isManuallyPaused = false;
+                    toroPlayer.isManuallyPaused = false;
                     play();
                 }
             });
@@ -3461,7 +3781,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 @Override
                 public void onScrubStop(TimeBar timeBar, long position, boolean canceled) {
                     if (!canceled) {
-                        savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+                        toroPlayer.savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
                     }
                 }
             });
@@ -3475,7 +3795,54 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             });
         }
 
-        void bindVideoUri(Uri videoUri) {
+        @NonNull
+        @Override
+        public View getPlayerView() {
+            return toroPlayer.getPlayerView();
+        }
+
+        @NonNull
+        @Override
+        public PlaybackInfo getCurrentPlaybackInfo() {
+            return toroPlayer.getCurrentPlaybackInfo();
+        }
+
+        @Override
+        public void initialize(@NonNull Container container, @NonNull PlaybackInfo playbackInfo) {
+            toroPlayer.initialize(container, playbackInfo);
+        }
+
+        @Override
+        public void play() {
+            toroPlayer.play();
+        }
+
+        @Override
+        public void pause() {
+            toroPlayer.pause();
+        }
+
+        @Override
+        public boolean isPlaying() {
+            return toroPlayer.isPlaying();
+        }
+
+        @Override
+        public void release() {
+            toroPlayer.release();
+        }
+
+        @Override
+        public boolean wantsToPlay() {
+            return toroPlayer.wantsToPlay();
+        }
+
+        @Override
+        public int getPlayerOrder() {
+            return toroPlayer.getPlayerOrder();
+        }
+
+        /*void bindVideoUri(Uri videoUri) {
             mediaUri = videoUri;
         }
 
@@ -3622,7 +3989,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         @Override
         public int getPlayerOrder() {
             return getBindingAdapterPosition();
-        }
+        }*/
     }
 
     @UnstableApi
@@ -4089,6 +4456,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                          View divider) {
             super.setBaseView(iconGifImageView,
                     nameTextView,
+                    typeTextView,
+                    nsfwTextView,
+                    flairTextView,
                     upvoteButton,
                     scoreTextView,
                     downvoteButton,
@@ -4236,39 +4606,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 return false;
             });
 
-            nsfwTextView.setOnClickListener(view -> {
-                int position = getBindingAdapterPosition();
-                if (position < 0) {
-                    return;
-                }
-                Post post = getItem(position);
-                if (post != null && !(mActivity instanceof FilteredPostsActivity)) {
-                    mCallback.nsfwChipClicked();
-                }
-            });
-
-            typeTextView.setOnClickListener(view -> {
-                int position = getBindingAdapterPosition();
-                if (position < 0) {
-                    return;
-                }
-                Post post = getItem(position);
-                if (post != null && !(mActivity instanceof FilteredPostsActivity)) {
-                    mCallback.typeChipClicked(post.getPostType());
-                }
-            });
-
-            flairTextView.setOnClickListener(view -> {
-                int position = getBindingAdapterPosition();
-                if (position < 0) {
-                    return;
-                }
-                Post post = getItem(position);
-                if (post != null && !(mActivity instanceof FilteredPostsActivity)) {
-                    mCallback.flairChipClicked(post.getFlair());
-                }
-            });
-
             imageView.setOnClickListener(view -> {
                 int position = getBindingAdapterPosition();
                 if (position < 0) {
@@ -4300,6 +4637,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             };
         }
 
+        @Override
         void markPostRead(Post post, boolean changePostItemColor) {
             if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
