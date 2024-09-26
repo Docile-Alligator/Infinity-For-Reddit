@@ -410,6 +410,7 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
         binding.postTitleEditTextPostPollActivity.setHintTextColor(secondaryTextColor);
         binding.postContentEditTextPostPollActivity.setTextColor(primaryTextColor);
         binding.postContentEditTextPostPollActivity.setHintTextColor(secondaryTextColor);
+        binding.votingLengthTextViewPostPollActivity.setTextColor(secondaryTextColor);
         binding.option1TextInputLayoutPostPollActivity.setBoxStrokeColor(primaryTextColor);
         binding.option1TextInputLayoutPostPollActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         binding.option1TextInputLayoutEditTextPostPollActivity.setTextColor(primaryTextColor);
