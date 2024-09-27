@@ -69,14 +69,8 @@ import javax.inject.Provider;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.FetchVideoLinkListener;
-import ml.docilealligator.infinityforreddit.thing.FetchRedgifsVideoLinks;
-import ml.docilealligator.infinityforreddit.post.FetchStreamableVideo;
-import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
-import ml.docilealligator.infinityforreddit.thing.SaveThing;
-import ml.docilealligator.infinityforreddit.thing.StreamableVideo;
-import ml.docilealligator.infinityforreddit.thing.VoteThing;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
@@ -115,8 +109,14 @@ import ml.docilealligator.infinityforreddit.databinding.ItemPostVideoTypeAutopla
 import ml.docilealligator.infinityforreddit.databinding.ItemPostWithPreviewBinding;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostDetailFragment;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
+import ml.docilealligator.infinityforreddit.post.FetchStreamableVideo;
+import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
+import ml.docilealligator.infinityforreddit.thing.FetchRedgifsVideoLinks;
+import ml.docilealligator.infinityforreddit.thing.SaveThing;
+import ml.docilealligator.infinityforreddit.thing.StreamableVideo;
+import ml.docilealligator.infinityforreddit.thing.VoteThing;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -980,19 +980,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     }
                 } else if (holder instanceof PostTextTypeViewHolder) {
                     if (!mHideTextPostContent && !post.isSpoiler() && post.getSelfTextPlainTrimmed() != null && !post.getSelfTextPlainTrimmed().equals("")) {
-                        ((PostTextTypeViewHolder) holder).binding.contentTextViewItemPostTextType.setVisibility(View.VISIBLE);
+                        ((PostTextTypeViewHolder) holder).contentTextView.setVisibility(View.VISIBLE);
                         if (post.isRead()) {
-                            ((PostTextTypeViewHolder) holder).binding.contentTextViewItemPostTextType.setTextColor(mReadPostContentColor);
+                            ((PostTextTypeViewHolder) holder).contentTextView.setTextColor(mReadPostContentColor);
                         }
-                        ((PostTextTypeViewHolder) holder).binding.contentTextViewItemPostTextType.setText(post.getSelfTextPlainTrimmed());
-                    }
-                } else if (holder instanceof PostCard2TextTypeViewHolder) {
-                    if (!mHideTextPostContent && !post.isSpoiler() && post.getSelfTextPlainTrimmed() != null && !post.getSelfTextPlainTrimmed().equals("")) {
-                        ((PostCard2TextTypeViewHolder) holder).binding.contentTextViewItemPostCard2Text.setVisibility(View.VISIBLE);
-                        if (post.isRead()) {
-                            ((PostCard2TextTypeViewHolder) holder).binding.contentTextViewItemPostCard2Text.setTextColor(mReadPostContentColor);
-                        }
-                        ((PostCard2TextTypeViewHolder) holder).binding.contentTextViewItemPostCard2Text.setText(post.getSelfTextPlainTrimmed());
+                        ((PostTextTypeViewHolder) holder).contentTextView.setText(post.getSelfTextPlainTrimmed());
                     }
                 }
                 mCallback.currentlyBindItem(holder.getBindingAdapterPosition());
@@ -2173,13 +2165,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 ((PostBaseGalleryTypeViewHolder) holder).noPreviewImageView.setVisibility(View.GONE);
                 ((PostBaseGalleryTypeViewHolder) holder).adapter.setGalleryImages(null);
             } else if (holder instanceof PostTextTypeViewHolder) {
-                ((PostTextTypeViewHolder) holder).binding.contentTextViewItemPostTextType.setText("");
-                ((PostTextTypeViewHolder) holder).binding.contentTextViewItemPostTextType.setTextColor(mPostContentColor);
-                ((PostTextTypeViewHolder) holder).binding.contentTextViewItemPostTextType.setVisibility(View.GONE);
-            } else if (holder instanceof PostCard2TextTypeViewHolder) {
-                ((PostCard2TextTypeViewHolder) holder).binding.contentTextViewItemPostCard2Text.setText("");
-                ((PostCard2TextTypeViewHolder) holder).binding.contentTextViewItemPostCard2Text.setTextColor(mPostContentColor);
-                ((PostCard2TextTypeViewHolder) holder).binding.contentTextViewItemPostCard2Text.setVisibility(View.GONE);
+                ((PostTextTypeViewHolder) holder).contentTextView.setText("");
+                ((PostTextTypeViewHolder) holder).contentTextView.setTextColor(mPostContentColor);
+                ((PostTextTypeViewHolder) holder).contentTextView.setVisibility(View.GONE);
             }
 
             mGlide.clear(((PostBaseViewHolder) holder).iconGifImageView);
@@ -3563,7 +3551,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     }
                     titleTextView.setTextColor(mReadPostTitleColor);
                     if (this instanceof PostTextTypeViewHolder) {
-                        ((PostTextTypeViewHolder) this).binding.contentTextViewItemPostTextType.setTextColor(mReadPostContentColor);
+                        ((PostTextTypeViewHolder) this).contentTextView.setTextColor(mReadPostContentColor);
                     }
                 }
                 if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
@@ -3922,7 +3910,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     }
 
-    public class PostBaseGalleryTypeViewHolder extends PostBaseViewHolder {
+    public abstract class PostBaseGalleryTypeViewHolder extends PostBaseViewHolder {
         FrameLayout frameLayout;
         RecyclerView galleryRecyclerView;
         CustomTextView imageIndexTextView;
@@ -4137,12 +4125,14 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     }
 
     class PostTextTypeViewHolder extends PostBaseViewHolder {
+        TextView contentTextView;
 
-        ItemPostTextBinding binding;
+        PostTextTypeViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
 
         PostTextTypeViewHolder(@NonNull ItemPostTextBinding binding) {
             super(binding.getRoot());
-            this.binding = binding;
             setBaseView(
                     binding.iconGifImageViewItemPostTextType,
                     binding.subredditNameTextViewItemPostTextType,
@@ -4163,12 +4153,59 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.downvoteButtonItemPostTextType,
                     binding.commentsCountButtonItemPostTextType,
                     binding.saveButtonItemPostTextType,
-                    binding.shareButtonItemPostTextType);
+                    binding.shareButtonItemPostTextType,
+                    binding.contentTextViewItemPostTextType);
+        }
+
+        void setBaseView(AspectRatioGifImageView iconGifImageView,
+                         TextView subredditTextView,
+                         TextView userTextView,
+                         ImageView stickiedPostImageView,
+                         TextView postTimeTextView,
+                         TextView titleTextView,
+                         CustomTextView typeTextView,
+                         ImageView archivedImageView,
+                         ImageView lockedImageView,
+                         ImageView crosspostImageView,
+                         CustomTextView nsfwTextView,
+                         CustomTextView spoilerTextView,
+                         CustomTextView flairTextView,
+                         ConstraintLayout bottomConstraintLayout,
+                         MaterialButton upvoteButton,
+                         TextView scoreTextView,
+                         MaterialButton downvoteButton,
+                         MaterialButton commentsCountButton,
+                         MaterialButton saveButton,
+                         MaterialButton shareButton,
+                         TextView contentTextView) {
+            super.setBaseView(
+                    iconGifImageView,
+                    subredditTextView,
+                    userTextView,
+                    stickiedPostImageView,
+                    postTimeTextView,
+                    titleTextView,
+                    typeTextView,
+                    archivedImageView,
+                    lockedImageView,
+                    crosspostImageView,
+                    nsfwTextView,
+                    spoilerTextView,
+                    flairTextView,
+                    bottomConstraintLayout,
+                    upvoteButton,
+                    scoreTextView,
+                    downvoteButton,
+                    commentsCountButton,
+                    saveButton,
+                    shareButton);
+
+            this.contentTextView = contentTextView;
 
             if (mActivity.contentTypeface != null) {
-                binding.contentTextViewItemPostTextType.setTypeface(mActivity.titleTypeface);
+                contentTextView.setTypeface(mActivity.titleTypeface);
             }
-            binding.contentTextViewItemPostTextType.setTextColor(mPostContentColor);
+            contentTextView.setTextColor(mPostContentColor);
         }
     }
 
@@ -4948,13 +4985,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     }
 
-    class PostCard2TextTypeViewHolder extends PostBaseViewHolder {
-
-        ItemPostCard2TextBinding binding;
-
+    class PostCard2TextTypeViewHolder extends PostTextTypeViewHolder {
         PostCard2TextTypeViewHolder(@NonNull ItemPostCard2TextBinding binding) {
             super(binding.getRoot());
-            this.binding = binding;
+            itemViewIsNotCardView = true;
+
             setBaseView(
                     binding.iconGifImageViewItemPostCard2Text,
                     binding.subredditNameTextViewItemPostCard2Text,
@@ -4976,12 +5011,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.commentsCountButtonItemPostCard2Text,
                     binding.saveButtonItemPostCard2Text,
                     binding.shareButtonItemPostCard2Text,
-                    true);
+                    binding.contentTextViewItemPostCard2Text);
 
-            if (mActivity.contentTypeface != null) {
-                binding.contentTextViewItemPostCard2Text.setTypeface(mActivity.contentTypeface);
-            }
-            binding.contentTextViewItemPostCard2Text.setTextColor(mPostContentColor);
             binding.dividerItemPostCard2Text.setBackgroundColor(mDividerColor);
         }
     }
