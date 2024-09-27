@@ -599,6 +599,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 return;
             }
 
+            ((PostViewHolder) holder).post = post;
+            ((PostViewHolder) holder).currentPosition = position;
+
             if (mDisplaySubredditName) {
                 if (post.getAuthorNamePrefixed().equals(post.getSubredditNamePrefixed())) {
                     if (post.getAuthorIconUrl() == null) {
@@ -747,8 +750,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 ((PostViewHolder) holder).saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
             }
 
-
-
             if (holder instanceof PostBaseViewHolder) {
                 ((PostBaseViewHolder) holder).post = post;
                 ((PostBaseViewHolder) holder).currentPosition = position;
@@ -829,59 +830,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         }
                     }
 
-                    if (post.isRedgifs() && !post.isLoadRedgifsOrStreamableVideoSuccess()) {
-                        ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall =
-                                mRedgifsRetrofit.create(RedgifsAPI.class)
-                                        .getRedgifsData(APIUtils.getRedgifsOAuthHeader(
-                                                        mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")),
-                                                post.getRedgifsId(), APIUtils.USER_AGENT);
-                        FetchRedgifsVideoLinks.fetchRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
-                                ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall,
-                                new FetchVideoLinkListener() {
-                                    @Override
-                                    public void onFetchRedgifsVideoLinkSuccess(String webm, String mp4) {
-                                        post.setVideoDownloadUrl(mp4);
-                                        post.setVideoUrl(mp4);
-                                        post.setLoadRedgifsOrStreamableVideoSuccess(true);
-                                        if (position == holder.getBindingAdapterPosition()) {
-                                            ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.bindVideoUri(Uri.parse(post.getVideoUrl()));
-                                        }
-                                    }
-
-                                    @Override
-                                    public void failed(@Nullable Integer messageRes) {
-                                        if (position == holder.getBindingAdapterPosition()) {
-                                            ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.loadFallbackDirectVideo();
-                                        }
-                                    }
-                                });
-                    } else if(post.isStreamable() && !post.isLoadRedgifsOrStreamableVideoSuccess()) {
-                        ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall =
-                                mStreamableApiProvider.get().getStreamableData(post.getStreamableShortCode());
-                        FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, new Handler(),
-                                ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall,
-                                new FetchVideoLinkListener() {
-                                    @Override
-                                    public void onFetchStreamableVideoLinkSuccess(StreamableVideo streamableVideo) {
-                                        StreamableVideo.Media media = streamableVideo.mp4 == null ? streamableVideo.mp4Mobile : streamableVideo.mp4;
-                                        post.setVideoDownloadUrl(media.url);
-                                        post.setVideoUrl(media.url);
-                                        post.setLoadRedgifsOrStreamableVideoSuccess(true);
-                                        if (position == holder.getBindingAdapterPosition()) {
-                                            ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.bindVideoUri(Uri.parse(post.getVideoUrl()));
-                                        }
-                                    }
-
-                                    @Override
-                                    public void failed(@Nullable Integer messageRes) {
-                                        if (position == holder.getBindingAdapterPosition()) {
-                                            ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.loadFallbackDirectVideo();
-                                        }
-                                    }
-                                });
-                    } else {
-                        ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.bindVideoUri(Uri.parse(post.getVideoUrl()));
-                    }
+                    ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.loadVideo(position);
                 } else if (holder instanceof PostWithPreviewTypeViewHolder) {
                     if (post.getPostType() == Post.VIDEO_TYPE) {
                         ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setVisibility(View.VISIBLE);
@@ -994,15 +943,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
                 mCallback.currentlyBindItem(holder.getBindingAdapterPosition());
             } else if (holder instanceof PostCompactBaseViewHolder) {
-                ((PostCompactBaseViewHolder) holder).post = post;
-                ((PostCompactBaseViewHolder) holder).currentPosition = position;
                 if (post.isRead()) {
                     holder.itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
                     ((PostCompactBaseViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
                 }
-                final String title = post.getTitle();
-                //TODO: why is voteType here?
-                int voteType = post.getVoteType();
                 boolean nsfw = post.isNSFW();
                 boolean spoiler = post.isSpoiler();
                 String flair = post.getFlair();
@@ -1160,8 +1104,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
                 mCallback.currentlyBindItem(holder.getBindingAdapterPosition());
             } else if (holder instanceof PostMaterial3CardBaseViewHolder) {
-                ((PostMaterial3CardBaseViewHolder) holder).post = post;
-                ((PostMaterial3CardBaseViewHolder) holder).currentPosition = position;
                 if (post.isRead()) {
                     holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostFilledCardViewBackgroundColor));
                     ((PostMaterial3CardBaseViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
@@ -1201,59 +1143,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         }
                     }
 
-                    if (post.isRedgifs() && !post.isLoadRedgifsOrStreamableVideoSuccess()) {
-                        ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall =
-                                mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(
-                                        APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences
-                                                .getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")),
-                                        post.getRedgifsId(), APIUtils.USER_AGENT);
-                        FetchRedgifsVideoLinks.fetchRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
-                                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall,
-                                new FetchVideoLinkListener() {
-                                    @Override
-                                    public void onFetchRedgifsVideoLinkSuccess(String webm, String mp4) {
-                                        post.setVideoDownloadUrl(mp4);
-                                        post.setVideoUrl(mp4);
-                                        post.setLoadRedgifsOrStreamableVideoSuccess(true);
-                                        if (position == holder.getBindingAdapterPosition()) {
-                                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.bindVideoUri(Uri.parse(post.getVideoUrl()));
-                                        }
-                                    }
-
-                                    @Override
-                                    public void failed(@Nullable Integer messageRes) {
-                                        if (position == holder.getBindingAdapterPosition()) {
-                                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.loadFallbackDirectVideo();
-                                        }
-                                    }
-                                });
-                    } else if(post.isStreamable() && !post.isLoadRedgifsOrStreamableVideoSuccess()) {
-                        ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall =
-                                mStreamableApiProvider.get().getStreamableData(post.getStreamableShortCode());
-                        FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, new Handler(),
-                                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall,
-                                new FetchVideoLinkListener() {
-                                    @Override
-                                    public void onFetchStreamableVideoLinkSuccess(StreamableVideo streamableVideo) {
-                                        StreamableVideo.Media media = streamableVideo.mp4 == null ? streamableVideo.mp4Mobile : streamableVideo.mp4;
-                                        post.setVideoDownloadUrl(media.url);
-                                        post.setVideoUrl(media.url);
-                                        post.setLoadRedgifsOrStreamableVideoSuccess(true);
-                                        if (position == holder.getBindingAdapterPosition()) {
-                                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.bindVideoUri(Uri.parse(post.getVideoUrl()));
-                                        }
-                                    }
-
-                                    @Override
-                                    public void failed(@Nullable Integer messageRes) {
-                                        if (position == holder.getBindingAdapterPosition()) {
-                                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.loadFallbackDirectVideo();
-                                        }
-                                    }
-                                });
-                    } else {
-                        ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.bindVideoUri(Uri.parse(post.getVideoUrl()));
-                    }
+                    ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.loadVideo(position);
                 } else if (holder instanceof PostMaterial3CardWithPreviewViewHolder) {
                     if (post.getPostType() == Post.VIDEO_TYPE) {
                         ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setVisibility(View.VISIBLE);
@@ -1362,9 +1252,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
                 mCallback.currentlyBindItem(holder.getBindingAdapterPosition());
             }
-        }
-
-        if (holder instanceof PostGalleryViewHolder) {
+        } else if (holder instanceof PostGalleryViewHolder) {
             Post post = getItem(position);
             if (post != null) {
                 ((PostGalleryViewHolder) holder).post = post;
@@ -2181,6 +2069,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         MaterialButton commentsCountButton;
         MaterialButton saveButton;
         MaterialButton shareButton;
+        Post post;
+        int currentPosition;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -2942,6 +2832,63 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             if (container != null) container.savePlaybackInfo(order, playbackInfo);
         }
 
+        void loadVideo(int position) {
+            Post post = getPost();
+            if (post.isRedgifs() && !post.isLoadRedgifsOrStreamableVideoSuccess()) {
+                fetchRedgifsOrStreamableVideoCall =
+                        mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(
+                                APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences
+                                        .getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")),
+                                post.getRedgifsId(), APIUtils.USER_AGENT);
+                FetchRedgifsVideoLinks.fetchRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
+                        fetchRedgifsOrStreamableVideoCall,
+                        new FetchVideoLinkListener() {
+                            @Override
+                            public void onFetchRedgifsVideoLinkSuccess(String webm, String mp4) {
+                                post.setVideoDownloadUrl(mp4);
+                                post.setVideoUrl(mp4);
+                                post.setLoadRedgifsOrStreamableVideoSuccess(true);
+                                if (position == getAdapterPosition()) {
+                                    bindVideoUri(Uri.parse(post.getVideoUrl()));
+                                }
+                            }
+
+                            @Override
+                            public void failed(@Nullable Integer messageRes) {
+                                if (position == getAdapterPosition()) {
+                                    loadFallbackDirectVideo();
+                                }
+                            }
+                        });
+            } else if(post.isStreamable() && !post.isLoadRedgifsOrStreamableVideoSuccess()) {
+                fetchRedgifsOrStreamableVideoCall =
+                        mStreamableApiProvider.get().getStreamableData(post.getStreamableShortCode());
+                FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, new Handler(),
+                        fetchRedgifsOrStreamableVideoCall,
+                        new FetchVideoLinkListener() {
+                            @Override
+                            public void onFetchStreamableVideoLinkSuccess(StreamableVideo streamableVideo) {
+                                StreamableVideo.Media media = streamableVideo.mp4 == null ? streamableVideo.mp4Mobile : streamableVideo.mp4;
+                                post.setVideoDownloadUrl(media.url);
+                                post.setVideoUrl(media.url);
+                                post.setLoadRedgifsOrStreamableVideoSuccess(true);
+                                if (position == getAdapterPosition()) {
+                                    bindVideoUri(Uri.parse(post.getVideoUrl()));
+                                }
+                            }
+
+                            @Override
+                            public void failed(@Nullable Integer messageRes) {
+                                if (position == getAdapterPosition()) {
+                                    loadFallbackDirectVideo();
+                                }
+                            }
+                        });
+            } else {
+                bindVideoUri(Uri.parse(post.getVideoUrl()));
+            }
+        }
+
         void loadFallbackDirectVideo() {
             Post post = getPost();
             if (post.getVideoFallBackDirectUrl() != null) {
@@ -3072,6 +3019,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             return canPlayVideo && mediaUri != null && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
         }
 
+        abstract int getAdapterPosition();
+
         abstract Post getPost();
 
         abstract void markPostRead(Post post, boolean changePostItemColor);
@@ -3091,11 +3040,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         CustomTextView spoilerTextView;
         CustomTextView flairTextView;
         ConstraintLayout bottomConstraintLayout;
-        Post post;
         Post.Preview preview;
 
         boolean itemViewIsNotCardView = false;
-        int currentPosition;
 
         PostBaseViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -3353,6 +3300,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     AppCompatResources.getDrawable(mActivity, R.drawable.ic_pause_24dp)) {
                 @Override
                 public int getPlayerOrder() {
+                    return getBindingAdapterPosition();
+                }
+
+                @Override
+                int getAdapterPosition() {
                     return getBindingAdapterPosition();
                 }
 
@@ -3960,9 +3912,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ConstraintLayout bottomConstraintLayout;
         View divider;
         RequestListener<Drawable> requestListener;
-        Post post;
-
-        int currentPosition;
 
         PostCompactBaseViewHolder(View itemView) {
             super(itemView);
@@ -4729,9 +4678,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         TextView postTimeTextView;
         TextView titleTextView;
         ConstraintLayout bottomConstraintLayout;
-        Post post;
         Post.Preview preview;
-        int currentPosition;
 
         PostMaterial3CardBaseViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -4884,6 +4831,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     AppCompatResources.getDrawable(mActivity, R.drawable.ic_pause_24dp)) {
                 @Override
                 public int getPlayerOrder() {
+                    return getBindingAdapterPosition();
+                }
+
+                @Override
+                int getAdapterPosition() {
                     return getBindingAdapterPosition();
                 }
 
