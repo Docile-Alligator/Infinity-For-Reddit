@@ -2641,8 +2641,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 mActivity.startActivity(intent);
             });
 
-            setOnClickListeners(
-                    typeTextView,
+            setOnClickListeners(typeTextView,
                     nsfwTextView,
                     flairTextView,
                     upvoteButton,
@@ -2712,6 +2711,31 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                  MaterialButton commentsCountButton,
                                  MaterialButton saveButton,
                                  MaterialButton shareButton) {
+            itemView.setOnClickListener(view -> {
+                int position = getBindingAdapterPosition();
+                if (position >= 0 && canStartActivity) {
+                    Post post = getItem(position);
+                    if (post != null) {
+                        markPostRead(post, true);
+
+                        openViewPostDetailActivity(post, getBindingAdapterPosition());
+                    }
+                }
+            });
+
+            itemView.setOnTouchListener((v, event) -> {
+                if (event.getActionMasked() == MotionEvent.ACTION_UP || event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
+                    if (mFragment.isRecyclerViewItemSwipeable(this)) {
+                        mActivity.unlockSwipeRightToGoBack();
+                    }
+                } else {
+                    if (mFragment.isRecyclerViewItemSwipeable(this)) {
+                        mActivity.lockSwipeRightToGoBack();
+                    }
+                }
+                return false;
+            });
+
             upvoteButton.setOnClickListener(view -> {
                 int position = getBindingAdapterPosition();
                 if (position < 0) {
@@ -3373,7 +3397,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                          MaterialButton commentsCountButton,
                          MaterialButton saveButton,
                          MaterialButton shareButton) {
-            super.setBaseView(iconGifImageView,
+            super.setBaseView(
+                    iconGifImageView,
                     subredditTextView,
                     userTextView,
                     typeTextView,
@@ -3468,18 +3493,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             saveButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             shareButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
 
-            itemView.setOnClickListener(view -> {
-                int position = getBindingAdapterPosition();
-                if (position >= 0 && canStartActivity) {
-                    Post post = getItem(position);
-                    if (post != null) {
-                        markPostRead(post, true);
-
-                        openViewPostDetailActivity(post, getBindingAdapterPosition());
-                    }
-                }
-            });
-
             itemView.setOnLongClickListener(v -> {
                 Post post = getItem(getBindingAdapterPosition());
                 if (post == null) {
@@ -3495,19 +3508,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
                 postOptionsBottomSheetFragment.show(mActivity.getSupportFragmentManager(), postOptionsBottomSheetFragment.getTag());
                 return true;
-            });
-
-            itemView.setOnTouchListener((v, event) -> {
-                if (event.getActionMasked() == MotionEvent.ACTION_UP || event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
-                    if (mFragment.isRecyclerViewItemSwipeable(PostBaseViewHolder.this)) {
-                        mActivity.unlockSwipeRightToGoBack();
-                    }
-                } else {
-                    if (mFragment.isRecyclerViewItemSwipeable(PostBaseViewHolder.this)) {
-                        mActivity.lockSwipeRightToGoBack();
-                    }
-                }
-                return false;
             });
         }
 
@@ -4380,18 +4380,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             imageView.setClipToOutline(true);
             noPreviewLinkImageFrameLayout.setClipToOutline(true);
 
-            itemView.setOnClickListener(view -> {
-                int position = getBindingAdapterPosition();
-                if (position < 0) {
-                    return;
-                }
-                Post post = getItem(position);
-                if (post != null && canStartActivity) {
-                    markPostRead(post, true);
-                    openViewPostDetailActivity(post, getBindingAdapterPosition());
-                }
-            });
-
             itemView.setOnLongClickListener(view -> {
                 if (mLongPressToHideToolbarInCompactLayout) {
                     if (bottomConstraintLayout.getLayoutParams().height == 0) {
@@ -4407,19 +4395,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     }
                 }
                 return true;
-            });
-
-            itemView.setOnTouchListener((v, event) -> {
-                if (event.getActionMasked() == MotionEvent.ACTION_UP || event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
-                    if (mFragment.isRecyclerViewItemSwipeable(PostCompactBaseViewHolder.this)) {
-                        mActivity.unlockSwipeRightToGoBack();
-                    }
-                } else {
-                    if (mFragment.isRecyclerViewItemSwipeable(PostCompactBaseViewHolder.this)) {
-                        mActivity.lockSwipeRightToGoBack();
-                    }
-                }
-                return false;
             });
 
             imageView.setOnClickListener(view -> {
@@ -5106,31 +5081,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             commentsCountButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             saveButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             shareButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
-
-            itemView.setOnClickListener(view -> {
-                int position = getBindingAdapterPosition();
-                if (position >= 0 && canStartActivity) {
-                    Post post = getItem(position);
-                    if (post != null) {
-                        markPostRead(post, true);
-
-                        openViewPostDetailActivity(post, getBindingAdapterPosition());
-                    }
-                }
-            });
-
-            itemView.setOnTouchListener((v, event) -> {
-                if (event.getActionMasked() == MotionEvent.ACTION_UP || event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
-                    if (mFragment.isRecyclerViewItemSwipeable(PostMaterial3CardBaseViewHolder.this)) {
-                        mActivity.unlockSwipeRightToGoBack();
-                    }
-                } else {
-                    if (mFragment.isRecyclerViewItemSwipeable(PostMaterial3CardBaseViewHolder.this)) {
-                        mActivity.lockSwipeRightToGoBack();
-                    }
-                }
-                return false;
-            });
         }
 
         @Override
