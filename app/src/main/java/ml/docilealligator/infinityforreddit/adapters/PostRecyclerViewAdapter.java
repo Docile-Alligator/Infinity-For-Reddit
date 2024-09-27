@@ -602,6 +602,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             ((PostViewHolder) holder).post = post;
             ((PostViewHolder) holder).currentPosition = position;
 
+            if (post.isRead()) {
+                ((PostViewHolder) holder).setItemViewBackgroundColor(true);
+                ((PostBaseViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
+            }
+
             if (mDisplaySubredditName) {
                 if (post.getAuthorNamePrefixed().equals(post.getSubredditNamePrefixed())) {
                     if (post.getAuthorIconUrl() == null) {
@@ -717,6 +722,49 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 ((PostViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.vote));
             }
 
+            if (((PostViewHolder) holder).typeTextView != null) {
+                if (mHidePostType) {
+                    ((PostViewHolder) holder).typeTextView.setVisibility(View.GONE);
+                } else {
+                    ((PostViewHolder) holder).typeTextView.setVisibility(View.VISIBLE);
+                }
+            }
+
+            if (((PostViewHolder) holder).lockedImageView != null && post.isLocked()) {
+                ((PostViewHolder) holder).lockedImageView.setVisibility(View.VISIBLE);
+            }
+
+            if (((PostViewHolder) holder).nsfwTextView != null && post.isNSFW()) {
+                ((PostViewHolder) holder).nsfwTextView.setVisibility(View.VISIBLE);
+            }
+
+            if (post.isSpoiler()) {
+                ((PostViewHolder) holder).spoilerTextView.setVisibility(View.VISIBLE);
+            }
+
+            if (((PostViewHolder) holder).flairTextView != null && post.getFlair() != null && !post.getFlair().isEmpty()) {
+                if (mHidePostFlair) {
+                    ((PostViewHolder) holder).flairTextView.setVisibility(View.GONE);
+                } else {
+                    ((PostViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
+                    Utils.setHTMLWithImageToTextView(((PostViewHolder) holder).flairTextView, post.getFlair(), false);
+                }
+            }
+
+            if (post.isArchived()) {
+                if (((PostViewHolder) holder).archivedImageView != null) {
+                    ((PostViewHolder) holder).archivedImageView.setVisibility(View.VISIBLE);
+                }
+
+                ((PostViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
+                ((PostViewHolder) holder).scoreTextView.setTextColor(mVoteAndReplyUnavailableVoteButtonColor);
+                ((PostViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
+            }
+
+            if (((PostViewHolder) holder).crosspostImageView != null && post.isCrosspost()) {
+                ((PostViewHolder) holder).crosspostImageView.setVisibility(View.VISIBLE);
+            }
+
             switch (post.getVoteType()) {
                 case 1:
                     //Upvoted
@@ -751,18 +799,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             }
 
             if (holder instanceof PostBaseViewHolder) {
-                ((PostBaseViewHolder) holder).post = post;
-                ((PostBaseViewHolder) holder).currentPosition = position;
-                if (post.isRead()) {
-                    if (((PostBaseViewHolder) holder).itemViewIsNotCardView) {
-                        holder.itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
-                    } else {
-                        holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
-                    }
-
-                    ((PostBaseViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
-                }
-
                 if (mHideSubredditAndUserPrefix) {
                     ((PostBaseViewHolder) holder).subredditTextView.setText(post.getSubredditName());
                     ((PostBaseViewHolder) holder).userTextView.setText(post.getAuthor());
@@ -773,45 +809,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
                 ((PostBaseViewHolder) holder).userTextView.setTextColor(
                         post.isModerator() ? mModeratorColor : mUsernameColor);
-
-                if (post.isLocked()) {
-                    ((PostBaseViewHolder) holder).lockedImageView.setVisibility(View.VISIBLE);
-                }
-
-                if (post.isNSFW()) {
-                    ((PostBaseViewHolder) holder).nsfwTextView.setVisibility(View.VISIBLE);
-                }
-
-                if (post.isSpoiler()) {
-                    ((PostBaseViewHolder) holder).spoilerTextView.setVisibility(View.VISIBLE);
-                }
-
-                if (post.getFlair() != null && !post.getFlair().isEmpty()) {
-                    if (mHidePostFlair) {
-                        ((PostBaseViewHolder) holder).flairTextView.setVisibility(View.GONE);
-                    } else {
-                        ((PostBaseViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
-                        Utils.setHTMLWithImageToTextView(((PostBaseViewHolder) holder).flairTextView, post.getFlair(), false);
-                    }
-                }
-
-                if (post.isArchived()) {
-                    ((PostBaseViewHolder) holder).archivedImageView.setVisibility(View.VISIBLE);
-
-                    ((PostBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
-                    ((PostBaseViewHolder) holder).scoreTextView.setTextColor(mVoteAndReplyUnavailableVoteButtonColor);
-                    ((PostBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
-                }
-
-                if (post.isCrosspost()) {
-                    ((PostBaseViewHolder) holder).crosspostImageView.setVisibility(View.VISIBLE);
-                }
-
-                if (mHidePostType) {
-                    ((PostBaseViewHolder) holder).typeTextView.setVisibility(View.GONE);
-                } else {
-                    ((PostBaseViewHolder) holder).typeTextView.setVisibility(View.VISIBLE);
-                }
 
                 if (holder instanceof PostBaseVideoAutoplayViewHolder) {
                     ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView.setVisibility(View.VISIBLE);
@@ -835,17 +832,25 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     if (post.getPostType() == Post.VIDEO_TYPE) {
                         ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setVisibility(View.VISIBLE);
                         ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_play_circle_36dp));
-                        ((PostWithPreviewTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.video));
+                        if (((PostWithPreviewTypeViewHolder) holder).typeTextView != null) {
+                            ((PostWithPreviewTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.video));
+                        }
                     } else if (post.getPostType() == Post.GIF_TYPE) {
                         if (!mAutoplay) {
                             ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setVisibility(View.VISIBLE);
                             ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_play_circle_36dp));
                         }
-                        ((PostWithPreviewTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.gif));
+                        if (((PostWithPreviewTypeViewHolder) holder).typeTextView != null) {
+                            ((PostWithPreviewTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.gif));
+                        }
                     } else if (post.getPostType() == Post.IMAGE_TYPE) {
-                        ((PostWithPreviewTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.image));
+                        if (((PostWithPreviewTypeViewHolder) holder).typeTextView != null) {
+                            ((PostWithPreviewTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.image));
+                        }
                     } else if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
-                        ((PostWithPreviewTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.link));
+                        if (((PostWithPreviewTypeViewHolder) holder).typeTextView != null) {
+                            ((PostWithPreviewTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.link));
+                        }
                         ((PostWithPreviewTypeViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
                         String domain = Uri.parse(post.getUrl()).getHost();
                         ((PostWithPreviewTypeViewHolder) holder).linkTextView.setText(domain);
@@ -879,6 +884,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             Post.Preview preview = getSuitablePreview(post.getPreviews());
                             ((PostWithPreviewTypeViewHolder) holder).preview = preview;
                             if (preview != null) {
+                                if (((PostWithPreviewTypeViewHolder) holder).imageWrapperFrameLayout != null) {
+                                    ((PostWithPreviewTypeViewHolder) holder).imageWrapperFrameLayout.setVisibility(View.VISIBLE);
+                                }
                                 ((PostWithPreviewTypeViewHolder) holder).imageView.setVisibility(View.VISIBLE);
                                 if (mFixedHeightPreviewInCard || (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0)) {
                                     int height = (int) (400 * mScale);
@@ -943,15 +951,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
                 mCallback.currentlyBindItem(holder.getBindingAdapterPosition());
             } else if (holder instanceof PostCompactBaseViewHolder) {
-                if (post.isRead()) {
-                    holder.itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
-                    ((PostCompactBaseViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
-                }
-                boolean nsfw = post.isNSFW();
-                boolean spoiler = post.isSpoiler();
-                String flair = post.getFlair();
-                boolean isArchived = post.isArchived();
-
                 if (mDisplaySubredditName) {
                     ((PostCompactBaseViewHolder) holder).nameTextView.setTextColor(mSubredditColor);
                     if (mHideSubredditAndUserPrefix) {
@@ -986,27 +985,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     ((PostCompactBaseViewHolder) holder).divider.setVisibility(View.GONE);
                 }
 
-                if (post.isLocked()) {
-                    ((PostCompactBaseViewHolder) holder).lockedImageView.setVisibility(View.VISIBLE);
-                }
-
-                if (nsfw) {
-                    ((PostCompactBaseViewHolder) holder).nsfwTextView.setVisibility(View.VISIBLE);
-                }
-
-                if (spoiler) {
-                    ((PostCompactBaseViewHolder) holder).spoilerTextView.setVisibility(View.VISIBLE);
-                }
-
-                if (flair != null && !flair.equals("")) {
-                    if (mHidePostFlair) {
-                        ((PostCompactBaseViewHolder) holder).flairTextView.setVisibility(View.GONE);
-                    } else {
-                        ((PostCompactBaseViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
-                        Utils.setHTMLWithImageToTextView(((PostCompactBaseViewHolder) holder).flairTextView, flair, false);
-                    }
-                }
-
                 if (post.getPostType() != Post.TEXT_TYPE && post.getPostType() != Post.NO_PREVIEW_LINK_TYPE && !(mDataSavingMode && mDisableImagePreview)) {
                     ((PostCompactBaseViewHolder) holder).relativeLayout.setVisibility(View.VISIBLE);
                     if (post.getPostType() == Post.GALLERY_TYPE && post.getPreviews() != null && post.getPreviews().isEmpty()) {
@@ -1018,24 +996,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostCompactBaseViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
                         loadImage(holder);
                     }
-                }
-
-                if (isArchived) {
-                    ((PostCompactBaseViewHolder) holder).archivedImageView.setVisibility(View.VISIBLE);
-
-                    ((PostCompactBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
-                    ((PostCompactBaseViewHolder) holder).scoreTextView.setTextColor(mVoteAndReplyUnavailableVoteButtonColor);
-                    ((PostCompactBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
-                }
-
-                if (post.isCrosspost()) {
-                    ((PostCompactBaseViewHolder) holder).crosspostImageView.setVisibility(View.VISIBLE);
-                }
-
-                if (mHidePostType) {
-                    ((PostCompactBaseViewHolder) holder).typeTextView.setVisibility(View.GONE);
-                } else {
-                    ((PostCompactBaseViewHolder) holder).typeTextView.setVisibility(View.VISIBLE);
                 }
 
                 switch (post.getPostType()) {
@@ -1102,154 +1062,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         break;
                 }
 
-                mCallback.currentlyBindItem(holder.getBindingAdapterPosition());
-            } else if (holder instanceof PostMaterial3CardBaseViewHolder) {
-                if (post.isRead()) {
-                    holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostFilledCardViewBackgroundColor));
-                    ((PostMaterial3CardBaseViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
-                }
-
-                if (mHideSubredditAndUserPrefix) {
-                    ((PostMaterial3CardBaseViewHolder) holder).subredditTextView.setText(post.getSubredditName());
-                    ((PostMaterial3CardBaseViewHolder) holder).userTextView.setText(post.getAuthor());
-                } else {
-                    ((PostMaterial3CardBaseViewHolder) holder).subredditTextView.setText(post.getSubredditNamePrefixed());
-                    ((PostMaterial3CardBaseViewHolder) holder).userTextView.setText(post.getAuthorNamePrefixed());
-                }
-
-                ((PostMaterial3CardBaseViewHolder) holder).userTextView.setTextColor(
-                        post.isModerator() ? mModeratorColor : mUsernameColor);
-
-                if (post.isArchived()) {
-                    ((PostMaterial3CardBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
-                    ((PostMaterial3CardBaseViewHolder) holder).scoreTextView.setTextColor(mVoteAndReplyUnavailableVoteButtonColor);
-                    ((PostMaterial3CardBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
-                }
-
-                if (holder instanceof PostMaterial3CardBaseVideoAutoplayViewHolder) {
-                    ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView.setVisibility(View.VISIBLE);
-                    Post.Preview preview = getSuitablePreview(post.getPreviews());
-                    if (!mFixedHeightPreviewInCard && preview != null) {
-                        ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.aspectRatioFrameLayout.setAspectRatio((float) preview.getPreviewWidth() / preview.getPreviewHeight());
-                        mGlide.load(preview.getPreviewUrl()).centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView);
-                    } else {
-                        ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.aspectRatioFrameLayout.setAspectRatio(1);
-                    }
-                    if (!((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.isManuallyPaused) {
-                        if (mFragment.getMasterMutingOption() == null) {
-                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
-                        } else {
-                            ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
-                        }
-                    }
-
-                    ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.loadVideo(position);
-                } else if (holder instanceof PostMaterial3CardWithPreviewViewHolder) {
-                    if (post.getPostType() == Post.VIDEO_TYPE) {
-                        ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setVisibility(View.VISIBLE);
-                        ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_play_circle_36dp));
-                    } else if (post.getPostType() == Post.GIF_TYPE) {
-                        if (!mAutoplay) {
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setVisibility(View.VISIBLE);
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_play_circle_36dp));
-                        }
-                    } else if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
-                        ((PostMaterial3CardWithPreviewViewHolder) holder).binding.linkTextViewItemPostCard3WithPreview.setVisibility(View.VISIBLE);
-                        String domain = Uri.parse(post.getUrl()).getHost();
-                        ((PostMaterial3CardWithPreviewViewHolder) holder).binding.linkTextViewItemPostCard3WithPreview.setText(domain);
-                        if (post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setVisibility(View.VISIBLE);
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_link_day_night_24dp);
-                        }
-                    }
-
-                    if (mDataSavingMode && mDisableImagePreview) {
-                        ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setVisibility(View.VISIBLE);
-                        if (post.getPostType() == Post.VIDEO_TYPE) {
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_video_day_night_24dp);
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setVisibility(View.GONE);
-                        } else if (post.getPostType() == Post.IMAGE_TYPE || post.getPostType() == Post.GIF_TYPE) {
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setVisibility(View.GONE);
-                        } else if (post.getPostType() == Post.LINK_TYPE) {
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_link_day_night_24dp);
-                        }
-                    } else if (mDataSavingMode && mOnlyDisablePreviewInVideoAndGifPosts && (post.getPostType() == Post.VIDEO_TYPE || post.getPostType() == Post.GIF_TYPE)) {
-                        ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setVisibility(View.VISIBLE);
-                        ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_video_day_night_24dp);
-                        ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setVisibility(View.GONE);
-                    } else {
-                        if (post.getPostType() == Post.GIF_TYPE && ((post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(mAutoplay && mAutoplayNsfwVideos)) || (post.isSpoiler() && mNeedBlurSpoiler))) {
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setVisibility(View.VISIBLE);
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setVisibility(View.GONE);
-                        } else {
-                            Post.Preview preview = getSuitablePreview(post.getPreviews());
-                            ((PostMaterial3CardWithPreviewViewHolder) holder).preview = preview;
-                            if (preview != null) {
-                                ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewItemPostCard3WithPreview.setVisibility(View.VISIBLE);
-                                ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageWrapperRelativeLayoutItemPostCard3WithPreview.setVisibility(View.VISIBLE);
-                                if (mFixedHeightPreviewInCard || (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0)) {
-                                    int height = (int) (400 * mScale);
-                                    ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewItemPostCard3WithPreview.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                                    ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewItemPostCard3WithPreview.getLayoutParams().height = height;
-                                } else {
-                                    ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewItemPostCard3WithPreview
-                                            .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
-                                }
-                                ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewItemPostCard3WithPreview.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                                    @Override
-                                    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                                        ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewItemPostCard3WithPreview.removeOnLayoutChangeListener(this);
-                                        loadImage(holder);
-                                    }
-                                });
-                            } else {
-                                ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setVisibility(View.VISIBLE);
-                                if (post.getPostType() == Post.VIDEO_TYPE) {
-                                    ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_video_day_night_24dp);
-                                    ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setVisibility(View.GONE);
-                                } else if (post.getPostType() == Post.IMAGE_TYPE || post.getPostType() == Post.GIF_TYPE) {
-                                    ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
-                                    ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setVisibility(View.GONE);
-                                } else if (post.getPostType() == Post.LINK_TYPE) {
-                                    ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_link_day_night_24dp);
-                                } else if (post.getPostType() == Post.GALLERY_TYPE) {
-                                    ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setImageResource(R.drawable.ic_gallery_day_night_24dp);
-                                }
-                            }
-                        }
-                    }
-                } else if (holder instanceof PostMaterial3CardBaseGalleryTypeViewHolder) {
-                    if (mDataSavingMode && mDisableImagePreview) {
-                        ((PostMaterial3CardBaseGalleryTypeViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
-                        ((PostMaterial3CardBaseGalleryTypeViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_day_night_24dp);
-                    } else {
-                        ((PostMaterial3CardBaseGalleryTypeViewHolder) holder).frameLayout.setVisibility(View.VISIBLE);
-                        ((PostMaterial3CardBaseGalleryTypeViewHolder) holder).imageIndexTextView.setText(mActivity.getString(R.string.image_index_in_gallery, 1, post.getGallery().size()));
-                        Post.Preview preview = getSuitablePreview(post.getPreviews());
-                        if (preview != null) {
-                            if (mFixedHeightPreviewInCard || (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0)) {
-                                ((PostMaterial3CardBaseGalleryTypeViewHolder) holder).adapter.setRatio(-1);
-                            } else {
-                                ((PostMaterial3CardBaseGalleryTypeViewHolder) holder).adapter.setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
-                            }
-                        } else {
-                            ((PostMaterial3CardBaseGalleryTypeViewHolder) holder).adapter.setRatio(-1);
-                        }
-                        ((PostMaterial3CardBaseGalleryTypeViewHolder) holder).adapter.setGalleryImages(post.getGallery());
-                        ((PostMaterial3CardBaseGalleryTypeViewHolder) holder).adapter.setBlurImage(
-                                (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit())) || (post.isSpoiler() && mNeedBlurSpoiler));
-                    }
-                } else if (holder instanceof PostMaterial3CardTextTypeViewHolder) {
-                    if (!mHideTextPostContent && !post.isSpoiler() && post.getSelfTextPlainTrimmed() != null && !post.getSelfTextPlainTrimmed().equals("")) {
-                        ((PostMaterial3CardTextTypeViewHolder) holder).binding.contentTextViewItemPostCard3TextType.setVisibility(View.VISIBLE);
-                        if (post.isRead()) {
-                            ((PostMaterial3CardTextTypeViewHolder) holder).binding.contentTextViewItemPostCard3TextType.setTextColor(mReadPostContentColor);
-                        }
-                        ((PostMaterial3CardTextTypeViewHolder) holder).binding.contentTextViewItemPostCard3TextType.setText(post.getSelfTextPlainTrimmed());
-                    }
-                }
                 mCallback.currentlyBindItem(holder.getBindingAdapterPosition());
             }
         } else if (holder instanceof PostGalleryViewHolder) {
@@ -1532,27 +1344,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostGalleryViewHolder) holder).binding.imageViewItemPostGallery);
                 }
             }
-        } else if (holder instanceof PostMaterial3CardWithPreviewViewHolder) {
-            ((PostMaterial3CardWithPreviewViewHolder) holder).binding.progressBarItemPostCard3WithPreview.setVisibility(View.VISIBLE);
-            Post post = ((PostMaterial3CardWithPreviewViewHolder) holder).post;
-            Post.Preview preview = ((PostMaterial3CardWithPreviewViewHolder) holder).preview;
-            if (preview != null) {
-                String url;
-                boolean blurImage = (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(post.getPostType() == Post.GIF_TYPE && mAutoplay && mAutoplayNsfwVideos)) || (post.isSpoiler() && mNeedBlurSpoiler);
-                if (post.getPostType() == Post.GIF_TYPE && mAutoplay && !blurImage) {
-                    url = post.getUrl();
-                } else {
-                    url = preview.getPreviewUrl();
-                }
-                RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(url).listener(((PostMaterial3CardWithPreviewViewHolder) holder).glideRequestListener);
-
-                if (blurImage) {
-                    imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                            .into(((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewItemPostCard3WithPreview);
-                } else {
-                    imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewItemPostCard3WithPreview);
-                }
-            }
         }
     }
 
@@ -1714,98 +1505,92 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     @OptIn(markerClass = UnstableApi.class)
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-        if (holder instanceof PostBaseViewHolder) {
+        if (holder instanceof PostViewHolder) {
             if (mMarkPostsAsReadOnScroll) {
-                int position = ((PostBaseViewHolder) holder).currentPosition;
+                int position = ((PostViewHolder) holder).currentPosition;
                 if (position < getItemCount() && position >= 0) {
                     Post post = getItem(position);
-                    ((PostBaseViewHolder) holder).markPostRead(post, false);
+                    ((PostViewHolder) holder).markPostRead(post, false);
                 }
-            }
-            if (((PostBaseViewHolder) holder).itemViewIsNotCardView) {
-                holder.itemView.setBackgroundColor(mCardViewBackgroundColor);
-            } else {
-                holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
-            }
-            mGlide.clear(((PostBaseViewHolder) holder).iconGifImageView);
-            ((PostBaseViewHolder) holder).titleTextView.setTextColor(mPostTitleColor);
-            if (holder instanceof PostBaseVideoAutoplayViewHolder) {
-                ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.mediaUri = null;
-                if (((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall != null
-                        && !((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall.isCanceled()) {
-                    ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall.cancel();
-                    ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall = null;
-                }
-                ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.errorLoadingRedgifsImageView.setVisibility(View.GONE);
-                ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.muteButton.setVisibility(View.GONE);
-                if (!((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.isManuallyPaused) {
-                    ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.resetVolume();
-                }
-                mGlide.clear(((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView);
-                ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView.setVisibility(View.GONE);
-            } else if (holder instanceof PostWithPreviewTypeViewHolder) {
-                mGlide.clear(((PostWithPreviewTypeViewHolder) holder).imageView);
-                ((PostWithPreviewTypeViewHolder) holder).imageView.setVisibility(View.GONE);
-                ((PostWithPreviewTypeViewHolder) holder).loadImageErrorTextView.setVisibility(View.GONE);
-                ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setVisibility(View.GONE);
-                ((PostWithPreviewTypeViewHolder) holder).progressBar.setVisibility(View.GONE);
-                ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setVisibility(View.GONE);
-                ((PostWithPreviewTypeViewHolder) holder).linkTextView.setVisibility(View.GONE);
-            } else if (holder instanceof PostBaseGalleryTypeViewHolder) {
-                ((PostBaseGalleryTypeViewHolder) holder).frameLayout.setVisibility(View.GONE);
-                ((PostBaseGalleryTypeViewHolder) holder).noPreviewImageView.setVisibility(View.GONE);
-                ((PostBaseGalleryTypeViewHolder) holder).adapter.setGalleryImages(null);
-            } else if (holder instanceof PostTextTypeViewHolder) {
-                ((PostTextTypeViewHolder) holder).contentTextView.setText("");
-                ((PostTextTypeViewHolder) holder).contentTextView.setTextColor(mPostContentColor);
-                ((PostTextTypeViewHolder) holder).contentTextView.setVisibility(View.GONE);
             }
 
-            mGlide.clear(((PostBaseViewHolder) holder).iconGifImageView);
-            ((PostBaseViewHolder) holder).stickiedPostImageView.setVisibility(View.GONE);
-            ((PostBaseViewHolder) holder).crosspostImageView.setVisibility(View.GONE);
-            ((PostBaseViewHolder) holder).archivedImageView.setVisibility(View.GONE);
-            ((PostBaseViewHolder) holder).lockedImageView.setVisibility(View.GONE);
-            ((PostBaseViewHolder) holder).nsfwTextView.setVisibility(View.GONE);
-            ((PostBaseViewHolder) holder).spoilerTextView.setVisibility(View.GONE);
-            ((PostBaseViewHolder) holder).flairTextView.setText("");
-            ((PostBaseViewHolder) holder).flairTextView.setVisibility(View.GONE);
-            ((PostBaseViewHolder) holder).upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
-            ((PostBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
-            ((PostBaseViewHolder) holder).scoreTextView.setTextColor(mPostIconAndInfoColor);
-            ((PostBaseViewHolder) holder).downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
-            ((PostBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
-        } else if (holder instanceof PostCompactBaseViewHolder) {
-            if (mMarkPostsAsReadOnScroll) {
-                int position = ((PostCompactBaseViewHolder) holder).currentPosition;
-                if (position < getItemCount() && position >= 0) {
-                    Post post = getItem(position);
-                    ((PostCompactBaseViewHolder) holder).markPostRead(post, false);
-                }
+            ((PostViewHolder) holder).setItemViewBackgroundColor(false);
+
+            ((PostViewHolder) holder).titleTextView.setTextColor(mPostTitleColor);
+            mGlide.clear(((PostViewHolder) holder).iconGifImageView);
+
+            ((PostViewHolder) holder).stickiedPostImageView.setVisibility(View.GONE);
+
+            if (((PostViewHolder) holder).crosspostImageView != null) {
+                ((PostViewHolder) holder).crosspostImageView.setVisibility(View.GONE);
             }
-            holder.itemView.setBackgroundColor(mCardViewBackgroundColor);
-            ((PostCompactBaseViewHolder) holder).titleTextView.setTextColor(mPostTitleColor);
-            mGlide.clear(((PostCompactBaseViewHolder) holder).imageView);
-            mGlide.clear(((PostCompactBaseViewHolder) holder).iconGifImageView);
-            ((PostCompactBaseViewHolder) holder).stickiedPostImageView.setVisibility(View.GONE);
-            ((PostCompactBaseViewHolder) holder).relativeLayout.setVisibility(View.GONE);
-            ((PostCompactBaseViewHolder) holder).crosspostImageView.setVisibility(View.GONE);
-            ((PostCompactBaseViewHolder) holder).archivedImageView.setVisibility(View.GONE);
-            ((PostCompactBaseViewHolder) holder).lockedImageView.setVisibility(View.GONE);
-            ((PostCompactBaseViewHolder) holder).nsfwTextView.setVisibility(View.GONE);
-            ((PostCompactBaseViewHolder) holder).spoilerTextView.setVisibility(View.GONE);
-            ((PostCompactBaseViewHolder) holder).flairTextView.setVisibility(View.GONE);
-            ((PostCompactBaseViewHolder) holder).flairTextView.setText("");
-            ((PostCompactBaseViewHolder) holder).linkTextView.setVisibility(View.GONE);
-            ((PostCompactBaseViewHolder) holder).progressBar.setVisibility(View.GONE);
-            ((PostCompactBaseViewHolder) holder).imageView.setVisibility(View.GONE);
-            ((PostCompactBaseViewHolder) holder).playButtonImageView.setVisibility(View.GONE);
-            ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.GONE);
-            ((PostCompactBaseViewHolder) holder).upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
-            ((PostCompactBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
-            ((PostCompactBaseViewHolder) holder).scoreTextView.setTextColor(mPostIconAndInfoColor);
-            ((PostCompactBaseViewHolder) holder).downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
-            ((PostCompactBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
+            if (((PostViewHolder) holder).archivedImageView != null) {
+                ((PostViewHolder) holder).archivedImageView.setVisibility(View.GONE);
+            }
+            if (((PostViewHolder) holder).lockedImageView != null) {
+                ((PostViewHolder) holder).lockedImageView.setVisibility(View.GONE);
+            }
+            if (((PostViewHolder) holder).nsfwTextView != null) {
+                ((PostViewHolder) holder).nsfwTextView.setVisibility(View.GONE);
+            }
+            if (((PostViewHolder) holder).spoilerTextView != null) {
+                ((PostViewHolder) holder).spoilerTextView.setVisibility(View.GONE);
+            }
+            if (((PostViewHolder) holder).flairTextView != null) {
+                ((PostViewHolder) holder).flairTextView.setText("");
+                ((PostViewHolder) holder).flairTextView.setVisibility(View.GONE);
+            }
+
+            ((PostViewHolder) holder).upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
+            ((PostViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
+            ((PostViewHolder) holder).scoreTextView.setTextColor(mPostIconAndInfoColor);
+            ((PostViewHolder) holder).downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
+            ((PostViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
+
+            if (holder instanceof PostBaseViewHolder) {
+                if (holder instanceof PostBaseVideoAutoplayViewHolder) {
+                    ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.mediaUri = null;
+                    if (((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall != null
+                            && !((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall.isCanceled()) {
+                        ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall.cancel();
+                        ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall = null;
+                    }
+                    ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.errorLoadingRedgifsImageView.setVisibility(View.GONE);
+                    ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.muteButton.setVisibility(View.GONE);
+                    if (!((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.isManuallyPaused) {
+                        ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.resetVolume();
+                    }
+                    mGlide.clear(((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView);
+                    ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView.setVisibility(View.GONE);
+                } else if (holder instanceof PostWithPreviewTypeViewHolder) {
+                    mGlide.clear(((PostWithPreviewTypeViewHolder) holder).imageView);
+                    if (((PostWithPreviewTypeViewHolder) holder).imageWrapperFrameLayout != null) {
+                        ((PostWithPreviewTypeViewHolder) holder).imageWrapperFrameLayout.setVisibility(View.GONE);
+                    }
+                    ((PostWithPreviewTypeViewHolder) holder).imageView.setVisibility(View.GONE);
+                    ((PostWithPreviewTypeViewHolder) holder).loadImageErrorTextView.setVisibility(View.GONE);
+                    ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setVisibility(View.GONE);
+                    ((PostWithPreviewTypeViewHolder) holder).progressBar.setVisibility(View.GONE);
+                    ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setVisibility(View.GONE);
+                    ((PostWithPreviewTypeViewHolder) holder).linkTextView.setVisibility(View.GONE);
+                } else if (holder instanceof PostBaseGalleryTypeViewHolder) {
+                    ((PostBaseGalleryTypeViewHolder) holder).frameLayout.setVisibility(View.GONE);
+                    ((PostBaseGalleryTypeViewHolder) holder).noPreviewImageView.setVisibility(View.GONE);
+                    ((PostBaseGalleryTypeViewHolder) holder).adapter.setGalleryImages(null);
+                } else if (holder instanceof PostTextTypeViewHolder) {
+                    ((PostTextTypeViewHolder) holder).contentTextView.setText("");
+                    ((PostTextTypeViewHolder) holder).contentTextView.setTextColor(mPostContentColor);
+                    ((PostTextTypeViewHolder) holder).contentTextView.setVisibility(View.GONE);
+                }
+            } else if (holder instanceof PostCompactBaseViewHolder) {
+                mGlide.clear(((PostCompactBaseViewHolder) holder).imageView);
+                ((PostCompactBaseViewHolder) holder).relativeLayout.setVisibility(View.GONE);
+                ((PostCompactBaseViewHolder) holder).linkTextView.setVisibility(View.GONE);
+                ((PostCompactBaseViewHolder) holder).progressBar.setVisibility(View.GONE);
+                ((PostCompactBaseViewHolder) holder).imageView.setVisibility(View.GONE);
+                ((PostCompactBaseViewHolder) holder).playButtonImageView.setVisibility(View.GONE);
+                ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.GONE);
+            }
         } else if (holder instanceof PostGalleryViewHolder) {
             if (mMarkPostsAsReadOnScroll) {
                 int position = ((PostGalleryViewHolder) holder).currentPosition;
@@ -1835,56 +1620,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
             ((PostGalleryBaseGalleryTypeViewHolder) holder).frameLayout.setVisibility(View.GONE);
             ((PostGalleryBaseGalleryTypeViewHolder) holder).noPreviewImageView.setVisibility(View.GONE);
-        } else if (holder instanceof PostMaterial3CardBaseViewHolder) {
-            if (mMarkPostsAsReadOnScroll) {
-                int position = ((PostMaterial3CardBaseViewHolder) holder).currentPosition;
-                if (position < getItemCount() && position >= 0) {
-                    Post post = getItem(position);
-                    ((PostMaterial3CardBaseViewHolder) holder).markPostRead(post, false);
-                }
-            }
-            holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mFilledCardViewBackgroundColor));
-            mGlide.clear(((PostMaterial3CardBaseViewHolder) holder).iconGifImageView);
-            ((PostMaterial3CardBaseViewHolder) holder).titleTextView.setTextColor(mPostTitleColor);
-            if (holder instanceof PostMaterial3CardBaseVideoAutoplayViewHolder) {
-                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.mediaUri = null;
-                if (((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall != null && !((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall.isCanceled()) {
-                    ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall.cancel();
-                    ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.fetchRedgifsOrStreamableVideoCall = null;
-                }
-                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.errorLoadingRedgifsImageView.setVisibility(View.GONE);
-                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.muteButton.setVisibility(View.GONE);
-                if (!((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.isManuallyPaused) {
-                    ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.resetVolume();
-                }
-                mGlide.clear(((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView);
-                ((PostMaterial3CardBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView.setVisibility(View.GONE);
-            } else if (holder instanceof PostMaterial3CardWithPreviewViewHolder) {
-                mGlide.clear(((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewItemPostCard3WithPreview);
-                ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewItemPostCard3WithPreview.setVisibility(View.GONE);
-                ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageWrapperRelativeLayoutItemPostCard3WithPreview.setVisibility(View.GONE);
-                ((PostMaterial3CardWithPreviewViewHolder) holder).binding.loadImageErrorTextViewItemPostCard3WithPreview.setVisibility(View.GONE);
-                ((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setVisibility(View.GONE);
-                ((PostMaterial3CardWithPreviewViewHolder) holder).binding.progressBarItemPostCard3WithPreview.setVisibility(View.GONE);
-                ((PostMaterial3CardWithPreviewViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setVisibility(View.GONE);
-                ((PostMaterial3CardWithPreviewViewHolder) holder).binding.linkTextViewItemPostCard3WithPreview.setVisibility(View.GONE);
-            } else if (holder instanceof PostMaterial3CardBaseGalleryTypeViewHolder) {
-                ((PostMaterial3CardBaseGalleryTypeViewHolder) holder).frameLayout.setVisibility(View.GONE);
-                ((PostMaterial3CardBaseGalleryTypeViewHolder) holder).noPreviewImageView.setVisibility(View.GONE);
-                ((PostMaterial3CardBaseGalleryTypeViewHolder) holder).adapter.setGalleryImages(null);
-            } else if (holder instanceof PostMaterial3CardTextTypeViewHolder) {
-                ((PostMaterial3CardTextTypeViewHolder) holder).binding.contentTextViewItemPostCard3TextType.setText("");
-                ((PostMaterial3CardTextTypeViewHolder) holder).binding.contentTextViewItemPostCard3TextType.setTextColor(mPostContentColor);
-                ((PostMaterial3CardTextTypeViewHolder) holder).binding.contentTextViewItemPostCard3TextType.setVisibility(View.GONE);
-            }
-
-            mGlide.clear(((PostMaterial3CardBaseViewHolder) holder).iconGifImageView);
-            ((PostMaterial3CardBaseViewHolder) holder).stickiedPostImageView.setVisibility(View.GONE);
-            ((PostMaterial3CardBaseViewHolder) holder).upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
-            ((PostMaterial3CardBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
-            ((PostMaterial3CardBaseViewHolder) holder).scoreTextView.setTextColor(mPostIconAndInfoColor);
-            ((PostMaterial3CardBaseViewHolder) holder).downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
-            ((PostMaterial3CardBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
         }
     }
 
@@ -2063,6 +1798,22 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ImageView stickiedPostImageView;
         TextView postTimeTextView;
         TextView titleTextView;
+
+        @Nullable
+        CustomTextView typeTextView;
+        @Nullable
+        ImageView archivedImageView;
+        @Nullable
+        ImageView lockedImageView;
+        @Nullable
+        ImageView crosspostImageView;
+        @Nullable
+        CustomTextView nsfwTextView;
+        @Nullable
+        CustomTextView spoilerTextView;
+        @Nullable
+        CustomTextView flairTextView;
+
         MaterialButton upvoteButton;
         TextView scoreTextView;
         MaterialButton downvoteButton;
@@ -2082,6 +1833,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                          ImageView stickiedPostImageView,
                          TextView postTimeTextView,
                          TextView titleTextView,
+                         @Nullable CustomTextView typeTextView,
+                         @Nullable ImageView archivedImageView,
+                         @Nullable ImageView lockedImageView,
+                         @Nullable ImageView crosspostImageView,
+                         @Nullable CustomTextView nsfwTextView,
+                         @Nullable CustomTextView spoilerTextView,
+                         @Nullable CustomTextView flairTextView,
                          MaterialButton upvoteButton,
                          TextView scoreTextView,
                          MaterialButton downvoteButton,
@@ -2092,98 +1850,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             this.stickiedPostImageView = stickiedPostImageView;
             this.postTimeTextView = postTimeTextView;
             this.titleTextView = titleTextView;
-            this.upvoteButton = upvoteButton;
-            this.scoreTextView = scoreTextView;
-            this.downvoteButton = downvoteButton;
-            this.commentsCountButton = commentsCountButton;
-            this.saveButton = saveButton;
-            this.shareButton = shareButton;
 
-            if (mDisplaySubredditName) {
-                subredditTextView.setOnClickListener(view -> {
-                    int position = getBindingAdapterPosition();
-                    if (position < 0) {
-                        return;
-                    }
-                    Post post = getItem(position);
-                    if (post != null) {
-                        if (canStartActivity) {
-                            canStartActivity = false;
-                            Intent intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
-                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                                    post.getSubredditName());
-                            mActivity.startActivity(intent);
-                        }
-                    }
-                });
+            this.typeTextView = typeTextView;
+            this.archivedImageView = archivedImageView;
+            this.lockedImageView = lockedImageView;
+            this.crosspostImageView = crosspostImageView;
+            this.nsfwTextView = nsfwTextView;
+            this.spoilerTextView = spoilerTextView;
+            this.flairTextView = flairTextView;
 
-                iconGifImageView.setOnClickListener(view -> subredditTextView.performClick());
-            } else {
-                subredditTextView.setOnClickListener(view -> {
-                    int position = getBindingAdapterPosition();
-                    if (position < 0) {
-                        return;
-                    }
-                    Post post = getItem(position);
-                    if (post != null) {
-                        if (canStartActivity) {
-                            canStartActivity = false;
-                            Intent intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
-                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                                    post.getSubredditName());
-                            mActivity.startActivity(intent);
-                        }
-                    }
-                });
-
-                iconGifImageView.setOnClickListener(view -> userTextView.performClick());
-            }
-
-            userTextView.setOnClickListener(view -> {
-                if (!canStartActivity) {
-                    return;
-                }
-                int position = getBindingAdapterPosition();
-                if (position < 0) {
-                    return;
-                }
-                Post post = getItem(position);
-                if (post == null || post.isAuthorDeleted()) {
-                    return;
-                }
-                canStartActivity = false;
-                Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, post.getAuthor());
-                mActivity.startActivity(intent);
-            });
-
-            setOnClickListeners(upvoteButton,
-                    scoreTextView,
-                    downvoteButton,
-                    commentsCountButton,
-                    saveButton,
-                    shareButton);
-        }
-
-        void setBaseView(AspectRatioGifImageView iconGifImageView,
-                         TextView subredditTextView,
-                         TextView userTextView,
-                         ImageView stickiedPostImageView,
-                         TextView postTimeTextView,
-                         TextView titleTextView,
-                         CustomTextView typeTextView,
-                         CustomTextView nsfwTextView,
-                         CustomTextView flairTextView,
-                         MaterialButton upvoteButton,
-                         TextView scoreTextView,
-                         MaterialButton downvoteButton,
-                         MaterialButton commentsCountButton,
-                         MaterialButton saveButton,
-                         MaterialButton shareButton) {
-            this.iconGifImageView = iconGifImageView;
-            this.stickiedPostImageView = stickiedPostImageView;
-            this.postTimeTextView = postTimeTextView;
-            this.titleTextView = titleTextView;
             this.upvoteButton = upvoteButton;
             this.scoreTextView = scoreTextView;
             this.downvoteButton = downvoteButton;
@@ -2265,9 +1940,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                          ImageView stickiedPostImageView,
                          TextView postTimeTextView,
                          TextView titleTextView,
-                         CustomTextView typeTextView,
-                         CustomTextView nsfwTextView,
-                         CustomTextView flairTextView,
+                         @Nullable CustomTextView typeTextView,
+                         @Nullable CustomTextView nsfwTextView,
+                         @Nullable CustomTextView flairTextView,
                          MaterialButton upvoteButton,
                          TextView scoreTextView,
                          MaterialButton downvoteButton,
@@ -2655,9 +2330,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             });
         }
 
-        void setOnClickListeners(CustomTextView typeTextView,
-                                 CustomTextView nsfwTextView,
-                                 CustomTextView flairTextView,
+        void setOnClickListeners(@Nullable CustomTextView typeTextView,
+                                 @Nullable CustomTextView nsfwTextView,
+                                 @Nullable CustomTextView flairTextView,
                                  MaterialButton upvoteButton,
                                  TextView scoreTextView,
                                  MaterialButton downvoteButton,
@@ -2672,40 +2347,48 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     shareButton);
 
             if (!(mActivity instanceof FilteredPostsActivity)) {
-                nsfwTextView.setOnClickListener(view -> {
-                    int position = getBindingAdapterPosition();
-                    if (position < 0) {
-                        return;
-                    }
-                    Post post = getItem(position);
-                    if (post != null) {
-                        mCallback.nsfwChipClicked();
-                    }
-                });
-                typeTextView.setOnClickListener(view -> {
-                    int position = getBindingAdapterPosition();
-                    if (position < 0) {
-                        return;
-                    }
-                    Post post = getItem(position);
-                    if (post != null) {
-                        mCallback.typeChipClicked(post.getPostType());
-                    }
-                });
+                if (nsfwTextView != null) {
+                    nsfwTextView.setOnClickListener(view -> {
+                        int position = getBindingAdapterPosition();
+                        if (position < 0) {
+                            return;
+                        }
+                        Post post = getItem(position);
+                        if (post != null) {
+                            mCallback.nsfwChipClicked();
+                        }
+                    });
+                }
 
-                flairTextView.setOnClickListener(view -> {
-                    int position = getBindingAdapterPosition();
-                    if (position < 0) {
-                        return;
-                    }
-                    Post post = getItem(position);
-                    if (post != null) {
-                        mCallback.flairChipClicked(post.getFlair());
-                    }
-                });
+                if (typeTextView != null) {
+                    typeTextView.setOnClickListener(view -> {
+                        int position = getBindingAdapterPosition();
+                        if (position < 0) {
+                            return;
+                        }
+                        Post post = getItem(position);
+                        if (post != null) {
+                            mCallback.typeChipClicked(post.getPostType());
+                        }
+                    });
+                }
+
+                if (flairTextView != null) {
+                    flairTextView.setOnClickListener(view -> {
+                        int position = getBindingAdapterPosition();
+                        if (position < 0) {
+                            return;
+                        }
+                        Post post = getItem(position);
+                        if (post != null) {
+                            mCallback.flairChipClicked(post.getFlair());
+                        }
+                    });
+                }
             }
         }
 
+        abstract void setItemViewBackgroundColor(boolean isReadPost);
         abstract void markPostRead(Post post, boolean changePostItemColor);
     }
 
@@ -3026,23 +2709,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         abstract void markPostRead(Post post, boolean changePostItemColor);
     }
 
-    public class PostBaseViewHolder extends PostViewHolder {
+    public abstract class PostBaseViewHolder extends PostViewHolder {
         TextView subredditTextView;
         TextView userTextView;
-        ImageView stickiedPostImageView;
-        TextView postTimeTextView;
-        TextView titleTextView;
-        CustomTextView typeTextView;
-        ImageView archivedImageView;
-        ImageView lockedImageView;
-        ImageView crosspostImageView;
-        CustomTextView nsfwTextView;
-        CustomTextView spoilerTextView;
-        CustomTextView flairTextView;
-        ConstraintLayout bottomConstraintLayout;
         Post.Preview preview;
-
-        boolean itemViewIsNotCardView = false;
 
         PostBaseViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -3054,13 +2724,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                          ImageView stickiedPostImageView,
                          TextView postTimeTextView,
                          TextView titleTextView,
-                         CustomTextView typeTextView,
-                         ImageView archivedImageView,
-                         ImageView lockedImageView,
-                         ImageView crosspostImageView,
-                         CustomTextView nsfwTextView,
-                         CustomTextView spoilerTextView,
-                         CustomTextView flairTextView,
+                         @Nullable CustomTextView typeTextView,
+                         @Nullable ImageView archivedImageView,
+                         @Nullable ImageView lockedImageView,
+                         @Nullable ImageView crosspostImageView,
+                         @Nullable CustomTextView nsfwTextView,
+                         @Nullable CustomTextView spoilerTextView,
+                         @Nullable CustomTextView flairTextView,
                          ConstraintLayout bottomConstraintLayout,
                          MaterialButton upvoteButton,
                          TextView scoreTextView,
@@ -3076,7 +2746,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     postTimeTextView,
                     titleTextView,
                     typeTextView,
+                    archivedImageView,
+                    lockedImageView,
+                    crosspostImageView,
                     nsfwTextView,
+                    spoilerTextView,
                     flairTextView,
                     upvoteButton,
                     scoreTextView,
@@ -3087,17 +2761,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
             this.subredditTextView = subredditTextView;
             this.userTextView = userTextView;
-            this.stickiedPostImageView = stickiedPostImageView;
-            this.postTimeTextView = postTimeTextView;
-            this.titleTextView = titleTextView;
-            this.typeTextView = typeTextView;
-            this.archivedImageView = archivedImageView;
-            this.lockedImageView = lockedImageView;
-            this.crosspostImageView = crosspostImageView;
-            this.nsfwTextView = nsfwTextView;
-            this.spoilerTextView = spoilerTextView;
-            this.flairTextView = flairTextView;
-            this.bottomConstraintLayout = bottomConstraintLayout;
 
             if (mVoteButtonsOnTheRight) {
                 ConstraintSet constraintSet = new ConstraintSet();
@@ -3118,20 +2781,24 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 constraintSet.applyTo(bottomConstraintLayout);
             }
 
-            if (itemViewIsNotCardView) {
-                itemView.setBackgroundColor(mCardViewBackgroundColor);
-            } else {
-                itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
-            }
+            setItemViewBackgroundColor(false);
 
             if (mActivity.typeface != null) {
                 subredditTextView.setTypeface(mActivity.typeface);
                 userTextView.setTypeface(mActivity.typeface);
                 postTimeTextView.setTypeface(mActivity.typeface);
-                typeTextView.setTypeface(mActivity.typeface);
-                spoilerTextView.setTypeface(mActivity.typeface);
-                nsfwTextView.setTypeface(mActivity.typeface);
-                flairTextView.setTypeface(mActivity.typeface);
+                if (typeTextView != null) {
+                    typeTextView.setTypeface(mActivity.typeface);
+                }
+                if (spoilerTextView != null) {
+                    spoilerTextView.setTypeface(mActivity.typeface);
+                }
+                if (nsfwTextView != null) {
+                    nsfwTextView.setTypeface(mActivity.typeface);
+                }
+                if (flairTextView != null) {
+                    flairTextView.setTypeface(mActivity.typeface);
+                }
                 upvoteButton.setTypeface(mActivity.typeface);
                 commentsCountButton.setTypeface(mActivity.typeface);
             }
@@ -3144,21 +2811,43 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             postTimeTextView.setTextColor(mSecondaryTextColor);
             titleTextView.setTextColor(mPostTitleColor);
             stickiedPostImageView.setColorFilter(mStickiedPostIconTint, PorterDuff.Mode.SRC_IN);
-            typeTextView.setBackgroundColor(mPostTypeBackgroundColor);
-            typeTextView.setBorderColor(mPostTypeBackgroundColor);
-            typeTextView.setTextColor(mPostTypeTextColor);
-            spoilerTextView.setBackgroundColor(mSpoilerBackgroundColor);
-            spoilerTextView.setBorderColor(mSpoilerBackgroundColor);
-            spoilerTextView.setTextColor(mSpoilerTextColor);
-            nsfwTextView.setBackgroundColor(mNSFWBackgroundColor);
-            nsfwTextView.setBorderColor(mNSFWBackgroundColor);
-            nsfwTextView.setTextColor(mNSFWTextColor);
-            flairTextView.setBackgroundColor(mFlairBackgroundColor);
-            flairTextView.setBorderColor(mFlairBackgroundColor);
-            flairTextView.setTextColor(mFlairTextColor);
-            archivedImageView.setColorFilter(mArchivedIconTint, PorterDuff.Mode.SRC_IN);
-            lockedImageView.setColorFilter(mLockedIconTint, PorterDuff.Mode.SRC_IN);
-            crosspostImageView.setColorFilter(mCrosspostIconTint, PorterDuff.Mode.SRC_IN);
+
+            if (typeTextView != null) {
+                typeTextView.setBackgroundColor(mPostTypeBackgroundColor);
+                typeTextView.setBorderColor(mPostTypeBackgroundColor);
+                typeTextView.setTextColor(mPostTypeTextColor);
+            }
+
+            if (spoilerTextView != null) {
+                spoilerTextView.setBackgroundColor(mSpoilerBackgroundColor);
+                spoilerTextView.setBorderColor(mSpoilerBackgroundColor);
+                spoilerTextView.setTextColor(mSpoilerTextColor);
+            }
+
+            if (nsfwTextView != null) {
+                nsfwTextView.setBackgroundColor(mNSFWBackgroundColor);
+                nsfwTextView.setBorderColor(mNSFWBackgroundColor);
+                nsfwTextView.setTextColor(mNSFWTextColor);
+            }
+
+            if (flairTextView != null) {
+                flairTextView.setBackgroundColor(mFlairBackgroundColor);
+                flairTextView.setBorderColor(mFlairBackgroundColor);
+                flairTextView.setTextColor(mFlairTextColor);
+            }
+
+            if (archivedImageView != null) {
+                archivedImageView.setColorFilter(mArchivedIconTint, PorterDuff.Mode.SRC_IN);
+            }
+
+            if (lockedImageView != null) {
+                lockedImageView.setColorFilter(mLockedIconTint, PorterDuff.Mode.SRC_IN);
+            }
+
+            if (crosspostImageView != null) {
+                crosspostImageView.setColorFilter(mCrosspostIconTint, PorterDuff.Mode.SRC_IN);
+            }
+
             upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             scoreTextView.setTextColor(mPostIconAndInfoColor);
             downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
@@ -3185,44 +2874,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             });
         }
 
-        void setBaseView(AspectRatioGifImageView iconGifImageView,
-                         TextView subredditTextView,
-                         TextView userTextView,
-                         ImageView stickiedPostImageView,
-                         TextView postTimeTextView,
-                         TextView titleTextView,
-                         CustomTextView typeTextView,
-                         ImageView archivedImageView,
-                         ImageView lockedImageView,
-                         ImageView crosspostImageView,
-                         CustomTextView nsfwTextView,
-                         CustomTextView spoilerTextView,
-                         CustomTextView flairTextView,
-                         ConstraintLayout bottomConstraintLayout,
-                         MaterialButton upvoteButton,
-                         TextView scoreTextView,
-                         MaterialButton downvoteButton,
-                         MaterialButton commentsCountButton,
-                         MaterialButton saveButton,
-                         MaterialButton shareButton, boolean itemViewIsNotCardView) {
-            this.itemViewIsNotCardView = itemViewIsNotCardView;
-
-            setBaseView(iconGifImageView, subredditTextView, userTextView, stickiedPostImageView, postTimeTextView,
-                    titleTextView, typeTextView, archivedImageView, lockedImageView, crosspostImageView,
-                    nsfwTextView, spoilerTextView, flairTextView, bottomConstraintLayout,
-                    upvoteButton, scoreTextView, downvoteButton, commentsCountButton, saveButton, shareButton);
-        }
-
         @Override
         void markPostRead(Post post, boolean changePostItemColor) {
             if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
                 if (changePostItemColor) {
-                    if (itemViewIsNotCardView) {
-                        itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
-                    } else {
-                        itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
-                    }
+                    setItemViewBackgroundColor(true);
                     titleTextView.setTextColor(mReadPostTitleColor);
                     if (this instanceof PostTextTypeViewHolder) {
                         ((PostTextTypeViewHolder) this).contentTextView.setTextColor(mReadPostContentColor);
@@ -3237,7 +2894,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     }
 
     @UnstableApi
-    class PostBaseVideoAutoplayViewHolder extends PostBaseViewHolder implements ToroPlayer {
+    abstract class PostBaseVideoAutoplayViewHolder extends PostBaseViewHolder implements ToroPlayer {
         VideoAutoplayImpl toroPlayer;
 
         @OptIn(markerClass = UnstableApi.class)
@@ -3248,13 +2905,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                         ImageView stickiedPostImageView,
                                         TextView postTimeTextView,
                                         TextView titleTextView,
-                                        CustomTextView typeTextView,
-                                        ImageView crosspostImageView,
-                                        ImageView archivedImageView,
-                                        ImageView lockedImageView,
-                                        CustomTextView nsfwTextView,
-                                        CustomTextView spoilerTextView,
-                                        CustomTextView flairTextView,
+                                        @Nullable CustomTextView typeTextView,
+                                        @Nullable ImageView crosspostImageView,
+                                        @Nullable ImageView archivedImageView,
+                                        @Nullable ImageView lockedImageView,
+                                        @Nullable CustomTextView nsfwTextView,
+                                        @Nullable CustomTextView spoilerTextView,
+                                        @Nullable CustomTextView flairTextView,
                                         AspectRatioFrameLayout aspectRatioFrameLayout,
                                         GifImageView previewImageView,
                                         ImageView errorLoadingRedgifsImageView,
@@ -3401,6 +3058,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.saveButtonItemPostVideoTypeAutoplay,
                     binding.shareButtonItemPostVideoTypeAutoplay);
         }
+
+        @Override
+        void setItemViewBackgroundColor(boolean isReadPost) {
+            itemView.setBackgroundTintList(ColorStateList.valueOf(isReadPost ? mReadPostCardViewBackgroundColor : mCardViewBackgroundColor));
+        }
     }
 
     @UnstableApi
@@ -3436,6 +3098,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.saveButtonItemPostVideoTypeAutoplay,
                     binding.shareButtonItemPostVideoTypeAutoplay);
         }
+
+        @Override
+        void setItemViewBackgroundColor(boolean isReadPost) {
+            itemView.setBackgroundTintList(ColorStateList.valueOf(isReadPost ? mReadPostCardViewBackgroundColor : mCardViewBackgroundColor));
+        }
     }
 
     class PostWithPreviewTypeViewHolder extends PostBaseViewHolder {
@@ -3444,6 +3111,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ProgressBar progressBar;
         ImageView videoOrGifIndicator;
         TextView loadImageErrorTextView;
+        @Nullable
+        FrameLayout imageWrapperFrameLayout;
         AspectRatioGifImageView imageView;
         RequestListener<Drawable> glideRequestListener;
 
@@ -3479,6 +3148,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.progressBarItemPostWithPreview,
                     binding.videoOrGifIndicatorImageViewItemPostWithPreview,
                     binding.loadImageErrorTextViewItemPostWithPreview,
+                    binding.imageWrapperRelativeLayoutItemPostWithPreview,
                     binding.imageViewItemPostWithPreview);
         }
 
@@ -3488,13 +3158,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                          ImageView stickiedPostImageView,
                          TextView postTimeTextView,
                          TextView titleTextView,
-                         CustomTextView typeTextView,
-                         ImageView archivedImageView,
-                         ImageView lockedImageView,
-                         ImageView crosspostImageView,
-                         CustomTextView nsfwTextView,
-                         CustomTextView spoilerTextView,
-                         CustomTextView flairTextView,
+                         @Nullable CustomTextView typeTextView,
+                         @Nullable ImageView archivedImageView,
+                         @Nullable ImageView lockedImageView,
+                         @Nullable ImageView crosspostImageView,
+                         @Nullable CustomTextView nsfwTextView,
+                         @Nullable CustomTextView spoilerTextView,
+                         @Nullable CustomTextView flairTextView,
                          ConstraintLayout bottomConstraintLayout,
                          MaterialButton upvoteButton,
                          TextView scoreTextView,
@@ -3507,6 +3177,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                          ProgressBar progressBar,
                          ImageView videoOrGifIndicator,
                          TextView loadImageErrorTextView,
+                         @Nullable FrameLayout imageWrapperFrameLayout,
                          AspectRatioGifImageView imageView) {
             super.setBaseView(
                     iconGifImageView,
@@ -3535,6 +3206,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             this.progressBar = progressBar;
             this.videoOrGifIndicator = videoOrGifIndicator;
             this.loadImageErrorTextView = loadImageErrorTextView;
+            this.imageWrapperFrameLayout = imageWrapperFrameLayout;
             this.imageView = imageView;
 
             if (mActivity.typeface != null) {
@@ -3587,6 +3259,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
             };
         }
+
+        @Override
+        void setItemViewBackgroundColor(boolean isReadPost) {
+            itemView.setBackgroundTintList(ColorStateList.valueOf(isReadPost ? mReadPostCardViewBackgroundColor : mCardViewBackgroundColor));
+        }
     }
 
     public abstract class PostBaseGalleryTypeViewHolder extends PostBaseViewHolder {
@@ -3605,13 +3282,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                       ImageView stickiedPostImageView,
                                       TextView postTimeTextView,
                                       TextView titleTextView,
-                                      CustomTextView typeTextView,
-                                      ImageView archivedImageView,
-                                      ImageView lockedImageView,
-                                      ImageView crosspostImageView,
-                                      CustomTextView nsfwTextView,
-                                      CustomTextView spoilerTextView,
-                                      CustomTextView flairTextView,
+                                      @Nullable CustomTextView typeTextView,
+                                      @Nullable ImageView archivedImageView,
+                                      @Nullable ImageView lockedImageView,
+                                      @Nullable ImageView crosspostImageView,
+                                      @Nullable CustomTextView nsfwTextView,
+                                      @Nullable CustomTextView spoilerTextView,
+                                      @Nullable CustomTextView flairTextView,
                                       FrameLayout frameLayout,
                                       RecyclerView galleryRecyclerView,
                                       CustomTextView imageIndexTextView,
@@ -3622,8 +3299,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                       MaterialButton downvoteButton,
                                       MaterialButton commentsCountButton,
                                       MaterialButton saveButton,
-                                      MaterialButton shareButton,
-                                      boolean itemViewIsNotCardView) {
+                                      MaterialButton shareButton) {
             super(rootView);
             setBaseView(
                     iconGifImageView,
@@ -3645,8 +3321,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     downvoteButton,
                     commentsCountButton,
                     saveButton,
-                    shareButton,
-                    itemViewIsNotCardView);
+                    shareButton);
 
             this.frameLayout = frameLayout;
             this.galleryRecyclerView = galleryRecyclerView;
@@ -3798,8 +3473,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.downvoteButtonItemPostGalleryType,
                     binding.commentsCountButtonItemPostGalleryType,
                     binding.saveButtonItemPostGalleryType,
-                    binding.shareButtonItemPostGalleryType,
-                    false);
+                    binding.shareButtonItemPostGalleryType);
+        }
+
+        @Override
+        void setItemViewBackgroundColor(boolean isReadPost) {
+            itemView.setBackgroundTintList(ColorStateList.valueOf(isReadPost ? mReadPostCardViewBackgroundColor : mCardViewBackgroundColor));
         }
     }
 
@@ -3842,13 +3521,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                          ImageView stickiedPostImageView,
                          TextView postTimeTextView,
                          TextView titleTextView,
-                         CustomTextView typeTextView,
-                         ImageView archivedImageView,
-                         ImageView lockedImageView,
-                         ImageView crosspostImageView,
-                         CustomTextView nsfwTextView,
-                         CustomTextView spoilerTextView,
-                         CustomTextView flairTextView,
+                         @Nullable CustomTextView typeTextView,
+                         @Nullable ImageView archivedImageView,
+                         @Nullable ImageView lockedImageView,
+                         @Nullable ImageView crosspostImageView,
+                         @Nullable CustomTextView nsfwTextView,
+                         @Nullable CustomTextView spoilerTextView,
+                         @Nullable CustomTextView flairTextView,
                          ConstraintLayout bottomConstraintLayout,
                          MaterialButton upvoteButton,
                          TextView scoreTextView,
@@ -3885,6 +3564,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 contentTextView.setTypeface(mActivity.titleTypeface);
             }
             contentTextView.setTextColor(mPostContentColor);
+        }
+
+        @Override
+        void setItemViewBackgroundColor(boolean isReadPost) {
+            itemView.setBackgroundTintList(ColorStateList.valueOf(isReadPost ? mReadPostCardViewBackgroundColor : mCardViewBackgroundColor));
         }
     }
 
@@ -4105,6 +3789,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     return false;
                 }
             };
+        }
+
+        @Override
+        void setItemViewBackgroundColor(boolean isReadPost) {
+            itemView.setBackgroundColor(isReadPost ? mReadPostCardViewBackgroundColor : mCardViewBackgroundColor);
         }
 
         @Override
@@ -4529,6 +4218,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
             binding.dividerItemPostCard2VideoAutoplay.setBackgroundColor(mDividerColor);
         }
+
+        @Override
+        void setItemViewBackgroundColor(boolean isReadPost) {
+            itemView.setBackgroundColor(isReadPost ? mReadPostCardViewBackgroundColor : mCardViewBackgroundColor);
+        }
     }
 
     @UnstableApi
@@ -4566,13 +4260,17 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
             binding.dividerItemPostCard2VideoAutoplay.setBackgroundColor(mDividerColor);
         }
+
+        @Override
+        void setItemViewBackgroundColor(boolean isReadPost) {
+            itemView.setBackgroundColor(isReadPost ? mReadPostCardViewBackgroundColor : mCardViewBackgroundColor);
+        }
     }
 
     class PostCard2WithPreviewViewHolder extends PostWithPreviewTypeViewHolder {
 
         PostCard2WithPreviewViewHolder(@NonNull ItemPostCard2WithPreviewBinding binding) {
             super(binding.getRoot());
-            this.itemViewIsNotCardView = true;
             setBaseView(
                     binding.iconGifImageViewItemPostCard2WithPreview,
                     binding.subredditNameTextViewItemPostCard2WithPreview,
@@ -4599,9 +4297,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.progressBarItemPostCard2WithPreview,
                     binding.videoOrGifIndicatorImageViewItemPostCard2WithPreview,
                     binding.loadImageErrorTextViewItemPostCard2WithPreview,
+                    null,
                     binding.imageViewItemPostCard2WithPreview);
 
             binding.dividerItemPostCard2WithPreview.setBackgroundColor(mDividerColor);
+        }
+
+        @Override
+        void setItemViewBackgroundColor(boolean isReadPost) {
+            itemView.setBackgroundColor(isReadPost ? mReadPostCardViewBackgroundColor : mCardViewBackgroundColor);
         }
     }
 
@@ -4632,17 +4336,20 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.downvoteButtonItemPostCard2GalleryType,
                     binding.commentsCountButtonItemPostCard2GalleryType,
                     binding.saveButtonItemPostCard2GalleryType,
-                    binding.shareButtonItemPostCard2GalleryType,
-                    true);
+                    binding.shareButtonItemPostCard2GalleryType);
 
             binding.dividerItemPostCard2GalleryType.setBackgroundColor(mDividerColor);
+        }
+
+        @Override
+        void setItemViewBackgroundColor(boolean isReadPost) {
+            itemView.setBackgroundColor(isReadPost ? mReadPostCardViewBackgroundColor : mCardViewBackgroundColor);
         }
     }
 
     class PostCard2TextTypeViewHolder extends PostTextTypeViewHolder {
         PostCard2TextTypeViewHolder(@NonNull ItemPostCard2TextBinding binding) {
             super(binding.getRoot());
-            itemViewIsNotCardView = true;
 
             setBaseView(
                     binding.iconGifImageViewItemPostCard2Text,
@@ -4669,238 +4376,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
             binding.dividerItemPostCard2Text.setBackgroundColor(mDividerColor);
         }
-    }
-
-    public class PostMaterial3CardBaseViewHolder extends PostViewHolder {
-        TextView subredditTextView;
-        TextView userTextView;
-        ImageView stickiedPostImageView;
-        TextView postTimeTextView;
-        TextView titleTextView;
-        ConstraintLayout bottomConstraintLayout;
-        Post.Preview preview;
-
-        PostMaterial3CardBaseViewHolder(@NonNull View itemView) {
-            super(itemView);
-        }
-
-        void setBaseView(AspectRatioGifImageView iconGifImageView,
-                         TextView subredditTextView,
-                         TextView userTextView,
-                         ImageView stickiedPostImageView,
-                         TextView postTimeTextView,
-                         TextView titleTextView,
-                         ConstraintLayout bottomConstraintLayout,
-                         MaterialButton upvoteButton,
-                         TextView scoreTextView,
-                         MaterialButton downvoteButton,
-                         MaterialButton commentsCountButton,
-                         MaterialButton saveButton,
-                         MaterialButton shareButton) {
-            super.setBaseView(iconGifImageView,
-                    subredditTextView,
-                    userTextView,
-                    stickiedPostImageView,
-                    postTimeTextView,
-                    titleTextView,
-                    upvoteButton,
-                    scoreTextView,
-                    downvoteButton,
-                    commentsCountButton,
-                    saveButton,
-                    shareButton);
-
-            this.subredditTextView = subredditTextView;
-            this.userTextView = userTextView;
-            this.stickiedPostImageView = stickiedPostImageView;
-            this.postTimeTextView = postTimeTextView;
-            this.titleTextView = titleTextView;
-            this.bottomConstraintLayout = bottomConstraintLayout;
-
-            if (mVoteButtonsOnTheRight) {
-                ConstraintSet constraintSet = new ConstraintSet();
-                constraintSet.clone(bottomConstraintLayout);
-                constraintSet.clear(upvoteButton.getId(), ConstraintSet.START);
-                constraintSet.clear(scoreTextView.getId(), ConstraintSet.START);
-                constraintSet.clear(downvoteButton.getId(), ConstraintSet.START);
-                constraintSet.clear(saveButton.getId(), ConstraintSet.END);
-                constraintSet.clear(shareButton.getId(), ConstraintSet.END);
-                constraintSet.connect(upvoteButton.getId(), ConstraintSet.END, scoreTextView.getId(), ConstraintSet.START);
-                constraintSet.connect(scoreTextView.getId(), ConstraintSet.END, downvoteButton.getId(), ConstraintSet.START);
-                constraintSet.connect(downvoteButton.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
-                constraintSet.connect(commentsCountButton.getId(), ConstraintSet.START, saveButton.getId(), ConstraintSet.END);
-                constraintSet.connect(commentsCountButton.getId(), ConstraintSet.END, upvoteButton.getId(), ConstraintSet.START);
-                constraintSet.connect(saveButton.getId(), ConstraintSet.START, shareButton.getId(), ConstraintSet.END);
-                constraintSet.connect(shareButton.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
-                constraintSet.setHorizontalBias(commentsCountButton.getId(), 0);
-                constraintSet.applyTo(bottomConstraintLayout);
-            }
-
-            itemView.setBackgroundTintList(ColorStateList.valueOf(mFilledCardViewBackgroundColor));
-
-            if (mActivity.typeface != null) {
-                subredditTextView.setTypeface(mActivity.typeface);
-                userTextView.setTypeface(mActivity.typeface);
-                postTimeTextView.setTypeface(mActivity.typeface);
-                upvoteButton.setTypeface(mActivity.typeface);
-                commentsCountButton.setTypeface(mActivity.typeface);
-            }
-            if (mActivity.titleTypeface != null) {
-                titleTextView.setTypeface(mActivity.titleTypeface);
-            }
-
-            subredditTextView.setTextColor(mSubredditColor);
-            userTextView.setTextColor(mUsernameColor);
-            postTimeTextView.setTextColor(mSecondaryTextColor);
-            titleTextView.setTextColor(mPostTitleColor);
-            stickiedPostImageView.setColorFilter(mStickiedPostIconTint, PorterDuff.Mode.SRC_IN);
-            upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
-            scoreTextView.setTextColor(mPostIconAndInfoColor);
-            downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
-            commentsCountButton.setTextColor(mPostIconAndInfoColor);
-            commentsCountButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
-            saveButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
-            shareButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
-        }
 
         @Override
-        void markPostRead(Post post, boolean changePostItemColor) {
-            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !post.isRead() && mMarkPostsAsRead) {
-                post.markAsRead();
-                if (changePostItemColor) {
-                    itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostFilledCardViewBackgroundColor));
-                    titleTextView.setTextColor(mReadPostTitleColor);
-                    if (this instanceof PostMaterial3CardTextTypeViewHolder) {
-                        ((PostMaterial3CardTextTypeViewHolder) this).binding.contentTextViewItemPostCard3TextType.setTextColor(mReadPostContentColor);
-                    }
-                }
-                if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
-                    ((MarkPostAsReadInterface) mActivity).markPostAsRead(post);
-                    mFragment.markPostAsRead(post);
-                }
-            }
+        void setItemViewBackgroundColor(boolean isReadPost) {
+            itemView.setBackgroundColor(isReadPost ? mReadPostCardViewBackgroundColor : mCardViewBackgroundColor);
         }
     }
 
     @UnstableApi
-    class PostMaterial3CardBaseVideoAutoplayViewHolder extends PostMaterial3CardBaseViewHolder implements ToroPlayer {
-        VideoAutoplayImpl toroPlayer;
-
-        PostMaterial3CardBaseVideoAutoplayViewHolder(View rootView,
-                                                     AspectRatioGifImageView iconGifImageView,
-                                                     TextView subredditTextView,
-                                                     TextView userTextView,
-                                                     ImageView stickiedPostImageView,
-                                                     TextView postTimeTextView,
-                                                     TextView titleTextView,
-                                                     AspectRatioFrameLayout aspectRatioFrameLayout,
-                                                     GifImageView previewImageView,
-                                                     ImageView errorLoadingRedgifsImageView,
-                                                     PlayerView videoPlayer,
-                                                     ImageView muteButton,
-                                                     ImageView fullscreenButton,
-                                                     ImageView playPauseButton,
-                                                     DefaultTimeBar progressBar,
-                                                     ConstraintLayout bottomConstraintLayout,
-                                                     MaterialButton upvoteButton,
-                                                     TextView scoreTextView,
-                                                     MaterialButton downvoteButton,
-                                                     MaterialButton commentsCountButton,
-                                                     MaterialButton saveButton,
-                                                     MaterialButton shareButton) {
-            super(rootView);
-            setBaseView(
-                    iconGifImageView,
-                    subredditTextView,
-                    userTextView,
-                    stickiedPostImageView,
-                    postTimeTextView,
-                    titleTextView,
-                    bottomConstraintLayout,
-                    upvoteButton,
-                    scoreTextView,
-                    downvoteButton,
-                    commentsCountButton,
-                    saveButton,
-                    shareButton);
-
-            toroPlayer = new VideoAutoplayImpl(rootView, aspectRatioFrameLayout, previewImageView,
-                    errorLoadingRedgifsImageView, videoPlayer, muteButton, fullscreenButton, playPauseButton,
-                    progressBar,
-                    AppCompatResources.getDrawable(mActivity, R.drawable.ic_play_arrow_24dp),
-                    AppCompatResources.getDrawable(mActivity, R.drawable.ic_pause_24dp)) {
-                @Override
-                public int getPlayerOrder() {
-                    return getBindingAdapterPosition();
-                }
-
-                @Override
-                int getAdapterPosition() {
-                    return getBindingAdapterPosition();
-                }
-
-                @Override
-                Post getPost() {
-                    return post;
-                }
-
-                @Override
-                void markPostRead(Post post, boolean changePostItemColor) {
-                    PostMaterial3CardBaseVideoAutoplayViewHolder.this.markPostRead(post, changePostItemColor);
-                }
-            };
-        }
-
-        @NonNull
-        @Override
-        public View getPlayerView() {
-            return toroPlayer.getPlayerView();
-        }
-
-        @NonNull
-        @Override
-        public PlaybackInfo getCurrentPlaybackInfo() {
-            return toroPlayer.getCurrentPlaybackInfo();
-        }
-
-        @Override
-        public void initialize(@NonNull Container container, @NonNull PlaybackInfo playbackInfo) {
-            toroPlayer.initialize(container, playbackInfo);
-        }
-
-        @Override
-        public void play() {
-            toroPlayer.play();
-        }
-
-        @Override
-        public void pause() {
-            toroPlayer.pause();
-        }
-
-        @Override
-        public boolean isPlaying() {
-            return toroPlayer.isPlaying();
-        }
-
-        @Override
-        public void release() {
-            toroPlayer.release();
-        }
-
-        @Override
-        public boolean wantsToPlay() {
-            return toroPlayer.wantsToPlay();
-        }
-
-        @Override
-        public int getPlayerOrder() {
-            return toroPlayer.getPlayerOrder();
-        }
-    }
-
-    @UnstableApi
-    class PostMaterial3CardVideoAutoplayViewHolder extends PostMaterial3CardBaseVideoAutoplayViewHolder {
+    class PostMaterial3CardVideoAutoplayViewHolder extends PostBaseVideoAutoplayViewHolder {
         PostMaterial3CardVideoAutoplayViewHolder(ItemPostCard3VideoTypeAutoplayBinding binding) {
             super(binding.getRoot(),
                     binding.iconGifImageViewItemPostCard3VideoTypeAutoplay,
@@ -4909,6 +4393,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.stickiedPostImageViewItemPostCard3VideoTypeAutoplay,
                     binding.postTimeTextViewItemPostCard3VideoTypeAutoplay,
                     binding.titleTextViewItemPostCard3VideoTypeAutoplay,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
                     binding.aspectRatioFrameLayoutItemPostCard3VideoTypeAutoplay,
                     binding.previewImageViewItemPostCard3VideoTypeAutoplay,
                     binding.errorLoadingVideoImageViewItemPostCard3VideoTypeAutoplay,
@@ -4925,10 +4416,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.saveButtonItemPostCard3VideoTypeAutoplay,
                     binding.shareButtonItemPostCard3VideoTypeAutoplay);
         }
+
+        @Override
+        void setItemViewBackgroundColor(boolean isReadPost) {
+            itemView.setBackgroundTintList(ColorStateList.valueOf(isReadPost ? mReadPostFilledCardViewBackgroundColor : mFilledCardViewBackgroundColor));
+        }
     }
 
     @UnstableApi
-    class PostMaterial3CardVideoAutoplayLegacyControllerViewHolder extends PostMaterial3CardBaseVideoAutoplayViewHolder {
+    class PostMaterial3CardVideoAutoplayLegacyControllerViewHolder extends PostBaseVideoAutoplayViewHolder {
         PostMaterial3CardVideoAutoplayLegacyControllerViewHolder(ItemPostCard3VideoTypeAutoplayLegacyControllerBinding binding) {
             super(binding.getRoot(),
                     binding.iconGifImageViewItemPostCard3VideoTypeAutoplay,
@@ -4937,6 +4433,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.stickiedPostImageViewItemPostCard3VideoTypeAutoplay,
                     binding.postTimeTextViewItemPostCard3VideoTypeAutoplay,
                     binding.titleTextViewItemPostCard3VideoTypeAutoplay,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
                     binding.aspectRatioFrameLayoutItemPostCard3VideoTypeAutoplay,
                     binding.previewImageViewItemPostCard3VideoTypeAutoplay,
                     binding.errorLoadingVideoImageViewItemPostCard3VideoTypeAutoplay,
@@ -4953,250 +4456,52 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.saveButtonItemPostCard3VideoTypeAutoplay,
                     binding.shareButtonItemPostCard3VideoTypeAutoplay);
         }
+
+        @Override
+        void setItemViewBackgroundColor(boolean isReadPost) {
+            itemView.setBackgroundTintList(ColorStateList.valueOf(isReadPost ? mReadPostFilledCardViewBackgroundColor : mFilledCardViewBackgroundColor));
+        }
     }
 
-    public class PostMaterial3CardWithPreviewViewHolder extends PostMaterial3CardBaseViewHolder {
-
-        ItemPostCard3WithPreviewBinding binding;
-        RequestListener<Drawable> glideRequestListener;
-
+    public class PostMaterial3CardWithPreviewViewHolder extends PostWithPreviewTypeViewHolder {
         PostMaterial3CardWithPreviewViewHolder(@NonNull ItemPostCard3WithPreviewBinding binding) {
             super(binding.getRoot());
-            this.binding = binding;
             setBaseView(binding.iconGifImageViewItemPostCard3WithPreview,
                     binding.subredditNameTextViewItemPostCard3WithPreview,
                     binding.userTextViewItemPostCard3WithPreview,
                     binding.stickiedPostImageViewItemPostCard3WithPreview,
                     binding.postTimeTextViewItemPostCard3WithPreview,
                     binding.titleTextViewItemPostCard3WithPreview,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
                     binding.bottomConstraintLayoutItemPostCard3WithPreview,
                     binding.upvoteButtonItemPostCard3WithPreview,
                     binding.scoreTextViewItemPostCard3WithPreview,
                     binding.downvoteButtonItemPostCard3WithPreview,
                     binding.commentsCountButtonItemPostCard3WithPreview,
                     binding.saveButtonItemPostCard3WithPreview,
-                    binding.shareButtonItemPostCard3WithPreview);
+                    binding.shareButtonItemPostCard3WithPreview,
+                    binding.linkTextViewItemPostCard3WithPreview,
+                    binding.imageViewNoPreviewGalleryItemPostCard3WithPreview,
+                    binding.progressBarItemPostCard3WithPreview,
+                    binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview,
+                    binding.loadImageErrorTextViewItemPostCard3WithPreview,
+                    binding.imageWrapperRelativeLayoutItemPostCard3WithPreview,
+                    binding.imageViewItemPostCard3WithPreview);
+        }
 
-            if (mActivity.typeface != null) {
-                binding.linkTextViewItemPostCard3WithPreview.setTypeface(mActivity.typeface);
-                binding.loadImageErrorTextViewItemPostCard3WithPreview.setTypeface(mActivity.typeface);
-            }
-            binding.linkTextViewItemPostCard3WithPreview.setTextColor(mSecondaryTextColor);
-            binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
-            binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
-            binding.progressBarItemPostCard3WithPreview.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
-            binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setColorFilter(mMediaIndicatorIconTint, PorterDuff.Mode.SRC_IN);
-            binding.videoOrGifIndicatorImageViewItemPostCard3WithPreview.setBackgroundTintList(ColorStateList.valueOf(mMediaIndicatorBackgroundColor));
-            binding.loadImageErrorTextViewItemPostCard3WithPreview.setTextColor(mPrimaryTextColor);
-
-            binding.imageViewItemPostCard3WithPreview.setOnClickListener(view -> {
-                int position = getBindingAdapterPosition();
-                if (position < 0) {
-                    return;
-                }
-                Post post = getItem(position);
-                if (post != null) {
-                    markPostRead(post, true);
-                    openMedia(post);
-                }
-            });
-
-            binding.loadImageErrorTextViewItemPostCard3WithPreview.setOnClickListener(view -> {
-                binding.progressBarItemPostCard3WithPreview.setVisibility(View.VISIBLE);
-                binding.loadImageErrorTextViewItemPostCard3WithPreview.setVisibility(View.GONE);
-                loadImage(this);
-            });
-
-            binding.imageViewNoPreviewGalleryItemPostCard3WithPreview.setOnClickListener(view -> {
-                binding.imageViewItemPostCard3WithPreview.performClick();
-            });
-
-            glideRequestListener = new RequestListener<>() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    binding.progressBarItemPostCard3WithPreview.setVisibility(View.GONE);
-                    binding.loadImageErrorTextViewItemPostCard3WithPreview.setVisibility(View.VISIBLE);
-                    return false;
-                }
-
-                @Override
-                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    binding.loadImageErrorTextViewItemPostCard3WithPreview.setVisibility(View.GONE);
-                    binding.progressBarItemPostCard3WithPreview.setVisibility(View.GONE);
-                    return false;
-                }
-            };
+        @Override
+        void setItemViewBackgroundColor(boolean isReadPost) {
+            itemView.setBackgroundTintList(ColorStateList.valueOf(isReadPost ? mReadPostFilledCardViewBackgroundColor : mFilledCardViewBackgroundColor));
         }
     }
 
-    public class PostMaterial3CardBaseGalleryTypeViewHolder extends PostMaterial3CardBaseViewHolder {
-        FrameLayout frameLayout;
-        RecyclerView galleryRecyclerView;
-        CustomTextView imageIndexTextView;
-        ImageView noPreviewImageView;
-
-        PostGalleryTypeImageRecyclerViewAdapter adapter;
-        private boolean swipeLocked;
-
-        PostMaterial3CardBaseGalleryTypeViewHolder(View rootView,
-                                                   AspectRatioGifImageView iconGifImageView,
-                                                   TextView subredditTextView,
-                                                   TextView userTextView,
-                                                   ImageView stickiedPostImageView,
-                                                   TextView postTimeTextView,
-                                                   TextView titleTextView,
-                                                   FrameLayout frameLayout,
-                                                   RecyclerView galleryRecyclerView,
-                                                   CustomTextView imageIndexTextView,
-                                                   ImageView noPreviewImageView,
-                                                   ConstraintLayout bottomConstraintLayout,
-                                                   MaterialButton upvoteButton,
-                                                   TextView scoreTextView,
-                                                   MaterialButton downvoteButton,
-                                                   MaterialButton commentsCountButton,
-                                                   MaterialButton saveButton,
-                                                   MaterialButton shareButton) {
-            super(rootView);
-            setBaseView(
-                    iconGifImageView,
-                    subredditTextView,
-                    userTextView,
-                    stickiedPostImageView,
-                    postTimeTextView,
-                    titleTextView,
-                    bottomConstraintLayout,
-                    upvoteButton,
-                    scoreTextView,
-                    downvoteButton,
-                    commentsCountButton,
-                    saveButton,
-                    shareButton);
-
-            this.frameLayout = frameLayout;
-            this.galleryRecyclerView = galleryRecyclerView;
-            this.imageIndexTextView = imageIndexTextView;
-            this.noPreviewImageView = noPreviewImageView;
-
-            imageIndexTextView.setTextColor(mMediaIndicatorIconTint);
-            imageIndexTextView.setBackgroundColor(mMediaIndicatorBackgroundColor);
-            imageIndexTextView.setBorderColor(mMediaIndicatorBackgroundColor);
-            if (mActivity.typeface != null) {
-                imageIndexTextView.setTypeface(mActivity.typeface);
-            }
-
-            noPreviewImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
-            noPreviewImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
-
-            adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface,
-                    mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale);
-            galleryRecyclerView.setAdapter(adapter);
-            galleryRecyclerView.setOnTouchListener((v, motionEvent) -> {
-                if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP || motionEvent.getActionMasked() == MotionEvent.ACTION_CANCEL) {
-                    if (mActivity.mSliderPanel != null) {
-                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(false);
-                    }
-
-                    if (mActivity.mViewPager2 != null) {
-                        mActivity.mViewPager2.setUserInputEnabled(true);
-                    }
-                    mActivity.unlockSwipeRightToGoBack();
-                    swipeLocked = false;
-                } else {
-                    if (mActivity.mSliderPanel != null) {
-                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
-                    }
-                    if (mActivity.mViewPager2 != null) {
-                        mActivity.mViewPager2.setUserInputEnabled(false);
-                    }
-                    mActivity.lockSwipeRightToGoBack();
-                    swipeLocked = true;
-                }
-
-                return false;
-            });
-            new PagerSnapHelper().attachToRecyclerView(galleryRecyclerView);
-            galleryRecyclerView.setRecycledViewPool(mGalleryRecycledViewPool);
-            LinearLayoutManagerBugFixed layoutManager = new LinearLayoutManagerBugFixed(mActivity, RecyclerView.HORIZONTAL, false);
-            galleryRecyclerView.setLayoutManager(layoutManager);
-            galleryRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                    super.onScrollStateChanged(recyclerView, newState);
-                }
-
-                @Override
-                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    super.onScrolled(recyclerView, dx, dy);
-                    imageIndexTextView.setText(mActivity.getString(R.string.image_index_in_gallery, layoutManager.findFirstVisibleItemPosition() + 1, post.getGallery().size()));
-                }
-            });
-            galleryRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-                private float downX;
-                private float downY;
-                private boolean dragged;
-                private final int minTouchSlop = ViewConfiguration.get(mActivity).getScaledTouchSlop();
-
-                @Override
-                public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-                    int action = e.getAction();
-                    switch (action) {
-                        case MotionEvent.ACTION_DOWN:
-                            downX = e.getRawX();
-                            downY = e.getRawY();
-                            break;
-                        case MotionEvent.ACTION_MOVE:
-                            if(Math.abs(e.getRawX() - downX) > minTouchSlop || Math.abs(e.getRawY() - downY) > minTouchSlop) {
-                                dragged = true;
-                            }
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            if (!dragged) {
-                                int position = getBindingAdapterPosition();
-                                if (position >= 0) {
-                                    if (post != null) {
-                                        markPostRead(post, true);
-                                        openMedia(post, layoutManager.findFirstVisibleItemPosition());
-                                    }
-                                }
-                            }
-
-                            downX = 0;
-                            downY = 0;
-                            dragged = false;
-                    }
-                    return false;
-                }
-
-                @Override
-                public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-
-                }
-
-                @Override
-                public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-                }
-            });
-
-            noPreviewImageView.setOnClickListener(view -> {
-                int position = getBindingAdapterPosition();
-                if (position < 0) {
-                    return;
-                }
-                if (post != null) {
-                    markPostRead(post, true);
-                    openMedia(post, 0);
-                }
-            });
-        }
-
-        public boolean isSwipeLocked() {
-            return swipeLocked;
-        }
-    }
-
-    public class PostMaterial3CardGalleryTypeViewHolder extends PostMaterial3CardBaseGalleryTypeViewHolder {
-
+    public class PostMaterial3CardGalleryTypeViewHolder extends PostBaseGalleryTypeViewHolder {
         PostMaterial3CardGalleryTypeViewHolder(ItemPostCard3GalleryTypeBinding binding) {
             super(binding.getRoot(),
                     binding.iconGifImageViewItemPostCard3GalleryType,
@@ -5205,6 +4510,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.stickiedPostImageViewItemPostCard3GalleryType,
                     binding.postTimeTextViewItemPostCard3GalleryType,
                     binding.titleTextViewItemPostCard3GalleryType,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
                     binding.galleryFrameLayoutItemPostCard3GalleryType,
                     binding.galleryRecyclerViewItemPostCard3GalleryType,
                     binding.imageIndexTextViewItemPostCard3GalleryType,
@@ -5217,15 +4529,16 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.saveButtonItemPostCard3GalleryType,
                     binding.shareButtonItemPostCard3GalleryType);
         }
+
+        @Override
+        void setItemViewBackgroundColor(boolean isReadPost) {
+            itemView.setBackgroundTintList(ColorStateList.valueOf(isReadPost ? mReadPostFilledCardViewBackgroundColor : mFilledCardViewBackgroundColor));
+        }
     }
 
-    class PostMaterial3CardTextTypeViewHolder extends PostMaterial3CardBaseViewHolder {
-
-        ItemPostCard3TextBinding binding;
-
+    class PostMaterial3CardTextTypeViewHolder extends PostTextTypeViewHolder {
         PostMaterial3CardTextTypeViewHolder(@NonNull ItemPostCard3TextBinding binding) {
             super(binding.getRoot());
-            this.binding = binding;
             setBaseView(
                     binding.iconGifImageViewItemPostCard3TextType,
                     binding.subredditNameTextViewItemPostCard3TextType,
@@ -5233,18 +4546,26 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.stickiedPostImageViewItemPostCard3TextType,
                     binding.postTimeTextViewItemPostCard3TextType,
                     binding.titleTextViewItemPostCard3TextType,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
                     binding.bottomConstraintLayoutItemPostCard3TextType,
                     binding.upvoteButtonItemPostCard3TextType,
                     binding.scoreTextViewItemPostCard3TextType,
                     binding.downvoteButtonItemPostCard3TextType,
                     binding.commentsCountButtonItemPostCard3TextType,
                     binding.saveButtonItemPostCard3TextType,
-                    binding.shareButtonItemPostCard3TextType);
+                    binding.shareButtonItemPostCard3TextType,
+                    binding.contentTextViewItemPostCard3TextType);
+        }
 
-            if (mActivity.contentTypeface != null) {
-                binding.contentTextViewItemPostCard3TextType.setTypeface(mActivity.titleTypeface);
-            }
-            binding.contentTextViewItemPostCard3TextType.setTextColor(mPostContentColor);
+        @Override
+        void setItemViewBackgroundColor(boolean isReadPost) {
+            itemView.setBackgroundTintList(ColorStateList.valueOf(isReadPost ? mReadPostFilledCardViewBackgroundColor : mFilledCardViewBackgroundColor));
         }
     }
 }
