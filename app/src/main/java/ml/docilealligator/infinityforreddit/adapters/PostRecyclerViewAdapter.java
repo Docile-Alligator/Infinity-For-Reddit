@@ -879,81 +879,80 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     }
                 } else if (holder instanceof PostWithPreviewTypeViewHolder) {
                     if (post.getPostType() == Post.VIDEO_TYPE) {
-                        ((PostWithPreviewTypeViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostWithPreview.setVisibility(View.VISIBLE);
-                        ((PostWithPreviewTypeViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostWithPreview.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_play_circle_36dp));
+                        ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setVisibility(View.VISIBLE);
+                        ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_play_circle_36dp));
                         ((PostWithPreviewTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.video));
                     } else if (post.getPostType() == Post.GIF_TYPE) {
                         if (!mAutoplay) {
-                            ((PostWithPreviewTypeViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostWithPreview.setVisibility(View.VISIBLE);
-                            ((PostWithPreviewTypeViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostWithPreview.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_play_circle_36dp));
+                            ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setVisibility(View.VISIBLE);
+                            ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_play_circle_36dp));
                         }
                         ((PostWithPreviewTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.gif));
                     } else if (post.getPostType() == Post.IMAGE_TYPE) {
                         ((PostWithPreviewTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.image));
                     } else if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
                         ((PostWithPreviewTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.link));
-                        ((PostWithPreviewTypeViewHolder) holder).binding.linkTextViewItemPostWithPreview.setVisibility(View.VISIBLE);
+                        ((PostWithPreviewTypeViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
                         String domain = Uri.parse(post.getUrl()).getHost();
-                        ((PostWithPreviewTypeViewHolder) holder).binding.linkTextViewItemPostWithPreview.setText(domain);
+                        ((PostWithPreviewTypeViewHolder) holder).linkTextView.setText(domain);
                         if (post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
-                            ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setVisibility(View.VISIBLE);
-                            ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_link_day_night_24dp);
+                            ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setVisibility(View.VISIBLE);
+                            ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setImageResource(R.drawable.ic_link_day_night_24dp);
                         }
                     }
 
                     if (mDataSavingMode && mDisableImagePreview) {
-                        ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setVisibility(View.VISIBLE);
+                        ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setVisibility(View.VISIBLE);
                         if (post.getPostType() == Post.VIDEO_TYPE) {
-                            ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_video_day_night_24dp);
-                            ((PostWithPreviewTypeViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostWithPreview.setVisibility(View.GONE);
+                            ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setImageResource(R.drawable.ic_video_day_night_24dp);
+                            ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setVisibility(View.GONE);
                         } else if (post.getPostType() == Post.IMAGE_TYPE || post.getPostType() == Post.GIF_TYPE) {
-                            ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
-                            ((PostWithPreviewTypeViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostWithPreview.setVisibility(View.GONE);
+                            ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setImageResource(R.drawable.ic_image_day_night_24dp);
+                            ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setVisibility(View.GONE);
                         } else if (post.getPostType() == Post.LINK_TYPE) {
-                            ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_link_day_night_24dp);
+                            ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setImageResource(R.drawable.ic_link_day_night_24dp);
                         }
                     } else if (mDataSavingMode && mOnlyDisablePreviewInVideoAndGifPosts && (post.getPostType() == Post.VIDEO_TYPE || post.getPostType() == Post.GIF_TYPE)) {
-                        ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setVisibility(View.VISIBLE);
-                        ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_video_day_night_24dp);
-                        ((PostWithPreviewTypeViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostWithPreview.setVisibility(View.GONE);
+                        ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setVisibility(View.VISIBLE);
+                        ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setImageResource(R.drawable.ic_video_day_night_24dp);
+                        ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setVisibility(View.GONE);
                     } else {
                         if (post.getPostType() == Post.GIF_TYPE && ((post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(mAutoplay && mAutoplayNsfwVideos)) || (post.isSpoiler() && mNeedBlurSpoiler))) {
-                            ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setVisibility(View.VISIBLE);
-                            ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
-                            ((PostWithPreviewTypeViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostWithPreview.setVisibility(View.GONE);
+                            ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setVisibility(View.VISIBLE);
+                            ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setImageResource(R.drawable.ic_image_day_night_24dp);
+                            ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setVisibility(View.GONE);
                         } else {
                             Post.Preview preview = getSuitablePreview(post.getPreviews());
                             ((PostWithPreviewTypeViewHolder) holder).preview = preview;
                             if (preview != null) {
-                                ((PostWithPreviewTypeViewHolder) holder).binding.imageViewItemPostWithPreview.setVisibility(View.VISIBLE);
-                                ((PostWithPreviewTypeViewHolder) holder).binding.imageWrapperRelativeLayoutItemPostWithPreview.setVisibility(View.VISIBLE);
+                                ((PostWithPreviewTypeViewHolder) holder).imageView.setVisibility(View.VISIBLE);
                                 if (mFixedHeightPreviewInCard || (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0)) {
                                     int height = (int) (400 * mScale);
-                                    ((PostWithPreviewTypeViewHolder) holder).binding.imageViewItemPostWithPreview.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                                    ((PostWithPreviewTypeViewHolder) holder).binding.imageViewItemPostWithPreview.getLayoutParams().height = height;
+                                    ((PostWithPreviewTypeViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                    ((PostWithPreviewTypeViewHolder) holder).imageView.getLayoutParams().height = height;
                                 } else {
-                                    ((PostWithPreviewTypeViewHolder) holder).binding.imageViewItemPostWithPreview
+                                    ((PostWithPreviewTypeViewHolder) holder).imageView
                                             .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
                                 }
-                                ((PostWithPreviewTypeViewHolder) holder).binding.imageViewItemPostWithPreview.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                                ((PostWithPreviewTypeViewHolder) holder).imageView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                                     @Override
                                     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                                        ((PostWithPreviewTypeViewHolder) holder).binding.imageViewItemPostWithPreview.removeOnLayoutChangeListener(this);
+                                        ((PostWithPreviewTypeViewHolder) holder).imageView.removeOnLayoutChangeListener(this);
                                         loadImage(holder);
                                     }
                                 });
                             } else {
-                                ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setVisibility(View.VISIBLE);
+                                ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setVisibility(View.VISIBLE);
                                 if (post.getPostType() == Post.VIDEO_TYPE) {
-                                    ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_video_day_night_24dp);
-                                    ((PostWithPreviewTypeViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostWithPreview.setVisibility(View.GONE);
+                                    ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setImageResource(R.drawable.ic_video_day_night_24dp);
+                                    ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setVisibility(View.GONE);
                                 } else if (post.getPostType() == Post.IMAGE_TYPE || post.getPostType() == Post.GIF_TYPE) {
-                                    ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
-                                    ((PostWithPreviewTypeViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostWithPreview.setVisibility(View.GONE);
+                                    ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setImageResource(R.drawable.ic_image_day_night_24dp);
+                                    ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setVisibility(View.GONE);
                                 } else if (post.getPostType() == Post.LINK_TYPE) {
-                                    ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_link_day_night_24dp);
+                                    ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setImageResource(R.drawable.ic_link_day_night_24dp);
                                 } else if (post.getPostType() == Post.GALLERY_TYPE) {
-                                    ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setImageResource(R.drawable.ic_gallery_day_night_24dp);
+                                    ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setImageResource(R.drawable.ic_gallery_day_night_24dp);
                                 }
                             }
                         }
@@ -1976,7 +1975,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
     private void loadImage(final RecyclerView.ViewHolder holder) {
         if (holder instanceof PostWithPreviewTypeViewHolder) {
-            ((PostWithPreviewTypeViewHolder) holder).binding.progressBarItemPostWithPreview.setVisibility(View.VISIBLE);
+            ((PostWithPreviewTypeViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
             Post post = ((PostWithPreviewTypeViewHolder) holder).post;
             Post.Preview preview = ((PostWithPreviewTypeViewHolder) holder).preview;
             if (preview != null) {
@@ -1990,9 +1989,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(url).listener(((PostWithPreviewTypeViewHolder) holder).glideRequestListener);
                 if (blurImage) {
                     imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                            .into(((PostWithPreviewTypeViewHolder) holder).binding.imageViewItemPostWithPreview);
+                            .into(((PostWithPreviewTypeViewHolder) holder).imageView);
                 } else {
-                    imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostWithPreviewTypeViewHolder) holder).binding.imageViewItemPostWithPreview);
+                    imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostWithPreviewTypeViewHolder) holder).imageView);
                 }
             }
         } else if (holder instanceof PostCompactBaseViewHolder) {
@@ -2048,7 +2047,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 } else {
                     url = preview.getPreviewUrl();
                 }
-                RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(url).listener(((PostCard2WithPreviewViewHolder) holder).requestListener);
+                RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(url).listener(((PostCard2WithPreviewViewHolder) holder).glideRequestListener);
 
                 if (blurImage) {
                     imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
@@ -2269,14 +2268,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 mGlide.clear(((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView);
                 ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.previewImageView.setVisibility(View.GONE);
             } else if (holder instanceof PostWithPreviewTypeViewHolder) {
-                mGlide.clear(((PostWithPreviewTypeViewHolder) holder).binding.imageViewItemPostWithPreview);
-                ((PostWithPreviewTypeViewHolder) holder).binding.imageViewItemPostWithPreview.setVisibility(View.GONE);
-                ((PostWithPreviewTypeViewHolder) holder).binding.imageWrapperRelativeLayoutItemPostWithPreview.setVisibility(View.GONE);
-                ((PostWithPreviewTypeViewHolder) holder).binding.loadImageErrorTextViewItemPostWithPreview.setVisibility(View.GONE);
-                ((PostWithPreviewTypeViewHolder) holder).binding.imageViewNoPreviewGalleryItemPostWithPreview.setVisibility(View.GONE);
-                ((PostWithPreviewTypeViewHolder) holder).binding.progressBarItemPostWithPreview.setVisibility(View.GONE);
-                ((PostWithPreviewTypeViewHolder) holder).binding.videoOrGifIndicatorImageViewItemPostWithPreview.setVisibility(View.GONE);
-                ((PostWithPreviewTypeViewHolder) holder).binding.linkTextViewItemPostWithPreview.setVisibility(View.GONE);
+                mGlide.clear(((PostWithPreviewTypeViewHolder) holder).imageView);
+                ((PostWithPreviewTypeViewHolder) holder).imageView.setVisibility(View.GONE);
+                ((PostWithPreviewTypeViewHolder) holder).loadImageErrorTextView.setVisibility(View.GONE);
+                ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setVisibility(View.GONE);
+                ((PostWithPreviewTypeViewHolder) holder).progressBar.setVisibility(View.GONE);
+                ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setVisibility(View.GONE);
+                ((PostWithPreviewTypeViewHolder) holder).linkTextView.setVisibility(View.GONE);
             } else if (holder instanceof PostBaseGalleryTypeViewHolder) {
                 ((PostBaseGalleryTypeViewHolder) holder).frameLayout.setVisibility(View.GONE);
                 ((PostBaseGalleryTypeViewHolder) holder).noPreviewImageView.setVisibility(View.GONE);
@@ -3889,12 +3887,20 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     }
 
     class PostWithPreviewTypeViewHolder extends PostBaseViewHolder {
-        ItemPostWithPreviewBinding binding;
+        TextView linkTextView;
+        ImageView imageViewNoPreviewGallery;
+        ProgressBar progressBar;
+        ImageView videoOrGifIndicator;
+        TextView loadImageErrorTextView;
+        AspectRatioGifImageView imageView;
         RequestListener<Drawable> glideRequestListener;
+
+        PostWithPreviewTypeViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
 
         PostWithPreviewTypeViewHolder(@NonNull ItemPostWithPreviewBinding binding) {
             super(binding.getRoot());
-            this.binding = binding;
             setBaseView(
                     binding.iconGifImageViewItemPostWithPreview,
                     binding.subredditNameTextViewItemPostWithPreview,
@@ -3915,21 +3921,83 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.downvoteButtonItemPostWithPreview,
                     binding.commentsCountButtonItemPostWithPreview,
                     binding.saveButtonItemPostWithPreview,
-                    binding.shareButtonItemPostWithPreview);
+                    binding.shareButtonItemPostWithPreview,
+                    binding.linkTextViewItemPostWithPreview,
+                    binding.imageViewNoPreviewGalleryItemPostWithPreview,
+                    binding.progressBarItemPostWithPreview,
+                    binding.videoOrGifIndicatorImageViewItemPostWithPreview,
+                    binding.loadImageErrorTextViewItemPostWithPreview,
+                    binding.imageViewItemPostWithPreview);
+        }
+
+        void setBaseView(AspectRatioGifImageView iconGifImageView,
+                         TextView subredditTextView,
+                         TextView userTextView,
+                         ImageView stickiedPostImageView,
+                         TextView postTimeTextView,
+                         TextView titleTextView,
+                         CustomTextView typeTextView,
+                         ImageView archivedImageView,
+                         ImageView lockedImageView,
+                         ImageView crosspostImageView,
+                         CustomTextView nsfwTextView,
+                         CustomTextView spoilerTextView,
+                         CustomTextView flairTextView,
+                         ConstraintLayout bottomConstraintLayout,
+                         MaterialButton upvoteButton,
+                         TextView scoreTextView,
+                         MaterialButton downvoteButton,
+                         MaterialButton commentsCountButton,
+                         MaterialButton saveButton,
+                         MaterialButton shareButton,
+                         TextView linkTextView,
+                         ImageView imageViewNoPreviewGallery,
+                         ProgressBar progressBar,
+                         ImageView videoOrGifIndicator,
+                         TextView loadImageErrorTextView,
+                         AspectRatioGifImageView imageView) {
+            super.setBaseView(
+                    iconGifImageView,
+                    subredditTextView,
+                    userTextView,
+                    stickiedPostImageView,
+                    postTimeTextView,
+                    titleTextView,
+                    typeTextView,
+                    archivedImageView,
+                    lockedImageView,
+                    crosspostImageView,
+                    nsfwTextView,
+                    spoilerTextView,
+                    flairTextView,
+                    bottomConstraintLayout,
+                    upvoteButton,
+                    scoreTextView,
+                    downvoteButton,
+                    commentsCountButton,
+                    saveButton,
+                    shareButton);
+
+            this.linkTextView = linkTextView;
+            this.imageViewNoPreviewGallery = imageViewNoPreviewGallery;
+            this.progressBar = progressBar;
+            this.videoOrGifIndicator = videoOrGifIndicator;
+            this.loadImageErrorTextView = loadImageErrorTextView;
+            this.imageView = imageView;
 
             if (mActivity.typeface != null) {
-                binding.linkTextViewItemPostWithPreview.setTypeface(mActivity.typeface);
-                binding.loadImageErrorTextViewItemPostWithPreview.setTypeface(mActivity.typeface);
+                linkTextView.setTypeface(mActivity.typeface);
+                loadImageErrorTextView.setTypeface(mActivity.typeface);
             }
-            binding.linkTextViewItemPostWithPreview.setTextColor(mSecondaryTextColor);
-            binding.imageViewNoPreviewGalleryItemPostWithPreview.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
-            binding.imageViewNoPreviewGalleryItemPostWithPreview.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
-            binding.progressBarItemPostWithPreview.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
-            binding.videoOrGifIndicatorImageViewItemPostWithPreview.setColorFilter(mMediaIndicatorIconTint, PorterDuff.Mode.SRC_IN);
-            binding.videoOrGifIndicatorImageViewItemPostWithPreview.setBackgroundTintList(ColorStateList.valueOf(mMediaIndicatorBackgroundColor));
-            binding.loadImageErrorTextViewItemPostWithPreview.setTextColor(mPrimaryTextColor);
+            linkTextView.setTextColor(mSecondaryTextColor);
+            imageViewNoPreviewGallery.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
+            imageViewNoPreviewGallery.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
+            progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
+            videoOrGifIndicator.setColorFilter(mMediaIndicatorIconTint, PorterDuff.Mode.SRC_IN);
+            videoOrGifIndicator.setBackgroundTintList(ColorStateList.valueOf(mMediaIndicatorBackgroundColor));
+            loadImageErrorTextView.setTextColor(mPrimaryTextColor);
 
-            binding.imageViewItemPostWithPreview.setOnClickListener(view -> {
+            imageView.setOnClickListener(view -> {
                 int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
@@ -3941,28 +4009,28 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
             });
 
-            binding.loadImageErrorTextViewItemPostWithPreview.setOnClickListener(view -> {
-                binding.progressBarItemPostWithPreview.setVisibility(View.VISIBLE);
-                binding.loadImageErrorTextViewItemPostWithPreview.setVisibility(View.GONE);
+            loadImageErrorTextView.setOnClickListener(view -> {
+                progressBar.setVisibility(View.VISIBLE);
+                loadImageErrorTextView.setVisibility(View.GONE);
                 loadImage(this);
             });
 
-            binding.imageViewNoPreviewGalleryItemPostWithPreview.setOnClickListener(view -> {
-                binding.imageViewItemPostWithPreview.performClick();
+            imageViewNoPreviewGallery.setOnClickListener(view -> {
+                imageView.performClick();
             });
 
             glideRequestListener = new RequestListener<>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    binding.progressBarItemPostWithPreview.setVisibility(View.GONE);
-                    binding.loadImageErrorTextViewItemPostWithPreview.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                    loadImageErrorTextView.setVisibility(View.VISIBLE);
                     return false;
                 }
 
                 @Override
                 public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    binding.loadImageErrorTextViewItemPostWithPreview.setVisibility(View.GONE);
-                    binding.progressBarItemPostWithPreview.setVisibility(View.GONE);
+                    loadImageErrorTextView.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
                     return false;
                 }
             };
@@ -4924,13 +4992,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     }
 
-    class PostCard2WithPreviewViewHolder extends PostBaseViewHolder {
+    class PostCard2WithPreviewViewHolder extends PostWithPreviewTypeViewHolder {
         ItemPostCard2WithPreviewBinding binding;
-        RequestListener<Drawable> requestListener;
 
         PostCard2WithPreviewViewHolder(@NonNull ItemPostCard2WithPreviewBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            this.itemViewIsNotCardView = true;
             setBaseView(
                     binding.iconGifImageViewItemPostCard2WithPreview,
                     binding.subredditNameTextViewItemPostCard2WithPreview,
@@ -4952,58 +5020,14 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.commentsCountButtonItemPostCard2WithPreview,
                     binding.saveButtonItemPostCard2WithPreview,
                     binding.shareButtonItemPostCard2WithPreview,
-                    true);
+                    binding.linkTextViewItemPostCard2WithPreview,
+                    binding.imageViewNoPreviewGalleryItemPostCard2WithPreview,
+                    binding.progressBarItemPostCard2WithPreview,
+                    binding.videoOrGifIndicatorImageViewItemPostCard2WithPreview,
+                    binding.loadImageErrorTextViewItemPostCard2WithPreview,
+                    binding.imageViewItemPostCard2WithPreview);
 
-            if (mActivity.typeface != null) {
-                binding.linkTextViewItemPostCard2WithPreview.setTypeface(mActivity.typeface);
-                binding.loadImageErrorTextViewItemPostCard2WithPreview.setTypeface(mActivity.typeface);
-            }
-            binding.linkTextViewItemPostCard2WithPreview.setTextColor(mSecondaryTextColor);
-            binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
-            binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
-            binding.progressBarItemPostCard2WithPreview.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
-            binding.videoOrGifIndicatorImageViewItemPostCard2WithPreview.setColorFilter(mMediaIndicatorIconTint, PorterDuff.Mode.SRC_IN);
-            binding.videoOrGifIndicatorImageViewItemPostCard2WithPreview.setBackgroundTintList(ColorStateList.valueOf(mMediaIndicatorBackgroundColor));
-            binding.loadImageErrorTextViewItemPostCard2WithPreview.setTextColor(mPrimaryTextColor);
             binding.dividerItemPostCard2WithPreview.setBackgroundColor(mDividerColor);
-
-            binding.imageViewItemPostCard2WithPreview.setOnClickListener(view -> {
-                int position = getBindingAdapterPosition();
-                if (position < 0) {
-                    return;
-                }
-                Post post = getItem(position);
-                if (post != null) {
-                    markPostRead(post, true);
-                    openMedia(post);
-                }
-            });
-
-            binding.loadImageErrorTextViewItemPostCard2WithPreview.setOnClickListener(view -> {
-                binding.progressBarItemPostCard2WithPreview.setVisibility(View.VISIBLE);
-                binding.loadImageErrorTextViewItemPostCard2WithPreview.setVisibility(View.GONE);
-                loadImage(this);
-            });
-
-            binding.imageViewNoPreviewGalleryItemPostCard2WithPreview.setOnClickListener(view -> {
-                binding.imageViewItemPostCard2WithPreview.performClick();
-            });
-
-            requestListener = new RequestListener<>() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    binding.progressBarItemPostCard2WithPreview.setVisibility(View.GONE);
-                    binding.loadImageErrorTextViewItemPostCard2WithPreview.setVisibility(View.VISIBLE);
-                    return false;
-                }
-
-                @Override
-                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    binding.loadImageErrorTextViewItemPostCard2WithPreview.setVisibility(View.GONE);
-                    binding.progressBarItemPostCard2WithPreview.setVisibility(View.GONE);
-                    return false;
-                }
-            };
         }
     }
 
