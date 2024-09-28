@@ -3656,7 +3656,8 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             noPreviewImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
 
             adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface,
-                    mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale);
+                    mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale,
+                    galleryImage -> itemView.performLongClick());
             galleryRecyclerView.setOnTouchListener((v, motionEvent) -> {
                 if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP || motionEvent.getActionMasked() == MotionEvent.ACTION_CANCEL) {
                     if (mActivity.mSliderPanel != null) {
@@ -4613,7 +4614,8 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             imageIndexTextView.setBorderColor(mMediaIndicatorBackgroundColor);
 
             adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface,
-                    mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale);
+                    mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale,
+                    galleryImage -> {});
             recyclerView.setOnTouchListener((v, motionEvent) -> {
                 if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP || motionEvent.getActionMasked() == MotionEvent.ACTION_CANCEL) {
                     if (mActivity.mSliderPanel != null) {
@@ -6235,7 +6237,8 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             noPreviewImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
 
             adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface,
-                    mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale);
+                    mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale,
+                    galleryImage -> itemView.performLongClick());
             galleryRecyclerView.setOnTouchListener((v, motionEvent) -> {
                 if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP || motionEvent.getActionMasked() == MotionEvent.ACTION_CANCEL) {
                     if (mActivity.mSliderPanel != null) {

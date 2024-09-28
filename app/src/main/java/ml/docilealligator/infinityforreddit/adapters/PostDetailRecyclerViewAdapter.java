@@ -2268,7 +2268,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
             adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface, mPostDetailMarkwon,
                     mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor,
-                    mCardViewColor, mCommentColor, mScale);
+                    mCardViewColor, mCommentColor, mScale,
+                    galleryImage -> {});
             binding.galleryRecyclerViewItemPostDetailGallery.setAdapter(adapter);
             new PagerSnapHelper().attachToRecyclerView(binding.galleryRecyclerViewItemPostDetailGallery);
             binding.galleryRecyclerViewItemPostDetailGallery.setOnTouchListener((v, motionEvent) -> {

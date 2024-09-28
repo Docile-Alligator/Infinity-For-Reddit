@@ -44,23 +44,27 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
     private boolean blurImage;
     private float ratio;
     private final boolean showCaption;
+    private ItemClickListener itemClickListener;
 
     public PostGalleryTypeImageRecyclerViewAdapter(RequestManager glide, Typeface typeface,
                                                    SaveMemoryCenterInisdeDownsampleStrategy saveMemoryCenterInisdeDownsampleStrategy,
-                                                   int mColorAccent, int mPrimaryTextColor, float scale) {
+                                                   int mColorAccent, int mPrimaryTextColor, float scale,
+                                                   ItemClickListener itemClickListener) {
         this.glide = glide;
         this.typeface = typeface;
         this.saveMemoryCenterInisdeDownsampleStrategy = saveMemoryCenterInisdeDownsampleStrategy;
         this.mColorAccent = mColorAccent;
         this.mPrimaryTextColor = mPrimaryTextColor;
         this.mScale = scale;
+        this.itemClickListener = itemClickListener;
         showCaption = false;
     }
 
     public PostGalleryTypeImageRecyclerViewAdapter(RequestManager glide, Typeface typeface, Markwon postDetailMarkwon,
                                                    SaveMemoryCenterInisdeDownsampleStrategy saveMemoryCenterInisdeDownsampleStrategy,
                                                    int mColorAccent, int mPrimaryTextColor, int mCardViewColor,
-                                                   int mCommentColor, float scale) {
+                                                   int mCommentColor, float scale,
+                                                   ItemClickListener itemClickListener) {
         this.glide = glide;
         this.typeface = typeface;
         this.mPostDetailMarkwon = postDetailMarkwon;
@@ -70,6 +74,7 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
         this.mCardViewColor = mCardViewColor;
         this.mCommentColor = mCommentColor;
         this.mScale = scale;
+        this.itemClickListener = itemClickListener;
         showCaption = true;
     }
 
@@ -203,6 +208,11 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
 
             this.binding = binding;
 
+            itemView.setOnLongClickListener(v -> {
+                itemClickListener.OnItemLongClick(galleryImages.get(getBindingAdapterPosition()));
+                return true;
+            });
+
             if (typeface != null) {
                 binding.errorTextViewItemGalleryImageInPostFeed.setTypeface(typeface);
             }
@@ -215,5 +225,9 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
                 loadImage(this);
             });
         }
+    }
+
+    public interface ItemClickListener {
+        void OnItemLongClick(Post.Gallery galleryImage);
     }
 }

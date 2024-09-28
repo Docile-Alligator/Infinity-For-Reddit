@@ -3233,6 +3233,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
             });
 
+            imageView.setOnLongClickListener(view -> itemView.performLongClick());
+
             loadImageErrorTextView.setOnClickListener(view -> {
                 progressBar.setVisibility(View.VISIBLE);
                 loadImageErrorTextView.setVisibility(View.GONE);
@@ -3242,6 +3244,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             imageViewNoPreviewGallery.setOnClickListener(view -> {
                 imageView.performClick();
             });
+
+            imageViewNoPreviewGallery.setOnLongClickListener(view -> itemView.performLongClick());
 
             glideRequestListener = new RequestListener<>() {
                 @Override
@@ -3339,7 +3343,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             noPreviewImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
 
             adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface,
-                    mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale);
+                    mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale,
+                    galleryImage -> itemView.performLongClick());
             galleryRecyclerView.setAdapter(adapter);
             galleryRecyclerView.setOnTouchListener((v, motionEvent) -> {
                 if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP || motionEvent.getActionMasked() == MotionEvent.ACTION_CANCEL) {
@@ -3439,6 +3444,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     openMedia(post, 0);
                 }
             });
+
+            noPreviewImageView.setOnLongClickListener(view -> itemView.performLongClick());
         }
 
         public boolean isSwipeLocked() {
@@ -4027,7 +4034,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             imageIndexTextView.setBorderColor(mMediaIndicatorBackgroundColor);
 
             adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface,
-                    mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale);
+                    mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale,
+                    galleryImage -> {});
             recyclerView.setOnTouchListener((v, motionEvent) -> {
                 if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP || motionEvent.getActionMasked() == MotionEvent.ACTION_CANCEL) {
                     if (mActivity.mSliderPanel != null) {
