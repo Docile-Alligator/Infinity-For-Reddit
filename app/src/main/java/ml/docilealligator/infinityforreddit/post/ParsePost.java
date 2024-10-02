@@ -8,6 +8,10 @@ import android.text.TextUtils;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.readpost.ReadPost;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostDao;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostsListInterface;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +35,7 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
  */
 
 public class ParsePost {
-    public static LinkedHashSet<Post> parsePostsSync(String response, int nPosts, PostFilter postFilter, List<String> readPostList) {
+    public static LinkedHashSet<Post> parsePostsSync(String response, int nPosts, PostFilter postFilter, ReadPostsListInterface readPostsList) {
         LinkedHashSet<Post> newPosts = new LinkedHashSet<>();
         try {
             JSONObject jsonResponse = new JSONObject(response);
@@ -45,24 +49,30 @@ public class ParsePost {
                 size = nPosts;
             }
 
-            HashSet<String> readPostHashSet = null;
-            if (readPostList != null) {
-                readPostHashSet = new HashSet<>(readPostList);
-            }
+            ArrayList<String> newPostsIds = new ArrayList<>();
             for (int i = 0; i < size; i++) {
                 try {
                     if (allData.getJSONObject(i).getString(JSONUtils.KIND_KEY).equals("t3")) {
                         JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                         Post post = parseBasicData(data);
-                        if (readPostHashSet != null && readPostHashSet.contains(post.getId())) {
-                            post.markAsRead();
-                        }
                         if (PostFilter.isPostAllowed(post, postFilter)) {
                             newPosts.add(post);
+                            newPostsIds.add(post.getId());
                         }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                }
+            }
+
+            List<ReadPost> readPosts = readPostsList.getReadPostsByIds(newPostsIds);
+            HashSet<String> readPostIds = new HashSet<>();
+            for (ReadPost readPost : readPosts) {
+                readPostIds.add(readPost.getId());
+            }
+            for (Post post: newPosts) {
+                if (readPostIds.contains(post.getId())) {
+                    post.markAsRead();
                 }
             }
 

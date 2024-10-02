@@ -16,6 +16,9 @@ import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import java.util.concurrent.Executor;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostDao;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.databinding.FragmentPostHistoryBinding;
@@ -28,6 +31,10 @@ public class PostHistoryFragment extends Fragment {
     @Inject
     @Named("post_history")
     SharedPreferences postHistorySharedPreferences;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    Executor mExecutor;
     private SettingsActivity activity;
 
     public PostHistoryFragment() {
@@ -52,6 +59,9 @@ public class PostHistoryFragment extends Fragment {
         if (activity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             binding.infoTextViewPostHistoryFragment.setText(R.string.only_for_logged_in_user);
             binding.markPostsAsReadLinearLayoutPostHistoryFragment.setVisibility(View.GONE);
+            binding.readPostsLimitLinearLayoutPostHistoryFragment.setVisibility(View.GONE);
+            binding.readPostsLimitEditTextPostHistoryFragment.setVisibility(View.GONE);
+            binding.readPostsInDbLinearLayoutPostHistoryFragment.setVisibility(View.GONE);
             binding.markPostsAsReadAfterVotingLinearLayoutPostHistoryFragment.setVisibility(View.GONE);
             binding.markPostsAsReadOnScrollLinearLayoutPostHistoryFragment.setVisibility(View.GONE);
             binding.hideReadPostsAutomaticallyLinearLayoutPostHistoryFragment.setVisibility(View.GONE);
@@ -60,6 +70,19 @@ public class PostHistoryFragment extends Fragment {
 
         binding.markPostsAsReadSwitchPostHistoryFragment.setChecked(postHistorySharedPreferences.getBoolean(
                 activity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false));
+
+        binding.readPostsLimitSwitchPostHistoryFragment.setChecked(postHistorySharedPreferences.getBoolean(
+                activity.accountName + SharedPreferencesUtils.READ_POSTS_LIMIT_ENABLED, true));
+        binding.readPostsLimitEditTextPostHistoryFragment.setText(String.valueOf(postHistorySharedPreferences.getInt(
+                activity.accountName + SharedPreferencesUtils.READ_POSTS_LIMIT, 500)));
+
+        mExecutor.execute(() -> {
+            ReadPostDao readPostDao = mRedditDataRoomDatabase.readPostDao();
+            int tableCount = readPostDao.getReadPostsCount(activity.accountName);
+            int tableSize = 38 * tableCount / 1024 / 1024; // 38 bytes is the maximum size of a row in read_posts table
+            binding.readPostsInDbTextViewPostHistoryFragment.setText(getString(R.string.settings_read_posts_db_summary, tableSize, tableCount));
+        });
+
         binding.markPostsAsReadAfterVotingSwitchPostHistoryFragment.setChecked(postHistorySharedPreferences.getBoolean(
                 activity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false));
         binding.markPostsAsReadOnScrollSwitchPostHistoryFragment.setChecked(postHistorySharedPreferences.getBoolean(
@@ -73,6 +96,31 @@ public class PostHistoryFragment extends Fragment {
 
         binding.markPostsAsReadSwitchPostHistoryFragment.setOnCheckedChangeListener((compoundButton, b) ->
                 postHistorySharedPreferences.edit().putBoolean(activity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, b).apply());
+
+        binding.readPostsLimitLinearLayoutPostHistoryFragment.setOnClickListener(view -> {
+            binding.readPostsLimitSwitchPostHistoryFragment.performClick();
+        });
+        binding.readPostsLimitSwitchPostHistoryFragment.setOnCheckedChangeListener((compoundButton, b) ->
+                postHistorySharedPreferences.edit().putBoolean(activity.accountName + SharedPreferencesUtils.READ_POSTS_LIMIT_ENABLED, b).apply()
+        );
+        binding.readPostsLimitEditTextPostHistoryFragment.setOnFocusChangeListener((view, b) -> {
+            if (!b) {
+                String readPostsLimitString = binding.readPostsLimitEditTextPostHistoryFragment.getText().toString();
+                if (readPostsLimitString.isEmpty()) {
+                    binding.readPostsLimitEditTextPostHistoryFragment.setText("500");
+                } else {
+                    int readPostsLimit = Integer.parseInt(readPostsLimitString);
+                    if (readPostsLimit < 100) {
+                        binding.readPostsLimitEditTextPostHistoryFragment.setText("100");
+                    }
+                    else {
+                        binding.readPostsLimitEditTextPostHistoryFragment.setText(String.valueOf(readPostsLimit));
+                    }
+                }
+                postHistorySharedPreferences.edit().putInt(activity.accountName + SharedPreferencesUtils.READ_POSTS_LIMIT,
+                        Integer.parseInt(binding.readPostsLimitEditTextPostHistoryFragment.getText().toString())).apply();
+            }
+        });
 
         binding.markPostsAsReadAfterVotingLinearLayoutPostHistoryFragment.setOnClickListener(view -> binding.markPostsAsReadAfterVotingSwitchPostHistoryFragment.performClick());
 

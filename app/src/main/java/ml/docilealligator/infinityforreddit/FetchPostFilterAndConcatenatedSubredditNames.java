@@ -14,31 +14,26 @@ import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 
-public class FetchPostFilterReadPostsAndConcatenatedSubredditNames {
+public class FetchPostFilterAndConcatenatedSubredditNames {
     public interface FetchPostFilterAndReadPostsListener {
         void success(PostFilter postFilter, ArrayList<String> readPostList);
+    }
+
+    public interface FetchPostFilterListerner {
+        void success(PostFilter postFilter);
     }
 
     public interface FetchPostFilterAndConcatenatecSubredditNamesListener {
         void success(PostFilter postFilter, String concatenatedSubredditNames);
     }
 
-    public static void fetchPostFilterAndReadPosts(RedditDataRoomDatabase redditDataRoomDatabase, Executor executor,
-                                                   Handler handler, @NonNull String accountName, int postFilterUsage,
-                                                   String nameOfUsage, FetchPostFilterAndReadPostsListener fetchPostFilterAndReadPostsListener) {
+    public static void fetchPostFilter(RedditDataRoomDatabase redditDataRoomDatabase, Executor executor,
+                                                   Handler handler, int postFilterUsage,
+                                                   String nameOfUsage, FetchPostFilterListerner fetchPostFilterListerner) {
         executor.execute(() -> {
             List<PostFilter> postFilters = redditDataRoomDatabase.postFilterDao().getValidPostFilters(postFilterUsage, nameOfUsage);
             PostFilter mergedPostFilter = PostFilter.mergePostFilter(postFilters);
-            if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                handler.post(() -> fetchPostFilterAndReadPostsListener.success(mergedPostFilter, null));
-            } else {
-                List<ReadPost> readPosts = redditDataRoomDatabase.readPostDao().getAllReadPosts(accountName);
-                ArrayList<String> readPostStrings = new ArrayList<>();
-                for (ReadPost readPost : readPosts) {
-                    readPostStrings.add(readPost.getId());
-                }
-                handler.post(() -> fetchPostFilterAndReadPostsListener.success(mergedPostFilter, readPostStrings));
-            }
+            handler.post(() -> fetchPostFilterListerner.success(mergedPostFilter));
         });
     }
 
