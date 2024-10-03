@@ -79,7 +79,8 @@ public class PostHistoryFragment extends Fragment {
         mExecutor.execute(() -> {
             ReadPostDao readPostDao = mRedditDataRoomDatabase.readPostDao();
             int tableCount = readPostDao.getReadPostsCount(activity.accountName);
-            int tableSize = 38 * tableCount / 1024 / 1024; // 38 bytes is the maximum size of a row in read_posts table
+            long tableEntrySize = readPostDao.getMaxReadPostEntrySize();
+            long tableSize = tableEntrySize * tableCount / 1024;
             binding.readPostsInDbTextViewPostHistoryFragment.setText(getString(R.string.settings_read_posts_db_summary, tableSize, tableCount));
         });
 

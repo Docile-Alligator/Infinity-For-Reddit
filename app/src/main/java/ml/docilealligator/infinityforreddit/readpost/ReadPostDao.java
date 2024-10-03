@@ -38,4 +38,10 @@ public interface ReadPostDao {
 
     @Query("SELECT * FROM read_posts WHERE id IN (:ids) AND username = :username")
     List<ReadPost> getReadPostsByIds(List<String> ids, String username);
+
+    default int getMaxReadPostEntrySize() { // in bytes
+        return  20 + // max username size
+                10 + // id size
+                8;   // time size
+    }
 }
