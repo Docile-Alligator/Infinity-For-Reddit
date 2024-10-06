@@ -1,9 +1,8 @@
 package ml.docilealligator.infinityforreddit.readpost;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class NullReadPostsList implements ReadPostsListInterface {
     public static NullReadPostsList getInstance() {
@@ -11,8 +10,8 @@ public class NullReadPostsList implements ReadPostsListInterface {
     }
 
     @Override
-    public List<ReadPost> getReadPostsByIds(List<String> ids) {
-        return Collections.emptyList();
+    public Set<String> getReadPostsIdsByIds(List<String> ids) {
+        return Collections.emptySet();
     }
 
     private static class InstanceHolder {

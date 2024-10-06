@@ -1,8 +1,8 @@
 package ml.docilealligator.infinityforreddit.readpost;
 
-
 import java.util.List;
+import java.util.Set;
 
 public interface ReadPostsListInterface {
-    List<ReadPost> getReadPostsByIds(List<String> ids);
+    Set<String> getReadPostsIdsByIds(List<String> ids);
 }

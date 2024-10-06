@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.readpost;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class ReadPostsList implements ReadPostsListInterface {
@@ -12,7 +13,9 @@ public class ReadPostsList implements ReadPostsListInterface {
     }
 
     @Override
-    public List<ReadPost> getReadPostsByIds(List<String> ids) {
-        return this.readPostDao.getReadPostsByIds(ids, accountName);
+    public HashSet<String> getReadPostsIdsByIds(List<String> ids) {
+        return new HashSet<>(
+                this.readPostDao.getReadPostsIdsByIds(ids, accountName)
+        );
     }
 }

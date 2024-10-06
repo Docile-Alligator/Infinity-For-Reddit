@@ -8,19 +8,12 @@ import android.text.TextUtils;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.readpost.ReadPost;
-import ml.docilealligator.infinityforreddit.readpost.ReadPostDao;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsListInterface;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,39 +32,32 @@ public class ParsePost {
         LinkedHashSet<Post> newPosts = new LinkedHashSet<>();
         try {
             JSONObject jsonResponse = new JSONObject(response);
-            JSONArray allData = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+            JSONArray allPostsData = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
 
             //Posts listing
-            int size;
-            if (nPosts < 0 || nPosts > allData.length()) {
-                size = allData.length();
-            } else {
-                size = nPosts;
-            }
+            int numberOfPosts = (nPosts < 0 || nPosts > allPostsData.length()) ?
+                    allPostsData.length() : nPosts;
 
             ArrayList<String> newPostsIds = new ArrayList<>();
-            for (int i = 0; i < size; i++) {
+            for (int i = 0; i < numberOfPosts; i++) {
                 try {
-                    if (allData.getJSONObject(i).getString(JSONUtils.KIND_KEY).equals("t3")) {
-                        JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-                        Post post = parseBasicData(data);
-                        if (PostFilter.isPostAllowed(post, postFilter)) {
-                            newPosts.add(post);
-                            newPostsIds.add(post.getId());
-                        }
+                    if (!allPostsData.getJSONObject(i).getString(JSONUtils.KIND_KEY).equals("t3")) {
+                        continue;
+                    }
+                    JSONObject data = allPostsData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
+                    Post post = parseBasicData(data);
+                    if (PostFilter.isPostAllowed(post, postFilter)) {
+                        newPosts.add(post);
+                        newPostsIds.add(post.getId());
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
 
-            List<ReadPost> readPosts = readPostsList.getReadPostsByIds(newPostsIds);
-            HashSet<String> readPostIds = new HashSet<>();
-            for (ReadPost readPost : readPosts) {
-                readPostIds.add(readPost.getId());
-            }
+            Set<String> readPostsIds = readPostsList.getReadPostsIdsByIds(newPostsIds);
             for (Post post: newPosts) {
-                if (readPostIds.contains(post.getId())) {
+                if (readPostsIds.contains(post.getId())) {
                     post.markAsRead();
                 }
             }
