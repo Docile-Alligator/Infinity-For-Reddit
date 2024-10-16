@@ -108,7 +108,9 @@ import ml.docilealligator.infinityforreddit.databinding.ItemPostVideoTypeAutopla
 import ml.docilealligator.infinityforreddit.databinding.ItemPostVideoTypeAutoplayLegacyControllerBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostWithPreviewBinding;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostDetailFragment;
+import ml.docilealligator.infinityforreddit.fragments.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
+import ml.docilealligator.infinityforreddit.fragments.PostFragmentBase;
 import ml.docilealligator.infinityforreddit.post.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -166,7 +168,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     };
 
     private BaseActivity mActivity;
-    private PostFragment mFragment;
+    private PostFragmentBase mFragment;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences mCurrentAccountSharedPreferences;
     private Executor mExecutor;

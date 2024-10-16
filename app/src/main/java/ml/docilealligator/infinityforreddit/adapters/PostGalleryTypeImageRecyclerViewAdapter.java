@@ -44,7 +44,7 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
     private boolean blurImage;
     private float ratio;
     private final boolean showCaption;
-    private ItemClickListener itemClickListener;
+    private final ItemClickListener itemClickListener;
 
     public PostGalleryTypeImageRecyclerViewAdapter(RequestManager glide, Typeface typeface,
                                                    SaveMemoryCenterInisdeDownsampleStrategy saveMemoryCenterInisdeDownsampleStrategy,

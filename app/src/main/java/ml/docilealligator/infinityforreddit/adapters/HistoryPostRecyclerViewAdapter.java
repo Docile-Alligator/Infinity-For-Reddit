@@ -2448,7 +2448,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
             intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
             intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, position);
-            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_FRAGMENT_ID, mFragment.getHistoryPostFragmentId());
+            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_FRAGMENT_ID, mFragment.getPostFragmentId());
             mActivity.startActivity(intent);
         }
     }

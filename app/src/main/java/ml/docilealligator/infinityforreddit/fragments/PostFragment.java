@@ -3,73 +3,52 @@ package ml.docilealligator.infinityforreddit.fragments;
 import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo.INDEX_UNSET;
 import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo.TIME_UNSET;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Canvas;
-import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.HapticFeedbackConstants;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.ItemSnapshotList;
 import androidx.paging.LoadState;
 import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import ml.docilealligator.infinityforreddit.activities.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.FetchPostFilterReadPostsAndConcatenatedSubredditNames;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.AccountPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.AccountSavedThingActivity;
+import ml.docilealligator.infinityforreddit.activities.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomizePostFilterActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
@@ -77,10 +56,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivi
 import ml.docilealligator.infinityforreddit.adapters.Paging3LoadingStateAdapter;
 import ml.docilealligator.infinityforreddit.adapters.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
-import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
-import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.FragmentPostBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeAutoplayNsfwVideosEvent;
@@ -107,16 +83,12 @@ import ml.docilealligator.infinityforreddit.events.ChangeOnlyDisablePreviewInVid
 import ml.docilealligator.infinityforreddit.events.ChangePostFeedMaxResolutionEvent;
 import ml.docilealligator.infinityforreddit.events.ChangePostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangePullToRefreshEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeRememberMutingOptionInPostFeedEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeSavePostFeedScrolledPositionEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeShowAbsoluteNumberOfVotesEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeShowElapsedTimeEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeSpoilerBlurEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeStartAutoplayVisibleAreaOffsetEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeSwipeActionEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeSwipeActionThresholdEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeTimeFormatEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeVibrateWhenActionTriggeredEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeVideoAutoplayEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragmentEvent;
@@ -129,6 +101,7 @@ import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.post.PostViewModel;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
+import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
@@ -138,9 +111,9 @@ import retrofit2.Retrofit;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link PostFragmentBase} subclass.
  */
-public class PostFragment extends Fragment implements FragmentCommunicator {
+public class PostFragment extends PostFragmentBase implements FragmentCommunicator {
 
     public static final String EXTRA_NAME = "EN";
     public static final String EXTRA_USER_NAME = "EUN";
@@ -160,21 +133,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     PostViewModel mPostViewModel;
     @Inject
-    @Named("no_oauth")
-    Retrofit mRetrofit;
-    @Inject
-    @Named("oauth")
-    Retrofit mOauthRetrofit;
-    @Inject
     @Named("redgifs")
     Retrofit mRedgifsRetrofit;
     @Inject
     Provider<StreamableAPI> mStreamableApiProvider;
-    @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
-    @Inject
-    @Named("default")
-    SharedPreferences mSharedPreferences;
     @Inject
     @Named("current_account")
     SharedPreferences mCurrentAccountSharedPreferences;
@@ -194,32 +156,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Named("post_feed_scrolled_position_cache")
     SharedPreferences mPostFeedScrolledPositionSharedPreferences;
     @Inject
-    CustomThemeWrapper mCustomThemeWrapper;
-    @Inject
     ExoCreator mExoCreator;
-    @Inject
-    Executor mExecutor;
-    private RequestManager mGlide;
-    private BaseActivity activity;
-    private LinearLayoutManagerBugFixed mLinearLayoutManager;
-    private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
     private MenuItem lazyModeItem;
-    private long postFragmentId;
     private int postType;
-    private boolean isInLazyMode = false;
-    private boolean isLazyModePaused = false;
     private boolean hasPost = false;
     private boolean savePostFeedScrolledPosition;
-    private boolean rememberMutingOptionInPostFeed;
-    private boolean swipeActionEnabled;
-    private Boolean masterMutingOption;
     private PostRecyclerViewAdapter mAdapter;
-    private RecyclerView.SmoothScroller smoothScroller;
-    private Window window;
-    private Handler lazyModeHandler;
-    private LazyModeRunnable lazyModeRunnable;
-    private CountDownTimer resumeLazyModeCountDownTimer;
-    private float lazyModeInterval;
     private String subredditName;
     private String username;
     private String query;
@@ -228,20 +170,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private String multiRedditPath;
     private String concatenatedSubredditNames;
     private int maxPosition = -1;
-    private int postLayout;
     private SortType sortType;
     private PostFilter postFilter;
-    private ColorDrawable backgroundSwipeRight;
-    private ColorDrawable backgroundSwipeLeft;
-    private Drawable drawableSwipeRight;
-    private Drawable drawableSwipeLeft;
-    private int swipeLeftAction;
-    private int swipeRightAction;
-    private boolean vibrateWhenActionTriggered;
-    private float swipeActionThreshold;
-    private ItemTouchHelper touchHelper;
     private ArrayList<String> readPosts;
-    private final Map<String, String> subredditOrUserIcons = new HashMap<>();
     private FragmentPostBinding binding;
 
     public PostFragment() {
@@ -262,7 +193,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
     }
 
-    private boolean scrollPostsByCount(int count) {
+    @Override
+    protected boolean scrollPostsByCount(int count) {
         if (mLinearLayoutManager != null) {
             int pos = mLinearLayoutManager.findFirstVisibleItemPosition();
             int targetPosition = pos + count;
@@ -274,20 +206,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     @Override
-    public boolean handleKeyDown(int keyCode) {
-        boolean volumeKeysNavigatePosts = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOLUME_KEYS_NAVIGATE_POSTS, false);
-        if (volumeKeysNavigatePosts) {
-            switch (keyCode) {
-                case KeyEvent.KEYCODE_VOLUME_UP:
-                    return scrollPostsByCount(-1);
-                case KeyEvent.KEYCODE_VOLUME_DOWN:
-                    return scrollPostsByCount(1);
-            }
-        }
-        return false;
-    }
-
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -295,26 +213,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
-        setHasOptionsMenu(true);
+        super.onCreateView(inflater, container, savedInstanceState);
 
-        EventBus.getDefault().register(this);
+        setHasOptionsMenu(true);
 
         applyTheme();
 
         binding.recyclerViewPostFragment.addOnWindowFocusChangedListener(this::onWindowFocusChanged);
-
-        lazyModeHandler = new Handler();
-
-        lazyModeInterval = Float.parseFloat(mSharedPreferences.getString(SharedPreferencesUtils.LAZY_MODE_INTERVAL_KEY, "2.5"));
-
-        smoothScroller = new LinearSmoothScroller(activity) {
-            @Override
-            protected int getVerticalSnapPreference() {
-                return LinearSmoothScroller.SNAP_TO_START;
-            }
-        };
-
-        window = activity.getWindow();
 
         Resources resources = getResources();
 
@@ -327,8 +232,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 binding.recyclerViewPostFragment.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
             }
         }
-
-        mGlide = Glide.with(activity);
 
         lazyModeRunnable = new LazyModeRunnable() {
 
@@ -356,18 +259,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     }
                 }
                 lazyModeHandler.postDelayed(this, (long) (lazyModeInterval * 1000));
-            }
-        };
-
-        resumeLazyModeCountDownTimer = new CountDownTimer((long) (lazyModeInterval * 1000), (long) (lazyModeInterval * 1000)) {
-            @Override
-            public void onTick(long l) {
-
-            }
-
-            @Override
-            public void onFinish() {
-                resumeLazyMode(true);
             }
         };
 
@@ -412,7 +303,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
         savePostFeedScrolledPosition = mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION, false);
-        rememberMutingOptionInPostFeed = mSharedPreferences.getBoolean(SharedPreferencesUtils.REMEMBER_MUTING_OPTION_IN_POST_FEED, false);
         Locale locale = getResources().getConfiguration().locale;
 
         int usage;
@@ -1023,12 +913,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         }
 
-        vibrateWhenActionTriggered = mSharedPreferences.getBoolean(SharedPreferencesUtils.VIBRATE_WHEN_ACTION_TRIGGERED, true);
-        swipeActionThreshold = Float.parseFloat(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_ACTION_THRESHOLD, "0.3"));
-        swipeRightAction = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_RIGHT_ACTION, "1"));
-        swipeLeftAction = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_LEFT_ACTION, "0"));
-        initializeSwipeActionDrawable();
-
         touchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             boolean exceedThreshold = false;
 
@@ -1140,43 +1024,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         });
 
         return binding.getRoot();
-    }
-
-    private int getNColumns(Resources resources) {
-        final boolean foldEnabled = mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_FOLD_SUPPORT, false);
-        if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            switch (postLayout) {
-                case SharedPreferencesUtils.POST_LAYOUT_CARD_2:
-                    return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT_CARD_LAYOUT_2, "1"));
-                case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
-                    return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT_COMPACT_LAYOUT, "1"));
-                case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
-                    return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT_GALLERY_LAYOUT, "2"));
-                default:
-                    if (getResources().getBoolean(R.bool.isTablet)) {
-                        if (foldEnabled) {
-                            return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT_UNFOLDED, "2"));
-                        } else {
-                            return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT, "2"));
-                        }
-                    }
-                    return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT, "1"));
-            }
-        } else {
-            switch (postLayout) {
-                case SharedPreferencesUtils.POST_LAYOUT_CARD_2:
-                    return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE_CARD_LAYOUT_2, "2"));
-                case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
-                    return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE_COMPACT_LAYOUT, "2"));
-                case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
-                    return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE_GALLERY_LAYOUT, "2"));
-                default:
-                    if (getResources().getBoolean(R.bool.isTablet) && foldEnabled) {
-                        return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE_UNFOLDED, "2"));
-                    }
-                    return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE, "2"));
-            }
-        }
     }
 
     private void initializeAndBindPostViewModel() {
@@ -1382,34 +1229,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
     }
 
-    private void initializeSwipeActionDrawable() {
-        if (swipeRightAction == SharedPreferencesUtils.SWIPE_ACITON_DOWNVOTE) {
-            backgroundSwipeRight = new ColorDrawable(mCustomThemeWrapper.getDownvoted());
-            drawableSwipeRight = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_downward_day_night_24dp, null);
-        } else {
-            backgroundSwipeRight = new ColorDrawable(mCustomThemeWrapper.getUpvoted());
-            drawableSwipeRight = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_upward_day_night_24dp, null);
-        }
-
-        if (swipeLeftAction == SharedPreferencesUtils.SWIPE_ACITON_UPVOTE) {
-            backgroundSwipeLeft = new ColorDrawable(mCustomThemeWrapper.getUpvoted());
-            drawableSwipeLeft = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_upward_day_night_24dp, null);
-        } else {
-            backgroundSwipeLeft = new ColorDrawable(mCustomThemeWrapper.getDownvoted());
-            drawableSwipeLeft = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_downward_day_night_24dp, null);
-        }
-    }
-
-    public long getPostFragmentId() {
-        return postFragmentId;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        this.activity = (BaseActivity) context;
-    }
-
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -1554,15 +1373,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     @Override
-    public boolean isInLazyMode() {
-        return isInLazyMode;
-    }
-
-    @Override
-    public void changePostLayout(int postLayout) {
-        changePostLayout(postLayout, false);
-    }
-
     public void changePostLayout(int postLayout, boolean temporary) {
         this.postLayout = postLayout;
         if (!temporary) {
@@ -1691,6 +1501,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
     }
 
+    @Override
     public boolean getIsNsfwSubreddit() {
         if (activity instanceof ViewSubredditDetailActivity) {
             return ((ViewSubredditDetailActivity) activity).isNsfwSubreddit();
@@ -1701,38 +1512,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
     }
 
-    @Nullable
-    public Boolean getMasterMutingOption() {
-        return masterMutingOption;
-    }
-
-    public void videoAutoplayChangeMutingOption(boolean isMute) {
-        if (rememberMutingOptionInPostFeed) {
-            masterMutingOption = isMute;
-        }
-    }
-
-    public void loadIcon(String subredditOrUserName, boolean isSubreddit, LoadIconListener loadIconListener) {
-        if (subredditOrUserIcons.containsKey(subredditOrUserName)) {
-            loadIconListener.loadIconSuccess(subredditOrUserName, subredditOrUserIcons.get(subredditOrUserName));
-        } else {
-            if (isSubreddit) {
-                LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase,
-                        subredditOrUserName, activity.accessToken, activity.accountName, mOauthRetrofit, mRetrofit,
-                        iconImageUrl -> {
-                            subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
-                            loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);
-                        });
-            } else {
-                LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditOrUserName,
-                        mRetrofit, iconImageUrl -> {
-                            subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
-                            loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);
-                        });
-            }
-        }
-    }
-
+    @Override
     public void markPostAsRead(Post post) {
         if (readPosts == null) {
             readPosts = new ArrayList<>();
@@ -1947,11 +1727,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     @Subscribe
-    public void onChangeVibrateWhenActionTriggeredEvent(ChangeVibrateWhenActionTriggeredEvent changeVibrateWhenActionTriggeredEvent) {
-        vibrateWhenActionTriggered = changeVibrateWhenActionTriggeredEvent.vibrateWhenActionTriggered;
-    }
-
-    @Subscribe
     public void onChangeEnableSwipeActionSwitchEvent(ChangeEnableSwipeActionSwitchEvent changeEnableSwipeActionSwitchEvent) {
         if (getNColumns(getResources()) == 1 && touchHelper != null) {
             swipeActionEnabled = changeEnableSwipeActionSwitchEvent.enableSwipeAction;
@@ -1985,11 +1760,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     @Subscribe
-    public void onChangeSwipeActionThresholdEvent(ChangeSwipeActionThresholdEvent changeSwipeActionThresholdEvent) {
-        swipeActionThreshold = changeSwipeActionThresholdEvent.swipeActionThreshold;
-    }
-
-    @Subscribe
     public void onChangeDataSavingModeEvent(ChangeDataSavingModeEvent changeDataSavingModeEvent) {
         if (mAdapter != null) {
             boolean dataSavingMode = false;
@@ -2017,13 +1787,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter.setOnlyDisablePreviewInVideoPosts(changeOnlyDisablePreviewInVideoAndGifPostsEvent.onlyDisablePreviewInVideoAndGifPosts);
             refreshAdapter();
         }
-    }
-
-    @Subscribe
-    public void onChangeSwipeActionEvent(ChangeSwipeActionEvent changeSwipeActionEvent) {
-        swipeRightAction = changeSwipeActionEvent.swipeRightAction == -1 ? swipeRightAction : changeSwipeActionEvent.swipeRightAction;
-        swipeLeftAction = changeSwipeActionEvent.swipeLeftAction == -1 ? swipeLeftAction : changeSwipeActionEvent.swipeLeftAction;
-        initializeSwipeActionDrawable();
     }
 
     @Subscribe
@@ -2073,14 +1836,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (mAdapter != null) {
             mAdapter.setHideTheNumberOfComments(event.hideTheNumberOfComments);
             refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeRememberMutingOptionInPostFeedEvent(ChangeRememberMutingOptionInPostFeedEvent event) {
-        rememberMutingOptionInPostFeed = event.rememberMutingOptionInPostFeedEvent;
-        if (!event.rememberMutingOptionInPostFeedEvent) {
-            masterMutingOption = null;
         }
     }
 
@@ -2169,7 +1924,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void onDestroy() {
-        EventBus.getDefault().unregister(this);
         binding.recyclerViewPostFragment.addOnWindowFocusChangedListener(null);
         super.onDestroy();
     }
@@ -2180,6 +1934,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
     }
 
+    @Override
     public boolean isRecyclerViewItemSwipeable(RecyclerView.ViewHolder viewHolder) {
         if (swipeActionEnabled) {
             if (viewHolder instanceof PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) {
@@ -2190,72 +1945,5 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
 
         return false;
-    }
-
-    private static abstract class LazyModeRunnable implements Runnable {
-        private int currentPosition = -1;
-
-        int getCurrentPosition() {
-            return currentPosition;
-        }
-
-        void setCurrentPosition(int currentPosition) {
-            this.currentPosition = currentPosition;
-        }
-
-        void incrementCurrentPosition() {
-            currentPosition++;
-        }
-
-        void resetOldPosition() {
-            currentPosition = -1;
-        }
-    }
-
-    private static class StaggeredGridLayoutManagerItemOffsetDecoration extends RecyclerView.ItemDecoration {
-
-        private final int mItemOffset;
-        private final int mNColumns;
-
-        StaggeredGridLayoutManagerItemOffsetDecoration(int itemOffset, int nColumns) {
-            mItemOffset = itemOffset;
-            mNColumns = nColumns;
-        }
-
-        StaggeredGridLayoutManagerItemOffsetDecoration(@NonNull Context context, @DimenRes int itemOffsetId, int nColumns) {
-            this(context.getResources().getDimensionPixelSize(itemOffsetId), nColumns);
-        }
-
-        @Override
-        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent,
-                                   @NonNull RecyclerView.State state) {
-            super.getItemOffsets(outRect, view, parent, state);
-
-            StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) view.getLayoutParams();
-
-            int spanIndex = layoutParams.getSpanIndex();
-
-            int halfOffset = mItemOffset / 2;
-
-            if (mNColumns == 2) {
-                if (spanIndex == 0) {
-                    outRect.set(halfOffset, 0, halfOffset / 2, 0);
-                } else {
-                    outRect.set(halfOffset / 2, 0, halfOffset, 0);
-                }
-            } else if (mNColumns == 3) {
-                if (spanIndex == 0) {
-                    outRect.set(halfOffset, 0, halfOffset / 2, 0);
-                } else if (spanIndex == 1) {
-                    outRect.set(halfOffset / 2, 0, halfOffset / 2, 0);
-                } else {
-                    outRect.set(halfOffset / 2, 0, halfOffset, 0);
-                }
-            }
-        }
-    }
-
-    public interface LoadIconListener {
-        void loadIconSuccess(String subredditOrUserName, String iconUrl);
     }
 }
