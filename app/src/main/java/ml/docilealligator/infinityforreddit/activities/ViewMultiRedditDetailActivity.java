@@ -37,6 +37,7 @@ import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.fragments.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.fragments.PostFragmentBase;
 import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
@@ -836,7 +837,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     public void postLayoutSelected(int postLayout) {
         if (mFragment != null) {
             mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiPath, postLayout).apply();
-            ((FragmentCommunicator) mFragment).changePostLayout(postLayout);
+            ((PostFragmentBase) mFragment).changePostLayout(postLayout);
         }
     }
 
