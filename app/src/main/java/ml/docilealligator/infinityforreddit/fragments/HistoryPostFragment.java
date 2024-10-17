@@ -150,16 +150,7 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
     private HistoryPostRecyclerViewAdapter mAdapter;
     private int maxPosition = -1;
     private PostFilter postFilter;
-    private ColorDrawable backgroundSwipeRight;
-    private ColorDrawable backgroundSwipeLeft;
-    private Drawable drawableSwipeRight;
-    private Drawable drawableSwipeLeft;
-    private int swipeLeftAction;
-    private int swipeRightAction;
-    private boolean vibrateWhenActionTriggered;
-    private float swipeActionThreshold;
     private ItemTouchHelper touchHelper;
-    private final Map<String, String> subredditOrUserIcons = new HashMap<>();
     private int historyType;
     private FragmentHistoryPostBinding binding;
 

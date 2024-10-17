@@ -30,9 +30,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
-
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsList;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsListInterface;
@@ -58,7 +55,6 @@ import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterfac
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.AccountPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.AccountSavedThingActivity;
-import ml.docilealligator.infinityforreddit.activities.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomizePostFilterActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
@@ -181,17 +177,8 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
     private int maxPosition = -1;
     private SortType sortType;
     private PostFilter postFilter;
-    private ColorDrawable backgroundSwipeRight;
-    private ColorDrawable backgroundSwipeLeft;
-    private Drawable drawableSwipeRight;
-    private Drawable drawableSwipeLeft;
-    private int swipeLeftAction;
-    private int swipeRightAction;
-    private boolean vibrateWhenActionTriggered;
-    private float swipeActionThreshold;
     private ItemTouchHelper touchHelper;
     private ReadPostsListInterface readPostsList;
-    private final Map<String, String> subredditOrUserIcons = new HashMap<>();
     private FragmentPostBinding binding;
 
     public PostFragment() {
