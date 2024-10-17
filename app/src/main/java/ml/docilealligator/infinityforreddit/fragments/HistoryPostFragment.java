@@ -5,25 +5,20 @@ import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackI
 
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Canvas;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.paging.ItemSnapshotList;
 import androidx.paging.LoadState;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
@@ -46,54 +41,19 @@ import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterfac
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.adapters.HistoryPostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.adapters.Paging3LoadingStateAdapter;
+import ml.docilealligator.infinityforreddit.adapters.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.FragmentHistoryPostBinding;
-import ml.docilealligator.infinityforreddit.events.ChangeAutoplayNsfwVideosEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeCompactLayoutToolbarHiddenByDefaultEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeDataSavingModeEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeDefaultLinkPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDefaultPostLayoutEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeDisableImagePreviewEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeEasierToWatchInFullScreenEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeEnableSwipeActionSwitchEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeFixedHeightPreviewInCardEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeHidePostFlairEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeHidePostTypeEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeHideSubredditAndUserPrefixEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeHideTextPostContent;
-import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfCommentsEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfVotesEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeLongPressToHideToolbarInCompactLayoutEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeMuteAutoplayingVideosEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeMuteNSFWVideoEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeNSFWBlurEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeOnlyDisablePreviewInVideoAndGifPostsEvent;
-import ml.docilealligator.infinityforreddit.events.ChangePostFeedMaxResolutionEvent;
-import ml.docilealligator.infinityforreddit.events.ChangePostLayoutEvent;
-import ml.docilealligator.infinityforreddit.events.ChangePullToRefreshEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeShowAbsoluteNumberOfVotesEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeShowElapsedTimeEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeSpoilerBlurEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeStartAutoplayVisibleAreaOffsetEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeTimeFormatEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeVideoAutoplayEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragmentEvent;
-import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
-import ml.docilealligator.infinityforreddit.events.ShowDividerInCompactLayoutPreferenceEvent;
-import ml.docilealligator.infinityforreddit.events.ShowThumbnailOnTheRightInCompactLayoutEvent;
 import ml.docilealligator.infinityforreddit.post.HistoryPostPagingSource;
 import ml.docilealligator.infinityforreddit.post.HistoryPostViewModel;
-import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.utils.Utils;
 import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
 import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
 import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
@@ -144,10 +104,8 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
     ExoCreator mExoCreator;
     @Inject
     Executor mExecutor;
-    private MenuItem lazyModeItem;
     private int postType;
-    private boolean hasPost = false;
-    private HistoryPostRecyclerViewAdapter mAdapter;
+    private PostRecyclerViewAdapter mAdapter;
     private int maxPosition = -1;
     private PostFilter postFilter;
     private ArrayList<String> readPosts;
@@ -193,35 +151,6 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
             }
         }
 
-        lazyModeRunnable = new LazyModeRunnable() {
-
-            @Override
-            public void run() {
-                if (isInLazyMode && !isLazyModePaused && mAdapter != null) {
-                    int nPosts = mAdapter.getItemCount();
-                    if (getCurrentPosition() == -1) {
-                        if (mLinearLayoutManager != null) {
-                            setCurrentPosition(mLinearLayoutManager.findFirstVisibleItemPosition());
-                        } else {
-                            int[] into = new int[2];
-                            setCurrentPosition(mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[1]);
-                        }
-                    }
-
-                    if (getCurrentPosition() != RecyclerView.NO_POSITION && nPosts > getCurrentPosition()) {
-                        incrementCurrentPosition();
-                        smoothScroller.setTargetPosition(getCurrentPosition());
-                        if (mLinearLayoutManager != null) {
-                            mLinearLayoutManager.startSmoothScroll(smoothScroller);
-                        } else {
-                            mStaggeredGridLayoutManager.startSmoothScroll(smoothScroller);
-                        }
-                    }
-                }
-                lazyModeHandler.postDelayed(this, (long) (lazyModeInterval * 1000));
-            }
-        };
-
         binding.swipeRefreshLayoutHistoryPostFragment.setEnabled(mSharedPreferences.getBoolean(SharedPreferencesUtils.PULL_TO_REFRESH, true));
         binding.swipeRefreshLayoutHistoryPostFragment.setOnRefreshListener(this::refresh);
 
@@ -265,11 +194,11 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
         if (historyType == HISTORY_TYPE_READ_POSTS) {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.HISTORY_POST_LAYOUT_READ_POST, defaultPostLayout);
 
-            mAdapter = new HistoryPostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit,
+            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit,
                     mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     activity.accessToken, activity.accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences,
-                    mExoCreator, new HistoryPostRecyclerViewAdapter.Callback() {
+                    null, mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void typeChipClicked(int filter) {
                     /*Intent intent = new Intent(activity, FilteredPostsActivity.class);
@@ -342,106 +271,6 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
         } else {
             initializeAndBindPostViewModel();
         }
-
-        touchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
-            boolean exceedThreshold = false;
-
-            @Override
-            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-                if (!(viewHolder instanceof HistoryPostRecyclerViewAdapter.PostBaseViewHolder) &&
-                        !(viewHolder instanceof HistoryPostRecyclerViewAdapter.PostCompactBaseViewHolder) &&
-                        !(viewHolder instanceof HistoryPostRecyclerViewAdapter.PostMaterial3CardBaseViewHolder)) {
-                    return makeMovementFlags(0, 0);
-                } else if (viewHolder instanceof HistoryPostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) {
-                    if (((HistoryPostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) viewHolder).isSwipeLocked()) {
-                        return makeMovementFlags(0, 0);
-                    }
-                }
-                int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
-                return makeMovementFlags(0, swipeFlags);
-            }
-
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public boolean isItemViewSwipeEnabled() {
-                return true;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                if (touchHelper != null) {
-                    exceedThreshold = false;
-                    touchHelper.attachToRecyclerView(null);
-                    touchHelper.attachToRecyclerView(binding.recyclerViewHistoryPostFragment);
-                }
-            }
-
-            @Override
-            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-
-                if (isCurrentlyActive) {
-                    View itemView = viewHolder.itemView;
-                    int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
-                    if (dX > 0) {
-                        if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                            if (!exceedThreshold) {
-                                exceedThreshold = true;
-                                if (vibrateWhenActionTriggered) {
-                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                                }
-                            }
-                            backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                        } else {
-                            exceedThreshold = false;
-                            backgroundSwipeRight.setBounds(0, 0, 0, 0);
-                        }
-
-                        drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
-                                (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
-                                itemView.getLeft() + ((int) dX) - horizontalOffset,
-                                (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
-                        backgroundSwipeRight.draw(c);
-                        drawableSwipeRight.draw(c);
-                    } else if (dX < 0) {
-                        if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                            if (!exceedThreshold) {
-                                exceedThreshold = true;
-                                if (vibrateWhenActionTriggered) {
-                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                                }
-                            }
-                            backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                        } else {
-                            exceedThreshold = false;
-                            backgroundSwipeLeft.setBounds(0, 0, 0, 0);
-                        }
-                        drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
-                                (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
-                                itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
-                                (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
-                        backgroundSwipeLeft.draw(c);
-                        drawableSwipeLeft.draw(c);
-                    }
-                } else {
-                    if (exceedThreshold) {
-                        mAdapter.onItemSwipe(viewHolder, dX > 0 ? ItemTouchHelper.END : ItemTouchHelper.START, swipeLeftAction, swipeRightAction);
-                        exceedThreshold = false;
-                    }
-                }
-            }
-
-            @Override
-            public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
-                return 1;
-            }
-        });
 
         if (nColumns == 1 && mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SWIPE_ACTION, false)) {
             swipeActionEnabled = true;
@@ -564,7 +393,8 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
         goBackToTop();
     }
 
-    private void showErrorView(int stringResId) {
+    @Override
+    protected void showErrorView(int stringResId) {
         if (activity != null && isAdded()) {
             binding.swipeRefreshLayoutHistoryPostFragment.setRefreshing(false);
             binding.fetchPostInfoLinearLayoutHistoryPostFragment.setVisibility(View.VISIBLE);
@@ -573,83 +403,22 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
         }
     }
 
+    @NonNull
     @Override
-    public boolean startLazyMode() {
-        if (!hasPost) {
-            Toast.makeText(activity, R.string.no_posts_no_lazy_mode, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        Utils.setTitleWithCustomFontToMenuItem(activity.typeface, lazyModeItem, getString(R.string.action_stop_lazy_mode));
-
-        if (mAdapter != null && mAdapter.isAutoplay()) {
-            mAdapter.setAutoplay(false);
-            refreshAdapter();
-        }
-
-        isInLazyMode = true;
-        isLazyModePaused = false;
-
-        lazyModeInterval = Float.parseFloat(mSharedPreferences.getString(SharedPreferencesUtils.LAZY_MODE_INTERVAL_KEY, "2.5"));
-        lazyModeHandler.postDelayed(lazyModeRunnable, (long) (lazyModeInterval * 1000));
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        Toast.makeText(activity, getString(R.string.lazy_mode_start, lazyModeInterval),
-                Toast.LENGTH_SHORT).show();
-
-        return true;
+    protected SwipeRefreshLayout getSwipeRefreshLayout() {
+        return binding.swipeRefreshLayoutHistoryPostFragment;
     }
 
+    @NonNull
     @Override
-    public void stopLazyMode() {
-        Utils.setTitleWithCustomFontToMenuItem(activity.typeface, lazyModeItem, getString(R.string.action_start_lazy_mode));
-        if (mAdapter != null) {
-            String autoplayString = mSharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
-            if (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ALWAYS_ON) ||
-                    (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI) && Utils.isConnectedToWifi(activity))) {
-                mAdapter.setAutoplay(true);
-                refreshAdapter();
-            }
-        }
-        isInLazyMode = false;
-        isLazyModePaused = false;
-        lazyModeRunnable.resetOldPosition();
-        lazyModeHandler.removeCallbacks(lazyModeRunnable);
-        resumeLazyModeCountDownTimer.cancel();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        Toast.makeText(activity, getString(R.string.lazy_mode_stop), Toast.LENGTH_SHORT).show();
+    protected RecyclerView getPostRecyclerView() {
+        return binding.recyclerViewHistoryPostFragment;
     }
 
+    @Nullable
     @Override
-    public void resumeLazyMode(boolean resumeNow) {
-        if (isInLazyMode) {
-            if (mAdapter != null && mAdapter.isAutoplay()) {
-                mAdapter.setAutoplay(false);
-                refreshAdapter();
-            }
-            isLazyModePaused = false;
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-            lazyModeRunnable.resetOldPosition();
-
-            if (resumeNow) {
-                lazyModeHandler.post(lazyModeRunnable);
-            } else {
-                lazyModeHandler.postDelayed(lazyModeRunnable, (long) (lazyModeInterval * 1000));
-            }
-        }
-    }
-
-    @Override
-    public void pauseLazyMode(boolean startTimer) {
-        resumeLazyModeCountDownTimer.cancel();
-        isInLazyMode = true;
-        isLazyModePaused = true;
-        lazyModeHandler.removeCallbacks(lazyModeRunnable);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        if (startTimer) {
-            resumeLazyModeCountDownTimer.start();
-        }
+    protected PostRecyclerViewAdapter getPostAdapter() {
+        return mAdapter;
     }
 
     @Override
@@ -709,7 +478,8 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
         }
     }
 
-    private void refreshAdapter() {
+    @Override
+    protected void refreshAdapter() {
         int previousPosition = -1;
         if (mLinearLayoutManager != null) {
             previousPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
@@ -765,95 +535,6 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
         }
     }
 
-    @Override
-    public boolean isRecyclerViewItemSwipeable(RecyclerView.ViewHolder viewHolder) {
-        if (swipeActionEnabled) {
-            if (viewHolder instanceof HistoryPostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) {
-                return !((HistoryPostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) viewHolder).isSwipeLocked();
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    @Subscribe
-    public void onPostUpdateEvent(PostUpdateEventToPostList event) {
-        ItemSnapshotList<Post> posts = mAdapter.snapshot();
-        if (event.positionInList >= 0 && event.positionInList < posts.size()) {
-            Post post = posts.get(event.positionInList);
-            if (post != null && post.getFullName().equals(event.post.getFullName())) {
-                post.setTitle(event.post.getTitle());
-                post.setVoteType(event.post.getVoteType());
-                post.setScore(event.post.getScore());
-                post.setNComments(event.post.getNComments());
-                post.setNSFW(event.post.isNSFW());
-                post.setHidden(event.post.isHidden());
-                post.setSpoiler(event.post.isSpoiler());
-                post.setFlair(event.post.getFlair());
-                post.setSaved(event.post.isSaved());
-                if (event.post.isRead()) {
-                    post.markAsRead();
-                }
-                mAdapter.notifyItemChanged(event.positionInList);
-            }
-        }
-    }
-
-    @Subscribe
-    public void onChangeShowElapsedTimeEvent(ChangeShowElapsedTimeEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setShowElapsedTime(event.showElapsedTime);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeTimeFormatEvent(ChangeTimeFormatEvent changeTimeFormatEvent) {
-        if (mAdapter != null) {
-            mAdapter.setTimeFormat(changeTimeFormatEvent.timeFormat);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeVoteButtonsPositionEvent(ChangeVoteButtonsPositionEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setVoteButtonsPosition(event.voteButtonsOnTheRight);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeNSFWBlurEvent(ChangeNSFWBlurEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setBlurNsfwAndDoNotBlurNsfwInNsfwSubreddits(event.needBlurNSFW);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeSpoilerBlurEvent(ChangeSpoilerBlurEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setBlurSpoiler(event.needBlurSpoiler);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangePostLayoutEvent(ChangePostLayoutEvent event) {
-        changePostLayout(event.postLayout);
-    }
-
-    @Subscribe
-    public void onShowDividerInCompactLayoutPreferenceEvent(ShowDividerInCompactLayoutPreferenceEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setShowDividerInCompactLayout(event.showDividerInCompactLayout);
-            refreshAdapter();
-        }
-    }
-
     @Subscribe
     public void onChangeDefaultPostLayoutEvent(ChangeDefaultPostLayoutEvent changeDefaultPostLayoutEvent) {
         Bundle bundle = getArguments();
@@ -869,237 +550,12 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
     }
 
     @Subscribe
-    public void onChangeDefaultLinkPostLayoutEvent(ChangeDefaultLinkPostLayoutEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setDefaultLinkPostLayout(event.defaultLinkPostLayout);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeShowAbsoluteNumberOfVotesEvent(ChangeShowAbsoluteNumberOfVotesEvent changeShowAbsoluteNumberOfVotesEvent) {
-        if (mAdapter != null) {
-            mAdapter.setShowAbsoluteNumberOfVotes(changeShowAbsoluteNumberOfVotesEvent.showAbsoluteNumberOfVotes);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeVideoAutoplayEvent(ChangeVideoAutoplayEvent changeVideoAutoplayEvent) {
-        if (mAdapter != null) {
-            boolean autoplay = false;
-            if (changeVideoAutoplayEvent.autoplay.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ALWAYS_ON)) {
-                autoplay = true;
-            } else if (changeVideoAutoplayEvent.autoplay.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI)) {
-                autoplay = Utils.isConnectedToWifi(activity);
-            }
-            mAdapter.setAutoplay(autoplay);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeAutoplayNsfwVideosEvent(ChangeAutoplayNsfwVideosEvent changeAutoplayNsfwVideosEvent) {
-        if (mAdapter != null) {
-            mAdapter.setAutoplayNsfwVideos(changeAutoplayNsfwVideosEvent.autoplayNsfwVideos);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeMuteAutoplayingVideosEvent(ChangeMuteAutoplayingVideosEvent changeMuteAutoplayingVideosEvent) {
-        if (mAdapter != null) {
-            mAdapter.setMuteAutoplayingVideos(changeMuteAutoplayingVideosEvent.muteAutoplayingVideos);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeNetworkStatusEvent(ChangeNetworkStatusEvent changeNetworkStatusEvent) {
-        if (mAdapter != null) {
-            String autoplay = mSharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
-            String dataSavingMode = mSharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
-            boolean stateChanged = false;
-            if (autoplay.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI)) {
-                mAdapter.setAutoplay(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_WIFI);
-                stateChanged = true;
-            }
-            if (dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
-                mAdapter.setDataSavingMode(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_CELLULAR);
-                stateChanged = true;
-            }
-
-            if (stateChanged) {
-                refreshAdapter();
-            }
-        }
-    }
-
-    @Subscribe
-    public void onShowThumbnailOnTheRightInCompactLayoutEvent(ShowThumbnailOnTheRightInCompactLayoutEvent showThumbnailOnTheRightInCompactLayoutEvent) {
-        if (mAdapter != null) {
-            mAdapter.setShowThumbnailOnTheRightInCompactLayout(showThumbnailOnTheRightInCompactLayoutEvent.showThumbnailOnTheRightInCompactLayout);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeStartAutoplayVisibleAreaOffsetEvent(ChangeStartAutoplayVisibleAreaOffsetEvent changeStartAutoplayVisibleAreaOffsetEvent) {
-        if (mAdapter != null) {
-            mAdapter.setStartAutoplayVisibleAreaOffset(changeStartAutoplayVisibleAreaOffsetEvent.startAutoplayVisibleAreaOffset);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeMuteNSFWVideoEvent(ChangeMuteNSFWVideoEvent changeMuteNSFWVideoEvent) {
-        if (mAdapter != null) {
-            mAdapter.setMuteNSFWVideo(changeMuteNSFWVideoEvent.muteNSFWVideo);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeEnableSwipeActionSwitchEvent(ChangeEnableSwipeActionSwitchEvent changeEnableSwipeActionSwitchEvent) {
-        if (getNColumns(getResources()) == 1 && touchHelper != null) {
-            swipeActionEnabled = changeEnableSwipeActionSwitchEvent.enableSwipeAction;
-            if (changeEnableSwipeActionSwitchEvent.enableSwipeAction) {
-                touchHelper.attachToRecyclerView(binding.recyclerViewHistoryPostFragment);
-            } else {
-                touchHelper.attachToRecyclerView(null);
-            }
-        }
-    }
-
-    @Subscribe
-    public void onChangePullToRefreshEvent(ChangePullToRefreshEvent changePullToRefreshEvent) {
-        binding.swipeRefreshLayoutHistoryPostFragment.setEnabled(changePullToRefreshEvent.pullToRefresh);
-    }
-
-    @Subscribe
-    public void onChangeLongPressToHideToolbarInCompactLayoutEvent(ChangeLongPressToHideToolbarInCompactLayoutEvent changeLongPressToHideToolbarInCompactLayoutEvent) {
-        if (mAdapter != null) {
-            mAdapter.setLongPressToHideToolbarInCompactLayout(changeLongPressToHideToolbarInCompactLayoutEvent.longPressToHideToolbarInCompactLayout);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeCompactLayoutToolbarHiddenByDefaultEvent(ChangeCompactLayoutToolbarHiddenByDefaultEvent changeCompactLayoutToolbarHiddenByDefaultEvent) {
-        if (mAdapter != null) {
-            mAdapter.setCompactLayoutToolbarHiddenByDefault(changeCompactLayoutToolbarHiddenByDefaultEvent.compactLayoutToolbarHiddenByDefault);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeDataSavingModeEvent(ChangeDataSavingModeEvent changeDataSavingModeEvent) {
-        if (mAdapter != null) {
-            boolean dataSavingMode = false;
-            if (changeDataSavingModeEvent.dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
-                dataSavingMode = Utils.isConnectedToCellularData(activity);
-            } else if (changeDataSavingModeEvent.dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ALWAYS)) {
-                dataSavingMode = true;
-            }
-            mAdapter.setDataSavingMode(dataSavingMode);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeDisableImagePreviewEvent(ChangeDisableImagePreviewEvent changeDisableImagePreviewEvent) {
-        if (mAdapter != null) {
-            mAdapter.setDisableImagePreview(changeDisableImagePreviewEvent.disableImagePreview);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeOnlyDisablePreviewInVideoAndGifPostsEvent(ChangeOnlyDisablePreviewInVideoAndGifPostsEvent changeOnlyDisablePreviewInVideoAndGifPostsEvent) {
-        if (mAdapter != null) {
-            mAdapter.setOnlyDisablePreviewInVideoPosts(changeOnlyDisablePreviewInVideoAndGifPostsEvent.onlyDisablePreviewInVideoAndGifPosts);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
     public void onNeedForPostListFromPostRecyclerViewAdapterEvent(NeedForPostListFromPostFragmentEvent event) {
         if (postFragmentId == event.postFragmentTimeId && mAdapter != null) {
             EventBus.getDefault().post(new ProvidePostListToViewPostDetailActivityEvent(postFragmentId,
                     new ArrayList<>(mAdapter.snapshot()), HistoryPostPagingSource.TYPE_READ_POSTS,
                     null, null, null, null,
                     null, null, null, postFilter, null, null));
-        }
-    }
-
-    @Subscribe
-    public void onChangeHidePostTypeEvent(ChangeHidePostTypeEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setHidePostType(event.hidePostType);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeHidePostFlairEvent(ChangeHidePostFlairEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setHidePostFlair(event.hidePostFlair);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeHideSubredditAndUserEvent(ChangeHideSubredditAndUserPrefixEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setHideSubredditAndUserPrefix(event.hideSubredditAndUserPrefix);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeHideTheNumberOfVotesEvent(ChangeHideTheNumberOfVotesEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setHideTheNumberOfVotes(event.hideTheNumberOfVotes);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeHideTheNumberOfCommentsEvent(ChangeHideTheNumberOfCommentsEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setHideTheNumberOfComments(event.hideTheNumberOfComments);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeFixedHeightPreviewCardEvent(ChangeFixedHeightPreviewInCardEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setFixedHeightPreviewInCard(event.fixedHeightPreviewInCard);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeHideTextPostContentEvent(ChangeHideTextPostContent event) {
-        if (mAdapter != null) {
-            mAdapter.setHideTextPostContent(event.hideTextPostContent);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangePostFeedMaxResolutionEvent(ChangePostFeedMaxResolutionEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setPostFeedMaxResolution(event.postFeedMaxResolution);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeEasierToWatchInFullScreenEvent(ChangeEasierToWatchInFullScreenEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setEasierToWatchInFullScreen(event.easierToWatchInFullScreen);
         }
     }
 }

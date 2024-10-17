@@ -17,16 +17,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.paging.ItemSnapshotList;
 import androidx.paging.LoadState;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
@@ -59,43 +58,11 @@ import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.FragmentPostBinding;
-import ml.docilealligator.infinityforreddit.events.ChangeAutoplayNsfwVideosEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeCompactLayoutToolbarHiddenByDefaultEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeDataSavingModeEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeDefaultLinkPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDefaultPostLayoutEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeDisableImagePreviewEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeEasierToWatchInFullScreenEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeEnableSwipeActionSwitchEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeFixedHeightPreviewInCardEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeHidePostFlairEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeHidePostTypeEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeHideSubredditAndUserPrefixEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeHideTextPostContent;
-import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfCommentsEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfVotesEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeLongPressToHideToolbarInCompactLayoutEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeMuteAutoplayingVideosEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeMuteNSFWVideoEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeOnlyDisablePreviewInVideoAndGifPostsEvent;
-import ml.docilealligator.infinityforreddit.events.ChangePostFeedMaxResolutionEvent;
-import ml.docilealligator.infinityforreddit.events.ChangePostLayoutEvent;
-import ml.docilealligator.infinityforreddit.events.ChangePullToRefreshEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeSavePostFeedScrolledPositionEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeShowAbsoluteNumberOfVotesEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeShowElapsedTimeEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeSpoilerBlurEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeStartAutoplayVisibleAreaOffsetEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeTimeFormatEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeVideoAutoplayEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragmentEvent;
-import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
-import ml.docilealligator.infinityforreddit.events.ShowDividerInCompactLayoutPreferenceEvent;
-import ml.docilealligator.infinityforreddit.events.ShowThumbnailOnTheRightInCompactLayoutEvent;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.post.PostViewModel;
@@ -157,9 +124,7 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
     SharedPreferences mPostFeedScrolledPositionSharedPreferences;
     @Inject
     ExoCreator mExoCreator;
-    private MenuItem lazyModeItem;
     private int postType;
-    private boolean hasPost = false;
     private boolean savePostFeedScrolledPosition;
     private PostRecyclerViewAdapter mAdapter;
     private String subredditName;
@@ -232,35 +197,6 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
                 binding.recyclerViewPostFragment.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
             }
         }
-
-        lazyModeRunnable = new LazyModeRunnable() {
-
-            @Override
-            public void run() {
-                if (isInLazyMode && !isLazyModePaused && mAdapter != null) {
-                    int nPosts = mAdapter.getItemCount();
-                    if (getCurrentPosition() == -1) {
-                        if (mLinearLayoutManager != null) {
-                            setCurrentPosition(mLinearLayoutManager.findFirstVisibleItemPosition());
-                        } else {
-                            int[] into = new int[2];
-                            setCurrentPosition(mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[1]);
-                        }
-                    }
-
-                    if (getCurrentPosition() != RecyclerView.NO_POSITION && nPosts > getCurrentPosition()) {
-                        incrementCurrentPosition();
-                        smoothScroller.setTargetPosition(getCurrentPosition());
-                        if (mLinearLayoutManager != null) {
-                            mLinearLayoutManager.startSmoothScroll(smoothScroller);
-                        } else {
-                            mStaggeredGridLayoutManager.startSmoothScroll(smoothScroller);
-                        }
-                    }
-                }
-                lazyModeHandler.postDelayed(this, (long) (lazyModeInterval * 1000));
-            }
-        };
 
         binding.swipeRefreshLayoutPostFragment.setEnabled(mSharedPreferences.getBoolean(SharedPreferencesUtils.PULL_TO_REFRESH, true));
         binding.swipeRefreshLayoutPostFragment.setOnRefreshListener(this::refresh);
@@ -1276,7 +1212,8 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
         goBackToTop();
     }
 
-    private void showErrorView(int stringResId) {
+    @Override
+    protected void showErrorView(int stringResId) {
         if (activity != null && isAdded()) {
             binding.swipeRefreshLayoutPostFragment.setRefreshing(false);
             binding.fetchPostInfoLinearLayoutPostFragment.setVisibility(View.VISIBLE);
@@ -1285,90 +1222,29 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
         }
     }
 
+    @NonNull
+    @Override
+    protected SwipeRefreshLayout getSwipeRefreshLayout() {
+        return binding.swipeRefreshLayoutPostFragment;
+    }
+
+    @NonNull
+    @Override
+    protected RecyclerView getPostRecyclerView() {
+        return binding.recyclerViewPostFragment;
+    }
+
+    @Nullable
+    @Override
+    protected PostRecyclerViewAdapter getPostAdapter() {
+        return mAdapter;
+    }
+
     @Override
     public void changeNSFW(boolean nsfw) {
         postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && nsfw;
         if (mPostViewModel != null) {
             mPostViewModel.changePostFilter(postFilter);
-        }
-    }
-
-    @Override
-    public boolean startLazyMode() {
-        if (!hasPost) {
-            Toast.makeText(activity, R.string.no_posts_no_lazy_mode, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        Utils.setTitleWithCustomFontToMenuItem(activity.typeface, lazyModeItem, getString(R.string.action_stop_lazy_mode));
-
-        if (mAdapter != null && mAdapter.isAutoplay()) {
-            mAdapter.setAutoplay(false);
-            refreshAdapter();
-        }
-
-        isInLazyMode = true;
-        isLazyModePaused = false;
-
-        lazyModeInterval = Float.parseFloat(mSharedPreferences.getString(SharedPreferencesUtils.LAZY_MODE_INTERVAL_KEY, "2.5"));
-        lazyModeHandler.postDelayed(lazyModeRunnable, (long) (lazyModeInterval * 1000));
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        Toast.makeText(activity, getString(R.string.lazy_mode_start, lazyModeInterval),
-                Toast.LENGTH_SHORT).show();
-
-        return true;
-    }
-
-    @Override
-    public void stopLazyMode() {
-        Utils.setTitleWithCustomFontToMenuItem(activity.typeface, lazyModeItem, getString(R.string.action_start_lazy_mode));
-        if (mAdapter != null) {
-            String autoplayString = mSharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
-            if (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ALWAYS_ON) ||
-                    (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI) && Utils.isConnectedToWifi(activity))) {
-                mAdapter.setAutoplay(true);
-                refreshAdapter();
-            }
-        }
-        isInLazyMode = false;
-        isLazyModePaused = false;
-        lazyModeRunnable.resetOldPosition();
-        lazyModeHandler.removeCallbacks(lazyModeRunnable);
-        resumeLazyModeCountDownTimer.cancel();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        Toast.makeText(activity, getString(R.string.lazy_mode_stop), Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void resumeLazyMode(boolean resumeNow) {
-        if (isInLazyMode) {
-            if (mAdapter != null && mAdapter.isAutoplay()) {
-                mAdapter.setAutoplay(false);
-                refreshAdapter();
-            }
-            isLazyModePaused = false;
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-            lazyModeRunnable.resetOldPosition();
-
-            if (resumeNow) {
-                lazyModeHandler.post(lazyModeRunnable);
-            } else {
-                lazyModeHandler.postDelayed(lazyModeRunnable, (long) (lazyModeInterval * 1000));
-            }
-        }
-    }
-
-    @Override
-    public void pauseLazyMode(boolean startTimer) {
-        resumeLazyModeCountDownTimer.cancel();
-        isInLazyMode = true;
-        isLazyModePaused = true;
-        lazyModeHandler.removeCallbacks(lazyModeRunnable);
-        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-        if (startTimer) {
-            resumeLazyModeCountDownTimer.start();
         }
     }
 
@@ -1521,82 +1397,6 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
     }
 
     @Subscribe
-    public void onPostUpdateEvent(PostUpdateEventToPostList event) {
-        ItemSnapshotList<Post> posts = mAdapter.snapshot();
-        if (event.positionInList >= 0 && event.positionInList < posts.size()) {
-            Post post = posts.get(event.positionInList);
-            if (post != null && post.getFullName().equals(event.post.getFullName())) {
-                post.setTitle(event.post.getTitle());
-                post.setVoteType(event.post.getVoteType());
-                post.setScore(event.post.getScore());
-                post.setNComments(event.post.getNComments());
-                post.setNSFW(event.post.isNSFW());
-                post.setHidden(event.post.isHidden());
-                post.setSpoiler(event.post.isSpoiler());
-                post.setFlair(event.post.getFlair());
-                post.setSaved(event.post.isSaved());
-                if (event.post.isRead()) {
-                    post.markAsRead();
-                }
-                mAdapter.notifyItemChanged(event.positionInList);
-            }
-        }
-    }
-
-    @Subscribe
-    public void onChangeShowElapsedTimeEvent(ChangeShowElapsedTimeEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setShowElapsedTime(event.showElapsedTime);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeTimeFormatEvent(ChangeTimeFormatEvent changeTimeFormatEvent) {
-        if (mAdapter != null) {
-            mAdapter.setTimeFormat(changeTimeFormatEvent.timeFormat);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeVoteButtonsPositionEvent(ChangeVoteButtonsPositionEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setVoteButtonsPosition(event.voteButtonsOnTheRight);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeNSFWBlurEvent(ChangeNSFWBlurEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setBlurNsfwAndDoNotBlurNsfwInNsfwSubreddits(event.needBlurNSFW, event.doNotBlurNsfwInNsfwSubreddits);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeSpoilerBlurEvent(ChangeSpoilerBlurEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setBlurSpoiler(event.needBlurSpoiler);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangePostLayoutEvent(ChangePostLayoutEvent event) {
-        changePostLayout(event.postLayout);
-    }
-
-    @Subscribe
-    public void onShowDividerInCompactLayoutPreferenceEvent(ShowDividerInCompactLayoutPreferenceEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setShowDividerInCompactLayout(event.showDividerInCompactLayout);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
     public void onChangeDefaultPostLayoutEvent(ChangeDefaultPostLayoutEvent changeDefaultPostLayoutEvent) {
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -1631,52 +1431,6 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
     }
 
     @Subscribe
-    public void onChangeDefaultLinkPostLayoutEvent(ChangeDefaultLinkPostLayoutEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setDefaultLinkPostLayout(event.defaultLinkPostLayout);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeShowAbsoluteNumberOfVotesEvent(ChangeShowAbsoluteNumberOfVotesEvent changeShowAbsoluteNumberOfVotesEvent) {
-        if (mAdapter != null) {
-            mAdapter.setShowAbsoluteNumberOfVotes(changeShowAbsoluteNumberOfVotesEvent.showAbsoluteNumberOfVotes);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeVideoAutoplayEvent(ChangeVideoAutoplayEvent changeVideoAutoplayEvent) {
-        if (mAdapter != null) {
-            boolean autoplay = false;
-            if (changeVideoAutoplayEvent.autoplay.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ALWAYS_ON)) {
-                autoplay = true;
-            } else if (changeVideoAutoplayEvent.autoplay.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI)) {
-                autoplay = Utils.isConnectedToWifi(activity);
-            }
-            mAdapter.setAutoplay(autoplay);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeAutoplayNsfwVideosEvent(ChangeAutoplayNsfwVideosEvent changeAutoplayNsfwVideosEvent) {
-        if (mAdapter != null) {
-            mAdapter.setAutoplayNsfwVideos(changeAutoplayNsfwVideosEvent.autoplayNsfwVideos);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeMuteAutoplayingVideosEvent(ChangeMuteAutoplayingVideosEvent changeMuteAutoplayingVideosEvent) {
-        if (mAdapter != null) {
-            mAdapter.setMuteAutoplayingVideos(changeMuteAutoplayingVideosEvent.muteAutoplayingVideos);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
     public void onChangeNetworkStatusEvent(ChangeNetworkStatusEvent changeNetworkStatusEvent) {
         if (mAdapter != null) {
             String autoplay = mSharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
@@ -1698,95 +1452,8 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
     }
 
     @Subscribe
-    public void onShowThumbnailOnTheRightInCompactLayoutEvent(ShowThumbnailOnTheRightInCompactLayoutEvent showThumbnailOnTheRightInCompactLayoutEvent) {
-        if (mAdapter != null) {
-            mAdapter.setShowThumbnailOnTheRightInCompactLayout(showThumbnailOnTheRightInCompactLayoutEvent.showThumbnailOnTheRightInCompactLayout);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeStartAutoplayVisibleAreaOffsetEvent(ChangeStartAutoplayVisibleAreaOffsetEvent changeStartAutoplayVisibleAreaOffsetEvent) {
-        if (mAdapter != null) {
-            mAdapter.setStartAutoplayVisibleAreaOffset(changeStartAutoplayVisibleAreaOffsetEvent.startAutoplayVisibleAreaOffset);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeMuteNSFWVideoEvent(ChangeMuteNSFWVideoEvent changeMuteNSFWVideoEvent) {
-        if (mAdapter != null) {
-            mAdapter.setMuteNSFWVideo(changeMuteNSFWVideoEvent.muteNSFWVideo);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
     public void onChangeSavePostFeedScrolledPositionEvent(ChangeSavePostFeedScrolledPositionEvent changeSavePostFeedScrolledPositionEvent) {
         savePostFeedScrolledPosition = changeSavePostFeedScrolledPositionEvent.savePostFeedScrolledPosition;
-    }
-
-    @Subscribe
-    public void onChangeEnableSwipeActionSwitchEvent(ChangeEnableSwipeActionSwitchEvent changeEnableSwipeActionSwitchEvent) {
-        if (getNColumns(getResources()) == 1 && touchHelper != null) {
-            swipeActionEnabled = changeEnableSwipeActionSwitchEvent.enableSwipeAction;
-            if (changeEnableSwipeActionSwitchEvent.enableSwipeAction) {
-                touchHelper.attachToRecyclerView(binding.recyclerViewPostFragment);
-            } else {
-                touchHelper.attachToRecyclerView(null);
-            }
-        }
-    }
-
-    @Subscribe
-    public void onChangePullToRefreshEvent(ChangePullToRefreshEvent changePullToRefreshEvent) {
-        binding.swipeRefreshLayoutPostFragment.setEnabled(changePullToRefreshEvent.pullToRefresh);
-    }
-
-    @Subscribe
-    public void onChangeLongPressToHideToolbarInCompactLayoutEvent(ChangeLongPressToHideToolbarInCompactLayoutEvent changeLongPressToHideToolbarInCompactLayoutEvent) {
-        if (mAdapter != null) {
-            mAdapter.setLongPressToHideToolbarInCompactLayout(changeLongPressToHideToolbarInCompactLayoutEvent.longPressToHideToolbarInCompactLayout);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeCompactLayoutToolbarHiddenByDefaultEvent(ChangeCompactLayoutToolbarHiddenByDefaultEvent changeCompactLayoutToolbarHiddenByDefaultEvent) {
-        if (mAdapter != null) {
-            mAdapter.setCompactLayoutToolbarHiddenByDefault(changeCompactLayoutToolbarHiddenByDefaultEvent.compactLayoutToolbarHiddenByDefault);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeDataSavingModeEvent(ChangeDataSavingModeEvent changeDataSavingModeEvent) {
-        if (mAdapter != null) {
-            boolean dataSavingMode = false;
-            if (changeDataSavingModeEvent.dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
-                dataSavingMode = Utils.isConnectedToCellularData(activity);
-            } else if (changeDataSavingModeEvent.dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ALWAYS)) {
-                dataSavingMode = true;
-            }
-            mAdapter.setDataSavingMode(dataSavingMode);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeDisableImagePreviewEvent(ChangeDisableImagePreviewEvent changeDisableImagePreviewEvent) {
-        if (mAdapter != null) {
-            mAdapter.setDisableImagePreview(changeDisableImagePreviewEvent.disableImagePreview);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeOnlyDisablePreviewInVideoAndGifPostsEvent(ChangeOnlyDisablePreviewInVideoAndGifPostsEvent changeOnlyDisablePreviewInVideoAndGifPostsEvent) {
-        if (mAdapter != null) {
-            mAdapter.setOnlyDisablePreviewInVideoPosts(changeOnlyDisablePreviewInVideoAndGifPostsEvent.onlyDisablePreviewInVideoAndGifPosts);
-            refreshAdapter();
-        }
     }
 
     @Subscribe
@@ -1799,78 +1466,8 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
         }
     }
 
-    @Subscribe
-    public void onChangeHidePostTypeEvent(ChangeHidePostTypeEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setHidePostType(event.hidePostType);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeHidePostFlairEvent(ChangeHidePostFlairEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setHidePostFlair(event.hidePostFlair);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeHideSubredditAndUserEvent(ChangeHideSubredditAndUserPrefixEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setHideSubredditAndUserPrefix(event.hideSubredditAndUserPrefix);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeHideTheNumberOfVotesEvent(ChangeHideTheNumberOfVotesEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setHideTheNumberOfVotes(event.hideTheNumberOfVotes);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeHideTheNumberOfCommentsEvent(ChangeHideTheNumberOfCommentsEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setHideTheNumberOfComments(event.hideTheNumberOfComments);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeFixedHeightPreviewCardEvent(ChangeFixedHeightPreviewInCardEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setFixedHeightPreviewInCard(event.fixedHeightPreviewInCard);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeHideTextPostContentEvent(ChangeHideTextPostContent event) {
-        if (mAdapter != null) {
-            mAdapter.setHideTextPostContent(event.hideTextPostContent);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangePostFeedMaxResolutionEvent(ChangePostFeedMaxResolutionEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setPostFeedMaxResolution(event.postFeedMaxResolution);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeEasierToWatchInFullScreenEvent(ChangeEasierToWatchInFullScreenEvent event) {
-        if (mAdapter != null) {
-            mAdapter.setEasierToWatchInFullScreen(event.easierToWatchInFullScreen);
-        }
-    }
-
-    private void refreshAdapter() {
+    @Override
+    protected void refreshAdapter() {
         int previousPosition = -1;
         if (mLinearLayoutManager != null) {
             previousPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
@@ -1932,18 +1529,5 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
         if (mAdapter != null) {
             mAdapter.setCanPlayVideo(hasWindowsFocus);
         }
-    }
-
-    @Override
-    public boolean isRecyclerViewItemSwipeable(RecyclerView.ViewHolder viewHolder) {
-        if (swipeActionEnabled) {
-            if (viewHolder instanceof PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) {
-                return !((PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) viewHolder).isSwipeLocked();
-            }
-
-            return true;
-        }
-
-        return false;
     }
 }
