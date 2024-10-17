@@ -282,6 +282,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         });
 
         sectionsPagerAdapter = new SectionsPagerAdapter(this);
+        binding.viewPager2ViewPostDetailActivity.setAdapter(sectionsPagerAdapter);
 
         checkNewAccountAndBindView(savedInstanceState);
     }
@@ -362,7 +363,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     private void bindView(Bundle savedInstanceState) {
-        binding.viewPager2ViewPostDetailActivity.setAdapter(sectionsPagerAdapter);
         if (savedInstanceState == null) {
             binding.viewPager2ViewPostDetailActivity.setCurrentItem(getIntent().getIntExtra(EXTRA_POST_LIST_POSITION, 0), false);
         }
