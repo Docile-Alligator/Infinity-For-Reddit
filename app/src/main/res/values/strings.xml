@@ -570,6 +570,9 @@
     <string name="settings_enable_search_history_title">Enable Search History</string>
     <string name="settings_post_history_title">Post History</string>
     <string name="settings_mark_posts_as_read_title">Mark Posts as Read</string>
+    <string name="settings_read_posts_limit_title">Limit Read Posts</string>
+    <string name="settings_read_posts_limit_hint">Set read posts limit</string>
+    <string name="settings_read_posts_db_summary">Read Posts DB Table \nSize: %1$d(KB) \nCount: %2$d</string>
     <string name="settings_mark_posts_as_read_after_voting_title">Mark Posts as Read After Voting</string>
     <string name="settings_mark_posts_as_read_on_scroll_title">Mark Posts as Read on Scroll</string>
     <string name="settings_hide_read_posts_automatically_title">Hide Read Posts Automatically</string>

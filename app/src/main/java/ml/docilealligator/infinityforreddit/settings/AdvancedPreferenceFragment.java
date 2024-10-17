@@ -16,6 +16,7 @@ import androidx.preference.Preference;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import ml.docilealligator.infinityforreddit.readpost.ReadPostDao;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.concurrent.Executor;
@@ -195,6 +196,13 @@ public class AdvancedPreferenceFragment extends CustomFontPreferenceFragmentComp
         }
 
         if (deleteReadPostsPreference != null) {
+            executor.execute(() -> {
+                ReadPostDao readPostDao = mRedditDataRoomDatabase.readPostDao();
+                int tableCount = readPostDao.getReadPostsCount(activity.accountName);
+                long tableEntrySize = readPostDao.getMaxReadPostEntrySize();
+                long tableSize = tableEntrySize * tableCount / 1024;
+                deleteReadPostsPreference.setSummary(getString(R.string.settings_read_posts_db_summary, tableSize, tableCount));
+            });
             deleteReadPostsPreference.setOnPreferenceClickListener(preference -> {
                 new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.are_you_sure)

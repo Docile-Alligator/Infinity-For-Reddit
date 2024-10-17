@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.events;
 
 import java.util.ArrayList;
 
+import ml.docilealligator.infinityforreddit.readpost.ReadPostsListInterface;
 import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
@@ -19,14 +20,13 @@ public class ProvidePostListToViewPostDetailActivityEvent {
     public String trendingSource;
     public PostFilter postFilter;
     public SortType sortType;
-    public ArrayList<String> readPostList;
+    public ReadPostsListInterface readPostsList;
 
     public ProvidePostListToViewPostDetailActivityEvent(long postFragmentId, ArrayList<Post> posts, int postType,
                                                         String subredditName, String concatenatedSubredditNames,
                                                         String username, String userWhere,
                                                         String multiPath, String query, String trendingSource,
-                                                        PostFilter postFilter, SortType sortType,
-                                                        ArrayList<String> readPostList) {
+                                                        PostFilter postFilter, SortType sortType, ReadPostsListInterface readPostsList) {
         this.postFragmentId = postFragmentId;
         this.posts = posts;
         this.postType = postType;
@@ -39,6 +39,6 @@ public class ProvidePostListToViewPostDetailActivityEvent {
         this.trendingSource = trendingSource;
         this.postFilter = postFilter;
         this.sortType = sortType;
-        this.readPostList = readPostList;
+        this.readPostsList = readPostsList;
     }
 }
