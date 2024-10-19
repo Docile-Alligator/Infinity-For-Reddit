@@ -21,6 +21,7 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -41,6 +42,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
     public static final String EXTRA_IS_NSFW = "EIN";
 
+    private static final Pattern REDDIT_IMAGE_PATTERN =  Pattern.compile("^/media$");
     private static final String POST_PATTERN = "/r/[\\w-]+/comments/\\w+/?\\w+/?";
     private static final String POST_PATTERN_2 = "/(u|U|user)/[\\w-]+/comments/\\w+/?\\w+/?";
     private static final String POST_PATTERN_3 = "/[\\w-]+$";
@@ -57,7 +59,6 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String IMGUR_GALLERY_PATTERN = "/gallery/\\w+/?";
     private static final String IMGUR_ALBUM_PATTERN = "/(album|a)/\\w+/?";
     private static final String IMGUR_IMAGE_PATTERN = "/\\w+/?";
-    private static final String MEDIA_PATTERN = "/media/?";
     private static final String WIKI_PATTERN = "/[rR]/[\\w-]+/(wiki|w)(?:/[\\w-]+)*";
     private static final String GOOGLE_AMP_PATTERN = "/amp/s/amp.reddit.com/.*";
     private static final String STREAMABLE_PATTERN = "/\\w+/?";
@@ -187,10 +188,20 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 startActivity(intent);
                             } else if (path.equals("/report")) {
                                 openInWebView(uri);
-                            } else if (path.matches(MEDIA_PATTERN)) {
-                                // TODO: check if this can be video.
-                                // Example: https://www.reddit.com/media?url=https%3A%2F%2Fpreview.redd.it%2F9iamzovpcrta1.png%3Fwidth%3D720%26auto%3Dwebp%26s%3Da6d1287094fc6ad986e1245a5fc3869b2f0c7da4
-                                deepLinkError(uri);
+                            } else if (REDDIT_IMAGE_PATTERN.matcher(path).matches()) {
+                                // reddit.com/media, actual image url is stored in the "url" query param
+                                try {
+                                    Intent intent = new Intent(this, ViewImageOrGifActivity.class);
+                                    String real_url = uri.getQueryParameter("url");
+                                    Uri real_uri = Uri.parse(real_url);
+                                    String fileName = FilenameUtils.getBaseName(real_uri.getPath());
+                                    intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, real_url);
+                                    intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, fileName);
+                                    intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, fileName);
+                                    startActivity(intent);
+                                } catch (Exception e) {
+                                    deepLinkError(uri);
+                                }
                             } else if (path.matches(POST_PATTERN) || path.matches(POST_PATTERN_2)) {
                                 int commentsIndex = segments.lastIndexOf("comments");
                                 if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
