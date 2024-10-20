@@ -60,6 +60,61 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/read_posts_limit_linear_layout_post_history_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="horizontal"
+            android:paddingStart="72dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="4dp">
+
+            <TextView
+                android:id="@+id/read_posts_limit_text_view_post_history_fragment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:drawablePadding="32dp"
+                android:fontFamily="?attr/font_family"
+                android:text="@string/settings_read_posts_limit_title"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/font_16" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/read_posts_limit_switch_post_history_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/read_posts_limit_text_input_layout_post_history_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="72dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="4dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/read_posts_limit_text_input_edit_text_post_history_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="?attr/font_family"
+                android:hint="@string/settings_read_posts_limit_hint"
+                android:inputType="number"
+                android:maxLines="11"
+                android:textSize="?attr/font_default" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
             android:id="@+id/mark_posts_as_read_after_voting_linear_layout_post_history_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

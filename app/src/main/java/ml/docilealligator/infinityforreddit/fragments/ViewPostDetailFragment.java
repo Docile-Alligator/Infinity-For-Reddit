@@ -48,6 +48,7 @@ import com.evernote.android.state.State;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.livefront.bridge.Bridge;
 
+import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -1156,7 +1157,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private void tryMarkingPostAsRead() {
         if (mMarkPostsAsRead && mPost != null && !mPost.isRead()) {
             mPost.markAsRead();
-            InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, activity.accountName, mPost.getId());
+            int readPostsLimit = ReadPostsUtils.GetReadPostsLimit(activity.accountName, mPostHistorySharedPreferences);
+            InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, activity.accountName, mPost.getId(), readPostsLimit);
             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
         }
     }
