@@ -19,7 +19,6 @@ import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
-import ml.docilealligator.infinityforreddit.readpost.ReadPostsListInterface;
 import retrofit2.Retrofit;
 
 public class HistoryPostViewModel extends ViewModel {

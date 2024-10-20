@@ -7,8 +7,7 @@ public class ReadPostsUtils {
     public static int GetReadPostsLimit(String accountName, SharedPreferences mPostHistorySharedPreferences) {
         if (mPostHistorySharedPreferences.getBoolean(accountName + SharedPreferencesUtils.READ_POSTS_LIMIT_ENABLED, true)) {
             return mPostHistorySharedPreferences.getInt(accountName + SharedPreferencesUtils.READ_POSTS_LIMIT, 500);
-        }
-        else {
+        } else {
             return -1;
         }
     }

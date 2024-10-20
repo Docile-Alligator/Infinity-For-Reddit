@@ -150,7 +150,6 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
     private HistoryPostRecyclerViewAdapter mAdapter;
     private int maxPosition = -1;
     private PostFilter postFilter;
-    private ItemTouchHelper touchHelper;
     private int historyType;
     private FragmentHistoryPostBinding binding;
 

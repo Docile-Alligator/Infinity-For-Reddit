@@ -2,31 +2,15 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.Handler;
 
-import androidx.annotation.NonNull;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubreddit;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
-import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 
 public class FetchPostFilterAndConcatenatedSubredditNames {
-    public interface FetchPostFilterAndReadPostsListener {
-        void success(PostFilter postFilter, ArrayList<String> readPostList);
-    }
-
-    public interface FetchPostFilterListerner {
-        void success(PostFilter postFilter);
-    }
-
-    public interface FetchPostFilterAndConcatenatecSubredditNamesListener {
-        void success(PostFilter postFilter, String concatenatedSubredditNames);
-    }
-
     public static void fetchPostFilter(RedditDataRoomDatabase redditDataRoomDatabase, Executor executor,
                                                    Handler handler, int postFilterUsage,
                                                    String nameOfUsage, FetchPostFilterListerner fetchPostFilterListerner) {
@@ -79,5 +63,13 @@ public class FetchPostFilterAndConcatenatedSubredditNames {
                 handler.post(() -> fetchPostFilterAndConcatenatecSubredditNamesListener.success(mergedPostFilter, null));
             }
         });
+    }
+
+    public interface FetchPostFilterListerner {
+        void success(PostFilter postFilter);
+    }
+
+    public interface FetchPostFilterAndConcatenatecSubredditNamesListener {
+        void success(PostFilter postFilter, String concatenatedSubredditNames);
     }
 }
