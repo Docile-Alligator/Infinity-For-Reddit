@@ -20,6 +20,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
+import ml.docilealligator.infinityforreddit.readpost.NullReadPostsList;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import retrofit2.Call;
@@ -92,7 +93,7 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
             Response<String> response = historyPosts.execute();
             if (response.isSuccessful()) {
                 String responseString = response.body();
-                LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, null);
+                LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, NullReadPostsList.getInstance());
                 if (newPosts == null) {
                     return new LoadResult.Error<>(new Exception("Error parsing posts"));
                 } else {

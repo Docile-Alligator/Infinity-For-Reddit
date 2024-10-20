@@ -27,7 +27,9 @@
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:key="delete_read_posts_in_database"
-        app:title="@string/settings_delete_read_posts_in_database_title" />
+        app:title="@string/settings_delete_read_posts_in_database_title"
+        app:summary=""
+    />
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:key="delete_all_legacy_settings"
