@@ -6,11 +6,9 @@ import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackI
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.Canvas;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,7 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.LoadState;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -219,13 +216,6 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
 
         readPostsList = new ReadPostsList(mRedditDataRoomDatabase.readPostDao(), activity.accountName,
                 getArguments().getBoolean(EXTRA_DISABLE_READ_POSTS, false));
-
-        binding.recyclerViewPostFragment.setOnTouchListener((view, motionEvent) -> {
-            if (isInLazyMode) {
-                pauseLazyMode(true);
-            }
-            return false;
-        });
 
         if (activity instanceof RecyclerViewContentScrollingInterface) {
             binding.recyclerViewPostFragment.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -824,105 +814,6 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
                 }
             }
         }
-
-        touchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
-            boolean exceedThreshold = false;
-
-            @Override
-            public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-                if (!(viewHolder instanceof PostRecyclerViewAdapter.PostBaseViewHolder) &&
-                        !(viewHolder instanceof PostRecyclerViewAdapter.PostCompactBaseViewHolder)) {
-                    return makeMovementFlags(0, 0);
-                } else if (viewHolder instanceof PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) {
-                    if (((PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) viewHolder).isSwipeLocked()) {
-                        return makeMovementFlags(0, 0);
-                    }
-                }
-                int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
-                return makeMovementFlags(0, swipeFlags);
-            }
-
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public boolean isItemViewSwipeEnabled() {
-                return true;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                if (touchHelper != null) {
-                    exceedThreshold = false;
-                    touchHelper.attachToRecyclerView(null);
-                    touchHelper.attachToRecyclerView(binding.recyclerViewPostFragment);
-                }
-            }
-
-            @Override
-            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-
-                if (isCurrentlyActive) {
-                    View itemView = viewHolder.itemView;
-                    int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
-                    if (dX > 0) {
-                        if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                            if (!exceedThreshold) {
-                                exceedThreshold = true;
-                                if (vibrateWhenActionTriggered) {
-                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                                }
-                            }
-                            backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                        } else {
-                            exceedThreshold = false;
-                            backgroundSwipeRight.setBounds(0, 0, 0, 0);
-                        }
-
-                        drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
-                                (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
-                                itemView.getLeft() + ((int) dX) - horizontalOffset,
-                                (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
-                        backgroundSwipeRight.draw(c);
-                        drawableSwipeRight.draw(c);
-                    } else if (dX < 0) {
-                        if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                            if (!exceedThreshold) {
-                                exceedThreshold = true;
-                                if (vibrateWhenActionTriggered) {
-                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                                }
-                            }
-                            backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                        } else {
-                            exceedThreshold = false;
-                            backgroundSwipeLeft.setBounds(0, 0, 0, 0);
-                        }
-                        drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
-                                (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
-                                itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
-                                (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
-                        backgroundSwipeLeft.draw(c);
-                        drawableSwipeLeft.draw(c);
-                    }
-                } else {
-                    if (exceedThreshold) {
-                        mAdapter.onItemSwipe(viewHolder, dX > 0 ? ItemTouchHelper.END : ItemTouchHelper.START, swipeLeftAction, swipeRightAction);
-                        exceedThreshold = false;
-                    }
-                }
-            }
-
-            @Override
-            public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
-                return 1;
-            }
-        });
 
         if (nColumns == 1 && mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SWIPE_ACTION, false)) {
             swipeActionEnabled = true;

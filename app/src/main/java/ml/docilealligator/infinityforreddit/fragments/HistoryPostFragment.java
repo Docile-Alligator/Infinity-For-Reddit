@@ -169,13 +169,6 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
             postFragmentId = System.currentTimeMillis() + new Random().nextInt(1000);
         }
 
-        binding.recyclerViewHistoryPostFragment.setOnTouchListener((view, motionEvent) -> {
-            if (isInLazyMode) {
-                pauseLazyMode(true);
-            }
-            return false;
-        });
-
         if (activity instanceof RecyclerViewContentScrollingInterface) {
             binding.recyclerViewHistoryPostFragment.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override

@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
+import static androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_IDLE;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -15,6 +17,7 @@ import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -141,6 +144,7 @@ public abstract class PostFragmentBase extends Fragment {
     protected int swipeLeftAction;
     protected int swipeRightAction;
     protected ItemTouchHelper touchHelper;
+    private boolean shouldSwipeBack;
     protected final Map<String, String> subredditOrUserIcons = new HashMap<>();
 
     public PostFragmentBase() {
@@ -217,7 +221,7 @@ public abstract class PostFragmentBase extends Fragment {
 
             @Override
             public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-                return makeMovementFlags(0, calculateMovementFlags(recyclerView, viewHolder));
+                return makeMovementFlags(ACTION_STATE_IDLE, calculateMovementFlags(recyclerView, viewHolder));
             }
 
             @Override
@@ -231,23 +235,25 @@ public abstract class PostFragmentBase extends Fragment {
             }
 
             @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                if (touchHelper != null) {
-                    exceedThreshold = false;
-                    touchHelper.attachToRecyclerView(null);
-                    touchHelper.attachToRecyclerView(getPostRecyclerView());
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {}
+
+            @Override
+            public int convertToAbsoluteDirection(int flags, int layoutDirection) {
+                if (shouldSwipeBack) {
+                    shouldSwipeBack = false;
+                    return 0;
                 }
+                return super.convertToAbsoluteDirection(flags, layoutDirection);
             }
 
             @Override
             public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-
                 if (isCurrentlyActive) {
                     View itemView = viewHolder.itemView;
                     int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
                     if (dX > 0) {
                         if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                            dX = (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold;
                             if (!exceedThreshold) {
                                 exceedThreshold = true;
                                 if (vibrateWhenActionTriggered) {
@@ -269,6 +275,7 @@ public abstract class PostFragmentBase extends Fragment {
                         drawableSwipeRight.draw(c);
                     } else if (dX < 0) {
                         if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                            dX = -(viewHolder.itemView.getRight() - viewHolder.itemView.getLeft()) * swipeActionThreshold;
                             if (!exceedThreshold) {
                                 exceedThreshold = true;
                                 if (vibrateWhenActionTriggered) {
@@ -294,12 +301,21 @@ public abstract class PostFragmentBase extends Fragment {
                         exceedThreshold = false;
                     }
                 }
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
 
             @Override
             public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
                 return 1;
             }
+        });
+
+        getPostRecyclerView().setOnTouchListener((view, motionEvent) -> {
+            shouldSwipeBack = motionEvent.getAction() == MotionEvent.ACTION_CANCEL || motionEvent.getAction() == MotionEvent.ACTION_UP;
+            if (isInLazyMode) {
+                pauseLazyMode(true);
+            }
+            return false;
         });
 
         return super.onCreateView(inflater, container, savedInstanceState);
