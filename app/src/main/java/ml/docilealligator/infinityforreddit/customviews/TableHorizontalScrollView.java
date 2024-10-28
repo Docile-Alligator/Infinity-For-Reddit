@@ -8,34 +8,40 @@ import android.view.MotionEvent;
 import android.view.ViewParent;
 import android.widget.HorizontalScrollView;
 
+import androidx.annotation.Nullable;
 import androidx.viewpager2.widget.ViewPager2;
 
 import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 
-public class TableHorinzontalScrollView extends HorizontalScrollView {
+public class TableHorizontalScrollView extends HorizontalScrollView {
+    @Nullable
     private CustomToroContainer toroContainer;
+    @Nullable
     private ViewPager2 viewPager2;
+    @Nullable
     private SliderPanel sliderPanel;
 
     private float lastX = 0.0f;
     private float lastY = 0.0f;
+    private boolean allowScroll;
+    private boolean isViewPager2Enabled;
 
-    public TableHorinzontalScrollView(Context context) {
+    public TableHorizontalScrollView(Context context) {
         super(context);
         init();
     }
 
-    public TableHorinzontalScrollView(Context context, AttributeSet attrs) {
+    public TableHorizontalScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public TableHorinzontalScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public TableHorizontalScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
-    public TableHorinzontalScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public TableHorizontalScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
@@ -48,6 +54,7 @@ public class TableHorinzontalScrollView extends HorizontalScrollView {
                     toroContainer = (CustomToroContainer) parent;
                 } else if (parent instanceof ViewPager2) {
                     viewPager2 = (ViewPager2) parent;
+                    isViewPager2Enabled = viewPager2.isUserInputEnabled();
                 } else if (parent instanceof SliderPanel) {
                     sliderPanel = (SliderPanel) parent;
                 }
@@ -59,32 +66,45 @@ public class TableHorinzontalScrollView extends HorizontalScrollView {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        boolean allowScroll = true;
+        processMotionEvent(ev);
+        return allowScroll;
+    }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        processMotionEvent(ev);
+        return super.onTouchEvent(ev);
+    }
+
+    private void processMotionEvent(MotionEvent ev) {
         switch (ev.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 lastX = ev.getX();
                 lastY = ev.getY();
+                allowScroll = true;
 
                 if (toroContainer != null) {
                     toroContainer.requestDisallowInterceptTouchEvent(true);
                 }
-                if (viewPager2 != null) {
+                if (viewPager2 != null && isViewPager2Enabled) {
                     viewPager2.setUserInputEnabled(false);
                 }
                 if (sliderPanel != null) {
-                    sliderPanel.requestDisallowInterceptTouchEvent(true);
+                    sliderPanel.lock();
                 }
                 break;
             case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                allowScroll = false;
+
                 if (toroContainer != null) {
                     toroContainer.requestDisallowInterceptTouchEvent(false);
                 }
-                if (viewPager2 != null) {
+                if (viewPager2 != null && isViewPager2Enabled) {
                     viewPager2.setUserInputEnabled(true);
                 }
                 if (sliderPanel != null) {
-                    sliderPanel.requestDisallowInterceptTouchEvent(false);
+                    sliderPanel.unlock();
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -98,15 +118,13 @@ public class TableHorinzontalScrollView extends HorizontalScrollView {
                 if (toroContainer != null) {
                     toroContainer.requestDisallowInterceptTouchEvent(allowScroll);
                 }
-                if (viewPager2 != null) {
+                if (viewPager2 != null && isViewPager2Enabled) {
                     viewPager2.setUserInputEnabled(false);
                 }
                 if (sliderPanel != null) {
-                    sliderPanel.requestDisallowInterceptTouchEvent(true);
+                    sliderPanel.lock();
                 }
                 break;
         }
-
-        return allowScroll && super.onInterceptTouchEvent(ev);
     }
 }
