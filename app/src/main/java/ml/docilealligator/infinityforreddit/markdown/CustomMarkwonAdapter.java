@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit.markdown;
 
 import android.util.SparseArray;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
@@ -142,39 +141,6 @@ public class CustomMarkwonAdapter extends MarkwonAdapter {
                 return false;
             });
         } else if (holder.itemView instanceof HorizontalScrollView) {
-            holder.itemView.setOnTouchListener(new View.OnTouchListener() {
-                boolean isSliderPanelLockedAlready;
-                boolean isViewPager2UserInputEnabledAlready;
-                @Override
-                public boolean onTouch(View v, MotionEvent motionEvent) {
-                    if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP) {
-                        if (activity.mSliderPanel != null) {
-                            activity.mSliderPanel.requestDisallowInterceptTouchEvent(false);
-                        }
-
-                        if (activity.mViewPager2 != null && isViewPager2UserInputEnabledAlready) {
-                            activity.mViewPager2.setUserInputEnabled(true);
-                        }
-
-                        if (!isSliderPanelLockedAlready) {
-                            activity.unlockSwipeRightToGoBack();
-                        }
-                    } else {
-                        if (activity.mSliderPanel != null) {
-                            isSliderPanelLockedAlready = activity.mSliderPanel.isLocked();
-                            activity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
-                        }
-                        if (activity.mViewPager2 != null) {
-                            isViewPager2UserInputEnabledAlready = activity.mViewPager2.isUserInputEnabled();
-                            activity.mViewPager2.setUserInputEnabled(false);
-                        }
-                        activity.lockSwipeRightToGoBack();
-                    }
-
-                    return false;
-                }
-            });
-
             TableLayout tableLayout = holder.itemView.findViewById(R.id.table_layout);
             if (tableLayout != null) {
                 for (int i = 0; i < tableLayout.getChildCount(); i++) {

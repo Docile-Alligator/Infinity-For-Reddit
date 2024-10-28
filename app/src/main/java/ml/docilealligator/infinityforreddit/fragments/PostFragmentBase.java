@@ -256,8 +256,8 @@ public abstract class PostFragmentBase extends Fragment {
                         if (!exceedThreshold && isCurrentlyActive) {
                             exceedThreshold = true;
                             if (vibrateWhenActionTriggered) {
-                                viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                itemView.setHapticFeedbackEnabled(true);
+                                itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                             }
                         }
                         backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
@@ -274,12 +274,12 @@ public abstract class PostFragmentBase extends Fragment {
                     drawableSwipeRight.draw(c);
                 } else if (dX < 0) {
                     if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                        dX = -(viewHolder.itemView.getRight() - viewHolder.itemView.getLeft()) * swipeActionThreshold;
+                        dX = -(itemView.getRight() - itemView.getLeft()) * swipeActionThreshold;
                         if (!exceedThreshold && isCurrentlyActive) {
                             exceedThreshold = true;
                             if (vibrateWhenActionTriggered) {
-                                viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                itemView.setHapticFeedbackEnabled(true);
+                                itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                             }
                         }
                         backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());

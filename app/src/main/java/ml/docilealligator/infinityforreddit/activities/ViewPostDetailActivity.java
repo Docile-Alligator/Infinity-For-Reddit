@@ -868,6 +868,20 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         }
     }
 
+    @Override
+    public void lockSwipeRightToGoBack() {
+        if (mSliderPanel != null) {
+            mSliderPanel.lock();
+        }
+    }
+
+    @Override
+    public void unlockSwipeRightToGoBack() {
+        if (mSliderPanel != null) {
+            mSliderPanel.unlock();
+        }
+    }
+
     private class SectionsPagerAdapter extends FragmentStateAdapter {
 
         public SectionsPagerAdapter(@NonNull FragmentActivity fragmentActivity) {

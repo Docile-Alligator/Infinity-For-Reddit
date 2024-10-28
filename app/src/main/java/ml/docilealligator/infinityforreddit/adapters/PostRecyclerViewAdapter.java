@@ -108,8 +108,6 @@ import ml.docilealligator.infinityforreddit.databinding.ItemPostVideoTypeAutopla
 import ml.docilealligator.infinityforreddit.databinding.ItemPostVideoTypeAutoplayLegacyControllerBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostWithPreviewBinding;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostDetailFragment;
-import ml.docilealligator.infinityforreddit.fragments.FragmentCommunicator;
-import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.fragments.PostFragmentBase;
 import ml.docilealligator.infinityforreddit.post.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
@@ -3366,11 +3364,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             noPreviewImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
 
             adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface,
-                    mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale,
-                    galleryImage -> itemView.performLongClick());
+                    mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale);
             galleryRecyclerView.setAdapter(adapter);
             galleryRecyclerView.setOnTouchListener((v, motionEvent) -> {
-                if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP || motionEvent.getActionMasked() == MotionEvent.ACTION_CANCEL) {
+                if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP) {
                     if (mActivity.mSliderPanel != null) {
                         mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(false);
                     }
@@ -3413,7 +3410,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 private float downX;
                 private float downY;
                 private boolean dragged;
+                private long downTime;
                 private final int minTouchSlop = ViewConfiguration.get(mActivity).getScaledTouchSlop();
+                private final int longClickThreshold = ViewConfiguration.getLongPressTimeout();
+                private boolean longPressed;
 
                 @Override
                 public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
@@ -3422,19 +3422,47 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         case MotionEvent.ACTION_DOWN:
                             downX = e.getRawX();
                             downY = e.getRawY();
+                            downTime = System.currentTimeMillis();
+
+                            if (mActivity.mSliderPanel != null) {
+                                mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
+                            }
+                            if (mActivity.mViewPager2 != null) {
+                                mActivity.mViewPager2.setUserInputEnabled(false);
+                            }
+                            mActivity.lockSwipeRightToGoBack();
+                            swipeLocked = true;
                             break;
                         case MotionEvent.ACTION_MOVE:
                             if(Math.abs(e.getRawX() - downX) > minTouchSlop || Math.abs(e.getRawY() - downY) > minTouchSlop) {
                                 dragged = true;
                             }
+
+                            if (!dragged && !longPressed) {
+                                if (System.currentTimeMillis() - downTime >= longClickThreshold) {
+                                    itemView.performLongClick();
+                                    longPressed = true;
+                                }
+                            }
+
+                            if (mActivity.mSliderPanel != null) {
+                                mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
+                            }
+                            if (mActivity.mViewPager2 != null) {
+                                mActivity.mViewPager2.setUserInputEnabled(false);
+                            }
+                            mActivity.lockSwipeRightToGoBack();
+                            swipeLocked = true;
                             break;
                         case MotionEvent.ACTION_UP:
                             if (!dragged) {
-                                int position = getBindingAdapterPosition();
-                                if (position >= 0) {
-                                    if (post != null) {
-                                        markPostRead(post, true);
-                                        openMedia(post, layoutManager.findFirstVisibleItemPosition());
+                                if (System.currentTimeMillis() - downTime < longClickThreshold) {
+                                    int position = getBindingAdapterPosition();
+                                    if (position >= 0) {
+                                        if (post != null) {
+                                            markPostRead(post, true);
+                                            openMedia(post, layoutManager.findFirstVisibleItemPosition());
+                                        }
                                     }
                                 }
                             }
@@ -3442,6 +3470,17 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             downX = 0;
                             downY = 0;
                             dragged = false;
+                            longPressed = false;
+
+                            if (mActivity.mSliderPanel != null) {
+                                mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(false);
+                            }
+
+                            if (mActivity.mViewPager2 != null) {
+                                mActivity.mViewPager2.setUserInputEnabled(true);
+                            }
+                            mActivity.unlockSwipeRightToGoBack();
+                            swipeLocked = false;
                     }
                     return false;
                 }
@@ -4049,10 +4088,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             imageIndexTextView.setBorderColor(mMediaIndicatorBackgroundColor);
 
             adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface,
-                    mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale,
-                    galleryImage -> {});
+                    mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale);
             recyclerView.setOnTouchListener((v, motionEvent) -> {
-                if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP || motionEvent.getActionMasked() == MotionEvent.ACTION_CANCEL) {
+                if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP) {
                     if (mActivity.mSliderPanel != null) {
                         mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(false);
                     }
@@ -4096,6 +4134,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 private long downTime;
                 private final int minTouchSlop = ViewConfiguration.get(mActivity).getScaledTouchSlop();
                 private final int longClickThreshold = ViewConfiguration.getLongPressTimeout();
+                private boolean longPressed;
 
                 @Override
                 public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
@@ -4107,12 +4146,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             downTime = System.currentTimeMillis();
                             break;
                         case MotionEvent.ACTION_MOVE:
-                            if(Math.abs(e.getRawX() - downX) > minTouchSlop || Math.abs(e.getRawY() - downY) > minTouchSlop) {
+                            if (Math.abs(e.getRawX() - downX) > minTouchSlop || Math.abs(e.getRawY() - downY) > minTouchSlop) {
                                 dragged = true;
                             }
-                            if (!dragged) {
+                            if (!dragged && !longPressed) {
                                 if (System.currentTimeMillis() - downTime >= longClickThreshold) {
                                     onLongClick();
+                                    longPressed = true;
                                 }
                             }
                             break;
@@ -4126,7 +4166,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             downX = 0;
                             downY = 0;
                             dragged = false;
-
+                            longPressed = false;
                     }
                     return false;
                 }
