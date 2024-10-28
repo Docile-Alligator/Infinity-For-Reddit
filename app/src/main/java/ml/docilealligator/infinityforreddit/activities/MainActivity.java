@@ -68,7 +68,7 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.thing.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
-import ml.docilealligator.infinityforreddit.PullNotificationWorker;
+import ml.docilealligator.infinityforreddit.worker.PullNotificationWorker;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
