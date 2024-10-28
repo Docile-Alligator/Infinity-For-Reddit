@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -2029,19 +2030,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
             });
 
-            itemView.setOnTouchListener((v, event) -> {
-                if (event.getActionMasked() == MotionEvent.ACTION_UP || event.getActionMasked() == MotionEvent.ACTION_CANCEL) {
-                    if (mFragment.isRecyclerViewItemSwipeable(this)) {
-                        mActivity.unlockSwipeRightToGoBack();
-                    }
-                } else {
-                    if (mFragment.isRecyclerViewItemSwipeable(this)) {
-                        mActivity.lockSwipeRightToGoBack();
-                    }
-                }
-                return false;
-            });
-
             upvoteButton.setOnClickListener(view -> {
                 int position = getBindingAdapterPosition();
                 if (position < 0) {
@@ -3366,30 +3354,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface,
                     mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale);
             galleryRecyclerView.setAdapter(adapter);
-            galleryRecyclerView.setOnTouchListener((v, motionEvent) -> {
-                if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP) {
-                    if (mActivity.mSliderPanel != null) {
-                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(false);
-                    }
-
-                    if (mActivity.mViewPager2 != null) {
-                        mActivity.mViewPager2.setUserInputEnabled(true);
-                    }
-                    mActivity.unlockSwipeRightToGoBack();
-                    swipeLocked = false;
-                } else {
-                    if (mActivity.mSliderPanel != null) {
-                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
-                    }
-                    if (mActivity.mViewPager2 != null) {
-                        mActivity.mViewPager2.setUserInputEnabled(false);
-                    }
-                    mActivity.lockSwipeRightToGoBack();
-                    swipeLocked = true;
-                }
-
-                return false;
-            });
             new PagerSnapHelper().attachToRecyclerView(galleryRecyclerView);
             galleryRecyclerView.setRecycledViewPool(mGalleryRecycledViewPool);
             LinearLayoutManagerBugFixed layoutManager = new LinearLayoutManagerBugFixed(mActivity, RecyclerView.HORIZONTAL, false);
@@ -3434,7 +3398,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             swipeLocked = true;
                             break;
                         case MotionEvent.ACTION_MOVE:
-                            if(Math.abs(e.getRawX() - downX) > minTouchSlop || Math.abs(e.getRawY() - downY) > minTouchSlop) {
+                            if (Math.abs(e.getRawX() - downX) > minTouchSlop || Math.abs(e.getRawY() - downY) > minTouchSlop) {
                                 dragged = true;
                             }
 
@@ -3455,7 +3419,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             swipeLocked = true;
                             break;
                         case MotionEvent.ACTION_UP:
-                            if (!dragged) {
+                        case MotionEvent.ACTION_CANCEL:
+                            if (e.getActionMasked() == MotionEvent.ACTION_UP && !dragged) {
                                 if (System.currentTimeMillis() - downTime < longClickThreshold) {
                                     int position = getBindingAdapterPosition();
                                     if (position >= 0) {
@@ -4089,27 +4054,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
             adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface,
                     mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale);
-            recyclerView.setOnTouchListener((v, motionEvent) -> {
-                if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP) {
-                    if (mActivity.mSliderPanel != null) {
-                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(false);
-                    }
-                    if (mActivity.mViewPager2 != null) {
-                        mActivity.mViewPager2.setUserInputEnabled(true);
-                    }
-                    mActivity.unlockSwipeRightToGoBack();
-                } else {
-                    if (mActivity.mSliderPanel != null) {
-                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
-                    }
-                    if (mActivity.mViewPager2 != null) {
-                        mActivity.mViewPager2.setUserInputEnabled(false);
-                    }
-                    mActivity.lockSwipeRightToGoBack();
-                }
-
-                return false;
-            });
             recyclerView.setAdapter(adapter);
             new PagerSnapHelper().attachToRecyclerView(recyclerView);
             recyclerView.setRecycledViewPool(mGalleryRecycledViewPool);
@@ -4144,6 +4088,14 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             downX = e.getRawX();
                             downY = e.getRawY();
                             downTime = System.currentTimeMillis();
+
+                            if (mActivity.mSliderPanel != null) {
+                                mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
+                            }
+                            if (mActivity.mViewPager2 != null) {
+                                mActivity.mViewPager2.setUserInputEnabled(false);
+                            }
+                            mActivity.lockSwipeRightToGoBack();
                             break;
                         case MotionEvent.ACTION_MOVE:
                             if (Math.abs(e.getRawX() - downX) > minTouchSlop || Math.abs(e.getRawY() - downY) > minTouchSlop) {
@@ -4155,18 +4107,35 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                     longPressed = true;
                                 }
                             }
+
+                            if (mActivity.mSliderPanel != null) {
+                                mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
+                            }
+                            if (mActivity.mViewPager2 != null) {
+                                mActivity.mViewPager2.setUserInputEnabled(false);
+                            }
+                            mActivity.lockSwipeRightToGoBack();
                             break;
                         case MotionEvent.ACTION_UP:
-                            if (!dragged) {
+                        case MotionEvent.ACTION_CANCEL:
+                            if (e.getActionMasked() == MotionEvent.ACTION_UP && !dragged) {
                                 if (System.currentTimeMillis() - downTime < longClickThreshold) {
                                     onClick();
                                 }
                             }
-                        case MotionEvent.ACTION_CANCEL:
                             downX = 0;
                             downY = 0;
                             dragged = false;
                             longPressed = false;
+
+                            if (mActivity.mSliderPanel != null) {
+                                mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(false);
+                            }
+
+                            if (mActivity.mViewPager2 != null) {
+                                mActivity.mViewPager2.setUserInputEnabled(true);
+                            }
+                            mActivity.unlockSwipeRightToGoBack();
                     }
                     return false;
                 }
