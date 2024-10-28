@@ -2,16 +2,20 @@ package ml.docilealligator.infinityforreddit.customviews;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import androidx.annotation.Nullable;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class MovableFloatingActionButton extends FloatingActionButton implements View.OnTouchListener {
@@ -28,6 +32,8 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
     @Nullable
     private SharedPreferences postDetailsSharedPreferences;
     private boolean portrait;
+    @Nullable
+    private SliderPanel sliderPanel;
 
     public MovableFloatingActionButton(Context context) {
         super(context);
@@ -46,6 +52,16 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
 
     private void init() {
         setOnTouchListener(this);
+        new Handler(Looper.getMainLooper()).post(() -> {
+            ViewParent parent = getParent();
+            while (parent != null) {
+                if (parent instanceof SliderPanel) {
+                    sliderPanel = (SliderPanel) parent;
+                    break;
+                }
+                parent = parent.getParent();
+            }
+        });
     }
 
     @Override
@@ -61,6 +77,10 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
             downRawY = motionEvent.getRawY();
             dX = view.getX() - downRawX;
             dY = view.getY() - downRawY;
+
+            if (sliderPanel != null) {
+                sliderPanel.lock();
+            }
 
             return true;
 
@@ -122,13 +142,19 @@ public class MovableFloatingActionButton extends FloatingActionButton implements
             float upDX = upRawX - downRawX;
             float upDY = upRawY - downRawY;
 
+            if (sliderPanel != null) {
+                sliderPanel.unlock();
+            }
+
             if (Math.abs(upDX) < CLICK_DRAG_TOLERANCE && Math.abs(upDY) < CLICK_DRAG_TOLERANCE) {
                 return System.currentTimeMillis() - downTime >= 300 ? performLongClick() : performClick();
             } else {
-
                 return true;
             }
         } else {
+            if (sliderPanel != null) {
+                sliderPanel.unlock();
+            }
             return super.onTouchEvent(motionEvent);
         }
     }
