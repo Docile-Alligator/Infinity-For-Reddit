@@ -269,7 +269,7 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
 
         if (nColumns == 1 && mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SWIPE_ACTION, false)) {
             swipeActionEnabled = true;
-            touchHelper.attachToRecyclerView(binding.recyclerViewHistoryPostFragment);
+            touchHelper.attachToRecyclerView(binding.recyclerViewHistoryPostFragment, 1);
         }
         binding.recyclerViewHistoryPostFragment.setAdapter(mAdapter);
         binding.recyclerViewHistoryPostFragment.setCacheManager(mAdapter);

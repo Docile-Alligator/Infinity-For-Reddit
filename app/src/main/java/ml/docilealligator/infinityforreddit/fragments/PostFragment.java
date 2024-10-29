@@ -817,7 +817,7 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
 
         if (nColumns == 1 && mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SWIPE_ACTION, false)) {
             swipeActionEnabled = true;
-            touchHelper.attachToRecyclerView(binding.recyclerViewPostFragment);
+            touchHelper.attachToRecyclerView(binding.recyclerViewPostFragment, 1);
         }
         binding.recyclerViewPostFragment.setAdapter(mAdapter);
         binding.recyclerViewPostFragment.setCacheManager(mAdapter);

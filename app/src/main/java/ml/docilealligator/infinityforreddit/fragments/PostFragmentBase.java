@@ -56,6 +56,7 @@ import ml.docilealligator.infinityforreddit.adapters.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.AdjustableTouchSlopItemTouchHelper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.events.ChangeAutoplayNsfwVideosEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeCompactLayoutToolbarHiddenByDefaultEvent;
@@ -143,7 +144,7 @@ public abstract class PostFragmentBase extends Fragment {
     protected float swipeActionThreshold;
     protected int swipeLeftAction;
     protected int swipeRightAction;
-    protected ItemTouchHelper touchHelper;
+    protected AdjustableTouchSlopItemTouchHelper touchHelper;
     private boolean shouldSwipeBack;
     protected final Map<String, String> subredditOrUserIcons = new HashMap<>();
 
@@ -216,7 +217,7 @@ public abstract class PostFragmentBase extends Fragment {
         swipeLeftAction = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_LEFT_ACTION, "0"));
         initializeSwipeActionDrawable();
 
-        touchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+        touchHelper = new AdjustableTouchSlopItemTouchHelper(new AdjustableTouchSlopItemTouchHelper.Callback() {
             boolean exceedThreshold = false;
 
             @Override
@@ -767,9 +768,9 @@ public abstract class PostFragmentBase extends Fragment {
         if (getNColumns(getResources()) == 1 && touchHelper != null) {
             swipeActionEnabled = changeEnableSwipeActionSwitchEvent.enableSwipeAction;
             if (changeEnableSwipeActionSwitchEvent.enableSwipeAction) {
-                touchHelper.attachToRecyclerView(getPostRecyclerView());
+                touchHelper.attachToRecyclerView(getPostRecyclerView(), 1);
             } else {
-                touchHelper.attachToRecyclerView(null);
+                touchHelper.attachToRecyclerView(null, 1);
             }
         }
     }

@@ -85,6 +85,7 @@ import ml.docilealligator.infinityforreddit.comment.ParseComment;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
 import ml.docilealligator.infinityforreddit.commentfilter.FetchCommentFilter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.AdjustableTouchSlopItemTouchHelper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.FragmentViewPostDetailBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWBlurEvent;
@@ -229,7 +230,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private int swipeLeftAction;
     private int swipeRightAction;
     private float swipeActionThreshold;
-    private ItemTouchHelper touchHelper;
+    private AdjustableTouchSlopItemTouchHelper touchHelper;
     private boolean shouldSwipeBack;
     private int scrollPosition;
     private FragmentViewPostDetailBinding binding;
@@ -411,7 +412,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         swipeRightAction = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_RIGHT_ACTION, "1"));
         swipeLeftAction = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_LEFT_ACTION, "0"));
         initializeSwipeActionDrawable();
-        touchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+        touchHelper = new AdjustableTouchSlopItemTouchHelper(new AdjustableTouchSlopItemTouchHelper.Callback() {
             boolean exceedThreshold = false;
 
             @Override
@@ -513,7 +514,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         });
 
         if (enableSwipeAction) {
-            touchHelper.attachToRecyclerView((mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView));
+            touchHelper.attachToRecyclerView((mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView), 5);
         }
 
         binding.swipeRefreshLayoutViewPostDetailFragment.setOnRefreshListener(() -> refresh(true, true));
