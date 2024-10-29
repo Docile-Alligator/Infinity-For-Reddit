@@ -245,15 +245,15 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         });
 
         if (enableSwipeAction) {
-            touchHelper.attachToRecyclerView(binding.recyclerViewCommentsListingFragment, 1);
+            touchHelper.attachToRecyclerView(binding.recyclerViewCommentsListingFragment, 5);
         }
 
-        new Handler().postDelayed(() -> bindView(resources), 0);
+        new Handler().postDelayed(this::bindView, 0);
 
         return binding.getRoot();
     }
 
-    private void bindView(Resources resources) {
+    private void bindView() {
         if (mActivity != null && !mActivity.isFinishing() && !mActivity.isDestroyed()) {
             mLinearLayoutManager = new LinearLayoutManagerBugFixed(mActivity);
             binding.recyclerViewCommentsListingFragment.setLayoutManager(mLinearLayoutManager);
