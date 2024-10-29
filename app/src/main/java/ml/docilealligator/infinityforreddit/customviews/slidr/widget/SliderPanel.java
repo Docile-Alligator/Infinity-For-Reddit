@@ -91,7 +91,6 @@ public class SliderPanel extends FrameLayout {
         return true;
     }
 
-
     @Override
     public void computeScroll() {
         super.computeScroll();
@@ -698,7 +697,7 @@ public class SliderPanel extends FrameLayout {
                 edgePosition = ViewDragHelper.EDGE_LEFT;
         }
 
-        dragHelper = ViewDragHelper.create(this, config.getSensitivity(), callback);
+        dragHelper = ViewDragHelper.create(this, 0.1f, callback);
         dragHelper.setMinVelocity(minVel);
         dragHelper.setEdgeTrackingEnabled(edgePosition);
 
