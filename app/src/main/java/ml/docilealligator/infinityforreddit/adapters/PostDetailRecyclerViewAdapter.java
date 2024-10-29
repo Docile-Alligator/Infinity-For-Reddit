@@ -86,6 +86,7 @@ import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareLinkBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -1256,6 +1257,18 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             this.saveButton = saveButton;
             this.shareButton = shareButton;
 
+            itemView.setOnLongClickListener(v -> {
+                PostOptionsBottomSheetFragment postOptionsBottomSheetFragment;
+                if (mPost.getPostType() == Post.GALLERY_TYPE && this instanceof PostDetailGalleryViewHolder) {
+                    postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(mPost,
+                            ((LinearLayoutManagerBugFixed) ((PostDetailGalleryViewHolder) this).binding.galleryRecyclerViewItemPostDetailGallery.getLayoutManager()).findFirstVisibleItemPosition());
+                } else {
+                    postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(mPost);
+                }
+                postOptionsBottomSheetFragment.show(mActivity.getSupportFragmentManager(), postOptionsBottomSheetFragment.getTag());
+                return true;
+            });
+
             iconGifImageView.setOnClickListener(view -> subredditTextView.performClick());
 
             subredditTextView.setOnClickListener(view -> {
@@ -2097,6 +2110,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             binding.imageViewItemPostDetailVideoAndGifPreview.setOnClickListener(view -> {
                 openMedia(mPost);
             });
+
+            binding.imageViewItemPostDetailVideoAndGifPreview.setOnLongClickListener(v -> {
+                itemView.performLongClick();
+                return true;
+            });
         }
     }
 
@@ -2134,6 +2152,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
             binding.imageViewItemPostDetailImageAndGifAutoplay.setOnClickListener(view -> {
                 openMedia(mPost);
+            });
+
+            binding.imageViewItemPostDetailImageAndGifAutoplay.setOnLongClickListener(view -> {
+                itemView.performLongClick();
+                return true;
             });
         }
     }
@@ -2181,6 +2204,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                 mActivity.startActivity(intent);
             });
+
+            binding.imageViewItemPostDetailLink.setOnLongClickListener(view -> {
+                itemView.performLongClick();
+                return true;
+            });
         }
     }
 
@@ -2222,6 +2250,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
             binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setOnClickListener(view -> {
                 openMedia(mPost);
+            });
+
+            binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setOnLongClickListener(view -> {
+                itemView.performLongClick();
+                return true;
             });
         }
     }

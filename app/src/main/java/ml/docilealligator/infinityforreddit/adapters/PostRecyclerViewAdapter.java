@@ -609,7 +609,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
             if (mHandleReadPost && post.isRead()) {
                 ((PostViewHolder) holder).setItemViewBackgroundColor(true);
-                ((PostBaseViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
+                ((PostViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
             }
 
             if (mDisplaySubredditName) {
@@ -3774,6 +3774,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         params.height = 0;
                         bottomConstraintLayout.setLayoutParams(params);
                     }
+                } else {
+                    Post post = getItem(getBindingAdapterPosition());
+                    if (post == null) {
+                        return false;
+                    }
+
+                    PostOptionsBottomSheetFragment postOptionsBottomSheetFragment;
+                    postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(post);
+                    postOptionsBottomSheetFragment.show(mActivity.getSupportFragmentManager(), postOptionsBottomSheetFragment.getTag());
                 }
                 return true;
             });
