@@ -59,10 +59,12 @@ public class ParsePost {
                 }
             }
 
-            Set<String> readPostsIds = readPostsList.getReadPostsIdsByIds(newPostsIds);
-            for (Post post: newPosts) {
-                if (readPostsIds.contains(post.getId())) {
-                    post.markAsRead();
+            if (readPostsList != null) {
+                Set<String> readPostsIds = readPostsList.getReadPostsIdsByIds(newPostsIds);
+                for (Post post: newPosts) {
+                    if (readPostsIds.contains(post.getId())) {
+                        post.markAsRead();
+                    }
                 }
             }
 
