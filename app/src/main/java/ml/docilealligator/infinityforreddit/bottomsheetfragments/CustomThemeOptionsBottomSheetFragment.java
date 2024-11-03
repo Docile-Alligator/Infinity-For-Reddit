@@ -49,12 +49,22 @@ public class CustomThemeOptionsBottomSheetFragment extends LandscapeExpandedRoun
         themeName = getArguments().getString(EXTRA_THEME_NAME);
         onlineCustomThemeMetadata = getArguments().getParcelable(EXTRA_ONLINE_CUSTOM_THEME_METADATA);
 
-        binding.themeNameTextViewCustomThemeOptionsBottomSheetFragment.setText(themeName);
+        if (onlineCustomThemeMetadata != null && !onlineCustomThemeMetadata.username.equals(activity.accountName)) {
+            binding.editThemeTextViewCustomThemeOptionsBottomSheetFragment.setVisibility(View.GONE);
+            binding.changeThemeNameTextViewCustomThemeOptionsBottomSheetFragment.setVisibility(View.GONE);
+        } else {
+            binding.editThemeTextViewCustomThemeOptionsBottomSheetFragment.setOnClickListener(view -> {
+                ((CustomThemeOptionsBottomSheetFragmentListener) activity).editTheme(themeName, onlineCustomThemeMetadata, getArguments().getInt(EXTRA_INDEX_IN_THEME_LIST, -1));
+                dismiss();
+            });
 
-        binding.editThemeTextViewCustomThemeOptionsBottomSheetFragment.setOnClickListener(view -> {
-            ((CustomThemeOptionsBottomSheetFragmentListener) activity).editTheme(themeName, onlineCustomThemeMetadata, getArguments().getInt(EXTRA_INDEX_IN_THEME_LIST, -1));
-            dismiss();
-        });
+            binding.changeThemeNameTextViewCustomThemeOptionsBottomSheetFragment.setOnClickListener(view -> {
+                ((CustomThemeOptionsBottomSheetFragmentListener) activity).changeName(themeName);
+                dismiss();
+            });
+        }
+
+        binding.themeNameTextViewCustomThemeOptionsBottomSheetFragment.setText(themeName);
 
         binding.shareThemeTextViewCustomThemeOptionsBottomSheetFragment.setOnClickListener(view -> {
             if (onlineCustomThemeMetadata != null) {
@@ -62,11 +72,6 @@ public class CustomThemeOptionsBottomSheetFragment extends LandscapeExpandedRoun
             } else {
                 ((CustomThemeOptionsBottomSheetFragmentListener) activity).shareTheme(themeName);
             }
-            dismiss();
-        });
-
-        binding.changeThemeNameTextViewCustomThemeOptionsBottomSheetFragment.setOnClickListener(view -> {
-            ((CustomThemeOptionsBottomSheetFragmentListener) activity).changeName(themeName);
             dismiss();
         });
 
