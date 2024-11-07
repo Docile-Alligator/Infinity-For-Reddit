@@ -25,7 +25,7 @@ public class APIUtils {
     public static final String PUSHSHIFT_API_BASE_URI = "https://api.pushshift.io/";
     public static final String REVEDDIT_API_BASE_URI = "https://api.reveddit.com/";
     public static final String STREAMABLE_API_BASE_URI = "https://api.streamable.com";
-    public static final String ONLINE_CUSTOM_THEMES_API_BASE_URI = "http://127.0.0.1";
+    public static final String SERVER_API_BASE_URI = "http://127.0.0.1";
 
     public static final String CLIENT_ID_KEY = "client_id";
     public static final String CLIENT_SECRET_KEY = "client_secret";
