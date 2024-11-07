@@ -22,8 +22,6 @@ public class APIUtils {
     public static final String API_UPLOAD_VIDEO_URI = "https://reddit-uploaded-video.s3-accelerate.amazonaws.com";
     public static final String REDGIFS_API_BASE_URI = "https://api.redgifs.com";
     public static final String IMGUR_API_BASE_URI = "https://api.imgur.com/3/";
-    public static final String PUSHSHIFT_API_BASE_URI = "https://api.pushshift.io/";
-    public static final String REVEDDIT_API_BASE_URI = "https://api.reveddit.com/";
     public static final String STREAMABLE_API_BASE_URI = "https://api.streamable.com";
     public static final String SERVER_API_BASE_URI = "http://127.0.0.1";
 
