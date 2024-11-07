@@ -9,12 +9,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.account.Account;
-import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.apis.ServerAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import okhttp3.Authenticator;
@@ -24,22 +22,21 @@ import okhttp3.Response;
 import okhttp3.Route;
 import retrofit2.Call;
 import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class AccessTokenAuthenticator implements Authenticator {
-    private final Retrofit mRetrofit;
+public class ServerAccessTokenAuthenticator implements Authenticator {
     private final RedditDataRoomDatabase mRedditDataRoomDatabase;
     private final SharedPreferences mCurrentAccountSharedPreferences;
 
-    public AccessTokenAuthenticator(Retrofit retrofit, RedditDataRoomDatabase redditDataRoomDatabase,
-                                    SharedPreferences currentAccountSharedPreferences) {
-        mRetrofit = retrofit;
+    public ServerAccessTokenAuthenticator(RedditDataRoomDatabase redditDataRoomDatabase,
+                                          SharedPreferences currentAccountSharedPreferences) {
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mCurrentAccountSharedPreferences = currentAccountSharedPreferences;
     }
 
     @Nullable
     @Override
-    public Request authenticate(Route route, @NonNull Response response) {
+    public Request authenticate(@Nullable Route route, @NonNull Response response) throws IOException {
         if (response.code() == 401) {
             String accessTokenHeader = response.request().header(APIUtils.AUTHORIZATION_KEY);
             if (accessTokenHeader == null) {
@@ -52,10 +49,11 @@ public class AccessTokenAuthenticator implements Authenticator {
                 if (account == null) {
                     return null;
                 }
+                // TODO server access token
                 String accessTokenFromDatabase = account.getAccessToken();
                 if (accessToken.equals(accessTokenFromDatabase)) {
                     String newAccessToken = refreshAccessToken(account);
-                    if (!newAccessToken.equals("")) {
+                    if (!newAccessToken.isEmpty()) {
                         return response.request().newBuilder().headers(Headers.of(APIUtils.getOAuthHeader(newAccessToken))).build();
                     } else {
                         return null;
@@ -69,27 +67,22 @@ public class AccessTokenAuthenticator implements Authenticator {
     }
 
     private String refreshAccessToken(Account account) {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(APIUtils.SERVER_API_BASE_URI)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+
+        // TODO server refresh token
         String refreshToken = mRedditDataRoomDatabase.accountDao().getCurrentAccount().getRefreshToken();
 
-        RedditAPI api = mRetrofit.create(RedditAPI.class);
-
-        Map<String, String> params = new HashMap<>();
-        params.put(APIUtils.GRANT_TYPE_KEY, APIUtils.GRANT_TYPE_REFRESH_TOKEN);
-        params.put(APIUtils.REFRESH_TOKEN_KEY, refreshToken);
-
-        Call<String> accessTokenCall = api.getAccessToken(APIUtils.getHttpBasicAuthHeader(), params);
+        Call<String> accessTokenCall = retrofit.create(ServerAPI.class).refreshAccessToken(account.getAccountName(), refreshToken);
         try {
             retrofit2.Response<String> response = accessTokenCall.execute();
             if (response.isSuccessful() && response.body() != null) {
-                JSONObject jsonObject = new JSONObject(response.body());
-                String newAccessToken = jsonObject.getString(APIUtils.ACCESS_TOKEN_KEY);
-                String newRefreshToken = jsonObject.has(APIUtils.REFRESH_TOKEN_KEY) ? jsonObject.getString(APIUtils.REFRESH_TOKEN_KEY) : null;
-                if (newRefreshToken == null) {
-                    mRedditDataRoomDatabase.accountDao().updateAccessToken(account.getAccountName(), newAccessToken);
-                } else {
-                    mRedditDataRoomDatabase.accountDao().updateAccessTokenAndRefreshToken(account.getAccountName(), newAccessToken, newRefreshToken);
-                }
+                String newAccessToken = new JSONObject(response.body()).getString(APIUtils.ACCESS_TOKEN_KEY);
+                mRedditDataRoomDatabase.accountDao().updateAccessToken(account.getAccountName(), newAccessToken);
                 if (mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT).equals(account.getAccountName())) {
+                    // TODO server access token
                     mCurrentAccountSharedPreferences.edit().putString(SharedPreferencesUtils.ACCESS_TOKEN, newAccessToken).apply();
                 }
 

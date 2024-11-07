@@ -980,7 +980,9 @@
     <string name="save_theme_options_message">You uploaded this theme so you can make changes.</string>
     <string name="save_locally">Save locally</string>
     <string name="save_online">Save online</string>
+    <string name="save_online_anonymous">Save online (anonymously)</string>
     <string name="save_locally_and_online">Save both locally and online</string>
+    <string name="save_locally_and_online_anonymous">Save both locally and online (anonymously)</string>
     <string name="theme_saved_locally">Theme saved locally</string>
     <string name="theme_saved_online">Theme saved online</string>
     <string name="upload_theme_failed">Failed to upload this theme. Try again later.</string>

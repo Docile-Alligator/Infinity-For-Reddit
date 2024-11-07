@@ -131,12 +131,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private static final String SCROLL_POSITION_STATE = "SPS";
 
     @Inject
-    @Named("pushshift")
-    Retrofit pushshiftRetrofit;
-    @Inject
-    @Named("reveddit")
-    Retrofit revedditRetrofit;
-    @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
     @Inject

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.apis.OnlineCustomThemeAPI;
+import ml.docilealligator.infinityforreddit.apis.ServerAPI;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import retrofit2.HttpException;
 import retrofit2.Response;
@@ -27,13 +27,13 @@ import retrofit2.Retrofit;
 
 public class OnlineCustomThemePagingSource extends ListenableFuturePagingSource<String, OnlineCustomThemeMetadata> {
     private final Executor executor;
-    private final OnlineCustomThemeAPI api;
+    private final ServerAPI api;
     private final RedditDataRoomDatabase redditDataRoomDatabase;
 
     public OnlineCustomThemePagingSource(Executor executor, Retrofit onlineCustomThemesRetrofit, RedditDataRoomDatabase redditDataRoomDatabase) {
         this.executor = executor;
         this.redditDataRoomDatabase = redditDataRoomDatabase;
-        api = onlineCustomThemesRetrofit.create(OnlineCustomThemeAPI.class);
+        api = onlineCustomThemesRetrofit.create(ServerAPI.class);
     }
 
     @Nullable

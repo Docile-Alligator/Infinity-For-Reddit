@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ml.docilealligator.infinityforreddit.BuildConfig;
+import ml.docilealligator.infinityforreddit.account.Account;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -49,6 +50,7 @@ public class APIUtils {
     public static final String AUTHORIZATION_BASE = "bearer ";
     public static final String USER_AGENT_KEY = "User-Agent";
     public static final String USER_AGENT = "android:ml.docilealligator.infinityforreddit:" + BuildConfig.VERSION_NAME + " (by /u/Hostilenemy)";
+    public static final String USERNAME_KEY = "username";
 
     public static final String GRANT_TYPE_KEY = "grant_type";
     public static final String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";
@@ -126,6 +128,17 @@ public class APIUtils {
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.AUTHORIZATION_KEY, APIUtils.AUTHORIZATION_BASE + accessToken);
         params.put(APIUtils.USER_AGENT_KEY, APIUtils.USER_AGENT);
+        return params;
+    }
+
+    public static Map<String, String> getServerHeader(String serverAccessToken, String accountName, boolean anonymous) {
+        if (accountName.equals(Account.ANONYMOUS_ACCOUNT) || anonymous) {
+            return new HashMap<>();
+        }
+
+        Map<String, String> params = new HashMap<>();
+        params.put(APIUtils.AUTHORIZATION_KEY, APIUtils.AUTHORIZATION_BASE + serverAccessToken);
+        params.put(APIUtils.USERNAME_KEY, accountName);
         return params;
     }
 
