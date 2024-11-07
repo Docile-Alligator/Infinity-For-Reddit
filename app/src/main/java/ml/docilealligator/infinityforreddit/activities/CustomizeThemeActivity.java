@@ -29,7 +29,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.adapters.CustomizeThemeRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.apis.OnlineCustomThemeAPI;
+import ml.docilealligator.infinityforreddit.apis.ServerAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCustomTheme;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertCustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
@@ -176,7 +176,7 @@ public class CustomizeThemeActivity extends BaseActivity {
                 } else {
                     if (onlineCustomThemeMetadata != null) {
                         binding.progressBarCustomizeThemeActivity.setVisibility(View.VISIBLE);
-                        onlineCustomThemesRetrofit.create(OnlineCustomThemeAPI.class)
+                        onlineCustomThemesRetrofit.create(ServerAPI.class)
                                 .getCustomTheme(onlineCustomThemeMetadata.name, onlineCustomThemeMetadata.username)
                                 .enqueue(new Callback<>() {
                                     @Override
