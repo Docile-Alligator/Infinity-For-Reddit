@@ -214,6 +214,10 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         } else {
             mViewPager2 = binding.viewPager2ViewPostDetailActivity;
         }
+
+        sectionsPagerAdapter = new SectionsPagerAdapter(this);
+        binding.viewPager2ViewPostDetailActivity.setAdapter(sectionsPagerAdapter);
+
         postFragmentId = getIntent().getLongExtra(EXTRA_POST_FRAGMENT_ID, -1);
         if (swipeBetweenPosts && posts == null && postFragmentId > 0) {
             EventBus.getDefault().post(new NeedForPostListFromPostFragmentEvent(postFragmentId));
@@ -282,9 +286,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                 binding.fabViewPostDetailActivity.setCoordinates();
             }
         });
-
-        sectionsPagerAdapter = new SectionsPagerAdapter(this);
-        binding.viewPager2ViewPostDetailActivity.setAdapter(sectionsPagerAdapter);
 
         checkNewAccountAndBindView(savedInstanceState);
     }
