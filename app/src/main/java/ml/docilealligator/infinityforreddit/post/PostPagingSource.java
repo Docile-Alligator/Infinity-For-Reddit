@@ -221,7 +221,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
                 }
             }
         } else {
-            return new LoadResult.Error<>(new Exception("Response failed"));
+            return new LoadResult.Error<>(new Exception("Error getting response"));
         }
     }
 

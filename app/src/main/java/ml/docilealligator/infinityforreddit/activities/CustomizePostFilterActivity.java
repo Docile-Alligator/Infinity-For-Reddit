@@ -65,9 +65,6 @@ public class CustomizePostFilterActivity extends BaseActivity {
     @Named("current_account")
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
-    @Named("current_account")
-    SharedPreferences currentAccountSharedPreferences;
-    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
