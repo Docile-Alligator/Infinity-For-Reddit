@@ -1,5 +1,9 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-parcelize'
+    id 'kotlin-kapt'
+    id 'com.google.devtools.ksp'
 }
 
 android {
@@ -39,6 +43,18 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
+
+    kotlinOptions {
+        jvmTarget = '11'
+    }
+
+    kapt {
+        correctErrorTypes = true
+    }
+
     lint {
         disable 'MissingTranslation'
     }
@@ -52,6 +68,7 @@ android {
     buildFeatures {
         buildConfig = true
         viewBinding = true
+        compose = true
     }
     namespace 'ml.docilealligator.infinityforreddit'
 }
@@ -63,6 +80,7 @@ dependencies {
     implementation 'androidx.browser:browser:1.8.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.activity:activity:1.9.0'
     def lifecycleVersion = "2.7.0"
@@ -75,11 +93,13 @@ dependencies {
     def pagingVersion = '3.3.0'
     implementation "androidx.paging:paging-runtime:$pagingVersion"
     implementation "androidx.paging:paging-guava:$pagingVersion"
+    implementation "androidx.paging:paging-compose:3.3.4"
     implementation 'androidx.preference:preference:1.2.1'
     implementation 'androidx.recyclerview:recyclerview:1.3.2'
     def roomVersion = "2.6.1"
     implementation "androidx.room:room-runtime:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-guava:$roomVersion"
     implementation 'androidx.viewpager2:viewpager2:1.1.0'
     implementation 'androidx.work:work-runtime:2.9.0'
@@ -108,6 +128,7 @@ dependencies {
     def daggerVersion = '2.51.1'
     implementation "com.google.dagger:dagger:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    ksp "com.google.dagger:dagger-compiler:$daggerVersion"
 
     // Binding
     compileOnly 'com.android.databinding:viewbinding:8.5.1'
@@ -116,6 +137,7 @@ dependencies {
     def eventbusVersion = "3.3.1"
     implementation "org.greenrobot:eventbus:$eventbusVersion"
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:$eventbusVersion"
+    kapt "org.greenrobot:eventbus-annotation-processor:$eventbusVersion"
 
     // TransactionTooLargeException avoidance
     implementation 'com.github.livefront:bridge:v2.0.2'
@@ -125,6 +147,7 @@ dependencies {
     def stateVersion = "1.4.1"
     implementation "com.evernote:android-state:$stateVersion"
     annotationProcessor "com.evernote:android-state-processor:$stateVersion"
+    kapt "com.evernote:android-state-processor:$stateVersion"
 
     // Object to JSON
     // NOTE: Replace with Squareup's Moshi?
@@ -146,6 +169,7 @@ dependencies {
     def glideVersion = "4.16.0"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+    ksp "com.github.bumptech.glide:compiler:$glideVersion"
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.santalu:aspect-ratio-imageview:1.0.9'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.29'
@@ -193,6 +217,32 @@ dependencies {
 
     implementation 'com.giphy.sdk:ui:2.3.15'
 
+    // Compose
+    def composeBom = platform('androidx.compose:compose-bom:2024.10.01')
+    implementation composeBom
+    androidTestImplementation composeBom
+
+    // Choose one of the following:
+    // Material Design 3
+    implementation 'androidx.compose.material3:material3'
+    implementation("androidx.compose.material3.adaptive:adaptive")
+    implementation("androidx.compose.material3.adaptive:adaptive-layout")
+    implementation("androidx.compose.material3.adaptive:adaptive-navigation")
+
+    // Android Studio Preview support
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+
+    // UI Tests
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
+    debugImplementation 'androidx.compose.ui:ui-test-manifest'
+
+    // Optional - Integration with activities
+    implementation 'androidx.activity:activity-compose:1.9.3'
+    // Optional - Integration with ViewModels
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7'
+    // Optional - Integration with LiveData
+    implementation 'androidx.compose.runtime:runtime-livedata'
 
 /**** Builds and flavors ****/
     // debugImplementation because LeakCanary should only run in debug builds.

@@ -197,6 +197,11 @@ public class JSONUtils {
     public static final String VARIANTS_KEY = "variants";
     public static final String PAGE_KEY = "page";
     public static final String SEND_REPLIES_KEY = "send_replies";
+    public static final String CONVERSATIONS_KEY = "conversations";
+    public static final String VIEWER_ID_KEY = "viewerId";
+    public static final String CONVERSATION_IDS_KEY = "conversationIds";
+    public static final String OBJ_IDS_KEY = "objIds";
+    public static final String MESSAGES_KEY = "messages";
 
     @Nullable
     public static Map<String, MediaMetadata> parseMediaMetadata(JSONObject data) {

@@ -316,6 +316,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         }*/
 
         initializeNotificationAndBindView();
+
+        Intent intent = new Intent(this, ModmailActivity.class);
+        startActivity(intent);
     }
 
     @Override
