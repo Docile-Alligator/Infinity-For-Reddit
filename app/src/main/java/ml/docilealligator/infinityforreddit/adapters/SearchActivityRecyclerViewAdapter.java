@@ -22,12 +22,13 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private final int filledCardViewBackgroundColor;
     private final int primaryTextColor;
     private final int secondaryTextColor;
+    private final int primaryIconColor;
     private final int subredditTextColor;
     private final int userTextColor;
     private final ItemOnClickListener itemOnClickListener;
 
     public interface ItemOnClickListener {
-        void onClick(RecentSearchQuery recentSearchQuery);
+        void onClick(RecentSearchQuery recentSearchQuery, boolean searchImmediately);
         void onDelete(RecentSearchQuery recentSearchQuery);
     }
 
@@ -37,6 +38,7 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         this.filledCardViewBackgroundColor = customThemeWrapper.getFilledCardViewBackgroundColor();
         this.primaryTextColor = customThemeWrapper.getPrimaryTextColor();
         this.secondaryTextColor = customThemeWrapper.getSecondaryTextColor();
+        this.primaryIconColor = customThemeWrapper.getPrimaryIconColor();
         this.subredditTextColor = customThemeWrapper.getSubreddit();
         this.userTextColor = customThemeWrapper.getUsername();
         this.itemOnClickListener = itemOnClickListener;
@@ -122,15 +124,25 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 binding.recentSearchQueryTextViewItemRecentSearchQuery.setTypeface(activity.typeface);
             }
 
+            binding.selectQueryImageViewItemRecentSearchQuery.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+
             itemView.setOnClickListener(view -> {
                 if (recentSearchQueries != null && !recentSearchQueries.isEmpty()) {
-                    itemOnClickListener.onClick(recentSearchQueries.get(getBindingAdapterPosition()));
+                    itemOnClickListener.onClick(recentSearchQueries.get(getBindingAdapterPosition()), true);
                 }
             });
 
             itemView.setOnLongClickListener(view -> {
-                itemOnClickListener.onDelete(recentSearchQueries.get(getBindingAdapterPosition()));
+                if (recentSearchQueries != null && !recentSearchQueries.isEmpty()) {
+                    itemOnClickListener.onDelete(recentSearchQueries.get(getBindingAdapterPosition()));
+                }
                 return true;
+            });
+
+            binding.selectQueryImageViewItemRecentSearchQuery.setOnClickListener(view -> {
+                if (recentSearchQueries != null && !recentSearchQueries.isEmpty()) {
+                    itemOnClickListener.onClick(recentSearchQueries.get(getBindingAdapterPosition()), false);
+                }
             });
         }
     }

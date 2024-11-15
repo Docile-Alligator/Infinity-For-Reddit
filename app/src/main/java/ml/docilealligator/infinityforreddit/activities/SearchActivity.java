@@ -350,14 +350,19 @@ public class SearchActivity extends BaseActivity {
         if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             adapter = new SearchActivityRecyclerViewAdapter(this, mCustomThemeWrapper, new SearchActivityRecyclerViewAdapter.ItemOnClickListener() {
                 @Override
-                public void onClick(RecentSearchQuery recentSearchQuery) {
-                    searchInSubredditOrUserName = recentSearchQuery.getSearchInSubredditOrUserName();
-                    searchInMultiReddit = MultiReddit.getDummyMultiReddit(recentSearchQuery.getMultiRedditPath());
-                    if (searchInMultiReddit != null && recentSearchQuery.getMultiRedditDisplayName() != null) {
-                        searchInMultiReddit.setDisplayName(recentSearchQuery.getMultiRedditDisplayName());
+                public void onClick(RecentSearchQuery recentSearchQuery, boolean searchImmediately) {
+                    if (searchImmediately) {
+                        searchInSubredditOrUserName = recentSearchQuery.getSearchInSubredditOrUserName();
+                        searchInMultiReddit = MultiReddit.getDummyMultiReddit(recentSearchQuery.getMultiRedditPath());
+                        if (searchInMultiReddit != null && recentSearchQuery.getMultiRedditDisplayName() != null) {
+                            searchInMultiReddit.setDisplayName(recentSearchQuery.getMultiRedditDisplayName());
+                        }
+                        searchInThingType = recentSearchQuery.getSearchInThingType();
+                        search(recentSearchQuery.getSearchQuery());
+                    } else {
+                        binding.searchEditTextSearchActivity.setText(recentSearchQuery.getSearchQuery());
+                        binding.searchEditTextSearchActivity.setSelection(recentSearchQuery.getSearchQuery().length());
                     }
-                    searchInThingType = recentSearchQuery.getSearchInThingType();
-                    search(recentSearchQuery.getSearchQuery());
                 }
 
                 @Override
