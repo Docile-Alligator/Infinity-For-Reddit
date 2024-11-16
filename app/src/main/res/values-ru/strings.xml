@@ -375,8 +375,6 @@
     <string name="settings_font_size_title">"Размер шрифта"</string>
     <string name="settings_title_font_size_title">"Размер шрифта заголовка"</string>
     <string name="settings_content_font_size_title">"Размер шрифта содержания"</string>
-    <string name="settings_enable_nsfw_title">"Включить NSFW"</string>
-    <string name="settings_blur_nsfw_title">"Размытие изображений NSFW"</string>
     <string name="settings_blur_spoiler_title">"Размывать изображения под спойлером"</string>
     <string name="settings_about_master_title">"Обо всём"</string>
     <string name="settings_acknowledgement_master_title">"Признательность"</string>
@@ -791,7 +789,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_number_of_columns_in_post_feed_title">"Количество столбцов в ленте постов"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Портрет"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Альбом"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW и спойлеры"</string>
     <string name="settings_delete_all_legacy_settings_title">"Удалить все устаревшие настройки"</string>
     <string name="restart_app_see_changes">"Перезапустите приложение, чтобы увидеть изменения."</string>
     <string name="settings_tab_count">"Количество вкладок"</string>
@@ -928,7 +925,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_all_read_posts_success">"Все прочтённые посты успешно удалены"</string>
     <string name="hide_read_posts">"Скрыть прочтённые посты"</string>
     <string name="filter_posts">"Фильтр постов"</string>
-    <string name="only_nsfw">"Только NSFW"</string>
     <string name="only_spoiler">"Только спойлер"</string>
     <string name="title_excludes_strings_hint">"Заголовок: исключая ключевые слова (key1,key2)"</string>
     <string name="title_excludes_regex_hint">"Заголовок: исключая регулярное выражение"</string>
@@ -975,7 +971,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="action_share_link">"Поделиться ссылкой"</string>
     <string name="action_copy_link">"Скопировать ссылку"</string>
     <string name="action_add_to_post_filter">"Добавить пост в фильтр"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"NSFW-посты в NSFW-сабреддитах без размытия"</string>
     <string name="settings_show_avatar_on_the_right">"Показывать аватар справа"</string>
     <string name="settings_backup_settings_title">"Резервное копирование настроек"</string>
     <string name="settings_restore_settings_title">"Восстановить настройки"</string>
@@ -1045,7 +1040,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_hide_post_flair">"Скрыть флейр поста"</string>
     <string name="settings_crash_reports_title">"Отчёты о сбоях"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Опасные"</string>
-    <string name="settings_disable_nsfw_forever_title">"Отключить NSFW навсегда"</string>
     <string name="settings_show_only_one_comment_level_indicator">"Показывать только один индикатор уровня комментария"</string>
     <string name="save_comment">"Сохранить"</string>
     <string name="unsave_comment">"Удалить"</string>
@@ -1054,11 +1048,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Отчёты о сбоях удалены"</string>
-
-    <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"После включения NSFW будет навсегда отключено, независимо от того, включён параметр NSFW или нет. И эта функция необратима, единственный способ снова включить NSFW – это очистить данные приложения.
-
-Всё ещё хотите включить его?"</string>
     <string name="reply">"Ответ"</string>
     <string name="post_gallery_activity_label">"Пост в галерее"</string>
     <string name="action_share_post_link">"Поделиться ссылкой на пост"</string>

@@ -338,8 +338,6 @@
     <string name="settings_font_size_title">"Betűtípus méret"</string>
     <string name="settings_title_font_size_title">"Cím betűtípus méret"</string>
     <string name="settings_content_font_size_title">"Tartalom betűtípus méret"</string>
-    <string name="settings_enable_nsfw_title">"NSFW engedélyezése"</string>
-    <string name="settings_blur_nsfw_title">"NSFW képek homályosítása"</string>
     <string name="settings_blur_spoiler_title">"Spoiler képek homályosítása"</string>
     <string name="settings_about_master_title">"Az appról"</string>
     <string name="settings_acknowledgement_master_title">"Köszönet"</string>
@@ -755,7 +753,6 @@ Az alap az indigó amoled téma"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Az oszlopok száma a poszt feedben"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Portré"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Tájlép"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW és Spoiler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Összes elavult beállítás törlése."</string>
     <string name="restart_app_see_changes">"Indítsd újra az appot, hogy lásd a változásokat"</string>
     <string name="settings_tab_count">"Fülek száma"</string>
@@ -897,7 +894,6 @@ Videó autómatikus lejátszása le van tiltva."</string>
     <string name="delete_all_read_posts_success">"Összes olvasott poszt törlése sikeres"</string>
     <string name="hide_read_posts">"Olvasott posztok elrejtése"</string>
     <string name="filter_posts">"Posztok szűrése"</string>
-    <string name="only_nsfw">"Csak NSFW"</string>
     <string name="only_spoiler">"Csak Spoiler"</string>
     <string name="title_excludes_strings_hint">"Cím: kulcsszavak (kulcs1,kulcs2) kizárása"</string>
     <string name="title_excludes_regex_hint">"Cím: regex kizárása"</string>
@@ -946,7 +942,6 @@ Videó autómatikus lejátszása le van tiltva."</string>
     <string name="action_share_link">"Link megosztása"</string>
     <string name="action_copy_link">"Link másolása"</string>
     <string name="action_add_to_post_filter">"Hozzáadás poszt filterhez"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Ne homályosítson el NSFW képeket NSFW subredditeken"</string>
     <string name="settings_show_avatar_on_the_right">"Avatár megjelenítése a jobb oldalon"</string>
     <string name="settings_backup_settings_title">"Beállítások biztonsági mentése"</string>
     <string name="settings_restore_settings_title">"Beállítások visszaállítása"</string>

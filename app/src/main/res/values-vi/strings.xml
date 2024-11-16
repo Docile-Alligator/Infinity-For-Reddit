@@ -377,8 +377,6 @@ Nhấn để thử lại."</string>
     <string name="settings_font_size_title">"Cỡ chữ"</string>
     <string name="settings_title_font_size_title">"Cỡ chữ tiêu đề"</string>
     <string name="settings_content_font_size_title">"Cỡ chữ nội dung"</string>
-    <string name="settings_enable_nsfw_title">"Bật NSFW"</string>
-    <string name="settings_blur_nsfw_title">"Làm mờ hình ảnh NSFW"</string>
     <string name="settings_blur_spoiler_title">"Làm mờ hình ảnh Spoiler"</string>
     <string name="settings_about_master_title">"Giới thiệu"</string>
     <string name="settings_acknowledgement_master_title">"Sự công nhận"</string>
@@ -792,7 +790,6 @@ Ví dụ: yourpass:123456"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Số lượng cột trong nguồn dữ liệu bài đăng"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Dọc"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Ngang"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW &amp; Spoiler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Xoá tất cả cài đặt cũ"</string>
     <string name="restart_app_see_changes">"Khởi động lại ứng dụng để thấy các thay đổi"</string>
     <string name="settings_tab_count">"Số tab"</string>
@@ -929,7 +926,6 @@ Tự động phát video bị tắt."</string>
     <string name="delete_all_read_posts_success">"Xoá tất cả bài đăng đã đọc thành công"</string>
     <string name="hide_read_posts">"Ẩn bài đăng đã đọc"</string>
     <string name="filter_posts">"Lọc bài đăng"</string>
-    <string name="only_nsfw">"Chỉ NSFW"</string>
     <string name="only_spoiler">"Chỉ Spoiler"</string>
     <string name="title_excludes_strings_hint">"Tiêu đề: loại trừ từ khoá (key1,key2)"</string>
     <string name="title_excludes_regex_hint">"Tiêu đề: loại trừ biểu thức tìm kiếm"</string>
@@ -976,7 +972,6 @@ Tự động phát video bị tắt."</string>
     <string name="action_share_link">"Chia sẻ liên kết"</string>
     <string name="action_copy_link">"Sao chép liên kết"</string>
     <string name="action_add_to_post_filter">"Thêm vào bộ lọc bài đăng"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Không làm mờ các hình ảnh NSFW trong các subreddit NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="settings_show_avatar_on_the_right">"Hiện ảnh đại diện ở bên trái"</string>
@@ -1048,7 +1043,6 @@ Tự động phát video bị tắt."</string>
     <string name="settings_hide_post_flair">"Ẩn tư cách bài đăng"</string>
     <string name="settings_crash_reports_title">"Báo cáo dừng đột ngột"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Nguy hiểm"</string>
-    <string name="settings_disable_nsfw_forever_title">"Tắt NSFW mãi mãi"</string>
     <string name="settings_show_only_one_comment_level_indicator">"Hiện chỉ một dấu chỉ thị cấp bình luận"</string>
     <string name="save_comment">"Lưu"</string>
     <string name="unsave_comment">"Huỷ lưu"</string>
@@ -1057,11 +1051,6 @@ Tự động phát video bị tắt."</string>
 
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Các báo cáo lỗi đã bị xoá"</string>
-
-    <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"Khi được bật, NSFW sẽ bị tắt vĩnh viễn, không kể là cài đặt NSFW có được bật hay không. Và tuỳ chọn này là không thể hoàn tác, cách duy nhất để bật lại NSFW là xoá dữ liệu ứng dụng.
-
-Bạn có vẫn muốn bật tuỳ chọn này không?"</string>
     <string name="reply">"Trả lời"</string>
     <string name="post_gallery_activity_label">"Bài đăng bộ sưu tập"</string>
     <string name="action_share_post_link">"Chia sẻ đường link bài đăng"</string>

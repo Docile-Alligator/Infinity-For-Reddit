@@ -372,8 +372,6 @@
     <string name="settings_font_size_title">"字体大小"</string>
     <string name="settings_title_font_size_title">"标题字体大小"</string>
     <string name="settings_content_font_size_title">"内容字体大小"</string>
-    <string name="settings_enable_nsfw_title">"允许 NSFW"</string>
-    <string name="settings_blur_nsfw_title">"模糊 NSFW 图像"</string>
     <string name="settings_blur_spoiler_title">"模糊剧透图像"</string>
     <string name="settings_about_master_title">"关于"</string>
     <string name="settings_acknowledgement_master_title">"致谢"</string>
@@ -802,7 +800,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_number_of_columns_in_post_feed_title">"帖子列表页面的列数"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"竖屏"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"横屏"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW 和剧透"</string>
     <string name="settings_delete_all_legacy_settings_title">"删除所有旧版设置"</string>
     <string name="restart_app_see_changes">"重新启动应用以查看更改"</string>
     <string name="settings_tab_count">"标签页数量"</string>
@@ -943,7 +940,6 @@ Reddit 视频分辨率较低。
     <string name="delete_all_read_posts_success">"成功删除所有已读帖子"</string>
     <string name="hide_read_posts">"隐藏已读帖子"</string>
     <string name="filter_posts">"过滤帖子"</string>
-    <string name="only_nsfw">"仅 NSFW"</string>
     <string name="only_spoiler">"仅剧透"</string>
     <string name="title_excludes_strings_hint">"标题：排除关键词（关键词1,关键词2）"</string>
     <string name="title_excludes_regex_hint">"标题：排除正则表达式"</string>
@@ -990,7 +986,6 @@ Reddit 视频分辨率较低。
     <string name="action_share_link">"分享链接"</string>
     <string name="action_copy_link">"复制链接"</string>
     <string name="action_add_to_post_filter">"添加到帖子过滤器"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"在 NSFW 版块中不模糊 NSFW 图片"</string>
     <string name="settings_show_avatar_on_the_right">"在右侧显示头像"</string>
     <string name="settings_backup_settings_title">"备份设置"</string>
     <string name="settings_restore_settings_title">"恢复设置"</string>
@@ -1054,16 +1049,12 @@ Reddit 视频分辨率较低。
     <string name="settings_hide_post_flair">"隐藏帖子头衔"</string>
     <string name="settings_crash_reports_title">"崩溃报告"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"危险"</string>
-    <string name="settings_disable_nsfw_forever_title">"永久禁用 NSFW"</string>
     <string name="settings_show_only_one_comment_level_indicator">"仅显示一个评论层级指示"</string>
     <string name="save_comment">"保存"</string>
     <string name="unsave_comment">"取消保存"</string>
     <string name="copy_multi_reddit_path">"复制聚合版块路径"</string>
     <string name="copy_multi_reddit_path_failed">"无法复制聚合版块路径"</string>
     <string name="crash_reports_deleted">"崩溃报告已删除"</string>
-    <string name="disable_nsfw_forever_message">"启用此选项后，NSFW 内容将被永久禁用，无论您是否开启 NSFW 设置。除非彻底清除应用数据，否则无法撤销此选项。
-
-仍然要继续吗？"</string>
     <string name="reply">"回复"</string>
     <string name="post_gallery_activity_label">"相册帖"</string>
     <string name="action_share_post_link">"分享帖子链接"</string>

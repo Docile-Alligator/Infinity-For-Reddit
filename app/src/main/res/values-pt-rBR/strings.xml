@@ -360,8 +360,6 @@ Toque para tentar de novo."</string>
     <string name="settings_font_size_title">"Tamanho da Fonte"</string>
     <string name="settings_title_font_size_title">"Tamanho da Fonte de Título"</string>
     <string name="settings_content_font_size_title">"Tamanho da fonte de conteúdo"</string>
-    <string name="settings_enable_nsfw_title">"Ativar NSFW"</string>
-    <string name="settings_blur_nsfw_title">"Borrar Imagens Marcadas como NSFW"</string>
     <string name="settings_blur_spoiler_title">"Borrar imagens marcardas como spoiler"</string>
     <string name="settings_about_master_title">"Sobre"</string>
     <string name="settings_acknowledgement_master_title">"Crédito"</string>
@@ -769,7 +767,6 @@ Exemplo: suasenha:123456"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"O número de colunas no feed de postagens"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Retrato"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Paisagem"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW &amp; Spoiler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Excluir todo ajuste antigo"</string>
     <string name="restart_app_see_changes">"Reinicie o aplicativo para ver as mudanças"</string>
     <string name="settings_tab_count">"Contador de abas"</string>
@@ -906,7 +903,6 @@ A reprodução automática de vídeos fica desativada."</string>
     <string name="delete_all_read_posts_success">"Êxito ao excluir toda postagem já lida"</string>
     <string name="hide_read_posts">"Ocultar postagens lidas"</string>
     <string name="filter_posts">"Filtrar postagens"</string>
-    <string name="only_nsfw">"Só NSFW"</string>
     <string name="only_spoiler">"Só spoiler"</string>
     <string name="title_excludes_strings_hint">"Título: retirar palavras-chave (chave1,chave2)"</string>
     <string name="title_excludes_regex_hint">"Título: retirar expressão regular"</string>
@@ -953,7 +949,6 @@ A reprodução automática de vídeos fica desativada."</string>
     <string name="action_share_link">"Compartilhar Link"</string>
     <string name="action_copy_link">"Copiar Link"</string>
     <string name="action_add_to_post_filter">"Adicionar ao filtro de postagem"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Não borrar imagens NSFW em subreddits NSFW"</string>
     <string name="settings_show_avatar_on_the_right">"Exibir avatar na direita"</string>
     <string name="settings_backup_settings_title">"Ajustes de cópia de segurança"</string>
     <string name="settings_restore_settings_title">"Restaurar ajustes"</string>
@@ -1017,16 +1012,12 @@ A reprodução automática de vídeos fica desativada."</string>
     <string name="settings_hide_post_flair">"Ocultar etiqueta da postagem"</string>
     <string name="settings_crash_reports_title">"Relatório de erros"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Perigoso"</string>
-    <string name="settings_disable_nsfw_forever_title">"Desativar NSFW para sempre"</string>
     <string name="settings_show_only_one_comment_level_indicator">"Só exibir um nível de comentário"</string>
     <string name="save_comment">"Salvar"</string>
     <string name="unsave_comment">"Não salvar"</string>
     <string name="copy_multi_reddit_path">"Copiar caminho do Multireddit"</string>
     <string name="copy_multi_reddit_path_failed">"Incapaz de copiar o caminho do Multireddit"</string>
     <string name="crash_reports_deleted">"Relatório de erros excluído"</string>
-    <string name="disable_nsfw_forever_message">"Uma vez ativada, o NSFW será desativado para sempre, independentemente do ajuste do NSFW estar ativado ou não. Esta opção é irreversível; o único jeito de reativar o NSFW é limpar os dados do aplicativo.
-
-Ainda quer a ativar?"</string>
     <string name="reply">"Responder"</string>
     <string name="post_gallery_activity_label">"Postar galeria"</string>
     <string name="action_share_post_link">"Compartilhar link da postagem"</string>

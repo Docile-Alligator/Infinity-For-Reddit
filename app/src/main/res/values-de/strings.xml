@@ -376,8 +376,6 @@ Tippen für Neuversuch."</string>
     <string name="settings_font_size_title">"Schriftgröße"</string>
     <string name="settings_title_font_size_title">"Titel-Schriftgröße"</string>
     <string name="settings_content_font_size_title">"Inhalt-Schriftgröße"</string>
-    <string name="settings_enable_nsfw_title">"NSFW aktivieren"</string>
-    <string name="settings_blur_nsfw_title">"NSFW-Bilder verwischen"</string>
     <string name="settings_blur_spoiler_title">"Spoiler-Bilder verwischen"</string>
     <string name="settings_about_master_title">"Über"</string>
     <string name="settings_acknowledgement_master_title">"Anerkennung"</string>
@@ -804,7 +802,6 @@ Beispiel: DeinPasswort:123456"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Anzahl an Spalten im Beitragsfeed"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Hochformat"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Querformat"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW &amp; Spoiler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Alle Legacy-Einstellungen löschen"</string>
     <string name="restart_app_see_changes">"Starte die App neu, um die Änderungen zu sehen"</string>
     <string name="settings_tab_count">"Anzahl an Reitern"</string>
@@ -953,7 +950,6 @@ Automatisches Abspielen von Videos ist deaktiviert."</string>
     <string name="delete_all_read_posts_success">"Alle gelesenen Beiträge erfolgreich gelöscht"</string>
     <string name="hide_read_posts">"Gelesene Beiträge verstecken"</string>
     <string name="filter_posts">"Beiträge filtern"</string>
-    <string name="only_nsfw">"Nur NSFW"</string>
     <string name="only_spoiler">"Nur Spoiler"</string>
     <string name="title_excludes_strings_hint">"Titel: schließt Schlüsselwörter aus (Wort 1, Wort 2)"</string>
     <string name="title_excludes_regex_hint">"Titel: Schließt RegEx aus"</string>
@@ -1004,7 +1000,6 @@ Automatisches Abspielen von Videos ist deaktiviert."</string>
     <string name="action_share_link">"Link teilen"</string>
     <string name="action_copy_link">"Link kopieren"</string>
     <string name="action_add_to_post_filter">"Zum Beitrags-Filter hinzufügen"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"NSFW-Bilder in NSFW-Subreddits nicht verwischen"</string>
 
     <!-- Fuzzy -->
     <string name="settings_show_avatar_on_the_right">"Avatar links anzeigen"</string>
@@ -1076,7 +1071,6 @@ Automatisches Abspielen von Videos ist deaktiviert."</string>
     <string name="settings_hide_post_flair">"Beitragsflair verstecken"</string>
     <string name="settings_crash_reports_title">"Absturzmeldungen"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Gefährlich"</string>
-    <string name="settings_disable_nsfw_forever_title">"NSFW dauerhaft deaktivieren"</string>
     <string name="settings_show_only_one_comment_level_indicator">"Nur einen Indikator für die Kommentarebene anzeigen"</string>
     <string name="save_comment">"Speichern"</string>
     <string name="unsave_comment">"Nicht mehr speichern"</string>
@@ -1085,9 +1079,6 @@ Automatisches Abspielen von Videos ist deaktiviert."</string>
     <string name="crash_reports_deleted">"Absturzmeldungen wurden gelöscht"</string>
 
     <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"Wenn du diese Option aktivierst, wird NSFW dauerhaft deaktiviert, egal ob die NSFW-Option ein- oder ausgeschaltet ist. Diese Option ist irreversibel, wenn du NSFW wieder einschalten willst, müssen die Daten der App gelöscht werden.
-
-Möchtest du trotzdem fortfahren?"</string>
     <string name="reply">"Antworten"</string>
     <string name="post_gallery_activity_label">"Galeriebeitrag"</string>
     <string name="action_share_post_link">"Teile Beitragslink"</string>

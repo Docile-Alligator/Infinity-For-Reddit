@@ -362,8 +362,6 @@ Apăsați pentru reîncărcare."</string>
     <string name="settings_font_size_title">"Mărimea fontului"</string>
     <string name="settings_title_font_size_title">"Dimensiunea fontului de titlu"</string>
     <string name="settings_content_font_size_title">"Dimensiunea fontului de conținut"</string>
-    <string name="settings_enable_nsfw_title">"Activați NSFW"</string>
-    <string name="settings_blur_nsfw_title">"Estompare imagini NSFW"</string>
     <string name="settings_blur_spoiler_title">"Estompare imagini spoiler"</string>
     <string name="settings_about_master_title">"Despre"</string>
     <string name="settings_acknowledgement_master_title">"Recunoștință"</string>
@@ -775,7 +773,6 @@ Exemplu: parolata:123456"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Numărul de Coloane în Fluxul de Postări"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Portret"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Peisaj"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW și Spoiler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Șterge Toate Setările Vechi"</string>
     <string name="restart_app_see_changes">"Repornește aplicația pentru a vedea modificările"</string>
     <string name="settings_tab_count">"Număr de File"</string>
@@ -912,7 +909,6 @@ Redarea automată a videoclipurilor este dezactivată."</string>
     <string name="delete_all_read_posts_success">"Toate postările citite au fost șters cu succes"</string>
     <string name="hide_read_posts">"Ascunde Postările Citite"</string>
     <string name="filter_posts">"Filtrează Postările"</string>
-    <string name="only_nsfw">"Doar NSFW"</string>
     <string name="only_spoiler">"Doar Spoiler"</string>
     <string name="title_excludes_strings_hint">"Titlu: exclude cuvintele cheie (cheie1,cheie2)"</string>
     <string name="title_excludes_regex_hint">"Titlu: exclude regex"</string>
@@ -959,7 +955,6 @@ Redarea automată a videoclipurilor este dezactivată."</string>
     <string name="action_share_link">"Partajează link"</string>
     <string name="action_copy_link">"Copie Link-ul"</string>
     <string name="action_add_to_post_filter">"Adaugă la Filtrul de Postări"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Nu estompa imaginile NSFW în subreddit-urile NSFW"</string>
     <string name="settings_show_avatar_on_the_right">"Afișează Avatarul în Dreapta"</string>
     <string name="settings_backup_settings_title">"Setări pentru Copie de Rezervă"</string>
     <string name="settings_restore_settings_title">"Restabilirea Setărilor"</string>
@@ -1025,7 +1020,6 @@ Redarea automată a videoclipurilor este dezactivată."</string>
     <string name="settings_hide_post_flair">"Ascunde Insigna Postării"</string>
     <string name="settings_crash_reports_title">"Rapoarte de Eroare"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Periculos"</string>
-    <string name="settings_disable_nsfw_forever_title">"Dezactivează NSFW pentru totdeauna"</string>
     <string name="settings_show_only_one_comment_level_indicator">"Afișează doar un Singur Indicator de Nivel al Comentariilor"</string>
     <string name="save_comment">"Salvează"</string>
     <string name="unsave_comment">"Scoate"</string>
@@ -1034,11 +1028,6 @@ Redarea automată a videoclipurilor este dezactivată."</string>
 
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Rapoartele de eroare au fost șterse"</string>
-
-    <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"Odată activat, NSFW va fi dezactivat permanent, indiferent dacă setarea NSFW este activată sau nu. Această opțiune este ireversibilă, singura modalitate de a reactiva NSFW este să ștergi datele aplicației.
-
-Încă dorești să-l activezi?"</string>
     <string name="reply">"Răspunde"</string>
     <string name="post_gallery_activity_label">"Postare Galerie"</string>
     <string name="action_share_post_link">"Partajează link postare"</string>

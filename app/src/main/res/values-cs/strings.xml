@@ -368,8 +368,6 @@
     <string name="settings_font_size_title">"Velikost písma"</string>
     <string name="settings_title_font_size_title">"Velikost písma nadpisu"</string>
     <string name="settings_content_font_size_title">"Velikost písma obsahu"</string>
-    <string name="settings_enable_nsfw_title">"Povolit NSFW"</string>
-    <string name="settings_blur_nsfw_title">"Rozmazat NSFW obrázky"</string>
     <string name="settings_blur_spoiler_title">"Rozmazat obrázky se spoilerem"</string>
     <string name="settings_about_master_title">"O aplikaci"</string>
     <string name="settings_acknowledgement_master_title">"Použité knihovny"</string>
@@ -783,7 +781,6 @@ Příklad: mojeheslo:123456"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Počet sloupců v příspěvcích"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Na výšku"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Na šířku"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW a spoiler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Odstranit všechna stará nastavení"</string>
     <string name="restart_app_see_changes">"Restartujte aplikaci pro zobrazení změn"</string>
     <string name="settings_tab_count">"Počet karet"</string>
@@ -920,7 +917,6 @@ Automatické přehrávání videí je zakázáno."</string>
     <string name="delete_all_read_posts_success">"Všechny přečtené příspěvky úspěšně odstraněny"</string>
     <string name="hide_read_posts">"Skrýt přečtené příspěvky"</string>
     <string name="filter_posts">"Filtrovat příspěvky"</string>
-    <string name="only_nsfw">"Pouze NSFW"</string>
     <string name="only_spoiler">"Pouze spoilery"</string>
     <string name="title_excludes_strings_hint">"Název: vyloučení klíčových slov (slovo1,slovo2)"</string>
     <string name="title_excludes_regex_hint">"Název: vyloučení regexu"</string>
@@ -967,7 +963,6 @@ Automatické přehrávání videí je zakázáno."</string>
     <string name="action_share_link">"Sdílet odkaz"</string>
     <string name="action_copy_link">"Zkopírovat odkaz"</string>
     <string name="action_add_to_post_filter">"Přidat do filtru příspěvků"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Nerozmazávat NSFW obrázky v NSFW subredditech"</string>
     <string name="settings_show_avatar_on_the_right">"Zobrazit avatar napravo"</string>
     <string name="settings_backup_settings_title">"Nastavení zálohování"</string>
     <string name="settings_restore_settings_title">"Obnovit nastavení"</string>
@@ -1035,7 +1030,6 @@ Automatické přehrávání videí je zakázáno."</string>
     <string name="settings_hide_post_flair">"Skrýt štítek příspěvku"</string>
     <string name="settings_crash_reports_title">"Hlášení o pádech"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Nebezpečné"</string>
-    <string name="settings_disable_nsfw_forever_title">"Permanentně zakázat NSFW"</string>
     <string name="settings_show_only_one_comment_level_indicator">"Zobrazit pouze jeden indikátor úrovně komentáře"</string>
     <string name="save_comment">"Uložit"</string>
     <string name="unsave_comment">"Neukládat"</string>
@@ -1044,11 +1038,6 @@ Automatické přehrávání videí je zakázáno."</string>
 
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Hlášení o pádech byla odstraněna"</string>
-
-    <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"Pokud povolíte tuto možnost, bude NSFW permanentně zakázáno, nehledě na to, zda je nastavení NSFW zapnuté nebo ne. Tato možnost je nevratná, jediný způsob jak jej znovu povolit je vymazat data aplikace.
-
-Stále chcete tuto možnost povolit?"</string>
     <string name="reply">"Odpovědět"</string>
     <string name="post_gallery_activity_label">"Příspěvek galerie"</string>
     <string name="action_share_post_link">"Sdílet odkaz příspěvku"</string>

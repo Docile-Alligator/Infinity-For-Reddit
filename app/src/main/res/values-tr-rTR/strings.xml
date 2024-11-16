@@ -365,8 +365,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_font_size_title">"Yazı Tipi Boyutu"</string>
     <string name="settings_title_font_size_title">"Yazı Tipi Başlığı Boyutu"</string>
     <string name="settings_content_font_size_title">"İçeriğin Yazı Tipi Boyutu"</string>
-    <string name="settings_enable_nsfw_title">"NSFW'yi Etkinleştir"</string>
-    <string name="settings_blur_nsfw_title">"NSFW Görüntüleri Bulanıklaştır"</string>
     <string name="settings_blur_spoiler_title">"Spoiler Görüntüleri Bulanıklaştır"</string>
     <string name="settings_about_master_title">"Hakkında"</string>
     <string name="settings_acknowledgement_master_title">"Özel Teşekkürler"</string>
@@ -785,7 +783,6 @@ Amoled Tema Şablonu Oluştur"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Gönderi Akışındaki Sütun Sayısı"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Portre"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Manzara"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW &amp; Spoiler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Tüm Eski Ayarları Sil"</string>
     <string name="restart_app_see_changes">"Değişiklikleri görmek için uygulamayı yeniden başlatın"</string>
     <string name="settings_tab_count">"Sekme Sayısı"</string>
@@ -934,7 +931,6 @@ Otomatik video oynatma kapatılır."</string>
     <string name="delete_all_read_posts_success">"Görüntülenmiş gönderiler başarıyla kaldırıldı"</string>
     <string name="hide_read_posts">"Görüntülenmiş Gönderileri Gizle"</string>
     <string name="filter_posts">"Gönderileri Filtrele"</string>
-    <string name="only_nsfw">"Sadece NSFW"</string>
     <string name="only_spoiler">"Sadece Spoiler"</string>
 
     <!-- What is it? -->
@@ -983,7 +979,6 @@ Otomatik video oynatma kapatılır."</string>
     <string name="action_share_link">"Bağlantıyı Paylaş"</string>
     <string name="action_copy_link">"Bağlantıyı Kopyala"</string>
     <string name="action_add_to_post_filter">"Gönderi Filtresine Ekle"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"NSFW Subreddit'lerindeki NSFW Görüntülerini Bulanıklaştırma"</string>
 
     <!-- Fuzzy -->
     <string name="settings_show_avatar_on_the_right">"Avatarı Solda Göster"</string>
@@ -1055,7 +1050,6 @@ Otomatik video oynatma kapatılır."</string>
     <string name="settings_hide_post_flair">"Gönderi Etiketini Gizle"</string>
     <string name="settings_crash_reports_title">"Kilitlenme Raporları"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Sakıncalı"</string>
-    <string name="settings_disable_nsfw_forever_title">"NSFW'yi Her Zaman Devre Dışı Bırak"</string>
     <string name="settings_show_only_one_comment_level_indicator">"Sadece Bir Yorum Seviyesi Belirtecini Göster"</string>
     <string name="save_comment">"Kaydet"</string>
     <string name="unsave_comment">"Kaydetme"</string>
@@ -1064,11 +1058,6 @@ Otomatik video oynatma kapatılır."</string>
 
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Kilitlenme raporları silindi"</string>
-
-    <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"Etkinleştirildikten sonra, NSFW ayarının etkin olup olmadığına bakılmaksızın NSFW kalıcı olarak devre dışı bırakılacaktır. Ve bu seçenek geri alınamaz, NSFW'yi yeniden etkinleştirmenin tek yolu uygulama verilerini temizlemektir.
-
-Yine de etkinleştirmek istiyor musunuz?"</string>
     <string name="reply">"Yanıtla"</string>
     <string name="post_gallery_activity_label">"Galeri Gönderisi"</string>
     <string name="action_share_post_link">"Gönderi Bağlantısını Paylaş"</string>

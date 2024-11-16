@@ -446,11 +446,11 @@
     <string name="settings_font_size_title">Font Size</string>
     <string name="settings_title_font_size_title">Title Font Size</string>
     <string name="settings_content_font_size_title">Content Font Size</string>
-    <string name="settings_nsfw_and_spoiler_title">NSFW &amp; Spoiler</string>
-    <string name="settings_enable_nsfw_title">Enable NSFW</string>
-    <string name="settings_blur_nsfw_title">Blur NSFW Images</string>
+    <string name="settings_over_18_and_spoiler_title">Content Sensitivity Filter</string>
+    <string name="settings_over_18_title">Sensitive Content</string>
+    <string name="settings_blur_over_18_title">Blur Sensitive Images</string>
     <string name="settings_blur_spoiler_title">Blur Spoiler Images</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">Don\'t blur NSFW Images in NSFW Subreddits</string>
+    <string name="settings_do_not_blur_over_18_in_over_18_subreddits_title">Don\'t blur Sensitive Images in Sensitive Subreddits</string>
     <string name="settings_about_master_title">About</string>
     <string name="settings_acknowledgement_master_title">Acknowledgement</string>
     <string name="settings_credits_master_title">Credits</string>
@@ -606,7 +606,7 @@
     <string name="settings_default_search_result_tab">Default Search Result Tab</string>
     <string name="settings_crash_reports_title">Crash Reports</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">Dangerous</string>
-    <string name="settings_disable_nsfw_forever_title">Disable NSFW Forever</string>
+    <string name="settings_disable_over_18_forever_title">Forever Family Friendly</string>
     <string name="settings_show_only_one_comment_level_indicator">Show Only One Comment Level Indicator</string>
     <string name="settings_video_player_automatic_landscape_orientation">Switch to Landscape Orientation in Video Player Automatically</string>
     <string name="settings_loop_video_title">Loop Video</string>
@@ -1128,7 +1128,7 @@
     <string name="hide_read_posts">Hide Read Posts</string>
     <string name="filter_posts">Filter Posts</string>
 
-    <string name="only_nsfw">Only NSFW</string>
+    <string name="only_sensitive_content">Only Sensitive Content</string>
     <string name="only_spoiler">Only Spoiler</string>
     <string name="title_excludes_strings_hint">Title: excludes keywords (key1,key2)</string>
     <string name="title_contains_strings_hint">Title: contains keywords (key1,key2)</string>
@@ -1169,7 +1169,7 @@
     <string name="post_filter_usage_embedded_more_count">and %1$d more</string>
     <string name="post_filter_name_explanation">The post filter name should be unique.</string>
     <string name="post_filter_post_type_explanation">To see certain types of posts, please turn on the switch corresponding to the types.</string>
-    <string name="post_filter_only_nsfw_spoiler_explanation">To only see NSFW or spoiler posts, please turn on the corresponding switch.</string>
+    <string name="post_filter_only_sensitive_spoiler_explanation">To only see sensitive or spoiler posts, please turn on the corresponding switch.</string>
     <string name="post_filter_title_excludes_strings_explanation">Posts will be filtered out if they contain the following keywords in their title.</string>
     <string name="post_filter_title_contains_strings_explanation">Posts will be filtered out if they do not contain the following keywords in their title.</string>
     <string name="post_filter_title_excludes_regex_explanation">Posts will be filtered out if their title matches the following regular expression.</string>
@@ -1253,7 +1253,7 @@
 
     <string name="crash_reports_deleted">Crash reports have been deleted</string>
 
-    <string name="disable_nsfw_forever_message">Once enabled, NSFW will be permanently disabled, regardless of whether the NSFW setting is enabled or not. This option is irreversible, the only way to re-enable NSFW is to clear the app data.\n\nDo you still want to enable it?</string>
+    <string name="disable_over_18_forever_message">Once enabled, sensitive content will always be hidden, regardless of the sensitive content setting. This option is irreversible; the only way to re-enable the sensitive content is to clear the app data.\n\nDo you still want to enable it?</string>
 
     <string name="reply">Reply</string>
 

@@ -350,8 +350,6 @@
     <string name="settings_font_summary">"폰트"</string>
     <string name="settings_title_font_summary">"제목"</string>
     <string name="settings_content_font_summary">"콘텐츠"</string>
-    <string name="settings_enable_nsfw_title">"NSFW 활성화"</string>
-    <string name="settings_blur_nsfw_title">"NSFW 사진 흐리게 하기"</string>
     <string name="settings_blur_spoiler_title">"스포일러 사진 흐리게 하기"</string>
     <string name="settings_about_master_title">"정보"</string>
     <string name="settings_credits_master_title">"크레딧"</string>
@@ -488,7 +486,6 @@
     <string name="theme_item_subscribed_color_detail">"적용 대상: 구독 해제 버튼"</string>
     <string name="theme_item_unsubscribed_color">"구독 해제됨"</string>
     <string name="theme_item_unsubscribed_color_detail">"적용 대상: 구독 버튼"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW와 스포일러"</string>
     <string name="settings_more_tabs_show_subscribed_subreddits_title">"구독한 서브레딧 보기"</string>
     <string name="only_spoiler">"스포일러만"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"위험"</string>

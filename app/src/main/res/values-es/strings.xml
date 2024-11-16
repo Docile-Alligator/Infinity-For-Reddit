@@ -387,8 +387,6 @@ Premio means prize, so it's better suited the first word instead of the second o
     <string name="settings_font_size_title">"Tamaño de la fuente"</string>
     <string name="settings_title_font_size_title">"Tamaño del título"</string>
     <string name="settings_content_font_size_title">"Tamaño del contenido"</string>
-    <string name="settings_enable_nsfw_title">"Permitir NSFW"</string>
-    <string name="settings_blur_nsfw_title">"Difuminar imágenes NSFW"</string>
     <string name="settings_blur_spoiler_title">"Difuminar Imágenes con Spoiler"</string>
     <string name="settings_about_master_title">"Acerca de Infinity for Reddit"</string>
     <string name="settings_acknowledgement_master_title">"Reconocimientos"</string>
@@ -824,7 +822,6 @@ Ejemplo: contraseña:123456"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"El número de columnas en el feed de publicaciones"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Vertical"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Horizontal"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW y spoiler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Borrar todos los ajustes heredados"</string>
     <string name="restart_app_see_changes">"Reinicie la app para ver cambios"</string>
     <string name="settings_tab_count">"Número de pestañas"</string>
@@ -968,7 +965,6 @@ https://s3.eu-west-1.amazonaws.com/po-pub/i/hJAe7sMhrfJzqjhp9VkDQOVC.PNG -->
     <string name="delete_all_read_posts_success">"Todas las publicaciones leídas han sido eliminadas"</string>
     <string name="hide_read_posts">"Ocultar posts leídos"</string>
     <string name="filter_posts">"Filtrar posts"</string>
-    <string name="only_nsfw">"Sólo NSFW"</string>
     <string name="only_spoiler">"Sólo spoilers"</string>
     <string name="title_excludes_strings_hint">"Título: Excluir palabras clave (palabra1, palabra2)"</string>
     <string name="title_excludes_regex_hint">"Título: Excluye Regex"</string>
@@ -1015,7 +1011,6 @@ https://s3.eu-west-1.amazonaws.com/po-pub/i/hJAe7sMhrfJzqjhp9VkDQOVC.PNG -->
     <string name="action_share_link">"Compartir enlace"</string>
     <string name="action_copy_link">"Copiar enlace"</string>
     <string name="action_add_to_post_filter">"Añadir al filtro de publicaciones"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"No difuminar imágenes NSFW en subreddits NSFW"</string>
     <string name="settings_show_avatar_on_the_right">"Mostrar avatar a la derecha"</string>
     <string name="settings_backup_settings_title">"Respaldar ajustes"</string>
     <string name="settings_restore_settings_title">"Restablecer ajustes"</string>
@@ -1085,7 +1080,6 @@ https://s3.eu-west-1.amazonaws.com/po-pub/i/hJAe7sMhrfJzqjhp9VkDQOVC.PNG -->
     <string name="settings_hide_post_flair">"Ocultar la etiqueta de la publicación"</string>
     <string name="settings_crash_reports_title">"Informe de fallos"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Peligroso"</string>
-    <string name="settings_disable_nsfw_forever_title">"Desactivar NSFW para siempre"</string>
     <string name="settings_show_only_one_comment_level_indicator">"Mostrar solo un indicador del nivel de comentarios"</string>
     <string name="save_comment">"Guardar"</string>
     <string name="unsave_comment">"No guardar"</string>
@@ -1094,11 +1088,6 @@ https://s3.eu-west-1.amazonaws.com/po-pub/i/hJAe7sMhrfJzqjhp9VkDQOVC.PNG -->
 
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Los informes de fallos han sido eliminados"</string>
-
-    <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"Una vez activado, NSFW será permanentemente desactivado, independientemente de si la opción de NFSW esta activada o no. Esta opción es irreversible, la única manera de reactivar NSFW es borrando los datos de la aplicación.
-
-¿Seguro que quieres activarlo?"</string>
     <string name="reply">"Responder"</string>
     <string name="post_gallery_activity_label">"Publicación de galería"</string>
     <string name="action_share_post_link">"Compartir enlace de publicación"</string>

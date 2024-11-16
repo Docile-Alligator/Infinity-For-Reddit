@@ -322,8 +322,6 @@
     <string name="settings_font_size_title">"எழுத்துரு அளவு"</string>
     <string name="settings_title_font_size_title">"தலைப்பு எழுத்துரு அளவு"</string>
     <string name="settings_content_font_size_title">"உள்ளடக்கம் எழுத்துரு அளவு"</string>
-    <string name="settings_enable_nsfw_title">"NSFWஐ இயக்கு"</string>
-    <string name="settings_blur_nsfw_title">"NSFW படங்களை மங்கலாக்கு"</string>
     <string name="settings_blur_spoiler_title">"கெட்டுப்பி படங்களை மங்காக்கு"</string>
     <string name="settings_about_master_title">"இதுபற்றி"</string>
     <string name="settings_acknowledgement_master_title">"ஒப்புகை"</string>
@@ -631,7 +629,6 @@
     <string name="select_subreddits_and_users">"துணைரெட்டிட்டுகள் மற்றும் பயனர்களைத் தேர்ந்தெடு"</string>
     <string name="hide_read_posts">"வாசித்த இடுகைகளை மறை"</string>
     <string name="filter_posts">"இடுகைகளை வடிகட்டு"</string>
-    <string name="only_nsfw">"NSFW மட்டும்"</string>
     <string name="only_spoiler">"கெடுப்பி மட்டும்"</string>
     <string name="post_filter_usage_home">"முகப்பு"</string>
     <string name="post_filter_usage_subreddit">"துணைரெட்டிட்: %1$s"</string>
@@ -680,7 +677,6 @@
     <string name="action_delete_logs">"பயன்குறிப்புகளை அழி"</string>
     <string name="settings_crash_reports_title">"சிதைவறிக்கைகள்"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"ஆபத்தானது"</string>
-    <string name="settings_disable_nsfw_forever_title">"NSFWஐ என்றென்றும் முடக்கு"</string>
     <string name="save_comment">"சேமி"</string>
     <string name="unsave_comment">"சேமிக்கா"</string>
 

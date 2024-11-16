@@ -127,7 +127,7 @@ public class NsfwAndSpoilerFragment extends Fragment {
                 manuallyCheckDisableNsfwForever = false;
                 new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.warning)
-                        .setMessage(R.string.disable_nsfw_forever_message)
+                        .setMessage(R.string.disable_over_18_forever_message)
                         .setPositiveButton(R.string.yes, (dialogInterface, i)
                                 -> {
                             sharedPreferences.edit().putBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, true).apply();

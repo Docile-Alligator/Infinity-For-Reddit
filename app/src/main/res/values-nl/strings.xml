@@ -371,8 +371,6 @@ Druk om opnieuw te proberen."</string>
     <string name="settings_font_size_title">"Tekstgrootte"</string>
     <string name="settings_title_font_size_title">"Titel - Tekstgrootte"</string>
     <string name="settings_content_font_size_title">"Inhoud - Tekstgrootte"</string>
-    <string name="settings_enable_nsfw_title">"NSFW inschakelen"</string>
-    <string name="settings_blur_nsfw_title">"NSFW-afbeeldingen vervagen"</string>
     <string name="settings_blur_spoiler_title">"Afbeeldingen bij leeswaarschuwingen vervagen"</string>
     <string name="settings_about_master_title">"Over"</string>
     <string name="settings_acknowledgement_master_title">"Erkenning"</string>
@@ -793,7 +791,6 @@ Voorbeeld: yourpass: 123456"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Het Aantal Kolommen in de Postfeed"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Portret"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Landschap"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW &amp; Spoiler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Verwijder alle legacyinstellingen"</string>
     <string name="restart_app_see_changes">"Start de app opnieuw om de wijzigingen te zien"</string>
     <string name="settings_tab_count">"Aantal Tabbladen"</string>
@@ -935,7 +932,6 @@ Automatisch afspelen van video is uitgeschakeld."</string>
     <string name="delete_all_read_posts_success">"Verwijder alle gelezen posts succesvol"</string>
     <string name="hide_read_posts">"Verberg Gelezen Posts"</string>
     <string name="filter_posts">"Filter Posts"</string>
-    <string name="only_nsfw">"Alleen NSFW"</string>
     <string name="only_spoiler">"Alleen Spoiler"</string>
     <string name="contain_flairs_hint">"Bevat flair (vb. flair1, flair2)"</string>
     <string name="min_vote_hint">"Min stem (-1: geen restrictie)"</string>
@@ -974,7 +970,6 @@ Automatisch afspelen van video is uitgeschakeld."</string>
     <string name="action_share_link">"Link Delen"</string>
     <string name="action_copy_link">"Link Kopiëren"</string>
     <string name="action_add_to_post_filter">"Toevoegen aan Post Filter"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Vervaag NSFW Afbeeldingen niet in NSFW Subreddits"</string>
     <string name="settings_show_avatar_on_the_right">"Laat Avatar aan de Rechterkant Zien"</string>
     <string name="settings_backup_settings_title">"Backup Instellingen"</string>
     <string name="settings_restore_settings_title">"Instellingen Herstellen"</string>
@@ -1026,18 +1021,12 @@ Automatisch afspelen van video is uitgeschakeld."</string>
     <string name="settings_hide_post_flair">"Verberg Post Flair"</string>
     <string name="settings_crash_reports_title">"Crashrapporten"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Gevaarlijk"</string>
-    <string name="settings_disable_nsfw_forever_title">"NSFW voor altijd uitschakelen"</string>
     <string name="settings_show_only_one_comment_level_indicator">"Laat alleen één reactieniveau indicator zien"</string>
     <string name="save_comment">"Opslaan"</string>
     <string name="unsave_comment">"Niet opslaan"</string>
 
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Crashrapporten zijn verwijderd"</string>
-
-    <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"Wanneer geactiveerd zal NSFW permanent uitgeschakeld worden, ongeacht of de NSFW instelling aan of uit staat. En deze optie is onomkeerbaar, de enige manier om NSFW opnieuw aan te zetten is door de app data te verwijderen.
-
-Wil je het nog steeds activeren?"</string>
     <string name="reply">"Antwoord"</string>
     <string name="post_gallery_activity_label">"Gallerijpost"</string>
     <string name="action_share_post_link">"Deel Post Link"</string>

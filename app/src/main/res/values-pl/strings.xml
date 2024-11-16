@@ -367,8 +367,6 @@ Naciśnij, aby spróbować ponownie."</string>
     <string name="settings_font_size_title">"Rozmiar czcionki"</string>
     <string name="settings_title_font_size_title">"Rozmiar czcionki tytułów"</string>
     <string name="settings_content_font_size_title">"Rozmiar czcionki zawartości"</string>
-    <string name="settings_enable_nsfw_title">"Włącz NSFW"</string>
-    <string name="settings_blur_nsfw_title">"Rozmazuj zdjęcia NSFW"</string>
     <string name="settings_blur_spoiler_title">"Rozmazuj zdjęcia z spoilerami"</string>
     <string name="settings_about_master_title">"O aplikacji"</string>
     <string name="settings_acknowledgement_master_title">"Użyte biblioteki"</string>
@@ -785,7 +783,6 @@ Example: yourpass:123456"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Liczba kolumn w kanale postów"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Pion"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Poziom"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW &amp; Spojler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Usuń wszystkie starsze ustawienia"</string>
     <string name="restart_app_see_changes">"Zrestartuj aplikację aby zobaczyć zmiany"</string>
     <string name="settings_tab_count">"Liczba kart"</string>
@@ -924,7 +921,6 @@ Autoodtwarzanie filmów jest wyłączone."</string>
     <string name="delete_all_read_posts_success">"Pomyślnie usunięto przeczytane posty"</string>
     <string name="hide_read_posts">"Ukryj przeczytane posty"</string>
     <string name="filter_posts">"Filtruj posty"</string>
-    <string name="only_nsfw">"Tylko NSFW"</string>
     <string name="only_spoiler">"Tylko spoilery"</string>
     <string name="title_excludes_strings_hint">"Tytuł: wyklucza słowa kluczowe (słowo1,słowo2)"</string>
     <string name="title_excludes_regex_hint">"Tytuł: wyklucza regex"</string>
@@ -966,7 +962,6 @@ użytkownika / multireddita"</string>
     <string name="action_share_link">"Zapisz link"</string>
     <string name="action_copy_link">"Skopiuj link"</string>
     <string name="action_add_to_post_filter">"Dodaj do filtra postów"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Nie bluruj obrazków NSFW w NSFW subredditach"</string>
     <string name="settings_show_avatar_on_the_right">"Pokaż awatar po prawej stronie"</string>
     <string name="settings_backup_settings_title">"Opcje backupu"</string>
     <string name="settings_restore_settings_title">"Przywróć ustawienia"</string>
@@ -1026,7 +1021,6 @@ użytkownika / multireddita"</string>
     <string name="settings_hide_post_flair">"Ukryj flagę posta"</string>
     <string name="settings_crash_reports_title">"Crash reporty"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Niebezpieczne"</string>
-    <string name="settings_disable_nsfw_forever_title">"Wyłącz NSFW na zawsze"</string>
     <string name="save_comment">"Zapisz"</string>
     <string name="unsave_comment">"Usuń z zapisanych"</string>
     <string name="copy_multi_reddit_path">"Skopiuj ścieżkę multireddita"</string>
@@ -1034,11 +1028,6 @@ użytkownika / multireddita"</string>
 
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Reporty crashów zostały usunięte"</string>
-
-    <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"Raz włączone, NSFW będzie wyłączone permamentnię, nieważnie czy inne ustawienia NSFW będą włączone czy nie. Jedyną opcją na włącznie NSFW z powrotem jest wyczyszczenie danych aplikacji.
-
-Nadal chcesz ją włączyć?"</string>
     <string name="reply">"Odpowiedz"</string>
     <string name="post_gallery_activity_label">"Post z galerią zdjęć"</string>
     <string name="action_share_post_link">"Udostępnij link do postu"</string>

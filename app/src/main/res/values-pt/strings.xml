@@ -375,8 +375,6 @@ Toque para tentar novamente."</string>
     <string name="settings_font_size_title">"Tamanho do Tipo de Letra"</string>
     <string name="settings_title_font_size_title">"Tamanho de Letra do Título"</string>
     <string name="settings_content_font_size_title">"Tamanho de Letra do Conteúdo"</string>
-    <string name="settings_enable_nsfw_title">"Ativar 18+"</string>
-    <string name="settings_blur_nsfw_title">"Desfocar Imagens 18+"</string>
     <string name="settings_blur_spoiler_title">"Desfocar Imagens Spoiler"</string>
     <string name="settings_about_master_title">"Sobre"</string>
     <string name="settings_acknowledgement_master_title">"Reconhecimento"</string>
@@ -780,7 +778,6 @@ Exemplo: asuapasse:123456"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Número de Colunas no Feed de Publicações"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Retrato"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Paisagem"</string>
-    <string name="settings_nsfw_and_spoiler_title">"18+ &amp; Spoiler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Eliminar Todas as Definições Datadas"</string>
     <string name="restart_app_see_changes">"Reinicie a aplicação para ver as alterações"</string>
     <string name="settings_tab_count">"Número de Separadores"</string>
@@ -915,7 +912,6 @@ Reprodução automática de vídeos desativada."</string>
     <string name="delete_all_read_posts_success">"Todas publicações lidas eliminadas com sucesso"</string>
     <string name="hide_read_posts">"Esconder Publicações Lidas"</string>
     <string name="filter_posts">"Filtrar Publicações"</string>
-    <string name="only_nsfw">"Apenas 18+"</string>
     <string name="only_spoiler">"Apenas Spoiler"</string>
     <string name="title_excludes_strings_hint">"Título: excluir palavras-chave (palavra1,palavra2)"</string>
     <string name="title_excludes_regex_hint">"Título: excluir expressões regulares"</string>
@@ -962,7 +958,6 @@ Reprodução automática de vídeos desativada."</string>
     <string name="action_share_link">"Partilhar Ligação"</string>
     <string name="action_copy_link">"Copiar Ligação"</string>
     <string name="action_add_to_post_filter">"Adicionar ao Filtro de Publicações"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Não desfocar Imagens 18+ em Comunidades 18+"</string>
 
     <!-- Fuzzy -->
     <string name="settings_show_avatar_on_the_right">"Mostrar Avatar à Esquerda"</string>
@@ -1034,7 +1029,6 @@ Reprodução automática de vídeos desativada."</string>
     <string name="settings_hide_post_flair">"Esconder Flair da Publicação"</string>
     <string name="settings_crash_reports_title">"Relatório de Falhas"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Perigoso"</string>
-    <string name="settings_disable_nsfw_forever_title">"Desativar 18+ para Sempre"</string>
     <string name="settings_show_only_one_comment_level_indicator">"Mostrar Apenas Um Indicador do Nível de Comentário"</string>
     <string name="save_comment">"Guardar"</string>
     <string name="unsave_comment">"Esquecer"</string>
@@ -1043,11 +1037,6 @@ Reprodução automática de vídeos desativada."</string>
 
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Os relatórios de erros eliminados"</string>
-
-    <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"Uma vez ativo, todo o conteúdo impróprio será desativado permanentemente, quer a definição de conteúdo 18+ esteja ativa ou não. Esta configuração é irreversível e a única maneira de reativar conteúdo 18+ é limpando os dados da aplicação.
-
-Ainda deseja ativar esta opção?"</string>
     <string name="reply">"Responder"</string>
     <string name="post_gallery_activity_label">"Publicação de Galeria"</string>
     <string name="action_share_post_link">"Partilhar Endereço da Publicação"</string>

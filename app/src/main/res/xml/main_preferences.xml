@@ -54,7 +54,7 @@
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:icon="@drawable/ic_nsfw_on_day_night_24dp"
-        app:title="@string/settings_nsfw_and_spoiler_title"
+        app:title="@string/settings_over_18_and_spoiler_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.NsfwAndSpoilerFragment"/>
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference

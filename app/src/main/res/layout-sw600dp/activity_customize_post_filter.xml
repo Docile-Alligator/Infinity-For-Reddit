@@ -341,7 +341,7 @@
                             android:paddingBottom="8dp"
                             android:paddingStart="16dp"
                             android:paddingEnd="16dp"
-                            android:text="@string/post_filter_only_nsfw_spoiler_explanation"
+                            android:text="@string/post_filter_only_sensitive_spoiler_explanation"
                             android:textSize="?attr/font_default"
                             android:textColor="?attr/primaryTextColor"
                             android:fontFamily="?attr/font_family" />
@@ -365,7 +365,7 @@
                                 android:layout_weight="1"
                                 android:layout_gravity="center_vertical"
                                 android:drawablePadding="32dp"
-                                android:text="@string/only_nsfw"
+                                android:text="@string/only_sensitive_content"
                                 android:fontFamily="?attr/font_default"
                                 android:textSize="?attr/font_default" />
 

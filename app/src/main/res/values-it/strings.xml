@@ -338,8 +338,6 @@ Tocca per riprovare."</string>
     <string name="settings_font_size_title">"Dimensione Carattere"</string>
     <string name="settings_title_font_size_title">"Dimensione Carattere Titolo"</string>
     <string name="settings_content_font_size_title">"Dimensione carattere del contenuto"</string>
-    <string name="settings_enable_nsfw_title">"Attiva NSFW"</string>
-    <string name="settings_blur_nsfw_title">"Sfoca Immagini NSFW"</string>
     <string name="settings_blur_spoiler_title">"Sfoca Immagini Spoiler"</string>
     <string name="settings_about_master_title">"Informazioni"</string>
     <string name="settings_acknowledgement_master_title">"Riconoscimenti"</string>
@@ -733,7 +731,6 @@ Esempio: latuapassword:123456"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Il numero di colonne nel Feed dei post"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Vista verticale"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Vista orizzontale"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW &amp; Spoiler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Elimina Tutte le Impostazioni Precedenti"</string>
     <string name="restart_app_see_changes">"Riavvia la app per vedere i cambiamenti"</string>
     <string name="settings_tab_count">"Numero di schede"</string>
@@ -868,7 +865,6 @@ La riproduzione automatica video è disabilitata."</string>
     <string name="delete_all_read_posts_success">"Cancellazione dei post letti avvenuta con successo"</string>
     <string name="hide_read_posts">"Nascondi post letti"</string>
     <string name="filter_posts">"Filtra post"</string>
-    <string name="only_nsfw">"Solo NSFW"</string>
     <string name="only_spoiler">"Solo spoiler"</string>
     <string name="title_excludes_strings_hint">"Titolo: escludi parole chiave (key1,key2)"</string>
     <string name="title_excludes_regex_hint">"Escludi regex"</string>
@@ -915,7 +911,6 @@ La riproduzione automatica video è disabilitata."</string>
     <string name="action_share_link">"Condividi Link"</string>
     <string name="action_copy_link">"Copia Link"</string>
     <string name="action_add_to_post_filter">"Aggiungi al filtro dei post"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Non oscurare immagini NSFW nei Subbreddits NSFW"</string>
     <string name="settings_show_avatar_on_the_right">"Mostra l'avatar a sinistra"</string>
     <string name="settings_backup_settings_title">"Impostazioni Backup"</string>
     <string name="settings_restore_settings_title">"Reimposta le impostazioni"</string>
@@ -979,16 +974,12 @@ La riproduzione automatica video è disabilitata."</string>
     <string name="settings_hide_post_flair">"Nascondi i flair dei post"</string>
     <string name="settings_crash_reports_title">"Rapporti sui crash"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Pericoloso"</string>
-    <string name="settings_disable_nsfw_forever_title">"Disabilita permanentemente NSFW"</string>
     <string name="settings_show_only_one_comment_level_indicator">"Mostra indicatori di un solo livello di commenti"</string>
     <string name="save_comment">"Salva"</string>
     <string name="unsave_comment">"Non salvare"</string>
     <string name="copy_multi_reddit_path">"Copia il percorso del Multireddit"</string>
     <string name="copy_multi_reddit_path_failed">"Impossibile copiare il percorso del Multireddit"</string>
     <string name="crash_reports_deleted">"I rapporti dei crash sono stati cancellati"</string>
-    <string name="disable_nsfw_forever_message">"Una volta abilitata l'opzione, i contenuti NSFW saranno permanentemente disabilitati, indipendentemente dal fatto che l'impostazione NSFW sia abilitata o meno. Questa opzione è irreversibile, l'unico modo per riabilitare i contenuti NSFW è cancellare i dati dell'app.
-
-Vuoi comunque abilitare l'opzione?"</string>
     <string name="reply">"Rispondi"</string>
     <string name="post_gallery_activity_label">"Galleria post"</string>
     <string name="action_share_post_link">"Condividi post link"</string>

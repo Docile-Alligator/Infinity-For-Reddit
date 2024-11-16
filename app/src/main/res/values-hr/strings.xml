@@ -387,8 +387,6 @@
     <string name="settings_font_size_title">"Veličina fonta"</string>
     <string name="settings_title_font_size_title">"Veličina fonta naslova"</string>
     <string name="settings_content_font_size_title">"Veličina fonta sadržaja"</string>
-    <string name="settings_enable_nsfw_title">"Omoguči NSFW"</string>
-    <string name="settings_blur_nsfw_title">"Zamagli NSFW slike"</string>
     <string name="settings_blur_spoiler_title">"Zamagli spojler slike"</string>
     <string name="settings_about_master_title">"O aplikaciji"</string>
     <string name="settings_acknowledgement_master_title">"Priznanja"</string>
@@ -818,7 +816,6 @@ Baziraj na Indigo Amoled temi"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Broj stupaca u feed-u objava"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Portret"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Pejzaž"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSWF i Spojler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Izbriši sve nasljeđene postavke"</string>
     <string name="restart_app_see_changes">"Ponovno pokrenite aplikaciju kako biste vidjeli promjene"</string>
     <string name="settings_tab_count">"Broj kartica"</string>
@@ -967,7 +964,6 @@ Reddit videi su niže rezolucije."</string>
     <string name="delete_all_read_posts_success">"Brisanje svih pročitanih objava uspješno"</string>
     <string name="hide_read_posts">"Sakrij pročitane objave"</string>
     <string name="filter_posts">"Filtriraj objave"</string>
-    <string name="only_nsfw">"Samo NSFW"</string>
     <string name="only_spoiler">"Samo Spojleri"</string>
     <string name="title_excludes_strings_hint">"Naslov: isključuje ključne riječi (key1,key2)"</string>
     <string name="title_excludes_regex_hint">"Naslov: isključuje regex"</string>
@@ -999,7 +995,6 @@ Reddit videi su niže rezolucije."</string>
     <string name="action_share_link">"Podjeli link"</string>
     <string name="action_copy_link">"Kopiraj link"</string>
     <string name="action_add_to_post_filter">"Dodaj u vrstu objave"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Nemoj blurati NSFW slike u NSFW Subredditima"</string>
 
     <!-- Fuzzy -->
     <string name="settings_show_avatar_on_the_right">"Prikazi sliku Avatara sa lijeve strane"</string>

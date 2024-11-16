@@ -416,8 +416,6 @@
     <string name="settings_font_size_title">"フォントサイズ"</string>
     <string name="settings_title_font_size_title">"フォントサイズ"</string>
     <string name="settings_content_font_size_title">"フォントサイズ"</string>
-    <string name="settings_enable_nsfw_title">"NSFWを有効化"</string>
-    <string name="settings_blur_nsfw_title">"NSFW画像をぼかして表示"</string>
     <string name="settings_blur_spoiler_title">"ネタバレ画像をぼかして表示"</string>
 
     <!-- Fuzzy -->
@@ -867,7 +865,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_number_of_columns_in_post_feed_title">"投稿フィードの表示列数"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"縦画面時"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"横画面時"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW(職場閲覧注意)とネタバレ"</string>
     <string name="settings_delete_all_legacy_settings_title">"古い設定データを削除"</string>
     <string name="restart_app_see_changes">"変更を適用するにはアプリを再起動してください"</string>
     <string name="settings_tab_count">"タブ数"</string>
@@ -1000,7 +997,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="open_link">"リンクを開く"</string>
     <string name="hide_read_posts">"既読の投稿を非表示にする"</string>
     <string name="filter_posts">"投稿をフィルタリング"</string>
-    <string name="only_nsfw">"NSFWのみ"</string>
     <string name="only_spoiler">"ネタバレのみ"</string>
     <string name="title_excludes_strings_hint">"タイトル: 除外するキーワード (key1,key2)"</string>
     <string name="title_excludes_regex_hint">"タイトル: 除外する正規表現"</string>
@@ -1037,7 +1033,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="action_share_link">"リンクを共有"</string>
     <string name="action_copy_link">"リンクをコピー"</string>
     <string name="action_add_to_post_filter">"投稿フィルターに追加"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"NSFWのSubredditではNSFW画像をぼかさない"</string>
     <string name="settings_show_avatar_on_the_right">"アバターを右側に表示"</string>
     <string name="settings_backup_settings_title">"設定をバックアップ"</string>
     <string name="settings_restore_settings_title">"設定を復元"</string>
@@ -1086,7 +1081,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="inbox_with_count">"受信トレイ (%1$d)"</string>
     <string name="settings_swipe_vertically_to_go_back_from_media_title">"縦方向にスワイプして画像やGIF動画の画面から戻る"</string>
     <string name="settings_crash_reports_title">"クラッシュレポート"</string>
-    <string name="settings_disable_nsfw_forever_title">"NSFWを永久に無効にする"</string>
     <string name="save_comment">"保存"</string>
     <string name="unsave_comment">"保存しない"</string>
     <string name="copy_multi_reddit_path">"Multiredditのパスをコピー"</string>
@@ -1094,11 +1088,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"クラッシュレポートが削除されました"</string>
-
-    <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"一度有効にすると、NSFW設定が有効かどうかに関係なく、NSFWは永続的に無効になります。そして、このオプションは元に戻せません。アプリのデータを消去することによってのみ、NSFWを再度有効にすることができます。
-
-それでも有効にしますか？"</string>
     <string name="reply">"返信"</string>
     <string name="post_gallery_activity_label">"ギャラリー投稿"</string>
     <string name="action_share_post_link">"投稿リンクを共有"</string>
