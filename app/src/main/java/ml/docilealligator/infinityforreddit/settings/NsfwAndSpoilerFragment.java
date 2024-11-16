@@ -1,11 +1,16 @@
 package ml.docilealligator.infinityforreddit.settings;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,9 +22,11 @@ import org.greenrobot.eventbus.EventBus;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.databinding.FragmentNsfwAndSpoilerBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWBlurEvent;
@@ -151,6 +158,28 @@ public class NsfwAndSpoilerFragment extends Fragment {
                         .show();
             }
         });
+
+        TextView messageTextView = new TextView(activity);
+        int padding = (int) Utils.convertDpToPixel(24, activity);
+        messageTextView.setPaddingRelative(padding, padding, padding, padding);
+        SpannableString message = new SpannableString(getString(R.string.user_agreement_message_sensitive_content, "https://www.redditinc.com/policies/user-agreement", "https://docile-alligator.github.io"));
+        Linkify.addLinks(message, Linkify.WEB_URLS);
+        messageTextView.setMovementMethod(BetterLinkMovementMethod.newInstance().setOnLinkClickListener((textView, url) -> {
+            Intent intent = new Intent(activity, LinkResolverActivity.class);
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
+            return true;
+        }));
+        messageTextView.setLinkTextColor(getResources().getColor(R.color.colorAccent));
+        messageTextView.setText(message);
+        new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+                .setTitle(getString(R.string.user_agreement_dialog_title))
+                .setView(messageTextView)
+                .setPositiveButton(R.string.agree, (dialogInterface, i) -> dialogInterface.dismiss())
+                .setNegativeButton(R.string.do_not_agree, (dialogInterface, i) -> activity.onBackPressed())
+                .setCancelable(false)
+                .show();
+
         return binding.getRoot();
     }
 
