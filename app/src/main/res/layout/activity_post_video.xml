@@ -155,6 +155,7 @@
                         android:textColor="?attr/primaryTextColor"
                         android:textSize="?attr/font_default"
                         android:fontFamily="?attr/font_family"
+                        android:visibility="gone"
                         app:lib_setRadius="6dp"
                         app:lib_setRoundedView="true"
                         app:lib_setShape="rectangle" />

@@ -162,7 +162,7 @@ public class NsfwAndSpoilerFragment extends Fragment {
         TextView messageTextView = new TextView(activity);
         int padding = (int) Utils.convertDpToPixel(24, activity);
         messageTextView.setPaddingRelative(padding, padding, padding, padding);
-        SpannableString message = new SpannableString(getString(R.string.user_agreement_message_sensitive_content, "https://www.redditinc.com/policies/user-agreement", "https://docile-alligator.github.io"));
+        SpannableString message = new SpannableString(getString(R.string.warning_message_sensitive_content, "https://www.redditinc.com/policies/user-agreement", "https://docile-alligator.github.io"));
         Linkify.addLinks(message, Linkify.WEB_URLS);
         messageTextView.setMovementMethod(BetterLinkMovementMethod.newInstance().setOnLinkClickListener((textView, url) -> {
             Intent intent = new Intent(activity, LinkResolverActivity.class);
@@ -173,7 +173,7 @@ public class NsfwAndSpoilerFragment extends Fragment {
         messageTextView.setLinkTextColor(getResources().getColor(R.color.colorAccent));
         messageTextView.setText(message);
         new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
-                .setTitle(getString(R.string.user_agreement_dialog_title))
+                .setTitle(getString(R.string.warning))
                 .setView(messageTextView)
                 .setPositiveButton(R.string.agree, (dialogInterface, i) -> dialogInterface.dismiss())
                 .setNegativeButton(R.string.do_not_agree, (dialogInterface, i) -> activity.onBackPressed())
