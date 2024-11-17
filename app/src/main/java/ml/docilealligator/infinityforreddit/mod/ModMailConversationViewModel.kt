@@ -18,7 +18,7 @@ class ModMailConversationViewModel(
         ModMailConversationPagingSource(oauthRetrofit, accessToken, sharedPreferences)
 
     val flow = Pager(
-        PagingConfig(20)
+        PagingConfig(20, 4)
     ) {
         pagingSource
     }.flow.cachedIn(viewModelScope)

@@ -2,15 +2,20 @@ package ml.docilealligator.infinityforreddit.activities
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,8 +24,14 @@ import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -86,6 +97,8 @@ class ModmailActivity : BaseActivity() {
                     modifier = Modifier.padding(innerPadding),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
+                    val lazyPagingItems: LazyPagingItems<Conversation> = conversationViewModel.flow.collectAsLazyPagingItems()
+                    val listState: LazyListState = rememberLazyListState()
                     val navigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
 
                     BackHandler(navigator.canNavigateBack()) {
@@ -98,7 +111,7 @@ class ModmailActivity : BaseActivity() {
                         value = navigator.scaffoldValue,
                         listPane = {
                             AnimatedPane {
-                                ConversationListView(conversationViewModel.flow.collectAsLazyPagingItems())
+                                ConversationListView(lazyPagingItems, navigator, listState)
                             }
                         },
                         detailPane = {
@@ -131,21 +144,55 @@ class ModmailActivity : BaseActivity() {
     }
 
     @Composable
-    fun ConversationListView(pagingItems: LazyPagingItems<Conversation>) {
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(count = pagingItems.itemCount) { index: Int ->
-                val conversation = pagingItems[index]
-                conversation?.let {
-                    ConversationView(it)
+    fun ConversationListView(pagingItems: LazyPagingItems<Conversation>, navigator: ThreePaneScaffoldNavigator<Conversation>, listState: LazyListState) {
+        when {
+            pagingItems.itemCount == 0 -> ConversationsLoadingView()
+            else -> {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    state = listState,
+                ) {
+                    items(count = pagingItems.itemCount) { index: Int ->
+                        val conversation = pagingItems[index]
+                        conversation?.let {
+                            ConversationView(it) { conversation ->
+                                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, conversation)
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
     @Composable
-    fun ConversationView(conversation: Conversation) {
+    fun ConversationView(conversation: Conversation, onItemClick: (Conversation) -> Unit) {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onItemClick(conversation) }
+        ) {
+            conversation.owner?.displayName?.let {
+                Text(text = it, color = Color(mCustomThemeWrapper.subreddit))
+            }
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                for (author in conversation.authors) {
+                    author.name?.let {
+                        Text(text = it, color = Color(mCustomThemeWrapper.username))
+                    }
+                }
+            }
+            conversation.subject?.let {
+                Text(text = it)
+            }
+        }
+    }
+
+    @Composable
+    fun ConversationDetailsView(conversation: Conversation) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -168,12 +215,12 @@ class ModmailActivity : BaseActivity() {
     }
 
     @Composable
-    fun ConversationDetailsView(conversation: Conversation) {
+    fun MessageView(message: ModMessage) {
 
     }
 
     @Composable
-    fun MessageView(message: ModMessage) {
+    fun ConversationsLoadingView() {
 
     }
 }
