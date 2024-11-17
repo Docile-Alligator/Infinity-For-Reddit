@@ -14,18 +14,11 @@ class ModMailConversationViewModel(
     accessToken: String,
     sharedPreferences: SharedPreferences
 ) : ViewModel() {
-    private val pagingSource: ModMailConversationPagingSource =
-        ModMailConversationPagingSource(oauthRetrofit, accessToken, sharedPreferences)
-
     val flow = Pager(
         PagingConfig(20, 4)
     ) {
-        pagingSource
+        ModMailConversationPagingSource(oauthRetrofit, accessToken, sharedPreferences)
     }.flow.cachedIn(viewModelScope)
-
-    fun refresh() {
-        pagingSource.invalidate()
-    }
 
     @Suppress("UNCHECKED_CAST")
     class Factory(

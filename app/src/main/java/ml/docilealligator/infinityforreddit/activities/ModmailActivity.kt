@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit.activities
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -27,15 +26,13 @@ import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
+import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import ml.docilealligator.infinityforreddit.Infinity
@@ -61,7 +58,6 @@ class ModmailActivity : BaseActivity() {
     lateinit var mCurrentAccountSharedPreferences: SharedPreferences
     @Inject
     lateinit var mCustomThemeWrapper: CustomThemeWrapper
-
     lateinit var conversationViewModel: ModMailConversationViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,15 +87,17 @@ class ModmailActivity : BaseActivity() {
                             Text(getString(R.string.modmail_activity_label))
                         }
                     )
-                }
+                },
+                containerColor = Color(mCustomThemeWrapper.backgroundColor)
             ) { innerPadding ->
                 Column(
                     modifier = Modifier.padding(innerPadding),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    val lazyPagingItems: LazyPagingItems<Conversation> = conversationViewModel.flow.collectAsLazyPagingItems()
                     val listState: LazyListState = rememberLazyListState()
                     val navigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
+
+                    val pagingItems: LazyPagingItems<Conversation> = conversationViewModel.flow.collectAsLazyPagingItems()
 
                     BackHandler(navigator.canNavigateBack()) {
                         navigator.navigateBack()
@@ -111,7 +109,7 @@ class ModmailActivity : BaseActivity() {
                         value = navigator.scaffoldValue,
                         listPane = {
                             AnimatedPane {
-                                ConversationListView(lazyPagingItems, navigator, listState)
+                                ConversationListView(pagingItems, navigator, listState)
                             }
                         },
                         detailPane = {
@@ -145,9 +143,11 @@ class ModmailActivity : BaseActivity() {
 
     @Composable
     fun ConversationListView(pagingItems: LazyPagingItems<Conversation>, navigator: ThreePaneScaffoldNavigator<Conversation>, listState: LazyListState) {
-        when {
-            pagingItems.itemCount == 0 -> ConversationsLoadingView()
-            else -> {
+        PullToRefreshBox(
+            isRefreshing = pagingItems.loadState.refresh == LoadState.Loading,
+            onRefresh = { pagingItems.refresh() }
+        ) {
+            if (pagingItems.itemCount > 0) {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     state = listState,
@@ -216,11 +216,6 @@ class ModmailActivity : BaseActivity() {
 
     @Composable
     fun MessageView(message: ModMessage) {
-
-    }
-
-    @Composable
-    fun ConversationsLoadingView() {
 
     }
 }
