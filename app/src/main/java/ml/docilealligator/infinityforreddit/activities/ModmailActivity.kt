@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
@@ -214,29 +215,40 @@ class ModmailActivity : BaseActivity() {
 
     @Composable
     fun ConversationDetailsView(conversation: Conversation) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = WindowInsets(top = 16.dp).add(WindowInsets.navigationBars).asPaddingValues(),
+            modifier = Modifier.clipToBounds()
         ) {
-            conversation.owner?.displayName?.let {
-                Text(text = it, color = Color(mCustomThemeWrapper.subreddit))
-            }
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                for (author in conversation.authors) {
-                    author.name?.let {
-                        Text(text = it, color = Color(mCustomThemeWrapper.username))
-                    }
+            items(count = conversation.messages.size) {
+                for (message in conversation.messages) {
+                    MessageView(message)
                 }
-            }
-            conversation.subject?.let {
-                Text(text = it)
             }
         }
     }
 
     @Composable
     fun MessageView(message: ModMessage) {
+        Column(
+            modifier = Modifier.fillMaxHeight(),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                message.author?.name?.let {
+                    Text(text = it)
+                }
+                message.date?.let {
+                    Text(text = it)
+                }
+            }
 
+            message.bodyMarkdown?.let {
+                Text(text = it)
+            }
+        }
     }
 }
