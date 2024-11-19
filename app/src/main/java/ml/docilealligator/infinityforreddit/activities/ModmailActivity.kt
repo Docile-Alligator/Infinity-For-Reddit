@@ -45,13 +45,19 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.google.gson.Gson
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
+import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.mod.Conversation
 import ml.docilealligator.infinityforreddit.mod.ModMailConversationViewModel
 import ml.docilealligator.infinityforreddit.mod.ModMessage
+import ml.docilealligator.infinityforreddit.utils.APIUtils
+import ml.docilealligator.infinityforreddit.utils.JSONUtils
+import org.json.JSONObject
 import retrofit2.Retrofit
+import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -148,6 +154,21 @@ class ModmailActivity : BaseActivity() {
 
     override fun applyCustomTheme() {
 
+    }
+
+    suspend fun fetchMessages(conversation: Conversation) {
+        try {
+            val response = mOauthRetrofit.create(RedditAPIKt::class.java).getModMailConversationMessages(conversation.id!!, APIUtils.getOAuthHeader(accessToken))
+            if (response.isSuccessful && response.body() != null) {
+                val responseJson = JSONObject(response.body()!!)
+                val updatedConversation = Conversation.parseConversation(Gson(), responseJson.getString(JSONUtils.CONVERSATION_KEY), responseJson.getJSONObject(JSONUtils.MESSAGES_KEY))
+                conversationViewModel.updateConversation(updatedConversation)
+            } else {
+
+            }
+        } catch (e: IOException) {
+
+        }
     }
 
     @Composable

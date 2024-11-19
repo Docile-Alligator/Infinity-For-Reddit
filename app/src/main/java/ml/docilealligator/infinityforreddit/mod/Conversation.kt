@@ -1,8 +1,15 @@
 package ml.docilealligator.infinityforreddit.mod
 
+import android.os.Parcel
 import android.os.Parcelable
+import androidx.room.Ignore
+import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parceler
 import kotlinx.parcelize.Parcelize
+import ml.docilealligator.infinityforreddit.utils.JSONUtils
+import org.json.JSONObject
+import java.io.IOException
 
 @Parcelize
 data class Conversation(
@@ -23,9 +30,39 @@ data class Conversation(
     @SerializedName("subject") var subject: String? = null,
     @SerializedName("id") var id: String? = null,
     @SerializedName("isHighlighted") var isHighlighted: Boolean? = null,
-    @SerializedName("numMessages") var numMessages: Int? = null
+    @SerializedName("numMessages") var numMessages: Int? = null,
+    @Ignore val messages: MutableList<ModMessage> = mutableListOf()
 ): Parcelable {
-    val messages: MutableList<ModMessage> = mutableListOf()
+    override fun equals(other: Any?): Boolean {
+        if (other === this) {
+            return true
+        }
+        if (other !is Conversation) {
+            return false
+        }
+
+        return other.id == id
+    }
+
+    companion object {
+        fun parseConversation(gson: Gson, conversationJson: String, messagesJSONObject: JSONObject): Conversation {
+            return gson.fromJson(conversationJson, Conversation::class.java).apply {
+                for (objId in objIds) {
+                    objId.key?.let { key ->
+                        if (key == "messages") {
+                            objId.id?.let { id ->
+                                try {
+                                    messages.add(gson.fromJson(messagesJSONObject.getString(id), ModMessage::class.java))
+                                } catch (ignore: IOException) {
+                                    ignore.printStackTrace()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Parcelize

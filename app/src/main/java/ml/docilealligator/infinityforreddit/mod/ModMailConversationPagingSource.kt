@@ -39,21 +39,7 @@ class ModMailConversationPagingSource(val retrofit: Retrofit, val accessToken: S
                     for (i in 0 until conversationIdsArray.length()) {
                         val conversationId = conversationIdsArray.getString(i)
                         try {
-                            conversations.add(gson.fromJson(json.getJSONObject(JSONUtils.CONVERSATIONS_KEY).getString(conversationId), Conversation::class.java).apply {
-                                for (objId in objIds) {
-                                    objId.key?.let { key ->
-                                        if (key == "messages") {
-                                            objId.id?.let { id ->
-                                                try {
-                                                    messages.add(gson.fromJson(messagesJSONObject.getString(id), ModMessage::class.java))
-                                                } catch (ignore: IOException) {
-                                                    ignore.printStackTrace()
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            })
+                            conversations.add(Conversation.parseConversation(gson, json.getJSONObject(JSONUtils.CONVERSATIONS_KEY).getString(conversationId), messagesJSONObject))
                         } catch (ignore: IOException) {
                             ignore.printStackTrace()
                         }
