@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.apis
 
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.HeaderMap
@@ -15,7 +14,7 @@ interface RedditAPIKt {
     ): Response<String>
 
     @GET("/api/mod/conversations/{id}")
-    suspend fun getModMailConversationMessages(
+    suspend fun getModMailConversation(
         @Path("id") id: String,
         @HeaderMap headers: Map<String, String>
     ): Response<String>

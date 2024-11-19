@@ -1,14 +1,17 @@
 package ml.docilealligator.infinityforreddit.mod
 
-import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.Ignore
 import com.google.gson.Gson
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parceler
 import kotlinx.parcelize.Parcelize
+import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
+import ml.docilealligator.infinityforreddit.utils.APIUtils
 import ml.docilealligator.infinityforreddit.utils.JSONUtils
 import org.json.JSONObject
+import retrofit2.Response
+import retrofit2.Retrofit
 import java.io.IOException
 
 @Parcelize
@@ -31,8 +34,13 @@ data class Conversation(
     @SerializedName("id") var id: String? = null,
     @SerializedName("isHighlighted") var isHighlighted: Boolean? = null,
     @SerializedName("numMessages") var numMessages: Int? = null,
-    @Ignore val messages: MutableList<ModMessage> = mutableListOf()
+    @Ignore private var _messages: MutableList<ModMessage>? = mutableListOf(),
+    @Ignore var isUpdated: Boolean
 ): Parcelable {
+    val messages: MutableList<ModMessage>
+        get() = _messages ?: mutableListOf<ModMessage>().also { _messages = it }
+
+
     override fun equals(other: Any?): Boolean {
         if (other === this) {
             return true
@@ -53,6 +61,7 @@ data class Conversation(
                             objId.id?.let { id ->
                                 try {
                                     messages.add(gson.fromJson(messagesJSONObject.getString(id), ModMessage::class.java))
+                                    print(messagesJSONObject)
                                 } catch (ignore: IOException) {
                                     ignore.printStackTrace()
                                 }
@@ -61,6 +70,30 @@ data class Conversation(
                     }
                 }
             }
+        }
+
+        /*
+            Return the old Conversation object if network request failed
+         */
+        suspend fun fetchConversation(oauthRetrofit: Retrofit, accessToken: String, conversation: Conversation, gson: Gson): Conversation {
+            conversation.id?.let { id ->
+                try {
+                    val response: Response<String> = oauthRetrofit.create(RedditAPIKt::class.java).getModMailConversation(id, APIUtils.getOAuthHeader(accessToken))
+                    if (response.isSuccessful && response.body() != null) {
+                        val responseJson = JSONObject(response.body()!!)
+                        return parseConversation(gson, responseJson.getString(JSONUtils.CONVERSATION_KEY),
+                            responseJson.getJSONObject(JSONUtils.MESSAGES_KEY)).apply {
+                            isUpdated = true
+                        }
+                    } else {
+                        return conversation
+                    }
+                } catch (e: IOException) {
+                    return conversation
+                }
+            }
+
+            return conversation
         }
     }
 }

@@ -12,6 +12,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import retrofit2.Retrofit
 
 class ModMailConversationViewModel(
@@ -19,7 +20,7 @@ class ModMailConversationViewModel(
     accessToken: String,
     sharedPreferences: SharedPreferences
 ) : ViewModel() {
-    private val updatedConversations: MutableStateFlow<MutableMap<String, Conversation>> = MutableStateFlow(mutableMapOf())
+    private val updatedConversations: MutableStateFlow<Map<String, Conversation>> = MutableStateFlow(emptyMap())
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val flow = updatedConversations.flatMapLatest { updatedConversationsValue ->
@@ -35,7 +36,7 @@ class ModMailConversationViewModel(
     }.cachedIn(viewModelScope)
 
     fun updateConversation(conversation: Conversation) {
-        updatedConversations.value[conversation.id!!] = conversation
+        updatedConversations.value = (updatedConversations.value + (conversation.id!! to conversation))
     }
 
     @Suppress("UNCHECKED_CAST")

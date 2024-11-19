@@ -36,16 +36,20 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
@@ -109,8 +113,6 @@ class ModmailActivity : BaseActivity() {
                 val listState: LazyListState = rememberLazyListState()
                 val navigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
 
-                val pagingItems: LazyPagingItems<Conversation> = conversationViewModel.flow.collectAsLazyPagingItems()
-
                 BackHandler(navigator.canNavigateBack()) {
                     navigator.navigateBack()
                 }
@@ -125,7 +127,7 @@ class ModmailActivity : BaseActivity() {
                     value = navigator.scaffoldValue,
                     listPane = {
                         AnimatedPane {
-                            ConversationListView(pagingItems, navigator, listState)
+                            ConversationListView(conversationViewModel.flow.collectAsLazyPagingItems(), navigator, listState)
                         }
                     },
                     detailPane = {
@@ -158,7 +160,7 @@ class ModmailActivity : BaseActivity() {
 
     suspend fun fetchMessages(conversation: Conversation) {
         try {
-            val response = mOauthRetrofit.create(RedditAPIKt::class.java).getModMailConversationMessages(conversation.id!!, APIUtils.getOAuthHeader(accessToken))
+            val response = mOauthRetrofit.create(RedditAPIKt::class.java).getModMailConversation(conversation.id!!, APIUtils.getOAuthHeader(accessToken))
             if (response.isSuccessful && response.body() != null) {
                 val responseJson = JSONObject(response.body()!!)
                 val updatedConversation = Conversation.parseConversation(Gson(), responseJson.getString(JSONUtils.CONVERSATION_KEY), responseJson.getJSONObject(JSONUtils.MESSAGES_KEY))
@@ -176,7 +178,7 @@ class ModmailActivity : BaseActivity() {
         val state: PullToRefreshState = rememberPullToRefreshState()
         PullToRefreshBox(
             isRefreshing = pagingItems.loadState.refresh == LoadState.Loading,
-            onRefresh = { pagingItems.refresh()},
+            onRefresh = { pagingItems.refresh() },
             state = state,
             indicator = {
                 Indicator(
@@ -236,15 +238,27 @@ class ModmailActivity : BaseActivity() {
 
     @Composable
     fun ConversationDetailsView(conversation: Conversation) {
+        if (!conversation.isUpdated) {
+            LaunchedEffect(Unit) {
+                lifecycleScope.launch {
+                    val updatedConversation = Conversation.fetchConversation(
+                        mOauthRetrofit, accessToken!!, conversation, Gson()
+                    )
+
+                    launch(Dispatchers.Main) {
+                        conversationViewModel.updateConversation(updatedConversation)
+                    }
+                }
+            }
+        }
+
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             contentPadding = WindowInsets(top = 16.dp).add(WindowInsets.navigationBars).asPaddingValues(),
             modifier = Modifier.clipToBounds()
         ) {
-            items(count = conversation.messages.size) {
-                for (message in conversation.messages) {
-                    MessageView(message)
-                }
+            items(count = conversation.messages.size) { index: Int ->
+                MessageView(conversation.messages[index])
             }
         }
     }
