@@ -37,31 +37,25 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
-import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.mod.Conversation
 import ml.docilealligator.infinityforreddit.mod.ModMailConversationViewModel
 import ml.docilealligator.infinityforreddit.mod.ModMessage
-import ml.docilealligator.infinityforreddit.utils.APIUtils
-import ml.docilealligator.infinityforreddit.utils.JSONUtils
-import org.json.JSONObject
 import retrofit2.Retrofit
-import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -127,7 +121,7 @@ class ModmailActivity : BaseActivity() {
                     value = navigator.scaffoldValue,
                     listPane = {
                         AnimatedPane {
-                            ConversationListView(conversationViewModel.flow.collectAsLazyPagingItems(), navigator, listState)
+                            ConversationListView(navigator, listState)
                         }
                     },
                     detailPane = {
@@ -158,24 +152,11 @@ class ModmailActivity : BaseActivity() {
 
     }
 
-    suspend fun fetchMessages(conversation: Conversation) {
-        try {
-            val response = mOauthRetrofit.create(RedditAPIKt::class.java).getModMailConversation(conversation.id!!, APIUtils.getOAuthHeader(accessToken))
-            if (response.isSuccessful && response.body() != null) {
-                val responseJson = JSONObject(response.body()!!)
-                val updatedConversation = Conversation.parseConversation(Gson(), responseJson.getString(JSONUtils.CONVERSATION_KEY), responseJson.getJSONObject(JSONUtils.MESSAGES_KEY))
-                conversationViewModel.updateConversation(updatedConversation)
-            } else {
-
-            }
-        } catch (e: IOException) {
-
-        }
-    }
-
     @Composable
-    fun ConversationListView(pagingItems: LazyPagingItems<Conversation>, navigator: ThreePaneScaffoldNavigator<Conversation>, listState: LazyListState) {
+    fun ConversationListView(navigator: ThreePaneScaffoldNavigator<Conversation>, listState: LazyListState) {
         val state: PullToRefreshState = rememberPullToRefreshState()
+        val pagingItems: LazyPagingItems<Conversation> = conversationViewModel.flow.collectAsLazyPagingItems()
+
         PullToRefreshBox(
             isRefreshing = pagingItems.loadState.refresh == LoadState.Loading,
             onRefresh = { pagingItems.refresh() },
@@ -238,17 +219,18 @@ class ModmailActivity : BaseActivity() {
 
     @Composable
     fun ConversationDetailsView(conversation: Conversation) {
-        if (!conversation.isUpdated) {
-            LaunchedEffect(Unit) {
-                lifecycleScope.launch {
-                    val updatedConversation = Conversation.fetchConversation(
-                        mOauthRetrofit, accessToken!!, conversation, Gson()
-                    )
+        val conversationState = remember { mutableStateOf(conversation) }
+        val conversationStateValue = conversationState.value
 
-                    launch(Dispatchers.Main) {
-                        conversationViewModel.updateConversation(updatedConversation)
-                    }
-                }
+        if (!conversationStateValue.isUpdated) {
+            LaunchedEffect(conversationStateValue.id) {
+                val updatedConversation = Conversation.fetchConversation(
+                    mOauthRetrofit, accessToken!!, conversationStateValue, Gson()
+                )
+
+                conversationState.value = updatedConversation
+
+                conversationViewModel.updateConversation(updatedConversation)
             }
         }
 
@@ -257,8 +239,8 @@ class ModmailActivity : BaseActivity() {
             contentPadding = WindowInsets(top = 16.dp).add(WindowInsets.navigationBars).asPaddingValues(),
             modifier = Modifier.clipToBounds()
         ) {
-            items(count = conversation.messages.size) { index: Int ->
-                MessageView(conversation.messages[index])
+            items(count = conversationStateValue.messages.size) { index: Int ->
+                MessageView(conversationStateValue.messages[index])
             }
         }
     }
