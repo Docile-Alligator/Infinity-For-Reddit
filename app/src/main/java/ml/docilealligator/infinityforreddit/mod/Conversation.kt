@@ -49,7 +49,7 @@ data class Conversation(
             return false
         }
 
-        return other.id == id && other.messages == messages
+        return other.id == id && other.messages == messages && other.isUpdated == isUpdated
     }
 
     companion object {

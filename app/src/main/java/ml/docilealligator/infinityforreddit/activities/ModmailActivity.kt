@@ -36,7 +36,9 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -45,10 +47,12 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.google.gson.Gson
+import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
@@ -125,9 +129,11 @@ class ModmailActivity : BaseActivity() {
                         }
                     },
                     detailPane = {
+                        val conversationState = remember { mutableStateOf<Conversation?>(null) }
                         AnimatedPane {
                             navigator.currentDestination?.content?.let {
-                                ConversationDetailsView(it)
+                                conversationState.value = it
+                                ConversationDetailsView(conversationState)
                             }
                         }
                     }
@@ -150,6 +156,20 @@ class ModmailActivity : BaseActivity() {
 
     override fun applyCustomTheme() {
 
+    }
+
+    private suspend fun refreshConversation(conversationState: MutableState<Conversation?>, refreshState: MutableState<Boolean>) {
+        refreshState.value = true
+
+        val updatedConversation = Conversation.fetchConversation(
+            mOauthRetrofit, accessToken!!, conversationState.value!!, Gson()
+        )
+
+        conversationState.value = updatedConversation
+
+        conversationViewModel.updateConversation(updatedConversation)
+
+        refreshState.value = false
     }
 
     @Composable
@@ -218,29 +238,45 @@ class ModmailActivity : BaseActivity() {
     }
 
     @Composable
-    fun ConversationDetailsView(conversation: Conversation) {
-        val conversationState = remember { mutableStateOf(conversation) }
+    fun ConversationDetailsView(conversationState: MutableState<Conversation?>) {
         val conversationStateValue = conversationState.value
+        conversationStateValue?.let {
+            val pullToRefreshState: PullToRefreshState = rememberPullToRefreshState()
+            val refreshState = remember { mutableStateOf(false) }
 
-        if (!conversationStateValue.isUpdated) {
-            LaunchedEffect(conversationStateValue.id) {
-                val updatedConversation = Conversation.fetchConversation(
-                    mOauthRetrofit, accessToken!!, conversationStateValue, Gson()
-                )
-
-                conversationState.value = updatedConversation
-
-                conversationViewModel.updateConversation(updatedConversation)
+            if (!it.isUpdated) {
+                LaunchedEffect(it.id) {
+                    refreshConversation(conversationState, refreshState)
+                }
             }
-        }
 
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = WindowInsets(top = 16.dp).add(WindowInsets.navigationBars).asPaddingValues(),
-            modifier = Modifier.clipToBounds()
-        ) {
-            items(count = conversationStateValue.messages.size) { index: Int ->
-                MessageView(conversationStateValue.messages[index])
+            PullToRefreshBox(
+                isRefreshing = refreshState.value,
+                onRefresh = {
+                    lifecycleScope.launch {
+                        refreshConversation(conversationState, refreshState)
+                    }
+                },
+                state = pullToRefreshState,
+                indicator = {
+                    Indicator(
+                        modifier = Modifier.align(Alignment.TopCenter),
+                        isRefreshing = refreshState.value,
+                        state = pullToRefreshState,
+                        containerColor = Color(mCustomThemeWrapper.circularProgressBarBackground),
+                        color = Color(mCustomThemeWrapper.colorAccent)
+                    )
+                }
+            ) {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    contentPadding = WindowInsets(top = 16.dp).add(WindowInsets.navigationBars).asPaddingValues(),
+                    modifier = Modifier.clipToBounds()
+                ) {
+                    items(count = it.messages.size) { index: Int ->
+                        MessageView(it.messages[index])
+                    }
+                }
             }
         }
     }
