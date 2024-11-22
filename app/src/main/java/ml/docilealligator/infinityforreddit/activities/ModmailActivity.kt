@@ -36,7 +36,6 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -198,7 +197,11 @@ class ModmailActivity : BaseActivity() {
                     contentPadding = WindowInsets(top = 16.dp).add(WindowInsets.navigationBars).asPaddingValues(),
                     modifier = Modifier.clipToBounds()
                 ) {
-                    items(count = pagingItems.itemCount) { index: Int ->
+                    items(
+                        count = pagingItems.itemCount,
+                        contentType = { _ -> 1 },
+                        key = { index -> pagingItems[index]?.id ?: index }
+                    ) { index: Int ->
                         val conversation = pagingItems[index]
                         conversation?.let {
                             ConversationView(it) { conversation ->
@@ -273,7 +276,7 @@ class ModmailActivity : BaseActivity() {
                     contentPadding = WindowInsets(top = 16.dp).add(WindowInsets.navigationBars).asPaddingValues(),
                     modifier = Modifier.clipToBounds()
                 ) {
-                    items(count = it.messages.size) { index: Int ->
+                    items(count = it.messages.size, key = { index -> it.messages[index].id ?: index }) { index: Int ->
                         MessageView(it.messages[index])
                     }
                 }

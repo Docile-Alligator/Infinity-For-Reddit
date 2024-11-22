@@ -6,7 +6,6 @@ import androidx.paging.PagingState
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import ml.docilealligator.infinityforreddit.apis.RedditAPI
 import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
 import ml.docilealligator.infinityforreddit.utils.APIUtils
 import ml.docilealligator.infinityforreddit.utils.JSONUtils
@@ -26,28 +25,14 @@ class ModMailConversationPagingSource(val retrofit: Retrofit, val accessToken: S
 
             if (response.isSuccessful) {
                 response.body()?.let {
-                    val json = JSONObject(it)
-                    val conversationIdsArray = json.getJSONArray(JSONUtils.CONVERSATION_IDS_KEY)
-                    if (conversationIdsArray.length() == 0) {
+                    val conversations: MutableList<Conversation>? = parseConversations(it)
+                    if (conversations == null) {
                         return LoadResult.Page(listOf(), null, null)
+                    } else {
+                        return LoadResult.Page(
+                            conversations, null, if (conversations.isEmpty()) null else conversations[conversations.size - 1].id
+                        )
                     }
-
-                    val gson = Gson()
-                    val conversations: MutableList<Conversation> = mutableListOf()
-
-                    val messagesJSONObject = json.getJSONObject(JSONUtils.MESSAGES_KEY)
-                    for (i in 0 until conversationIdsArray.length()) {
-                        val conversationId = conversationIdsArray.getString(i)
-                        try {
-                            conversations.add(Conversation.parseConversation(gson, json.getJSONObject(JSONUtils.CONVERSATIONS_KEY).getString(conversationId), messagesJSONObject))
-                        } catch (ignore: IOException) {
-                            ignore.printStackTrace()
-                        }
-                    }
-
-                    return LoadResult.Page(
-                        conversations, null, conversationIdsArray.getString(conversationIdsArray.length() - 1)
-                    )
                 }
             }
         } catch (e: IOException) {
@@ -55,5 +40,30 @@ class ModMailConversationPagingSource(val retrofit: Retrofit, val accessToken: S
         }
 
         return LoadResult.Error(Exception("Error getting response"))
+    }
+
+    private suspend fun parseConversations(response: String): MutableList<Conversation>? {
+        return withContext(Dispatchers.Default) {
+            val json = JSONObject(response)
+            val conversationIdsArray = json.getJSONArray(JSONUtils.CONVERSATION_IDS_KEY)
+            if (conversationIdsArray.length() == 0) {
+                null
+            } else {
+                val gson = Gson()
+                val conversations: MutableList<Conversation> = mutableListOf()
+
+                val messagesJSONObject = json.getJSONObject(JSONUtils.MESSAGES_KEY)
+                for (i in 0 until conversationIdsArray.length()) {
+                    val conversationId = conversationIdsArray.getString(i)
+                    try {
+                        conversations.add(Conversation.parseConversation(gson, json.getJSONObject(JSONUtils.CONVERSATIONS_KEY).getString(conversationId), messagesJSONObject))
+                    } catch (ignore: IOException) {
+                        ignore.printStackTrace()
+                    }
+                }
+
+                conversations
+            }
+        }
     }
 }

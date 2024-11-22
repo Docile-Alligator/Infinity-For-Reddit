@@ -8,11 +8,13 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import androidx.paging.map
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 
 class ModMailConversationViewModel(
@@ -23,17 +25,25 @@ class ModMailConversationViewModel(
     private val updatedConversations: MutableStateFlow<Map<String, Conversation>> = MutableStateFlow(emptyMap())
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val flow = updatedConversations.flatMapLatest { updatedConversationsValue ->
-        Pager(
-            PagingConfig(20, 4)
-        ) {
-            ModMailConversationPagingSource(oauthRetrofit, accessToken, sharedPreferences)
-        }.flow.map { pagingData ->
-            pagingData.map { conversation ->
-                if (updatedConversationsValue.containsKey(conversation.id)) updatedConversationsValue[conversation.id]!! else conversation
+    val flow = updatedConversations
+        .flatMapLatest { updatedConversationsValue ->
+            withContext(Dispatchers.IO) {
+                Pager(
+                    PagingConfig(20, 4)
+                ) {
+                    ModMailConversationPagingSource(oauthRetrofit, accessToken, sharedPreferences)
+                }
+                    .flow
+                    .map { pagingData ->
+                        pagingData.map { conversation ->
+                            withContext(Dispatchers.Default) {
+                                if (updatedConversationsValue.containsKey(conversation.id)) updatedConversationsValue[conversation.id]!! else conversation
+                            }
+                        }
+                    }
             }
         }
-    }.cachedIn(viewModelScope)
+        .cachedIn(viewModelScope)
 
     fun updateConversation(conversation: Conversation) {
         updatedConversations.value = (updatedConversations.value + (conversation.id!! to conversation))
