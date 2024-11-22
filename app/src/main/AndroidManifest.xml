@@ -88,7 +88,7 @@
             android:name=".activities.EditProfileActivity"
             android:label="@string/edit_profile_activity_label"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.Slidable"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.WikiActivity"
@@ -201,7 +201,7 @@
             android:name=".activities.EditMultiRedditActivity"
             android:label="@string/edit_multi_reddit_activity_label"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.Slidable" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.CustomThemePreviewActivity"
             android:label="@string/theme_preview_activity_label"
@@ -221,7 +221,7 @@
             android:name=".activities.SubredditMultiselectionActivity"
             android:label="@string/subreddit_multiselection_activity_label"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.Slidable" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.CreateMultiRedditActivity"
             android:label="@string/create_multi_reddit_activity_label"
@@ -286,7 +286,7 @@
             android:name=".activities.EditPostActivity"
             android:label="@string/edit_post_activity_label"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.Slidable"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.FilteredPostsActivity"
