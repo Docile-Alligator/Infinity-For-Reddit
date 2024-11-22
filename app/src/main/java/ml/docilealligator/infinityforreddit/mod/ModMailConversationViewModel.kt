@@ -27,21 +27,19 @@ class ModMailConversationViewModel(
     @OptIn(ExperimentalCoroutinesApi::class)
     val flow = updatedConversations
         .flatMapLatest { updatedConversationsValue ->
-            withContext(Dispatchers.IO) {
-                Pager(
-                    PagingConfig(20, 4)
-                ) {
-                    ModMailConversationPagingSource(oauthRetrofit, accessToken, sharedPreferences)
-                }
-                    .flow
-                    .map { pagingData ->
-                        pagingData.map { conversation ->
-                            withContext(Dispatchers.Default) {
-                                if (updatedConversationsValue.containsKey(conversation.id)) updatedConversationsValue[conversation.id]!! else conversation
-                            }
+            Pager(
+                PagingConfig(20, 4)
+            ) {
+                ModMailConversationPagingSource(oauthRetrofit, accessToken, sharedPreferences)
+            }
+                .flow
+                .map { pagingData ->
+                    pagingData.map { conversation ->
+                        withContext(Dispatchers.Default) {
+                            if (updatedConversationsValue.containsKey(conversation.id)) updatedConversationsValue[conversation.id]!! else conversation
                         }
                     }
-            }
+                }
         }
         .cachedIn(viewModelScope)
 
