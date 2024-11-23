@@ -470,7 +470,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
     }
 
     private void savePostFilter(String originalName) {
-        SavePostFilter.savePostFilter(mExecutor, new Handler(), mRedditDataRoomDatabase, postFilter, originalName,
+        SavePostFilter.savePostFilter(mExecutor, mHandler, mRedditDataRoomDatabase, postFilter, originalName,
                 new SavePostFilter.SavePostFilterListener() {
                     @Override
                     public void success() {

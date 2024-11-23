@@ -342,11 +342,10 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
     }
 
     private void loadCurrentAccount() {
-        Handler handler = new Handler();
         mExecutor.execute(() -> {
             Account account = mRedditDataRoomDatabase.accountDao().getCurrentAccount();
             selectedAccount = account;
-            handler.post(() -> {
+            mHandler.post(() -> {
                 if (!isFinishing() && !isDestroyed() && account != null) {
                     mGlide.load(account.getProfileImageUrl())
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -446,7 +445,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
     }
 
     private void loadSubredditIcon() {
-        LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditName,
+        LoadSubredditIcon.loadSubredditIcon(mExecutor, mHandler, mRedditDataRoomDatabase, subredditName,
                 accessToken, accountName, mOauthRetrofit, mRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();

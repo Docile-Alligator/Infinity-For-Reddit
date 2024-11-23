@@ -22,6 +22,7 @@ import static ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil.checkN
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -138,7 +139,7 @@ public class DefaultExoCreator implements ExoCreator, MediaSourceEventListener {
     @NonNull
     @Override
     public MediaSource createMediaSource(@NonNull Uri uri, String fileExt) {
-        return mediaSourceBuilder.buildMediaSource(this.toro.context, uri, fileExt, new Handler(),
+        return mediaSourceBuilder.buildMediaSource(this.toro.context, uri, fileExt, new Handler(Looper.getMainLooper()),
                 manifestDataSourceFactory, mediaDataSourceFactory, this);
     }
 
@@ -152,38 +153,38 @@ public class DefaultExoCreator implements ExoCreator, MediaSourceEventListener {
 
     @Override
     public void onLoadStarted(int windowIndex, @Nullable MediaSource.MediaPeriodId mediaPeriodId,
-                              LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData) {
+                              @NonNull LoadEventInfo loadEventInfo, @NonNull MediaLoadData mediaLoadData) {
         // no-ops
     }
 
     @Override
     public void onLoadCompleted(int windowIndex, @Nullable MediaSource.MediaPeriodId mediaPeriodId,
-                                LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData) {
+                                @NonNull LoadEventInfo loadEventInfo, @NonNull MediaLoadData mediaLoadData) {
         // no-ops
     }
 
     @Override
     public void onLoadCanceled(int windowIndex, @Nullable MediaSource.MediaPeriodId mediaPeriodId,
-                               LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData) {
+                               @NonNull LoadEventInfo loadEventInfo, @NonNull MediaLoadData mediaLoadData) {
         // no-ops
     }
 
     @Override
     public void onLoadError(int windowIndex, @Nullable MediaSource.MediaPeriodId mediaPeriodId,
-                            LoadEventInfo loadEventInfo, MediaLoadData mediaLoadData, IOException error,
+                            @NonNull LoadEventInfo loadEventInfo, @NonNull MediaLoadData mediaLoadData, @NonNull IOException error,
                             boolean wasCanceled) {
         // no-ops
     }
 
     @Override
-    public void onUpstreamDiscarded(int windowIndex, MediaSource.MediaPeriodId mediaPeriodId,
-                                    MediaLoadData mediaLoadData) {
+    public void onUpstreamDiscarded(int windowIndex, @NonNull MediaSource.MediaPeriodId mediaPeriodId,
+                                    @NonNull MediaLoadData mediaLoadData) {
         // no-ops
     }
 
     @Override
     public void onDownstreamFormatChanged(int windowIndex,
-                                          @Nullable MediaSource.MediaPeriodId mediaPeriodId, MediaLoadData mediaLoadData) {
+                                          @Nullable MediaSource.MediaPeriodId mediaPeriodId, @NonNull MediaLoadData mediaLoadData) {
         // no-ops
     }
 }

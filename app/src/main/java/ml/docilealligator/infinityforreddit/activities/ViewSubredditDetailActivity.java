@@ -48,7 +48,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.android.material.textfield.TextInputEditText;
 
-import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -67,13 +66,9 @@ import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
-import ml.docilealligator.infinityforreddit.thing.SortType;
-import ml.docilealligator.infinityforreddit.thing.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.SubredditAutocompleteRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
@@ -102,15 +97,20 @@ import ml.docilealligator.infinityforreddit.markdown.EvenBetterLinkMovementMetho
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
+import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
 import ml.docilealligator.infinityforreddit.subreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditSubscription;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditViewModel;
 import ml.docilealligator.infinityforreddit.subreddit.shortcut.ShortcutManager;
+import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
+import ml.docilealligator.infinityforreddit.thing.SortType;
+import ml.docilealligator.infinityforreddit.thing.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -555,7 +555,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         if (mNewAccountName != null) {
             if (accountName.equals(Account.ANONYMOUS_ACCOUNT) || !accountName.equals(mNewAccountName)) {
                 AccountManagement.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
-                        mExecutor, new Handler(), mNewAccountName, newAccount -> {
+                        mExecutor, mHandler, mNewAccountName, newAccount -> {
                             EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
                             Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
@@ -577,7 +577,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     private void fetchSubredditData() {
         if (!mFetchSubredditInfoSuccess) {
-            Handler handler = new Handler();
+            Handler handler = mHandler;
             FetchSubredditData.fetchSubredditData(mExecutor, handler,
                     accountName.equals(Account.ANONYMOUS_ACCOUNT) ? null : mOauthRetrofit, mRetrofit,
                     subredditName, accessToken, new FetchSubredditData.FetchSubredditDataListener() {
@@ -967,7 +967,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 if (subscriptionReady) {
                     subscriptionReady = false;
                     if (getResources().getString(R.string.subscribe).contentEquals(binding.subscribeSubredditChipViewSubredditDetailActivity.getText())) {
-                        SubredditSubscription.anonymousSubscribeToSubreddit(mExecutor, new Handler(),
+                        SubredditSubscription.anonymousSubscribeToSubreddit(mExecutor, mHandler,
                                 mRetrofit, mRedditDataRoomDatabase, subredditName,
                                 new SubredditSubscription.SubredditSubscriptionListener() {
                                     @Override
@@ -985,7 +985,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                                     }
                                 });
                     } else {
-                        SubredditSubscription.anonymousUnsubscribeToSubreddit(mExecutor, new Handler(),
+                        SubredditSubscription.anonymousUnsubscribeToSubreddit(mExecutor, mHandler,
                                 mRedditDataRoomDatabase, subredditName,
                                 new SubredditSubscription.SubredditSubscriptionListener() {
                                     @Override
@@ -1008,7 +1008,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 if (subscriptionReady) {
                     subscriptionReady = false;
                     if (getResources().getString(R.string.subscribe).contentEquals(binding.subscribeSubredditChipViewSubredditDetailActivity.getText())) {
-                        SubredditSubscription.subscribeToSubreddit(mExecutor, new Handler(), mOauthRetrofit,
+                        SubredditSubscription.subscribeToSubreddit(mExecutor, mHandler, mOauthRetrofit,
                                 mRetrofit, accessToken, subredditName, accountName, mRedditDataRoomDatabase,
                                 new SubredditSubscription.SubredditSubscriptionListener() {
                                     @Override
@@ -1026,7 +1026,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                                     }
                                 });
                     } else {
-                        SubredditSubscription.unsubscribeToSubreddit(mExecutor, new Handler(), mOauthRetrofit,
+                        SubredditSubscription.unsubscribeToSubreddit(mExecutor, mHandler, mOauthRetrofit,
                                 accessToken, subredditName, accountName, mRedditDataRoomDatabase,
                                 new SubredditSubscription.SubredditSubscriptionListener() {
                                     @Override
@@ -1048,7 +1048,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             }
         });
 
-        CheckIsSubscribedToSubreddit.checkIsSubscribedToSubreddit(mExecutor, new Handler(),
+        CheckIsSubscribedToSubreddit.checkIsSubscribedToSubreddit(mExecutor, mHandler,
                 mRedditDataRoomDatabase, subredditName, accountName,
                 new CheckIsSubscribedToSubreddit.CheckIsSubscribedToSubredditListener() {
                     @Override
@@ -1403,7 +1403,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             startActivity(intent);
         });
         recyclerView.setAdapter(adapter);
-        Utils.showKeyboard(this, new Handler(), thingEditText);
+        Utils.showKeyboard(this, mHandler, thingEditText);
         thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE) {
                 Utils.hideKeyboard(this);
@@ -1415,7 +1415,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             return false;
         });
 
-        Handler handler = new Handler();
+        Handler handler = mHandler;
         boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
         thingEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -1494,7 +1494,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, binding.getRoot(), false);
         TextInputEditText thingEditText = rootView.findViewById(R.id.text_input_edit_text_go_to_thing_edit_text);
         thingEditText.requestFocus();
-        Utils.showKeyboard(this, new Handler(), thingEditText);
+        Utils.showKeyboard(this, mHandler, thingEditText);
         thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE) {
                 Utils.hideKeyboard(this);

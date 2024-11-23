@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -168,7 +169,7 @@ public abstract class PostFragmentBase extends Fragment {
             }
         };
 
-        lazyModeHandler = new Handler();
+        lazyModeHandler = new Handler(Looper.getMainLooper());
         lazyModeRunnable = new LazyModeRunnable() {
             @Override
             public void run() {
@@ -504,14 +505,14 @@ public abstract class PostFragmentBase extends Fragment {
             loadIconListener.loadIconSuccess(subredditOrUserName, subredditOrUserIcons.get(subredditOrUserName));
         } else {
             if (isSubreddit) {
-                LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase,
+                LoadSubredditIcon.loadSubredditIcon(mExecutor, activity.mHandler, mRedditDataRoomDatabase,
                         subredditOrUserName, activity.accessToken, activity.accountName, mOauthRetrofit, mRetrofit,
                         iconImageUrl -> {
                             subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
                             loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);
                         });
             } else {
-                LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditOrUserName,
+                LoadUserData.loadUserData(mExecutor, activity.mHandler, mRedditDataRoomDatabase, subredditOrUserName,
                         mRetrofit, iconImageUrl -> {
                             subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
                             loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);

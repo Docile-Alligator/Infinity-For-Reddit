@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.res.ColorStateList;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,7 +90,7 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 EditText themeNameEditText = dialogView.findViewById(R.id.name_edit_text_edit_name_dialog);
                 themeNameEditText.setText(themeName);
                 themeNameEditText.requestFocus();
-                Utils.showKeyboard(activity, new Handler(), themeNameEditText);
+                Utils.showKeyboard(activity, activity.mHandler, themeNameEditText);
                 new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.edit_theme_name)
                         .setView(dialogView)

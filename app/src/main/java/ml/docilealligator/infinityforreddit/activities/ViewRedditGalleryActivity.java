@@ -16,6 +16,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -236,7 +237,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     @Override
     public void setToHomeScreen(int viewPagerPosition) {
         if (gallery != null && viewPagerPosition >= 0 && viewPagerPosition < gallery.size()) {
-            WallpaperSetter.set(executor, new Handler(), gallery.get(viewPagerPosition).url, WallpaperSetter.HOME_SCREEN, this,
+            WallpaperSetter.set(executor, new Handler(Looper.getMainLooper()), gallery.get(viewPagerPosition).url, WallpaperSetter.HOME_SCREEN, this,
                     new WallpaperSetter.SetWallpaperListener() {
                         @Override
                         public void success() {
@@ -254,7 +255,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     @Override
     public void setToLockScreen(int viewPagerPosition) {
         if (gallery != null && viewPagerPosition >= 0 && viewPagerPosition < gallery.size()) {
-            WallpaperSetter.set(executor, new Handler(), gallery.get(viewPagerPosition).url, WallpaperSetter.LOCK_SCREEN, this,
+            WallpaperSetter.set(executor, new Handler(Looper.getMainLooper()), gallery.get(viewPagerPosition).url, WallpaperSetter.LOCK_SCREEN, this,
                     new WallpaperSetter.SetWallpaperListener() {
                         @Override
                         public void success() {
@@ -272,7 +273,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     @Override
     public void setToBoth(int viewPagerPosition) {
         if (gallery != null && viewPagerPosition >= 0 && viewPagerPosition < gallery.size()) {
-            WallpaperSetter.set(executor, new Handler(), gallery.get(viewPagerPosition).url, WallpaperSetter.BOTH_SCREENS, this,
+            WallpaperSetter.set(executor, new Handler(Looper.getMainLooper()), gallery.get(viewPagerPosition).url, WallpaperSetter.BOTH_SCREENS, this,
                     new WallpaperSetter.SetWallpaperListener() {
                         @Override
                         public void success() {

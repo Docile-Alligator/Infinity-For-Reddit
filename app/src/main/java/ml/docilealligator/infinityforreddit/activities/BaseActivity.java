@@ -81,7 +81,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
     public String accessToken;
     @NonNull
     public String accountName = Account.ANONYMOUS_ACCOUNT;
-    protected Handler mHandler;
+    public Handler mHandler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

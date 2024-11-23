@@ -184,7 +184,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
         binding.markdownBottomBarRecyclerViewEditCommentActivity.setAdapter(adapter);
 
         binding.commentEditTextEditCommentActivity.requestFocus();
-        Utils.showKeyboard(this, new Handler(), binding.commentEditTextEditCommentActivity);
+        Utils.showKeyboard(this, mHandler, binding.commentEditTextEditCommentActivity);
 
         Giphy.INSTANCE.configure(this, APIUtils.GIPHY_GIF_API_KEY);
     }
@@ -268,14 +268,13 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
                 params.put(APIUtils.TEXT_KEY, content);
             }
 
-            Handler handler = new Handler(getMainLooper());
             mExecutor.execute(() -> {
                 try {
                     Response<String> response = mOauthRetrofit.create(RedditAPI.class)
                             .editPostOrComment(APIUtils.getOAuthHeader(mAccessToken), params).execute();
                     if (response.isSuccessful()) {
                         Comment comment = ParseComment.parseSingleComment(new JSONObject(response.body()), 0);
-                        handler.post(() -> {
+                        mHandler.post(() -> {
                             isSubmitting = false;
                             Toast.makeText(EditCommentActivity.this, R.string.edit_success, Toast.LENGTH_SHORT).show();
 
@@ -287,20 +286,20 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
                             finish();
                         });
                     } else {
-                        handler.post(() -> {
+                        mHandler.post(() -> {
                             isSubmitting = false;
                             Snackbar.make(binding.coordinatorLayoutEditCommentActivity, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
                         });
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    handler.post(() -> {
+                    mHandler.post(() -> {
                         isSubmitting = false;
                         Snackbar.make(binding.coordinatorLayoutEditCommentActivity, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
                     });
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    handler.post(() -> {
+                    mHandler.post(() -> {
                         isSubmitting = false;
                         Toast.makeText(EditCommentActivity.this, R.string.edit_success, Toast.LENGTH_SHORT).show();
 
@@ -335,10 +334,10 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
                     Toast.makeText(EditCommentActivity.this, R.string.error_getting_image, Toast.LENGTH_LONG).show();
                     return;
                 }
-                Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
+                Utils.uploadImageToReddit(this, mExecutor, mHandler, mOauthRetrofit, mUploadMediaRetrofit,
                         mAccessToken, binding.commentEditTextEditCommentActivity, binding.coordinatorLayoutEditCommentActivity, data.getData(), uploadedImages);
             } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
-                Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
+                Utils.uploadImageToReddit(this, mExecutor, mHandler, mOauthRetrofit, mUploadMediaRetrofit,
                         mAccessToken, binding.commentEditTextEditCommentActivity, binding.coordinatorLayoutEditCommentActivity, capturedImageUri, uploadedImages);
             } else if (requestCode == MARKDOWN_PREVIEW_REQUEST_CODE) {
                 editComment();

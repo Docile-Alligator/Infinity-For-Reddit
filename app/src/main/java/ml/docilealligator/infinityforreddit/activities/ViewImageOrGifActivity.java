@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.PersistableBundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -145,7 +146,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
         glide = Glide.with(this);
 
-        handler = new Handler();
+        handler = new Handler(Looper.getMainLooper());
 
         Intent intent = getIntent();
         mImageUrl = intent.getStringExtra(EXTRA_GIF_URL_KEY);

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
@@ -208,7 +207,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
         EditText themeNameEditText = dialogView.findViewById(R.id.name_edit_text_edit_name_dialog);
         themeNameEditText.setText(oldThemeName);
         themeNameEditText.requestFocus();
-        Utils.showKeyboard(this, new Handler(), themeNameEditText);
+        Utils.showKeyboard(this, mHandler, themeNameEditText);
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(R.string.edit_theme_name)
                 .setView(dialogView)
@@ -227,7 +226,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
 
     @Override
     public void shareTheme(String themeName) {
-        GetCustomTheme.getCustomTheme(executor, new Handler(), redditDataRoomDatabase, themeName,
+        GetCustomTheme.getCustomTheme(executor, mHandler, redditDataRoomDatabase, themeName,
                 customTheme -> {
             if (customTheme != null) {
                 String jsonModel = customTheme.getJSONModel();
@@ -251,7 +250,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
                 .setTitle(R.string.delete_theme)
                 .setMessage(getString(R.string.delete_theme_dialog_message, themeName))
                 .setPositiveButton(R.string.yes, (dialogInterface, i)
-                        -> DeleteTheme.deleteTheme(executor, new Handler(), redditDataRoomDatabase, themeName, (isLightTheme, isDarkTheme, isAmoledTheme) -> {
+                        -> DeleteTheme.deleteTheme(executor, mHandler, redditDataRoomDatabase, themeName, (isLightTheme, isDarkTheme, isAmoledTheme) -> {
                             if (isLightTheme) {
                                 CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(
                                         CustomThemeWrapper.getIndigo(CustomThemeListingActivity.this), lightThemeSharedPreferences);
@@ -364,7 +363,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
     }
 
     private void checkDuplicateAndImportTheme(CustomTheme customTheme, boolean checkDuplicate) {
-        InsertCustomTheme.insertCustomTheme(executor, new Handler(), redditDataRoomDatabase, lightThemeSharedPreferences,
+        InsertCustomTheme.insertCustomTheme(executor, mHandler, redditDataRoomDatabase, lightThemeSharedPreferences,
                 darkThemeSharedPreferences, amoledThemeSharedPreferences, customTheme, checkDuplicate,
                 new InsertCustomTheme.InsertCustomThemeListener() {
                     @Override
@@ -384,7 +383,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
                                     EditText themeNameEditText = dialogView.findViewById(R.id.name_edit_text_edit_name_dialog);
                                     themeNameEditText.setText(customTheme.name);
                                     themeNameEditText.requestFocus();
-                                    Utils.showKeyboard(CustomThemeListingActivity.this, new Handler(), themeNameEditText);
+                                    Utils.showKeyboard(CustomThemeListingActivity.this, mHandler, themeNameEditText);
                                     new MaterialAlertDialogBuilder(CustomThemeListingActivity.this, R.style.MaterialAlertDialogTheme)
                                             .setTitle(R.string.edit_theme_name)
                                             .setView(dialogView)

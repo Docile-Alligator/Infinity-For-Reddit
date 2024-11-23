@@ -9,8 +9,6 @@ import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -345,7 +343,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         if (mNewAccountName != null) {
             if (accountName.equals(Account.ANONYMOUS_ACCOUNT) || !accountName.equals(mNewAccountName)) {
                 AccountManagement.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
-                        mExecutor, new Handler(), mNewAccountName, newAccount -> {
+                        mExecutor, mHandler, mNewAccountName, newAccount -> {
                             EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
                             Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
@@ -519,8 +517,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             morePostsFragment.setStatus(LoadingMorePostsStatus.LOADING);
         }
 
-        Handler handler = new Handler(Looper.getMainLooper());
-
         if (postType != HistoryPostPagingSource.TYPE_READ_POSTS) {
             mExecutor.execute(() -> {
                 RedditAPI api = (accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit).create(RedditAPI.class);
@@ -586,7 +582,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                         String responseString = response.body();
                         LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, readPostsList);
                         if (newPosts == null) {
-                            handler.post(() -> {
+                            mHandler.post(() -> {
                                 loadingMorePostsStatus = LoadingMorePostsStatus.NO_MORE_POSTS;
                                 MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
                                 if (fragment != null) {
@@ -598,7 +594,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                             int currentPostsSize = postLinkedHashSet.size();
                             postLinkedHashSet.addAll(newPosts);
                             if (currentPostsSize == postLinkedHashSet.size()) {
-                                handler.post(() -> {
+                                mHandler.post(() -> {
                                     loadingMorePostsStatus = LoadingMorePostsStatus.NO_MORE_POSTS;
                                     MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
                                     if (fragment != null) {
@@ -607,7 +603,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                                 });
                             } else {
                                 posts = new ArrayList<>(postLinkedHashSet);
-                                handler.post(() -> {
+                                mHandler.post(() -> {
                                     if (changePage) {
                                         binding.viewPager2ViewPostDetailActivity.setCurrentItem(currentPostsSize - 1, false);
                                     }
@@ -621,7 +617,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                             }
                         }
                     } else {
-                        handler.post(() -> {
+                        mHandler.post(() -> {
                             loadingMorePostsStatus = LoadingMorePostsStatus.FAILED;
                             MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
                             if (fragment != null) {
@@ -631,7 +627,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    handler.post(() -> {
+                    mHandler.post(() -> {
                         loadingMorePostsStatus = LoadingMorePostsStatus.FAILED;
                         MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
                         if (fragment != null) {
@@ -668,7 +664,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                         String responseString = response.body();
                         LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, NullReadPostsList.getInstance());
                         if (newPosts == null || newPosts.isEmpty()) {
-                            handler.post(() -> {
+                            mHandler.post(() -> {
                                 loadingMorePostsStatus = LoadingMorePostsStatus.NO_MORE_POSTS;
                                 MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
                                 if (fragment != null) {
@@ -680,7 +676,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                             int currentPostsSize = postLinkedHashSet.size();
                             postLinkedHashSet.addAll(newPosts);
                             if (currentPostsSize == postLinkedHashSet.size()) {
-                                handler.post(() -> {
+                                mHandler.post(() -> {
                                     loadingMorePostsStatus = LoadingMorePostsStatus.NO_MORE_POSTS;
                                     MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
                                     if (fragment != null) {
@@ -689,7 +685,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                                 });
                             } else {
                                 posts = new ArrayList<>(postLinkedHashSet);
-                                handler.post(() -> {
+                                mHandler.post(() -> {
                                     if (changePage) {
                                         binding.viewPager2ViewPostDetailActivity.setCurrentItem(currentPostsSize - 1, false);
                                     }
@@ -703,7 +699,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                             }
                         }
                     } else {
-                        handler.post(() -> {
+                        mHandler.post(() -> {
                             loadingMorePostsStatus = LoadingMorePostsStatus.FAILED;
                             MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
                             if (fragment != null) {
@@ -713,7 +709,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    handler.post(() -> {
+                    mHandler.post(() -> {
                         loadingMorePostsStatus = LoadingMorePostsStatus.FAILED;
                         MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
                         if (fragment != null) {

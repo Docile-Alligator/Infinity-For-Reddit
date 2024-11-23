@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -239,14 +238,13 @@ public class SidebarFragment extends Fragment {
 
     public void fetchSubredditData() {
         binding.swipeRefreshLayoutSidebarFragment.setRefreshing(true);
-        Handler handler = new Handler();
-        FetchSubredditData.fetchSubredditData(mExecutor, handler,
+        FetchSubredditData.fetchSubredditData(mExecutor, activity.mHandler,
                 activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? null : mOauthRetrofit, mRetrofit,
                 subredditName, activity.accessToken, new FetchSubredditData.FetchSubredditDataListener() {
                     @Override
                     public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                         binding.swipeRefreshLayoutSidebarFragment.setRefreshing(false);
-                        InsertSubredditData.insertSubredditData(mExecutor, handler, mRedditDataRoomDatabase,
+                        InsertSubredditData.insertSubredditData(mExecutor, activity.mHandler, mRedditDataRoomDatabase,
                                 subredditData, () -> binding.swipeRefreshLayoutSidebarFragment.setRefreshing(false));
                     }
 

@@ -12,6 +12,7 @@ import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.PersistableBundle;
 import android.widget.Toast;
 
@@ -279,7 +280,7 @@ public class SubmitPostService extends JobService {
     @Override
     public void onCreate() {
         ((Infinity) getApplication()).getAppComponent().inject(this);
-        handler = new Handler();
+        handler = new Handler(Looper.getMainLooper());
     }
 
     private Notification createNotification(int stringResId) {

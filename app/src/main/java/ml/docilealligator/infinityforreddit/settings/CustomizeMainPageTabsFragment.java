@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,13 +24,13 @@ import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.SearchActivity;
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.databinding.FragmentCustomizeMainPageTabsBinding;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
+import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
@@ -116,7 +115,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             editText.setHint(R.string.settings_tab_title);
             editText.setText(tab1CurrentTitle);
             editText.requestFocus();
-            Utils.showKeyboard(activity, new Handler(), editText);
+            Utils.showKeyboard(activity, activity.mHandler, editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }
@@ -168,7 +167,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             editText.setText(tab1CurrentName);
             editText.setHint(titleId);
             editText.requestFocus();
-            Utils.showKeyboard(activity, new Handler(), editText);
+            Utils.showKeyboard(activity, activity.mHandler, editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }
@@ -205,7 +204,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             editText.setHint(R.string.settings_tab_title);
             editText.setText(tab2CurrentTitle);
             editText.requestFocus();
-            Utils.showKeyboard(activity, new Handler(), editText);
+            Utils.showKeyboard(activity, activity.mHandler, editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }
@@ -257,7 +256,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             editText.setText(tab2CurrentName);
             editText.setHint(titleId);
             editText.requestFocus();
-            Utils.showKeyboard(activity, new Handler(), editText);
+            Utils.showKeyboard(activity, activity.mHandler, editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }
@@ -294,7 +293,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             editText.setHint(R.string.settings_tab_title);
             editText.setText(tab3CurrentTitle);
             editText.requestFocus();
-            Utils.showKeyboard(activity, new Handler(), editText);
+            Utils.showKeyboard(activity, activity.mHandler, editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }
@@ -346,7 +345,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             editText.setText(tab3CurrentName);
             editText.setHint(titleId);
             editText.requestFocus();
-            Utils.showKeyboard(activity, new Handler(), editText);
+            Utils.showKeyboard(activity, activity.mHandler, editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }

@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -20,16 +19,16 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.user.FetchUserFlairs;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.user.SelectUserFlair;
-import ml.docilealligator.infinityforreddit.user.UserFlair;
 import ml.docilealligator.infinityforreddit.adapters.UserFlairRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivitySelectUserFlairBinding;
+import ml.docilealligator.infinityforreddit.user.FetchUserFlairs;
+import ml.docilealligator.infinityforreddit.user.SelectUserFlair;
+import ml.docilealligator.infinityforreddit.user.UserFlair;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
@@ -117,7 +116,7 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
                 EditText flairEditText = dialogView.findViewById(R.id.flair_edit_text_edit_flair_dialog);
                 flairEditText.setText(userFlair.getText());
                 flairEditText.requestFocus();
-                Utils.showKeyboard(this, new Handler(), flairEditText);
+                Utils.showKeyboard(this, mHandler, flairEditText);
                 new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.edit_flair)
                         .setView(dialogView)

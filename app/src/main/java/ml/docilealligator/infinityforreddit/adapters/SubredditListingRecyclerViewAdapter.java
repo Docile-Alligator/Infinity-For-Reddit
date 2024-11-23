@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.res.ColorStateList;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -136,7 +135,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
                 ((DataViewHolder) holder).binding.subscriberCountTextViewItemSubredditListing.setText(activity.getString(R.string.subscribers_number_detail, subredditData.getNSubscribers()));
 
                 if (!isMultiSelection) {
-                    CheckIsSubscribedToSubreddit.checkIsSubscribedToSubreddit(executor, new Handler(),
+                    CheckIsSubscribedToSubreddit.checkIsSubscribedToSubreddit(executor, activity.mHandler,
                             redditDataRoomDatabase, subredditData.getName(), accountName,
                             new CheckIsSubscribedToSubreddit.CheckIsSubscribedToSubredditListener() {
                                 @Override
@@ -149,7 +148,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
                                     ((DataViewHolder) holder).binding.subscribeImageViewItemSubredditListing.setVisibility(View.VISIBLE);
                                     ((DataViewHolder) holder).binding.subscribeImageViewItemSubredditListing.setOnClickListener(view -> {
                                         if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                                            SubredditSubscription.subscribeToSubreddit(executor, new Handler(),
+                                            SubredditSubscription.subscribeToSubreddit(executor, activity.mHandler,
                                                     oauthRetrofit, retrofit, accessToken, subredditData.getName(),
                                                     accountName, redditDataRoomDatabase,
                                                     new SubredditSubscription.SubredditSubscriptionListener() {
@@ -165,7 +164,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
                                                         }
                                                     });
                                         } else {
-                                            SubredditSubscription.anonymousSubscribeToSubreddit(executor, new Handler(),
+                                            SubredditSubscription.anonymousSubscribeToSubreddit(executor, activity.mHandler,
                                                     retrofit, redditDataRoomDatabase,
                                                     subredditData.getName(),
                                                     new SubredditSubscription.SubredditSubscriptionListener() {

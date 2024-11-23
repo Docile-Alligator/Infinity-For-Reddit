@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -122,7 +121,7 @@ public class CustomizeThemeActivity extends BaseActivity {
         if (customThemeSettingsItems == null) {
             if (getIntent().hasExtra(EXTRA_THEME_TYPE)) {
                 int themeType = getIntent().getIntExtra(EXTRA_THEME_TYPE, EXTRA_LIGHT_THEME);
-                GetCustomTheme.getCustomTheme(mExecutor, new Handler(), redditDataRoomDatabase, themeType, customTheme -> {
+                GetCustomTheme.getCustomTheme(mExecutor, mHandler, redditDataRoomDatabase, themeType, customTheme -> {
                     if (customTheme == null) {
                         isPredefinedTheme = true;
                         switch (themeType) {
@@ -203,7 +202,7 @@ public class CustomizeThemeActivity extends BaseActivity {
                                     }
                                 });
                     } else {
-                        GetCustomTheme.getCustomTheme(mExecutor, new Handler(), redditDataRoomDatabase,
+                        GetCustomTheme.getCustomTheme(mExecutor, mHandler, redditDataRoomDatabase,
                                 themeName, customTheme -> {
                                     customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
                                             CustomizeThemeActivity.this, customTheme, androidVersion);
@@ -311,7 +310,7 @@ public class CustomizeThemeActivity extends BaseActivity {
     }
 
     private void saveThemeLocally(CustomTheme customTheme) {
-        InsertCustomTheme.insertCustomTheme(mExecutor, new Handler(), redditDataRoomDatabase, lightThemeSharedPreferences,
+        InsertCustomTheme.insertCustomTheme(mExecutor, mHandler, redditDataRoomDatabase, lightThemeSharedPreferences,
                 darkThemeSharedPreferences, amoledThemeSharedPreferences, customTheme,
                 false, () -> {
                     Toast.makeText(CustomizeThemeActivity.this, R.string.theme_saved_locally, Toast.LENGTH_SHORT).show();

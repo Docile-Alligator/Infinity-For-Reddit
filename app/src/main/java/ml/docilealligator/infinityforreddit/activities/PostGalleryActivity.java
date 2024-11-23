@@ -370,11 +370,10 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     }
 
     private void loadCurrentAccount() {
-        Handler handler = new Handler();
         mExecutor.execute(() -> {
             Account account = mRedditDataRoomDatabase.accountDao().getCurrentAccount();
             selectedAccount = account;
-            handler.post(() -> {
+            mHandler.post(() -> {
                 if (!isFinishing() && !isDestroyed() && account != null) {
                     mGlide.load(account.getProfileImageUrl())
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -466,27 +465,26 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     }
 
     private void uploadImage() {
-        Handler handler = new Handler();
         isUploading = true;
         mExecutor.execute(() -> {
             try {
                 Bitmap resource = Glide.with(PostGalleryActivity.this).asBitmap().load(imageUri).submit().get();
                 String response = UploadImageUtils.uploadImage(mOauthRetrofit, mUploadMediaRetrofit, accessToken, resource, true, false);
                 String mediaId = new JSONObject(response).getJSONObject(JSONUtils.ASSET_KEY).getString(JSONUtils.ASSET_ID_KEY);
-                handler.post(() -> {
+                mHandler.post(() -> {
                     adapter.setImageAsUploaded(mediaId);
                     isUploading = false;
                 });
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
-                handler.post(() -> {
+                mHandler.post(() -> {
                     adapter.removeFailedToUploadImage();
                     Snackbar.make(binding.coordinatorLayoutPostGalleryActivity, R.string.get_image_bitmap_failed, Snackbar.LENGTH_LONG).show();
                     isUploading = false;
                 });
             } catch (XmlPullParserException | JSONException | IOException e) {
                 e.printStackTrace();
-                handler.post(() -> {
+                mHandler.post(() -> {
                     adapter.removeFailedToUploadImage();
                     Snackbar.make(binding.coordinatorLayoutPostGalleryActivity, R.string.upload_image_failed, Snackbar.LENGTH_LONG).show();
                     isUploading = false;
@@ -510,7 +508,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     }
 
     private void loadSubredditIcon() {
-        LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditName,
+        LoadSubredditIcon.loadSubredditIcon(mExecutor, mHandler, mRedditDataRoomDatabase, subredditName,
                 accessToken, accountName, mOauthRetrofit, mRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();

@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -716,7 +715,7 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
         if (!activity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             if (postFilter == null) {
                 FetchPostFilterAndConcatenatedSubredditNames.fetchPostFilter(mRedditDataRoomDatabase, mExecutor,
-                        new Handler(), usage, nameOfUsage, (postFilter) -> {
+                        activity.mHandler, usage, nameOfUsage, (postFilter) -> {
                             if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                                 this.postFilter = postFilter;
                                 this.postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(activity.accountName + SharedPreferencesUtils.NSFW_BASE, false);
@@ -730,7 +729,7 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
             if (postFilter == null) {
                 if (postType == PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE) {
                     if (concatenatedSubredditNames == null) {
-                        FetchPostFilterAndConcatenatedSubredditNames.fetchPostFilterAndConcatenatedSubredditNames(mRedditDataRoomDatabase, mExecutor, new Handler(), usage, nameOfUsage,
+                        FetchPostFilterAndConcatenatedSubredditNames.fetchPostFilterAndConcatenatedSubredditNames(mRedditDataRoomDatabase, mExecutor, activity.mHandler, usage, nameOfUsage,
                                 (postFilter, concatenatedSubredditNames) -> {
                                     if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                                         this.postFilter = postFilter;
@@ -748,7 +747,7 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
                     }
                 } else if (postType == PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT) {
                     if (concatenatedSubredditNames == null) {
-                        FetchPostFilterAndConcatenatedSubredditNames.fetchPostFilterAndConcatenatedSubredditNames(mRedditDataRoomDatabase, mExecutor, new Handler(), multiRedditPath, usage, nameOfUsage,
+                        FetchPostFilterAndConcatenatedSubredditNames.fetchPostFilterAndConcatenatedSubredditNames(mRedditDataRoomDatabase, mExecutor, activity.mHandler, multiRedditPath, usage, nameOfUsage,
                                 (postFilter, concatenatedSubredditNames) -> {
                                     if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                                         this.postFilter = postFilter;
@@ -766,7 +765,7 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
                     }
                 } else {
                     FetchPostFilterAndConcatenatedSubredditNames.fetchPostFilter(mRedditDataRoomDatabase, mExecutor,
-                            new Handler(), usage, nameOfUsage, (postFilter) -> {
+                            activity.mHandler, usage, nameOfUsage, (postFilter) -> {
                                 if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                                     this.postFilter = postFilter;
                                     this.postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);
@@ -777,7 +776,7 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
             } else {
                 if (postType == PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE) {
                     if (concatenatedSubredditNames == null) {
-                        FetchPostFilterAndConcatenatedSubredditNames.fetchPostFilterAndConcatenatedSubredditNames(mRedditDataRoomDatabase, mExecutor, new Handler(), usage, nameOfUsage,
+                        FetchPostFilterAndConcatenatedSubredditNames.fetchPostFilterAndConcatenatedSubredditNames(mRedditDataRoomDatabase, mExecutor, activity.mHandler, usage, nameOfUsage,
                                 (postFilter, concatenatedSubredditNames) -> {
                                     if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                                         this.postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);
@@ -794,7 +793,7 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
                     }
                 } else if (postType == PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT) {
                     if (concatenatedSubredditNames == null) {
-                        FetchPostFilterAndConcatenatedSubredditNames.fetchPostFilterAndConcatenatedSubredditNames(mRedditDataRoomDatabase, mExecutor, new Handler(), multiRedditPath, usage, nameOfUsage,
+                        FetchPostFilterAndConcatenatedSubredditNames.fetchPostFilterAndConcatenatedSubredditNames(mRedditDataRoomDatabase, mExecutor, activity.mHandler, multiRedditPath, usage, nameOfUsage,
                                 (postFilter, concatenatedSubredditNames) -> {
                                     if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                                         this.postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);

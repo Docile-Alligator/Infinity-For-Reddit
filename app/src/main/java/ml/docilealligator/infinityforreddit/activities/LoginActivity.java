@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.SpannableString;
 import android.text.util.Linkify;
 import android.util.Log;
@@ -34,10 +33,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
-import ml.docilealligator.infinityforreddit.account.FetchMyInfo;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.FetchMyInfo;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.ParseAndInsertNewAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -172,7 +171,7 @@ public class LoginActivity extends BaseActivity {
                                                                 .putString(SharedPreferencesUtils.ACCOUNT_NAME, name)
                                                                 .putString(SharedPreferencesUtils.ACCOUNT_IMAGE_URL, profileImageUrl).apply();
                                                         mCurrentAccountSharedPreferences.edit().remove(SharedPreferencesUtils.SUBSCRIBED_THINGS_SYNC_TIME).apply();
-                                                        ParseAndInsertNewAccount.parseAndInsertNewAccount(mExecutor, new Handler(), name, accessToken, refreshToken, profileImageUrl, bannerImageUrl,
+                                                        ParseAndInsertNewAccount.parseAndInsertNewAccount(mExecutor, mHandler, name, accessToken, refreshToken, profileImageUrl, bannerImageUrl,
                                                                 karma, authCode, mRedditDataRoomDatabase.accountDao(),
                                                                 () -> {
                                                                     EventBus.getDefault().post(new NewUserLoggedInEvent());

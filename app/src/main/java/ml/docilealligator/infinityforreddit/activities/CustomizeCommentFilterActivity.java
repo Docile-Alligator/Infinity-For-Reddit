@@ -311,7 +311,7 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
     }
 
     private void saveCommentFilter(String originalName) {
-        SaveCommentFilter.saveCommentFilter(mExecutor, new Handler(), mRedditDataRoomDatabase, commentFilter, originalName,
+        SaveCommentFilter.saveCommentFilter(mExecutor, mHandler, mRedditDataRoomDatabase, commentFilter, originalName,
                 new SaveCommentFilter.SaveCommentFilterListener() {
                     @Override
                     public void success() {

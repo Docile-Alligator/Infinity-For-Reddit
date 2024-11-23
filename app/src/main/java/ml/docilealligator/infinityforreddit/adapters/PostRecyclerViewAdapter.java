@@ -2528,7 +2528,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences
                                         .getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")),
                                 post.getRedgifsId(), APIUtils.USER_AGENT);
-                FetchRedgifsVideoLinks.fetchRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
+                FetchRedgifsVideoLinks.fetchRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, mActivity.mHandler,
                         fetchRedgifsOrStreamableVideoCall,
                         new FetchVideoLinkListener() {
                             @Override
@@ -2551,7 +2551,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             } else if(post.isStreamable() && !post.isLoadRedgifsOrStreamableVideoSuccess()) {
                 fetchRedgifsOrStreamableVideoCall =
                         mStreamableApiProvider.get().getStreamableData(post.getStreamableShortCode());
-                FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, new Handler(),
+                FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, mActivity.mHandler,
                         fetchRedgifsOrStreamableVideoCall,
                         new FetchVideoLinkListener() {
                             @Override

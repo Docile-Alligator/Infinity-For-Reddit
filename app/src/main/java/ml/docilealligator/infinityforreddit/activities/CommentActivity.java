@@ -329,17 +329,16 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         });
 
         binding.commentCommentEditText.requestFocus();
-        Utils.showKeyboard(this, new Handler(), binding.commentCommentEditText);
+        Utils.showKeyboard(this, mHandler, binding.commentCommentEditText);
 
         Giphy.INSTANCE.configure(this, APIUtils.GIPHY_GIF_API_KEY);
     }
 
     private void loadCurrentAccount() {
-        Handler handler = new Handler();
         mExecutor.execute(() -> {
             Account account = mRedditDataRoomDatabase.accountDao().getCurrentAccount();
             selectedAccount = account;
-            handler.post(() -> {
+            mHandler.post(() -> {
                 if (!isFinishing() && !isDestroyed() && account != null) {
                     mGlide.load(account.getProfileImageUrl())
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -457,7 +456,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     .connectionPool(new ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
                     .build())
                     .build();
-            SendComment.sendComment(this, mExecutor, new Handler(), binding.commentCommentEditText.getText().toString(),
+            SendComment.sendComment(this, mExecutor, mHandler, binding.commentCommentEditText.getText().toString(),
                     parentFullname, parentDepth, uploadedImages, giphyGif, newAuthenticatorOauthRetrofit, selectedAccount,
                     new SendComment.SendCommentListener() {
                         @Override
@@ -516,10 +515,10 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     Toast.makeText(CommentActivity.this, R.string.error_getting_image, Toast.LENGTH_LONG).show();
                     return;
                 }
-                Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
+                Utils.uploadImageToReddit(this, mExecutor, mHandler, mOauthRetrofit, mUploadMediaRetrofit,
                         accessToken, binding.commentCommentEditText, binding.commentCoordinatorLayout, data.getData(), uploadedImages);
             } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
-                Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
+                Utils.uploadImageToReddit(this, mExecutor, mHandler, mOauthRetrofit, mUploadMediaRetrofit,
                         accessToken, binding.commentCommentEditText, binding.commentCoordinatorLayout, capturedImageUri, uploadedImages);
             } else if (requestCode == MARKDOWN_PREVIEW_REQUEST_CODE) {
                 sendComment(mMenu == null ? null : mMenu.findItem(R.id.action_send_comment_activity));

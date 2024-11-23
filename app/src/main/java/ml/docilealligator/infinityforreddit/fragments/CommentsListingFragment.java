@@ -9,8 +9,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -41,18 +39,18 @@ import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.customviews.AdjustableTouchSlopItemTouchHelper;
-import ml.docilealligator.infinityforreddit.thing.ReplyNotificationsToggle;
-import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.adapters.CommentsListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.comment.CommentViewModel;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.AdjustableTouchSlopItemTouchHelper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.FragmentCommentsListingBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
+import ml.docilealligator.infinityforreddit.thing.ReplyNotificationsToggle;
+import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
@@ -248,7 +246,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
             touchHelper.attachToRecyclerView(binding.recyclerViewCommentsListingFragment, 5);
         }
 
-        new Handler().postDelayed(this::bindView, 0);
+        mActivity.mHandler.postDelayed(this::bindView, 0);
 
         return binding.getRoot();
     }
@@ -421,7 +419,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     }
 
     public void toggleReplyNotifications(Comment comment, int position) {
-        ReplyNotificationsToggle.toggleEnableNotification(new Handler(Looper.getMainLooper()), mOauthRetrofit,
+        ReplyNotificationsToggle.toggleEnableNotification(mActivity.mHandler, mOauthRetrofit,
                 mActivity.accessToken, comment, new ReplyNotificationsToggle.SendNotificationListener() {
                     @Override
                     public void onSuccess() {

@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.Toast;
 
 import java.util.concurrent.Executor;
@@ -49,7 +48,7 @@ public class FetchRandomSubredditOrPostActivity extends BaseActivity {
 
         int option = getIntent().getIntExtra(EXTRA_RANDOM_OPTION, RandomBottomSheetFragment.RANDOM_SUBREDDIT);
 
-        FetchPost.fetchRandomPost(mExecutor, new Handler(), mRetrofit,
+        FetchPost.fetchRandomPost(mExecutor, mHandler, mRetrofit,
                 option == RandomBottomSheetFragment.RANDOM_NSFW_SUBREDDIT
                 || option == RandomBottomSheetFragment.RANDOM_NSFW_POST, new FetchPost.FetchRandomPostListener() {
             @Override

@@ -388,12 +388,11 @@ public final class Utils {
         return drawable;
     }
 
-    public static void uploadImageToReddit(Context context, Executor executor, Retrofit oauthRetrofit,
+    public static void uploadImageToReddit(Context context, Executor executor, Handler handler, Retrofit oauthRetrofit,
                                            Retrofit uploadMediaRetrofit, String accessToken, EditText editText,
                                            CoordinatorLayout coordinatorLayout, Uri imageUri,
                                            ArrayList<UploadedImage> uploadedImages) {
         Toast.makeText(context, R.string.uploading_image, Toast.LENGTH_SHORT).show();
-        Handler handler = new Handler();
         executor.execute(() -> {
             try {
                 Bitmap bitmap = Glide.with(context).asBitmap().load(imageUri).submit().get();

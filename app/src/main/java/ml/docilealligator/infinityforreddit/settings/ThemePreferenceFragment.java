@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
@@ -175,7 +174,7 @@ public class ThemePreferenceFragment extends CustomFontPreferenceFragmentCompat 
 
             enableMaterialYouSwitchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 if ((Boolean) newValue) {
-                    MaterialYouUtils.changeThemeASync(activity, executor, new Handler(),
+                    MaterialYouUtils.changeThemeASync(activity, executor, activity.mHandler,
                             redditDataRoomDatabase, customThemeWrapper,
                             lightThemeSharedPreferences, darkThemeSharedPreferences,
                             amoledThemeSharedPreferences, null);
@@ -187,7 +186,7 @@ public class ThemePreferenceFragment extends CustomFontPreferenceFragmentCompat 
             });
 
             applyMaterialYouPreference.setOnPreferenceClickListener(preference -> {
-                MaterialYouUtils.changeThemeASync(activity, executor, new Handler(),
+                MaterialYouUtils.changeThemeASync(activity, executor, activity.mHandler,
                         redditDataRoomDatabase, customThemeWrapper,
                         lightThemeSharedPreferences, darkThemeSharedPreferences,
                         amoledThemeSharedPreferences, null);

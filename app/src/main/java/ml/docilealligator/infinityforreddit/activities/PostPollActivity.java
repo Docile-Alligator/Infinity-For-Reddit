@@ -349,11 +349,10 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
     }
 
     private void loadCurrentAccount() {
-        Handler handler = new Handler();
         mExecutor.execute(() -> {
             Account account = mRedditDataRoomDatabase.accountDao().getCurrentAccount();
             selectedAccount = account;
-            handler.post(() -> {
+            mHandler.post(() -> {
                 if (!isFinishing() && !isDestroyed() && account != null) {
                     mGlide.load(account.getProfileImageUrl())
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -506,7 +505,7 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
     }
 
     private void loadSubredditIcon() {
-        LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditName,
+        LoadSubredditIcon.loadSubredditIcon(mExecutor, mHandler, mRedditDataRoomDatabase, subredditName,
                 accessToken, accountName, mOauthRetrofit, mRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
@@ -720,10 +719,10 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
                     Toast.makeText(PostPollActivity.this, R.string.error_getting_image, Toast.LENGTH_LONG).show();
                     return;
                 }
-                Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
+                Utils.uploadImageToReddit(this, mExecutor, mHandler, mOauthRetrofit, mUploadMediaRetrofit,
                         accessToken, binding.postContentEditTextPostPollActivity, binding.coordinatorLayoutPostPollActivity, data.getData(), uploadedImages);
             } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
-                Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
+                Utils.uploadImageToReddit(this, mExecutor, mHandler, mOauthRetrofit, mUploadMediaRetrofit,
                         accessToken, binding.postContentEditTextPostPollActivity, binding.coordinatorLayoutPostPollActivity, capturedImageUri, uploadedImages);
             } else if (requestCode == MARKDOWN_PREVIEW_REQUEST_CODE) {
                 submitPost(mMenu.findItem(R.id.action_send_post_poll_activity));

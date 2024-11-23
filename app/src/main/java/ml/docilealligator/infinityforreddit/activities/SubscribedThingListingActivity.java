@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -41,9 +40,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.network.AnyAccountAccessTokenAuthenticator;
-import ml.docilealligator.infinityforreddit.thing.FetchSubscribedThing;
-import ml.docilealligator.infinityforreddit.fragments.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
@@ -58,14 +54,17 @@ import ml.docilealligator.infinityforreddit.events.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.events.RefreshMultiRedditsEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.FollowedUsersListingFragment;
+import ml.docilealligator.infinityforreddit.fragments.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.fragments.MultiRedditListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.SubscribedSubredditsListingFragment;
 import ml.docilealligator.infinityforreddit.multireddit.DeleteMultiReddit;
 import ml.docilealligator.infinityforreddit.multireddit.FetchMyMultiReddits;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
+import ml.docilealligator.infinityforreddit.network.AnyAccountAccessTokenAuthenticator;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.thing.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import okhttp3.ConnectionPool;
@@ -395,7 +394,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                             mCurrentAccountSharedPreferences.edit().putLong(SharedPreferencesUtils.SUBSCRIBED_THINGS_SYNC_TIME, System.currentTimeMillis()).apply();
                             InsertSubscribedThings.insertSubscribedThings(
                                     mExecutor,
-                                    new Handler(),
+                                    mHandler,
                                     mRedditDataRoomDatabase,
                                     accountName,
                                     subscribedSubredditData,
@@ -439,7 +438,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
             FetchMyMultiReddits.fetchMyMultiReddits(mOauthRetrofit, accessToken, new FetchMyMultiReddits.FetchMyMultiRedditsListener() {
                 @Override
                 public void success(ArrayList<MultiReddit> multiReddits) {
-                    InsertMultireddit.insertMultireddits(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddits, accountName, () -> {
+                    InsertMultireddit.insertMultireddits(mExecutor, mHandler, mRedditDataRoomDatabase, multiReddits, accountName, () -> {
                         mInsertMultiredditSuccess = true;
                         sectionsPagerAdapter.stopMultiRedditRefreshProgressbar();
                     });
@@ -462,11 +461,11 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                 .setPositiveButton(R.string.delete, (dialogInterface, i)
                         -> {
                     if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                        DeleteMultiredditInDatabase.deleteMultiredditInDatabase(mExecutor, new Handler(), mRedditDataRoomDatabase, accountName, multiReddit.getPath(),
+                        DeleteMultiredditInDatabase.deleteMultiredditInDatabase(mExecutor, mHandler, mRedditDataRoomDatabase, accountName, multiReddit.getPath(),
                                 () -> Toast.makeText(SubscribedThingListingActivity.this,
                                         R.string.delete_multi_reddit_success, Toast.LENGTH_SHORT).show());
                     } else {
-                        DeleteMultiReddit.deleteMultiReddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase,
+                        DeleteMultiReddit.deleteMultiReddit(mExecutor, mHandler, mOauthRetrofit, mRedditDataRoomDatabase,
                                 accessToken, accountName, multiReddit.getPath(), new DeleteMultiReddit.DeleteMultiRedditListener() {
                                     @Override
                                     public void success() {

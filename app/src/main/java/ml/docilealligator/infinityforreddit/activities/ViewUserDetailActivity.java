@@ -44,7 +44,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.android.material.textfield.TextInputEditText;
 
-import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -62,15 +61,10 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.thing.DeleteThing;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
-import ml.docilealligator.infinityforreddit.thing.SortType;
-import ml.docilealligator.infinityforreddit.thing.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.SubredditAutocompleteRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
@@ -100,11 +94,17 @@ import ml.docilealligator.infinityforreddit.markdown.EvenBetterLinkMovementMetho
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
+import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.thing.DeleteThing;
+import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
+import ml.docilealligator.infinityforreddit.thing.SortType;
+import ml.docilealligator.infinityforreddit.thing.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.user.BlockUser;
 import ml.docilealligator.infinityforreddit.user.FetchUserData;
 import ml.docilealligator.infinityforreddit.user.UserDao;
@@ -411,7 +411,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                             subscriptionReady = false;
                             if (resources.getString(R.string.follow).contentEquals(binding.subscribeUserChipViewUserDetailActivity.getText())) {
                                 if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                                    UserFollowing.anonymousFollowUser(mExecutor, new Handler(), mRetrofit,
+                                    UserFollowing.anonymousFollowUser(mExecutor, mHandler, mRetrofit,
                                             username, mRedditDataRoomDatabase, new UserFollowing.UserFollowingListener() {
                                                 @Override
                                                 public void onUserFollowingSuccess() {
@@ -447,7 +447,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                                 }
                             } else {
                                 if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                                    UserFollowing.anonymousUnfollowUser(mExecutor, new Handler(), username,
+                                    UserFollowing.anonymousUnfollowUser(mExecutor, mHandler, username,
                                             mRedditDataRoomDatabase, new UserFollowing.UserFollowingListener() {
                                                 @Override
                                                 public void onUserFollowingSuccess() {
@@ -484,7 +484,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                         }
                     });
 
-                    CheckIsFollowingUser.checkIsFollowingUser(mExecutor, new Handler(), mRedditDataRoomDatabase,
+                    CheckIsFollowingUser.checkIsFollowingUser(mExecutor, mHandler, mRedditDataRoomDatabase,
                             username, accountName, new CheckIsFollowingUser.CheckIsFollowingUserListener() {
                         @Override
                         public void isSubscribed() {
@@ -641,7 +641,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         if (mNewAccountName != null) {
             if (accountName.equals(Account.ANONYMOUS_ACCOUNT) || !accountName.equals(mNewAccountName)) {
                 AccountManagement.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
-                        mExecutor, new Handler(), mNewAccountName, newAccount -> {
+                        mExecutor, mHandler, mNewAccountName, newAccount -> {
                             EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
                             Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
@@ -1365,7 +1365,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             startActivity(intent);
         });
         recyclerView.setAdapter(adapter);
-        Utils.showKeyboard(this, new Handler(), thingEditText);
+        Utils.showKeyboard(this, mHandler, thingEditText);
         thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE) {
                 Utils.hideKeyboard(this);
@@ -1377,7 +1377,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             return false;
         });
 
-        Handler handler = new Handler();
+        Handler handler = mHandler;
         boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
         thingEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -1456,7 +1456,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, binding.getRoot(), false);
         TextInputEditText thingEditText = rootView.findViewById(R.id.text_input_edit_text_go_to_thing_edit_text);
         thingEditText.requestFocus();
-        Utils.showKeyboard(this, new Handler(), thingEditText);
+        Utils.showKeyboard(this, mHandler, thingEditText);
         thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE) {
                 Utils.hideKeyboard(this);

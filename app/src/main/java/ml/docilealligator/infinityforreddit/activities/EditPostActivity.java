@@ -145,7 +145,7 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
         binding.markdownBottomBarRecyclerViewEditPostActivity.setAdapter(adapter);
 
         binding.postContentEditTextEditPostActivity.requestFocus();
-        Utils.showKeyboard(this, new Handler(), binding.postContentEditTextEditPostActivity);
+        Utils.showKeyboard(this, mHandler, binding.postContentEditTextEditPostActivity);
     }
 
     @Override
@@ -250,10 +250,10 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
                     Toast.makeText(EditPostActivity.this, R.string.error_getting_image, Toast.LENGTH_LONG).show();
                     return;
                 }
-                Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
+                Utils.uploadImageToReddit(this, mExecutor, mHandler, mOauthRetrofit, mUploadMediaRetrofit,
                         mAccessToken, binding.postContentEditTextEditPostActivity, binding.coordinatorLayoutEditPostActivity, data.getData(), uploadedImages);
             } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
-                Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
+                Utils.uploadImageToReddit(this, mExecutor, mHandler, mOauthRetrofit, mUploadMediaRetrofit,
                         mAccessToken, binding.postContentEditTextEditPostActivity, binding.coordinatorLayoutEditPostActivity, capturedImageUri, uploadedImages);
             } else if (requestCode == MARKDOWN_PREVIEW_REQUEST_CODE) {
                 editPost();

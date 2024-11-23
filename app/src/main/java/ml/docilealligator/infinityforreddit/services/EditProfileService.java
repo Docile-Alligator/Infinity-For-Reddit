@@ -12,6 +12,7 @@ import android.net.NetworkRequest;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.PersistableBundle;
 
 import androidx.annotation.NonNull;
@@ -92,7 +93,7 @@ public class EditProfileService extends JobService {
     public void onCreate() {
         super.onCreate();
         ((Infinity) getApplication()).getAppComponent().inject(this);
-        handler = new Handler();
+        handler = new Handler(Looper.getMainLooper());
     }
 
     @Override

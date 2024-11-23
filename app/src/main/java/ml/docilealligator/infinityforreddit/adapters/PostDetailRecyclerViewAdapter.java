@@ -12,7 +12,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -528,7 +527,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             if (mPost.getSubredditNamePrefixed().startsWith("u/")) {
                 if (mPost.getAuthorIconUrl() == null) {
                     String authorName = mPost.isAuthorDeleted() ? mPost.getSubredditNamePrefixed().substring(2) : mPost.getAuthor();
-                    LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase,
+                    LoadUserData.loadUserData(mExecutor, mActivity.mHandler, mRedditDataRoomDatabase,
                             authorName, mRetrofit, iconImageUrl -> {
                         if (mActivity != null && getItemCount() > 0) {
                             if (iconImageUrl == null || iconImageUrl.equals("")) {
@@ -561,7 +560,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 }
             } else {
                 if (mPost.getSubredditIconUrl() == null) {
-                    LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(),
+                    LoadSubredditIcon.loadSubredditIcon(mExecutor, mActivity.mHandler,
                             mRedditDataRoomDatabase, mPost.getSubredditNamePrefixed().substring(2),
                             mAccessToken, mAccountName, mOauthRetrofit, mRetrofit,
                             iconImageUrl -> {
@@ -722,7 +721,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                     .getRedgifsData(APIUtils.getRedgifsOAuthHeader(
                                             mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")),
                                             mPost.getRedgifsId(), APIUtils.USER_AGENT);
-                    FetchRedgifsVideoLinks.fetchRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
+                    FetchRedgifsVideoLinks.fetchRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, mActivity.mHandler,
                             ((PostDetailBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall,
                             new FetchVideoLinkListener() {
                                 @Override
@@ -741,7 +740,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 } else if(mPost.isStreamable() && !mPost.isLoadRedgifsOrStreamableVideoSuccess()) {
                     ((PostDetailBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall =
                             mStreamableApiProvider.get().getStreamableData(mPost.getStreamableShortCode());
-                    FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, new Handler(),
+                    FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, mActivity.mHandler,
                             ((PostDetailBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall,
                             new FetchVideoLinkListener() {
                                 @Override

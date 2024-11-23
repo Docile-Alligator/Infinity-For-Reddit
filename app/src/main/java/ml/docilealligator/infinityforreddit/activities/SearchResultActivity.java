@@ -393,7 +393,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         });
 
         if (!accountName.equals(Account.ANONYMOUS_ACCOUNT) && mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SEARCH_HISTORY, true) && !mInsertSearchQuerySuccess && mQuery != null) {
-            InsertRecentSearchQuery.insertRecentSearchQueryListener(executor, new Handler(getMainLooper()),
+            InsertRecentSearchQuery.insertRecentSearchQueryListener(executor, mHandler,
                     mRedditDataRoomDatabase, accountName, mQuery, mSearchInSubredditOrUserName, mSearchInMultiReddit,
                     mSearchInThingType, () -> mInsertSearchQuerySuccess = true);
         }
@@ -598,7 +598,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             startActivity(intent);
         });
         recyclerView.setAdapter(adapter);
-        Utils.showKeyboard(this, new Handler(), thingEditText);
+        Utils.showKeyboard(this, mHandler, thingEditText);
         thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE) {
                 Utils.hideKeyboard(this);
@@ -610,7 +610,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             return false;
         });
 
-        Handler handler = new Handler();
+        Handler handler = mHandler;
         boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
         thingEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -689,7 +689,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, binding.getRoot(), false);
         TextInputEditText thingEditText = rootView.findViewById(R.id.text_input_edit_text_go_to_thing_edit_text);
         thingEditText.requestFocus();
-        Utils.showKeyboard(this, new Handler(), thingEditText);
+        Utils.showKeyboard(this, mHandler, thingEditText);
         thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE) {
                 Utils.hideKeyboard(this);

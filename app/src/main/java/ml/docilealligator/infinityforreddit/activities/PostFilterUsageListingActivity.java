@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -137,7 +136,7 @@ public class PostFilterUsageListingActivity extends BaseActivity {
                 break;
         }
 
-        Utils.showKeyboard(this, new Handler(), textInputEditText);
+        Utils.showKeyboard(this, mHandler, textInputEditText);
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(titleStringId)
                 .setView(dialogView)

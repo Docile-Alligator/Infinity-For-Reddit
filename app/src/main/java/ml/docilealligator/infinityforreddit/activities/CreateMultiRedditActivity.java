@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -151,7 +150,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
                             }
                         });
             } else {
-                CreateMultiReddit.anonymousCreateMultiReddit(mExecutor, new Handler(), mRedditDataRoomDatabase,
+                CreateMultiReddit.anonymousCreateMultiReddit(mExecutor, mHandler, mRedditDataRoomDatabase,
                         "/user/-/m/" + binding.multiRedditNameEditTextCreateMultiRedditActivity.getText().toString(),
                         binding.multiRedditNameEditTextCreateMultiRedditActivity.getText().toString(), binding.descriptionEditTextCreateMultiRedditActivity.getText().toString(),
                         mSubreddits, new CreateMultiReddit.CreateMultiRedditListener() {

@@ -369,7 +369,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         if (mNewAccountName != null) {
             if (accountName.equals(Account.ANONYMOUS_ACCOUNT) || !accountName.equals(mNewAccountName)) {
                 AccountManagement.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
-                        mExecutor, new Handler(), mNewAccountName, newAccount -> {
+                        mExecutor, mHandler, mNewAccountName, newAccount -> {
                             EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
                             Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
@@ -828,14 +828,14 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             intent = new Intent(MainActivity.this, LoginActivity.class);
                         } else if (stringId == R.string.anonymous_account) {
                             AccountManagement.switchToAnonymousMode(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
-                                    mExecutor, new Handler(), false, () -> {
+                                    mExecutor, mHandler, false, () -> {
                                         Intent anonymousIntent = new Intent(MainActivity.this, MainActivity.class);
                                         startActivity(anonymousIntent);
                                         finish();
                                     });
                         } else if (stringId == R.string.log_out) {
                             AccountManagement.switchToAnonymousMode(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
-                                    mExecutor, new Handler(), true,
+                                    mExecutor, mHandler, true,
                                     () -> {
                                         Intent logOutIntent = new Intent(MainActivity.this, MainActivity.class);
                                         startActivity(logOutIntent);
@@ -858,7 +858,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     @Override
                     public void onAccountClick(@NonNull String accountName) {
                         AccountManagement.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
-                                mExecutor, new Handler(), accountName, newAccount -> {
+                                mExecutor, mHandler, accountName, newAccount -> {
                             Intent intent = new Intent(MainActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
@@ -1092,7 +1092,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             mCurrentAccountSharedPreferences.edit().putLong(SharedPreferencesUtils.SUBSCRIBED_THINGS_SYNC_TIME, System.currentTimeMillis()).apply();
                             InsertSubscribedThings.insertSubscribedThings(
                                     mExecutor,
-                                    new Handler(),
+                                    mHandler,
                                     mRedditDataRoomDatabase,
                                     accountName,
                                     subscribedSubredditData,
@@ -1466,7 +1466,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         recyclerView.setAdapter(adapter);
 
         thingEditText.requestFocus();
-        Utils.showKeyboard(this, new Handler(), thingEditText);
+        Utils.showKeyboard(this, mHandler, thingEditText);
         thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE) {
                 Utils.hideKeyboard(this);
@@ -1479,7 +1479,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         });
 
         boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
-        Handler handler = new Handler();
+        Handler handler = mHandler;
         thingEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -1557,7 +1557,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, binding.includedAppBar.coordinatorLayoutMainActivity, false);
         TextInputEditText thingEditText = rootView.findViewById(R.id.text_input_edit_text_go_to_thing_edit_text);
         thingEditText.requestFocus();
-        Utils.showKeyboard(this, new Handler(), thingEditText);
+        Utils.showKeyboard(this, mHandler, thingEditText);
         thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE) {
                 Utils.hideKeyboard(this);

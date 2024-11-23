@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -98,7 +97,7 @@ public class EditMultiRedditActivity extends BaseActivity {
     private void bindView() {
         if (multiReddit == null) {
             if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                FetchMultiRedditInfo.anonymousFetchMultiRedditInfo(mExecutor, new Handler(),
+                FetchMultiRedditInfo.anonymousFetchMultiRedditInfo(mExecutor, mHandler,
                         mRedditDataRoomDatabase, multipath, new FetchMultiRedditInfo.FetchMultiRedditInfoListener() {
                             @Override
                             public void success(MultiReddit multiReddit) {
@@ -172,7 +171,7 @@ public class EditMultiRedditActivity extends BaseActivity {
                 multiReddit.setDisplayName(name);
                 multiReddit.setName(name);
                 multiReddit.setDescription(binding.descriptionEditTextEditMultiRedditActivity.getText().toString());
-                EditMultiReddit.anonymousEditMultiReddit(mExecutor, new Handler(), mRedditDataRoomDatabase,
+                EditMultiReddit.anonymousEditMultiReddit(mExecutor, mHandler, mRedditDataRoomDatabase,
                         multiReddit, new EditMultiReddit.EditMultiRedditListener() {
                             @Override
                             public void success() {

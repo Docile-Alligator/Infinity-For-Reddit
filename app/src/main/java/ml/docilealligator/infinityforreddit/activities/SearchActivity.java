@@ -8,7 +8,6 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -41,7 +40,6 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.SearchActivityRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.adapters.SubredditAutocompleteRecyclerViewAdapter;
@@ -55,6 +53,7 @@ import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQuery;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQueryViewModel;
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -112,7 +111,6 @@ public class SearchActivity extends BaseActivity {
     private boolean searchSubredditsAndUsers;
     private SearchActivityRecyclerViewAdapter adapter;
     private SubredditAutocompleteRecyclerViewAdapter subredditAutocompleteRecyclerViewAdapter;
-    private Handler handler;
     private Runnable autoCompleteRunnable;
     private Call<String> subredditAutocompleteCall;
     RecentSearchQueryViewModel mRecentSearchQueryViewModel;
@@ -183,8 +181,6 @@ public class SearchActivity extends BaseActivity {
             binding.searchEditTextSearchActivity.setImeOptions(binding.searchEditTextSearchActivity.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
         }
 
-        handler = new Handler();
-
         binding.searchEditTextSearchActivity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -197,7 +193,7 @@ public class SearchActivity extends BaseActivity {
                     subredditAutocompleteCall.cancel();
                 }
                 if (autoCompleteRunnable != null) {
-                    handler.removeCallbacks(autoCompleteRunnable);
+                    mHandler.removeCallbacks(autoCompleteRunnable);
                 }
             }
 
@@ -215,7 +211,7 @@ public class SearchActivity extends BaseActivity {
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                                 subredditAutocompleteCall = null;
                                 if (response.isSuccessful() && !call.isCanceled()) {
-                                    ParseSubredditData.parseSubredditListingData(executor, handler,
+                                    ParseSubredditData.parseSubredditListingData(executor, mHandler,
                                             response.body(), nsfw, new ParseSubredditData.ParseSubredditListingDataListener() {
                                                 @Override
                                                 public void onParseSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
@@ -239,7 +235,7 @@ public class SearchActivity extends BaseActivity {
                         });
                     };
 
-                    handler.postDelayed(autoCompleteRunnable, 500);
+                    mHandler.postDelayed(autoCompleteRunnable, 500);
                 } else {
                     binding.recentSearchQueryRecyclerViewSearchActivity.setVisibility(View.VISIBLE);
                     binding.subredditAutocompleteRecyclerViewSearchActivity.setVisibility(View.GONE);
@@ -281,12 +277,12 @@ public class SearchActivity extends BaseActivity {
                         executor.execute(() -> {
                             List<RecentSearchQuery> deletedQueries = mRedditDataRoomDatabase.recentSearchQueryDao().getAllRecentSearchQueries(accountName);
                             mRedditDataRoomDatabase.recentSearchQueryDao().deleteAllRecentSearchQueries(accountName);
-                            handler.post(() -> Snackbar.make(view, R.string.all_recent_searches_deleted, Snackbar.LENGTH_LONG)
+                            mHandler.post(() -> Snackbar.make(view, R.string.all_recent_searches_deleted, Snackbar.LENGTH_LONG)
                                     .setAction(R.string.undo, v -> executor.execute(() -> mRedditDataRoomDatabase.recentSearchQueryDao().insertAll(deletedQueries)))
                                     .addCallback(new Snackbar.Callback() {
                                         @Override
                                         public void onDismissed(Snackbar transientBottomBar, int event) {
-                                            Utils.showKeyboard(SearchActivity.this, handler, binding.searchEditTextSearchActivity);
+                                            Utils.showKeyboard(SearchActivity.this, mHandler, binding.searchEditTextSearchActivity);
                                         }
                                     })
                                     .show());
@@ -371,7 +367,7 @@ public class SearchActivity extends BaseActivity {
                                 .addCallback(new Snackbar.Callback() {
                                     @Override
                                     public void onDismissed(Snackbar transientBottomBar, int event) {
-                                        Utils.showKeyboard(SearchActivity.this, handler, binding.searchEditTextSearchActivity);
+                                        Utils.showKeyboard(SearchActivity.this, mHandler, binding.searchEditTextSearchActivity);
                                     }
                                 })
                                 .show();
@@ -520,7 +516,7 @@ public class SearchActivity extends BaseActivity {
             query = null;
         }
 
-        Utils.showKeyboard(this, new Handler(), binding.searchEditTextSearchActivity);
+        Utils.showKeyboard(this, mHandler, binding.searchEditTextSearchActivity);
     }
 
     @Override

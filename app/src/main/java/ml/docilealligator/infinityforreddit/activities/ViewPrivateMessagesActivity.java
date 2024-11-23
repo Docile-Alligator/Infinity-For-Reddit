@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -216,7 +215,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         if (mUserAvatar == null) {
             mProvideUserAvatarCallbacks.add(provideUserAvatarCallback);
             if (!isLoadingUserAvatar) {
-                LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase,
+                LoadUserData.loadUserData(mExecutor, mHandler, mRedditDataRoomDatabase,
                         username, mRetrofit, iconImageUrl -> {
                     isLoadingUserAvatar = false;
                     mUserAvatar = iconImageUrl == null ? "" : iconImageUrl;

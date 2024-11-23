@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,12 +132,12 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                     ((MultiRedditViewHolder) holder).binding.favoriteImageViewItemMultiReddit.setImageResource(R.drawable.ic_favorite_border_24dp);
                     multiReddit.setFavorite(false);
                     if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                        InsertMultireddit.insertMultireddit(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddit,
+                        InsertMultireddit.insertMultireddit(mExecutor, mActivity.mHandler, mRedditDataRoomDatabase, multiReddit,
                                 () -> {
                                     //Do nothing
                                 });
                     } else {
-                        FavoriteMultiReddit.favoriteMultiReddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase,
+                        FavoriteMultiReddit.favoriteMultiReddit(mExecutor, mActivity.mHandler, mOauthRetrofit, mRedditDataRoomDatabase,
                                 mAccessToken, false, multiReddit,
                                 new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                     @Override
@@ -166,12 +165,12 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                     ((MultiRedditViewHolder) holder).binding.favoriteImageViewItemMultiReddit.setImageResource(R.drawable.ic_favorite_24dp);
                     multiReddit.setFavorite(true);
                     if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                        InsertMultireddit.insertMultireddit(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddit,
+                        InsertMultireddit.insertMultireddit(mExecutor, mActivity.mHandler, mRedditDataRoomDatabase, multiReddit,
                                 () -> {
                                     //Do nothing
                                 });
                     } else {
-                        FavoriteMultiReddit.favoriteMultiReddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase,
+                        FavoriteMultiReddit.favoriteMultiReddit(mExecutor, mActivity.mHandler, mOauthRetrofit, mRedditDataRoomDatabase,
                                 mAccessToken, true, multiReddit,
                                 new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                     @Override
@@ -233,12 +232,12 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                     ((FavoriteMultiRedditViewHolder) holder).binding.favoriteImageViewItemMultiReddit.setImageResource(R.drawable.ic_favorite_border_24dp);
                     multiReddit.setFavorite(false);
                     if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                        InsertMultireddit.insertMultireddit(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddit,
+                        InsertMultireddit.insertMultireddit(mExecutor, mActivity.mHandler, mRedditDataRoomDatabase, multiReddit,
                                 () -> {
                                     //Do nothing
                                 });
                     } else {
-                        FavoriteMultiReddit.favoriteMultiReddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase,
+                        FavoriteMultiReddit.favoriteMultiReddit(mExecutor, mActivity.mHandler, mOauthRetrofit, mRedditDataRoomDatabase,
                                 mAccessToken, false, multiReddit,
                                 new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                     @Override
@@ -266,12 +265,12 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                     ((FavoriteMultiRedditViewHolder) holder).binding.favoriteImageViewItemMultiReddit.setImageResource(R.drawable.ic_favorite_24dp);
                     multiReddit.setFavorite(true);
                     if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                        InsertMultireddit.insertMultireddit(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddit,
+                        InsertMultireddit.insertMultireddit(mExecutor, mActivity.mHandler, mRedditDataRoomDatabase, multiReddit,
                                 () -> {
                                     //Do nothing
                                 });
                     } else {
-                        FavoriteMultiReddit.favoriteMultiReddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase,
+                        FavoriteMultiReddit.favoriteMultiReddit(mExecutor, mActivity.mHandler, mOauthRetrofit, mRedditDataRoomDatabase,
                                 mAccessToken, true, multiReddit,
                                 new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                     @Override

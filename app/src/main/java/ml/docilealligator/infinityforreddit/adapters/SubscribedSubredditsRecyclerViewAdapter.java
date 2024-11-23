@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import java.util.concurrent.Executor;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.zhanghai.android.fastscroll.PopupTextProvider;
-import ml.docilealligator.infinityforreddit.thing.FavoriteThing;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
@@ -29,6 +27,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.ItemFavoriteThingDividerBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemSubscribedThingBinding;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.thing.FavoriteThing;
 import retrofit2.Retrofit;
 
 public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements PopupTextProvider {
@@ -194,7 +193,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                     if(mSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset).isFavorite()) {
                         ((SubredditViewHolder) viewHolder).binding.favoriteImageViewItemSubscribedThing.setImageResource(R.drawable.ic_favorite_border_24dp);
                         mSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset).setFavorite(false);
-                        FavoriteThing.unfavoriteSubreddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
+                        FavoriteThing.unfavoriteSubreddit(mExecutor, mActivity.mHandler, mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
                                 accountName, mSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset),
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override
@@ -219,7 +218,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                     } else {
                         ((SubredditViewHolder) viewHolder).binding.favoriteImageViewItemSubscribedThing.setImageResource(R.drawable.ic_favorite_24dp);
                         mSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset).setFavorite(true);
-                        FavoriteThing.favoriteSubreddit(mExecutor, new Handler(), mOauthRetrofit,
+                        FavoriteThing.favoriteSubreddit(mExecutor, mActivity.mHandler, mOauthRetrofit,
                                 mRedditDataRoomDatabase, accessToken, accountName,
                                 mSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset),
                                 new FavoriteThing.FavoriteThingListener() {
@@ -293,7 +292,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                 if(mFavoriteSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset).isFavorite()) {
                     ((FavoriteSubredditViewHolder) viewHolder).binding.favoriteImageViewItemSubscribedThing.setImageResource(R.drawable.ic_favorite_border_24dp);
                     mFavoriteSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset).setFavorite(false);
-                    FavoriteThing.unfavoriteSubreddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
+                    FavoriteThing.unfavoriteSubreddit(mExecutor, mActivity.mHandler, mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
                             accountName, mFavoriteSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset),
                             new FavoriteThing.FavoriteThingListener() {
                                 @Override
@@ -318,7 +317,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                 } else {
                     ((FavoriteSubredditViewHolder) viewHolder).binding.favoriteImageViewItemSubscribedThing.setImageResource(R.drawable.ic_favorite_24dp);
                     mFavoriteSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset).setFavorite(true);
-                    FavoriteThing.favoriteSubreddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
+                    FavoriteThing.favoriteSubreddit(mExecutor, mActivity.mHandler, mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
                             accountName, mFavoriteSubscribedSubredditData.get(viewHolder.getBindingAdapterPosition() - offset),
                             new FavoriteThing.FavoriteThingListener() {
                                 @Override

@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -676,7 +675,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                         Retrofit retrofit = mAccountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit;
                         SortType.Type sortType = mCommentRecyclerViewAdapterCallback.getSortType();
-                        FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken,
+                        FetchComment.fetchMoreComment(mExecutor, mActivity.mHandler, retrofit, mAccessToken,
                                 mAccountName, parentComment.getMoreChildrenIds(),
                                 mExpandChildren, mPost.getFullName(), sortType, new FetchComment.FetchMoreCommentListener() {
                                     @Override

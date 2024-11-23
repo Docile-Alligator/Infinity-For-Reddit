@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -21,10 +20,8 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.post.FetchRules;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.subreddit.Rule;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.RulesRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -33,6 +30,8 @@ import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel
 import ml.docilealligator.infinityforreddit.databinding.ActivityRulesBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.post.FetchRules;
+import ml.docilealligator.infinityforreddit.subreddit.Rule;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
@@ -110,7 +109,7 @@ public class RulesActivity extends BaseActivity {
         mAdapter = new RulesRecyclerViewAdapter(this, mCustomThemeWrapper, sliderPanel, mSubredditName);
         binding.recyclerViewRulesActivity.setAdapter(mAdapter);
 
-        FetchRules.fetchRules(mExecutor, new Handler(),
+        FetchRules.fetchRules(mExecutor, mHandler,
                 accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit,
                 accessToken, accountName, mSubredditName, new FetchRules.FetchRulesListener() {
                     @Override
@@ -166,13 +165,13 @@ public class RulesActivity extends BaseActivity {
         binding.errorTextViewRulesActivity.setOnClickListener(view -> {
             binding.progressBarRulesActivity.setVisibility(View.VISIBLE);
             binding.errorTextViewRulesActivity.setVisibility(View.GONE);
-            FetchRules.fetchRules(mExecutor, new Handler(),
+            FetchRules.fetchRules(mExecutor, mHandler,
                     accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit,
                     accessToken, accountName, mSubredditName, new FetchRules.FetchRulesListener() {
                 @Override
                 public void success(ArrayList<Rule> rules) {
                     binding.progressBarRulesActivity.setVisibility(View.GONE);
-                    if (rules == null || rules.size() == 0) {
+                    if (rules == null || rules.isEmpty()) {
                         binding.errorTextViewRulesActivity.setVisibility(View.VISIBLE);
                         binding.errorTextViewRulesActivity.setText(R.string.no_rule);
                         binding.errorTextViewRulesActivity.setOnClickListener(view -> {

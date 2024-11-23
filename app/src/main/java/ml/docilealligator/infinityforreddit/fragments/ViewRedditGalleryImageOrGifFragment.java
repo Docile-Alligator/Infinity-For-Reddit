@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.PersistableBundle;
 import android.text.TextUtils;
 import android.text.util.Linkify;
@@ -398,7 +399,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                 if (activity.getExternalCacheDir() != null) {
                     Toast.makeText(activity, R.string.save_image_first, Toast.LENGTH_SHORT).show();
-                    SaveBitmapImageToFile.SaveBitmapImageToFile(mExecutor, new Handler(), resource, activity.getExternalCacheDir().getPath(),
+                    SaveBitmapImageToFile.SaveBitmapImageToFile(mExecutor, new Handler(Looper.getMainLooper()), resource, activity.getExternalCacheDir().getPath(),
                             media.fileName,
                             new SaveBitmapImageToFile.SaveBitmapImageToFileListener() {
                                 @Override
@@ -443,7 +444,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             @Override
             public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
                 if (activity.getExternalCacheDir() != null) {
-                    SaveGIFToFile.saveGifToFile(mExecutor, new Handler(), resource, activity.getExternalCacheDir().getPath(), media.fileName,
+                    SaveGIFToFile.saveGifToFile(mExecutor, new Handler(Looper.getMainLooper()), resource, activity.getExternalCacheDir().getPath(), media.fileName,
                             new SaveGIFToFile.SaveGIFToFileListener() {
                                 @Override
                                 public void saveSuccess(File imageFile) {

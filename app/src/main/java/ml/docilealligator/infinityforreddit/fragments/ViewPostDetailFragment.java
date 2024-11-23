@@ -16,8 +16,6 @@ import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -612,7 +610,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             if (commentFilterFetched) {
                 fetchCommentsAfterCommentFilterAvailable();
             } else {
-                FetchCommentFilter.fetchCommentFilter(mExecutor, new Handler(Looper.getMainLooper()), mRedditDataRoomDatabase, mPost.getSubredditName(),
+                FetchCommentFilter.fetchCommentFilter(mExecutor, activity.mHandler, mRedditDataRoomDatabase, mPost.getSubredditName(),
                         commentFilter -> {
                             mCommentFilter = commentFilter;
                             commentFilterFetched = true;
@@ -888,7 +886,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (activity.authorIcons.containsKey(authorName)) {
             loadIconListener.loadIconSuccess(authorName, activity.authorIcons.get(authorName));
         } else {
-            LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, authorName,
+            LoadUserData.loadUserData(mExecutor, activity.mHandler, mRedditDataRoomDatabase, authorName,
                     mRetrofit, iconImageUrl -> {
                         activity.authorIcons.put(authorName, iconImageUrl);
                         loadIconListener.loadIconSuccess(authorName, iconImageUrl);
@@ -1266,7 +1264,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 binding.swipeRefreshLayoutViewPostDetailFragment.setRefreshing(false);
 
                 if (response.isSuccessful()) {
-                    ParsePost.parsePost(mExecutor, new Handler(), response.body(), new ParsePost.ParsePostListener() {
+                    ParsePost.parsePost(mExecutor, activity.mHandler, response.body(), new ParsePost.ParsePostListener() {
                         @Override
                         public void onParsePostSuccess(Post post) {
                             mPost = post;
@@ -1315,7 +1313,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                 binding.postDetailRecyclerViewViewPostDetailFragment.setAdapter(mConcatAdapter);
                             }
 
-                            FetchCommentFilter.fetchCommentFilter(mExecutor, new Handler(Looper.getMainLooper()), mRedditDataRoomDatabase,
+                            FetchCommentFilter.fetchCommentFilter(mExecutor, activity.mHandler, mRedditDataRoomDatabase,
                                     mPost.getSubredditName(), new FetchCommentFilter.FetchCommentFilterListener() {
                                         @Override
                                         public void success(CommentFilter commentFilter) {
@@ -1325,7 +1323,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                             if (mRespectSubredditRecommendedSortType) {
                                                 fetchCommentsRespectRecommendedSort(false);
                                             } else {
-                                                ParseComment.parseComment(mExecutor, new Handler(), response.body(),
+                                                ParseComment.parseComment(mExecutor, activity.mHandler, response.body(),
                                                         mExpandChildren, mCommentFilter, new ParseComment.ParseCommentListener() {
                                                             @Override
                                                             public void onParseCommentSuccess(ArrayList<Comment> topLevelComments, ArrayList<Comment> expandedComments, String parentId, ArrayList<String> moreChildrenIds) {
@@ -1423,7 +1421,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     e.printStackTrace();
                 }
             }
-            FetchSubredditData.fetchSubredditData(mExecutor, new Handler(),
+            FetchSubredditData.fetchSubredditData(mExecutor, activity.mHandler,
                     activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? null : mOauthRetrofit,
                     mRetrofit, mPost.getSubredditName(), activity.accessToken,
                     new FetchSubredditData.FetchSubredditDataListener() {
@@ -1470,7 +1468,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         }
 
         Retrofit retrofit = activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit;
-        FetchComment.fetchComments(mExecutor, new Handler(), retrofit, activity.accessToken, activity.accountName, mPost.getId(), commentId, sortType,
+        FetchComment.fetchComments(mExecutor, activity.mHandler, retrofit, activity.accessToken, activity.accountName, mPost.getId(), commentId, sortType,
                 mContextNumber, mExpandChildren, mCommentFilter, new FetchComment.FetchCommentListener() {
                     @Override
                     public void onFetchCommentSuccess(ArrayList<Comment> expandedComments,
@@ -1557,7 +1555,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         isLoadingMoreChildren = true;
 
         Retrofit retrofit = activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit;
-        FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, activity.accessToken, activity.accountName,
+        FetchComment.fetchMoreComment(mExecutor, activity.mHandler, retrofit, activity.accessToken, activity.accountName,
                 children, mExpandChildren, mPost.getFullName(), sortType, new FetchComment.FetchMoreCommentListener() {
                     @Override
                     public void onFetchMoreCommentSuccess(ArrayList<Comment> topLevelComments,
@@ -1597,7 +1595,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 } else {
                     retrofit = mOauthRetrofit;
                 }
-                FetchPost.fetchPost(mExecutor, new Handler(), retrofit, mPost.getId(), activity.accessToken, activity.accountName,
+                FetchPost.fetchPost(mExecutor, activity.mHandler, retrofit, mPost.getId(), activity.accessToken, activity.accountName,
                         new FetchPost.FetchPostListener() {
                             @Override
                             public void fetchPostSuccess(Post post) {
@@ -1818,7 +1816,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     }
 
     public void toggleReplyNotifications(Comment comment, int position) {
-        ReplyNotificationsToggle.toggleEnableNotification(new Handler(Looper.getMainLooper()), mOauthRetrofit,
+        ReplyNotificationsToggle.toggleEnableNotification(activity.mHandler, mOauthRetrofit,
                 activity.accessToken, comment, new ReplyNotificationsToggle.SendNotificationListener() {
                     @Override
                     public void onSuccess() {

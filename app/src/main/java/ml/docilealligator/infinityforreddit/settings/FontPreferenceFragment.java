@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -187,8 +186,6 @@ public class FontPreferenceFragment extends CustomFontPreferenceFragmentCompat {
         }
         File fontDestinationPath = activity.getExternalFilesDir("fonts");
 
-        Handler handler = new Handler();
-
         executor.execute(() -> {
             File destinationFontFile = new File(fontDestinationPath, destinationFontName);
             try (InputStream in = activity.getContentResolver().openInputStream(uri);
@@ -212,20 +209,20 @@ public class FontPreferenceFragment extends CustomFontPreferenceFragmentCompat {
                         }
                     } catch (RuntimeException e) {
                         e.printStackTrace();
-                        handler.post(() -> Toast.makeText(activity, R.string.unable_to_load_font, Toast.LENGTH_SHORT).show());
+                        activity.mHandler.post(() -> Toast.makeText(activity, R.string.unable_to_load_font, Toast.LENGTH_SHORT).show());
                         return;
                     }
                 } else {
-                    handler.post(() -> Toast.makeText(activity, R.string.unable_to_get_font_file, Toast.LENGTH_SHORT).show());
+                    activity.mHandler.post(() -> Toast.makeText(activity, R.string.unable_to_get_font_file, Toast.LENGTH_SHORT).show());
                     return;
                 }
-                handler.post(() -> {
+                activity.mHandler.post(() -> {
                     EventBus.getDefault().post(new RecreateActivityEvent());
                     ActivityCompat.recreate(activity);
                 });
             } catch (IOException e) {
                 e.printStackTrace();
-                handler.post(() -> {
+                activity.mHandler.post(() -> {
                     Toast.makeText(activity, R.string.unable_to_copy_font_file, Toast.LENGTH_SHORT).show();
                 });
             }
