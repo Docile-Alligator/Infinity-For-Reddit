@@ -21,30 +21,13 @@ class ModMailConversationViewModel(
     accessToken: String,
     sharedPreferences: SharedPreferences
 ) : ViewModel() {
-    private val updatedConversations: MutableStateFlow<Map<String, Conversation>> = MutableStateFlow(emptyMap())
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val flow = updatedConversations
-        .flatMapLatest { updatedConversationsValue ->
-            Pager(
-                PagingConfig(20, 4)
-            ) {
-                ModMailConversationPagingSource(oauthRetrofit, accessToken, sharedPreferences)
-            }
-                .flow
-                .map { pagingData ->
-                    pagingData.map { conversation ->
-                        withContext(Dispatchers.Default) {
-                            if (updatedConversationsValue.containsKey(conversation.id)) updatedConversationsValue[conversation.id]!! else conversation
-                        }
-                    }
-                }
-        }
-        .cachedIn(viewModelScope)
-
-    fun updateConversation(conversation: Conversation) {
-        updatedConversations.value = (updatedConversations.value + (conversation.id!! to conversation))
+    val flow = Pager(
+        PagingConfig(20, 4)
+    ) {
+        ModMailConversationPagingSource(oauthRetrofit, accessToken, sharedPreferences)
     }
+        .flow
+        .cachedIn(viewModelScope)
 
     @Suppress("UNCHECKED_CAST")
     class Factory(

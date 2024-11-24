@@ -37,9 +37,11 @@ data class Conversation(
     @Ignore private var _messages: MutableList<ModMessage>? = mutableListOf(),
     @Ignore var isUpdated: Boolean
 ): Parcelable {
-    val messages: MutableList<ModMessage>
+    var messages: MutableList<ModMessage>
         get() = _messages ?: mutableListOf<ModMessage>().also { _messages = it }
-
+        set(newMessages) {
+            _messages = newMessages
+        }
 
     override fun equals(other: Any?): Boolean {
         if (other === this) {

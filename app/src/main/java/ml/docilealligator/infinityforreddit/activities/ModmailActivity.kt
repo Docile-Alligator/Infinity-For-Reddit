@@ -37,7 +37,9 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -47,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.ItemSnapshotList
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -58,6 +61,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.mod.Conversation
 import ml.docilealligator.infinityforreddit.mod.ModMailConversationViewModel
 import ml.docilealligator.infinityforreddit.mod.ModMessage
+import org.checkerframework.checker.units.qual.m
 import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Named
@@ -109,6 +113,38 @@ class ModmailActivity : BaseActivity() {
             ) { innerPadding ->
                 val listState: LazyListState = rememberLazyListState()
                 val navigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
+                val pagingItems = conversationViewModel.flow.collectAsLazyPagingItems()
+
+                val selectedPageIndex = remember { mutableIntStateOf(0) }
+                val selectConversation: (Int) -> Unit = { index ->
+                    selectedPageIndex.intValue = index
+                }
+
+                val updateConversation: (Int, Conversation) -> Unit = { index, updatedConversation ->
+                    pagingItems[index]?.apply {
+                        if (updatedConversation.id == id) {
+                            isAuto = updatedConversation.isAuto
+                            participant = updatedConversation.participant
+                            objIds = updatedConversation.objIds
+                            isRepliable = updatedConversation.isRepliable
+                            lastUserUpdate = updatedConversation.lastUserUpdate
+                            isInternal = updatedConversation.isInternal
+                            lastModUpdate = updatedConversation.lastModUpdate
+                            authors = updatedConversation.authors
+                            lastUpdated = updatedConversation.lastUpdated
+                            legacyFirstMessageId = updatedConversation.legacyFirstMessageId
+                            this.state = updatedConversation.state
+                            conversationType = updatedConversation.conversationType
+                            lastUnread = updatedConversation.lastUnread
+                            owner = updatedConversation.owner
+                            subject = updatedConversation.subject
+                            isHighlighted = updatedConversation.isHighlighted
+                            numMessages = updatedConversation.numMessages
+                            messages = updatedConversation.messages
+                            isUpdated = true
+                        }
+                    }
+                }
 
                 BackHandler(navigator.canNavigateBack()) {
                     navigator.navigateBack()
@@ -124,7 +160,7 @@ class ModmailActivity : BaseActivity() {
                     value = navigator.scaffoldValue,
                     listPane = {
                         AnimatedPane {
-                            ConversationListView(navigator, listState)
+                            ConversationListView(pagingItems, navigator, listState, selectConversation)
                         }
                     },
                     detailPane = {
@@ -132,7 +168,7 @@ class ModmailActivity : BaseActivity() {
                         AnimatedPane {
                             navigator.currentDestination?.content?.let {
                                 conversationState.value = it
-                                ConversationDetailsView(conversationState)
+                                ConversationDetailsView(conversationState, selectedPageIndex, updateConversation)
                             }
                         }
                     }
@@ -157,24 +193,26 @@ class ModmailActivity : BaseActivity() {
 
     }
 
-    private suspend fun refreshConversation(conversationState: MutableState<Conversation?>, refreshState: MutableState<Boolean>) {
+    private suspend fun refreshConversation(conversationState: MutableState<Conversation?>, refreshState: MutableState<Boolean>,
+                                            index: Int, updateConversation: (Int, Conversation) -> Unit) {
         refreshState.value = true
 
         val updatedConversation = Conversation.fetchConversation(
             mOauthRetrofit, accessToken!!, conversationState.value!!, Gson()
         )
 
-        conversationState.value = updatedConversation
-
-        conversationViewModel.updateConversation(updatedConversation)
+        if (updatedConversation.isUpdated) {
+            // Refresh succeeded
+            updateConversation(index, updatedConversation)
+        }
 
         refreshState.value = false
     }
 
     @Composable
-    fun ConversationListView(navigator: ThreePaneScaffoldNavigator<Conversation>, listState: LazyListState) {
+    fun ConversationListView(pagingItems: LazyPagingItems<Conversation>, navigator: ThreePaneScaffoldNavigator<Conversation>,
+                             listState: LazyListState, selectConversation: (Int) -> Unit) {
         val state: PullToRefreshState = rememberPullToRefreshState()
-        val pagingItems: LazyPagingItems<Conversation> = conversationViewModel.flow.collectAsLazyPagingItems()
 
         PullToRefreshBox(
             isRefreshing = pagingItems.loadState.refresh == LoadState.Loading,
@@ -205,6 +243,7 @@ class ModmailActivity : BaseActivity() {
                         val conversation = pagingItems[index]
                         conversation?.let {
                             ConversationView(it) { conversation ->
+                                selectConversation(index)
                                 navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, conversation)
                             }
                         }
@@ -241,7 +280,8 @@ class ModmailActivity : BaseActivity() {
     }
 
     @Composable
-    fun ConversationDetailsView(conversationState: MutableState<Conversation?>) {
+    fun ConversationDetailsView(conversationState: MutableState<Conversation?>, index: MutableIntState,
+                                updateConversation: (Int, Conversation) -> Unit) {
         val conversationStateValue = conversationState.value
         conversationStateValue?.let {
             val pullToRefreshState: PullToRefreshState = rememberPullToRefreshState()
@@ -249,7 +289,7 @@ class ModmailActivity : BaseActivity() {
 
             if (!it.isUpdated) {
                 LaunchedEffect(it.id) {
-                    refreshConversation(conversationState, refreshState)
+                    refreshConversation(conversationState, refreshState, index.intValue, updateConversation)
                 }
             }
 
@@ -257,7 +297,7 @@ class ModmailActivity : BaseActivity() {
                 isRefreshing = refreshState.value,
                 onRefresh = {
                     lifecycleScope.launch {
-                        refreshConversation(conversationState, refreshState)
+                        refreshConversation(conversationState, refreshState, index.intValue, updateConversation)
                     }
                 },
                 state = pullToRefreshState,
