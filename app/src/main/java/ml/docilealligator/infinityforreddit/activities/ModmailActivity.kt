@@ -37,9 +37,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -49,7 +47,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.ItemSnapshotList
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -61,7 +58,6 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.mod.Conversation
 import ml.docilealligator.infinityforreddit.mod.ModMailConversationViewModel
 import ml.docilealligator.infinityforreddit.mod.ModMessage
-import org.checkerframework.checker.units.qual.m
 import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Named
@@ -115,13 +111,8 @@ class ModmailActivity : BaseActivity() {
                 val navigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
                 val pagingItems = conversationViewModel.flow.collectAsLazyPagingItems()
 
-                val selectedPageIndex = remember { mutableIntStateOf(0) }
-                val selectConversation: (Int) -> Unit = { index ->
-                    selectedPageIndex.intValue = index
-                }
-
-                val updateConversation: (Int, Conversation) -> Unit = { index, updatedConversation ->
-                    pagingItems[index]?.apply {
+                val updateConversation: (Conversation, Conversation) -> Unit = { conversation, updatedConversation ->
+                    conversation.apply {
                         if (updatedConversation.id == id) {
                             isAuto = updatedConversation.isAuto
                             participant = updatedConversation.participant
@@ -160,15 +151,13 @@ class ModmailActivity : BaseActivity() {
                     value = navigator.scaffoldValue,
                     listPane = {
                         AnimatedPane {
-                            ConversationListView(pagingItems, navigator, listState, selectConversation)
+                            ConversationListView(pagingItems, navigator, listState)
                         }
                     },
                     detailPane = {
-                        val conversationState = remember { mutableStateOf<Conversation?>(null) }
                         AnimatedPane {
                             navigator.currentDestination?.content?.let {
-                                conversationState.value = it
-                                ConversationDetailsView(conversationState, selectedPageIndex, updateConversation)
+                                ConversationDetailsView(it, updateConversation)
                             }
                         }
                     }
@@ -193,17 +182,18 @@ class ModmailActivity : BaseActivity() {
 
     }
 
-    private suspend fun refreshConversation(conversationState: MutableState<Conversation?>, refreshState: MutableState<Boolean>,
-                                            index: Int, updateConversation: (Int, Conversation) -> Unit) {
+    private suspend fun refreshConversation(conversation: Conversation, refreshState: MutableState<Boolean>,
+                                            updateConversation: (Conversation, Conversation) -> Unit) {
         refreshState.value = true
 
-        val updatedConversation = Conversation.fetchConversation(
-            mOauthRetrofit, accessToken!!, conversationState.value!!, Gson()
-        )
+        conversation.id?.let { id ->
+            val updatedConversation = Conversation.fetchConversation(
+                mOauthRetrofit, accessToken!!, id, Gson()
+            )
 
-        if (updatedConversation.isUpdated) {
-            // Refresh succeeded
-            updateConversation(index, updatedConversation)
+            updatedConversation?.let {
+                updateConversation(conversation, it)
+            } ?: Toast.makeText(this, R.string.refresh_conversation_failed, Toast.LENGTH_SHORT).show()
         }
 
         refreshState.value = false
@@ -211,7 +201,7 @@ class ModmailActivity : BaseActivity() {
 
     @Composable
     fun ConversationListView(pagingItems: LazyPagingItems<Conversation>, navigator: ThreePaneScaffoldNavigator<Conversation>,
-                             listState: LazyListState, selectConversation: (Int) -> Unit) {
+                             listState: LazyListState) {
         val state: PullToRefreshState = rememberPullToRefreshState()
 
         PullToRefreshBox(
@@ -240,10 +230,8 @@ class ModmailActivity : BaseActivity() {
                         contentType = { _ -> 1 },
                         key = { index -> pagingItems[index]?.id ?: index }
                     ) { index: Int ->
-                        val conversation = pagingItems[index]
-                        conversation?.let {
+                        pagingItems[index]?.let {
                             ConversationView(it) { conversation ->
-                                selectConversation(index)
                                 navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, conversation)
                             }
                         }
@@ -280,45 +268,41 @@ class ModmailActivity : BaseActivity() {
     }
 
     @Composable
-    fun ConversationDetailsView(conversationState: MutableState<Conversation?>, index: MutableIntState,
-                                updateConversation: (Int, Conversation) -> Unit) {
-        val conversationStateValue = conversationState.value
-        conversationStateValue?.let {
-            val pullToRefreshState: PullToRefreshState = rememberPullToRefreshState()
-            val refreshState = remember { mutableStateOf(false) }
+    fun ConversationDetailsView(conversation: Conversation, updateConversation: (Conversation, Conversation) -> Unit) {
+        val pullToRefreshState: PullToRefreshState = rememberPullToRefreshState()
+        val refreshState = remember { mutableStateOf(false) }
 
-            if (!it.isUpdated) {
-                LaunchedEffect(it.id) {
-                    refreshConversation(conversationState, refreshState, index.intValue, updateConversation)
-                }
+        if (!conversation.isUpdated) {
+            LaunchedEffect(conversation.id) {
+                refreshConversation(conversation, refreshState, updateConversation)
             }
+        }
 
-            PullToRefreshBox(
-                isRefreshing = refreshState.value,
-                onRefresh = {
-                    lifecycleScope.launch {
-                        refreshConversation(conversationState, refreshState, index.intValue, updateConversation)
-                    }
-                },
-                state = pullToRefreshState,
-                indicator = {
-                    Indicator(
-                        modifier = Modifier.align(Alignment.TopCenter),
-                        isRefreshing = refreshState.value,
-                        state = pullToRefreshState,
-                        containerColor = Color(mCustomThemeWrapper.circularProgressBarBackground),
-                        color = Color(mCustomThemeWrapper.colorAccent)
-                    )
+        PullToRefreshBox(
+            isRefreshing = refreshState.value,
+            onRefresh = {
+                lifecycleScope.launch {
+                    refreshConversation(conversation, refreshState, updateConversation)
                 }
+            },
+            state = pullToRefreshState,
+            indicator = {
+                Indicator(
+                    modifier = Modifier.align(Alignment.TopCenter),
+                    isRefreshing = refreshState.value,
+                    state = pullToRefreshState,
+                    containerColor = Color(mCustomThemeWrapper.circularProgressBarBackground),
+                    color = Color(mCustomThemeWrapper.colorAccent)
+                )
+            }
+        ) {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                contentPadding = WindowInsets(top = 16.dp).add(WindowInsets.navigationBars).asPaddingValues(),
+                modifier = Modifier.clipToBounds()
             ) {
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
-                    contentPadding = WindowInsets(top = 16.dp).add(WindowInsets.navigationBars).asPaddingValues(),
-                    modifier = Modifier.clipToBounds()
-                ) {
-                    items(count = it.messages.size, key = { index -> it.messages[index].id ?: index }) { index: Int ->
-                        MessageView(it.messages[index])
-                    }
+                items(count = conversation.messages.size, key = { index -> conversation.messages[index].id ?: index }) { index: Int ->
+                    MessageView(conversation.messages[index])
                 }
             }
         }

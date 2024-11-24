@@ -24,15 +24,13 @@ class ModMailConversationPagingSource(val retrofit: Retrofit, val accessToken: S
                 .getModMailConversations(APIUtils.getOAuthHeader(accessToken), params.key)
 
             if (response.isSuccessful) {
-                response.body()?.let {
-                    val conversations: MutableList<Conversation>? = parseConversations(it)
-                    if (conversations == null) {
-                        return LoadResult.Page(listOf(), null, null)
-                    } else {
+                response.body()?.let { body ->
+                    val conversations: MutableList<Conversation>? = parseConversations(body)
+                    conversations?.let {
                         return LoadResult.Page(
-                            conversations, null, if (conversations.isEmpty()) null else conversations[conversations.size - 1].id
+                            it, null, if (it.isEmpty()) null else it[it.size - 1].id
                         )
-                    }
+                    } ?: return LoadResult.Page(listOf(), null, null)
                 }
             }
         } catch (e: IOException) {

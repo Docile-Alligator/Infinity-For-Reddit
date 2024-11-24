@@ -74,28 +74,24 @@ data class Conversation(
             }
         }
 
-        /*
-            Return the old Conversation object if network request failed
-         */
-        suspend fun fetchConversation(oauthRetrofit: Retrofit, accessToken: String, conversation: Conversation, gson: Gson): Conversation {
-            conversation.id?.let { id ->
-                try {
-                    val response: Response<String> = oauthRetrofit.create(RedditAPIKt::class.java).getModMailConversation(id, APIUtils.getOAuthHeader(accessToken))
-                    if (response.isSuccessful && response.body() != null) {
-                        val responseJson = JSONObject(response.body()!!)
-                        return parseConversation(gson, responseJson.getString(JSONUtils.CONVERSATION_KEY),
-                            responseJson.getJSONObject(JSONUtils.MESSAGES_KEY)).apply {
-                            isUpdated = true
-                        }
-                    } else {
-                        return conversation
+        suspend fun fetchConversation(oauthRetrofit: Retrofit, accessToken: String, conversationId: String, gson: Gson): Conversation? {
+            try {
+                val response: Response<String> = oauthRetrofit.create(RedditAPIKt::class.java).getModMailConversation(
+                    conversationId, APIUtils.getOAuthHeader(accessToken))
+                if (response.isSuccessful && response.body() != null) {
+                    val responseJson = JSONObject(response.body()!!)
+                    return parseConversation(
+                        gson, responseJson.getString(JSONUtils.CONVERSATION_KEY),
+                        responseJson.getJSONObject(JSONUtils.MESSAGES_KEY)
+                    ).apply {
+                        isUpdated = true
                     }
-                } catch (e: IOException) {
-                    return conversation
+                } else {
+                    return null
                 }
+            } catch (e: IOException) {
+                return null
             }
-
-            return conversation
         }
     }
 }
