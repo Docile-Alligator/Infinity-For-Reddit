@@ -1526,6 +1526,10 @@
     <string name="download_video">Download Video</string>
     <string name="download_all_gallery_images">Download All Gallery Images</string>
 
+    <string name="modmail_unread">Unread</string>
+    <string name="modmail_recent">Recent</string>
+    <string name="modmail_mod">Mod</string>
+    <string name="modmail_user">User</string>
     <string name="refresh_conversation_failed">Cannot refresh the conversation</string>
 
 </resources>

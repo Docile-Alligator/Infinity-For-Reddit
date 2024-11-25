@@ -2,10 +2,12 @@ package ml.docilealligator.infinityforreddit.activities
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,8 +22,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
@@ -38,12 +50,19 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -102,66 +121,76 @@ class ModmailActivity : BaseActivity() {
                         ),
                         title = {
                             Text(getString(R.string.modmail_activity_label))
-                        }
+                        },
+                        navigationIcon = {
+                            IconButton(onClick = { finish() }) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = null,
+                                    tint = Color(mCustomThemeWrapper.toolbarPrimaryTextAndIconColor)
+                                )
+                            }
+                        },
                     )
                 },
                 containerColor = Color(mCustomThemeWrapper.backgroundColor),
             ) { innerPadding ->
-                val listState: LazyListState = rememberLazyListState()
-                val navigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
-                val pagingItems = conversationViewModel.flow.collectAsLazyPagingItems()
+                val scope = rememberCoroutineScope()
+                val pagerState = rememberPagerState { 4 }
+                val selectedTabIndex = remember { derivedStateOf { pagerState.currentPage } }
 
-                val updateConversation: (Conversation, Conversation) -> Unit = { conversation, updatedConversation ->
-                    conversation.apply {
-                        if (updatedConversation.id == id) {
-                            isAuto = updatedConversation.isAuto
-                            participant = updatedConversation.participant
-                            objIds = updatedConversation.objIds
-                            isRepliable = updatedConversation.isRepliable
-                            lastUserUpdate = updatedConversation.lastUserUpdate
-                            isInternal = updatedConversation.isInternal
-                            lastModUpdate = updatedConversation.lastModUpdate
-                            authors = updatedConversation.authors
-                            lastUpdated = updatedConversation.lastUpdated
-                            legacyFirstMessageId = updatedConversation.legacyFirstMessageId
-                            this.state = updatedConversation.state
-                            conversationType = updatedConversation.conversationType
-                            lastUnread = updatedConversation.lastUnread
-                            owner = updatedConversation.owner
-                            subject = updatedConversation.subject
-                            isHighlighted = updatedConversation.isHighlighted
-                            numMessages = updatedConversation.numMessages
-                            messages = updatedConversation.messages
-                            isUpdated = true
-                        }
-                    }
-                }
-
-                BackHandler(navigator.canNavigateBack()) {
-                    navigator.navigateBack()
-                }
-
-                ListDetailPaneScaffold(
-                    modifier = Modifier.padding(
-                        top = innerPadding.calculateTopPadding(),
-                        start = 16.dp,
-                        end = 16.dp
-                    ),
-                    directive = navigator.scaffoldDirective,
-                    value = navigator.scaffoldValue,
-                    listPane = {
-                        AnimatedPane {
-                            ConversationListView(pagingItems, navigator, listState)
-                        }
-                    },
-                    detailPane = {
-                        AnimatedPane {
-                            navigator.currentDestination?.content?.let {
-                                ConversationDetailsView(it, updateConversation)
+                Column(
+                    modifier = Modifier
+                        .padding(
+                            top = innerPadding.calculateTopPadding()
+                        )
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabBackground))
+                    ) {
+                        val tabTitles = listOf(getString(R.string.modmail_unread), getString(R.string.modmail_recent),
+                            getString(R.string.modmail_mod), getString(R.string.modmail_user))
+                        PrimaryScrollableTabRow(
+                            selectedTabIndex = selectedTabIndex.value,
+                            containerColor = Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabBackground),
+                            modifier = Modifier.fillMaxWidth(),
+                            edgePadding = 0.dp,
+                            indicator = {
+                                TabRowDefaults.PrimaryIndicator(
+                                    modifier = Modifier
+                                        .tabIndicatorOffset(selectedTabIndex.value, matchContentSize = true)
+                                        .background(Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabBackground)),
+                                    width = Dp.Unspecified,
+                                    color = Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabIndicator),
+                                )
+                            },
+                            divider = { }
+                        ) {
+                            tabTitles.forEachIndexed { index, title ->
+                                Tab(
+                                    selected = selectedTabIndex.value == index,
+                                    onClick = {
+                                        scope.launch {
+                                            pagerState.animateScrollToPage(index)
+                                        }
+                                    },
+                                    selectedContentColor = Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabIndicator),
+                                    unselectedContentColor = Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabIndicator),
+                                    text = { Text(text = title, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+                                )
                             }
                         }
                     }
-                )
+
+                    HorizontalPager(
+                        state = pagerState
+                    ) { page ->
+                        ConversationListDetailPaneView(page)
+                    }
+                }
             }
         }
     }
@@ -197,6 +226,70 @@ class ModmailActivity : BaseActivity() {
         }
 
         refreshState.value = false
+    }
+
+    @Composable
+    fun ConversationListDetailPaneView(page: Int) {
+        val listState: LazyListState = rememberLazyListState()
+        val navigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
+        val pagingItems = when(page) {
+            0 -> conversationViewModel.unreadFlow.collectAsLazyPagingItems()
+            1 -> conversationViewModel.recentFlow.collectAsLazyPagingItems()
+            2 -> conversationViewModel.modFlow.collectAsLazyPagingItems()
+            3 -> conversationViewModel.userFlow.collectAsLazyPagingItems()
+            else -> conversationViewModel.recentFlow.collectAsLazyPagingItems()
+        }
+
+        val updateConversation: (Conversation, Conversation) -> Unit = { conversation, updatedConversation ->
+            conversation.apply {
+                if (updatedConversation.id == id) {
+                    isAuto = updatedConversation.isAuto
+                    participant = updatedConversation.participant
+                    objIds = updatedConversation.objIds
+                    isRepliable = updatedConversation.isRepliable
+                    lastUserUpdate = updatedConversation.lastUserUpdate
+                    isInternal = updatedConversation.isInternal
+                    lastModUpdate = updatedConversation.lastModUpdate
+                    authors = updatedConversation.authors
+                    lastUpdated = updatedConversation.lastUpdated
+                    legacyFirstMessageId = updatedConversation.legacyFirstMessageId
+                    this.state = updatedConversation.state
+                    conversationType = updatedConversation.conversationType
+                    lastUnread = updatedConversation.lastUnread
+                    owner = updatedConversation.owner
+                    subject = updatedConversation.subject
+                    isHighlighted = updatedConversation.isHighlighted
+                    numMessages = updatedConversation.numMessages
+                    messages = updatedConversation.messages
+                    isUpdated = true
+                }
+            }
+        }
+
+        BackHandler(navigator.canNavigateBack()) {
+            navigator.navigateBack()
+        }
+
+        ListDetailPaneScaffold(
+            modifier = Modifier.padding(
+                start = 16.dp,
+                end = 16.dp
+            ),
+            directive = navigator.scaffoldDirective,
+            value = navigator.scaffoldValue,
+            listPane = {
+                AnimatedPane {
+                    ConversationListView(pagingItems, navigator, listState)
+                }
+            },
+            detailPane = {
+                AnimatedPane {
+                    navigator.currentDestination?.content?.let {
+                        ConversationDetailsView(it, updateConversation)
+                    }
+                }
+            }
+        )
     }
 
     @Composable

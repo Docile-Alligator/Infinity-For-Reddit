@@ -7,13 +7,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
-import androidx.paging.map
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 
 class ModMailConversationViewModel(
@@ -21,10 +14,34 @@ class ModMailConversationViewModel(
     accessToken: String,
     sharedPreferences: SharedPreferences
 ) : ViewModel() {
-    val flow = Pager(
+    val recentFlow = Pager(
         PagingConfig(20, 4)
     ) {
-        ModMailConversationPagingSource(oauthRetrofit, accessToken, sharedPreferences)
+        ModMailConversationPagingSource(oauthRetrofit, accessToken, sharedPreferences, "recent")
+    }
+        .flow
+        .cachedIn(viewModelScope)
+
+    val modFlow = Pager(
+        PagingConfig(20, 4)
+    ) {
+        ModMailConversationPagingSource(oauthRetrofit, accessToken, sharedPreferences, "mod")
+    }
+        .flow
+        .cachedIn(viewModelScope)
+
+    val userFlow = Pager(
+        PagingConfig(20, 4)
+    ) {
+        ModMailConversationPagingSource(oauthRetrofit, accessToken, sharedPreferences, "user")
+    }
+        .flow
+        .cachedIn(viewModelScope)
+
+    val unreadFlow = Pager(
+        PagingConfig(20, 4)
+    ) {
+        ModMailConversationPagingSource(oauthRetrofit, accessToken, sharedPreferences, "unread")
     }
         .flow
         .cachedIn(viewModelScope)
