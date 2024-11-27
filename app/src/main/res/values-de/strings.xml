@@ -1188,8 +1188,6 @@ Antippen zum Wiederholen."</string>
     <string name="app_lock_timeout_24_hours">"24 Stunden"</string>
     <string name="edit_profile_activity_label">"Profil bearbeiten"</string>
     <string name="action_contact_mods">"Moderator kontaktieren"</string>
-    <string name="settings_save_nsfw_media_in_different_folder_title">"NSFW-Medien an anderem Speicherort"</string>
-    <string name="settings_nsfw_download_location_title">"NSFW Speicherort"</string>
     <string name="fetch_streamable_video_failed">"Ergreifen von Streamable-Vide fehlgeschlagen"</string>
 
     <!-- EditProfileService Notification -->

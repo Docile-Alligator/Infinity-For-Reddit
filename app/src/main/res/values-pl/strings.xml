@@ -1114,7 +1114,6 @@ Brak podglądu w Ostatnich aplikacjach."</string>
     <string name="app_lock_timeout_24_hours">"24 godziny"</string>
     <string name="edit_profile_activity_label">"Edytuj profil"</string>
     <string name="action_contact_mods">"Kontakt z modami"</string>
-    <string name="settings_save_nsfw_media_in_different_folder_title">"Zapisz media NSFW w innej lokalizacji"</string>
     <string name="fetch_streamable_video_failed">"Błąd pobierania ze Streamable"</string>
 
     <!-- EditProfileService Notification -->

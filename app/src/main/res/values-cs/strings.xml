@@ -1143,8 +1143,6 @@ Pokud ano, přejmenujte je, než povolíte Material You."</string>
     <string name="app_lock_timeout_24_hours">"24 hodin"</string>
     <string name="edit_profile_activity_label">"Upravit profil"</string>
     <string name="action_contact_mods">"Kontaktovat moderátory"</string>
-    <string name="settings_save_nsfw_media_in_different_folder_title">"Uložit NSFW média do jiné lokace"</string>
-    <string name="settings_nsfw_download_location_title">"Lokace NSFW stahování"</string>
     <string name="fetch_streamable_video_failed">"Nepodařilo se získat Streamable video"</string>
 
     <!-- EditProfileService Notification -->

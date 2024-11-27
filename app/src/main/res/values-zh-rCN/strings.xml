@@ -1160,8 +1160,6 @@ Reddit 视频分辨率较低。
     <string name="app_lock_timeout_24_hours">"24 小时"</string>
     <string name="edit_profile_activity_label">"编辑档案"</string>
     <string name="action_contact_mods">"联系管理员"</string>
-    <string name="settings_save_nsfw_media_in_different_folder_title">"在不同的位置保存 NSFW 媒体"</string>
-    <string name="settings_nsfw_download_location_title">"NSFW 下载位置"</string>
     <string name="fetch_streamable_video_failed">"获取流式传输视频失败"</string>
 
     <!-- EditProfileService Notification -->

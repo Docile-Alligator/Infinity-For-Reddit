@@ -1156,8 +1156,6 @@ Nhấn để thử lại."</string>
     <string name="app_lock_timeout_24_hours">"24 tiếng"</string>
     <string name="edit_profile_activity_label">"Chỉnh sửa Hồ sơ"</string>
     <string name="action_contact_mods">"Liên hệ Quản trị viên"</string>
-    <string name="settings_save_nsfw_media_in_different_folder_title">"Lưu Phương tiện NSFW trong thư mục khác"</string>
-    <string name="settings_nsfw_download_location_title">"Vị trí tải xuống nội dung NSFW"</string>
     <string name="fetch_streamable_video_failed">"Lấy video Streamable thất bại"</string>
 
     <!-- EditProfileService Notification -->

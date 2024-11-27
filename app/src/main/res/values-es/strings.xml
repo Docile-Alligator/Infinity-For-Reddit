@@ -1193,8 +1193,6 @@ Toque para volver a intentarlo."</string>
     <string name="app_lock_timeout_24_hours">"24 horas"</string>
     <string name="edit_profile_activity_label">"Editar perfil"</string>
     <string name="action_contact_mods">"Contactar moderadores"</string>
-    <string name="settings_save_nsfw_media_in_different_folder_title">"Guardar contenido NSFW en una ubicación diferente"</string>
-    <string name="settings_nsfw_download_location_title">"Ubicación de descargas NSFW"</string>
     <string name="fetch_streamable_video_failed">"No fue posible obtener el vídeo de Streamable"</string>
 
     <!-- EditProfileService Notification -->

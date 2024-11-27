@@ -526,8 +526,8 @@
     <string name="settings_gif_download_location_title">Gif Download Location</string>
     <string name="settings_video_download_location_title">Video Download Location</string>
     <string name="settings_separate_folder_for_each_subreddit">Separate Folder for Each Subreddit</string>
-    <string name="settings_save_nsfw_media_in_different_folder_title">Save NSFW Media in Different Location</string>
-    <string name="settings_nsfw_download_location_title">NSFW Download Location</string>
+    <string name="settings_save_nsfw_media_in_different_folder_title">Save Sensitive Media in Different Location</string>
+    <string name="settings_nsfw_download_location_title">Sensitive Download Location</string>
     <string name="settings_swipe_action_title">Swipe Action</string>
     <string name="settings_swipe_action_haptic_feedback_title">Haptic Feedback</string>
     <string name="settings_disable_swiping_between_tabs_title">Disable Swiping Between Tabs</string>

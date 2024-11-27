@@ -1137,8 +1137,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="app_lock_timeout_24_hours">"24 години"</string>
     <string name="edit_profile_activity_label">"Змінити профіль"</string>
     <string name="action_contact_mods">"Моди контактів"</string>
-    <string name="settings_save_nsfw_media_in_different_folder_title">"Зберігати НБДР-медія в інше місце"</string>
-    <string name="settings_nsfw_download_location_title">"Місце завантаження НБДР"</string>
     <string name="fetch_streamable_video_failed">"Не вдалося отримати потоковий відеозапис"</string>
 
     <!-- EditProfileService Notification -->

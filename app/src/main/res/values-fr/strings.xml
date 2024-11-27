@@ -1263,8 +1263,6 @@ Cliquer pour réessayer."</string>
     <string name="app_lock_timeout_24_hours">"24 heures"</string>
     <string name="edit_profile_activity_label">"Éditer le profil"</string>
     <string name="action_contact_mods">"Contacter les modérateurs"</string>
-    <string name="settings_save_nsfw_media_in_different_folder_title">"Sauvegarder le contenu NSFW dans une destination différente"</string>
-    <string name="settings_nsfw_download_location_title">"Destination des téléchargements NSFW"</string>
     <string name="fetch_streamable_video_failed">"Échec de la récupération de la vidéo Streamable"</string>
 
     <!-- EditProfileService Notification -->
