@@ -56,8 +56,6 @@
     <string name="action_unhide_post">"Bericht zichtbaar maken"</string>
     <string name="action_edit_post">"Bericht aanpassen"</string>
     <string name="action_delete_post">"Bericht verwijderen"</string>
-    <string name="action_mark_nsfw">"Markeren als NSFW"</string>
-    <string name="action_unmark_nsfw">"Demarkeren als NSFW"</string>
     <string name="action_mark_spoiler">"Markeren als leeswaarshuwing"</string>
     <string name="action_unmark_spoiler">"Demarkeren als leeswaarschuwing"</string>
     <string name="action_edit_flair">"Flair bewerken"</string>
@@ -99,7 +97,6 @@ Druk om opnieuw te proberen."</string>
     <string name="load_messages_failed">"De berichten kunnen niet worden geladen.
 Druk om opnieuw te proberen."</string>
     <string name="no_messages">"Leeg"</string>
-    <string name="nsfw">"NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="karma_info">"Karma: %1$d"</string>
@@ -274,10 +271,6 @@ Druk om opnieuw te proberen."</string>
     <string name="edit_success">"Het bericht is bewerkt"</string>
     <string name="delete_post_success">"Het bericht is verwijderd"</string>
     <string name="delete_post_failed">"Het verwijderen is mislukt"</string>
-    <string name="mark_nsfw_success">"Het bericht is gemarkeerd als NSFW"</string>
-    <string name="mark_nsfw_failed">"Het markeren als NSFW is mislukt"</string>
-    <string name="unmark_nsfw_success">"Het bericht is gedemarkeerd als NSFW"</string>
-    <string name="unmark_nsfw_failed">"Het demarkeren als NSFW is mislukt"</string>
     <string name="mark_spoiler_success">"Het bericht is voorzien van een leeswaarschuwing"</string>
     <string name="mark_spoiler_failed">"Het voorzien van een leeswaarschuwing is mislukt"</string>
     <string name="unmark_spoiler_success">"Het bericht is niet meer voorzien van een leeswaarschuwing"</string>
@@ -310,7 +303,6 @@ Druk om opnieuw te proberen."</string>
     <string name="settigns_video_title">"Video"</string>
     <string name="settings_video_autoplay_title">"Video's automatisch afspelen"</string>
     <string name="settings_mute_autoplaying_videos_title">"Automatisch afspelende video's dempen"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"NSFW-video's automatisch afspelen"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Zichtbaar gebied van automatische afspelende video's (verticaal)"</string>
 
     <!-- Fuzzy -->
@@ -330,7 +322,6 @@ Druk om opnieuw te proberen."</string>
     <string name="settings_volume_keys_navigate_comments_title">"Volumetoetsen gebruiken om door reacties te bladeren"</string>
     <string name="settings_volume_keys_navigate_posts_title">"Volumetoetsen gebruiken om door berichten te bladeren"</string>
     <string name="settings_mute_video_title">"Video's dempen"</string>
-    <string name="settings_mute_nsfw_video_title">"NSFW-video's dempen"</string>
 
     <!-- Fuzzy -->
     <string name="settings_video_player_ignore_nav_bar_title">"Navigatiebalk verbergen in videospeler"</string>
@@ -515,8 +506,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit_success">"Het verwijderen is voltooid"</string>
     <string name="delete_multi_reddit_failed">"Het verwijderen is mislukt"</string>
     <string name="delete_multi_reddit_dialog_message">"Weet je het zeker?"</string>
-    <string name="enable_nsfw">"NSFW inschakelen"</string>
-    <string name="disable_nsfw">"NSFW uitschakelen"</string>
     <string name="cannot_save_image">"De afbeelding kan niet worden opgeslagen"</string>
     <string name="cannot_save_gif">"De GIF kan niet worden opgeslagen"</string>
     <string name="cannot_get_storage">"Geen toegang tot de app-opslagruimte"</string>
@@ -612,10 +601,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_spoiler_background_color_detail">"Wordt toegepast op de achtergrond van het leeswaarschuwingslabel"</string>
     <string name="theme_item_spoiler_text_color">"Tekstkleur van leeswaarschuwing"</string>
     <string name="theme_item_spoiler_text_color_detail">"Wordt toegepast op de tekst van het leeswaarschuwingslabel"</string>
-    <string name="theme_item_nsfw_background_color">"NSFW-achtergrondkleur"</string>
-    <string name="theme_item_nsfw_background_color_detail">"Wordt toegepast op de achtergrond van het NSFW-label"</string>
-    <string name="theme_item_nsfw_text_color">"NSFW-tekstkleur"</string>
-    <string name="theme_item_nsfw_text_color_detail">"Wordt toegepast op de tekst van het NSFW-label"</string>
     <string name="theme_item_flair_background_color">"Flair-achtergrondkleur"</string>
     <string name="theme_item_flair_background_color_detail">"Wordt toegepast op de achtergrond van het flair-label"</string>
     <string name="theme_item_flair_text_color">"Flair-tekstkleur"</string>
@@ -857,8 +842,6 @@ Automatisch afspelen van video is uitgeschakeld."</string>
 
     <!-- Fuzzy -->
     <string name="warning">"Waarschuwing"</string>
-    <string name="this_is_a_nsfw_subreddit">"Dit is een NSFW subreddit."</string>
-    <string name="this_user_has_nsfw_content">"Deze gebruiker heeft NSFW inhoud"</string>
     <string name="dismiss">"Afwijzgen"</string>
     <string name="leave">"Verlaten"</string>
 
@@ -869,10 +852,6 @@ Automatisch afspelen van video is uitgeschakeld."</string>
     <string name="go_to_user">"Ga naar gebruiker"</string>
     <string name="go_to_thing_hint">"Naam"</string>
     <string name="random">"Willekeurig"</string>
-    <string name="random_subreddit">"Willekeurige Subreddit"</string>
-    <string name="random_nsfw_subreddit">"Willekeurige NSFW Subreddit"</string>
-    <string name="random_post">"Willekeurige Post"</string>
-    <string name="random_nsfw_post">"Willekeurige NSFW Post"</string>
     <string name="fetch_random_thing_failed">"Probeer later opnieuw"</string>
     <string name="downloading">"Downloaden"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all en r/popular"</string>

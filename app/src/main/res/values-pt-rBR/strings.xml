@@ -58,8 +58,6 @@
     <string name="action_unhide_post">"Exibir postagem"</string>
     <string name="action_edit_post">"Editar postagem"</string>
     <string name="action_delete_post">"Excluir postagem"</string>
-    <string name="action_mark_nsfw">"Marcar como NSFW"</string>
-    <string name="action_unmark_nsfw">"Desmarcar como NSFW"</string>
     <string name="action_mark_spoiler">"Marcar como spoiler"</string>
     <string name="action_unmark_spoiler">"Desmarcar como spoiler"</string>
     <string name="action_edit_flair">"Editar etiqueta"</string>
@@ -104,7 +102,6 @@ Toque para tentar de novo."</string>
     <string name="load_messages_failed">"Erro ao carregar as mensagens.
 Toque para tentar de novo."</string>
     <string name="no_messages">"Vazio"</string>
-    <string name="nsfw">"NSFW"</string>
     <string name="karma_info">"Carma: %1$,d"</string>
     <string name="karma_info_user_detail">"Carma:
 %1$,d (%2$d + %3$d)"</string>
@@ -269,10 +266,6 @@ Toque para tentar de novo."</string>
     <string name="edit_success">"Êxito ao editar"</string>
     <string name="delete_post_success">"Êxito ao excluir"</string>
     <string name="delete_post_failed">"Erro ao excluir"</string>
-    <string name="mark_nsfw_success">"Êxito ao marcar como NSFW"</string>
-    <string name="mark_nsfw_failed">"Erro ao marcar como NSFW"</string>
-    <string name="unmark_nsfw_success">"Êxito ao desmarcar como NSFW"</string>
-    <string name="unmark_nsfw_failed">"Erro ao desmarcar como NSFW"</string>
     <string name="mark_spoiler_success">"Êxito ao marcar como spoiler"</string>
     <string name="mark_spoiler_failed">"Erro ao marcar como Spoiler"</string>
     <string name="unmark_spoiler_success">"Êxito ao desmarcar como spoiler"</string>
@@ -305,7 +298,6 @@ Toque para tentar de novo."</string>
     <string name="settigns_video_title">"Vídeo"</string>
     <string name="settings_video_autoplay_title">"Reprodução Automática de Vídeo"</string>
     <string name="settings_mute_autoplaying_videos_title">"Silenciar vídeos reproduzidos automaticamente"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"Reprodução automática de vídeos NSFW"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Deslocar área visível para reproduzir vídeos automaticamente (retrato)"</string>
 
     <!-- Fuzzy -->
@@ -325,7 +317,6 @@ Toque para tentar de novo."</string>
     <string name="settings_volume_keys_navigate_comments_title">"Usar as teclas de volume para navegar em comentários em postagens"</string>
     <string name="settings_volume_keys_navigate_posts_title">"Usar as teclas de volume para navegar em posagens"</string>
     <string name="settings_mute_video_title">"Silenciar Vídeos"</string>
-    <string name="settings_mute_nsfw_video_title">"Silenciar Vídeos NSFW"</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignorar barra de navegação no reprodutor de vídeos"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Evitar que o Controle de Vídeo Tenha Margens Largas"</string>
     <string name="settings_confirm_to_exit">"Confirmar para Sair"</string>
@@ -497,8 +488,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit_success">"Êxito ao excluir"</string>
     <string name="delete_multi_reddit_failed">"Erro ao excluir"</string>
     <string name="delete_multi_reddit_dialog_message">"Tem certeza?"</string>
-    <string name="enable_nsfw">"Ativar NSFW"</string>
-    <string name="disable_nsfw">"Desativar NSFW"</string>
     <string name="cannot_save_image">"Não pode salvar a imagem"</string>
     <string name="cannot_save_gif">"Não pode salvar o GIF"</string>
     <string name="cannot_get_storage">"Não pode acessar os dados de armazenamento do aplicativo"</string>
@@ -594,10 +583,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_spoiler_background_color_detail">"Aplicado a: Fundo da marcação de spoiler"</string>
     <string name="theme_item_spoiler_text_color">"Cor do Texto do Spoiler"</string>
     <string name="theme_item_spoiler_text_color_detail">"Aplicado a: Cor do texto na marcação de spoiler"</string>
-    <string name="theme_item_nsfw_background_color">"Cor de fundo do NSFW"</string>
-    <string name="theme_item_nsfw_background_color_detail">"Aplicado a: Fundo da marcação de NSFW"</string>
-    <string name="theme_item_nsfw_text_color">"Cor do Texto do NSFW"</string>
-    <string name="theme_item_nsfw_text_color_detail">"Aplicado a: Cor do texto da marcação de NSFW"</string>
     <string name="theme_item_flair_background_color">"Cor de fundo da etiqueta"</string>
     <string name="theme_item_flair_background_color_detail">"Aplicado a: Fundo da marcação da etiqueta"</string>
     <string name="theme_item_flair_text_color">"Cor do texto da etiqueta"</string>
@@ -830,18 +815,12 @@ A reprodução automática de vídeos fica desativada."</string>
 
     <!-- Fuzzy -->
     <string name="warning">"Aviso"</string>
-    <string name="this_is_a_nsfw_subreddit">"Este é um subreddit NSFW."</string>
-    <string name="this_user_has_nsfw_content">"Este usuário tem conteúdo NSFW"</string>
     <string name="dismiss">"Dispensar"</string>
     <string name="leave">"Sair"</string>
     <string name="go_to_subreddit">"Ir ao subreddit"</string>
     <string name="go_to_user">"Ir a usuário"</string>
     <string name="go_to_thing_hint">"Nome"</string>
     <string name="random">"Aleatório"</string>
-    <string name="random_subreddit">"Subreddit aleatório"</string>
-    <string name="random_nsfw_subreddit">"Subreddit NSFW aleatório"</string>
-    <string name="random_post">"Postagem aleatória"</string>
-    <string name="random_nsfw_post">"Postagem NSFW aleatória"</string>
     <string name="fetch_random_thing_failed">"Tente de novo depois"</string>
     <string name="downloading">"Baixando"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all e r/popular"</string>

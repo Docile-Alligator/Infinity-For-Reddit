@@ -65,8 +65,8 @@
     <string name="action_unhide_post">Unhide Post</string>
     <string name="action_edit_post">Edit Post</string>
     <string name="action_delete_post">Delete Post</string>
-    <string name="action_mark_nsfw">Mark NSFW</string>
-    <string name="action_unmark_nsfw">Unmark NSFW</string>
+    <string name="action_mark_nsfw">Mark Sensitive</string>
+    <string name="action_unmark_nsfw">Unmark Sensitive</string>
     <string name="action_mark_spoiler">Mark Spoiler</string>
     <string name="action_unmark_spoiler">Unmark Spoiler</string>
     <string name="action_edit_flair">Edit Flair</string>
@@ -131,7 +131,7 @@
     <string name="load_messages_failed">Error loading messages.\nTap to retry.</string>
     <string name="no_messages">Empty</string>
 
-    <string name="nsfw">NSFW</string>
+    <string name="nsfw">Sensitive</string>
     <string name="karma_info">Karma: %1$,d</string>
     <string name="karma_info_user_detail">Karma:\n%1$,d (%2$d + %3$d)</string>
     <string name="cakeday_info">Cake day:\n%1$s</string>
@@ -342,10 +342,10 @@
     <string name="edit_success">Edit successfully</string>
     <string name="delete_post_success">Delete successfully</string>
     <string name="delete_post_failed">Delete failed</string>
-    <string name="mark_nsfw_success">Mark NSFW successfully</string>
-    <string name="mark_nsfw_failed">Mark NSFW failed</string>
-    <string name="unmark_nsfw_success">Unmark NSFW successfully</string>
-    <string name="unmark_nsfw_failed">Unmark NSFW failed</string>
+    <string name="mark_nsfw_success">Mark sensitive successfully</string>
+    <string name="mark_nsfw_failed">Mark sensitive failed</string>
+    <string name="unmark_nsfw_success">Unmark sensitive successfully</string>
+    <string name="unmark_nsfw_failed">Unmark sensitive failed</string>
     <string name="mark_spoiler_success">Mark spoiler successfully</string>
     <string name="mark_spoiler_failed">Mark spoiler failed</string>
     <string name="unmark_spoiler_success">Unmark spoiler successfully</string>
@@ -384,7 +384,7 @@
     <string name="settigns_video_title">Video</string>
     <string name="settings_video_autoplay_title">Video Autoplay</string>
     <string name="settings_mute_autoplaying_videos_title">Mute Autoplaying Videos</string>
-    <string name="settings_autoplay_nsfw_videos_title">Autoplay NSFW Videos</string>
+    <string name="settings_autoplay_nsfw_videos_title">Autoplay Sensitive Videos</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">Autoplay Videos Visible Area Offset (Portrait)</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">Start autoplaying videos when %1$d%% of them are visible</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">Autoplay Videos Visible Area Offset (Landscape)</string>
@@ -402,7 +402,7 @@
     <string name="settings_volume_keys_navigate_comments_title">Use Volume Keys to Navigate Comments in Posts</string>
     <string name="settings_volume_keys_navigate_posts_title">Use Volume Keys to Navigate Posts</string>
     <string name="settings_mute_video_title">Mute Videos</string>
-    <string name="settings_mute_nsfw_video_title">Mute NSFW Videos</string>
+    <string name="settings_mute_nsfw_video_title">Mute Sensitive Videos</string>
     <string name="settings_video_player_ignore_nav_bar_title">Ignore Navigation Bar in Video Player</string>
     <string name="settings_video_player_ignore_nav_bar_summary">Prevent the Video Controller Having Extra Margin</string>
     <string name="settings_main_page_back_button_action">Main Page Back Button Action</string>
@@ -754,9 +754,6 @@
     <string name="delete_multi_reddit_failed">Delete failed</string>
     <string name="delete_multi_reddit_dialog_message">Are you sure?</string>
 
-    <string name="enable_nsfw">Enable NSFW</string>
-    <string name="disable_nsfw">Disable NSFW</string>
-
     <string name="cannot_save_image">Cannot save the image</string>
     <string name="cannot_save_gif">Cannot save the gif</string>
     <string name="cannot_get_storage">Cannot access the app storage</string>
@@ -867,10 +864,10 @@
     <string name="theme_item_spoiler_background_color_detail">Applied to: Background of the spoiler tag</string>
     <string name="theme_item_spoiler_text_color">Spoiler Text Color</string>
     <string name="theme_item_spoiler_text_color_detail">Applied to: Text color in the spoiler tag</string>
-    <string name="theme_item_nsfw_background_color">NSFW Background Color</string>
-    <string name="theme_item_nsfw_background_color_detail">Applied to: Background of the NSFW tag</string>
-    <string name="theme_item_nsfw_text_color">NSFW text color</string>
-    <string name="theme_item_nsfw_text_color_detail">Applied to: Text color of the NSFW tag</string>
+    <string name="theme_item_nsfw_background_color">Sensitive Tag Background Color</string>
+    <string name="theme_item_nsfw_background_color_detail">Applied to: Background of the sensitive tag</string>
+    <string name="theme_item_nsfw_text_color">Sensitive Tag Text Color</string>
+    <string name="theme_item_nsfw_text_color_detail">Applied to: Text color of the sensitive tag</string>
     <string name="theme_item_flair_background_color">Flair Background Color</string>
     <string name="theme_item_flair_background_color_detail">Applied to: Background of the flair tag</string>
     <string name="theme_item_flair_text_color">Flair Text Color</string>
@@ -1107,8 +1104,8 @@
     <string name="edited_time">Edited on %s</string>
 
     <string name="warning">Warning</string>
-    <string name="this_is_a_nsfw_subreddit">This is a NSFW subreddit.</string>
-    <string name="this_user_has_nsfw_content">This user has NSFW content</string>
+    <string name="this_is_a_nsfw_subreddit">This is a sensitive subreddit.</string>
+    <string name="this_user_has_nsfw_content">This user has sensitive content</string>
     <string name="dismiss">Dismiss</string>
     <string name="leave">Leave</string>
 
@@ -1117,10 +1114,6 @@
     <string name="go_to_thing_hint">Name</string>
     <string name="go_to_top">Go To Top</string>
     <string name="random">Random</string>
-    <string name="random_subreddit">Random Subreddit</string>
-    <string name="random_nsfw_subreddit">Random NSFW Subreddit</string>
-    <string name="random_post">Random Post</string>
-    <string name="random_nsfw_post">Random NSFW post</string>
     <string name="fetch_random_thing_failed">Try again later</string>
 
     <string name="select_video_quality">Select Video Quality</string>

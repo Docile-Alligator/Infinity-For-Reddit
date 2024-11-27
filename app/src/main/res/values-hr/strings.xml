@@ -60,8 +60,6 @@
     <string name="action_unhide_post">"Prikaži objavu"</string>
     <string name="action_edit_post">"Uredi objavu"</string>
     <string name="action_delete_post">"Obriši objavu"</string>
-    <string name="action_mark_nsfw">"Označi kao NSFW"</string>
-    <string name="action_unmark_nsfw">"Odznači kao NSFW"</string>
     <string name="action_mark_spoiler">"Označi kao Spojler"</string>
     <string name="action_unmark_spoiler">"Odznači kao Spojler"</string>
     <string name="action_edit_flair">"Uredi Flair"</string>
@@ -100,7 +98,6 @@
     <string name="refresh_post_failed">"Pogreška pri osvježavanju objave"</string>
     <string name="load_messages_failed">"Pogreška pri učitavanju poruka. Dodirnite za ponovni pokušaj."</string>
     <string name="no_messages">"Prazno"</string>
-    <string name="nsfw">"NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="karma_info">"Karma: %1$d"</string>
@@ -279,14 +276,6 @@
     <string name="delete_post_failed">"Brisanje nije uspjelo"</string>
 
     <!-- Fuzzy -->
-    <string name="mark_nsfw_success">"Uspješno označeno kao NSFW"</string>
-    <string name="mark_nsfw_failed">"Označavanje kao NSFW nije uspjelo"</string>
-
-    <!-- Fuzzy -->
-    <string name="unmark_nsfw_success">"Uspješno odznačeno kao NSFW"</string>
-    <string name="unmark_nsfw_failed">"Odznačavanje kao NSFW nije uspjelo"</string>
-
-    <!-- Fuzzy -->
     <string name="mark_spoiler_success">"Uspješno označeno kao Spojler"</string>
     <string name="mark_spoiler_failed">"Označavanje kao Spojler nije uspjelo"</string>
 
@@ -323,7 +312,6 @@
     <string name="settigns_video_title">"Video"</string>
     <string name="settings_video_autoplay_title">"Automatsko pokretanje videozapisa"</string>
     <string name="settings_mute_autoplaying_videos_title">"Automatski pokrenuti videozapisi bez zvuka"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"Automatski pokreni NSFW videozapise"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Pomak vidljivog područja kod automatski pokrenutog videozapisa (Portret)"</string>
 
     <!-- Fuzzy -->
@@ -346,7 +334,6 @@
     <string name="settings_volume_keys_navigate_comments_title">"Koristi tipke za glasnoću pri navigaciji komentara"</string>
     <string name="settings_volume_keys_navigate_posts_title">"Koristi tipke za glasnoću pri navigaciji objava"</string>
     <string name="settings_mute_video_title">"Isključi ton na videozapisima"</string>
-    <string name="settings_mute_nsfw_video_title">"Isključi ton na NSFW videozapisima"</string>
 
     <!-- Fuzzy -->
     <string name="settings_video_player_ignore_nav_bar_title">"Ignoriraj navigacijsku traku u video playeru"</string>
@@ -526,8 +513,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit_success">"Brisanje uspješno"</string>
     <string name="delete_multi_reddit_failed">"Brisanje nije uspjelo"</string>
     <string name="delete_multi_reddit_dialog_message">"Jeste li sigurni?"</string>
-    <string name="enable_nsfw">"Omogući NSFW"</string>
-    <string name="disable_nsfw">"Onemogući NSFW"</string>
     <string name="cannot_save_image">"Nije moguće spremiti sliku"</string>
     <string name="cannot_save_gif">"Nije moguće spremiti gif"</string>
     <string name="cannot_get_storage">"Nije moguće pristupiti spremniku aplikacije"</string>
@@ -623,10 +608,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_spoiler_background_color_detail">"Primijenjeno na: Pozadinu znaka Spojlera"</string>
     <string name="theme_item_spoiler_text_color">"Boja teksta znaka Spojlera"</string>
     <string name="theme_item_spoiler_text_color_detail">"Primijenjeno na: Boju teksta u znaku Spojlera"</string>
-    <string name="theme_item_nsfw_background_color">"Boja pozadine NSFW znaka"</string>
-    <string name="theme_item_nsfw_background_color_detail">"Primijenjeno na: Pozadinu NSFW znaka"</string>
-    <string name="theme_item_nsfw_text_color">"Boja teksta NSFW znaka"</string>
-    <string name="theme_item_nsfw_text_color_detail">"Primijenjeno na: Boju teksta NSFW znaka"</string>
     <string name="theme_item_flair_background_color">"Boja pozadine Flair znaka"</string>
     <string name="theme_item_flair_background_color_detail">"Primijenjeno na: Pozadinu Flair znaka"</string>
     <string name="theme_item_flair_text_color">"Boja teksta Flair znaka"</string>
@@ -883,8 +864,6 @@ Reddit videi su niže rezolucije."</string>
 
     <!-- Fuzzy -->
     <string name="warning">"Upozorenje"</string>
-    <string name="this_is_a_nsfw_subreddit">"Ovo je NSFW podreddit."</string>
-    <string name="this_user_has_nsfw_content">"Ovaj korisnik ima NSFW sadržaj"</string>
     <string name="dismiss">"Odbaci"</string>
     <string name="leave">"Napusti"</string>
 
@@ -895,10 +874,6 @@ Reddit videi su niže rezolucije."</string>
     <string name="go_to_user">"Idi na profil korisnika"</string>
     <string name="go_to_thing_hint">"Ime"</string>
     <string name="random">"Nasumično"</string>
-    <string name="random_subreddit">"Nasumični podreddit"</string>
-    <string name="random_nsfw_subreddit">"Nasumični NSFW podreddit"</string>
-    <string name="random_post">"Nasumična objava"</string>
-    <string name="random_nsfw_post">"Nasumična NSFW objava"</string>
     <string name="fetch_random_thing_failed">"Pokušajte ponovno kasnije"</string>
     <string name="downloading">"Preuzimanje"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all i r/popular"</string>

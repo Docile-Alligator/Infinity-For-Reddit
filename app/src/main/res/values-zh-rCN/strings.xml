@@ -52,8 +52,6 @@
     <string name="action_unhide_post">"显示帖子"</string>
     <string name="action_edit_post">"编辑帖子"</string>
     <string name="action_delete_post">"删除帖子"</string>
-    <string name="action_mark_nsfw">"标记为 NSFW"</string>
-    <string name="action_unmark_nsfw">"取消标记 NSFW"</string>
     <string name="action_mark_spoiler">"标记为剧透"</string>
     <string name="action_unmark_spoiler">"取消标记剧透"</string>
     <string name="action_edit_flair">"编辑头衔"</string>
@@ -100,7 +98,6 @@
     <string name="load_messages_failed">"加载消息错误。
 点击以重试。"</string>
     <string name="no_messages">"空"</string>
-    <string name="nsfw">"NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="karma_info">"声望：%1$d"</string>
@@ -275,10 +272,6 @@
     <string name="edit_success">"编辑成功"</string>
     <string name="delete_post_success">"删除成功"</string>
     <string name="delete_post_failed">"删除失败"</string>
-    <string name="mark_nsfw_success">"已标记为 NSFW"</string>
-    <string name="mark_nsfw_failed">"标记 NSFW 失败"</string>
-    <string name="unmark_nsfw_success">"已取消标记 NSFW"</string>
-    <string name="unmark_nsfw_failed">"取消标记 NSFW 失败"</string>
     <string name="mark_spoiler_success">"标记剧透成功"</string>
     <string name="mark_spoiler_failed">"标记剧透失败"</string>
     <string name="unmark_spoiler_success">"取消标记剧透成功"</string>
@@ -309,7 +302,6 @@
     <string name="settigns_video_title">"视频"</string>
     <string name="settings_video_autoplay_title">"自动播放视频"</string>
     <string name="settings_mute_autoplaying_videos_title">"静音自动播放的视频"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"自动播放 NSFW 视频"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"自动播放视频可视区域偏移（竖屏）"</string>
 
     <!-- Fuzzy -->
@@ -331,7 +323,6 @@
     <string name="settings_volume_keys_navigate_comments_title">"在帖子内使用音量键浏览评论"</string>
     <string name="settings_volume_keys_navigate_posts_title">"使用音量键浏览帖子"</string>
     <string name="settings_mute_video_title">"静音视频"</string>
-    <string name="settings_mute_nsfw_video_title">"静音 NSFW 视频"</string>
 
     <!-- Fuzzy -->
     <string name="settings_video_player_ignore_nav_bar_title">"视频播放器中忽略导航栏"</string>
@@ -503,8 +494,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit_success">"删除成功"</string>
     <string name="delete_multi_reddit_failed">"删除失败"</string>
     <string name="delete_multi_reddit_dialog_message">"您确定吗？"</string>
-    <string name="enable_nsfw">"允许 NSFW"</string>
-    <string name="disable_nsfw">"禁止 NSFW"</string>
     <string name="cannot_save_image">"无法保存图像"</string>
     <string name="cannot_save_gif">"无法保存动图"</string>
     <string name="cannot_get_storage">"无法访问应用存储"</string>
@@ -624,10 +613,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_spoiler_background_color_detail">"适用于：剧透标签的背景"</string>
     <string name="theme_item_spoiler_text_color">"剧透文字颜色"</string>
     <string name="theme_item_spoiler_text_color_detail">"应用于：剧透标签的文字颜色"</string>
-    <string name="theme_item_nsfw_background_color">"NSFW 背景色"</string>
-    <string name="theme_item_nsfw_background_color_detail">"应用于：NSFW 标签的背景"</string>
-    <string name="theme_item_nsfw_text_color">"NSFW 文字颜色"</string>
-    <string name="theme_item_nsfw_text_color_detail">"应用于：NSFW 标签的文字颜色"</string>
     <string name="theme_item_flair_background_color">"头衔背景色"</string>
     <string name="theme_item_flair_background_color_detail">"应用于：头衔标签的背景"</string>
     <string name="theme_item_flair_text_color">"头衔文字颜色"</string>
@@ -865,18 +850,12 @@ Reddit 视频分辨率较低。
 
     <!-- Fuzzy -->
     <string name="warning">"警告"</string>
-    <string name="this_is_a_nsfw_subreddit">"这是一个 NSFW 版块。"</string>
-    <string name="this_user_has_nsfw_content">"该用户有 NSFW 内容"</string>
     <string name="dismiss">"忽略"</string>
     <string name="leave">"离开"</string>
     <string name="go_to_subreddit">"前往版块"</string>
     <string name="go_to_user">"查看用户"</string>
     <string name="go_to_thing_hint">"名称"</string>
     <string name="random">"随机"</string>
-    <string name="random_subreddit">"随机版块"</string>
-    <string name="random_nsfw_subreddit">"随机 NSFW 版块"</string>
-    <string name="random_post">"随机帖子"</string>
-    <string name="random_nsfw_post">"随机 NSFW 帖子"</string>
     <string name="fetch_random_thing_failed">"请稍后重试"</string>
     <string name="downloading">"正在下载"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all 和 r/popular 版块"</string>

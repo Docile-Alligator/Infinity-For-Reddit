@@ -58,8 +58,6 @@
     <string name="action_unhide_post">"Mostrar publicación"</string>
     <string name="action_edit_post">"Editar publicación"</string>
     <string name="action_delete_post">"Borrar publicación"</string>
-    <string name="action_mark_nsfw">"Marcar como NSFW"</string>
-    <string name="action_unmark_nsfw">"Desmarcar como NSFW"</string>
     <string name="action_mark_spoiler">"Marcar como Spoiler"</string>
     <string name="action_unmark_spoiler">"Desmarcar como Spoiler"</string>
     <string name="action_edit_flair">"Editar etiqueta temática"</string>
@@ -106,7 +104,6 @@ Toca para reintentar."</string>
     <string name="load_messages_failed">"Error al cargar los mensajes.
 Toca para reintentar."</string>
     <string name="no_messages">"Vacío"</string>
-    <string name="nsfw">"NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="karma_info">"Karma: %1$d"</string>
@@ -287,12 +284,6 @@ Toca para reintentar."</string>
     <string name="edit_success">"Editado correctamente"</string>
     <string name="delete_post_success">"Borrado correctamente"</string>
     <string name="delete_post_failed">"Borrado fallido"</string>
-    <string name="mark_nsfw_success">"Se marcó como NSFW correctamente"</string>
-
-    <!-- Correcting the Sentence, from imperative to enunciated sentence -->
-    <string name="mark_nsfw_failed">"No fue posible marcar como NSFW"</string>
-    <string name="unmark_nsfw_success">"Se desmarcó como NSFW correctamente"</string>
-    <string name="unmark_nsfw_failed">"No fue posible desmarcar como NSFW"</string>
     <string name="mark_spoiler_success">"Marcar como spoiler"</string>
     <string name="mark_spoiler_failed">"No fue posible marcar como spoiler"</string>
     <string name="unmark_spoiler_success">"Se desmarcó como spoiler correctamente"</string>
@@ -330,7 +321,6 @@ Premio means prize, so it's better suited the first word instead of the second o
     <string name="settigns_video_title">"Vídeo"</string>
     <string name="settings_video_autoplay_title">"Reproducción automática de Vídeo"</string>
     <string name="settings_mute_autoplaying_videos_title">"Silenciar videos reproducidos automáticamente"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"Reproducir vídeos NSFW automáticamente"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Reproducción automática de vídeo en área visible (vertical)"</string>
 
     <!-- Fuzzy -->
@@ -350,7 +340,6 @@ Premio means prize, so it's better suited the first word instead of the second o
     <string name="settings_volume_keys_navigate_comments_title">"Usar las teclas de volumen para navegar comentarios en publicaciones"</string>
     <string name="settings_volume_keys_navigate_posts_title">"Usar las teclas de volumen para navegar publicaciones"</string>
     <string name="settings_mute_video_title">"Silenciar vídeos"</string>
-    <string name="settings_mute_nsfw_video_title">"Silenciar vídeos NSFW"</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignorar la barra de navegación en el reproductor de vídeo"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Bloquear al controlador de vídeo para que no tenga margen extra"</string>
     <string name="settings_confirm_to_exit">"Confirmar para salir"</string>
@@ -533,8 +522,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit_success">"Borrado correctamente"</string>
     <string name="delete_multi_reddit_failed">"Borrado fallido"</string>
     <string name="delete_multi_reddit_dialog_message">"¿Seguro?"</string>
-    <string name="enable_nsfw">"Activar NSFW"</string>
-    <string name="disable_nsfw">"Desactivar NSFW"</string>
     <string name="cannot_save_image">"No fue posible guardar la imagen"</string>
     <string name="cannot_save_gif">"No fue posible guardar el GIF"</string>
     <string name="cannot_get_storage">"No fue posible acceder al almacenamiento de la app"</string>
@@ -632,10 +619,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_spoiler_background_color_detail">"Aplicado a: Fondo de la etiqueta de spoiler"</string>
     <string name="theme_item_spoiler_text_color">"Color del texto de spoiler"</string>
     <string name="theme_item_spoiler_text_color_detail">"Aplicado a: Texto en la etiqueta de spoiler"</string>
-    <string name="theme_item_nsfw_background_color">"Color del fondo de NSFW"</string>
-    <string name="theme_item_nsfw_background_color_detail">"Aplicado a: Fondo de la etiqueta NSFW"</string>
-    <string name="theme_item_nsfw_text_color">"Color del texto de NSFW"</string>
-    <string name="theme_item_nsfw_text_color_detail">"Aplicado a: Texto en la etiqueta de NSFW"</string>
     <string name="theme_item_flair_background_color">"Color del fondo de la etiqueta temática"</string>
     <string name="theme_item_flair_background_color_detail">"Aplicado a: Fondo de la etiqueta temática"</string>
     <string name="theme_item_flair_text_color">"Color del texto de la etiqueta temática"</string>
@@ -888,8 +871,6 @@ Mensaje: %2$s
 https://s3.eu-west-1.amazonaws.com/po-pub/i/hJAe7sMhrfJzqjhp9VkDQOVC.PNG -->
     <!-- Fuzzy -->
     <string name="warning">"Precaución"</string>
-    <string name="this_is_a_nsfw_subreddit">"Este es un subreddit NSFW."</string>
-    <string name="this_user_has_nsfw_content">"Este usuario tiene contenido NSFW"</string>
     <string name="dismiss">"Descartar"</string>
     <string name="leave">"Salir"</string>
     <string name="go_to_subreddit">"Ir al subreddit"</string>
@@ -898,10 +879,6 @@ https://s3.eu-west-1.amazonaws.com/po-pub/i/hJAe7sMhrfJzqjhp9VkDQOVC.PNG -->
     <string name="go_to_user">"Ir al usuario"</string>
     <string name="go_to_thing_hint">"Nombre"</string>
     <string name="random">"Aleatorio"</string>
-    <string name="random_subreddit">"Subreddit aleatorio"</string>
-    <string name="random_nsfw_subreddit">"Subreddit NSFW aleatorio"</string>
-    <string name="random_post">"Publicación aleatoria"</string>
-    <string name="random_nsfw_post">"Publicación NSFW aleatoria"</string>
     <string name="fetch_random_thing_failed">"Intente de nuevo después"</string>
     <string name="downloading">"Descargando"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all y r/popular"</string>

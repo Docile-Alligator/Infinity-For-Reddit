@@ -60,8 +60,6 @@
     <string name="action_unhide_post">"Показать пост"</string>
     <string name="action_edit_post">"Изменить пост"</string>
     <string name="action_delete_post">"Удалить пост"</string>
-    <string name="action_mark_nsfw">"Отметить как NSFW"</string>
-    <string name="action_unmark_nsfw">"Убрать отметку NSFW"</string>
     <string name="action_mark_spoiler">"Отметить как спойлер"</string>
     <string name="action_unmark_spoiler">"Убрать отметку спойлер"</string>
     <string name="action_edit_flair">"Изменить флейр"</string>
@@ -105,7 +103,6 @@
     <string name="load_messages_failed">"Ошибка загрузки сообщений.
 Нажмите, чтобы повторить попытку."</string>
     <string name="no_messages">"Пусто"</string>
-    <string name="nsfw">"NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="karma_info">"Карма: %1$d"</string>
@@ -282,10 +279,6 @@
     <string name="edit_success">"Редактирование успешно"</string>
     <string name="delete_post_success">"Удалено успешно"</string>
     <string name="delete_post_failed">"Невозможно удалить"</string>
-    <string name="mark_nsfw_success">"Успешно отмечено как NSFW"</string>
-    <string name="mark_nsfw_failed">"Невозможно отметить как NSFW"</string>
-    <string name="unmark_nsfw_success">"Отметка NSFW снята успешно"</string>
-    <string name="unmark_nsfw_failed">"Невозможно снять отметку NSFW"</string>
     <string name="mark_spoiler_success">"Успешно отмечено как спойлер"</string>
     <string name="mark_spoiler_failed">"Невозможно отметить как спойлер"</string>
     <string name="unmark_spoiler_success">"Отметка спойлера снята успешно"</string>
@@ -318,7 +311,6 @@
     <string name="settigns_video_title">"Видео"</string>
     <string name="settings_video_autoplay_title">"Автовоспроизведение видео"</string>
     <string name="settings_mute_autoplaying_videos_title">"Отключать звук у автовоспроизводящихся видео"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"Автовоспроизведение NSFW-видео"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Автоматическое воспроизведение видео (портрет)"</string>
 
     <!-- Fuzzy -->
@@ -338,7 +330,6 @@
     <string name="settings_volume_keys_navigate_comments_title">"Навигация кнопками громкости между комментариями в постах"</string>
     <string name="settings_volume_keys_navigate_posts_title">"Навигация кнопками громкости межу постами"</string>
     <string name="settings_mute_video_title">"Видео без звука"</string>
-    <string name="settings_mute_nsfw_video_title">"NSFW-видео без звука"</string>
 
     <!-- Fuzzy -->
     <string name="settings_video_player_ignore_nav_bar_title">"Не использовать панель навигации в видеопроигрывателе"</string>
@@ -515,8 +506,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit_success">"Успешно удалено"</string>
     <string name="delete_multi_reddit_failed">"Ошибка удаления"</string>
     <string name="delete_multi_reddit_dialog_message">"Вы уверены?"</string>
-    <string name="enable_nsfw">"Включить NSFW"</string>
-    <string name="disable_nsfw">"Отключить NSFW"</string>
     <string name="cannot_save_image">"Невозможно сохранить изображение"</string>
     <string name="cannot_save_gif">"Невозможно сохранить GIF"</string>
     <string name="cannot_get_storage">"Нет доступа к хранилищу"</string>
@@ -612,10 +601,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_spoiler_background_color_detail">"Применяется к: фон отметки спойлера"</string>
     <string name="theme_item_spoiler_text_color">"Цвет текста спойлера"</string>
     <string name="theme_item_spoiler_text_color_detail">"Применяется к: цвет текста отметки спойлера"</string>
-    <string name="theme_item_nsfw_background_color">"Цвет фона NSFW"</string>
-    <string name="theme_item_nsfw_background_color_detail">"Применяется к: цвет фона отметки NSFW"</string>
-    <string name="theme_item_nsfw_text_color">"Цвет текста NSFW"</string>
-    <string name="theme_item_nsfw_text_color_detail">"Применяется к: цвет текста отметки NSFW"</string>
     <string name="theme_item_flair_background_color">"Цвет фона флейра"</string>
     <string name="theme_item_flair_background_color_detail">"Применяется к: фон флейра"</string>
     <string name="theme_item_flair_text_color">"Цвет флейра"</string>
@@ -852,18 +837,12 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 
     <!-- Fuzzy -->
     <string name="warning">"Предупреждение"</string>
-    <string name="this_is_a_nsfw_subreddit">"Это NSFW-сабреддит"</string>
-    <string name="this_user_has_nsfw_content">"У пользователь есть NSFW-контент"</string>
     <string name="dismiss">"Отклонить"</string>
     <string name="leave">"Покинуть"</string>
     <string name="go_to_subreddit">"Перейти к сабреддиту"</string>
     <string name="go_to_user">"Перейти к пользователю"</string>
     <string name="go_to_thing_hint">"Имя"</string>
     <string name="random">"Случайно"</string>
-    <string name="random_subreddit">"Случайный сабреддит"</string>
-    <string name="random_nsfw_subreddit">"Случайный NSFW-сабреддит"</string>
-    <string name="random_post">"Случайный пост"</string>
-    <string name="random_nsfw_post">"Случайный NSFW-пост"</string>
     <string name="fetch_random_thing_failed">"Попробуйте позже"</string>
     <string name="downloading">"Скачивание"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all и r/popular"</string>

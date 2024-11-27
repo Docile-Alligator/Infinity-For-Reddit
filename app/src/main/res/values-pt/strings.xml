@@ -56,8 +56,6 @@
     <string name="action_unhide_post">"Revelar publicação"</string>
     <string name="action_edit_post">"Editar publicação"</string>
     <string name="action_delete_post">"Eliminar publicação"</string>
-    <string name="action_mark_nsfw">"Marcar como 18+"</string>
-    <string name="action_unmark_nsfw">"Desmarcar 18+"</string>
     <string name="action_mark_spoiler">"Marcar como Spoiler"</string>
     <string name="action_unmark_spoiler">"Desmarcar como Spoiler"</string>
     <string name="action_edit_flair">"Editar Flair"</string>
@@ -102,7 +100,6 @@ Toque para tentar novamente."</string>
     <string name="load_messages_failed">"Erro ao carregar mensagens.
 Toque para tentar novamente."</string>
     <string name="no_messages">"Vazio"</string>
-    <string name="nsfw">"18+"</string>
 
     <!-- Fuzzy -->
     <string name="karma_info">"Karma: %1$d"</string>
@@ -283,10 +280,6 @@ Toque para tentar novamente."</string>
     <string name="edit_success">"Editado com sucesso"</string>
     <string name="delete_post_success">"Eliminada com sucesso"</string>
     <string name="delete_post_failed">"Falha ao eliminar"</string>
-    <string name="mark_nsfw_success">"Marcado como 18+ com sucesso"</string>
-    <string name="mark_nsfw_failed">"Falhou ao marcar como 18+"</string>
-    <string name="unmark_nsfw_success">"Desmarcado como 18+ com sucesso"</string>
-    <string name="unmark_nsfw_failed">"Falhou ao desmarcar como 18+"</string>
     <string name="mark_spoiler_success">"Marcado como spoiler com sucesso"</string>
     <string name="mark_spoiler_failed">"Marcação como spoiler falhou"</string>
     <string name="unmark_spoiler_success">"Desmarcado como Spoiler com sucesso"</string>
@@ -319,7 +312,6 @@ Toque para tentar novamente."</string>
     <string name="settigns_video_title">"Vídeo"</string>
     <string name="settings_video_autoplay_title">"Reprodução Automática de Vídeos"</string>
     <string name="settings_mute_autoplaying_videos_title">"Vídeos em auto-reprodução Sem Som"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"Reprodução Automática de Vídeos 18+"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Área Visível de Vídeos para Desencadear Reprodução (Retrato)"</string>
 
     <!-- Fuzzy -->
@@ -339,7 +331,6 @@ Toque para tentar novamente."</string>
     <string name="settings_volume_keys_navigate_comments_title">"Usar Teclas de Volume para Navegar pelos Comentários"</string>
     <string name="settings_volume_keys_navigate_posts_title">"Usar Teclas de Volume para Navegar pelas Publicações"</string>
     <string name="settings_mute_video_title">"Vídeos Sem Som"</string>
-    <string name="settings_mute_nsfw_video_title">"Vídeos 18+ Sem Som"</string>
 
     <!-- Fuzzy -->
     <string name="settings_video_player_ignore_nav_bar_title">"Ignorar Barra de Navegação no Reprodutor de Vídeo"</string>
@@ -514,8 +505,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit_success">"Eliminado com sucesso"</string>
     <string name="delete_multi_reddit_failed">"Falha ao eliminar"</string>
     <string name="delete_multi_reddit_dialog_message">"Tem a certeza?"</string>
-    <string name="enable_nsfw">"Ativar 18+"</string>
-    <string name="disable_nsfw">"Desativar 18+"</string>
     <string name="cannot_save_image">"Não é possível guardar a imagem"</string>
     <string name="cannot_save_gif">"Não é possível guardar o gif"</string>
     <string name="cannot_get_storage">"Não é possível aceder ao armazenamento da aplicação"</string>
@@ -599,10 +588,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_spoiler_background_color_detail">"Aplicado a: Fundo da etiqueta spoiler"</string>
     <string name="theme_item_spoiler_text_color">"Cor do Texto Spoiler"</string>
     <string name="theme_item_spoiler_text_color_detail">"Aplicado a: Cor do texto na etiqueta spoiler"</string>
-    <string name="theme_item_nsfw_background_color">"Cor de Fundo de 18+"</string>
-    <string name="theme_item_nsfw_background_color_detail">"Aplicado a: Cor de fundo da etiqueta 18+"</string>
-    <string name="theme_item_nsfw_text_color">"Cor do Texto 18+"</string>
-    <string name="theme_item_nsfw_text_color_detail">"Aplicado a: Cor do texto da etiqueta 18+"</string>
     <string name="theme_item_flair_background_color">"Cor de Fundo Flair"</string>
     <string name="theme_item_flair_background_color_detail">"Aplicado a: Fundo da etiqueta flair"</string>
     <string name="theme_item_flair_text_color">"Cor do Texto Flair"</string>
@@ -841,18 +826,12 @@ Reprodução automática de vídeos desativada."</string>
 
     <!-- Fuzzy -->
     <string name="warning">"Aviso"</string>
-    <string name="this_is_a_nsfw_subreddit">"Esta é uma comunidade 18+."</string>
-    <string name="this_user_has_nsfw_content">"Este utilizador tem conteúdo 18+"</string>
     <string name="dismiss">"Descartar"</string>
     <string name="leave">"Sair"</string>
     <string name="go_to_subreddit">"Ir para a Comunidade"</string>
     <string name="go_to_user">"Ir para o Utilizador"</string>
     <string name="go_to_thing_hint">"Nome"</string>
     <string name="random">"Aleatório"</string>
-    <string name="random_subreddit">"Comunidade Aleatória"</string>
-    <string name="random_nsfw_subreddit">"Comunidade 18+ Aleatória"</string>
-    <string name="random_post">"Publicação Aleatória"</string>
-    <string name="random_nsfw_post">"Publicação 18+ Aleatória"</string>
     <string name="fetch_random_thing_failed">"Tente novamente mais tarde"</string>
     <string name="downloading">"A transferir"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all e r/popular"</string>
