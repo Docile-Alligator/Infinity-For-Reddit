@@ -1114,6 +1114,10 @@
     <string name="go_to_thing_hint">Name</string>
     <string name="go_to_top">Go To Top</string>
     <string name="random">Random</string>
+    <string name="random_subreddit">Random Subreddit</string>
+    <string name="random_nsfw_subreddit">Random NSFW Subreddit</string>
+    <string name="random_post">Random Post</string>
+    <string name="random_nsfw_post">Random NSFW post</string>
     <string name="fetch_random_thing_failed">Try again later</string>
 
     <string name="select_video_quality">Select Video Quality</string>

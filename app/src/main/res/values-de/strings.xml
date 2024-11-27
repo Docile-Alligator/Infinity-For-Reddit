@@ -864,10 +864,6 @@ Automatisches Abspielen von Videos ist deaktiviert."</string>
     <string name="go_to_user">"Zum Benutzer gehen"</string>
     <string name="go_to_thing_hint">"Name"</string>
     <string name="random">"Zufällig"</string>
-    <string name="random_subreddit">"Zufälliges Subreddit"</string>
-    <string name="random_nsfw_subreddit">"Zufälliger NSFW-Subreddit"</string>
-    <string name="random_post">"Zufälliger Beitrag"</string>
-    <string name="random_nsfw_post">"Zufälliger NSFW-Beitrag"</string>
     <string name="fetch_random_thing_failed">"Versuche es später erneut"</string>
     <string name="downloading">"Am Herunterladen"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all und r/popular"</string>
