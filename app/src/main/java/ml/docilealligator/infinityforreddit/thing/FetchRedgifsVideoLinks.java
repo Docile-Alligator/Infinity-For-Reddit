@@ -96,7 +96,7 @@ public class FetchRedgifsVideoLinks {
                 mp4 = mp4.substring(0, mp4.indexOf("-silent")) + ".mp4";
             }
             final String mp4Name = mp4;
-            handler.post(() -> fetchRedgifsVideoLinksListener.success(mp4Name, mp4Name));
+            handler.post(() -> fetchVideoLinkListener.onFetchRedgifsVideoLinkSuccess(mp4Name, mp4Name));
         } catch (JSONException e) {
             e.printStackTrace();
             handler.post(() -> fetchVideoLinkListener.failed(null));
