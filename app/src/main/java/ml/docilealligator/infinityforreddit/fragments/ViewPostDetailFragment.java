@@ -1883,6 +1883,10 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         return false;
     }
 
+    public int getPostListPosition() {
+        return postListPosition;
+    }
+
     @Subscribe
     public void onPostUpdateEvent(PostUpdateEventToPostDetailFragment event) {
         if (mPost.getId().equals(event.post.getId())) {
