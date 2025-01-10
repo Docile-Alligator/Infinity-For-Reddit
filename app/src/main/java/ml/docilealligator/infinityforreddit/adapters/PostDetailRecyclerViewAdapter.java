@@ -1261,9 +1261,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 PostOptionsBottomSheetFragment postOptionsBottomSheetFragment;
                 if (mPost.getPostType() == Post.GALLERY_TYPE && this instanceof PostDetailGalleryViewHolder) {
                     postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(mPost,
+                            getBindingAdapterPosition(),
                             ((LinearLayoutManagerBugFixed) ((PostDetailGalleryViewHolder) this).binding.galleryRecyclerViewItemPostDetailGallery.getLayoutManager()).findFirstVisibleItemPosition());
                 } else {
-                    postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(mPost);
+                    postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(mPost, getBindingAdapterPosition());
                 }
                 postOptionsBottomSheetFragment.show(mActivity.getSupportFragmentManager(), postOptionsBottomSheetFragment.getTag());
                 return true;

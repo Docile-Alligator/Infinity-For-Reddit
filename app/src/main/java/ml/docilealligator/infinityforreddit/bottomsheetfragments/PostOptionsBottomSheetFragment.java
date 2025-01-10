@@ -11,13 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
+import org.greenrobot.eventbus.EventBus;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
@@ -27,9 +29,12 @@ import ml.docilealligator.infinityforreddit.activities.ReportActivity;
 import ml.docilealligator.infinityforreddit.activities.SubmitCrosspostActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.databinding.FragmentPostOptionsBottomSheetBinding;
+import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
+import ml.docilealligator.infinityforreddit.post.HidePost;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.services.DownloadRedditVideoService;
+import retrofit2.Retrofit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,11 +44,16 @@ import ml.docilealligator.infinityforreddit.services.DownloadRedditVideoService;
 public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     private static final String EXTRA_POST = "EP";
+    private static final String EXTRA_POST_LIST_POSITION = "EPLP";
     private static final String EXTRA_GALLERY_INDEX = "EGI";
 
     private BaseActivity mBaseActivity;
     private Post mPost;
     private FragmentPostOptionsBottomSheetBinding binding;
+
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
 
     public PostOptionsBottomSheetFragment() {
         // Required empty public constructor
@@ -56,19 +66,21 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
      * @param post Post
      * @return A new instance of fragment PostOptionsBottomSheetFragment.
      */
-    public static PostOptionsBottomSheetFragment newInstance(Post post, int galleryIndex) {
+    public static PostOptionsBottomSheetFragment newInstance(Post post, int postListPosition, int galleryIndex) {
         PostOptionsBottomSheetFragment fragment = new PostOptionsBottomSheetFragment();
         Bundle args = new Bundle();
         args.putParcelable(EXTRA_POST, post);
+        args.putInt(EXTRA_POST_LIST_POSITION, postListPosition);
         args.putInt(EXTRA_GALLERY_INDEX, galleryIndex);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static PostOptionsBottomSheetFragment newInstance(Post post) {
+    public static PostOptionsBottomSheetFragment newInstance(Post post, int postListPosition) {
         PostOptionsBottomSheetFragment fragment = new PostOptionsBottomSheetFragment();
         Bundle args = new Bundle();
         args.putParcelable(EXTRA_POST, post);
+        args.putInt(EXTRA_POST_LIST_POSITION, postListPosition);
         fragment.setArguments(args);
         return fragment;
     }
@@ -86,6 +98,7 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ((Infinity) mBaseActivity.getApplication()).getAppComponent().inject(this);
         // Inflate the layout for this fragment
         binding = FragmentPostOptionsBottomSheetBinding.inflate(inflater, container, false);
 
@@ -178,11 +191,43 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                 }
 
                 binding.hidePostTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {
-                    if (mBaseActivity instanceof PostOptionsCallback) {
-                        ((PostOptionsCallback) mBaseActivity).onOptionClicked(mPost, mPost.isHidden() ? POST_OPTION.UNHIDE_POST : POST_OPTION.HIDE_POST);
-                    }
+                    if (mPost.isHidden()) {
+                        HidePost.unhidePost(mOauthRetrofit, mBaseActivity.accessToken, mPost.getFullName(), new HidePost.HidePostListener() {
+                            @Override
+                            public void success() {
+                                mPost.setHidden(false);
+                                Toast.makeText(mBaseActivity, R.string.post_unhide_success, Toast.LENGTH_SHORT).show();
+                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, getArguments().getInt(EXTRA_POST_LIST_POSITION, 0)));
+                                dismiss();
+                            }
 
-                    dismiss();
+                            @Override
+                            public void failed() {
+                                mPost.setHidden(true);
+                                Toast.makeText(mBaseActivity, R.string.post_unhide_failed, Toast.LENGTH_SHORT).show();
+                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, getArguments().getInt(EXTRA_POST_LIST_POSITION, 0)));
+                                dismiss();
+                            }
+                        });
+                    } else {
+                        HidePost.hidePost(mOauthRetrofit, mBaseActivity.accessToken, mPost.getFullName(), new HidePost.HidePostListener() {
+                            @Override
+                            public void success() {
+                                mPost.setHidden(true);
+                                Toast.makeText(mBaseActivity, R.string.post_hide_success, Toast.LENGTH_SHORT).show();
+                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, getArguments().getInt(EXTRA_POST_LIST_POSITION, 0)));
+                                dismiss();
+                            }
+
+                            @Override
+                            public void failed() {
+                                mPost.setHidden(false);
+                                Toast.makeText(mBaseActivity, R.string.post_hide_failed, Toast.LENGTH_SHORT).show();
+                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, getArguments().getInt(EXTRA_POST_LIST_POSITION, 0)));
+                                dismiss();
+                            }
+                        });
+                    }
                 });
 
                 binding.crosspostTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {
@@ -209,17 +254,5 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mBaseActivity = (BaseActivity) context;
-    }
-
-    public interface PostOptionsCallback {
-        void onOptionClicked(Post post, @POST_OPTION int option);
-    }
-
-    @IntDef({POST_OPTION.HIDE_POST, POST_OPTION.UNHIDE_POST})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface POST_OPTION {
-        int HIDE_POST = 0;
-        int UNHIDE_POST = 1;
-        int DOWNLOAD_MEDIA = 2;
     }
 }

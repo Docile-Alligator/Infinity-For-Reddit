@@ -2870,9 +2870,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 PostOptionsBottomSheetFragment postOptionsBottomSheetFragment;
                 if (post.getPostType() == Post.GALLERY_TYPE && this instanceof PostBaseGalleryTypeViewHolder) {
                     postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(post,
+                            getBindingAdapterPosition(),
                             ((LinearLayoutManagerBugFixed) ((PostBaseGalleryTypeViewHolder) this).galleryRecyclerView.getLayoutManager()).findFirstVisibleItemPosition());
                 } else {
-                    postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(post);
+                    postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(post, getBindingAdapterPosition());
                 }
                 postOptionsBottomSheetFragment.show(mActivity.getSupportFragmentManager(), postOptionsBottomSheetFragment.getTag());
                 return true;
@@ -3781,7 +3782,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     }
 
                     PostOptionsBottomSheetFragment postOptionsBottomSheetFragment;
-                    postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(post);
+                    postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(post, getBindingAdapterPosition());
                     postOptionsBottomSheetFragment.show(mActivity.getSupportFragmentManager(), postOptionsBottomSheetFragment.getTag());
                 }
                 return true;
