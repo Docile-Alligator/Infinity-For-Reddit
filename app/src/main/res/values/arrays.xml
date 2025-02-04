@@ -733,4 +733,16 @@
         <item>@string/comment_filter_display_mode_fully_collapse_comments</item>
     </string-array>
 
+    <string-array name="settings_proxy_type">
+        <item>@string/proxy_http</item>
+        <item>@string/proxy_socks</item>
+        <item>@string/proxy_direct</item>
+    </string-array>
+
+    <string-array name="settings_proxy_type_values">
+        <item>HTTP</item>
+        <item>SOCKS</item>
+        <item>DIRECT</item>
+    </string-array>
+
 </resources>
