@@ -418,6 +418,10 @@ Tippen für Neuversuch."</string>
     <string name="settings_tab_post_type">"Typ"</string>
     <string name="settings_tab_subreddit_name">"Subreddit-Name (ohne r/ Präfix)"</string>
 
+    <!-- Proxy -->
+    <string name="settings_proxy_enabled">Proxy verwenden</string>
+    <string name="settings_proxy_type">Proxy-Typ</string>
+
     <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"Multireddit-Name (/user/DeinBenutzername/m/DeinMultiredditName) (nur Kleinbuchstaben)"</string>
     <string name="settings_tab_username">"Benutzername (ohne u/ Präfix)"</string>
@@ -1233,6 +1237,8 @@ Antippen zum Wiederholen."</string>
     <string name="option_5_hint">"Option 5"</string>
     <string name="option_6_hint">"Option 6"</string>
     <string name="not_a_valid_number">"Keine valide Nummer"</string>
+    <string name="not_a_valid_ip_or_hostname">Ungültige IP oder Hostname</string>
+    <string name="not_a_valid_port">Ungültiger Port (0 - 65535)</string>
     <string name="post_karma">"Beitragskarma:"</string>
     <string name="comment_karma">"Kommentarkarma:"</string>
     <string name="awarder_karma">"Auszeichnungskarma:"</string>

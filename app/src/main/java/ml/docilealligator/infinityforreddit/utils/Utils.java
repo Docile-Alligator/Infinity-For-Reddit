@@ -69,6 +69,8 @@ public final class Utils {
     private static final long DAY_MILLIS = 24 * HOUR_MILLIS;
     private static final long MONTH_MILLIS = 30 * DAY_MILLIS;
     private static final long YEAR_MILLIS = 12 * MONTH_MILLIS;
+
+    public static String HOSTNAME_REGEX = "^(?=^.{1,253}$)(([a-z\\d]([a-z\\d-]{0,62}[a-z\\d])*[\\.]){1,3}[a-z]{1,61})$";
     private static final Pattern[] REGEX_PATTERNS = {
             Pattern.compile("((?<=[\\s])|^)/[rRuU]/[\\w-]+/{0,1}"),
             Pattern.compile("((?<=[\\s])|^)[rRuU]/[\\w-]+/{0,1}"),
