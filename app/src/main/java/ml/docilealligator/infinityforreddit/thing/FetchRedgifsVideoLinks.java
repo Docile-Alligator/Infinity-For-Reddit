@@ -92,7 +92,11 @@ public class FetchRedgifsVideoLinks {
         try {
             String mp4 = new JSONObject(response).getJSONObject(JSONUtils.GIF_KEY).getJSONObject(JSONUtils.URLS_KEY)
                     .getString(JSONUtils.HD_KEY);
-            handler.post(() -> fetchVideoLinkListener.onFetchRedgifsVideoLinkSuccess(mp4, mp4));
+            if (mp4.contains("-silent")) {
+                mp4 = mp4.substring(0, mp4.indexOf("-silent")) + ".mp4";
+            }
+            final String mp4Name = mp4;
+            handler.post(() -> fetchVideoLinkListener.onFetchRedgifsVideoLinkSuccess(mp4Name, mp4Name));
         } catch (JSONException e) {
             e.printStackTrace();
             handler.post(() -> fetchVideoLinkListener.failed(null));
