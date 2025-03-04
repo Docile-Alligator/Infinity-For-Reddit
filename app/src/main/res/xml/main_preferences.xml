@@ -53,6 +53,11 @@
         app:fragment="ml.docilealligator.infinityforreddit.settings.DataSavingModePreferenceFragment" />
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+        app:icon="@drawable/ic_call_split_24"
+        app:title="@string/settings_proxy_title"
+        app:fragment="ml.docilealligator.infinityforreddit.settings.ProxyPreferenceFragment" />
+
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:icon="@drawable/ic_nsfw_on_day_night_24dp"
         app:title="@string/settings_over_18_and_spoiler_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.NsfwAndSpoilerFragment"/>
