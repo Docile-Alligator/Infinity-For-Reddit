@@ -71,7 +71,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/title_and_image_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
