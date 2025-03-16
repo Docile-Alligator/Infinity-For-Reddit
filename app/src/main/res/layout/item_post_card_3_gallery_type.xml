@@ -47,7 +47,7 @@
             android:id="@+id/no_preview_image_view_item_post_card_3_gallery_type"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:src="@drawable/ic_gallery_24dp"
+            android:src="@drawable/ic_gallery_day_night_24dp"
             android:scaleType="center"
             android:visibility="gone" />
 

@@ -56,8 +56,6 @@
     <string name="action_unhide_post">"Odkrýt příspěvek"</string>
     <string name="action_edit_post">"Upravit příspěvek"</string>
     <string name="action_delete_post">"Odstranit příspěvek"</string>
-    <string name="action_mark_nsfw">"Označit jako NSFW"</string>
-    <string name="action_unmark_nsfw">"Zrušit označení jako NSFW"</string>
     <string name="action_mark_spoiler">"Označit jako spoiler"</string>
     <string name="action_unmark_spoiler">"Zrušit označení jako spoiler"</string>
     <string name="action_edit_flair">"Upravit štítek"</string>
@@ -102,7 +100,6 @@
     <string name="load_messages_failed">"Chyba při načítání zpráv.
 Ťukněte pro opakování."</string>
     <string name="no_messages">"Prázdné"</string>
-    <string name="nsfw">"NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="karma_info">"Karma: %1$d"</string>
@@ -144,7 +141,6 @@
     <string name="follow_failed">"Sledování selhalo"</string>
     <string name="unfollowed">"Sledování zrušeno"</string>
     <string name="unfollow_failed">"Rušení sledování selhalo"</string>
-    <string name="content_description_banner_imageview">"Bannerový obrázek subredditu"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Hledat cokoli"</string>
     <string name="no_posts_no_lazy_mode">"Nejsou dostupné žádné příspěvky"</string>
@@ -278,10 +274,6 @@
     <string name="edit_success">"Úspěšně upraveno"</string>
     <string name="delete_post_success">"Úspěšně odstraněno"</string>
     <string name="delete_post_failed">"Odstranění selhalo"</string>
-    <string name="mark_nsfw_success">"Úspěšně označeno jako NSFW"</string>
-    <string name="mark_nsfw_failed">"Označení jako NSFW selhalo"</string>
-    <string name="unmark_nsfw_success">"Úspěšně zrušeno označení NSFW"</string>
-    <string name="unmark_nsfw_failed">"Zrušení označení NSFW selhalo"</string>
     <string name="mark_spoiler_success">"Úspěšně označeno jako spoiler"</string>
     <string name="mark_spoiler_failed">"Označení jako spoiler selhalo"</string>
     <string name="unmark_spoiler_success">"Zrušení označení jako spoiler selhalo"</string>
@@ -314,7 +306,6 @@
     <string name="settigns_video_title">"Video"</string>
     <string name="settings_video_autoplay_title">"Automatické přehrávání videí"</string>
     <string name="settings_mute_autoplaying_videos_title">"Ztlumit automaticky přehrávaná videa"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"Automaticky přehrávat NSFW videa"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Viditelná oblast pro automatické přehrávání videí (na výšku)"</string>
 
     <!-- Fuzzy -->
@@ -334,7 +325,6 @@
     <string name="settings_volume_keys_navigate_comments_title">"Použít tlačítka hlasitosti pro navigaci v komentářích"</string>
     <string name="settings_volume_keys_navigate_posts_title">"Použít tlačítka hlasitosti pro navigaci v příspěvcích"</string>
     <string name="settings_mute_video_title">"Ztlumit videa"</string>
-    <string name="settings_mute_nsfw_video_title">"Ztlumit NSFW videa"</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignorovat navigační lištu v přehrávači videí"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Zabránit ovládání videa mít dodatečný okraj"</string>
     <string name="settings_confirm_to_exit">"Potvrdit pro odchod"</string>
@@ -369,8 +359,6 @@
     <string name="settings_font_size_title">"Velikost písma"</string>
     <string name="settings_title_font_size_title">"Velikost písma nadpisu"</string>
     <string name="settings_content_font_size_title">"Velikost písma obsahu"</string>
-    <string name="settings_enable_nsfw_title">"Povolit NSFW"</string>
-    <string name="settings_blur_nsfw_title">"Rozmazat NSFW obrázky"</string>
     <string name="settings_blur_spoiler_title">"Rozmazat obrázky se spoilerem"</string>
     <string name="settings_about_master_title">"O aplikaci"</string>
     <string name="settings_acknowledgement_master_title">"Použité knihovny"</string>
@@ -510,8 +498,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit_success">"Odstranění úspěšné"</string>
     <string name="delete_multi_reddit_failed">"Odstranění selhalo"</string>
     <string name="delete_multi_reddit_dialog_message">"Jste si jisti?"</string>
-    <string name="enable_nsfw">"Povolit NSFW"</string>
-    <string name="disable_nsfw">"Zakázat NSFW"</string>
     <string name="cannot_save_image">"Nelze uložit obrázek"</string>
     <string name="cannot_save_gif">"Nelze uložit GIF"</string>
     <string name="cannot_get_storage">"Nelze přistupovat k úložisti aplikace"</string>
@@ -607,10 +593,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_spoiler_background_color_detail">"Použito na: pozadí štítku spoileru"</string>
     <string name="theme_item_spoiler_text_color">"Barva textu spoileru"</string>
     <string name="theme_item_spoiler_text_color_detail">"Použito na: barvu textu ve štítku spoileru"</string>
-    <string name="theme_item_nsfw_background_color">"Barva pozadí NSFW"</string>
-    <string name="theme_item_nsfw_background_color_detail">"Použito na: pozadí štítku NSFW"</string>
-    <string name="theme_item_nsfw_text_color">"Barva textu NSFW"</string>
-    <string name="theme_item_nsfw_text_color_detail">"Použito na: barvu textu štítku NSFW"</string>
     <string name="theme_item_flair_background_color">"Barva pozadí štítku"</string>
     <string name="theme_item_flair_background_color_detail">"Použito na: pozadí štítku"</string>
     <string name="theme_item_flair_text_color">"Barva textu štítku"</string>
@@ -784,7 +766,6 @@ Příklad: mojeheslo:123456"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Počet sloupců v příspěvcích"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Na výšku"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Na šířku"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW a spoiler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Odstranit všechna stará nastavení"</string>
     <string name="restart_app_see_changes">"Restartujte aplikaci pro zobrazení změn"</string>
     <string name="settings_tab_count">"Počet karet"</string>
@@ -848,18 +829,12 @@ Automatické přehrávání videí je zakázáno."</string>
 
     <!-- Fuzzy -->
     <string name="warning">"Varování"</string>
-    <string name="this_is_a_nsfw_subreddit">"Toto je NSFW subreddit."</string>
-    <string name="this_user_has_nsfw_content">"Tento uživatel má NSFW obsah"</string>
     <string name="dismiss">"Zavřít"</string>
     <string name="leave">"Opustit"</string>
     <string name="go_to_subreddit">"Navštívit subreddit"</string>
     <string name="go_to_user">"Navštívit uživatele"</string>
     <string name="go_to_thing_hint">"Název"</string>
     <string name="random">"Náhodný"</string>
-    <string name="random_subreddit">"Náhodný subreddit"</string>
-    <string name="random_nsfw_subreddit">"Náhodný NSFW subreddit"</string>
-    <string name="random_post">"Náhodný příspěvek"</string>
-    <string name="random_nsfw_post">"Náhodný NSFW příspěvek"</string>
     <string name="fetch_random_thing_failed">"Zkuste to znovu později"</string>
     <string name="downloading">"Stahování"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all a r/popular"</string>
@@ -921,7 +896,6 @@ Automatické přehrávání videí je zakázáno."</string>
     <string name="delete_all_read_posts_success">"Všechny přečtené příspěvky úspěšně odstraněny"</string>
     <string name="hide_read_posts">"Skrýt přečtené příspěvky"</string>
     <string name="filter_posts">"Filtrovat příspěvky"</string>
-    <string name="only_nsfw">"Pouze NSFW"</string>
     <string name="only_spoiler">"Pouze spoilery"</string>
     <string name="title_excludes_strings_hint">"Název: vyloučení klíčových slov (slovo1,slovo2)"</string>
     <string name="title_excludes_regex_hint">"Název: vyloučení regexu"</string>
@@ -968,7 +942,6 @@ Automatické přehrávání videí je zakázáno."</string>
     <string name="action_share_link">"Sdílet odkaz"</string>
     <string name="action_copy_link">"Zkopírovat odkaz"</string>
     <string name="action_add_to_post_filter">"Přidat do filtru příspěvků"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Nerozmazávat NSFW obrázky v NSFW subredditech"</string>
     <string name="settings_show_avatar_on_the_right">"Zobrazit avatar napravo"</string>
     <string name="settings_backup_settings_title">"Nastavení zálohování"</string>
     <string name="settings_restore_settings_title">"Obnovit nastavení"</string>
@@ -1036,7 +1009,6 @@ Automatické přehrávání videí je zakázáno."</string>
     <string name="settings_hide_post_flair">"Skrýt štítek příspěvku"</string>
     <string name="settings_crash_reports_title">"Hlášení o pádech"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Nebezpečné"</string>
-    <string name="settings_disable_nsfw_forever_title">"Permanentně zakázat NSFW"</string>
     <string name="settings_show_only_one_comment_level_indicator">"Zobrazit pouze jeden indikátor úrovně komentáře"</string>
     <string name="save_comment">"Uložit"</string>
     <string name="unsave_comment">"Neukládat"</string>
@@ -1045,11 +1017,6 @@ Automatické přehrávání videí je zakázáno."</string>
 
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Hlášení o pádech byla odstraněna"</string>
-
-    <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"Pokud povolíte tuto možnost, bude NSFW permanentně zakázáno, nehledě na to, zda je nastavení NSFW zapnuté nebo ne. Tato možnost je nevratná, jediný způsob jak jej znovu povolit je vymazat data aplikace.
-
-Stále chcete tuto možnost povolit?"</string>
     <string name="reply">"Odpovědět"</string>
     <string name="post_gallery_activity_label">"Příspěvek galerie"</string>
     <string name="action_share_post_link">"Sdílet odkaz příspěvku"</string>
@@ -1155,8 +1122,6 @@ Pokud ano, přejmenujte je, než povolíte Material You."</string>
     <string name="app_lock_timeout_24_hours">"24 hodin"</string>
     <string name="edit_profile_activity_label">"Upravit profil"</string>
     <string name="action_contact_mods">"Kontaktovat moderátory"</string>
-    <string name="settings_save_nsfw_media_in_different_folder_title">"Uložit NSFW média do jiné lokace"</string>
-    <string name="settings_nsfw_download_location_title">"Lokace NSFW stahování"</string>
     <string name="fetch_streamable_video_failed">"Nepodařilo se získat Streamable video"</string>
 
     <!-- EditProfileService Notification -->

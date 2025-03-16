@@ -56,8 +56,6 @@
     <string name="action_unhide_post">"Bericht zichtbaar maken"</string>
     <string name="action_edit_post">"Bericht aanpassen"</string>
     <string name="action_delete_post">"Bericht verwijderen"</string>
-    <string name="action_mark_nsfw">"Markeren als NSFW"</string>
-    <string name="action_unmark_nsfw">"Demarkeren als NSFW"</string>
     <string name="action_mark_spoiler">"Markeren als leeswaarshuwing"</string>
     <string name="action_unmark_spoiler">"Demarkeren als leeswaarschuwing"</string>
     <string name="action_edit_flair">"Flair bewerken"</string>
@@ -99,7 +97,6 @@ Druk om opnieuw te proberen."</string>
     <string name="load_messages_failed">"De berichten kunnen niet worden geladen.
 Druk om opnieuw te proberen."</string>
     <string name="no_messages">"Leeg"</string>
-    <string name="nsfw">"NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="karma_info">"Karma: %1$d"</string>
@@ -141,7 +138,6 @@ Druk om opnieuw te proberen."</string>
     <string name="follow_failed">"Het volgen is mislukt"</string>
     <string name="unfollowed">"Ontvolgd"</string>
     <string name="unfollow_failed">"Het ontvolgen is mislukt"</string>
-    <string name="content_description_banner_imageview">"Omslagfoto van subreddit"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Zoek iets"</string>
     <string name="no_posts_no_lazy_mode">"Geen berichten beschikbaar"</string>
@@ -275,10 +271,6 @@ Druk om opnieuw te proberen."</string>
     <string name="edit_success">"Het bericht is bewerkt"</string>
     <string name="delete_post_success">"Het bericht is verwijderd"</string>
     <string name="delete_post_failed">"Het verwijderen is mislukt"</string>
-    <string name="mark_nsfw_success">"Het bericht is gemarkeerd als NSFW"</string>
-    <string name="mark_nsfw_failed">"Het markeren als NSFW is mislukt"</string>
-    <string name="unmark_nsfw_success">"Het bericht is gedemarkeerd als NSFW"</string>
-    <string name="unmark_nsfw_failed">"Het demarkeren als NSFW is mislukt"</string>
     <string name="mark_spoiler_success">"Het bericht is voorzien van een leeswaarschuwing"</string>
     <string name="mark_spoiler_failed">"Het voorzien van een leeswaarschuwing is mislukt"</string>
     <string name="unmark_spoiler_success">"Het bericht is niet meer voorzien van een leeswaarschuwing"</string>
@@ -311,7 +303,6 @@ Druk om opnieuw te proberen."</string>
     <string name="settigns_video_title">"Video"</string>
     <string name="settings_video_autoplay_title">"Video's automatisch afspelen"</string>
     <string name="settings_mute_autoplaying_videos_title">"Automatisch afspelende video's dempen"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"NSFW-video's automatisch afspelen"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Zichtbaar gebied van automatische afspelende video's (verticaal)"</string>
 
     <!-- Fuzzy -->
@@ -331,7 +322,6 @@ Druk om opnieuw te proberen."</string>
     <string name="settings_volume_keys_navigate_comments_title">"Volumetoetsen gebruiken om door reacties te bladeren"</string>
     <string name="settings_volume_keys_navigate_posts_title">"Volumetoetsen gebruiken om door berichten te bladeren"</string>
     <string name="settings_mute_video_title">"Video's dempen"</string>
-    <string name="settings_mute_nsfw_video_title">"NSFW-video's dempen"</string>
 
     <!-- Fuzzy -->
     <string name="settings_video_player_ignore_nav_bar_title">"Navigatiebalk verbergen in videospeler"</string>
@@ -372,8 +362,6 @@ Druk om opnieuw te proberen."</string>
     <string name="settings_font_size_title">"Tekstgrootte"</string>
     <string name="settings_title_font_size_title">"Titel - Tekstgrootte"</string>
     <string name="settings_content_font_size_title">"Inhoud - Tekstgrootte"</string>
-    <string name="settings_enable_nsfw_title">"NSFW inschakelen"</string>
-    <string name="settings_blur_nsfw_title">"NSFW-afbeeldingen vervagen"</string>
     <string name="settings_blur_spoiler_title">"Afbeeldingen bij leeswaarschuwingen vervagen"</string>
     <string name="settings_about_master_title">"Over"</string>
     <string name="settings_acknowledgement_master_title">"Erkenning"</string>
@@ -518,8 +506,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit_success">"Het verwijderen is voltooid"</string>
     <string name="delete_multi_reddit_failed">"Het verwijderen is mislukt"</string>
     <string name="delete_multi_reddit_dialog_message">"Weet je het zeker?"</string>
-    <string name="enable_nsfw">"NSFW inschakelen"</string>
-    <string name="disable_nsfw">"NSFW uitschakelen"</string>
     <string name="cannot_save_image">"De afbeelding kan niet worden opgeslagen"</string>
     <string name="cannot_save_gif">"De GIF kan niet worden opgeslagen"</string>
     <string name="cannot_get_storage">"Geen toegang tot de app-opslagruimte"</string>
@@ -615,10 +601,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_spoiler_background_color_detail">"Wordt toegepast op de achtergrond van het leeswaarschuwingslabel"</string>
     <string name="theme_item_spoiler_text_color">"Tekstkleur van leeswaarschuwing"</string>
     <string name="theme_item_spoiler_text_color_detail">"Wordt toegepast op de tekst van het leeswaarschuwingslabel"</string>
-    <string name="theme_item_nsfw_background_color">"NSFW-achtergrondkleur"</string>
-    <string name="theme_item_nsfw_background_color_detail">"Wordt toegepast op de achtergrond van het NSFW-label"</string>
-    <string name="theme_item_nsfw_text_color">"NSFW-tekstkleur"</string>
-    <string name="theme_item_nsfw_text_color_detail">"Wordt toegepast op de tekst van het NSFW-label"</string>
     <string name="theme_item_flair_background_color">"Flair-achtergrondkleur"</string>
     <string name="theme_item_flair_background_color_detail">"Wordt toegepast op de achtergrond van het flair-label"</string>
     <string name="theme_item_flair_text_color">"Flair-tekstkleur"</string>
@@ -794,7 +776,6 @@ Voorbeeld: yourpass: 123456"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Het Aantal Kolommen in de Postfeed"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Portret"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Landschap"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW &amp; Spoiler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Verwijder alle legacyinstellingen"</string>
     <string name="restart_app_see_changes">"Start de app opnieuw om de wijzigingen te zien"</string>
     <string name="settings_tab_count">"Aantal Tabbladen"</string>
@@ -861,8 +842,6 @@ Automatisch afspelen van video is uitgeschakeld."</string>
 
     <!-- Fuzzy -->
     <string name="warning">"Waarschuwing"</string>
-    <string name="this_is_a_nsfw_subreddit">"Dit is een NSFW subreddit."</string>
-    <string name="this_user_has_nsfw_content">"Deze gebruiker heeft NSFW inhoud"</string>
     <string name="dismiss">"Afwijzgen"</string>
     <string name="leave">"Verlaten"</string>
 
@@ -873,10 +852,6 @@ Automatisch afspelen van video is uitgeschakeld."</string>
     <string name="go_to_user">"Ga naar gebruiker"</string>
     <string name="go_to_thing_hint">"Naam"</string>
     <string name="random">"Willekeurig"</string>
-    <string name="random_subreddit">"Willekeurige Subreddit"</string>
-    <string name="random_nsfw_subreddit">"Willekeurige NSFW Subreddit"</string>
-    <string name="random_post">"Willekeurige Post"</string>
-    <string name="random_nsfw_post">"Willekeurige NSFW Post"</string>
     <string name="fetch_random_thing_failed">"Probeer later opnieuw"</string>
     <string name="downloading">"Downloaden"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all en r/popular"</string>
@@ -936,7 +911,6 @@ Automatisch afspelen van video is uitgeschakeld."</string>
     <string name="delete_all_read_posts_success">"Verwijder alle gelezen posts succesvol"</string>
     <string name="hide_read_posts">"Verberg Gelezen Posts"</string>
     <string name="filter_posts">"Filter Posts"</string>
-    <string name="only_nsfw">"Alleen NSFW"</string>
     <string name="only_spoiler">"Alleen Spoiler"</string>
     <string name="contain_flairs_hint">"Bevat flair (vb. flair1, flair2)"</string>
     <string name="min_vote_hint">"Min stem (-1: geen restrictie)"</string>
@@ -975,7 +949,6 @@ Automatisch afspelen van video is uitgeschakeld."</string>
     <string name="action_share_link">"Link Delen"</string>
     <string name="action_copy_link">"Link Kopiëren"</string>
     <string name="action_add_to_post_filter">"Toevoegen aan Post Filter"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Vervaag NSFW Afbeeldingen niet in NSFW Subreddits"</string>
     <string name="settings_show_avatar_on_the_right">"Laat Avatar aan de Rechterkant Zien"</string>
     <string name="settings_backup_settings_title">"Backup Instellingen"</string>
     <string name="settings_restore_settings_title">"Instellingen Herstellen"</string>
@@ -1027,18 +1000,12 @@ Automatisch afspelen van video is uitgeschakeld."</string>
     <string name="settings_hide_post_flair">"Verberg Post Flair"</string>
     <string name="settings_crash_reports_title">"Crashrapporten"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Gevaarlijk"</string>
-    <string name="settings_disable_nsfw_forever_title">"NSFW voor altijd uitschakelen"</string>
     <string name="settings_show_only_one_comment_level_indicator">"Laat alleen één reactieniveau indicator zien"</string>
     <string name="save_comment">"Opslaan"</string>
     <string name="unsave_comment">"Niet opslaan"</string>
 
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Crashrapporten zijn verwijderd"</string>
-
-    <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"Wanneer geactiveerd zal NSFW permanent uitgeschakeld worden, ongeacht of de NSFW instelling aan of uit staat. En deze optie is onomkeerbaar, de enige manier om NSFW opnieuw aan te zetten is door de app data te verwijderen.
-
-Wil je het nog steeds activeren?"</string>
     <string name="reply">"Antwoord"</string>
     <string name="post_gallery_activity_label">"Gallerijpost"</string>
     <string name="action_share_post_link">"Deel Post Link"</string>

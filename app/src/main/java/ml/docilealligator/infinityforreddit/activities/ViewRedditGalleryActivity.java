@@ -5,6 +5,9 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Typeface;
@@ -49,14 +52,13 @@ import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryImageOrGifFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryVideoFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class ViewRedditGalleryActivity extends AppCompatActivity implements SetAsWallpaperCallback, CustomFontReceiver {
 
-    public static final String EXTRA_REDDIT_GALLERY = "ERG";
-    public static final String EXTRA_SUBREDDIT_NAME = "ESN";
-    public static final String EXTRA_IS_NSFW = "EIN";
+    public static final String EXTRA_POST = "EP";
     public static final String EXTRA_GALLERY_ITEM_INDEX = "EGII";
 
     @Inject
@@ -66,6 +68,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     Executor executor;
     public Typeface typeface;
     private SectionsPagerAdapter sectionsPagerAdapter;
+    private Post post;
     private ArrayList<Post.Gallery> gallery;
     private String subredditName;
     private boolean isNsfw;
@@ -144,13 +147,18 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
             getSupportActionBar().hide();
         }
 
-        gallery = getIntent().getParcelableArrayListExtra(EXTRA_REDDIT_GALLERY);
+        post = getIntent().getParcelableExtra(EXTRA_POST);
+        if (post == null) {
+            finish();
+            return;
+        }
+        gallery = post.getGallery();
         if (gallery == null || gallery.isEmpty()) {
             finish();
             return;
         }
-        subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
-        isNsfw = getIntent().getBooleanExtra(EXTRA_IS_NSFW, false);
+        subredditName = post.getSubredditName();
+        isNsfw = post.isNSFW();
 
         if (sharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_VERTICALLY_TO_GO_BACK_FROM_MEDIA, true)) {
             binding.getRoot().setOnDragDismissedListener(dragDirection -> {
@@ -201,6 +209,10 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.view_reddit_gallery_activity, menu);
+        for (int i = 0; i < menu.size(); i++) {
+            Utils.setTitleWithCustomFontToMenuItem(typeface, menu.getItem(i), null);
+        }
         return true;
     }
 
@@ -208,6 +220,13 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+            return true;
+        } else if (item.getItemId() == R.id.action_download_all_gallery_media_view_reddit_gallery_activity) {
+            //TODO: contentEstimatedBytes
+            JobInfo jobInfo = DownloadMediaService.constructGalleryDownloadAllMediaJobInfo(this, 5000000L * gallery.size(), post);
+            ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
+
+            Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
             return true;
         }
 

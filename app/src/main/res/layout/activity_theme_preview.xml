@@ -156,8 +156,9 @@
                 android:gravity="center"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:src="@drawable/ic_subscritptions_bottom_app_bar_24dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:src="@drawable/ic_subscriptions_bottom_app_bar_day_night_24dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/content_description_bottom_navigation_bar_button" />
 
             <ImageView
                 android:id="@+id/multi_reddit_bottom_app_bar_theme_preview_activity"
@@ -167,8 +168,9 @@
                 android:gravity="center"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:src="@drawable/ic_multi_reddit_24dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:src="@drawable/ic_multi_reddit_day_night_24dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/content_description_bottom_navigation_bar_button" />
 
             <TextView
                 android:layout_width="0dp"
@@ -184,8 +186,9 @@
                 android:gravity="center"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:src="@drawable/ic_inbox_24dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:src="@drawable/ic_inbox_day_night_24dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/content_description_bottom_navigation_bar_button" />
 
             <ImageView
                 android:id="@+id/profile_bottom_app_bar_theme_preview_activity"
@@ -196,8 +199,9 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:gravity="center"
-                android:src="@drawable/ic_account_circle_24dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:src="@drawable/ic_account_circle_day_night_24dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/content_description_bottom_navigation_bar_button" />
 
         </LinearLayout>
 
@@ -208,6 +212,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
+        android:contentDescription="@string/content_description_fab"
         app:srcCompat="@drawable/ic_add_day_night_24dp"
         app:tint="@android:color/white"
         app:layout_anchor="@id/bottom_navigation_theme_preview_activity" />

@@ -42,6 +42,10 @@ public class PostLayoutBottomSheetFragment extends LandscapeExpandedRoundedBotto
             ((PostLayoutSelectionCallback) activity).postLayoutSelected(SharedPreferencesUtils.POST_LAYOUT_COMPACT);
             dismiss();
         });
+        binding.compactLayout2TextViewPostLayoutBottomSheetFragment.setOnClickListener(view -> {
+            ((PostLayoutSelectionCallback) activity).postLayoutSelected(SharedPreferencesUtils.POST_LAYOUT_COMPACT_2);
+            dismiss();
+        });
         binding.galleryLayoutTextViewPostLayoutBottomSheetFragment.setOnClickListener(view -> {
             ((PostLayoutSelectionCallback) activity).postLayoutSelected(SharedPreferencesUtils.POST_LAYOUT_GALLERY);
             dismiss();

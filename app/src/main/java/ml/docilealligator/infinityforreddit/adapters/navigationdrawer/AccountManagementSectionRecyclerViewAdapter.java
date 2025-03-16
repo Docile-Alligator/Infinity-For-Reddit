@@ -72,8 +72,6 @@ public class AccountManagementSectionRecyclerViewAdapter extends RecyclerView.Ad
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
                     .into(((AccountViewHolder) holder).binding.profileImageItemAccount);
             ((AccountViewHolder) holder).binding.usernameTextViewItemAccount.setText(accounts.get(position).getAccountName());
-            holder.itemView.setOnClickListener(view ->
-                    itemClickListener.onAccountClick(accounts.get(position).getAccountName()));
         } else if (holder instanceof MenuItemViewHolder) {
             int stringId = 0;
             int drawableId = 0;
@@ -82,17 +80,17 @@ public class AccountManagementSectionRecyclerViewAdapter extends RecyclerView.Ad
                 int offset = accounts == null ? 0 : accounts.size();
                 if (position == offset) {
                     stringId = R.string.add_account;
-                    drawableId = R.drawable.ic_outline_add_circle_outline_24dp;
+                    drawableId = R.drawable.ic_add_circle_outline_day_night_24dp;
                 } else if (position == offset + 1) {
                     stringId = R.string.anonymous_account;
-                    drawableId = R.drawable.ic_anonymous_24dp;
+                    drawableId = R.drawable.ic_anonymous_day_night_24dp;
                 } else if (position == offset + 2) {
                     stringId = R.string.log_out;
-                    drawableId = R.drawable.ic_log_out_24dp;
+                    drawableId = R.drawable.ic_log_out_day_night_24dp;
                 }
             } else {
                 stringId = R.string.add_account;
-                drawableId = R.drawable.ic_outline_add_circle_outline_24dp;
+                drawableId = R.drawable.ic_add_circle_outline_day_night_24dp;
             }
 
             if (stringId != 0) {
@@ -136,6 +134,14 @@ public class AccountManagementSectionRecyclerViewAdapter extends RecyclerView.Ad
                 binding.usernameTextViewItemAccount.setTypeface(baseActivity.typeface);
             }
             binding.usernameTextViewItemAccount.setTextColor(primaryTextColor);
+
+            itemView.setOnClickListener(view ->
+                    itemClickListener.onAccountClick(accounts.get(getBindingAdapterPosition()).getAccountName()));
+
+            itemView.setOnLongClickListener(view -> {
+                itemClickListener.onAccountLongClick(accounts.get(getBindingAdapterPosition()).getAccountName());
+                return true;
+            });
         }
     }
 

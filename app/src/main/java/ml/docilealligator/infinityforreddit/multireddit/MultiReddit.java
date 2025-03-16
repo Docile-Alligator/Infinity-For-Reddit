@@ -4,10 +4,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Index;
 
 import java.util.ArrayList;
 
@@ -15,7 +17,8 @@ import ml.docilealligator.infinityforreddit.account.Account;
 
 @Entity(tableName = "multi_reddits", primaryKeys = {"path", "username"},
         foreignKeys = @ForeignKey(entity = Account.class, parentColumns = "username",
-                childColumns = "username", onDelete = ForeignKey.CASCADE))
+                childColumns = "username", onDelete = ForeignKey.CASCADE),
+        indices = {@Index(value = "username")})
 public class MultiReddit implements Parcelable {
     @NonNull
     @ColumnInfo(name = "path")
@@ -255,5 +258,16 @@ public class MultiReddit implements Parcelable {
         parcel.writeByte((byte) (isSubscriber ? 1 : 0));
         parcel.writeByte((byte) (isFavorite ? 1 : 0));
         parcel.writeStringList(subreddits);
+    }
+
+    @Nullable
+    public static MultiReddit getDummyMultiReddit(@Nullable String multiPath) {
+        if (multiPath == null) {
+            return null;
+        }
+        return new MultiReddit(multiPath,
+                multiPath.substring(multiPath.lastIndexOf("/", multiPath.length() - 2) + 1),
+                multiPath, null, null, null, null, Account.ANONYMOUS_ACCOUNT,
+                0, 0, true, false, false);
     }
 }

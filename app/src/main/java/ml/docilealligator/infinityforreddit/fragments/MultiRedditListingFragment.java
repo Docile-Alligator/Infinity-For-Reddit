@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,13 +25,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.activities.MultiredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewMultiRedditDetailActivity;
 import ml.docilealligator.infinityforreddit.adapters.MultiRedditListingRecyclerViewAdapter;
@@ -45,7 +45,7 @@ import retrofit2.Retrofit;
 
 public class MultiRedditListingFragment extends Fragment implements FragmentCommunicator {
 
-    public static final String EXTRA_IS_GETTING_MULTIREDDIT_INFO = "EIGMI";
+    public static final String EXTRA_IS_MULTIREDDIT_SELECTION = "EIMS";
 
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
@@ -90,7 +90,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
             }
         }
 
-        boolean isGettingMultiredditInfo = getArguments().getBoolean(EXTRA_IS_GETTING_MULTIREDDIT_INFO, false);
+        boolean isGettingMultiredditInfo = getArguments().getBoolean(EXTRA_IS_MULTIREDDIT_SELECTION, false);
 
         if (mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             binding.swipeRefreshLayoutMultiRedditListingFragment.setEnabled(false);
@@ -105,8 +105,12 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
                 mActivity.accountName, new MultiRedditListingRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onClick(MultiReddit multiReddit) {
-                if (mActivity instanceof MultiredditSelectionActivity) {
-                    ((MultiredditSelectionActivity) mActivity).getSelectedMultireddit(multiReddit);
+                if (isGettingMultiredditInfo) {
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT, multiReddit);
+                    returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_THING_TYPE, SelectThingReturnKey.THING_TYPE.MULTIREDDIT);
+                    mActivity.setResult(Activity.RESULT_OK, returnIntent);
+                    mActivity.finish();
                 } else {
                     Intent intent = new Intent(mActivity, ViewMultiRedditDetailActivity.class);
                     intent.putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_DATA, multiReddit);
@@ -141,8 +145,8 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
                 new MultiRedditViewModel.Factory(mRedditDataRoomDatabase, mActivity.accountName))
                 .get(MultiRedditViewModel.class);
 
-        mMultiRedditViewModel.getAllMultiReddits().observe(getViewLifecycleOwner(), subscribedUserData -> {
-            if (subscribedUserData == null || subscribedUserData.size() == 0) {
+        mMultiRedditViewModel.getAllMultiReddits().observe(getViewLifecycleOwner(), multiReddits -> {
+            if (multiReddits == null || multiReddits.size() == 0) {
                 binding.recyclerViewMultiRedditListingFragment.setVisibility(View.GONE);
                 binding.fetchMultiRedditListingInfoLinearLayoutMultiRedditListingFragment.setVisibility(View.VISIBLE);
                 mGlide.load(R.drawable.error_image).into(binding.fetchMultiRedditListingInfoImageViewMultiRedditListingFragment);
@@ -151,16 +155,16 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
                 binding.recyclerViewMultiRedditListingFragment.setVisibility(View.VISIBLE);
                 mGlide.clear(binding.fetchMultiRedditListingInfoImageViewMultiRedditListingFragment);
             }
-            adapter.setMultiReddits(subscribedUserData);
+            adapter.setMultiReddits(multiReddits);
         });
 
-        mMultiRedditViewModel.getAllFavoriteMultiReddits().observe(getViewLifecycleOwner(), favoriteSubscribedUserData -> {
-            if (favoriteSubscribedUserData != null && favoriteSubscribedUserData.size() > 0) {
+        mMultiRedditViewModel.getAllFavoriteMultiReddits().observe(getViewLifecycleOwner(), favoriteMultiReddits -> {
+            if (favoriteMultiReddits != null && favoriteMultiReddits.size() > 0) {
                 binding.fetchMultiRedditListingInfoLinearLayoutMultiRedditListingFragment.setVisibility(View.GONE);
                 binding.recyclerViewMultiRedditListingFragment.setVisibility(View.VISIBLE);
                 mGlide.clear(binding.fetchMultiRedditListingInfoImageViewMultiRedditListingFragment);
             }
-            adapter.setFavoriteMultiReddits(favoriteSubscribedUserData);
+            adapter.setFavoriteMultiReddits(favoriteMultiReddits);
         });
 
         return binding.getRoot();

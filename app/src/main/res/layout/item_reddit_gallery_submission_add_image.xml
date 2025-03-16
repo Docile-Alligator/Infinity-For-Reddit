@@ -7,7 +7,7 @@
         android:id="@+id/fab_item_gallery_submission_add_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_outline_select_photo_24dp"
+        android:src="@drawable/ic_select_photo_24dp"
         android:layout_gravity="center" />
 
 </FrameLayout>

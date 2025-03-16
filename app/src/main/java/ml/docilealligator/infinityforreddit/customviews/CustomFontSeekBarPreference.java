@@ -11,7 +11,7 @@ import androidx.preference.PreferenceViewHolder;
 import androidx.preference.SeekBarPreference;
 
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
-import ml.docilealligator.infinityforreddit.CustomThemeWrapperReceiver;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapperReceiver;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 
 public class CustomFontSeekBarPreference extends SeekBarPreference implements CustomFontReceiver, CustomThemeWrapperReceiver {

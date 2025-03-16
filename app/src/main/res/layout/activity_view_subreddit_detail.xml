@@ -15,130 +15,141 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar_layout_view_subreddit_detail_activity"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:titleEnabled="false"
             app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
             app:toolbarId="@+id/toolbar">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <pl.droidsonroids.gif.GifImageView
                     android:id="@+id/banner_image_view_view_subreddit_detail_activity"
                     android:layout_width="match_parent"
-                    android:scaleType="centerCrop"
                     android:layout_height="160dp"
-                    android:contentDescription="@string/content_description_banner_imageview" />
+                    android:contentDescription="@string/content_description_banner_imageview"
+                    android:scaleType="centerCrop" />
 
-                <pl.droidsonroids.gif.GifImageView
-                    android:id="@+id/icon_gif_image_view_view_subreddit_detail_activity"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:layout_marginTop="-36dp"
-                    android:layout_below="@id/banner_image_view_view_subreddit_detail_activity"
-                    android:layout_centerHorizontal="true"
-                    android:elevation="4dp" />
-
-                <LinearLayout
-                    android:id="@+id/toolbar_linear_layout_view_subreddit_detail_activity"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/toolbar_constraint_layout_view_subreddit_detail_activity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="36dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:layout_below="@id/banner_image_view_view_subreddit_detail_activity">
+                    android:padding="16dp">
+
+                    <pl.droidsonroids.gif.GifImageView
+                        android:id="@+id/icon_gif_image_view_view_subreddit_detail_activity"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/subscriber_count_text_view_view_subreddit_detail_activity" />
 
                     <TextView
                         android:id="@+id/subreddit_name_text_view_view_subreddit_detail_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginStart="16dp"
+                        android:paddingTop="8dp"
+                        android:fontFamily="?attr/font_family"
                         android:textSize="?attr/font_18"
-                        android:layout_gravity="center_horizontal"
-                        android:fontFamily="?attr/font_family" />
+                        app:layout_constraintVertical_chainStyle="packed"
+                        app:layout_constraintStart_toEndOf="@id/icon_gif_image_view_view_subreddit_detail_activity"
+                        app:layout_constraintTop_toTopOf="@id/icon_gif_image_view_view_subreddit_detail_activity"
+                        app:layout_constraintBottom_toTopOf="@id/subscribe_subreddit_chip_view_subreddit_detail_activity" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/subscribe_subreddit_chip_view_subreddit_detail_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        app:chipStrokeColor="#00000000"  />
+                        android:layout_marginStart="16dp"
+                        app:chipStrokeColor="#00000000"
+                        app:layout_constraintStart_toEndOf="@id/icon_gif_image_view_view_subreddit_detail_activity"
+                        app:layout_constraintTop_toBottomOf="@id/subreddit_name_text_view_view_subreddit_detail_activity"
+                        app:layout_constraintBottom_toBottomOf="@id/icon_gif_image_view_view_subreddit_detail_activity" />
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/subscriber_count_text_view_view_subreddit_detail_activity"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp">
+                        android:fontFamily="?attr/font_family"
+                        android:textSize="?attr/font_default"
+                        app:layout_constraintEnd_toStartOf="@id/barrier"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/barrier5"
+                        app:layout_constraintHorizontal_bias="0" />
 
-                        <TextView
-                            android:id="@+id/subscriber_count_text_view_view_subreddit_detail_activity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="?attr/font_default"
-                            android:fontFamily="?attr/font_family"
-                            app:layout_constraintBottom_toTopOf="@id/online_subscriber_count_text_view_view_subreddit_detail_activity"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/barrier"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintHorizontal_bias="0" />
+                    <TextView
+                        android:id="@+id/online_subscriber_count_text_view_view_subreddit_detail_activity"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="?attr/font_family"
+                        android:textSize="?attr/font_default"
+                        app:layout_constraintEnd_toStartOf="@id/barrier"
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/subscriber_count_text_view_view_subreddit_detail_activity" />
 
-                        <TextView
-                            android:id="@+id/online_subscriber_count_text_view_view_subreddit_detail_activity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="?attr/font_default"
-                            android:fontFamily="?attr/font_family"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toStartOf="@id/barrier"
-                            app:layout_constraintTop_toBottomOf="@id/subscriber_count_text_view_view_subreddit_detail_activity"
-                            app:layout_constraintHorizontal_bias="0" />
+                    <TextView
+                        android:id="@+id/since_text_view_view_subreddit_detail_activity"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="?attr/font_family"
+                        android:text="@string/since"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/barrier5" />
 
-                        <TextView
-                            android:id="@+id/since_text_view_view_subreddit_detail_activity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/since"
-                            android:fontFamily="?attr/font_family"
-                            app:layout_constraintBottom_toTopOf="@id/creation_time_text_view_view_subreddit_detail_activity"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/creation_time_text_view_view_subreddit_detail_activity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="end"
-                            android:textSize="?attr/font_default"
-                            android:fontFamily="?attr/font_family"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/since_text_view_view_subreddit_detail_activity" />
-
-                        <androidx.constraintlayout.widget.Barrier
-                            android:id="@+id/barrier"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:barrierDirection="start"
-                            app:constraint_referenced_ids="creation_time_text_view_view_subreddit_detail_activity, since_text_view_view_subreddit_detail_activity" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/creation_time_text_view_view_subreddit_detail_activity"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="?attr/font_family"
+                        android:gravity="end"
+                        android:textSize="?attr/font_default"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/since_text_view_view_subreddit_detail_activity" />
 
                     <TextView
                         android:id="@+id/description_text_view_view_subreddit_detail_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="?attr/font_family"
+                        android:textSize="?attr/font_default"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/barrier6"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        tools:visibility="visible" />
+
+                    <androidx.constraintlayout.widget.Barrier
+                        android:id="@+id/barrier"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:textSize="?attr/font_default"
-                        android:fontFamily="?attr/font_family"
-                        android:visibility="gone"/>
+                        app:barrierDirection="start"
+                        app:constraint_referenced_ids="creation_time_text_view_view_subreddit_detail_activity, since_text_view_view_subreddit_detail_activity" />
 
-                </LinearLayout>
+                    <androidx.constraintlayout.widget.Barrier
+                        android:id="@+id/barrier5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:barrierDirection="bottom"
+                        app:constraint_referenced_ids="icon_gif_image_view_view_subreddit_detail_activity,subscribe_subreddit_chip_view_subreddit_detail_activity" />
 
-            </RelativeLayout>
+                    <androidx.constraintlayout.widget.Barrier
+                        android:id="@+id/barrier6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:barrierDirection="bottom"
+                        app:constraint_referenced_ids="creation_time_text_view_view_subreddit_detail_activity,online_subscriber_count_text_view_view_subreddit_detail_activity" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
@@ -184,6 +195,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:visibility="gone"
-        app:layout_anchor="@id/bottom_app_bar_bottom_app_bar" />
+        app:layout_anchor="@id/bottom_app_bar_bottom_app_bar"
+        android:contentDescription="@null" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

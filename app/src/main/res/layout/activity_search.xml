@@ -46,17 +46,19 @@
                     android:src="@drawable/ic_cancel_24dp"
                     android:clickable="true"
                     android:focusable="true"
-                    android:background="?attr/actionBarItemBackground" />
+                    android:background="?attr/actionBarItemBackground"
+                    android:contentDescription="@string/content_description_delete_texts" />
 
                 <ImageView
                     android:id="@+id/link_handler_image_view_search_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:src="@drawable/ic_open_link_24dp"
+                    android:src="@drawable/ic_open_link_day_night_24dp"
                     android:clickable="true"
                     android:focusable="true"
-                    android:background="?attr/actionBarItemBackground" />
+                    android:background="?attr/actionBarItemBackground"
+                    android:contentDescription="@string/content_description_handle_link" />
 
             </LinearLayout>
 
@@ -129,7 +131,15 @@
                 android:visibility="gone" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_search_activity"
+                android:id="@+id/recent_search_query_recycler_view_search_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:spanCount="2"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/subreddit_autocomplete_recycler_view_search_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"

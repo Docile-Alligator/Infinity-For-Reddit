@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -55,11 +56,10 @@ public class SetRedditGalleryItemCaptionAndUrlBottomSheetFragment extends Landsc
         okButton = rootView.findViewById(R.id.ok_button_set_reddit_gallery_item_caption_and_url_bottom_sheet_fragment);
 
         int primaryTextColor = mActivity.getResources().getColor(R.color.primaryTextColor);
-        Drawable cursorDrawable = Utils.getTintedDrawable(mActivity, R.drawable.edit_text_cursor, primaryTextColor);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            captionTextInputEditText.setTextCursorDrawable(cursorDrawable);
-            urlTextInputEditText.setTextCursorDrawable(cursorDrawable);
+            captionTextInputLayout.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            urlTextInputLayout.setCursorColor(ColorStateList.valueOf(primaryTextColor));
         } else {
             setCursorDrawableColor(captionTextInputEditText, primaryTextColor);
             setCursorDrawableColor(urlTextInputEditText, primaryTextColor);

@@ -2,7 +2,7 @@ package ml.docilealligator.infinityforreddit.markdown;
 
 import org.commonmark.node.CustomBlock;
 
-import ml.docilealligator.infinityforreddit.MediaMetadata;
+import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 
 public class ImageAndGifBlock extends CustomBlock {
     public MediaMetadata mediaMetadata;

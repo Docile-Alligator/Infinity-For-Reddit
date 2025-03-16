@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.thing.SortType;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 

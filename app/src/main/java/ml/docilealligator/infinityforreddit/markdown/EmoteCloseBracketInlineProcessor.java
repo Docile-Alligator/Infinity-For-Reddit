@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import io.noties.markwon.inlineparser.InlineProcessor;
-import ml.docilealligator.infinityforreddit.MediaMetadata;
+import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 
 public class EmoteCloseBracketInlineProcessor extends InlineProcessor {
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");

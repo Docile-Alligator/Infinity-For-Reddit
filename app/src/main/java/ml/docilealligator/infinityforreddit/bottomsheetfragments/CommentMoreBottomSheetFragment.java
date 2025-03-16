@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.MediaMetadata;
+import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
@@ -107,16 +107,29 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
                     }
                 });
             }
+
+            if (comment.getAuthor().equals(activity.accountName)) {
+                binding.notificationViewCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
+                binding.notificationViewCommentMoreBottomSheetFragment.setText(comment.isSendReplies() ? R.string.disable_reply_notifications : R.string.enable_reply_notifications);
+                binding.notificationViewCommentMoreBottomSheetFragment.setOnClickListener(view -> {
+                    dismiss();
+                    if (activity instanceof ViewPostDetailActivity) {
+                        ((ViewPostDetailActivity) activity).toggleReplyNotifications(comment, bundle.getInt(EXTRA_POSITION));
+                    } else if (activity instanceof ViewUserDetailActivity) {
+                        ((ViewUserDetailActivity) activity).toggleReplyNotifications(comment, bundle.getInt(EXTRA_POSITION));
+                    }
+                });
+            }
         }
 
         if (showReplyAndSaveOption) {
             binding.replyTextViewCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
             binding.saveTextViewCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
             if (comment.isSaved()) {
-                binding.saveTextViewCommentMoreBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(activity, R.drawable.ic_bookmark_24dp), null, null, null);
+                binding.saveTextViewCommentMoreBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(activity, R.drawable.ic_bookmark_day_night_24dp), null, null, null);
                 binding.saveTextViewCommentMoreBottomSheetFragment.setText(R.string.unsave_comment);
             } else {
-                binding.saveTextViewCommentMoreBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(activity, R.drawable.ic_bookmark_border_24dp), null, null, null);
+                binding.saveTextViewCommentMoreBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(activity, R.drawable.ic_bookmark_border_day_night_24dp), null, null, null);
                 binding.saveTextViewCommentMoreBottomSheetFragment.setText(R.string.save_comment);
             }
             binding.replyTextViewCommentMoreBottomSheetFragment.setOnClickListener(view -> {

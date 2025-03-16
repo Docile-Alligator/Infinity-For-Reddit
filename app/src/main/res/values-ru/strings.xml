@@ -60,8 +60,6 @@
     <string name="action_unhide_post">"Показать пост"</string>
     <string name="action_edit_post">"Изменить пост"</string>
     <string name="action_delete_post">"Удалить пост"</string>
-    <string name="action_mark_nsfw">"Отметить как NSFW"</string>
-    <string name="action_unmark_nsfw">"Убрать отметку NSFW"</string>
     <string name="action_mark_spoiler">"Отметить как спойлер"</string>
     <string name="action_unmark_spoiler">"Убрать отметку спойлер"</string>
     <string name="action_edit_flair">"Изменить флейр"</string>
@@ -105,7 +103,6 @@
     <string name="load_messages_failed">"Ошибка загрузки сообщений.
 Нажмите, чтобы повторить попытку."</string>
     <string name="no_messages">"Пусто"</string>
-    <string name="nsfw">"NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="karma_info">"Карма: %1$d"</string>
@@ -147,7 +144,6 @@
     <string name="follow_failed">"Невозможно начать следить"</string>
     <string name="unfollowed">"Вы не следите"</string>
     <string name="unfollow_failed">"Невозможно отписаться"</string>
-    <string name="content_description_banner_imageview">"Изображение баннера сабреддита"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Ищите что угодно"</string>
     <string name="no_posts_no_lazy_mode">"Нет доступных постов"</string>
@@ -283,10 +279,6 @@
     <string name="edit_success">"Редактирование успешно"</string>
     <string name="delete_post_success">"Удалено успешно"</string>
     <string name="delete_post_failed">"Невозможно удалить"</string>
-    <string name="mark_nsfw_success">"Успешно отмечено как NSFW"</string>
-    <string name="mark_nsfw_failed">"Невозможно отметить как NSFW"</string>
-    <string name="unmark_nsfw_success">"Отметка NSFW снята успешно"</string>
-    <string name="unmark_nsfw_failed">"Невозможно снять отметку NSFW"</string>
     <string name="mark_spoiler_success">"Успешно отмечено как спойлер"</string>
     <string name="mark_spoiler_failed">"Невозможно отметить как спойлер"</string>
     <string name="unmark_spoiler_success">"Отметка спойлера снята успешно"</string>
@@ -319,7 +311,6 @@
     <string name="settigns_video_title">"Видео"</string>
     <string name="settings_video_autoplay_title">"Автовоспроизведение видео"</string>
     <string name="settings_mute_autoplaying_videos_title">"Отключать звук у автовоспроизводящихся видео"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"Автовоспроизведение NSFW-видео"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Автоматическое воспроизведение видео (портрет)"</string>
 
     <!-- Fuzzy -->
@@ -339,7 +330,6 @@
     <string name="settings_volume_keys_navigate_comments_title">"Навигация кнопками громкости между комментариями в постах"</string>
     <string name="settings_volume_keys_navigate_posts_title">"Навигация кнопками громкости межу постами"</string>
     <string name="settings_mute_video_title">"Видео без звука"</string>
-    <string name="settings_mute_nsfw_video_title">"NSFW-видео без звука"</string>
 
     <!-- Fuzzy -->
     <string name="settings_video_player_ignore_nav_bar_title">"Не использовать панель навигации в видеопроигрывателе"</string>
@@ -376,8 +366,6 @@
     <string name="settings_font_size_title">"Размер шрифта"</string>
     <string name="settings_title_font_size_title">"Размер шрифта заголовка"</string>
     <string name="settings_content_font_size_title">"Размер шрифта содержания"</string>
-    <string name="settings_enable_nsfw_title">"Включить NSFW"</string>
-    <string name="settings_blur_nsfw_title">"Размытие изображений NSFW"</string>
     <string name="settings_blur_spoiler_title">"Размывать изображения под спойлером"</string>
     <string name="settings_about_master_title">"Обо всём"</string>
     <string name="settings_acknowledgement_master_title">"Признательность"</string>
@@ -518,8 +506,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit_success">"Успешно удалено"</string>
     <string name="delete_multi_reddit_failed">"Ошибка удаления"</string>
     <string name="delete_multi_reddit_dialog_message">"Вы уверены?"</string>
-    <string name="enable_nsfw">"Включить NSFW"</string>
-    <string name="disable_nsfw">"Отключить NSFW"</string>
     <string name="cannot_save_image">"Невозможно сохранить изображение"</string>
     <string name="cannot_save_gif">"Невозможно сохранить GIF"</string>
     <string name="cannot_get_storage">"Нет доступа к хранилищу"</string>
@@ -615,10 +601,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_spoiler_background_color_detail">"Применяется к: фон отметки спойлера"</string>
     <string name="theme_item_spoiler_text_color">"Цвет текста спойлера"</string>
     <string name="theme_item_spoiler_text_color_detail">"Применяется к: цвет текста отметки спойлера"</string>
-    <string name="theme_item_nsfw_background_color">"Цвет фона NSFW"</string>
-    <string name="theme_item_nsfw_background_color_detail">"Применяется к: цвет фона отметки NSFW"</string>
-    <string name="theme_item_nsfw_text_color">"Цвет текста NSFW"</string>
-    <string name="theme_item_nsfw_text_color_detail">"Применяется к: цвет текста отметки NSFW"</string>
     <string name="theme_item_flair_background_color">"Цвет фона флейра"</string>
     <string name="theme_item_flair_background_color_detail">"Применяется к: фон флейра"</string>
     <string name="theme_item_flair_text_color">"Цвет флейра"</string>
@@ -792,7 +774,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_number_of_columns_in_post_feed_title">"Количество столбцов в ленте постов"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Портрет"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Альбом"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW и спойлеры"</string>
     <string name="settings_delete_all_legacy_settings_title">"Удалить все устаревшие настройки"</string>
     <string name="restart_app_see_changes">"Перезапустите приложение, чтобы увидеть изменения."</string>
     <string name="settings_tab_count">"Количество вкладок"</string>
@@ -856,18 +837,12 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 
     <!-- Fuzzy -->
     <string name="warning">"Предупреждение"</string>
-    <string name="this_is_a_nsfw_subreddit">"Это NSFW-сабреддит"</string>
-    <string name="this_user_has_nsfw_content">"У пользователь есть NSFW-контент"</string>
     <string name="dismiss">"Отклонить"</string>
     <string name="leave">"Покинуть"</string>
     <string name="go_to_subreddit">"Перейти к сабреддиту"</string>
     <string name="go_to_user">"Перейти к пользователю"</string>
     <string name="go_to_thing_hint">"Имя"</string>
     <string name="random">"Случайно"</string>
-    <string name="random_subreddit">"Случайный сабреддит"</string>
-    <string name="random_nsfw_subreddit">"Случайный NSFW-сабреддит"</string>
-    <string name="random_post">"Случайный пост"</string>
-    <string name="random_nsfw_post">"Случайный NSFW-пост"</string>
     <string name="fetch_random_thing_failed">"Попробуйте позже"</string>
     <string name="downloading">"Скачивание"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all и r/popular"</string>
@@ -929,7 +904,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_all_read_posts_success">"Все прочтённые посты успешно удалены"</string>
     <string name="hide_read_posts">"Скрыть прочтённые посты"</string>
     <string name="filter_posts">"Фильтр постов"</string>
-    <string name="only_nsfw">"Только NSFW"</string>
     <string name="only_spoiler">"Только спойлер"</string>
     <string name="title_excludes_strings_hint">"Заголовок: исключая ключевые слова (key1,key2)"</string>
     <string name="title_excludes_regex_hint">"Заголовок: исключая регулярное выражение"</string>
@@ -976,7 +950,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="action_share_link">"Поделиться ссылкой"</string>
     <string name="action_copy_link">"Скопировать ссылку"</string>
     <string name="action_add_to_post_filter">"Добавить пост в фильтр"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"NSFW-посты в NSFW-сабреддитах без размытия"</string>
     <string name="settings_show_avatar_on_the_right">"Показывать аватар справа"</string>
     <string name="settings_backup_settings_title">"Резервное копирование настроек"</string>
     <string name="settings_restore_settings_title">"Восстановить настройки"</string>
@@ -1046,7 +1019,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_hide_post_flair">"Скрыть флейр поста"</string>
     <string name="settings_crash_reports_title">"Отчёты о сбоях"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Опасные"</string>
-    <string name="settings_disable_nsfw_forever_title">"Отключить NSFW навсегда"</string>
     <string name="settings_show_only_one_comment_level_indicator">"Показывать только один индикатор уровня комментария"</string>
     <string name="save_comment">"Сохранить"</string>
     <string name="unsave_comment">"Удалить"</string>
@@ -1055,11 +1027,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Отчёты о сбоях удалены"</string>
-
-    <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"После включения NSFW будет навсегда отключено, независимо от того, включён параметр NSFW или нет. И эта функция необратима, единственный способ снова включить NSFW – это очистить данные приложения.
-
-Всё ещё хотите включить его?"</string>
     <string name="reply">"Ответ"</string>
     <string name="post_gallery_activity_label">"Пост в галерее"</string>
     <string name="action_share_post_link">"Поделиться ссылкой на пост"</string>
@@ -1165,8 +1132,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="app_lock_timeout_24_hours">"24 часа"</string>
     <string name="edit_profile_activity_label">"Изменить профиль"</string>
     <string name="action_contact_mods">"Связь с модераторами"</string>
-    <string name="settings_save_nsfw_media_in_different_folder_title">"Сохранять NSFW-материалы отдельно"</string>
-    <string name="settings_nsfw_download_location_title">"Папка для NSFW"</string>
     <string name="fetch_streamable_video_failed">"Невозможно загрузить потоковое видео"</string>
 
     <!-- EditProfileService Notification -->

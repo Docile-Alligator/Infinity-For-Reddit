@@ -18,12 +18,17 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.giphy.sdk.core.models.Media;
+import com.giphy.sdk.ui.GPHContentType;
+import com.giphy.sdk.ui.Giphy;
+import com.giphy.sdk.ui.views.GiphyDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,32 +41,34 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.MediaMetadata;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.UploadImageEnabledActivity;
-import ml.docilealligator.infinityforreddit.UploadedImage;
 import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.comment.Comment;
+import ml.docilealligator.infinityforreddit.comment.ParseComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.ActivityEditCommentBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.RichTextJSONConverter;
+import ml.docilealligator.infinityforreddit.thing.GiphyGif;
+import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
+import ml.docilealligator.infinityforreddit.thing.UploadedImage;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class EditCommentActivity extends BaseActivity implements UploadImageEnabledActivity {
+public class EditCommentActivity extends BaseActivity implements UploadImageEnabledActivity,
+        GiphyDialogFragment.GifSelectionListener {
 
     public static final String EXTRA_CONTENT = "EC";
     public static final String EXTRA_FULLNAME = "EF";
     public static final String EXTRA_MEDIA_METADATA_LIST = "EMML";
     public static final String EXTRA_POSITION = "EP";
+    public static final String RETURN_EXTRA_EDITED_COMMENT = "REEC";
     public static final String RETURN_EXTRA_EDITED_COMMENT_CONTENT = "REECC";
     public static final String RETURN_EXTRA_EDITED_COMMENT_POSITION = "REECP";
 
@@ -70,6 +77,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
     private static final int MARKDOWN_PREVIEW_REQUEST_CODE = 300;
 
     private static final String UPLOADED_IMAGES_STATE = "UIS";
+    private static final String GIPHY_GIF_STATE = "GGS";
 
     @Inject
     @Named("oauth")
@@ -93,6 +101,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
     private boolean isSubmitting = false;
     private Uri capturedImageUri;
     private ArrayList<UploadedImage> uploadedImages = new ArrayList<>();
+    private GiphyGif giphyGif;
     private ActivityEditCommentBinding binding;
 
     @Override
@@ -142,10 +151,11 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
 
         if (savedInstanceState != null) {
             uploadedImages = savedInstanceState.getParcelableArrayList(UPLOADED_IMAGES_STATE);
+            giphyGif = savedInstanceState.getParcelable(GIPHY_GIF_STATE);
         }
 
         MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(
-                mCustomThemeWrapper, true, new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
+                mCustomThemeWrapper, true, true, new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
             @Override
             public void onClick(int item) {
                 MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(
@@ -162,14 +172,21 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
                 fragment.setArguments(arguments);
                 fragment.show(getSupportFragmentManager(), fragment.getTag());
             }
+
+            @Override
+            public void onSelectGiphyGif() {
+                GiphyDialogFragment.Companion.newInstance().show(getSupportFragmentManager(), "giphy_dialog");
+            }
         });
 
         binding.markdownBottomBarRecyclerViewEditCommentActivity.setLayoutManager(new LinearLayoutManagerBugFixed(this,
-                LinearLayoutManager.HORIZONTAL, false));
+                LinearLayoutManager.HORIZONTAL, true).setStackFromEndAndReturnCurrentObject());
         binding.markdownBottomBarRecyclerViewEditCommentActivity.setAdapter(adapter);
 
         binding.commentEditTextEditCommentActivity.requestFocus();
         Utils.showKeyboard(this, new Handler(), binding.commentEditTextEditCommentActivity);
+
+        Giphy.INSTANCE.configure(this, APIUtils.GIPHY_GIF_API_KEY);
     }
 
     @Override
@@ -238,9 +255,9 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
 
             Map<String, String> params = new HashMap<>();
             params.put(APIUtils.THING_ID_KEY, mFullName);
-            if (!uploadedImages.isEmpty()) {
+            if (!uploadedImages.isEmpty() || giphyGif != null) {
                 try {
-                    params.put(APIUtils.RICHTEXT_JSON_KEY, new RichTextJSONConverter().constructRichTextJSON(this, content, uploadedImages));
+                    params.put(APIUtils.RICHTEXT_JSON_KEY, new RichTextJSONConverter().constructRichTextJSON(this, content, uploadedImages, giphyGif));
                     params.put(APIUtils.TEXT_KEY, "");
                 } catch (JSONException e) {
                     isSubmitting = false;
@@ -251,33 +268,51 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
                 params.put(APIUtils.TEXT_KEY, content);
             }
 
-            mOauthRetrofit.create(RedditAPI.class)
-                    .editPostOrComment(APIUtils.getOAuthHeader(mAccessToken), params)
-                    .enqueue(new Callback<>() {
-                        @Override
-                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+            Handler handler = new Handler(getMainLooper());
+            mExecutor.execute(() -> {
+                try {
+                    Response<String> response = mOauthRetrofit.create(RedditAPI.class)
+                            .editPostOrComment(APIUtils.getOAuthHeader(mAccessToken), params).execute();
+                    if (response.isSuccessful()) {
+                        Comment comment = ParseComment.parseSingleComment(new JSONObject(response.body()), 0);
+                        handler.post(() -> {
                             isSubmitting = false;
-                            if (response.isSuccessful()) {
-                                Toast.makeText(EditCommentActivity.this, R.string.edit_success, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditCommentActivity.this, R.string.edit_success, Toast.LENGTH_SHORT).show();
 
-                                Intent returnIntent = new Intent();
-                                returnIntent.putExtra(RETURN_EXTRA_EDITED_COMMENT_CONTENT, Utils.modifyMarkdown(content));
-                                returnIntent.putExtra(RETURN_EXTRA_EDITED_COMMENT_POSITION, getIntent().getExtras().getInt(EXTRA_POSITION));
-                                setResult(RESULT_OK, returnIntent);
+                            Intent returnIntent = new Intent();
+                            returnIntent.putExtra(RETURN_EXTRA_EDITED_COMMENT, comment);
+                            returnIntent.putExtra(RETURN_EXTRA_EDITED_COMMENT_POSITION, getIntent().getExtras().getInt(EXTRA_POSITION));
+                            setResult(RESULT_OK, returnIntent);
 
-                                finish();
-                            } else {
-                                Snackbar.make(binding.coordinatorLayoutEditCommentActivity, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                            finish();
+                        });
+                    } else {
+                        handler.post(() -> {
                             isSubmitting = false;
                             Snackbar.make(binding.coordinatorLayoutEditCommentActivity, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
-                        }
+                        });
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    handler.post(() -> {
+                        isSubmitting = false;
+                        Snackbar.make(binding.coordinatorLayoutEditCommentActivity, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
                     });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    handler.post(() -> {
+                        isSubmitting = false;
+                        Toast.makeText(EditCommentActivity.this, R.string.edit_success, Toast.LENGTH_SHORT).show();
 
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra(RETURN_EXTRA_EDITED_COMMENT_CONTENT, Utils.modifyMarkdown(content));
+                        returnIntent.putExtra(RETURN_EXTRA_EDITED_COMMENT_POSITION, getIntent().getExtras().getInt(EXTRA_POSITION));
+                        setResult(RESULT_OK, returnIntent);
+
+                        finish();
+                    });
+                }
+            });
         }
     }
 
@@ -315,6 +350,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(UPLOADED_IMAGES_STATE, uploadedImages);
+        outState.putParcelable(GIPHY_GIF_STATE, giphyGif);
     }
 
     @Override
@@ -379,5 +415,33 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
                     "![](" + uploadedImage.imageUrlOrKey + ")\n",
                     0, "![]()\n".length() + uploadedImage.imageUrlOrKey.length());
         }
+    }
+
+    @Override
+    public void didSearchTerm(@NonNull String s) {
+
+    }
+
+    @Override
+    public void onGifSelected(@NonNull Media media, @Nullable String s, @NonNull GPHContentType gphContentType) {
+        this.giphyGif = new GiphyGif(media.getId(), true);
+
+        int start = Math.max(binding.commentEditTextEditCommentActivity.getSelectionStart(), 0);
+        int end = Math.max(binding.commentEditTextEditCommentActivity.getSelectionEnd(), 0);
+        int realStart = Math.min(start, end);
+        if (realStart > 0 && binding.commentEditTextEditCommentActivity.getText().toString().charAt(realStart - 1) != '\n') {
+            binding.commentEditTextEditCommentActivity.getText().replace(realStart, Math.max(start, end),
+                    "\n![gif](" + giphyGif.id + ")\n",
+                    0, "\n![gif]()\n".length() + giphyGif.id.length());
+        } else {
+            binding.commentEditTextEditCommentActivity.getText().replace(realStart, Math.max(start, end),
+                    "![gif](" + giphyGif.id + ")\n",
+                    0, "![gif]()\n".length() + giphyGif.id.length());
+        }
+    }
+
+    @Override
+    public void onDismissed(@NonNull GPHContentType gphContentType) {
+
     }
 }

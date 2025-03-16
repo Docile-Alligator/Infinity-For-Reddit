@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -61,14 +62,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import ml.docilealligator.infinityforreddit.DeleteThing;
-import ml.docilealligator.infinityforreddit.Flair;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.SaveThing;
-import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
 import ml.docilealligator.infinityforreddit.activities.EditPostActivity;
@@ -89,6 +85,7 @@ import ml.docilealligator.infinityforreddit.comment.ParseComment;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
 import ml.docilealligator.infinityforreddit.commentfilter.FetchCommentFilter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.AdjustableTouchSlopItemTouchHelper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.FragmentViewPostDetailBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWBlurEvent;
@@ -103,8 +100,14 @@ import ml.docilealligator.infinityforreddit.post.HidePost;
 import ml.docilealligator.infinityforreddit.post.ParsePost;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
 import ml.docilealligator.infinityforreddit.subreddit.FetchSubredditData;
+import ml.docilealligator.infinityforreddit.subreddit.Flair;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.thing.DeleteThing;
+import ml.docilealligator.infinityforreddit.thing.ReplyNotificationsToggle;
+import ml.docilealligator.infinityforreddit.thing.SaveThing;
+import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -127,12 +130,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private static final int EDIT_POST_REQUEST_CODE = 2;
     private static final String SCROLL_POSITION_STATE = "SPS";
 
-    @Inject
-    @Named("pushshift")
-    Retrofit pushshiftRetrofit;
-    @Inject
-    @Named("reveddit")
-    Retrofit revedditRetrofit;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -227,7 +224,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private int swipeLeftAction;
     private int swipeRightAction;
     private float swipeActionThreshold;
-    private ItemTouchHelper touchHelper;
+    private AdjustableTouchSlopItemTouchHelper touchHelper;
+    private boolean shouldSwipeBack;
     private int scrollPosition;
     private FragmentViewPostDetailBinding binding;
     private RecyclerView mCommentsRecyclerView;
@@ -408,7 +406,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         swipeRightAction = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_RIGHT_ACTION, "1"));
         swipeLeftAction = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_LEFT_ACTION, "0"));
         initializeSwipeActionDrawable();
-        touchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+        touchHelper = new AdjustableTouchSlopItemTouchHelper(new AdjustableTouchSlopItemTouchHelper.Callback() {
             boolean exceedThreshold = false;
 
             @Override
@@ -431,81 +429,86 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             }
 
             @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                if (touchHelper != null) {
-                    exceedThreshold = false;
-                    touchHelper.attachToRecyclerView(null);
-                    touchHelper.attachToRecyclerView((mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView));
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {}
+
+            @Override
+            public int convertToAbsoluteDirection(int flags, int layoutDirection) {
+                if (shouldSwipeBack) {
+                    shouldSwipeBack = false;
+                    return 0;
                 }
+                return super.convertToAbsoluteDirection(flags, layoutDirection);
             }
 
             @Override
             public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-
-                if (isCurrentlyActive) {
-                    View itemView = viewHolder.itemView;
-                    int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
-                    if (dX > 0) {
-                        if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                            if (!exceedThreshold) {
-                                exceedThreshold = true;
-                                if (vibrateWhenActionTriggered) {
-                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                                }
+                View itemView = viewHolder.itemView;
+                int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
+                if (dX > 0) {
+                    if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                        dX = (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold;
+                        if (!exceedThreshold && isCurrentlyActive) {
+                            exceedThreshold = true;
+                            if (vibrateWhenActionTriggered) {
+                                itemView.setHapticFeedbackEnabled(true);
+                                itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                             }
-                            backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                        } else {
-                            exceedThreshold = false;
-                            backgroundSwipeRight.setBounds(0, 0, 0, 0);
                         }
-
-                        drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
-                                (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
-                                itemView.getLeft() + ((int) dX) - horizontalOffset,
-                                (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
-                        backgroundSwipeRight.draw(c);
-                        drawableSwipeRight.draw(c);
-                    } else if (dX < 0) {
-                        if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                            if (!exceedThreshold) {
-                                exceedThreshold = true;
-                                if (vibrateWhenActionTriggered) {
-                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
-                                }
-                            }
-                            backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                        } else {
-                            exceedThreshold = false;
-                            backgroundSwipeLeft.setBounds(0, 0, 0, 0);
-                        }
-                        drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
-                                (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
-                                itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
-                                (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
-                        backgroundSwipeLeft.draw(c);
-                        drawableSwipeLeft.draw(c);
-                    }
-                } else {
-                    if (exceedThreshold) {
-                        if (mCommentsAdapter != null) {
-                            mCommentsAdapter.onItemSwipe(viewHolder, dX > 0 ? ItemTouchHelper.END : ItemTouchHelper.START, swipeLeftAction, swipeRightAction);
-                        }
+                        backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                    } else {
                         exceedThreshold = false;
+                        backgroundSwipeRight.setBounds(0, 0, 0, 0);
                     }
+
+                    drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
+                            (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
+                            itemView.getLeft() + ((int) dX) - horizontalOffset,
+                            (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
+                    backgroundSwipeRight.draw(c);
+                    drawableSwipeRight.draw(c);
+                } else if (dX < 0) {
+                    if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                        dX = -(itemView.getRight() - itemView.getLeft()) * swipeActionThreshold;
+                        if (!exceedThreshold && isCurrentlyActive) {
+                            exceedThreshold = true;
+                            if (vibrateWhenActionTriggered) {
+                                itemView.setHapticFeedbackEnabled(true);
+                                itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                            }
+                        }
+                        backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                    } else {
+                        exceedThreshold = false;
+                        backgroundSwipeLeft.setBounds(0, 0, 0, 0);
+                    }
+                    drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
+                            (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
+                            itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
+                            (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
+                    backgroundSwipeLeft.draw(c);
+                    drawableSwipeLeft.draw(c);
                 }
+
+                if (!isCurrentlyActive && exceedThreshold && mCommentsAdapter != null) {
+                    mCommentsAdapter.onItemSwipe(viewHolder, dX > 0 ? ItemTouchHelper.END : ItemTouchHelper.START, swipeLeftAction, swipeRightAction);
+                    exceedThreshold = false;
+                }
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
 
             @Override
             public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
-                return 100;
+                return 1;
             }
         });
 
+        (mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView).setOnTouchListener((view, motionEvent) -> {
+            shouldSwipeBack = motionEvent.getAction() == MotionEvent.ACTION_CANCEL || motionEvent.getAction() == MotionEvent.ACTION_UP;
+            return false;
+        });
+
         if (enableSwipeAction) {
-            touchHelper.attachToRecyclerView((mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView));
+            touchHelper.attachToRecyclerView((mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView), 5);
         }
 
         binding.swipeRefreshLayoutViewPostDetailFragment.setOnRefreshListener(() -> refresh(true, true));
@@ -705,18 +708,18 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private void initializeSwipeActionDrawable() {
         if (swipeRightAction == SharedPreferencesUtils.SWIPE_ACITON_DOWNVOTE) {
             backgroundSwipeRight = new ColorDrawable(mCustomThemeWrapper.getDownvoted());
-            drawableSwipeRight = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_downward_black_24dp, null);
+            drawableSwipeRight = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_downward_day_night_24dp, null);
         } else {
             backgroundSwipeRight = new ColorDrawable(mCustomThemeWrapper.getUpvoted());
-            drawableSwipeRight = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_upward_black_24dp, null);
+            drawableSwipeRight = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_upward_day_night_24dp, null);
         }
 
         if (swipeLeftAction == SharedPreferencesUtils.SWIPE_ACITON_UPVOTE) {
             backgroundSwipeLeft = new ColorDrawable(mCustomThemeWrapper.getUpvoted());
-            drawableSwipeLeft = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_upward_black_24dp, null);
+            drawableSwipeLeft = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_upward_day_night_24dp, null);
         } else {
             backgroundSwipeLeft = new ColorDrawable(mCustomThemeWrapper.getDownvoted());
-            drawableSwipeLeft = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_downward_black_24dp, null);
+            drawableSwipeLeft = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_downward_day_night_24dp, null);
         }
     }
 
@@ -749,9 +752,15 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
     }
 
-    public void editComment(String commentAuthor, String commentContentMarkdown, int position) {
+    public void editComment(Comment comment, int position) {
         if (mCommentsAdapter != null) {
-            mCommentsAdapter.editComment(commentAuthor,
+            mCommentsAdapter.editComment(comment, position);
+        }
+    }
+
+    public void editComment(String commentContentMarkdown, int position) {
+        if (mCommentsAdapter != null) {
+            mCommentsAdapter.editComment(
                     commentContentMarkdown,
                     position);
         }
@@ -1150,7 +1159,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private void tryMarkingPostAsRead() {
         if (mMarkPostsAsRead && mPost != null && !mPost.isRead()) {
             mPost.markAsRead();
-            InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, activity.accountName, mPost.getId());
+            int readPostsLimit = ReadPostsUtils.GetReadPostsLimit(activity.accountName, mPostHistorySharedPreferences);
+            InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, activity.accountName, mPost.getId(), readPostsLimit);
             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
         }
     }
@@ -1196,8 +1206,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
         Bridge.clear(this);
+        super.onDestroyView();
     }
 
     @Override
@@ -1807,6 +1817,24 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 .show();
     }
 
+    public void toggleReplyNotifications(Comment comment, int position) {
+        ReplyNotificationsToggle.toggleEnableNotification(new Handler(Looper.getMainLooper()), mOauthRetrofit,
+                activity.accessToken, comment, new ReplyNotificationsToggle.SendNotificationListener() {
+                    @Override
+                    public void onSuccess() {
+                        Toast.makeText(activity,
+                                comment.isSendReplies() ? R.string.reply_notifications_disabled : R.string.reply_notifications_enabled,
+                                Toast.LENGTH_SHORT).show();
+                        mCommentsAdapter.toggleReplyNotifications(comment.getFullName(), position);
+                    }
+
+                    @Override
+                    public void onError() {
+                        Toast.makeText(activity, R.string.toggle_reply_notifications_failed, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     public void changeToNormalThreadMode() {
         isSingleCommentThreadMode = false;
         mSingleCommentId = null;
@@ -1853,6 +1881,10 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             return activity.isNsfwSubreddit();
         }
         return false;
+    }
+
+    public int getPostListPosition() {
+        return postListPosition;
     }
 
     @Subscribe

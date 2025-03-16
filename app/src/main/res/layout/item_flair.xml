@@ -27,7 +27,7 @@
         android:layout_gravity="center_vertical|end"
         android:paddingStart="32dp"
         android:paddingEnd="32dp"
-        android:src="@drawable/ic_edit_24dp"
+        android:src="@drawable/ic_edit_day_night_24dp"
         android:visibility="gone"
         app:tint="?attr/primaryTextColor"
         android:background="?actionBarItemBackground"

@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ml.docilealligator.infinityforreddit.UploadedImage;
+import ml.docilealligator.infinityforreddit.thing.UploadedImage;
 
 public class UploadedImageBlockParser extends AbstractBlockParser {
     private final UploadedImageBlock uploadedImageBlock;

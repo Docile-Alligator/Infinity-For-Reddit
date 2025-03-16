@@ -91,15 +91,15 @@ public class AccountSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 switch (position) {
                     case 1:
                         stringId = R.string.profile;
-                        drawableId = R.drawable.ic_account_circle_24dp;
+                        drawableId = R.drawable.ic_account_circle_day_night_24dp;
                         break;
                     case 2:
                         stringId = R.string.subscriptions;
-                        drawableId = R.drawable.ic_subscritptions_bottom_app_bar_24dp;
+                        drawableId = R.drawable.ic_subscriptions_bottom_app_bar_day_night_24dp;
                         break;
                     case 3:
                         stringId = R.string.multi_reddit;
-                        drawableId = R.drawable.ic_multi_reddit_24dp;
+                        drawableId = R.drawable.ic_multi_reddit_day_night_24dp;
                         break;
                     case 4:
                         setOnClickListener = false;
@@ -108,7 +108,7 @@ public class AccountSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         } else {
                             ((MenuItemViewHolder) holder).binding.textViewItemNavDrawerMenuItem.setText(R.string.inbox);
                         }
-                        ((MenuItemViewHolder) holder).binding.imageViewItemNavDrawerMenuItem.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_inbox_24dp));
+                        ((MenuItemViewHolder) holder).binding.imageViewItemNavDrawerMenuItem.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_inbox_day_night_24dp));
                         holder.itemView.setOnClickListener(view -> {
                             Intent intent = new Intent(baseActivity, InboxActivity.class);
                             baseActivity.startActivity(intent);
@@ -116,22 +116,22 @@ public class AccountSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         break;
                     default:
                         stringId = R.string.history;
-                        drawableId = R.drawable.ic_history_24dp;
+                        drawableId = R.drawable.ic_history_day_night_24dp;
 
                 }
             } else {
                 switch (position) {
                     case 1:
                         stringId = R.string.subscriptions;
-                        drawableId = R.drawable.ic_subscritptions_bottom_app_bar_24dp;
+                        drawableId = R.drawable.ic_subscriptions_bottom_app_bar_day_night_24dp;
                         break;
                     case 2:
                         stringId = R.string.multi_reddit;
-                        drawableId = R.drawable.ic_multi_reddit_24dp;
+                        drawableId = R.drawable.ic_multi_reddit_day_night_24dp;
                         break;
                     default:
                         stringId = R.string.history;
-                        drawableId = R.drawable.ic_history_24dp;
+                        drawableId = R.drawable.ic_history_day_night_24dp;
                 }
             }
 

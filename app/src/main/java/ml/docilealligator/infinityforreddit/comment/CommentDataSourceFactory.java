@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
 
-import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.thing.SortType;
 import retrofit2.Retrofit;
 
 class CommentDataSourceFactory extends DataSource.Factory {

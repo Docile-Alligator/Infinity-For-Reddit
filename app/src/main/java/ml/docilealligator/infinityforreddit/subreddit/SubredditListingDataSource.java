@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.thing.SortType;
 import retrofit2.Retrofit;
 
 public class SubredditListingDataSource extends PageKeyedDataSource<String, SubredditData> {

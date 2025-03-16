@@ -34,14 +34,14 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
-import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
+import ml.docilealligator.infinityforreddit.asynctasks.AccountManagement;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivityInboxBinding;
@@ -140,6 +140,9 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         } else {
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
         }
+
+        sectionsPagerAdapter = new SectionsPagerAdapter(this);
+
         getCurrentAccountAndFetchMessage(savedInstanceState);
 
         binding.viewPagerInboxActivity.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -215,7 +218,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     private void getCurrentAccountAndFetchMessage(Bundle savedInstanceState) {
         if (mNewAccountName != null) {
             if (accountName.equals(Account.ANONYMOUS_ACCOUNT) || !accountName.equals(mNewAccountName)) {
-                SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
+                AccountManagement.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
                         mExecutor, new Handler(), mNewAccountName, newAccount -> {
                             EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
                             Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
@@ -223,6 +226,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                             mNewAccountName = null;
                             if (newAccount != null) {
                                 accessToken = newAccount.getAccessToken();
+                                accountName = newAccount.getAccountName();
                             }
 
                             bindView(savedInstanceState);
@@ -236,7 +240,6 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     }
 
     private void bindView(Bundle savedInstanceState) {
-        sectionsPagerAdapter = new SectionsPagerAdapter(this);
         binding.viewPagerInboxActivity.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -248,7 +251,6 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             }
         });
         binding.viewPagerInboxActivity.setAdapter(sectionsPagerAdapter);
-        binding.viewPagerInboxActivity.setOffscreenPageLimit(ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT);
         new TabLayoutMediator(binding.tabLayoutInboxActivity, binding.viewPagerInboxActivity, (tab, position) -> {
             switch (position) {
                 case 0:
@@ -319,7 +321,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == SEARCH_USER_REQUEST_CODE && data != null) {
-            String username = data.getStringExtra(SearchActivity.EXTRA_RETURN_USER_NAME);
+            String username = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
             Intent intent = new Intent(this, SendPrivateMessageActivity.class);
             intent.putExtra(SendPrivateMessageActivity.EXTRA_RECIPIENT_USERNAME, username);
             startActivity(intent);

@@ -14,7 +14,7 @@ import androidx.preference.SwitchPreference;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
-import ml.docilealligator.infinityforreddit.CustomThemeWrapperReceiver;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapperReceiver;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 

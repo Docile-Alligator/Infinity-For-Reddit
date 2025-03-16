@@ -23,7 +23,8 @@
             android:gravity="center"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@null" />
 
         <ImageView
             android:id="@+id/option_2_bottom_app_bar"
@@ -33,7 +34,8 @@
             android:gravity="center"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@null" />
 
         <TextView
             android:layout_width="0dp"
@@ -49,7 +51,8 @@
             android:gravity="center"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@null" />
 
         <ImageView
             android:id="@+id/option_4_bottom_app_bar"
@@ -59,7 +62,8 @@
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:gravity="center"
-            android:background="?attr/selectableItemBackgroundBorderless" />
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@null" />
 
     </LinearLayout>
 

@@ -47,6 +47,7 @@
         android:layout_gravity="bottom|end"
         app:backgroundTint="?attr/colorPrimaryLightTheme"
         app:srcCompat="@drawable/ic_add_day_night_24dp"
+        android:contentDescription="@string/content_description_create_post_filter"
         app:tint="@android:color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

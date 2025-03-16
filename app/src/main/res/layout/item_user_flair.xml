@@ -24,7 +24,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginStart="16dp"
         android:padding="16dp"
-        android:src="@drawable/ic_edit_24dp"
+        android:src="@drawable/ic_edit_day_night_24dp"
         android:background="?actionBarItemBackground"
         android:clickable="true"
         android:focusable="true" />

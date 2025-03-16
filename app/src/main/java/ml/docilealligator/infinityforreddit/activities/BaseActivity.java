@@ -18,6 +18,8 @@ import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,8 +46,6 @@ import com.google.android.material.tabs.TabLayout;
 import java.lang.reflect.Field;
 import java.util.Locale;
 
-import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
-import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.account.Account;
@@ -81,6 +81,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
     public String accessToken;
     @NonNull
     public String accountName = Account.ANONYMOUS_ACCOUNT;
+    protected Handler mHandler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -232,6 +233,30 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
 
         accessToken = getCurrentAccountSharedPreferences().getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         accountName = getCurrentAccountSharedPreferences().getString(SharedPreferencesUtils.ACCOUNT_NAME, Account.ANONYMOUS_ACCOUNT);
+
+        mHandler = new Handler(Looper.getMainLooper());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && mSliderPanel != null) {
+            setTranslucent(true);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && mSliderPanel != null && !isFinishing()) {
+            mHandler.postDelayed(() -> setTranslucent(false), 500);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mHandler.removeCallbacksAndMessages(null);
     }
 
     public abstract SharedPreferences getDefaultSharedPreferences();
@@ -403,6 +428,44 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
                 touchSlopField.set(recyclerView, touchSlop * 4);
             }
         } catch (NoSuchFieldException | IllegalAccessException ignore) {}
+    }
+
+    protected void setOtherActivitiesFabContentDescription(FloatingActionButton fab, int fabOption) {
+        switch (fabOption) {
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS:
+                fab.setContentDescription(getString(R.string.content_description_submit_post));
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH:
+                fab.setContentDescription(getString(R.string.content_description_refresh));
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE:
+                fab.setContentDescription(getString(R.string.content_description_change_sort_type));
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT:
+                fab.setContentDescription(getString(R.string.content_description_change_post_layout));
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH:
+                fab.setContentDescription(getString(R.string.content_description_search));
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_SUBREDDIT:
+                fab.setContentDescription(getString(R.string.content_description_go_to_subreddit));
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_USER:
+                fab.setContentDescription(getString(R.string.content_description_go_to_user));
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_RANDOM:
+                fab.setContentDescription(getString(R.string.content_description_random));
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
+                fab.setContentDescription(getString(R.string.content_description_hide_read_posts));
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
+                fab.setContentDescription(getString(R.string.content_description_filter_posts));
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_TOP:
+                fab.setContentDescription(getString(R.string.content_description_go_to_top));
+                break;
+        }
     }
 
     @Override

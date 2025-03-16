@@ -10,6 +10,9 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
+import ml.docilealligator.infinityforreddit.network.AccessTokenAuthenticator;
+import ml.docilealligator.infinityforreddit.network.RedgifsAccessTokenAuthenticator;
+import ml.docilealligator.infinityforreddit.network.ServerAccessTokenAuthenticator;
 import ml.docilealligator.infinityforreddit.network.SortTypeConverterFactory;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import okhttp3.ConnectionPool;
@@ -72,11 +75,24 @@ abstract class NetworkModule {
     @Singleton
     static OkHttpClient provideOkHttpClient(@Named("base") OkHttpClient httpClient,
                                             @Named("base") Retrofit retrofit,
-                                            RedditDataRoomDatabase accountRoomDatabase,
+                                            RedditDataRoomDatabase redditDataRoomDatabase,
                                             @Named("current_account") SharedPreferences currentAccountSharedPreferences,
                                             ConnectionPool connectionPool) {
         return httpClient.newBuilder()
-                .authenticator(new AccessTokenAuthenticator(retrofit, accountRoomDatabase, currentAccountSharedPreferences))
+                .authenticator(new AccessTokenAuthenticator(retrofit, redditDataRoomDatabase, currentAccountSharedPreferences))
+                .connectionPool(connectionPool)
+                .build();
+    }
+
+    @Provides
+    @Named("server")
+    @Singleton
+    static OkHttpClient provideServerOkHttpClient(@Named("base") OkHttpClient httpClient,
+                                            RedditDataRoomDatabase redditDataRoomDatabase,
+                                            @Named("current_account") SharedPreferences currentAccountSharedPreferences,
+                                            ConnectionPool connectionPool) {
+        return httpClient.newBuilder()
+                .authenticator(new ServerAccessTokenAuthenticator(redditDataRoomDatabase, currentAccountSharedPreferences))
                 .connectionPool(connectionPool)
                 .build();
     }
@@ -156,24 +172,6 @@ abstract class NetworkModule {
     }
 
     @Provides
-    @Named("pushshift")
-    @Singleton
-    static Retrofit providePushshiftRetrofit(@Named("base") Retrofit retrofit) {
-        return retrofit.newBuilder()
-                .baseUrl(APIUtils.PUSHSHIFT_API_BASE_URI)
-                .build();
-    }
-
-    @Provides
-    @Named("reveddit")
-    @Singleton
-    static Retrofit provideRevedditRetrofit(@Named("base") Retrofit retrofit) {
-        return retrofit.newBuilder()
-                .baseUrl(APIUtils.REVEDDIT_API_BASE_URI)
-                .build();
-    }
-
-    @Provides
     @Named("vReddIt")
     @Singleton
     static Retrofit provideVReddItRetrofit(@Named("base") Retrofit retrofit) {
@@ -194,9 +192,10 @@ abstract class NetworkModule {
     @Provides
     @Named("online_custom_themes")
     @Singleton
-    static Retrofit provideOnlineCustomThemesRetrofit(@Named("base") Retrofit retrofit) {
+    static Retrofit provideOnlineCustomThemesRetrofit(@Named("base") Retrofit retrofit, @Named("server") OkHttpClient httpClient) {
         return retrofit.newBuilder()
-                .baseUrl(APIUtils.ONLINE_CUSTOM_THEMES_API_BASE_URI)
+                .baseUrl(APIUtils.SERVER_API_BASE_URI)
+                .client(httpClient)
                 .build();
     }
 

@@ -1,7 +1,9 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
@@ -23,13 +25,12 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.activities.SubredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.adapters.SubscribedSubredditsRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -104,7 +105,14 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
         if (getArguments().getBoolean(EXTRA_IS_SUBREDDIT_SELECTION)) {
             adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity, mExecutor, mOauthRetrofit, mRedditDataRoomDatabase,
                     mCustomThemeWrapper, mActivity.accessToken, mActivity.accountName, getArguments().getBoolean(EXTRA_EXTRA_CLEAR_SELECTION),
-                    (name, iconUrl, subredditIsUser) -> ((SubredditSelectionActivity) mActivity).getSelectedSubreddit(name, iconUrl, subredditIsUser));
+                    (name, iconUrl, subredditIsUser) -> {
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME, name);
+                        returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON, iconUrl);
+                        returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_THING_TYPE, subredditIsUser ? SelectThingReturnKey.THING_TYPE.USER : SelectThingReturnKey.THING_TYPE.SUBREDDIT);
+                        mActivity.setResult(Activity.RESULT_OK, returnIntent);
+                        mActivity.finish();
+                    });
         } else {
             adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity, mExecutor, mOauthRetrofit, mRedditDataRoomDatabase,
                     mCustomThemeWrapper, mActivity.accessToken, mActivity.accountName);

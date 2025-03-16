@@ -52,8 +52,6 @@
     <string name="action_unhide_post">"显示帖子"</string>
     <string name="action_edit_post">"编辑帖子"</string>
     <string name="action_delete_post">"删除帖子"</string>
-    <string name="action_mark_nsfw">"标记为 NSFW"</string>
-    <string name="action_unmark_nsfw">"取消标记 NSFW"</string>
     <string name="action_mark_spoiler">"标记为剧透"</string>
     <string name="action_unmark_spoiler">"取消标记剧透"</string>
     <string name="action_edit_flair">"编辑头衔"</string>
@@ -100,7 +98,6 @@
     <string name="load_messages_failed">"加载消息错误。
 点击以重试。"</string>
     <string name="no_messages">"空"</string>
-    <string name="nsfw">"NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="karma_info">"声望：%1$d"</string>
@@ -140,7 +137,6 @@
     <string name="unfollow_failed">"取消关注失败"</string>
 
     <!-- 参考国内一些评论，将“Subreddit”翻译为“社区” -->
-    <string name="content_description_banner_imageview">"版块横幅图片"</string>
 
     <!-- 这个感觉不必翻译 -->
     <string name="app_label">"Infinity"</string>
@@ -276,10 +272,6 @@
     <string name="edit_success">"编辑成功"</string>
     <string name="delete_post_success">"删除成功"</string>
     <string name="delete_post_failed">"删除失败"</string>
-    <string name="mark_nsfw_success">"已标记为 NSFW"</string>
-    <string name="mark_nsfw_failed">"标记 NSFW 失败"</string>
-    <string name="unmark_nsfw_success">"已取消标记 NSFW"</string>
-    <string name="unmark_nsfw_failed">"取消标记 NSFW 失败"</string>
     <string name="mark_spoiler_success">"标记剧透成功"</string>
     <string name="mark_spoiler_failed">"标记剧透失败"</string>
     <string name="unmark_spoiler_success">"取消标记剧透成功"</string>
@@ -310,7 +302,6 @@
     <string name="settigns_video_title">"视频"</string>
     <string name="settings_video_autoplay_title">"自动播放视频"</string>
     <string name="settings_mute_autoplaying_videos_title">"静音自动播放的视频"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"自动播放 NSFW 视频"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"自动播放视频可视区域偏移（竖屏）"</string>
 
     <!-- Fuzzy -->
@@ -332,7 +323,6 @@
     <string name="settings_volume_keys_navigate_comments_title">"在帖子内使用音量键浏览评论"</string>
     <string name="settings_volume_keys_navigate_posts_title">"使用音量键浏览帖子"</string>
     <string name="settings_mute_video_title">"静音视频"</string>
-    <string name="settings_mute_nsfw_video_title">"静音 NSFW 视频"</string>
 
     <!-- Fuzzy -->
     <string name="settings_video_player_ignore_nav_bar_title">"视频播放器中忽略导航栏"</string>
@@ -373,8 +363,6 @@
     <string name="settings_font_size_title">"字体大小"</string>
     <string name="settings_title_font_size_title">"标题字体大小"</string>
     <string name="settings_content_font_size_title">"内容字体大小"</string>
-    <string name="settings_enable_nsfw_title">"允许 NSFW"</string>
-    <string name="settings_blur_nsfw_title">"模糊 NSFW 图像"</string>
     <string name="settings_blur_spoiler_title">"模糊剧透图像"</string>
     <string name="settings_about_master_title">"关于"</string>
     <string name="settings_acknowledgement_master_title">"致谢"</string>
@@ -506,8 +494,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit_success">"删除成功"</string>
     <string name="delete_multi_reddit_failed">"删除失败"</string>
     <string name="delete_multi_reddit_dialog_message">"您确定吗？"</string>
-    <string name="enable_nsfw">"允许 NSFW"</string>
-    <string name="disable_nsfw">"禁止 NSFW"</string>
     <string name="cannot_save_image">"无法保存图像"</string>
     <string name="cannot_save_gif">"无法保存动图"</string>
     <string name="cannot_get_storage">"无法访问应用存储"</string>
@@ -627,10 +613,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_spoiler_background_color_detail">"适用于：剧透标签的背景"</string>
     <string name="theme_item_spoiler_text_color">"剧透文字颜色"</string>
     <string name="theme_item_spoiler_text_color_detail">"应用于：剧透标签的文字颜色"</string>
-    <string name="theme_item_nsfw_background_color">"NSFW 背景色"</string>
-    <string name="theme_item_nsfw_background_color_detail">"应用于：NSFW 标签的背景"</string>
-    <string name="theme_item_nsfw_text_color">"NSFW 文字颜色"</string>
-    <string name="theme_item_nsfw_text_color_detail">"应用于：NSFW 标签的文字颜色"</string>
     <string name="theme_item_flair_background_color">"头衔背景色"</string>
     <string name="theme_item_flair_background_color_detail">"应用于：头衔标签的背景"</string>
     <string name="theme_item_flair_text_color">"头衔文字颜色"</string>
@@ -803,7 +785,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_number_of_columns_in_post_feed_title">"帖子列表页面的列数"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"竖屏"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"横屏"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW 和剧透"</string>
     <string name="settings_delete_all_legacy_settings_title">"删除所有旧版设置"</string>
     <string name="restart_app_see_changes">"重新启动应用以查看更改"</string>
     <string name="settings_tab_count">"标签页数量"</string>
@@ -869,18 +850,12 @@ Reddit 视频分辨率较低。
 
     <!-- Fuzzy -->
     <string name="warning">"警告"</string>
-    <string name="this_is_a_nsfw_subreddit">"这是一个 NSFW 版块。"</string>
-    <string name="this_user_has_nsfw_content">"该用户有 NSFW 内容"</string>
     <string name="dismiss">"忽略"</string>
     <string name="leave">"离开"</string>
     <string name="go_to_subreddit">"前往版块"</string>
     <string name="go_to_user">"查看用户"</string>
     <string name="go_to_thing_hint">"名称"</string>
     <string name="random">"随机"</string>
-    <string name="random_subreddit">"随机版块"</string>
-    <string name="random_nsfw_subreddit">"随机 NSFW 版块"</string>
-    <string name="random_post">"随机帖子"</string>
-    <string name="random_nsfw_post">"随机 NSFW 帖子"</string>
     <string name="fetch_random_thing_failed">"请稍后重试"</string>
     <string name="downloading">"正在下载"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all 和 r/popular 版块"</string>
@@ -944,7 +919,6 @@ Reddit 视频分辨率较低。
     <string name="delete_all_read_posts_success">"成功删除所有已读帖子"</string>
     <string name="hide_read_posts">"隐藏已读帖子"</string>
     <string name="filter_posts">"过滤帖子"</string>
-    <string name="only_nsfw">"仅 NSFW"</string>
     <string name="only_spoiler">"仅剧透"</string>
     <string name="title_excludes_strings_hint">"标题：排除关键词（关键词1,关键词2）"</string>
     <string name="title_excludes_regex_hint">"标题：排除正则表达式"</string>
@@ -991,7 +965,6 @@ Reddit 视频分辨率较低。
     <string name="action_share_link">"分享链接"</string>
     <string name="action_copy_link">"复制链接"</string>
     <string name="action_add_to_post_filter">"添加到帖子过滤器"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"在 NSFW 版块中不模糊 NSFW 图片"</string>
     <string name="settings_show_avatar_on_the_right">"在右侧显示头像"</string>
     <string name="settings_backup_settings_title">"备份设置"</string>
     <string name="settings_restore_settings_title">"恢复设置"</string>
@@ -1055,16 +1028,12 @@ Reddit 视频分辨率较低。
     <string name="settings_hide_post_flair">"隐藏帖子头衔"</string>
     <string name="settings_crash_reports_title">"崩溃报告"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"危险"</string>
-    <string name="settings_disable_nsfw_forever_title">"永久禁用 NSFW"</string>
     <string name="settings_show_only_one_comment_level_indicator">"仅显示一个评论层级指示"</string>
     <string name="save_comment">"保存"</string>
     <string name="unsave_comment">"取消保存"</string>
     <string name="copy_multi_reddit_path">"复制聚合版块路径"</string>
     <string name="copy_multi_reddit_path_failed">"无法复制聚合版块路径"</string>
     <string name="crash_reports_deleted">"崩溃报告已删除"</string>
-    <string name="disable_nsfw_forever_message">"启用此选项后，NSFW 内容将被永久禁用，无论您是否开启 NSFW 设置。除非彻底清除应用数据，否则无法撤销此选项。
-
-仍然要继续吗？"</string>
     <string name="reply">"回复"</string>
     <string name="post_gallery_activity_label">"相册帖"</string>
     <string name="action_share_post_link">"分享帖子链接"</string>
@@ -1170,8 +1139,6 @@ Reddit 视频分辨率较低。
     <string name="app_lock_timeout_24_hours">"24 小时"</string>
     <string name="edit_profile_activity_label">"编辑档案"</string>
     <string name="action_contact_mods">"联系管理员"</string>
-    <string name="settings_save_nsfw_media_in_different_folder_title">"在不同的位置保存 NSFW 媒体"</string>
-    <string name="settings_nsfw_download_location_title">"NSFW 下载位置"</string>
     <string name="fetch_streamable_video_failed">"获取流式传输视频失败"</string>
 
     <!-- EditProfileService Notification -->

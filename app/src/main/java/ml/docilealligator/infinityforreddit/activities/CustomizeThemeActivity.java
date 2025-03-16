@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -29,7 +28,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.adapters.CustomizeThemeRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.apis.OnlineCustomThemeAPI;
+import ml.docilealligator.infinityforreddit.apis.ServerAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCustomTheme;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertCustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
@@ -38,6 +37,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customtheme.OnlineCustomThemeMetadata;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCustomizeThemeBinding;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -176,7 +176,7 @@ public class CustomizeThemeActivity extends BaseActivity {
                 } else {
                     if (onlineCustomThemeMetadata != null) {
                         binding.progressBarCustomizeThemeActivity.setVisibility(View.VISIBLE);
-                        onlineCustomThemesRetrofit.create(OnlineCustomThemeAPI.class)
+                        onlineCustomThemesRetrofit.create(ServerAPI.class)
                                 .getCustomTheme(onlineCustomThemeMetadata.name, onlineCustomThemeMetadata.username)
                                 .enqueue(new Callback<>() {
                                     @Override
@@ -253,28 +253,53 @@ public class CustomizeThemeActivity extends BaseActivity {
                     new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                             .setTitle(R.string.save_theme_options_title)
                             //.setMessage(R.string.save_theme_options_message)
-                            .setSingleChoiceItems(R.array.save_theme_options, 0, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    option[0] = which;
-                                }
-                            })
+                            .setSingleChoiceItems(R.array.save_theme_options, 0, (dialog, which) -> option[0] = which)
                             .setPositiveButton(R.string.ok, (dialogInterface, which) -> {
                                 switch (option[0]) {
                                     case 0:
                                         saveThemeLocally(customTheme);
                                         break;
                                     case 1:
-                                        saveThemeOnline(customTheme);
+                                        saveThemeOnline(customTheme, false);
                                         break;
                                     case 2:
                                         saveThemeLocally(customTheme);
-                                        saveThemeOnline(customTheme);
+                                        saveThemeOnline(customTheme, false);
+                                        break;
                                 }
                             })
                             .setNegativeButton(R.string.cancel, null)
                             .show();
                 } else {
+                    /*// This custom theme is from the server but not uploaded by the current user, or it is local
+                    final int[] option = {0};
+                    new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                            .setTitle(R.string.save_theme_options_title)
+                            //.setMessage(R.string.save_theme_options_message)
+                            .setSingleChoiceItems(R.array.save_theme_options_anonymous_included, 0, (dialog, which) -> option[0] = which)
+                            .setPositiveButton(R.string.ok, (dialogInterface, which) -> {
+                                switch (option[0]) {
+                                    case 0:
+                                        saveThemeLocally(customTheme);
+                                        break;
+                                    case 1:
+                                        saveThemeOnline(customTheme, false);
+                                        break;
+                                    case 2:
+                                        saveThemeOnline(customTheme, true);
+                                        break;
+                                    case 3:
+                                        saveThemeLocally(customTheme);
+                                        saveThemeOnline(customTheme, false);
+                                        break;
+                                    case 4:
+                                        saveThemeLocally(customTheme);
+                                        saveThemeOnline(customTheme, true);
+                                        break;
+                                }
+                            })
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();*/
                     saveThemeLocally(customTheme);
                 }
             }
@@ -295,12 +320,25 @@ public class CustomizeThemeActivity extends BaseActivity {
                 });
     }
 
-    private void saveThemeOnline(CustomTheme customTheme) {
-        onlineCustomThemesRetrofit.create(OnlineCustomThemeAPI.class).modifyTheme(
-                onlineCustomThemeMetadata.id, customTheme.name,
-                customTheme.getJSONModel(),
-                ('#' + Integer.toHexString(customTheme.colorPrimary)).toUpperCase()
-        ).enqueue(new Callback<>() {
+    private void saveThemeOnline(CustomTheme customTheme, boolean anonymous) {
+        Call<String> request;
+        // TODO server access token
+        if (onlineCustomThemeMetadata != null) {
+            request = onlineCustomThemesRetrofit.create(ServerAPI.class).modifyTheme(
+                    APIUtils.getServerHeader("", accountName, anonymous),
+                    onlineCustomThemeMetadata.id,
+                    customTheme.name,
+                    customTheme.getJSONModel()
+            );
+        } else {
+            request = onlineCustomThemesRetrofit.create(ServerAPI.class).createTheme(
+                    APIUtils.getServerHeader("", accountName, anonymous),
+                    customTheme.name,
+                    customTheme.getJSONModel()
+            );
+        }
+
+        request.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {

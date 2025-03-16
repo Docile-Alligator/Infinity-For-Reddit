@@ -318,7 +318,7 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         int secondaryTextColor = activity.customThemeWrapper.getSecondaryTextColor();
         int accentColor = activity.customThemeWrapper.getColorAccent();
         binding.infoTextViewCustomizeBottomAppBarFragment.setTextColor(secondaryTextColor);
-        Drawable infoDrawable = Utils.getTintedDrawable(activity, R.drawable.ic_info_preference_24dp, activity.customThemeWrapper.getPrimaryIconColor());
+        Drawable infoDrawable = Utils.getTintedDrawable(activity, R.drawable.ic_info_preference_day_night_24dp, activity.customThemeWrapper.getPrimaryIconColor());
         binding.infoTextViewCustomizeBottomAppBarFragment.setCompoundDrawablesWithIntrinsicBounds(infoDrawable, null, null, null);
         binding.mainActivityGroupSummaryCustomizeBottomAppBarFragment.setTextColor(accentColor);
         binding.mainActivityOptionCountTitleTextViewCustomizeBottomAppBarFragment.setTextColor(primaryTextColor);

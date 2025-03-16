@@ -46,8 +46,6 @@
     <string name="action_unhide_post">"Bejegyzés megjelenítése"</string>
     <string name="action_edit_post">"Bejegyzés szerkesztése"</string>
     <string name="action_delete_post">"Bejegyzés törlése"</string>
-    <string name="action_mark_nsfw">"NSFW jelölés"</string>
-    <string name="action_unmark_nsfw">"NSFW jelölés visszavonása"</string>
     <string name="action_mark_spoiler">"Spoiler jelölés"</string>
     <string name="action_unmark_spoiler">"Spoiler jelölés visszavonása"</string>
     <string name="action_edit_flair">"Címke szerkesztése"</string>
@@ -86,7 +84,6 @@
     <string name="refresh_post_failed">"Hiba a bejegyzés újratöltése során"</string>
     <string name="load_messages_failed">"Hiba az üzenetek betöltése során. Koppintson az újrapróbálkozáshoz."</string>
     <string name="no_messages">"Üres"</string>
-    <string name="nsfw">"NSFW"</string>
     <string name="karma_info">"Karma: %1$d"</string>
     <string name="karma_info_user_detail">"Karma:
 %1$d (%2$d + %3$d)"</string>
@@ -124,7 +121,6 @@
     <string name="follow_failed">"Követés sikertelen"</string>
     <string name="unfollowed">"Követés megszüntetve"</string>
     <string name="unfollow_failed">"Követés megszüntetése sikertelen"</string>
-    <string name="content_description_banner_imageview">"Subreddit borítóképe"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Keressen bármire"</string>
     <string name="no_posts_no_lazy_mode">"Nincs rendelkezésre álló bejegyzés"</string>
@@ -250,10 +246,6 @@
     <string name="edit_success">"A szerkesztés sikeres"</string>
     <string name="delete_post_success">"A törlés sikeres"</string>
     <string name="delete_post_failed">"A törlés sikertelen"</string>
-    <string name="mark_nsfw_success">"Az NSFW-nek jelölés sikeres"</string>
-    <string name="mark_nsfw_failed">"Az NSFW-nek jelölés sikertelen"</string>
-    <string name="unmark_nsfw_success">"Az NSFW-nek jelölés visszavonása sikeres"</string>
-    <string name="unmark_nsfw_failed">"Az NSFW-nek jelölés visszavonása sikertelen"</string>
     <string name="mark_spoiler_success">"A spoilernek jelölés sikeres"</string>
     <string name="mark_spoiler_failed">"A spoilernek jelölés sikertelen"</string>
     <string name="unmark_spoiler_success">"A spoilernek jelölés visszavonása sikeres"</string>
@@ -284,7 +276,6 @@
     <string name="settigns_video_title">"Videó"</string>
     <string name="settings_video_autoplay_title">"Videó automatikus lejátszása"</string>
     <string name="settings_mute_autoplaying_videos_title">"Automatikusan lejátszott videók némítása"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"NSFW videó automatikus lejátszása"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Automatikusan lejátszott videók látható területének eltolása (álló módban)"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Videó automatikus lejátszása, ha %1$d%%-a látszódik"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Automatikusan lejátszott videók látható területének eltolása (fekvő módban)"</string>
@@ -300,7 +291,6 @@
     <string name="settings_volume_keys_navigate_comments_title">"Hangerőgombok használata a hozzászólások közti navigációra"</string>
     <string name="settings_volume_keys_navigate_posts_title">"Hangerőgombok használata a bejegyzések közti navigációra"</string>
     <string name="settings_mute_video_title">"Videók némítása"</string>
-    <string name="settings_mute_nsfw_video_title">"NSFW videók némítása"</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Navigációs sáv mellőzése a videólejátszóban"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"A videóvezérlő extra margójának megakadályozása"</string>
     <string name="settings_confirm_to_exit">"Kilépés megerősítése"</string>
@@ -339,8 +329,6 @@
     <string name="settings_font_size_title">"Betűtípus méret"</string>
     <string name="settings_title_font_size_title">"Cím betűtípus méret"</string>
     <string name="settings_content_font_size_title">"Tartalom betűtípus méret"</string>
-    <string name="settings_enable_nsfw_title">"NSFW engedélyezése"</string>
-    <string name="settings_blur_nsfw_title">"NSFW képek homályosítása"</string>
     <string name="settings_blur_spoiler_title">"Spoiler képek homályosítása"</string>
     <string name="settings_about_master_title">"Az appról"</string>
     <string name="settings_acknowledgement_master_title">"Köszönet"</string>
@@ -481,8 +469,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit_success">"Törlés sikeres"</string>
     <string name="delete_multi_reddit_failed">"Törlés nem sikerült"</string>
     <string name="delete_multi_reddit_dialog_message">"Biztos vagy benne?"</string>
-    <string name="enable_nsfw">"NSFW engedélyezése"</string>
-    <string name="disable_nsfw">"NSFW tiltása"</string>
     <string name="cannot_save_image">"Nem lehet menteni a képet"</string>
     <string name="cannot_save_gif">"Nem lehet menteni a gifet"</string>
     <string name="cannot_get_storage">"Nem lehet hozzáférni az app tárhelyéhez"</string>
@@ -578,10 +564,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_spoiler_background_color_detail">"Beállítva: Spoiler címke hátterére"</string>
     <string name="theme_item_spoiler_text_color">"Spoiler szöveg szín"</string>
     <string name="theme_item_spoiler_text_color_detail">"Beállítva: Spoiler címke szöveg színére"</string>
-    <string name="theme_item_nsfw_background_color">"NSFW háttérszín"</string>
-    <string name="theme_item_nsfw_background_color_detail">"Beállítva: NSFW címke hátterére"</string>
-    <string name="theme_item_nsfw_text_color">"NSFW szöveg szín"</string>
-    <string name="theme_item_nsfw_text_color_detail">"Beállítva: NSFW címke színére"</string>
     <string name="theme_item_flair_background_color">"Flair háttérszín"</string>
     <string name="theme_item_flair_background_color_detail">"Beállítva: Flair címke hátterére"</string>
     <string name="theme_item_flair_text_color">"Flair szöveg szín"</string>
@@ -756,7 +738,6 @@ Az alap az indigó amoled téma"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Az oszlopok száma a poszt feedben"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Portré"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Tájlép"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW és Spoiler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Összes elavult beállítás törlése."</string>
     <string name="restart_app_see_changes">"Indítsd újra az appot, hogy lásd a változásokat"</string>
     <string name="settings_tab_count">"Fülek száma"</string>
@@ -825,18 +806,12 @@ Videó autómatikus lejátszása le van tiltva."</string>
 
     <!-- Fuzzy -->
     <string name="warning">"Figyelem"</string>
-    <string name="this_is_a_nsfw_subreddit">"Ez egy NSFW subreddit."</string>
-    <string name="this_user_has_nsfw_content">"Ennek a felhasználónak van NSFW tartlama"</string>
     <string name="dismiss">"Elutasít"</string>
     <string name="leave">"Elhagy"</string>
     <string name="go_to_subreddit">"Subreddithez"</string>
     <string name="go_to_user">"Felhasználóhoz"</string>
     <string name="go_to_thing_hint">"Név"</string>
     <string name="random">"Random"</string>
-    <string name="random_subreddit">"Random subreddit"</string>
-    <string name="random_nsfw_subreddit">"Random NSFW subreddit"</string>
-    <string name="random_post">"Random poszt"</string>
-    <string name="random_nsfw_post">"Random NSFW poszt"</string>
     <string name="fetch_random_thing_failed">"Próbáld újra később"</string>
     <string name="downloading">"Letöltés"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all és r/popular"</string>
@@ -898,7 +873,6 @@ Videó autómatikus lejátszása le van tiltva."</string>
     <string name="delete_all_read_posts_success">"Összes olvasott poszt törlése sikeres"</string>
     <string name="hide_read_posts">"Olvasott posztok elrejtése"</string>
     <string name="filter_posts">"Posztok szűrése"</string>
-    <string name="only_nsfw">"Csak NSFW"</string>
     <string name="only_spoiler">"Csak Spoiler"</string>
     <string name="title_excludes_strings_hint">"Cím: kulcsszavak (kulcs1,kulcs2) kizárása"</string>
     <string name="title_excludes_regex_hint">"Cím: regex kizárása"</string>
@@ -947,7 +921,6 @@ Videó autómatikus lejátszása le van tiltva."</string>
     <string name="action_share_link">"Link megosztása"</string>
     <string name="action_copy_link">"Link másolása"</string>
     <string name="action_add_to_post_filter">"Hozzáadás poszt filterhez"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Ne homályosítson el NSFW képeket NSFW subredditeken"</string>
     <string name="settings_show_avatar_on_the_right">"Avatár megjelenítése a jobb oldalon"</string>
     <string name="settings_backup_settings_title">"Beállítások biztonsági mentése"</string>
     <string name="settings_restore_settings_title">"Beállítások visszaállítása"</string>

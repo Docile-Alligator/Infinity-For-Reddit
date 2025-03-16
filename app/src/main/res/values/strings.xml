@@ -46,7 +46,7 @@
     <string name="history_activity_label">History</string>
     <string name="subscription_activity_label">Subscription</string>
     <string name="comment_filter_preference_activity_label">Comment Filter</string>
-    <string name="customize_comment_filter_activity_label">Customize Post Filter</string>
+    <string name="customize_comment_filter_activity_label">Customize Comment Filter</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -65,8 +65,8 @@
     <string name="action_unhide_post">Unhide Post</string>
     <string name="action_edit_post">Edit Post</string>
     <string name="action_delete_post">Delete Post</string>
-    <string name="action_mark_nsfw">Mark NSFW</string>
-    <string name="action_unmark_nsfw">Unmark NSFW</string>
+    <string name="action_mark_nsfw">Mark Sensitive</string>
+    <string name="action_unmark_nsfw">Unmark Sensitive</string>
     <string name="action_mark_spoiler">Mark Spoiler</string>
     <string name="action_unmark_spoiler">Unmark Spoiler</string>
     <string name="action_edit_flair">Edit Flair</string>
@@ -98,6 +98,9 @@
     <string name="action_contact_mods">Contact Mods</string>
     <string name="action_more_options">More Options</string>
     <string name="action_add_to_home_screen">Add to Home screen</string>
+    <string name="action_reset_fab_position">Reset FAB position</string>
+    <string name="action_download_all_gallery_media">Download All Gallery Media</string>
+    <string name="action_download_all_imgur_album_media">Download All Imgur Album Media</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -128,7 +131,7 @@
     <string name="load_messages_failed">Error loading messages.\nTap to retry.</string>
     <string name="no_messages">Empty</string>
 
-    <string name="nsfw">NSFW</string>
+    <string name="nsfw">Sensitive</string>
     <string name="karma_info">Karma: %1$,d</string>
     <string name="karma_info_user_detail">Karma:\n%1$,d (%2$d + %3$d)</string>
     <string name="cakeday_info">Cake day:\n%1$s</string>
@@ -166,12 +169,11 @@
     <string name="unfollowed">Unfollowed</string>
     <string name="unfollow_failed">Unfollowing Failed</string>
 
-    <string name="content_description_banner_imageview">Subreddit Banner Image</string>
-
     <string name="app_label">Infinity</string>
     <string name="search_hint">Search anything</string>
     <string name="search_only_subreddits_hint">Search subreddits</string>
     <string name="search_only_users_hint">Search users</string>
+    <string name="search_subreddits_and_users_hint">Search subreddits and users</string>
 
     <string name="no_posts_no_lazy_mode">No posts available</string>
     <string name="lazy_mode_start">Lazy Mode starts in %1$.1fs</string>
@@ -265,6 +267,9 @@
 
     <string name="confirm">Confirm</string>
     <string name="confirm_delete_all_recent_searches">Are you sure you want to delete all recent search queries?</string>
+    <string name="all_recent_searches_deleted">All recent searches deleted</string>
+    <string name="recent_search_deleted">Recent search Deleted</string>
+    <string name="undo">Undo</string>
 
     <string name="sort_best">Best</string>
     <string name="sort_hot">Hot</string>
@@ -337,10 +342,10 @@
     <string name="edit_success">Edit successfully</string>
     <string name="delete_post_success">Delete successfully</string>
     <string name="delete_post_failed">Delete failed</string>
-    <string name="mark_nsfw_success">Mark NSFW successfully</string>
-    <string name="mark_nsfw_failed">Mark NSFW failed</string>
-    <string name="unmark_nsfw_success">Unmark NSFW successfully</string>
-    <string name="unmark_nsfw_failed">Unmark NSFW failed</string>
+    <string name="mark_nsfw_success">Mark sensitive successfully</string>
+    <string name="mark_nsfw_failed">Mark sensitive failed</string>
+    <string name="unmark_nsfw_success">Unmark sensitive successfully</string>
+    <string name="unmark_nsfw_failed">Unmark sensitive failed</string>
     <string name="mark_spoiler_success">Mark spoiler successfully</string>
     <string name="mark_spoiler_failed">Mark spoiler failed</string>
     <string name="unmark_spoiler_success">Unmark spoiler successfully</string>
@@ -379,7 +384,7 @@
     <string name="settigns_video_title">Video</string>
     <string name="settings_video_autoplay_title">Video Autoplay</string>
     <string name="settings_mute_autoplaying_videos_title">Mute Autoplaying Videos</string>
-    <string name="settings_autoplay_nsfw_videos_title">Autoplay NSFW Videos</string>
+    <string name="settings_autoplay_nsfw_videos_title">Autoplay Sensitive Videos</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">Autoplay Videos Visible Area Offset (Portrait)</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">Start autoplaying videos when %1$d%% of them are visible</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">Autoplay Videos Visible Area Offset (Landscape)</string>
@@ -397,7 +402,7 @@
     <string name="settings_volume_keys_navigate_comments_title">Use Volume Keys to Navigate Comments in Posts</string>
     <string name="settings_volume_keys_navigate_posts_title">Use Volume Keys to Navigate Posts</string>
     <string name="settings_mute_video_title">Mute Videos</string>
-    <string name="settings_mute_nsfw_video_title">Mute NSFW Videos</string>
+    <string name="settings_mute_nsfw_video_title">Mute Sensitive Videos</string>
     <string name="settings_video_player_ignore_nav_bar_title">Ignore Navigation Bar in Video Player</string>
     <string name="settings_video_player_ignore_nav_bar_summary">Prevent the Video Controller Having Extra Margin</string>
     <string name="settings_main_page_back_button_action">Main Page Back Button Action</string>
@@ -441,11 +446,11 @@
     <string name="settings_font_size_title">Font Size</string>
     <string name="settings_title_font_size_title">Title Font Size</string>
     <string name="settings_content_font_size_title">Content Font Size</string>
-    <string name="settings_nsfw_and_spoiler_title">NSFW &amp; Spoiler</string>
-    <string name="settings_enable_nsfw_title">Enable NSFW</string>
-    <string name="settings_blur_nsfw_title">Blur NSFW Images</string>
+    <string name="settings_over_18_and_spoiler_title">Content Sensitivity Filter</string>
+    <string name="settings_over_18_title">Sensitive Content</string>
+    <string name="settings_blur_over_18_title">Blur Sensitive Images</string>
     <string name="settings_blur_spoiler_title">Blur Spoiler Images</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">Don\'t blur NSFW Images in NSFW Subreddits</string>
+    <string name="settings_do_not_blur_over_18_in_over_18_subreddits_title">Don\'t blur Sensitive Images in Sensitive Subreddits</string>
     <string name="settings_about_master_title">About</string>
     <string name="settings_acknowledgement_master_title">Acknowledgement</string>
     <string name="settings_credits_master_title">Credits</string>
@@ -521,8 +526,8 @@
     <string name="settings_gif_download_location_title">Gif Download Location</string>
     <string name="settings_video_download_location_title">Video Download Location</string>
     <string name="settings_separate_folder_for_each_subreddit">Separate Folder for Each Subreddit</string>
-    <string name="settings_save_nsfw_media_in_different_folder_title">Save NSFW Media in Different Location</string>
-    <string name="settings_nsfw_download_location_title">NSFW Download Location</string>
+    <string name="settings_save_nsfw_media_in_different_folder_title">Save Sensitive Media in Different Location</string>
+    <string name="settings_nsfw_download_location_title">Sensitive Download Location</string>
     <string name="settings_swipe_action_title">Swipe Action</string>
     <string name="settings_swipe_action_haptic_feedback_title">Haptic Feedback</string>
     <string name="settings_disable_swiping_between_tabs_title">Disable Swiping Between Tabs</string>
@@ -565,6 +570,9 @@
     <string name="settings_enable_search_history_title">Enable Search History</string>
     <string name="settings_post_history_title">Post History</string>
     <string name="settings_mark_posts_as_read_title">Mark Posts as Read</string>
+    <string name="settings_read_posts_limit_title">Limit Read Posts</string>
+    <string name="settings_read_posts_limit_hint">Set read posts limit</string>
+    <string name="settings_read_posts_db_summary">Read Posts DB Table \nSize: %1$d(KB) \nCount: %2$d</string>
     <string name="settings_mark_posts_as_read_after_voting_title">Mark Posts as Read After Voting</string>
     <string name="settings_mark_posts_as_read_on_scroll_title">Mark Posts as Read on Scroll</string>
     <string name="settings_hide_read_posts_automatically_title">Hide Read Posts Automatically</string>
@@ -598,7 +606,7 @@
     <string name="settings_default_search_result_tab">Default Search Result Tab</string>
     <string name="settings_crash_reports_title">Crash Reports</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">Dangerous</string>
-    <string name="settings_disable_nsfw_forever_title">Disable NSFW Forever</string>
+    <string name="settings_disable_over_18_forever_title">Forever Disable Sensitive Content</string>
     <string name="settings_show_only_one_comment_level_indicator">Show Only One Comment Level Indicator</string>
     <string name="settings_video_player_automatic_landscape_orientation">Switch to Landscape Orientation in Video Player Automatically</string>
     <string name="settings_loop_video_title">Loop Video</string>
@@ -680,6 +688,7 @@
     <string name="link_post_layout_auto">Auto</string>
     <string name="post_layout_card">Card Layout</string>
     <string name="post_layout_compact">Compact Layout</string>
+    <string name="post_layout_compact_2">Compact Layout 2</string>
     <string name="post_layout_gallery">Gallery Layout</string>
     <string name="post_layout_card_2">Card Layout 2</string>
     <string name="post_layout_card_3">Card Layout 3</string>
@@ -733,6 +742,7 @@
     <string name="device_default">Device Default</string>
     <string name="set_by_battery_saver">Set by Battery Saver</string>
 
+    <string name="multi_reddit_name_explanation">The name should be unique.</string>
     <string name="multi_reddit_name_hint">Name (Max 50 Characters)</string>
     <string name="multi_reddit_description_hint">Description</string>
     <string name="private_multi_reddit">Private</string>
@@ -744,9 +754,6 @@
     <string name="delete_multi_reddit_success">Deleted successfully</string>
     <string name="delete_multi_reddit_failed">Delete failed</string>
     <string name="delete_multi_reddit_dialog_message">Are you sure?</string>
-
-    <string name="enable_nsfw">Enable NSFW</string>
-    <string name="disable_nsfw">Disable NSFW</string>
 
     <string name="cannot_save_image">Cannot save the image</string>
     <string name="cannot_save_gif">Cannot save the gif</string>
@@ -858,10 +865,10 @@
     <string name="theme_item_spoiler_background_color_detail">Applied to: Background of the spoiler tag</string>
     <string name="theme_item_spoiler_text_color">Spoiler Text Color</string>
     <string name="theme_item_spoiler_text_color_detail">Applied to: Text color in the spoiler tag</string>
-    <string name="theme_item_nsfw_background_color">NSFW Background Color</string>
-    <string name="theme_item_nsfw_background_color_detail">Applied to: Background of the NSFW tag</string>
-    <string name="theme_item_nsfw_text_color">NSFW text color</string>
-    <string name="theme_item_nsfw_text_color_detail">Applied to: Text color of the NSFW tag</string>
+    <string name="theme_item_nsfw_background_color">Sensitive Tag Background Color</string>
+    <string name="theme_item_nsfw_background_color_detail">Applied to: Background of the sensitive tag</string>
+    <string name="theme_item_nsfw_text_color">Sensitive Tag Text Color</string>
+    <string name="theme_item_nsfw_text_color_detail">Applied to: Text color of the sensitive tag</string>
     <string name="theme_item_flair_background_color">Flair Background Color</string>
     <string name="theme_item_flair_background_color_detail">Applied to: Background of the flair tag</string>
     <string name="theme_item_flair_text_color">Flair Text Color</string>
@@ -971,7 +978,9 @@
     <string name="save_theme_options_message">You uploaded this theme so you can make changes.</string>
     <string name="save_locally">Save locally</string>
     <string name="save_online">Save online</string>
+    <string name="save_online_anonymous">Save online (anonymously)</string>
     <string name="save_locally_and_online">Save both locally and online</string>
+    <string name="save_locally_and_online_anonymous">Save both locally and online (anonymously)</string>
     <string name="theme_saved_locally">Theme saved locally</string>
     <string name="theme_saved_online">Theme saved online</string>
     <string name="upload_theme_failed">Failed to upload this theme. Try again later.</string>
@@ -1046,6 +1055,12 @@
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">Download failed: cannot access destination directory</string>
     <string name="downloading_media_failed_cannot_download_media">Download failed</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">Download failed: cannot save the file to destination directory</string>
+    <string name="download_media_failed_cannot_fetch_redgifs_url">Download failed: cannot fetch Redgifs video url</string>
+    <string name="download_media_failed_cannot_fetch_streamable_url">Download failed: cannot fetch Streamable video url</string>
+    <string name="download_media_failed_invalid_argument">Invalid argument</string>
+    <string name="download_all_gallery_media_notification_title">All Gallery Media</string>
+    <string name="download_all_imgur_album_media_notification_title">All Imgur Album Media</string>
+    <string name="download_gallery_failed_some_images">Downloaded. Some media failed to download.</string>
 
     <string name="wallpaper_set">Wallpaper set</string>
     <string name="error_set_wallpaper">Cannot set wallpaper</string>
@@ -1090,8 +1105,8 @@
     <string name="edited_time">Edited on %s</string>
 
     <string name="warning">Warning</string>
-    <string name="this_is_a_nsfw_subreddit">This is a NSFW subreddit.</string>
-    <string name="this_user_has_nsfw_content">This user has NSFW content</string>
+    <string name="this_is_a_nsfw_subreddit">This is a sensitive subreddit.</string>
+    <string name="this_user_has_nsfw_content">This user has sensitive content</string>
     <string name="dismiss">Dismiss</string>
     <string name="leave">Leave</string>
 
@@ -1101,9 +1116,9 @@
     <string name="go_to_top">Go To Top</string>
     <string name="random">Random</string>
     <string name="random_subreddit">Random Subreddit</string>
-    <string name="random_nsfw_subreddit">Random NSFW Subreddit</string>
+    <string name="random_nsfw_subreddit">Random Sensitive Subreddit</string>
     <string name="random_post">Random Post</string>
-    <string name="random_nsfw_post">Random NSFW post</string>
+    <string name="random_nsfw_post">Random Sensitive post</string>
     <string name="fetch_random_thing_failed">Try again later</string>
 
     <string name="select_video_quality">Select Video Quality</string>
@@ -1111,7 +1126,7 @@
     <string name="hide_read_posts">Hide Read Posts</string>
     <string name="filter_posts">Filter Posts</string>
 
-    <string name="only_nsfw">Only NSFW</string>
+    <string name="only_sensitive_content">Only Sensitive Content</string>
     <string name="only_spoiler">Only Spoiler</string>
     <string name="title_excludes_strings_hint">Title: excludes keywords (key1,key2)</string>
     <string name="title_contains_strings_hint">Title: contains keywords (key1,key2)</string>
@@ -1150,6 +1165,23 @@
     <string name="edit_post_filter_name_of_usage_info">Leave it blank to apply this post filter to all the subreddits / users / multireddits</string>
     <string name="click_to_apply_post_filter">Click here to apply it to some post feeds</string>
     <string name="post_filter_usage_embedded_more_count">and %1$d more</string>
+    <string name="post_filter_name_explanation">The post filter name should be unique.</string>
+    <string name="post_filter_post_type_explanation">To see certain types of posts, please turn on the switch corresponding to the types.</string>
+    <string name="post_filter_only_sensitive_spoiler_explanation">To only see sensitive or spoiler posts, please turn on the corresponding switch.</string>
+    <string name="post_filter_title_excludes_strings_explanation">Posts will be filtered out if they contain the following keywords in their title.</string>
+    <string name="post_filter_title_contains_strings_explanation">Posts will be filtered out if they do not contain the following keywords in their title.</string>
+    <string name="post_filter_title_excludes_regex_explanation">Posts will be filtered out if their title matches the following regular expression.</string>
+    <string name="post_filter_title_contains_regex_explanation">Posts will be filtered out if their title does not match the following regular expression.</string>
+    <string name="post_filter_exclude_subreddits_explanation">Posts from the following subreddits will be filtered out.</string>
+    <string name="post_filter_exclude_users_explanation">Posts submitted by the following users will be filtered out.</string>
+    <string name="post_filter_exclude_flairs_explanation">Posts that have the following flairs will be filtered out.</string>
+    <string name="post_filter_contain_flairs_explanation">Posts that do not have the following flairs will be filtered out.</string>
+    <string name="post_filter_exclude_domains_explanation">Link posts that have the following urls will be filtered out.</string>
+    <string name="post_filter_contain_domains_explanation">Link posts that do not have the following urls will be filtered out.</string>
+    <string name="post_filter_min_vote_explanation">Posts that have a score lower than the following value will be filtered out (-1 means no restriction).</string>
+    <string name="post_filter_max_vote_explanation">Posts that have a score higher than the following value will be filtered out (-1 means no restriction).</string>
+    <string name="post_filter_min_comments_explanation">Posts will be filtered out if the number of their comments is less than the following value. (-1 means no restriction).</string>
+    <string name="post_filter_max_comments_explanation">Posts will be filtered out if the number of their comments is larger than the following value. (-1 means no restriction).</string>
 
     <string name="excludes_strings_hint">Exclude keywords (key1,key2)</string>
     <string name="comment_filter_name_hint">Comment Filter Name</string>
@@ -1219,18 +1251,18 @@
 
     <string name="crash_reports_deleted">Crash reports have been deleted</string>
 
-    <string name="disable_nsfw_forever_message">Once enabled, NSFW will be permanently disabled, regardless of whether the NSFW setting is enabled or not. This option is irreversible, the only way to re-enable NSFW is to clear the app data.\n\nDo you still want to enable it?</string>
+    <string name="disable_over_18_forever_message">Once enabled, sensitive content will always be hidden, regardless of the sensitive content setting. This option is irreversible; the only way to re-enable the sensitive content is to clear the app data.\n\nDo you still want to enable it?</string>
 
     <string name="reply">Reply</string>
 
     <string name="uploaded_images">Uploaded Images</string>
     <string name="uploaded_images_explanation">This is an experimental feature, and here are some things you need to know:\n
         1. Uploaded images will not be shown in the text editor, and instead, a piece of text will be inserted as a block,
-    with a format similar to ![](XXXXX). XXXXX is the image id, and it should not be modified. To add a caption for
-    your image, simply type between the brackets. Example: ![This is a caption](XXXXX). Note that the caption will be treated
-    as plain text.\n
+        with a format similar to ![](XXXXX). XXXXX is the image id, and it should not be modified. To add a caption for
+        your image, simply type between the brackets. Example: ![This is a caption](XXXXX). Note that the caption will be treated
+        as plain text.\n
         2. To write a superscript, please use ^(), and put the texts inside the parentheses, instead of only
-    using a single ^. For simplicity, click the superscript option in the formatting tools to insert a superscript.\n
+        using a single ^. For simplicity, click the superscript option in the formatting tools to insert a superscript.\n
         3. This feature converts your markdown to rich text format and some formatting may be lost in the process.\n
         4. Uploaded images may not be shown on the preview screen.\n
         5. You cannot edit a submitted post with embedded images in it.\n
@@ -1242,6 +1274,17 @@
     <string name="upload_image_success">Upload image successfully. Click the image button again to see the uploaded images.</string>
     <string name="get_image_bitmap_failed">Unable to get the bitmap of the image</string>
     <string name="upload_image_failed">Unable to upload the image</string>
+    <string name="select_giphy_gif">Select a Giphy GIF</string>
+    <string name="select_giphy_gif_explanation">This is an experimental feature, and here are some things you need to know:\n
+        1. Giphy gifs will not be shown in the text editor, and instead, a piece of text will be inserted as a block,
+        with a format similar to ![gif](XXXXX). XXXXX is the Giphy gif id, and it should not be modified.\n
+        2. You can only insert one Giphy gif per comment.\n
+        3. To write a superscript, please use ^(), and put the texts inside the parentheses, instead of only
+        using a single ^. For simplicity, click the superscript option in the formatting tools to insert a superscript.\n
+        4. This feature converts your markdown to rich text format and some formatting may be lost in the process.\n
+        5. Giphy gifs may not be shown on the preview screen.\n
+        6. Please do not change your account using the account chooser on the editing screen. You should switch
+        your account in the navigation drawer on the main screen.</string>
 
     <string name="search_comments">Search Comments</string>
 
@@ -1309,6 +1352,7 @@
 
     <string name="user_agreement_dialog_title">User Agreement</string>
     <string name="user_agreement_message">You need to agree to Reddit User Agreement (%1$s) and Infinity for Reddit\'s Privacy Policy (%2$s) before logging in.\n\nFrom now on, you will need a monthly subscription to access the Reddit API within Infinity for Reddit and this is because Reddit has started charging for API access since July 1st, 2023.</string>
+    <string name="warning_message_sensitive_content">Infinity neither promotes nor recommends sensitive content. Due to Reddit\'s policy, you are unlikely to encounter sensitive content within the app. You need to agree to Reddit User Agreement (%1$s) and Infinity for Reddit\'s Privacy Policy (%2$s) before changing these settings.</string>
     <string name="agree">Agree</string>
     <string name="do_not_agree">Don\'t Agree</string>
 
@@ -1405,6 +1449,79 @@
     <string name="comment_filter_display_mode">Display mode</string>
     <string name="comment_filter_display_mode_remove_comments">Remove comments</string>
     <string name="comment_filter_display_mode_fully_collapse_comments">Fully collapse comments</string>
+    <string name="comment_filter_name_explanation">The comment filter name should be unique.</string>
+    <string name="comment_filter_display_mode_explanation">Filtered out comments will be shown as the following selected option.</string>
+    <string name="comment_filter_exclude_strings_explanation">Comments will be filtered out if they contain the following keywords.</string>
+    <string name="comment_filter_exclude_users_explanation">Comments will be filtered out if they were submitted by the following users.</string>
+    <string name="comment_filter_min_vote_explanation">Comments that have a score lower than the following value will be filtered out (-1 means no restriction).</string>
+    <string name="comment_filter_max_vote_explanation">Comments that have a score higher than the following value will be filtered out (-1 means no restriction).</string>
 
+    <string name="content_description_banner_imageview">Banner Image</string>
+    <string name="content_description_create_comment_filter">Create comment filter</string>
+    <string name="content_description_add_comment_filter_usage">Apply comment filter to somewhere</string>
+    <string name="content_description_comment_filter_add_user">Add a user to comment filter</string>
+    <string name="content_description_create_custom_theme">Create custom theme</string>
+    <string name="content_description_create_post_filter">Create post filter</string>
+    <string name="content_description_add_post_filter_usage">Apply post filter to somewhere</string>
+    <string name="content_description_post_filter_add_subreddit">Add a subreddit to post filter</string>
+    <string name="content_description_post_filter_add_user">Add a user to post filter</string>
+    <string name="content_description_change_banner">Change banner</string>
+    <string name="content_description_change_avatar">Change avatar</string>
+    <string name="content_description_customize_post_filter">Customize post filter</string>
+    <string name="content_description_compose_message">Compose message</string>
+    <string name="content_description_alternative_login_method">Alternative login method</string>
+    <string name="content_description_capture_photo">Capture photo</string>
+    <string name="content_description_select_image">Select image</string>
+    <string name="content_description_selected_image">Selected image</string>
+    <string name="content_description_record_video">Record video</string>
+    <string name="content_description_select_video">Select video</string>
+    <string name="content_description_delete_texts">Delete texts</string>
+    <string name="content_description_handle_link">Handle link</string>
+    <string name="content_description_submit_post">Submit post</string>
+    <string name="content_description_refresh">Refresh</string>
+    <string name="content_description_change_sort_type">Change sort type</string>
+    <string name="content_description_change_post_layout">Change post layout</string>
+    <string name="content_description_search">Search</string>
+    <string name="content_description_go_to_subreddit">Go to subreddit</string>
+    <string name="content_description_go_to_user">Go to user</string>
+    <string name="content_description_random">Random</string>
+    <string name="content_description_filter_posts">Filter posts</string>
+    <string name="content_description_hide_read_posts">Hide read posts</string>
+    <string name="content_description_go_to_top">Go to top</string>
+    <string name="content_description_add_subreddit_or_user">Add subreddit or user</string>
+    <string name="content_description_video_indicator">Video indicator</string>
+    <string name="content_description_no_subscriptions_indicator">No subscriptions indicator</string>
+    <string name="content_description_create_multireddit">Create multireddit</string>
+    <string name="content_description_bottom_navigation_bar_button">Bottom navigation bar button</string>
+    <string name="content_description_fab">Floating action button</string>
+    <string name="content_description_download">Download</string>
+    <string name="content_description_share">Share</string>
+    <string name="content_description_set_as_wallpaper">Set as wallpaper</string>
+    <string name="content_description_previous_result">Go to previous result</string>
+    <string name="content_description_next_result">Go to next result</string>
+    <string name="content_description_close_search_panel">Close search panel</string>
+    <string name="content_description_send_message">Send message</string>
+    <string name="content_description_home">Home</string>
+    <string name="content_description_subscriptions">Subscriptions</string>
+    <string name="content_description_inbox">Inbox</string>
+    <string name="content_description_profile">Profile</string>
+    <string name="content_description_multireddits">Multireddits</string>
+    <string name="content_description_upvoted">Upvoted</string>
+    <string name="content_description_downvoted">Downvoted</string>
+    <string name="content_description_hidden">Hidden</string>
+    <string name="content_description_saved">Saved</string>
+
+    <string name="comment">Comment</string>
+    <string name="enable_reply_notifications">Receive reply notifications</string>
+    <string name="disable_reply_notifications">Disable reply notifications</string>
+    <string name="reply_notifications_enabled">Reply notifications enabled</string>
+    <string name="reply_notifications_disabled">Reply notifications disabled</string>
+    <string name="toggle_reply_notifications_failed">Toggle reply notifications failed</string>
+    <string name="cannot_find_comment">Cannot find comment</string>
+
+    <string name="download_image">Download Image</string>
+    <string name="download_gif">Download Gif</string>
+    <string name="download_video">Download Video</string>
+    <string name="download_all_gallery_images">Download All Gallery Images</string>
 
 </resources>

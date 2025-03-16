@@ -127,6 +127,8 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
         PredefinedCustomThemeViewHolder(@NonNull ItemPredefinedCustomThemeBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            binding.nameTextViewItemPredefinedCustomTheme.setTextColor(activity.customThemeWrapper.getPrimaryTextColor());
+            binding.addImageViewItemPredefinedCustomTheme.setColorFilter(activity.customThemeWrapper.getPrimaryIconColor());
             if (activity.typeface != null) {
                 binding.nameTextViewItemPredefinedCustomTheme.setTypeface(activity.typeface);
             }
@@ -139,6 +141,9 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
         UserCustomThemeViewHolder(@NonNull ItemUserCustomThemeBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            binding.nameTextViewItemUserCustomTheme.setTextColor(activity.customThemeWrapper.getPrimaryTextColor());
+            binding.addImageViewItemUserCustomTheme.setColorFilter(activity.customThemeWrapper.getPrimaryIconColor());
+            binding.shareImageViewItemUserCustomTheme.setColorFilter(activity.customThemeWrapper.getPrimaryIconColor());
             if (activity.typeface != null) {
                 binding.nameTextViewItemUserCustomTheme.setTypeface(activity.typeface);
             }
@@ -149,6 +154,7 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
 
         PreDefinedThemeDividerViewHolder(@NonNull View itemView) {
             super(itemView);
+            ((TextView) itemView).setTextColor(activity.customThemeWrapper.getSecondaryTextColor());
             if (activity.typeface != null) {
                 ((TextView) itemView).setTypeface(activity.typeface);
             }
@@ -159,6 +165,7 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
 
         UserThemeDividerViewHolder(@NonNull View itemView) {
             super(itemView);
+            ((TextView) itemView).setTextColor(activity.customThemeWrapper.getSecondaryTextColor());
             if (activity.typeface != null) {
                 ((TextView) itemView).setTypeface(activity.typeface);
             }

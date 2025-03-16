@@ -45,6 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_filter_24dp" />
+        android:contentDescription="@string/content_description_customize_post_filter"
+        android:src="@drawable/ic_filter_day_night_24dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

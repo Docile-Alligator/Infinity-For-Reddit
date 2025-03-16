@@ -1,11 +1,16 @@
 package ml.docilealligator.infinityforreddit.settings;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,9 +22,11 @@ import org.greenrobot.eventbus.EventBus;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.databinding.FragmentNsfwAndSpoilerBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWBlurEvent;
@@ -127,7 +134,7 @@ public class NsfwAndSpoilerFragment extends Fragment {
                 manuallyCheckDisableNsfwForever = false;
                 new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.warning)
-                        .setMessage(R.string.disable_nsfw_forever_message)
+                        .setMessage(R.string.disable_over_18_forever_message)
                         .setPositiveButton(R.string.yes, (dialogInterface, i)
                                 -> {
                             sharedPreferences.edit().putBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, true).apply();
@@ -151,12 +158,34 @@ public class NsfwAndSpoilerFragment extends Fragment {
                         .show();
             }
         });
+
+        TextView messageTextView = new TextView(activity);
+        int padding = (int) Utils.convertDpToPixel(24, activity);
+        messageTextView.setPaddingRelative(padding, padding, padding, padding);
+        SpannableString message = new SpannableString(getString(R.string.warning_message_sensitive_content, "https://www.redditinc.com/policies/user-agreement", "https://docile-alligator.github.io"));
+        Linkify.addLinks(message, Linkify.WEB_URLS);
+        messageTextView.setMovementMethod(BetterLinkMovementMethod.newInstance().setOnLinkClickListener((textView, url) -> {
+            Intent intent = new Intent(activity, LinkResolverActivity.class);
+            intent.setData(Uri.parse(url));
+            startActivity(intent);
+            return true;
+        }));
+        messageTextView.setLinkTextColor(getResources().getColor(R.color.colorAccent));
+        messageTextView.setText(message);
+        new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+                .setTitle(getString(R.string.warning))
+                .setView(messageTextView)
+                .setPositiveButton(R.string.agree, (dialogInterface, i) -> dialogInterface.dismiss())
+                .setNegativeButton(R.string.do_not_agree, (dialogInterface, i) -> activity.onBackPressed())
+                .setCancelable(false)
+                .show();
+
         return binding.getRoot();
     }
 
     private void applyCustomTheme() {
         int primaryTextColor = activity.customThemeWrapper.getPrimaryTextColor();
-        binding.enableNsfwTextViewNsfwAndSpoilerFragment.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(activity, R.drawable.ic_nsfw_on_24dp, activity.customThemeWrapper.getPrimaryIconColor()), null, null, null);
+        binding.enableNsfwTextViewNsfwAndSpoilerFragment.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(activity, R.drawable.ic_nsfw_on_day_night_24dp, activity.customThemeWrapper.getPrimaryIconColor()), null, null, null);
         binding.enableNsfwTextViewNsfwAndSpoilerFragment.setTextColor(primaryTextColor);
         binding.blurNsfwTextViewNsfwAndSpoilerFragment.setTextColor(primaryTextColor);
         binding.doNotBlurNsfwTextViewNsfwAndSpoilerFragment.setTextColor(primaryTextColor);

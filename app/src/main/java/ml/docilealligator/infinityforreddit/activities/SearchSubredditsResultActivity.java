@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -34,8 +33,6 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 public class SearchSubredditsResultActivity extends BaseActivity implements ActivityToolbarInterface {
 
     static final String EXTRA_QUERY = "EQ";
-    static final String EXTRA_RETURN_SUBREDDIT_NAME = "ERSN";
-    static final String EXTRA_RETURN_SUBREDDIT_ICON_URL = "ERSIU";
     static final String EXTRA_IS_MULTI_SELECTION = "EIMS";
     static final String RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES = "RESS";
 
@@ -126,14 +123,6 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
     protected void applyCustomTheme() {
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutSearchSubredditsResultActivity, null, binding.toolbarSearchSubredditsResultActivity);
-    }
-
-    public void getSelectedSubreddit(String name, String iconUrl) {
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_NAME, name);
-        returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_ICON_URL, iconUrl);
-        setResult(Activity.RESULT_OK, returnIntent);
-        finish();
     }
 
     @Override

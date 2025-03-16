@@ -4,7 +4,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.Map;
 
-import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -320,12 +320,27 @@ public interface RedditAPI {
 
     @GET("{multipath}?raw_json=1&limit=100")
     ListenableFuture<Response<String>> getMultiRedditPostsListenableFuture(@Path(value = "multipath", encoded = true) String multiPath,
+                                                                           @Path(value = "sortType", encoded = true) SortType.Type sortType,
                                                                            @Query("after") String after, @Query("t") SortType.Time sortTime);
 
-    @GET("{multipath}.json?raw_json=1&limit=100")
+    @GET("{multipath}/{sortType}.json?raw_json=1&limit=100")
     ListenableFuture<Response<String>> getMultiRedditPostsOauthListenableFuture(@Path(value = "multipath", encoded = true) String multiPath,
-                                          @Query("after") String after, @Query("t") SortType.Time sortTime,
-                                          @HeaderMap Map<String, String> headers);
+                                                                                @Path(value = "sortType", encoded = true) SortType.Type sortType,
+                                                                                @Query("after") String after, @Query("t") SortType.Time sortTime,
+                                                                                @HeaderMap Map<String, String> headers);
+
+    @GET("{multipath}/search.json?raw_json=1&limit=100&type=link&restrict_sr=on&sr_detail=true&include_over_18=1&always_show_media=1")
+    ListenableFuture<Response<String>> searchMultiRedditPostsListenableFuture(@Path(value = "multipath", encoded = true) String multiPath, @Query("q") String query,
+                                                                              @Query("after") String after,
+                                                                              @Query("sort") SortType.Type sortType,
+                                                                              @Query("t") SortType.Time sortTime);
+
+    @GET("{multipath}/search.json?raw_json=1&limit=100&type=link&restrict_sr=on&sr_detail=true&include_over_18=1&always_show_media=1")
+    ListenableFuture<Response<String>> searchMultiRedditPostsOauthListenableFuture(@Path(value = "multipath", encoded = true) String multiPath, @Query("q") String query,
+                                                                                   @Query("after") String after,
+                                                                                   @Query("sort") SortType.Type sortType,
+                                                                                   @Query("t") SortType.Time sortTime,
+                                                                                   @HeaderMap Map<String, String> headers);
 
     @GET("{sortType}?raw_json=1&limit=100")
     Call<String> getBestPosts(@Path("sortType") SortType.Type sortType, @Query("t") SortType.Time sortTime,
@@ -407,4 +422,8 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("/api/morechildren.json?raw_json=1&api_type=json")
     Call<String> moreChildrenOauth(@Field("link_id") String linkId, @Field("children") String children, @Field("sort") SortType.Type sort, @HeaderMap Map<String, String> headers);
+
+    @FormUrlEncoded
+    @POST("/api/sendreplies")
+    Call<String> toggleRepliesNotification(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

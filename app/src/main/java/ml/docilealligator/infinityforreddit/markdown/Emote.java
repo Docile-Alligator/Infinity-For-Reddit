@@ -3,7 +3,7 @@ package ml.docilealligator.infinityforreddit.markdown;
 import org.commonmark.node.CustomNode;
 import org.commonmark.node.Visitor;
 
-import ml.docilealligator.infinityforreddit.MediaMetadata;
+import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 
 public class Emote extends CustomNode {
     private final MediaMetadata mediaMetadata;

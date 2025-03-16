@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.MediaMetadata;
+import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -253,7 +253,7 @@ public class ParseComment {
         }
     }
 
-    static Comment parseSingleComment(JSONObject singleCommentData, int depth) throws JSONException {
+    public static Comment parseSingleComment(JSONObject singleCommentData, int depth) throws JSONException {
         String id = singleCommentData.getString(JSONUtils.ID_KEY);
         String fullName = singleCommentData.getString(JSONUtils.NAME_KEY);
         String author = singleCommentData.getString(JSONUtils.AUTHOR_KEY);
@@ -298,6 +298,7 @@ public class ParseComment {
         long submitTime = singleCommentData.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
         boolean scoreHidden = singleCommentData.getBoolean(JSONUtils.SCORE_HIDDEN_KEY);
         boolean saved = singleCommentData.getBoolean(JSONUtils.SAVED_KEY);
+        boolean sendReplies = singleCommentData.getBoolean(JSONUtils.SEND_REPLIES_KEY);
 
         if (singleCommentData.has(JSONUtils.DEPTH_KEY)) {
             depth = singleCommentData.getInt(JSONUtils.DEPTH_KEY);
@@ -312,7 +313,7 @@ public class ParseComment {
         return new Comment(id, fullName, author, authorFlair, authorFlairHTMLBuilder.toString(),
                 linkAuthor, submitTime, commentMarkdown, commentRawText,
                 linkId, subredditName, parentId, score, voteType, isSubmitter, distinguished,
-                permalink, depth, collapsed, hasReply, scoreHidden, saved, edited,
+                permalink, depth, collapsed, hasReply, scoreHidden, saved, sendReplies, edited,
                 mediaMetadataMap);
     }
 

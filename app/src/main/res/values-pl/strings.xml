@@ -56,8 +56,6 @@
     <string name="action_unhide_post">"Pokaż post"</string>
     <string name="action_edit_post">"Edytuj post"</string>
     <string name="action_delete_post">"Usuń post"</string>
-    <string name="action_mark_nsfw">"Oznacz jako NSFW"</string>
-    <string name="action_unmark_nsfw">"Odznacz jako NSFW"</string>
     <string name="action_mark_spoiler">"Oznacz jako spoiler"</string>
     <string name="action_unmark_spoiler">"Odznacz jako spoiler"</string>
     <string name="action_edit_flair">"Edytuj flagi"</string>
@@ -97,7 +95,6 @@ Naciśnij, aby spróbować ponownie."</string>
     <string name="refresh_post_failed">"Wstąpił błąd podczas odświeżania postu"</string>
     <string name="load_messages_failed">"Wystąpił błąd podczas ładowania wiadomości. Naciśnij, aby spróbować ponownie."</string>
     <string name="no_messages">"Pusto"</string>
-    <string name="nsfw">"NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="karma_info">"Karma: %1$,d"</string>
@@ -139,7 +136,6 @@ Naciśnij, aby spróbować ponownie."</string>
     <string name="follow_failed">"Nie udało się zaobserwować"</string>
     <string name="unfollowed">"Przestano obserwować"</string>
     <string name="unfollow_failed">"Nie udało się przestać obserwować"</string>
-    <string name="content_description_banner_imageview">"Banner subreddita"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Wyszukaj cokolwiek"</string>
     <string name="no_posts_no_lazy_mode">"Nie znaleziono postów"</string>
@@ -267,10 +263,6 @@ Naciśnij, aby spróbować ponownie."</string>
     <string name="edit_success">"Zedytowano pomyślnie"</string>
     <string name="delete_post_success">"Usunięto pomyślnie"</string>
     <string name="delete_post_failed">"Nie udało się usunąć"</string>
-    <string name="mark_nsfw_success">"Oznaczono jako NSFW pomyślnie"</string>
-    <string name="mark_nsfw_failed">"Nie udało się oznaczyć jako NSFW"</string>
-    <string name="unmark_nsfw_success">"Odznaczono NSFW pomyślnie"</string>
-    <string name="unmark_nsfw_failed">"Nie udało się odznaczyć NSFW"</string>
     <string name="mark_spoiler_success">"Oznaczono jako spoiler pomyślnie"</string>
     <string name="mark_spoiler_failed">"Nie udało się oznaczyć jako spoiler"</string>
     <string name="unmark_spoiler_success">"Odznaczono jako spoiler pomyślnie"</string>
@@ -303,7 +295,6 @@ Naciśnij, aby spróbować ponownie."</string>
     <string name="settigns_video_title">"Wideo"</string>
     <string name="settings_video_autoplay_title">"Autoodtwarzanie filmów"</string>
     <string name="settings_mute_autoplaying_videos_title">"Wycisz autoodtwarzane filmy"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"Autoodtwarzaj filmy NSFW"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Odsunięcie widocznego obszaru autoodtwarzanych filmów (w pionie)"</string>
 
     <!-- Fuzzy -->
@@ -323,7 +314,6 @@ Naciśnij, aby spróbować ponownie."</string>
     <string name="settings_volume_keys_navigate_comments_title">"Używaj przycisków głośności, aby nawigować komentarze"</string>
     <string name="settings_volume_keys_navigate_posts_title">"Używaj przycisków głośności, aby nawigować posty"</string>
     <string name="settings_mute_video_title">"Wycisz filmy"</string>
-    <string name="settings_mute_nsfw_video_title">"Wycisz filmy NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="settings_video_player_ignore_nav_bar_title">"Ignoruj pasek nawigacji w odtwarzaczu wideo"</string>
@@ -368,8 +358,6 @@ Naciśnij, aby spróbować ponownie."</string>
     <string name="settings_font_size_title">"Rozmiar czcionki"</string>
     <string name="settings_title_font_size_title">"Rozmiar czcionki tytułów"</string>
     <string name="settings_content_font_size_title">"Rozmiar czcionki zawartości"</string>
-    <string name="settings_enable_nsfw_title">"Włącz NSFW"</string>
-    <string name="settings_blur_nsfw_title">"Rozmazuj zdjęcia NSFW"</string>
     <string name="settings_blur_spoiler_title">"Rozmazuj zdjęcia z spoilerami"</string>
     <string name="settings_about_master_title">"O aplikacji"</string>
     <string name="settings_acknowledgement_master_title">"Użyte biblioteki"</string>
@@ -508,8 +496,6 @@ Naciśnij, aby spróbować ponownie."</string>
     <string name="delete_multi_reddit_success">"Usunięto pomyślnie"</string>
     <string name="delete_multi_reddit_failed">"Nie udało się usunąć"</string>
     <string name="delete_multi_reddit_dialog_message">"Jesteś pewny?"</string>
-    <string name="enable_nsfw">"Włącz NSFW"</string>
-    <string name="disable_nsfw">"Wyłącz NSFW"</string>
     <string name="cannot_save_image">"Nie można zapisać obrazu"</string>
     <string name="cannot_save_gif">"Nie można zapisać gif'a"</string>
     <string name="cannot_get_storage">"Nie można uzyskać dostępu do pamięci aplikacji"</string>
@@ -605,10 +591,6 @@ Naciśnij, aby spróbować ponownie."</string>
     <string name="theme_item_spoiler_background_color_detail">"Zastosowano dla: Tło spojlerów"</string>
     <string name="theme_item_spoiler_text_color">"Kolor tekstu spojlerów"</string>
     <string name="theme_item_spoiler_text_color_detail">"Zastosowano dla: Kolor tekstu spojlerów"</string>
-    <string name="theme_item_nsfw_background_color">"Kolor tła NSFW"</string>
-    <string name="theme_item_nsfw_background_color_detail">"Zastosowano dla: Tło postu NSFW"</string>
-    <string name="theme_item_nsfw_text_color">"Kolor tekstu NSFW"</string>
-    <string name="theme_item_nsfw_text_color_detail">"Zastosowano dla: Kolor tekstu postów NSFW"</string>
     <string name="theme_item_flair_background_color">"Kolor tła flagi"</string>
     <string name="theme_item_flair_background_color_detail">"Zastosowano dla: Tło talentu"</string>
     <string name="theme_item_flair_text_color">"Kolor tekstu flagi"</string>
@@ -786,7 +768,6 @@ Example: yourpass:123456"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Liczba kolumn w kanale postów"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Pion"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Poziom"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW &amp; Spojler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Usuń wszystkie starsze ustawienia"</string>
     <string name="restart_app_see_changes">"Zrestartuj aplikację aby zobaczyć zmiany"</string>
     <string name="settings_tab_count">"Liczba kart"</string>
@@ -854,18 +835,12 @@ Autoodtwarzanie filmów jest wyłączone."</string>
 
     <!-- Fuzzy -->
     <string name="warning">"Ostrzeżenie "</string>
-    <string name="this_is_a_nsfw_subreddit">"To jest subreddit NSFW"</string>
-    <string name="this_user_has_nsfw_content">"Ten użytkownik posiada treści NSFW"</string>
     <string name="dismiss">"Odrzuć"</string>
     <string name="leave">"Opuść"</string>
     <string name="go_to_subreddit">"Przejdź do subreddita"</string>
     <string name="go_to_user">"Przejdź do użytkownika"</string>
     <string name="go_to_thing_hint">"Nazwa"</string>
     <string name="random">"Losowe"</string>
-    <string name="random_subreddit">"Losowy subreddit"</string>
-    <string name="random_nsfw_subreddit">"Losowy subreddit NSFW"</string>
-    <string name="random_post">"Losowy post"</string>
-    <string name="random_nsfw_post">"Losowy post NSFW"</string>
     <string name="fetch_random_thing_failed">"Spróbuj ponownie później"</string>
     <string name="downloading">"Pobieranie"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all i r/popular"</string>
@@ -925,7 +900,6 @@ Autoodtwarzanie filmów jest wyłączone."</string>
     <string name="delete_all_read_posts_success">"Pomyślnie usunięto przeczytane posty"</string>
     <string name="hide_read_posts">"Ukryj przeczytane posty"</string>
     <string name="filter_posts">"Filtruj posty"</string>
-    <string name="only_nsfw">"Tylko NSFW"</string>
     <string name="only_spoiler">"Tylko spoilery"</string>
     <string name="title_excludes_strings_hint">"Tytuł: wyklucza słowa kluczowe (słowo1,słowo2)"</string>
     <string name="title_excludes_regex_hint">"Tytuł: wyklucza regex"</string>
@@ -967,7 +941,6 @@ użytkownika / multireddita"</string>
     <string name="action_share_link">"Zapisz link"</string>
     <string name="action_copy_link">"Skopiuj link"</string>
     <string name="action_add_to_post_filter">"Dodaj do filtra postów"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Nie bluruj obrazków NSFW w NSFW subredditach"</string>
     <string name="settings_show_avatar_on_the_right">"Pokaż awatar po prawej stronie"</string>
     <string name="settings_backup_settings_title">"Opcje backupu"</string>
     <string name="settings_restore_settings_title">"Przywróć ustawienia"</string>
@@ -1027,7 +1000,6 @@ użytkownika / multireddita"</string>
     <string name="settings_hide_post_flair">"Ukryj flagę posta"</string>
     <string name="settings_crash_reports_title">"Crash reporty"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Niebezpieczne"</string>
-    <string name="settings_disable_nsfw_forever_title">"Wyłącz NSFW na zawsze"</string>
     <string name="save_comment">"Zapisz"</string>
     <string name="unsave_comment">"Usuń z zapisanych"</string>
     <string name="copy_multi_reddit_path">"Skopiuj ścieżkę multireddita"</string>
@@ -1035,11 +1007,6 @@ użytkownika / multireddita"</string>
 
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Reporty crashów zostały usunięte"</string>
-
-    <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"Raz włączone, NSFW będzie wyłączone permamentnię, nieważnie czy inne ustawienia NSFW będą włączone czy nie. Jedyną opcją na włącznie NSFW z powrotem jest wyczyszczenie danych aplikacji.
-
-Nadal chcesz ją włączyć?"</string>
     <string name="reply">"Odpowiedz"</string>
     <string name="post_gallery_activity_label">"Post z galerią zdjęć"</string>
     <string name="action_share_post_link">"Udostępnij link do postu"</string>
@@ -1126,7 +1093,6 @@ Brak podglądu w Ostatnich aplikacjach."</string>
     <string name="app_lock_timeout_24_hours">"24 godziny"</string>
     <string name="edit_profile_activity_label">"Edytuj profil"</string>
     <string name="action_contact_mods">"Kontakt z modami"</string>
-    <string name="settings_save_nsfw_media_in_different_folder_title">"Zapisz media NSFW w innej lokalizacji"</string>
     <string name="fetch_streamable_video_failed">"Błąd pobierania ze Streamable"</string>
 
     <!-- EditProfileService Notification -->

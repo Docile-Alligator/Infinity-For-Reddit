@@ -7,7 +7,7 @@ import org.commonmark.parser.Parser;
 import java.util.Map;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
-import ml.docilealligator.infinityforreddit.MediaMetadata;
+import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 
 public class ImageAndGifPlugin extends AbstractMarkwonPlugin {
 

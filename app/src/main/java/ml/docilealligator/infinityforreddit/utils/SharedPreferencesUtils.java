@@ -78,6 +78,7 @@ public class SharedPreferencesUtils {
     public static final int POST_LAYOUT_GALLERY = 2;
     public static final int POST_LAYOUT_CARD_2 = 3;
     public static final int POST_LAYOUT_CARD_3 = 4;
+    public static final int POST_LAYOUT_COMPACT_2 = 5;
 
     public static final String FRONT_PAGE_SCROLLED_POSITION_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.front_page_scrolled_position";
     public static final String FRONT_PAGE_SCROLLED_POSITION_FRONT_PAGE_BASE = "_front_page";
@@ -386,6 +387,8 @@ public class SharedPreferencesUtils {
 
     public static final String POST_HISTORY_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.post_history";
     public static final String MARK_POSTS_AS_READ_BASE = "_mark_posts_as_read";
+    public static final String READ_POSTS_LIMIT_ENABLED = "_read_posts_limit_enabled";
+    public static final String READ_POSTS_LIMIT = "_read_posts_limit";
     public static final String MARK_POSTS_AS_READ_AFTER_VOTING_BASE = "_mark_posts_as_read_after_voting";
     public static final String MARK_POSTS_AS_READ_ON_SCROLL_BASE = "_mark_posts_as_read_on_scroll";
     public static final String HIDE_READ_POSTS_AUTOMATICALLY_BASE = "_hide_read_posts_automatically";

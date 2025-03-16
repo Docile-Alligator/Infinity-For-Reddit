@@ -77,6 +77,26 @@ public class MarkdownUtils {
     }
 
     @NonNull
+    public static Markwon createContentSubmissionRedditMarkwon(@NonNull Context context,
+                                                               @NonNull UploadedImagePlugin uploadedImagePlugin,
+                                                               @NonNull GiphyGifPlugin giphyGifPlugin) {
+        return Markwon.builder(context)
+                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
+                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
+                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
+                }))
+                .usePlugin(SuperscriptPlugin.create())
+                .usePlugin(SpoilerParserPlugin.create(0, 0))
+                .usePlugin(RedditHeadingPlugin.create())
+                .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .usePlugin(giphyGifPlugin)
+                .usePlugin(uploadedImagePlugin)
+                .usePlugin(TableEntryPlugin.create(context))
+                .build();
+    }
+
+    @NonNull
     public static Markwon createContentPreviewRedditMarkwon(@NonNull Context context,
                                                         @NonNull MarkwonPlugin miscPlugin,
                                                             int markdownColor,

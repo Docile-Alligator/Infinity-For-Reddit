@@ -22,4 +22,9 @@ public class LinearLayoutManagerBugFixed extends LinearLayoutManager {
     public boolean supportsPredictiveItemAnimations() {
         return false;
     }
+
+    public LinearLayoutManagerBugFixed setStackFromEndAndReturnCurrentObject() {
+        setStackFromEnd(true);
+        return this;
+    }
 }

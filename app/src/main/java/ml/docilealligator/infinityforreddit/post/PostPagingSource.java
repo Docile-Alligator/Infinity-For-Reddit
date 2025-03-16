@@ -13,10 +13,10 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostsListInterface;
+import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
@@ -53,7 +53,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     private final int postType;
     private final SortType sortType;
     private final PostFilter postFilter;
-    private final List<String> readPostList;
+    private final ReadPostsListInterface readPostsList;
     private String userWhere;
     private String multiRedditPath;
     private final LinkedHashSet<Post> postLinkedHashSet;
@@ -62,7 +62,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences,
                      SharedPreferences postFeedScrolledPositionSharedPreferences, int postType,
-                     SortType sortType, PostFilter postFilter, List<String> readPostList) {
+                     SortType sortType, PostFilter postFilter, ReadPostsListInterface readPostsList) {
         this.executor = executor;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
@@ -72,39 +72,28 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         this.postType = postType;
         this.sortType = sortType == null ? new SortType(SortType.Type.BEST) : sortType;
         this.postFilter = postFilter;
-        this.readPostList = readPostList;
+        this.readPostsList = readPostsList;
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
+    // PostPagingSource.TYPE_SUBREDDIT || PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE || PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT:
     PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                     String path, int postType, SortType sortType, PostFilter postFilter,
-                     List<String> readPostList) {
+                     String name, int postType, SortType sortType, PostFilter postFilter,
+                     ReadPostsListInterface readPostsList) {
         this.executor = executor;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.sharedPreferences = sharedPreferences;
         this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
-        if (postType == TYPE_SUBREDDIT || postType == TYPE_ANONYMOUS_FRONT_PAGE || postType == TYPE_ANONYMOUS_MULTIREDDIT) {
-            this.subredditOrUserName = path;
-            if (subredditOrUserName == null) {
-                subredditOrUserName = "popular";
-            }
-        } else {
-            if (sortType != null) {
-                if (path.endsWith("/")) {
-                    multiRedditPath = path + sortType.getType().value;
-                } else {
-                    multiRedditPath = path + "/" + sortType.getType().value;
-                }
-            } else {
-                multiRedditPath = path;
-            }
+        this.subredditOrUserName = name;
+        if (subredditOrUserName == null) {
+            subredditOrUserName = "popular";
         }
         this.postType = postType;
         if (sortType == null) {
-            if ("popular".equals(path) || "all".equals(path)) {
+            if ("popular".equals(name) || "all".equals(name)) {
                 this.sortType = new SortType(SortType.Type.HOT);
             } else {
                 this.sortType = new SortType(SortType.Type.BEST);
@@ -113,14 +102,42 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
             this.sortType = sortType;
         }
         this.postFilter = postFilter;
-        this.readPostList = readPostList;
+        this.readPostsList = readPostsList;
+        postLinkedHashSet = new LinkedHashSet<>();
+    }
+
+    // PostPagingSource.TYPE_MULTI_REDDIT
+    PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
+                     SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
+                     String path, String query, int postType, SortType sortType, PostFilter postFilter,
+                     ReadPostsListInterface readPostsList) {
+        this.executor = executor;
+        this.retrofit = retrofit;
+        this.accessToken = accessToken;
+        this.accountName = accountName;
+        this.sharedPreferences = sharedPreferences;
+        this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
+        if (path.endsWith("/")) {
+            multiRedditPath = path.substring(0, path.length() - 1);
+        } else {
+            multiRedditPath = path;
+        }
+        this.query = query;
+        this.postType = postType;
+        if (sortType == null) {
+            this.sortType = new SortType(SortType.Type.HOT);
+        } else {
+            this.sortType = sortType;
+        }
+        this.postFilter = postFilter;
+        this.readPostsList = readPostsList;
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
     PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                      String subredditOrUserName, int postType, SortType sortType, PostFilter postFilter,
-                     String where, List<String> readPostList) {
+                     String where, ReadPostsListInterface readPostsList) {
         this.executor = executor;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
@@ -132,14 +149,14 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         this.sortType = sortType == null ? new SortType(SortType.Type.NEW) : sortType;
         this.postFilter = postFilter;
         userWhere = where;
-        this.readPostList = readPostList;
+        this.readPostsList = readPostsList;
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
     PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                      String subredditOrUserName, String query, String trendingSource, int postType,
-                     SortType sortType, PostFilter postFilter, List<String> readPostList) {
+                     SortType sortType, PostFilter postFilter, ReadPostsListInterface readPostsList) {
         this.executor = executor;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
@@ -153,7 +170,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         this.sortType = sortType == null ? new SortType(SortType.Type.RELEVANCE) : sortType;
         this.postFilter = postFilter;
         postLinkedHashSet = new LinkedHashSet<>();
-        this.readPostList = readPostList;
+        this.readPostsList = readPostsList;
     }
 
     @Nullable
@@ -185,7 +202,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     public LoadResult<String, Post> transformData(Response<String> response) {
         if (response.isSuccessful()) {
             String responseString = response.body();
-            LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, readPostList);
+            LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, readPostsList);
             String lastItem = ParsePost.getLastItem(responseString);
             if (newPosts == null) {
                 return new LoadResult.Error<>(new Exception("Error parsing posts"));
@@ -204,7 +221,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
                 }
             }
         } else {
-            return new LoadResult.Error<>(new Exception("Response failed"));
+            return new LoadResult.Error<>(new Exception("Error getting response"));
         }
     }
 
@@ -308,10 +325,20 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     private ListenableFuture<LoadResult<String, Post>> loadMultiRedditPosts(@NonNull LoadParams<String> loadParams, RedditAPI api) {
         ListenableFuture<Response<String>> multiRedditPosts;
         if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-            multiRedditPosts = api.getMultiRedditPostsListenableFuture(multiRedditPath, loadParams.getKey(), sortType.getTime());
+            if (query != null && !query.isEmpty()) {
+                multiRedditPosts = api.searchMultiRedditPostsListenableFuture(multiRedditPath, query, loadParams.getKey(),
+                        sortType.getType(), sortType.getTime());
+            } else {
+                multiRedditPosts = api.getMultiRedditPostsListenableFuture(multiRedditPath, sortType.getType(), loadParams.getKey(), sortType.getTime());
+            }
         } else {
-            multiRedditPosts = api.getMultiRedditPostsOauthListenableFuture(multiRedditPath, loadParams.getKey(),
-                    sortType.getTime(), APIUtils.getOAuthHeader(accessToken));
+            if (query != null && !query.isEmpty()) {
+                multiRedditPosts = api.searchMultiRedditPostsOauthListenableFuture(multiRedditPath, query, loadParams.getKey(),
+                        sortType.getType(), sortType.getTime(), APIUtils.getOAuthHeader(accessToken));
+            } else {
+                multiRedditPosts = api.getMultiRedditPostsOauthListenableFuture(multiRedditPath, sortType.getType(), loadParams.getKey(),
+                        sortType.getTime(), APIUtils.getOAuthHeader(accessToken));
+            }
         }
 
         ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(multiRedditPosts, this::transformData, executor);

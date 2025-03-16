@@ -376,14 +376,6 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     private void download() {
         isDownloading = false;
 
-        /*Intent intent = new Intent(activity, DownloadMediaService.class);
-        intent.putExtra(DownloadMediaService.EXTRA_URL, media.hasFallback() ? media.fallbackUrl : media.url); // Retrieve original instead of the one additionally compressed by reddit
-        intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, media.mediaType == Post.Gallery.TYPE_GIF ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF: DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
-        intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, media.fileName);
-        intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
-        intent.putExtra(DownloadMediaService.EXTRA_IS_NSFW, isNsfw);
-        ContextCompat.startForegroundService(activity, intent);*/
-
         PersistableBundle extras = new PersistableBundle();
         extras.putString(DownloadMediaService.EXTRA_URL, media.hasFallback() ? media.fallbackUrl : media.url); // Retrieve original instead of the one additionally compressed by reddit
         extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, media.mediaType == Post.Gallery.TYPE_GIF ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF: DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);

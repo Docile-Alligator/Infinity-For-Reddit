@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
-        app:icon="@drawable/ic_info_preference_24dp"
+        app:icon="@drawable/ic_info_preference_day_night_24dp"
         app:summary="@string/restart_app_see_changes"
         app:enabled="false" />
 

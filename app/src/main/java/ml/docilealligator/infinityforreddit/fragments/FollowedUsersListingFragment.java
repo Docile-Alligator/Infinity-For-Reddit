@@ -1,7 +1,9 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
@@ -23,13 +25,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.adapters.FollowedUsersRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
@@ -43,6 +46,8 @@ import retrofit2.Retrofit;
  * A simple {@link Fragment} subclass.
  */
 public class FollowedUsersListingFragment extends Fragment implements FragmentCommunicator {
+
+    public static final String EXTRA_IS_USER_SELECTION = "EIUS";
 
     @Inject
     @Named("oauth")
@@ -95,7 +100,20 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
         mLinearLayoutManager = new LinearLayoutManagerBugFixed(mActivity);
         binding.recyclerViewFollowedUsersListingFragment.setLayoutManager(mLinearLayoutManager);
         FollowedUsersRecyclerViewAdapter adapter = new FollowedUsersRecyclerViewAdapter(mActivity,
-                mExecutor, mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, mActivity.accessToken, mActivity.accountName);
+                mExecutor, mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, mActivity.accessToken,
+                mActivity.accountName, subscribedUserData -> {
+                    if (getArguments().getBoolean(EXTRA_IS_USER_SELECTION)) {
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME, subscribedUserData.getName());
+                        returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_THING_TYPE, SelectThingReturnKey.THING_TYPE.USER);
+                        mActivity.setResult(Activity.RESULT_OK, returnIntent);
+                        mActivity.finish();
+                    } else {
+                        Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, subscribedUserData.getName());
+                        mActivity.startActivity(intent);
+                    }
+                });
         binding.recyclerViewFollowedUsersListingFragment.setAdapter(adapter);
         new FastScrollerBuilder(binding.recyclerViewFollowedUsersListingFragment).useMd2Style().build();
 

@@ -53,8 +53,6 @@
     <string name="action_unhide_post">"இடுகையைக் காண்பி"</string>
     <string name="action_edit_post">"இடக்கையைத் திருத்து"</string>
     <string name="action_delete_post">"இடுகையை அழி"</string>
-    <string name="action_mark_nsfw">"NSFW என குறி"</string>
-    <string name="action_unmark_nsfw">"NSFW என குறிக்காதே"</string>
     <string name="action_mark_spoiler">"கெடுப்பியென குறி"</string>
     <string name="action_unmark_spoiler">"கெடுப்பியென குறிக்காதே"</string>
     <string name="action_change_post_layout">"இடுகை தளவமைப்பை மாற்று"</string>
@@ -98,7 +96,6 @@
     <string name="load_messages_failed">"தகவல்களை ஏற்றுவதில் பிழை.
 மறுமுயல தட்டுக."</string>
     <string name="no_messages">"காலி"</string>
-    <string name="nsfw">"NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="karma_info">"கர்மம்: %1$d"</string>
@@ -137,7 +134,6 @@
     <string name="follow_failed">"பின்தொடர்தல் தோல்வி"</string>
     <string name="unfollowed">"பின்தொடர்நீக்கம்"</string>
     <string name="unfollow_failed">"பின்தொடர்நீக்கம் தோல்வி"</string>
-    <string name="content_description_banner_imageview">"துணைரெட்டிட் பதாகைப் படம்"</string>
     <string name="search_hint">"எதையும் தேடு"</string>
     <string name="no_posts_no_lazy_mode">"இடுகைகள் ஏதுமில்லை"</string>
     <string name="lazy_mode_stop">"சோம்பல் பயன்முறை நின்றது"</string>
@@ -263,10 +259,6 @@
     <string name="edit_success">"திருத்தம் வெற்றி"</string>
     <string name="delete_post_success">"அழித்தல் வெற்றி"</string>
     <string name="delete_post_failed">"அழித்தல் தோல்வி"</string>
-    <string name="mark_nsfw_success">"NSFW குறித்தல் வெற்றி"</string>
-    <string name="mark_nsfw_failed">"NSFW குறித்தல் தோல்வி"</string>
-    <string name="unmark_nsfw_success">"NSFW குறிநீக்கல் வெற்றி"</string>
-    <string name="unmark_nsfw_failed">"NSFW குறிநீக்கல் தோல்வி"</string>
     <string name="view_all_comments">"எல்லா கருத்துகளையும் உலாவ இங்குச் சொடுக்கு"</string>
     <string name="notification_summary_account">"கணக்கு"</string>
     <string name="notification_summary_message">"புதிய தகவல்"</string>
@@ -288,13 +280,11 @@
     <string name="settigns_video_title">"காணொளி"</string>
     <string name="settings_video_autoplay_title">"கானொளி தானியக்கம்"</string>
     <string name="settings_mute_autoplaying_videos_title">"தானியங்கும் கானொளிகளை ஒலியடக்கு"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"NSFW காணொளிகளைத் தானியக்கு"</string>
     <string name="settings_immersive_interface_summary">"எல்லா பக்கங்களுக்கும் செயல்படுத்தாதே"</string>
     <string name="settings_enable_bottom_app_bar_title">"அடிப்புற வழிசெழுத்தலை இயக்கு"</string>
     <string name="settings_category_post_and_comment_title">"இடுகையிட்டு கருத்தளி"</string>
     <string name="settings_vote_buttons_on_the_right_title">"வலதில் வாக்குப் பொத்தான்கள்"</string>
     <string name="settings_mute_video_title">"காணொளிகளை ஒளியடக்கு"</string>
-    <string name="settings_mute_nsfw_video_title">"NSFW காணொளிகளை ஒலிமறு"</string>
     <string name="settings_video_player_ignore_nav_bar_title">"காணொளி இயக்கியில் வழிசெலுத்தல் பட்டையைப் புறக்கணி"</string>
     <string name="settings_confirm_to_exit">"வெளியேற உறுதிசெய்"</string>
     <string name="settings_category_comment_title">"கருத்து"</string>
@@ -323,8 +313,6 @@
     <string name="settings_font_size_title">"எழுத்துரு அளவு"</string>
     <string name="settings_title_font_size_title">"தலைப்பு எழுத்துரு அளவு"</string>
     <string name="settings_content_font_size_title">"உள்ளடக்கம் எழுத்துரு அளவு"</string>
-    <string name="settings_enable_nsfw_title">"NSFWஐ இயக்கு"</string>
-    <string name="settings_blur_nsfw_title">"NSFW படங்களை மங்கலாக்கு"</string>
     <string name="settings_blur_spoiler_title">"கெட்டுப்பி படங்களை மங்காக்கு"</string>
     <string name="settings_about_master_title">"இதுபற்றி"</string>
     <string name="settings_acknowledgement_master_title">"ஒப்புகை"</string>
@@ -429,8 +417,6 @@
     <string name="delete_multi_reddit_success">"அழித்தல் வெற்றி"</string>
     <string name="delete_multi_reddit_failed">"அழித்தல் தோல்வி"</string>
     <string name="delete_multi_reddit_dialog_message">"நீங்கள் உறுதியா?"</string>
-    <string name="enable_nsfw">"NSFWஐ இயக்கு"</string>
-    <string name="disable_nsfw">"NSFWஐ முடக்கு"</string>
     <string name="cannot_save_image">"படத்தைச் சேமிக்கவியலா"</string>
     <string name="save_image_first">"படத்தைச் சேமிக்கிறது. காத்திருக்கவும்."</string>
     <string name="theme_name_description">"இத்தோற்றத்தின் பெயரை மாற்ற தட்டு."</string>
@@ -459,7 +445,6 @@
     <string name="theme_item_downvoted_color">"கீழ்வாக்களித்த நிறம்"</string>
     <string name="theme_item_post_type_background_color">"இடுகை வகை பின்புல நிறம்"</string>
     <string name="theme_item_post_type_text_color">"இடுகை வகை உரை நிறம்"</string>
-    <string name="theme_item_nsfw_background_color">"NSFW பின்புல நிறம்"</string>
     <string name="theme_item_awards_background_color">"விருதுகள் பின்புல நிறம்"</string>
     <string name="theme_item_awards_text_color">"விருதுகள் உரை நிறம்"</string>
     <string name="theme_item_archived_tint">"காப்பகமானவை படவுரு நிறம்"</string>
@@ -585,18 +570,12 @@
     <string name="change_sort_type">"வகைப்படுத்தல் வகையை மாற்று"</string>
     <string name="change_post_layout">"இடுகை தளவமைப்பை மாற்று"</string>
     <string name="warning">"எச்சரிக்கை"</string>
-    <string name="this_is_a_nsfw_subreddit">"இது ஓர் NSFW துணைரெட்டிட்."</string>
-    <string name="this_user_has_nsfw_content">"இப்பயனர் NSFW உள்ளடக்கம் கொண்டுள்ளார்"</string>
     <string name="dismiss">"நிராகரி"</string>
     <string name="leave">"விலகு"</string>
     <string name="go_to_subreddit">"துணைரெட்டிட்டுக்குச் செல்"</string>
     <string name="go_to_user">"பயனருக்குச் செல்"</string>
     <string name="go_to_thing_hint">"பெயர்"</string>
     <string name="random">"சீரற்ற"</string>
-    <string name="random_subreddit">"சீரற்ற துணைரெட்டிட்"</string>
-    <string name="random_nsfw_subreddit">"சீரற்ற NSFW கணக்கு"</string>
-    <string name="random_post">"சீரற்ற இடுகை"</string>
-    <string name="random_nsfw_post">"சீரற்ற NSFW இடுகை"</string>
     <string name="fetch_random_thing_failed">"பின்னர் மீண்டும் முயல்"</string>
     <string name="downloading">"பதிவிறக்குகிறது"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all மற்றும் r/popular"</string>
@@ -632,7 +611,6 @@
     <string name="select_subreddits_and_users">"துணைரெட்டிட்டுகள் மற்றும் பயனர்களைத் தேர்ந்தெடு"</string>
     <string name="hide_read_posts">"வாசித்த இடுகைகளை மறை"</string>
     <string name="filter_posts">"இடுகைகளை வடிகட்டு"</string>
-    <string name="only_nsfw">"NSFW மட்டும்"</string>
     <string name="only_spoiler">"கெடுப்பி மட்டும்"</string>
     <string name="post_filter_usage_home">"முகப்பு"</string>
     <string name="post_filter_usage_subreddit">"துணைரெட்டிட்: %1$s"</string>
@@ -681,7 +659,6 @@
     <string name="action_delete_logs">"பயன்குறிப்புகளை அழி"</string>
     <string name="settings_crash_reports_title">"சிதைவறிக்கைகள்"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"ஆபத்தானது"</string>
-    <string name="settings_disable_nsfw_forever_title">"NSFWஐ என்றென்றும் முடக்கு"</string>
     <string name="save_comment">"சேமி"</string>
     <string name="unsave_comment">"சேமிக்கா"</string>
 

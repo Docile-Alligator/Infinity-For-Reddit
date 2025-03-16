@@ -18,12 +18,12 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
+import ml.docilealligator.infinityforreddit.fragments.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.SortType;
-import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
+import ml.docilealligator.infinityforreddit.fragments.PostFragmentBase;
+import ml.docilealligator.infinityforreddit.thing.SortType;
+import ml.docilealligator.infinityforreddit.thing.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
@@ -119,7 +119,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (mFragment != null) {
-            return ((FragmentCommunicator) mFragment).handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+            return ((PostFragmentBase) mFragment).handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
         }
 
         return super.onKeyDown(keyCode, event);
@@ -224,7 +224,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     public void postLayoutSelected(int postLayout) {
         if (mFragment != null) {
             mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + accountName, postLayout).apply();
-            ((FragmentCommunicator) mFragment).changePostLayout(postLayout);
+            ((PostFragmentBase) mFragment).changePostLayout(postLayout);
         }
     }
 
