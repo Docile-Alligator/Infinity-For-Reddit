@@ -2,6 +2,8 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.SharedPreferences;
 
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Named;
@@ -15,6 +17,7 @@ import ml.docilealligator.infinityforreddit.network.RedgifsAccessTokenAuthentica
 import ml.docilealligator.infinityforreddit.network.ServerAccessTokenAuthenticator;
 import ml.docilealligator.infinityforreddit.network.SortTypeConverterFactory;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import okhttp3.ConnectionPool;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -28,12 +31,24 @@ abstract class NetworkModule {
     @Provides
     @Named("base")
     @Singleton
-    static OkHttpClient provideBaseOkhttp() {
-        return new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .build();
+    static OkHttpClient provideBaseOkhttp(@Named("default") SharedPreferences mSharedPreferences) {
+        boolean proxyEnabled = mSharedPreferences.getBoolean(SharedPreferencesUtils.PROXY_ENABLED, false);
+        Proxy.Type proxyType = Proxy.Type.valueOf(mSharedPreferences.getString(SharedPreferencesUtils.PROXY_TYPE, "HTTP"));
+        String proxyHost = mSharedPreferences.getString(SharedPreferencesUtils.PROXY_HOSTNAME, "127.0.0.1");
+        int proxyPort = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.PROXY_PORT, "1080"));
+
+        var builder =  new OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS);
+
+        if (proxyEnabled) {
+            InetSocketAddress proxyAddr = new InetSocketAddress(proxyHost, proxyPort);
+            Proxy proxy = new Proxy(proxyType, proxyAddr);
+            builder.proxy(proxy);
+        }
+
+        return builder.build();
     }
 
     @Provides
