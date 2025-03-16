@@ -432,9 +432,9 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static final Migration MIGRATION_27_28 = new Migration(27, 28) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("CREATE INDEX index_SubscribedSubredditData_username ON SubscribedSubredditData(username)");
-            database.execSQL("CREATE INDEX index_SubscribedUserData_username ON SubscribedUserData(username)");
-            database.execSQL("CREATE INDEX index_MultiReddit_username ON MultiReddit(username)");
+            database.execSQL("CREATE INDEX index_subscribed_subreddits_username ON subscribed_subreddits(username)");
+            database.execSQL("CREATE INDEX index_subscribed_users_username ON subscribed_users(username)");
+            database.execSQL("CREATE INDEX index_multi_reddits_username ON multi_reddits(username)");
         }
     };
 }
