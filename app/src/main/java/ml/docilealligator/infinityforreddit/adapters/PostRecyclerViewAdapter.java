@@ -142,16 +142,17 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private static final int VIEW_TYPE_POST_CARD_GALLERY_TYPE = 3;
     private static final int VIEW_TYPE_POST_CARD_TEXT_TYPE = 4;
     private static final int VIEW_TYPE_POST_COMPACT = 5;
-    private static final int VIEW_TYPE_POST_GALLERY = 6;
-    private static final int VIEW_TYPE_POST_GALLERY_GALLERY_TYPE = 7;
-    private static final int VIEW_TYPE_POST_CARD_2_VIDEO_AUTOPLAY_TYPE = 8;
-    private static final int VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE = 9;
-    private static final int VIEW_TYPE_POST_CARD_2_GALLERY_TYPE = 10;
-    private static final int VIEW_TYPE_POST_CARD_2_TEXT_TYPE = 11;
-    private static final int VIEW_TYPE_POST_CARD_3_VIDEO_AUTOPLAY_TYPE = 12;
-    private static final int VIEW_TYPE_POST_CARD_3_WITH_PREVIEW_TYPE = 13;
-    private static final int VIEW_TYPE_POST_CARD_3_GALLERY_TYPE = 14;
-    private static final int VIEW_TYPE_POST_CARD_3_TEXT_TYPE = 15;
+    private static final int VIEW_TYPE_POST_COMPACT_2 = 6;
+    private static final int VIEW_TYPE_POST_GALLERY = 7;
+    private static final int VIEW_TYPE_POST_GALLERY_GALLERY_TYPE = 8;
+    private static final int VIEW_TYPE_POST_CARD_2_VIDEO_AUTOPLAY_TYPE = 9;
+    private static final int VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE = 10;
+    private static final int VIEW_TYPE_POST_CARD_2_GALLERY_TYPE = 11;
+    private static final int VIEW_TYPE_POST_CARD_2_TEXT_TYPE = 12;
+    private static final int VIEW_TYPE_POST_CARD_3_VIDEO_AUTOPLAY_TYPE = 13;
+    private static final int VIEW_TYPE_POST_CARD_3_WITH_PREVIEW_TYPE = 14;
+    private static final int VIEW_TYPE_POST_CARD_3_GALLERY_TYPE = 15;
+    private static final int VIEW_TYPE_POST_CARD_3_TEXT_TYPE = 16;
 
     private static final DiffUtil.ItemCallback<Post> DIFF_CALLBACK = new DiffUtil.ItemCallback<>() {
         @Override
@@ -421,6 +422,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 return VIEW_TYPE_POST_GALLERY;
                             case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
                                 return VIEW_TYPE_POST_COMPACT;
+                            case SharedPreferencesUtils.POST_LAYOUT_COMPACT_2:
+                                return VIEW_TYPE_POST_COMPACT_2;
                         }
                         return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
                     default:
@@ -445,6 +448,23 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
             }
             return VIEW_TYPE_POST_COMPACT;
+        } else if (mPostLayout == SharedPreferencesUtils.POST_LAYOUT_COMPACT_2) {
+            Post post = getItem(position);
+            if (post != null) {
+                if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
+                    switch (mDefaultLinkPostLayout) {
+                        case SharedPreferencesUtils.POST_LAYOUT_CARD:
+                            return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
+                        case SharedPreferencesUtils.POST_LAYOUT_CARD_2:
+                            return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
+                        case SharedPreferencesUtils.POST_LAYOUT_CARD_3:
+                            return VIEW_TYPE_POST_CARD_3_WITH_PREVIEW_TYPE;
+                        case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
+                            return VIEW_TYPE_POST_GALLERY;
+                    }
+                }
+            }
+            return VIEW_TYPE_POST_COMPACT_2;
         } else if (mPostLayout == SharedPreferencesUtils.POST_LAYOUT_GALLERY) {
             Post post = getItem(position);
             if (post != null) {
@@ -484,6 +504,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 return VIEW_TYPE_POST_GALLERY;
                             case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
                                 return VIEW_TYPE_POST_COMPACT;
+                            case SharedPreferencesUtils.POST_LAYOUT_COMPACT_2:
+                                return VIEW_TYPE_POST_COMPACT_2;
                         }
                         return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
                     default:
@@ -519,6 +541,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 return VIEW_TYPE_POST_GALLERY;
                             case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
                                 return VIEW_TYPE_POST_COMPACT;
+                            case SharedPreferencesUtils.POST_LAYOUT_COMPACT_2:
+                                return VIEW_TYPE_POST_COMPACT_2;
                         }
                         return VIEW_TYPE_POST_CARD_3_WITH_PREVIEW_TYPE;
                     default:
@@ -550,12 +574,17 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         } else if (viewType == VIEW_TYPE_POST_CARD_TEXT_TYPE) {
             return new PostTextTypeViewHolder(ItemPostTextBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         } else if (viewType == VIEW_TYPE_POST_COMPACT) {
-            /*if (mShowThumbnailOnTheRightInCompactLayout) {
+            if (mShowThumbnailOnTheRightInCompactLayout) {
                 return new PostCompactRightThumbnailViewHolder(ItemPostCompactRightThumbnailBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
             } else {
                 return new PostCompactLeftThumbnailViewHolder(ItemPostCompactBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-            }*/
-            return new PostCompact2LeftThumbnailViewHolder(ItemPostCompact2Binding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+            }
+        } else if (viewType == VIEW_TYPE_POST_COMPACT_2) {
+            if (mShowThumbnailOnTheRightInCompactLayout) {
+                return new PostCompact2LeftThumbnailViewHolder(ItemPostCompact2Binding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+            } else {
+                return new PostCompact2LeftThumbnailViewHolder(ItemPostCompact2Binding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+            }
         } else if (viewType == VIEW_TYPE_POST_GALLERY) {
             return new PostGalleryViewHolder(ItemPostGalleryBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         } else if (viewType == VIEW_TYPE_POST_GALLERY_GALLERY_TYPE) {
