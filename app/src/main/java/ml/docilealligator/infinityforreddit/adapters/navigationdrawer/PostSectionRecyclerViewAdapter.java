@@ -86,19 +86,19 @@ public class PostSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                 switch (position) {
                     case 1:
                         stringId = R.string.upvoted;
-                        drawableId = R.drawable.ic_arrow_upward_black_24dp;
+                        drawableId = R.drawable.ic_arrow_upward_day_night_24dp;
                         break;
                     case 2:
                         stringId = R.string.downvoted;
-                        drawableId = R.drawable.ic_arrow_downward_black_24dp;
+                        drawableId = R.drawable.ic_arrow_downward_day_night_24dp;
                         break;
                     case 3:
                         stringId = R.string.hidden;
-                        drawableId = R.drawable.ic_outline_lock_24dp;
+                        drawableId = R.drawable.ic_lock_day_night_24dp;
                         break;
                     case 4:
                         stringId = R.string.account_saved_thing_activity_label;
-                        drawableId = R.drawable.ic_outline_bookmarks_24dp;
+                        drawableId = R.drawable.ic_bookmarks_day_night_24dp;
                         break;
                 }
             }

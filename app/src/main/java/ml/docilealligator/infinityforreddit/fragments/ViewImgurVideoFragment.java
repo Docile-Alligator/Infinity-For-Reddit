@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,12 +48,12 @@ import com.google.common.collect.ImmutableList;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.ImgurMedia;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.ViewImgurMediaActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.databinding.FragmentViewImgurVideoBinding;
+import ml.docilealligator.infinityforreddit.post.ImgurMedia;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -260,19 +259,8 @@ public class ViewImgurVideoFragment extends Fragment {
     private void download() {
         isDownloading = false;
 
-        /*Intent intent = new Intent(activity, DownloadMediaService.class);
-        intent.putExtra(DownloadMediaService.EXTRA_URL, imgurMedia.getLink());
-        intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
-        intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, imgurMedia.getFileName());
-        ContextCompat.startForegroundService(activity, intent);*/
-
-        PersistableBundle extras = new PersistableBundle();
-        extras.putString(DownloadMediaService.EXTRA_URL, imgurMedia.getLink());
-        extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
-        extras.putString(DownloadMediaService.EXTRA_FILE_NAME, imgurMedia.getFileName());
-
         //TODO: contentEstimatedBytes
-        JobInfo jobInfo = DownloadMediaService.constructJobInfo(activity, 5000000, extras);
+        JobInfo jobInfo = DownloadMediaService.constructJobInfo(activity, 5000000, imgurMedia);
         ((JobScheduler) activity.getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
 
         Toast.makeText(activity, R.string.download_started, Toast.LENGTH_SHORT).show();

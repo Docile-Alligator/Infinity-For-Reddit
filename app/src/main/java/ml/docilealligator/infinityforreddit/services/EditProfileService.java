@@ -76,12 +76,14 @@ public class EditProfileService extends JobService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             return new JobInfo.Builder(JOB_ID++, new ComponentName(context, EditProfileService.class))
                     .setUserInitiated(true)
-                    .setRequiredNetwork(new NetworkRequest.Builder().build())
+                    .setRequiredNetwork(new NetworkRequest.Builder().clearCapabilities().build())
                     .setEstimatedNetworkBytes(0, contentEstimatedBytes + 500)
                     .setExtras(extras)
                     .build();
         } else {
             return new JobInfo.Builder(JOB_ID++, new ComponentName(context, EditProfileService.class))
+                    .setOverrideDeadline(0)
+                    .setExtras(extras)
                     .build();
         }
     }

@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -35,8 +34,6 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
 
     static final String EXTRA_QUERY = "EQ";
     static final String EXTRA_IS_MULTI_SELECTION = "EIMS";
-    static final String EXTRA_RETURN_USER_NAME = "ERUN";
-    static final String EXTRA_RETURN_USER_ICON_URL = "ERUIU";
     static final String RETURN_EXTRA_SELECTED_USERNAMES = "RESU";
 
     private static final String FRAGMENT_OUT_STATE = "FOS";
@@ -127,14 +124,6 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutSearchUsersResultActivity,
                 null, binding.toolbarSearchUsersResultActivity);
-    }
-
-    public void getSelectedUser(String name, String iconUrl) {
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra(EXTRA_RETURN_USER_NAME, name);
-        returnIntent.putExtra(EXTRA_RETURN_USER_ICON_URL, iconUrl);
-        setResult(Activity.RESULT_OK, returnIntent);
-        finish();
     }
 
     @Override

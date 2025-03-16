@@ -73,7 +73,8 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:src="@drawable/ic_file_download_toolbar_white_24dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/content_description_download" />
 
             <ImageView
                 android:id="@+id/share_image_view_view_image_or_gif_activity"
@@ -81,7 +82,8 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:src="@drawable/ic_share_toolbar_white_24dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/content_description_share" />
 
             <ImageView
                 android:id="@+id/wallpaper_image_view_view_image_or_gif_activity"
@@ -89,8 +91,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:padding="16dp"
-                android:src="@drawable/ic_wallpaper_white_24dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:src="@drawable/ic_wallpaper_24dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/content_description_set_as_wallpaper" />
 
         </LinearLayout>
 

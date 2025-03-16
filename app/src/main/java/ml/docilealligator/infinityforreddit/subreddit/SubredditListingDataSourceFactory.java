@@ -9,7 +9,7 @@ import androidx.paging.DataSource;
 
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.thing.SortType;
 import retrofit2.Retrofit;
 
 public class SubredditListingDataSourceFactory extends DataSource.Factory {

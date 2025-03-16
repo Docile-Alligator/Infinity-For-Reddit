@@ -5,13 +5,13 @@
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="mute_video"
-        app:icon="@drawable/ic_mute_preferences_24dp"
+        app:icon="@drawable/ic_mute_preferences_day_night_24dp"
         app:title="@string/settings_mute_video_title" />
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="mute_nsfw_video"
-        app:icon="@drawable/ic_mute_preferences_24dp"
+        app:icon="@drawable/ic_mute_preferences_day_night_24dp"
         app:title="@string/settings_mute_nsfw_video_title" />
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
@@ -59,7 +59,7 @@
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="mute_autoplaying_videos"
-        app:icon="@drawable/ic_mute_preferences_24dp"
+        app:icon="@drawable/ic_mute_preferences_day_night_24dp"
         app:title="@string/settings_mute_autoplaying_videos_title" />
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference

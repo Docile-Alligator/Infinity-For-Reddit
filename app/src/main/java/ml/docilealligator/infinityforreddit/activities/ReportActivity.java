@@ -18,13 +18,13 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.FetchRules;
+import ml.docilealligator.infinityforreddit.post.FetchRules;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.ReportReason;
-import ml.docilealligator.infinityforreddit.ReportThing;
-import ml.docilealligator.infinityforreddit.Rule;
+import ml.docilealligator.infinityforreddit.thing.ReportReason;
+import ml.docilealligator.infinityforreddit.thing.ReportThing;
+import ml.docilealligator.infinityforreddit.subreddit.Rule;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.ReportReasonRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;

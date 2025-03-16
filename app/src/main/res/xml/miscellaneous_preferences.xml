@@ -11,7 +11,7 @@
         app:defaultValue="0"
         app:entries="@array/link_handler"
         app:entryValues="@array/link_handler_values"
-        app:icon="@drawable/ic_link"
+        app:icon="@drawable/ic_link_day_night_24dp"
         app:key="link_handler"
         app:title="@string/settings_link_handler_title"
         app:useSimpleSummaryProvider="true" />
@@ -21,7 +21,7 @@
         app:entries="@array/main_page_back_button_action"
         app:entryValues="@array/main_page_back_button_action_values"
         app:key="main_page_back_button_action"
-        app:icon="@drawable/ic_exit_24dp"
+        app:icon="@drawable/ic_exit_day_night_24dp"
         app:title="@string/settings_main_page_back_button_action"
         app:useSimpleSummaryProvider="true" />
 
@@ -36,7 +36,7 @@
         app:entries="@array/settings_language"
         app:entryValues="@array/settings_language_values"
         app:key="language"
-        app:icon="@drawable/ic_language_24dp"
+        app:icon="@drawable/ic_language_day_night_24dp"
         app:title="@string/settings_language_title"
         app:useSimpleSummaryProvider="true" />
 
@@ -44,7 +44,7 @@
         app:title="@string/settings_miscellaneous_dangerous_group_title" />
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
-        app:icon="@drawable/ic_info_preference_24dp"
+        app:icon="@drawable/ic_info_preference_day_night_24dp"
         app:summary="@string/settings_post_feed_max_resolution_warning_title"
         app:enabled="false" />
 

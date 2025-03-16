@@ -56,8 +56,6 @@
     <string name="action_unhide_post">"Gönderiyi Göster"</string>
     <string name="action_edit_post">"Gönderiyi Düzenle"</string>
     <string name="action_delete_post">"Gönderiyi Sil"</string>
-    <string name="action_mark_nsfw">"NSFW İşaretle"</string>
-    <string name="action_unmark_nsfw">"NSFW Kaldır"</string>
     <string name="action_mark_spoiler">"Spoiler İşaretle"</string>
     <string name="action_unmark_spoiler">"Spoiler Kaldır"</string>
     <string name="action_edit_flair">"Etiketi Düzenle"</string>
@@ -102,7 +100,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="load_messages_failed">"Mesajlar yüklenirken hata oluştu.
 Tekrar denemek için tıklayın."</string>
     <string name="no_messages">"Boş"</string>
-    <string name="nsfw">"NSFW"</string>
     <string name="karma_info">"Karma: %1$,d"</string>
     <string name="karma_info_user_detail">"Karma:
 %1$,d (%2$d + %3$d)"</string>
@@ -141,7 +138,6 @@ This translation does it work well in this kinda format. People use "since" in s
     <string name="follow_failed">"Takip edilemedi"</string>
     <string name="unfollowed">"Takip bırakıldı"</string>
     <string name="unfollow_failed">"Takip bırakılamadı"</string>
-    <string name="content_description_banner_imageview">"Subreddit Banner Resmi"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Bir şey arayın"</string>
     <string name="no_posts_no_lazy_mode">"Hiç gönderi yok"</string>
@@ -273,10 +269,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="edit_success">"Başarıyla düzenlendi"</string>
     <string name="delete_post_success">"Başarıyla silindi"</string>
     <string name="delete_post_failed">"Silinemedi"</string>
-    <string name="mark_nsfw_success">"NSFW başarıyla işaretlendi"</string>
-    <string name="mark_nsfw_failed">"NSFW işaretlenemedi"</string>
-    <string name="unmark_nsfw_success">"NSFW işareti başarıyla kaldırıldı"</string>
-    <string name="unmark_nsfw_failed">"NSFW işareti kaldırılamadı"</string>
     <string name="mark_spoiler_success">"Spoiler başarıyla işaretlendi"</string>
     <string name="mark_spoiler_failed">"Spoiller işaretlenemedi"</string>
     <string name="unmark_spoiler_success">"Spoiller işareti başarıyla kaldırıldı"</string>
@@ -309,7 +301,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="settigns_video_title">"Video"</string>
     <string name="settings_video_autoplay_title">"Otomatik Video Oynatma"</string>
     <string name="settings_mute_autoplaying_videos_title">"Otomatik Oynatılan Videoları Sessize Al"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"NSFW Videolarını Otomatik Oynat"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Otomatik Oynatılan Videoların Görünür Alan Uzaklığı (Dikey)"</string>
 
     <!-- Fuzzy -->
@@ -329,7 +320,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_volume_keys_navigate_comments_title">"Gönderilerdeki Yorumlarda Gezinmek İçin Ses Tuşlarını Kullan"</string>
     <string name="settings_volume_keys_navigate_posts_title">"Gönderilerde Gezinmek İçin Ses Tuşlarını Kullan"</string>
     <string name="settings_mute_video_title">"Videoları Sessize Al"</string>
-    <string name="settings_mute_nsfw_video_title">"NSFW Videolarını Sessize Al"</string>
 
     <!-- Fuzzy -->
     <string name="settings_video_player_ignore_nav_bar_title">"Video Oynatıcısındaki Navigasyon Çubuğunu Yoksay"</string>
@@ -366,8 +356,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_font_size_title">"Yazı Tipi Boyutu"</string>
     <string name="settings_title_font_size_title">"Yazı Tipi Başlığı Boyutu"</string>
     <string name="settings_content_font_size_title">"İçeriğin Yazı Tipi Boyutu"</string>
-    <string name="settings_enable_nsfw_title">"NSFW'yi Etkinleştir"</string>
-    <string name="settings_blur_nsfw_title">"NSFW Görüntüleri Bulanıklaştır"</string>
     <string name="settings_blur_spoiler_title">"Spoiler Görüntüleri Bulanıklaştır"</string>
     <string name="settings_about_master_title">"Hakkında"</string>
     <string name="settings_acknowledgement_master_title">"Özel Teşekkürler"</string>
@@ -509,8 +497,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit_success">"Başarıyla silindi"</string>
     <string name="delete_multi_reddit_failed">"Silinemedi"</string>
     <string name="delete_multi_reddit_dialog_message">"Emin misiniz?"</string>
-    <string name="enable_nsfw">"NSFW'yi Etkinleştir"</string>
-    <string name="disable_nsfw">"NSFW'yi Etkinleştir"</string>
     <string name="cannot_save_image">"Görüntü kaydedilemiyor"</string>
     <string name="cannot_save_gif">"Gif kaydedilemiyor"</string>
     <string name="cannot_get_storage">"Uygulama depolamasına erişilemiyor"</string>
@@ -608,10 +594,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_spoiler_background_color_detail">"Uygulandığı yer: Spoiler etiketinin arka planı"</string>
     <string name="theme_item_spoiler_text_color">"Spoiler Metin Rengi"</string>
     <string name="theme_item_spoiler_text_color_detail">"Uygulandığı yer: Spoiler etiketindeki metin rengi"</string>
-    <string name="theme_item_nsfw_background_color">"NSFW Arka Plan Rengi"</string>
-    <string name="theme_item_nsfw_background_color_detail">"Uygulandığı yer: NSFW etiketinin arka planı"</string>
-    <string name="theme_item_nsfw_text_color">"NSFW metin rengi"</string>
-    <string name="theme_item_nsfw_text_color_detail">"Uygulandığı yer: NSFW etiketinin metin rengi"</string>
     <string name="theme_item_flair_background_color">"Etiket Arka Plan Rengi"</string>
     <string name="theme_item_flair_background_color_detail">"Uygulandığı yer: Etiket etiketinin arka planı"</string>
     <string name="theme_item_flair_text_color">"Etiket Metin Rengi"</string>
@@ -786,7 +768,6 @@ Amoled Tema Şablonu Oluştur"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Gönderi Akışındaki Sütun Sayısı"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Portre"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Manzara"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW &amp; Spoiler"</string>
     <string name="settings_delete_all_legacy_settings_title">"Tüm Eski Ayarları Sil"</string>
     <string name="restart_app_see_changes">"Değişiklikleri görmek için uygulamayı yeniden başlatın"</string>
     <string name="settings_tab_count">"Sekme Sayısı"</string>
@@ -856,8 +837,6 @@ Otomatik video oynatma kapatılır."</string>
 
     <!-- Fuzzy -->
     <string name="warning">"Uyarı"</string>
-    <string name="this_is_a_nsfw_subreddit">"Bu bir NSFW subredditidir."</string>
-    <string name="this_user_has_nsfw_content">"Bu kullanıcının NSFW içeriği var"</string>
     <string name="dismiss">"Reddet"</string>
     <string name="leave">"Ayrıl"</string>
 
@@ -868,10 +847,6 @@ Otomatik video oynatma kapatılır."</string>
     <string name="go_to_user">"Kullanıcıya Git"</string>
     <string name="go_to_thing_hint">"İsim"</string>
     <string name="random">"Rastgele"</string>
-    <string name="random_subreddit">"Rastgele Subreddit"</string>
-    <string name="random_nsfw_subreddit">"Rastgele NSFW Subreddit'i"</string>
-    <string name="random_post">"Rastgele Gönderi"</string>
-    <string name="random_nsfw_post">"Rastgele NSFW Gönderisi"</string>
     <string name="fetch_random_thing_failed">"Daha sonra tekrar deneyin"</string>
     <string name="downloading">"İndiriliyor"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all ve r/popular"</string>
@@ -935,7 +910,6 @@ Otomatik video oynatma kapatılır."</string>
     <string name="delete_all_read_posts_success">"Görüntülenmiş gönderiler başarıyla kaldırıldı"</string>
     <string name="hide_read_posts">"Görüntülenmiş Gönderileri Gizle"</string>
     <string name="filter_posts">"Gönderileri Filtrele"</string>
-    <string name="only_nsfw">"Sadece NSFW"</string>
     <string name="only_spoiler">"Sadece Spoiler"</string>
 
     <!-- What is it? -->
@@ -984,7 +958,6 @@ Otomatik video oynatma kapatılır."</string>
     <string name="action_share_link">"Bağlantıyı Paylaş"</string>
     <string name="action_copy_link">"Bağlantıyı Kopyala"</string>
     <string name="action_add_to_post_filter">"Gönderi Filtresine Ekle"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"NSFW Subreddit'lerindeki NSFW Görüntülerini Bulanıklaştırma"</string>
 
     <!-- Fuzzy -->
     <string name="settings_show_avatar_on_the_right">"Avatarı Solda Göster"</string>
@@ -1056,7 +1029,6 @@ Otomatik video oynatma kapatılır."</string>
     <string name="settings_hide_post_flair">"Gönderi Etiketini Gizle"</string>
     <string name="settings_crash_reports_title">"Kilitlenme Raporları"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Sakıncalı"</string>
-    <string name="settings_disable_nsfw_forever_title">"NSFW'yi Her Zaman Devre Dışı Bırak"</string>
     <string name="settings_show_only_one_comment_level_indicator">"Sadece Bir Yorum Seviyesi Belirtecini Göster"</string>
     <string name="save_comment">"Kaydet"</string>
     <string name="unsave_comment">"Kaydetme"</string>
@@ -1065,11 +1037,6 @@ Otomatik video oynatma kapatılır."</string>
 
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Kilitlenme raporları silindi"</string>
-
-    <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"Etkinleştirildikten sonra, NSFW ayarının etkin olup olmadığına bakılmaksızın NSFW kalıcı olarak devre dışı bırakılacaktır. Ve bu seçenek geri alınamaz, NSFW'yi yeniden etkinleştirmenin tek yolu uygulama verilerini temizlemektir.
-
-Yine de etkinleştirmek istiyor musunuz?"</string>
     <string name="reply">"Yanıtla"</string>
     <string name="post_gallery_activity_label">"Galeri Gönderisi"</string>
     <string name="action_share_post_link">"Gönderi Bağlantısını Paylaş"</string>
@@ -1175,8 +1142,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="app_lock_timeout_24_hours">"24 saat"</string>
     <string name="edit_profile_activity_label">"Profili Düzenle"</string>
     <string name="action_contact_mods">"İletişim Modları"</string>
-    <string name="settings_save_nsfw_media_in_different_folder_title">"NSFW Medyasını Farklı Konumda Kaydet"</string>
-    <string name="settings_nsfw_download_location_title">"NSFW İndirme Konumu"</string>
     <string name="fetch_streamable_video_failed">"Video akışı getirilemedi"</string>
 
     <!-- EditProfileService Notification -->

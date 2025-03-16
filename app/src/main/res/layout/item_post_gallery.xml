@@ -47,7 +47,7 @@
         android:layout_gravity="center"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        app:drawableTopCompat="@drawable/ic_error_outline_black_24dp"
+        app:drawableTopCompat="@drawable/ic_error_outline_black_day_night_24dp"
         android:layout_centerInParent="true"
         android:text="@string/error_loading_image_tap_to_retry"
         android:textSize="?attr/font_default"

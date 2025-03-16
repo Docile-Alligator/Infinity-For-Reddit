@@ -7,7 +7,7 @@ import org.commonmark.parser.Parser;
 import java.util.List;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
-import ml.docilealligator.infinityforreddit.UploadedImage;
+import ml.docilealligator.infinityforreddit.thing.UploadedImage;
 
 public class UploadedImagePlugin extends AbstractMarkwonPlugin {
     private final UploadedImageBlockParser.Factory factory;

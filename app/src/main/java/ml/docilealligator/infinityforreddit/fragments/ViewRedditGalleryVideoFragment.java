@@ -214,7 +214,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
             requestPermissionAndDownload();
             return true;
         } else if (item.getItemId() == R.id.action_playback_speed_view_reddit_gallery_video_fragment) {
-
+            changePlaybackSpeed();
             return true;
         }
         return false;
@@ -258,14 +258,6 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
 
     private void download() {
         isDownloading = false;
-
-        /*Intent intent = new Intent(activity, DownloadMediaService.class);
-        intent.putExtra(DownloadMediaService.EXTRA_URL, galleryVideo.url);
-        intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
-        intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, galleryVideo.fileName);
-        intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
-        intent.putExtra(DownloadMediaService.EXTRA_IS_NSFW, isNsfw);
-        ContextCompat.startForegroundService(activity, intent);*/
 
         PersistableBundle extras = new PersistableBundle();
         extras.putString(DownloadMediaService.EXTRA_URL, galleryVideo.url);

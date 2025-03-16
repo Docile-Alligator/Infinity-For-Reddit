@@ -59,19 +59,19 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
                     binding.shareMediaLinkTextViewShareLinkBottomSheetFragment.setText(R.string.share_image_link);
                     binding.copyMediaLinkTextViewShareLinkBottomSheetFragment.setText(R.string.copy_image_link);
                     binding.shareMediaLinkTextViewShareLinkBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(
-                            activity.getDrawable(R.drawable.ic_image_24dp), null, null, null);
+                            activity.getDrawable(R.drawable.ic_image_day_night_24dp), null, null, null);
                     break;
                 case Post.GIF_TYPE:
                     binding.shareMediaLinkTextViewShareLinkBottomSheetFragment.setText(R.string.share_gif_link);
                     binding.copyMediaLinkTextViewShareLinkBottomSheetFragment.setText(R.string.copy_gif_link);
                     binding.shareMediaLinkTextViewShareLinkBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(
-                            activity.getDrawable(R.drawable.ic_image_24dp), null, null, null);
+                            activity.getDrawable(R.drawable.ic_image_day_night_24dp), null, null, null);
                     break;
                 case Post.VIDEO_TYPE:
                     binding.shareMediaLinkTextViewShareLinkBottomSheetFragment.setText(R.string.share_video_link);
                     binding.copyMediaLinkTextViewShareLinkBottomSheetFragment.setText(R.string.copy_video_link);
                     binding.shareMediaLinkTextViewShareLinkBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(
-                            activity.getDrawable(R.drawable.ic_outline_video_24dp), null, null, null);
+                            activity.getDrawable(R.drawable.ic_video_day_night_24dp), null, null, null);
                     break;
                 case Post.LINK_TYPE:
                 case Post.NO_PREVIEW_LINK_TYPE:

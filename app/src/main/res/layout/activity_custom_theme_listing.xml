@@ -59,6 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:layout_gravity="bottom|end"
+        android:contentDescription="@string/content_description_create_custom_theme"
         app:backgroundTint="?attr/colorPrimaryLightTheme"
         app:srcCompat="@drawable/ic_add_day_night_24dp"
         app:tint="@android:color/white" />

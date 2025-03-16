@@ -135,8 +135,8 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                                 public void onAuthenticationSucceeded(
                                         @NonNull BiometricPrompt.AuthenticationResult result) {
                                     super.onAuthenticationSucceeded(result);
-                                    pageToggle.openAccountSection();
-                                    openAccountSection(((NavHeaderViewHolder) holder).binding.accountSwitcherImageViewNavHeaderMain);
+                                    pageToggle.openAccountManagement();
+                                    openAccountManagement(((NavHeaderViewHolder) holder).binding.accountSwitcherImageViewNavHeaderMain);
                                 }
                             });
 
@@ -147,17 +147,17 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
                             biometricPrompt.authenticate(promptInfo);
                         } else {
-                            pageToggle.openAccountSection();
-                            openAccountSection(((NavHeaderViewHolder) holder).binding.accountSwitcherImageViewNavHeaderMain);
+                            pageToggle.openAccountManagement();
+                            openAccountManagement(((NavHeaderViewHolder) holder).binding.accountSwitcherImageViewNavHeaderMain);
                         }
                     } else {
-                        pageToggle.openAccountSection();
-                        openAccountSection(((NavHeaderViewHolder) holder).binding.accountSwitcherImageViewNavHeaderMain);
+                        pageToggle.openAccountManagement();
+                        openAccountManagement(((NavHeaderViewHolder) holder).binding.accountSwitcherImageViewNavHeaderMain);
                     }
                 } else {
                     ((NavHeaderViewHolder) holder).binding.accountSwitcherImageViewNavHeaderMain.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_arrow_drop_down_24dp, null));
-                    pageToggle.closeAccountSectionWithoutChangeIconResource();
-                    closeAccountSectionWithoutChangeIconResource(false);
+                    pageToggle.closeAccountManagement();
+                    closeAccountManagement(false);
                 }
             });
         }
@@ -168,19 +168,16 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         return 1;
     }
 
-    private void openAccountSection(ImageView dropIconImageView) {
+    private void openAccountManagement(ImageView dropIconImageView) {
         dropIconImageView.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_arrow_drop_up_24dp, null));
         isInMainPage = false;
     }
 
-    public boolean closeAccountSectionWithoutChangeIconResource(boolean checkIsInMainPage) {
-        if (!(checkIsInMainPage && isInMainPage)) {
-            isInMainPage = true;
-            return true;
+    public void closeAccountManagement(boolean notifyItemChanged) {
+        isInMainPage = true;
+        if (notifyItemChanged) {
+            notifyItemChanged(0);
         }
-
-        notifyItemChanged(0);
-        return false;
     }
 
     public void updateAccountInfo(String profileImageUrl, String bannerImageUrl, int karma) {
@@ -223,7 +220,7 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     }
 
     public interface PageToggle {
-        void openAccountSection();
-        void closeAccountSectionWithoutChangeIconResource();
+        void openAccountManagement();
+        void closeAccountManagement();
     }
 }

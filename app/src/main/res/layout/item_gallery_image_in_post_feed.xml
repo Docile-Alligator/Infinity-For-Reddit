@@ -25,7 +25,7 @@
             android:id="@+id/error_text_view_item_gallery_image_in_post_feed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableTop="@drawable/ic_error_outline_black_24dp"
+            android:drawableTop="@drawable/ic_error_outline_black_day_night_24dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/error_loading_image_tap_to_retry"

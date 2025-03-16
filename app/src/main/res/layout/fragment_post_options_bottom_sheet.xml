@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:overScrollMode="never"
+    android:paddingBottom="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/comment_text_view_post_options_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_comment_toolbar_24dp"
+            android:drawablePadding="48dp"
+            android:focusable="true"
+            android:fontFamily="?attr/font_family"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:text="@string/comment"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            app:drawableTint="?attr/primaryTextColor" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/add_to_post_filter_text_view_post_options_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_filter_day_night_24dp"
+            android:drawablePadding="48dp"
+            android:focusable="true"
+            android:fontFamily="?attr/font_family"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:text="@string/action_add_to_post_filter"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            app:drawableTint="?attr/primaryTextColor" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/hide_post_text_view_post_options_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_hide_post_day_night_24dp"
+            android:drawablePadding="48dp"
+            android:focusable="true"
+            android:fontFamily="?attr/font_family"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            app:drawableTint="?attr/primaryTextColor" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/crosspost_text_view_post_options_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_crosspost_24dp"
+            android:drawablePadding="48dp"
+            android:focusable="true"
+            android:fontFamily="?attr/font_family"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:text="@string/action_crosspost"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            app:drawableTint="?attr/primaryTextColor" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/download_text_view_post_options_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_download_day_night_24dp"
+            android:drawablePadding="48dp"
+            android:focusable="true"
+            android:fontFamily="?attr/font_family"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:text="@string/action_crosspost"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:visibility="gone"
+            app:drawableTint="?attr/primaryTextColor" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/download_all_text_view_post_options_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_download_day_night_24dp"
+            android:drawablePadding="48dp"
+            android:focusable="true"
+            android:fontFamily="?attr/font_family"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:text="@string/action_download_all_gallery_media"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:visibility="gone"
+            app:drawableTint="?attr/primaryTextColor" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/report_text_view_post_options_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_report_day_night_24dp"
+            android:drawablePadding="48dp"
+            android:focusable="true"
+            android:fontFamily="?attr/font_family"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:text="@string/report"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            app:drawableTint="?attr/primaryTextColor" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

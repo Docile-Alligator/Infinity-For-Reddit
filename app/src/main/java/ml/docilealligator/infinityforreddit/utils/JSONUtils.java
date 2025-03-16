@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import ml.docilealligator.infinityforreddit.MediaMetadata;
+import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 
 /**
  * Created by alex on 2/25/18.
@@ -196,6 +196,7 @@ public class JSONUtils {
     public static final String P_KEY = "p";
     public static final String VARIANTS_KEY = "variants";
     public static final String PAGE_KEY = "page";
+    public static final String SEND_REPLIES_KEY = "send_replies";
 
     @Nullable
     public static Map<String, MediaMetadata> parseMediaMetadata(JSONObject data) {

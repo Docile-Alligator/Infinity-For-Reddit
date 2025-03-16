@@ -66,14 +66,10 @@ import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.FetchRedgifsVideoLinks;
-import ml.docilealligator.infinityforreddit.FetchStreamableVideo;
+import ml.docilealligator.infinityforreddit.FetchVideoLinkListener;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
-import ml.docilealligator.infinityforreddit.SaveThing;
-import ml.docilealligator.infinityforreddit.StreamableVideo;
-import ml.docilealligator.infinityforreddit.VoteThing;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
@@ -90,6 +86,7 @@ import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareLinkBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -113,8 +110,13 @@ import ml.docilealligator.infinityforreddit.markdown.EvenBetterLinkMovementMetho
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
+import ml.docilealligator.infinityforreddit.post.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
+import ml.docilealligator.infinityforreddit.thing.FetchRedgifsVideoLinks;
+import ml.docilealligator.infinityforreddit.thing.SaveThing;
+import ml.docilealligator.infinityforreddit.thing.StreamableVideo;
+import ml.docilealligator.infinityforreddit.thing.VoteThing;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -722,9 +724,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                             mPost.getRedgifsId(), APIUtils.USER_AGENT);
                     FetchRedgifsVideoLinks.fetchRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
                             ((PostDetailBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall,
-                            new FetchRedgifsVideoLinks.FetchRedgifsVideoLinksListener() {
+                            new FetchVideoLinkListener() {
                                 @Override
-                                public void success(String webm, String mp4) {
+                                public void onFetchRedgifsVideoLinkSuccess(String webm, String mp4) {
                                     mPost.setVideoDownloadUrl(mp4);
                                     mPost.setVideoUrl(mp4);
                                     mPost.setLoadRedgifsOrStreamableVideoSuccess(true);
@@ -732,7 +734,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                 }
 
                                 @Override
-                                public void failed(int errorCode) {
+                                public void failed(@Nullable Integer messageRes) {
                                     ((PostDetailBaseVideoAutoplayViewHolder) holder).loadFallbackDirectVideo();
                                 }
                             });
@@ -741,9 +743,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             mStreamableApiProvider.get().getStreamableData(mPost.getStreamableShortCode());
                     FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, new Handler(),
                             ((PostDetailBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall,
-                            new FetchStreamableVideo.FetchStreamableVideoListener() {
+                            new FetchVideoLinkListener() {
                                 @Override
-                                public void success(StreamableVideo streamableVideo) {
+                                public void onFetchStreamableVideoLinkSuccess(StreamableVideo streamableVideo) {
                                     StreamableVideo.Media media = streamableVideo.mp4 == null ? streamableVideo.mp4Mobile : streamableVideo.mp4;
                                     mPost.setVideoDownloadUrl(media.url);
                                     mPost.setVideoUrl(media.url);
@@ -752,7 +754,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                 }
 
                                 @Override
-                                public void failed() {
+                                public void failed(@Nullable Integer messageRes) {
                                     ((PostDetailBaseVideoAutoplayViewHolder) holder).loadFallbackDirectVideo();
                                 }
                             });
@@ -808,7 +810,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     String noPreviewLinkDomain = Uri.parse(mPost.getUrl()).getHost();
                     ((PostDetailNoPreviewViewHolder) holder).binding.linkTextViewItemPostDetailNoPreview.setVisibility(View.VISIBLE);
                     ((PostDetailNoPreviewViewHolder) holder).binding.linkTextViewItemPostDetailNoPreview.setText(noPreviewLinkDomain);
-                    ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_link);
+                    ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_link_day_night_24dp);
                 } else {
                     ((PostDetailNoPreviewViewHolder) holder).binding.linkTextViewItemPostDetailNoPreview.setVisibility(View.GONE);
                     switch (mPost.getPostType()) {
@@ -816,32 +818,32 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             if (!mHidePostType) {
                                 ((PostDetailNoPreviewViewHolder) holder).binding.typeTextViewItemPostDetailNoPreview.setText(R.string.video);
                             }
-                            ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_outline_video_24dp);
+                            ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_video_day_night_24dp);
                             break;
                         case Post.IMAGE_TYPE:
                             if (!mHidePostType) {
                                 ((PostDetailNoPreviewViewHolder) holder).binding.typeTextViewItemPostDetailNoPreview.setText(R.string.image);
                             }
-                            ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_image_24dp);
+                            ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
                             break;
                         case Post.GIF_TYPE:
                             if (!mHidePostType) {
                                 ((PostDetailNoPreviewViewHolder) holder).binding.typeTextViewItemPostDetailNoPreview.setText(R.string.gif);
                             }
-                            ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_image_24dp);
+                            ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_image_day_night_24dp);
                             break;
                         case Post.GALLERY_TYPE:
                             if (!mHidePostType) {
                                 ((PostDetailNoPreviewViewHolder) holder).binding.typeTextViewItemPostDetailNoPreview.setText(R.string.gallery);
                             }
-                            ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_gallery_24dp);
+                            ((PostDetailNoPreviewViewHolder) holder).binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setImageResource(R.drawable.ic_gallery_day_night_24dp);
                             break;
                     }
                 }
             } else if (holder instanceof PostDetailGalleryViewHolder) {
                 if (mDataSavingMode && mDisableImagePreview) {
                     ((PostDetailGalleryViewHolder) holder).binding.noPreviewPostTypeImageViewItemPostDetailGallery.setVisibility(View.VISIBLE);
-                    ((PostDetailGalleryViewHolder) holder).binding.noPreviewPostTypeImageViewItemPostDetailGallery.setImageResource(R.drawable.ic_gallery_24dp);
+                    ((PostDetailGalleryViewHolder) holder).binding.noPreviewPostTypeImageViewItemPostDetailGallery.setImageResource(R.drawable.ic_gallery_day_night_24dp);
                 } else {
                     ((PostDetailGalleryViewHolder) holder).binding.galleryFrameLayoutItemPostDetailGallery.setVisibility(View.VISIBLE);
                     ((PostDetailGalleryViewHolder) holder).binding.imageIndexTextViewItemPostDetailGallery.setText(mActivity.getString(R.string.image_index_in_gallery, 1, mPost.getGallery().size()));
@@ -1111,9 +1113,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 mActivity.startActivity(intent);
             } else if (post.getPostType() == Post.GALLERY_TYPE) {
                 Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
-                intent.putParcelableArrayListExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, post.getGallery());
-                intent.putExtra(ViewRedditGalleryActivity.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
-                intent.putExtra(ViewRedditGalleryActivity.EXTRA_IS_NSFW, post.isNSFW());
+                intent.putExtra(ViewRedditGalleryActivity.EXTRA_POST, post);
                 intent.putExtra(ViewRedditGalleryActivity.EXTRA_GALLERY_ITEM_INDEX, galleryItemIndex);
                 mActivity.startActivity(intent);
             }
@@ -1256,6 +1256,19 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             this.commentsCountButton = commentsCountButton;
             this.saveButton = saveButton;
             this.shareButton = shareButton;
+
+            itemView.setOnLongClickListener(v -> {
+                PostOptionsBottomSheetFragment postOptionsBottomSheetFragment;
+                if (mPost.getPostType() == Post.GALLERY_TYPE && this instanceof PostDetailGalleryViewHolder) {
+                    postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(mPost,
+                            mFragment.getPostListPosition(),
+                            ((LinearLayoutManagerBugFixed) ((PostDetailGalleryViewHolder) this).binding.galleryRecyclerViewItemPostDetailGallery.getLayoutManager()).findFirstVisibleItemPosition());
+                } else {
+                    postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(mPost, mFragment.getPostListPosition());
+                }
+                postOptionsBottomSheetFragment.show(mActivity.getSupportFragmentManager(), postOptionsBottomSheetFragment.getTag());
+                return true;
+            });
 
             iconGifImageView.setOnClickListener(view -> subredditTextView.performClick());
 
@@ -1679,7 +1692,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             archivedImageView.setColorFilter(mArchivedTintColor, PorterDuff.Mode.SRC_IN);
             lockedImageView.setColorFilter(mLockedTintColor, PorterDuff.Mode.SRC_IN);
             crosspostImageView.setColorFilter(mCrosspostTintColor, PorterDuff.Mode.SRC_IN);
-            Drawable upvoteRatioDrawable = Utils.getTintedDrawable(mActivity, R.drawable.ic_upvote_ratio, mUpvoteRatioTintColor);
+            Drawable upvoteRatioDrawable = Utils.getTintedDrawable(mActivity, R.drawable.ic_upvote_ratio_18dp, mUpvoteRatioTintColor);
             upvoteRatioTextView.setCompoundDrawablesWithIntrinsicBounds(
                     upvoteRatioDrawable, null, null, null);
             upvoteRatioTextView.setTextColor(mSecondaryTextColor);
@@ -2098,6 +2111,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             binding.imageViewItemPostDetailVideoAndGifPreview.setOnClickListener(view -> {
                 openMedia(mPost);
             });
+
+            binding.imageViewItemPostDetailVideoAndGifPreview.setOnLongClickListener(v -> {
+                itemView.performLongClick();
+                return true;
+            });
         }
     }
 
@@ -2135,6 +2153,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
             binding.imageViewItemPostDetailImageAndGifAutoplay.setOnClickListener(view -> {
                 openMedia(mPost);
+            });
+
+            binding.imageViewItemPostDetailImageAndGifAutoplay.setOnLongClickListener(view -> {
+                itemView.performLongClick();
+                return true;
             });
         }
     }
@@ -2182,6 +2205,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                 mActivity.startActivity(intent);
             });
+
+            binding.imageViewItemPostDetailLink.setOnLongClickListener(view -> {
+                itemView.performLongClick();
+                return true;
+            });
         }
     }
 
@@ -2223,6 +2251,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
             binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setOnClickListener(view -> {
                 openMedia(mPost);
+            });
+
+            binding.imageViewNoPreviewPostTypeItemPostDetailNoPreview.setOnLongClickListener(view -> {
+                itemView.performLongClick();
+                return true;
             });
         }
     }
@@ -2272,27 +2305,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mCardViewColor, mCommentColor, mScale);
             binding.galleryRecyclerViewItemPostDetailGallery.setAdapter(adapter);
             new PagerSnapHelper().attachToRecyclerView(binding.galleryRecyclerViewItemPostDetailGallery);
-            binding.galleryRecyclerViewItemPostDetailGallery.setOnTouchListener((v, motionEvent) -> {
-                if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP || motionEvent.getActionMasked() == MotionEvent.ACTION_CANCEL) {
-                    if (mActivity.mSliderPanel != null) {
-                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(false);
-                    }
-                    if (mActivity.mViewPager2 != null) {
-                        mActivity.mViewPager2.setUserInputEnabled(true);
-                    }
-                    mActivity.unlockSwipeRightToGoBack();
-                } else {
-                    if (mActivity.mSliderPanel != null) {
-                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
-                    }
-                    if (mActivity.mViewPager2 != null) {
-                        mActivity.mViewPager2.setUserInputEnabled(false);
-                    }
-                    mActivity.lockSwipeRightToGoBack();
-                }
-
-                return false;
-            });
             LinearLayoutManagerBugFixed layoutManager = new LinearLayoutManagerBugFixed(mActivity, RecyclerView.HORIZONTAL, false);
             binding.galleryRecyclerViewItemPostDetailGallery.setLayoutManager(layoutManager);
             binding.galleryRecyclerViewItemPostDetailGallery.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -2311,7 +2323,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 private float downX;
                 private float downY;
                 private boolean dragged;
+                private long downTime;
                 private final int minTouchSlop = ViewConfiguration.get(mActivity).getScaledTouchSlop();
+                private final int longClickThreshold = ViewConfiguration.getLongPressTimeout();
+                private boolean longPressed;
 
                 @Override
                 public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
@@ -2320,18 +2335,44 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         case MotionEvent.ACTION_DOWN:
                             downX = e.getRawX();
                             downY = e.getRawY();
+                            downTime = System.currentTimeMillis();
+
+                            if (mActivity.mSliderPanel != null) {
+                                mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
+                            }
+                            if (mActivity.mViewPager2 != null) {
+                                mActivity.mViewPager2.setUserInputEnabled(false);
+                            }
+                            mActivity.lockSwipeRightToGoBack();
                             break;
                         case MotionEvent.ACTION_MOVE:
-                            if(Math.abs(e.getRawX() - downX) > minTouchSlop || Math.abs(e.getRawY() - downY) > minTouchSlop) {
+                            if (Math.abs(e.getRawX() - downX) > minTouchSlop || Math.abs(e.getRawY() - downY) > minTouchSlop) {
                                 dragged = true;
                             }
+                            if (!dragged && !longPressed) {
+                                if (System.currentTimeMillis() - downTime >= longClickThreshold) {
+                                    itemView.performLongClick();
+                                    longPressed = true;
+                                }
+                            }
+
+                            if (mActivity.mSliderPanel != null) {
+                                mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
+                            }
+                            if (mActivity.mViewPager2 != null) {
+                                mActivity.mViewPager2.setUserInputEnabled(false);
+                            }
+                            mActivity.lockSwipeRightToGoBack();
                             break;
                         case MotionEvent.ACTION_UP:
-                            if (!dragged) {
-                                int position = getBindingAdapterPosition();
-                                if (position >= 0) {
-                                    if (mPost != null) {
-                                        openMedia(mPost, layoutManager.findFirstVisibleItemPosition());
+                        case MotionEvent.ACTION_CANCEL:
+                            if (e.getActionMasked() == MotionEvent.ACTION_UP && !dragged) {
+                                if (System.currentTimeMillis() - downTime < longClickThreshold) {
+                                    int position = getBindingAdapterPosition();
+                                    if (position >= 0) {
+                                        if (mPost != null) {
+                                            openMedia(mPost, layoutManager.findFirstVisibleItemPosition());
+                                        }
                                     }
                                 }
                             }
@@ -2339,6 +2380,17 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             downX = 0;
                             downY = 0;
                             dragged = false;
+                            longPressed = false;
+
+                            if (mActivity.mSliderPanel != null) {
+                                mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(false);
+                            }
+
+                            if (mActivity.mViewPager2 != null) {
+                                mActivity.mViewPager2.setUserInputEnabled(true);
+                            }
+                            mActivity.unlockSwipeRightToGoBack();
+                            break;
                     }
                     return false;
                 }

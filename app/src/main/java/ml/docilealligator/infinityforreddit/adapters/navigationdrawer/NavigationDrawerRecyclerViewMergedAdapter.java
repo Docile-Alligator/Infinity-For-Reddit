@@ -39,13 +39,13 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
                 glide, accountName, sharedPreferences, navigationDrawerSharedPreferences, securitySharedPreferences,
                 new HeaderSectionRecyclerViewAdapter.PageToggle() {
                     @Override
-                    public void openAccountSection() {
+                    public void openAccountManagement() {
                         NavigationDrawerRecyclerViewMergedAdapter.this.openAccountSection();
                     }
 
                     @Override
-                    public void closeAccountSectionWithoutChangeIconResource() {
-                        NavigationDrawerRecyclerViewMergedAdapter.this.closeAccountSectionWithoutChangeIconResource();
+                    public void closeAccountManagement() {
+                        NavigationDrawerRecyclerViewMergedAdapter.this.closeAccountManagement(false);
                     }
                 });
         accountSectionRecyclerViewAdapter = new AccountSectionRecyclerViewAdapter(baseActivity, customThemeWrapper,
@@ -55,7 +55,7 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
         postSectionRecyclerViewAdapter = new PostSectionRecyclerViewAdapter(baseActivity, customThemeWrapper,
                 navigationDrawerSharedPreferences, !accountName.equals(Account.ANONYMOUS_ACCOUNT), itemClickListener);
         preferenceSectionRecyclerViewAdapter = new PreferenceSectionRecyclerViewAdapter(baseActivity, customThemeWrapper,
-                accountName, nsfwAndSpoilerSharedPreferences, navigationDrawerSharedPreferences, itemClickListener);
+                navigationDrawerSharedPreferences, itemClickListener);
         favoriteSubscribedSubredditsSectionRecyclerViewAdapter = new FavoriteSubscribedSubredditsSectionRecyclerViewAdapter(
                 baseActivity, glide, customThemeWrapper, navigationDrawerSharedPreferences, itemClickListener);
         subscribedSubredditsRecyclerViewAdapter = new SubscribedSubredditsRecyclerViewAdapter(baseActivity, glide,
@@ -88,7 +88,7 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
         mainPageConcatAdapter.addAdapter(accountManagementSectionRecyclerViewAdapter);
     }
 
-    public void closeAccountSectionWithoutChangeIconResource() {
+    public void closeAccountManagement(boolean refreshHeader) {
         mainPageConcatAdapter.removeAdapter(accountManagementSectionRecyclerViewAdapter);
 
         mainPageConcatAdapter.addAdapter(accountSectionRecyclerViewAdapter);
@@ -97,11 +97,10 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
         mainPageConcatAdapter.addAdapter(preferenceSectionRecyclerViewAdapter);
         mainPageConcatAdapter.addAdapter(favoriteSubscribedSubredditsSectionRecyclerViewAdapter);
         mainPageConcatAdapter.addAdapter(subscribedSubredditsRecyclerViewAdapter);
-    }
 
-    public void closeAccountSectionWithoutChangeIconResource(boolean checkIsInMainPage) {
-        closeAccountSectionWithoutChangeIconResource();
-        headerSectionRecyclerViewAdapter.closeAccountSectionWithoutChangeIconResource(checkIsInMainPage);
+        if (refreshHeader) {
+            headerSectionRecyclerViewAdapter.closeAccountManagement(true);
+        }
     }
 
     public void updateAccountInfo(String profileImageUrl, String bannerImageUrl, int karma) {
@@ -124,10 +123,6 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
         accountSectionRecyclerViewAdapter.setInboxCount(inboxCount);
     }
 
-    public void setNSFWEnabled(boolean isNSFWEnabled) {
-        preferenceSectionRecyclerViewAdapter.setNSFWEnabled(isNSFWEnabled);
-    }
-
     public void setFavoriteSubscribedSubreddits(List<SubscribedSubredditData> favoriteSubscribedSubreddits) {
         favoriteSubscribedSubredditsSectionRecyclerViewAdapter.setFavoriteSubscribedSubreddits(favoriteSubscribedSubreddits);
     }
@@ -144,5 +139,6 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
         void onMenuClick(int stringId);
         void onSubscribedSubredditClick(String subredditName);
         void onAccountClick(@NonNull String accountName);
+        void onAccountLongClick(@NonNull String accountName);
     }
 }

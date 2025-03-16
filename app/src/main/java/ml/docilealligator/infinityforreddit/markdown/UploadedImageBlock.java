@@ -2,7 +2,7 @@ package ml.docilealligator.infinityforreddit.markdown;
 
 import org.commonmark.node.CustomBlock;
 
-import ml.docilealligator.infinityforreddit.UploadedImage;
+import ml.docilealligator.infinityforreddit.thing.UploadedImage;
 
 public class UploadedImageBlock extends CustomBlock {
     public UploadedImage uploadeImage;

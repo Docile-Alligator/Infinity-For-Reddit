@@ -56,8 +56,6 @@
     <string name="action_unhide_post">"글 숨기기 해제"</string>
     <string name="action_edit_post">"글 편집"</string>
     <string name="action_delete_post">"글 삭제"</string>
-    <string name="action_mark_nsfw">"NSFW 표기"</string>
-    <string name="action_unmark_nsfw">"NSFW 표기 해제"</string>
     <string name="action_mark_spoiler">"스포일러 표기"</string>
     <string name="action_unmark_spoiler">"스포일러 표기 해제"</string>
     <string name="action_edit_flair">"플레어 편집"</string>
@@ -102,7 +100,6 @@
     <string name="load_messages_failed">"메시지들을 로드하는데 오류가 발생했습니다.
 재시도하려면 탭하세요."</string>
     <string name="no_messages">"비어 있음"</string>
-    <string name="nsfw">"NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="karma_info">"카르마: %1$d"</string>
@@ -144,7 +141,6 @@
     <string name="follow_failed">"팔로우 실패"</string>
     <string name="unfollowed">"언팔로우됨"</string>
     <string name="unfollow_failed">"언팔로우 실패"</string>
-    <string name="content_description_banner_imageview">"서브레딧 배너 사진"</string>
     <string name="app_label">"인피니티"</string>
     <string name="search_hint">"아무거나 검색"</string>
     <string name="no_posts_no_lazy_mode">"글 없음"</string>
@@ -278,10 +274,6 @@
     <string name="edit_success">"성공적으로 편집"</string>
     <string name="delete_post_success">"성공적으로 삭제"</string>
     <string name="delete_post_failed">"삭제 실패"</string>
-    <string name="mark_nsfw_success">"성공적으로 NSFW 표기"</string>
-    <string name="mark_nsfw_failed">"NSFW 표기 실패"</string>
-    <string name="unmark_nsfw_success">"성공적으로 NSFW 표기 해제"</string>
-    <string name="unmark_nsfw_failed">"NSFW 표기 해제 실패"</string>
     <string name="mark_spoiler_success">"성공적으로 스포일러 표기"</string>
     <string name="mark_spoiler_failed">"스포일러 표기 실패"</string>
     <string name="unmark_spoiler_success">"성공적으로 스포일러 표기 해제"</string>
@@ -314,7 +306,6 @@
     <string name="settigns_video_title">"둥영상"</string>
     <string name="settings_video_autoplay_title">"둥영상 자동 재생"</string>
     <string name="settings_mute_autoplaying_videos_title">"자동 재생된 둥영상 음소거"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"NSFW 둥영상 자동 재생"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"화면에 보이지 않아도 자동재생(초상화)"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"영상이 보일시 자동재생"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"화면에 보이지 않아도 자동재생(렌드스케이프)"</string>
@@ -327,7 +318,6 @@
     <string name="settings_volume_keys_navigate_comments_title">"볼륨키로 게시글 댓글 이동"</string>
     <string name="settings_volume_keys_navigate_posts_title">"볼륨 키로 포스트 스크롤하기"</string>
     <string name="settings_mute_video_title">"둥영상 음소거"</string>
-    <string name="settings_mute_nsfw_video_title">"NSFW 둥영상 음소거"</string>
     <string name="settings_video_player_ignore_nav_bar_title">"영상에서 내비게이션 바 무시"</string>
     <string name="settings_confirm_to_exit">"나갈 때 확인"</string>
     <string name="settings_category_comment_title">"댓글"</string>
@@ -351,8 +341,6 @@
     <string name="settings_font_summary">"폰트"</string>
     <string name="settings_title_font_summary">"제목"</string>
     <string name="settings_content_font_summary">"콘텐츠"</string>
-    <string name="settings_enable_nsfw_title">"NSFW 활성화"</string>
-    <string name="settings_blur_nsfw_title">"NSFW 사진 흐리게 하기"</string>
     <string name="settings_blur_spoiler_title">"스포일러 사진 흐리게 하기"</string>
     <string name="settings_about_master_title">"정보"</string>
     <string name="settings_credits_master_title">"크레딧"</string>
@@ -441,8 +429,6 @@
     <string name="delete_multi_reddit_success">"성공적으로 삭제"</string>
     <string name="delete_multi_reddit_failed">"삭제 실패"</string>
     <string name="delete_multi_reddit_dialog_message">"정말로 삭제할까요?"</string>
-    <string name="enable_nsfw">"NSFW 활성화"</string>
-    <string name="disable_nsfw">"NSFW 비활성화"</string>
     <string name="cannot_save_image">"이 사진을 저장할 수 없습니다"</string>
     <string name="cannot_save_gif">"이 gif를 저장할 수 없습니다"</string>
     <string name="cannot_get_storage">"어플 저장소에 접근할 수 없습니다"</string>
@@ -489,7 +475,6 @@
     <string name="theme_item_subscribed_color_detail">"적용 대상: 구독 해제 버튼"</string>
     <string name="theme_item_unsubscribed_color">"구독 해제됨"</string>
     <string name="theme_item_unsubscribed_color_detail">"적용 대상: 구독 버튼"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW와 스포일러"</string>
     <string name="settings_more_tabs_show_subscribed_subreddits_title">"구독한 서브레딧 보기"</string>
     <string name="only_spoiler">"스포일러만"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"위험"</string>

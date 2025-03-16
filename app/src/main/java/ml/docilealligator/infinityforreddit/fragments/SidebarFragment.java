@@ -233,8 +233,8 @@ public class SidebarFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
     public void fetchSubredditData() {

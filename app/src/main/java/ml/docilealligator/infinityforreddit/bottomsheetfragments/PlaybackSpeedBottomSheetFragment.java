@@ -39,28 +39,28 @@ public class PlaybackSpeedBottomSheetFragment extends LandscapeExpandedRoundedBo
         int playbackSpeed = getArguments().getInt(EXTRA_PLAYBACK_SPEED, ViewVideoActivity.PLAYBACK_SPEED_NORMAL);
         switch (playbackSpeed) {
             case ViewVideoActivity.PLAYBACK_SPEED_25:
-                binding.playbackSpeed025TextViewPlaybackSpeedBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_playback_speed_24dp, 0);
+                binding.playbackSpeed025TextViewPlaybackSpeedBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_playback_speed_day_night_24dp, 0);
                 break;
             case ViewVideoActivity.PLAYBACK_SPEED_50:
-                binding.playbackSpeed050TextViewPlaybackSpeedBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_playback_speed_24dp, 0);
+                binding.playbackSpeed050TextViewPlaybackSpeedBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_playback_speed_day_night_24dp, 0);
                 break;
             case ViewVideoActivity.PLAYBACK_SPEED_75:
-                binding.playbackSpeed075TextViewPlaybackSpeedBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_playback_speed_24dp, 0);
+                binding.playbackSpeed075TextViewPlaybackSpeedBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_playback_speed_day_night_24dp, 0);
                 break;
             case ViewVideoActivity.PLAYBACK_SPEED_NORMAL:
-                binding.playbackSpeedNormalTextViewPlaybackSpeedBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_playback_speed_24dp, 0);
+                binding.playbackSpeedNormalTextViewPlaybackSpeedBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_playback_speed_day_night_24dp, 0);
                 break;
             case ViewVideoActivity.PLAYBACK_SPEED_125:
-                binding.playbackSpeed125TextViewPlaybackSpeedBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_playback_speed_24dp, 0);
+                binding.playbackSpeed125TextViewPlaybackSpeedBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_playback_speed_day_night_24dp, 0);
                 break;
             case ViewVideoActivity.PLAYBACK_SPEED_150:
-                binding.playbackSpeed150TextViewPlaybackSpeedBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_playback_speed_24dp, 0);
+                binding.playbackSpeed150TextViewPlaybackSpeedBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_playback_speed_day_night_24dp, 0);
                 break;
             case ViewVideoActivity.PLAYBACK_SPEED_175:
-                binding.playbackSpeed175TextViewPlaybackSpeedBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_playback_speed_24dp, 0);
+                binding.playbackSpeed175TextViewPlaybackSpeedBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_playback_speed_day_night_24dp, 0);
                 break;
             case ViewVideoActivity.PLAYBACK_SPEED_200:
-                binding.playbackSpeed200TextViewPlaybackSpeedBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_playback_speed_24dp, 0);
+                binding.playbackSpeed200TextViewPlaybackSpeedBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_playback_speed_day_night_24dp, 0);
                 break;
         }
 

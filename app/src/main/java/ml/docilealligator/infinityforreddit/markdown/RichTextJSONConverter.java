@@ -47,7 +47,8 @@ import java.util.Stack;
 
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonReducer;
-import ml.docilealligator.infinityforreddit.UploadedImage;
+import ml.docilealligator.infinityforreddit.thing.GiphyGif;
+import ml.docilealligator.infinityforreddit.thing.UploadedImage;
 
 public class RichTextJSONConverter implements Visitor {
     private static final int BOLD = 1;
@@ -69,6 +70,7 @@ public class RichTextJSONConverter implements Visitor {
     private static final String SPOILER_E = "spoilertext";
     private static final String TABLE_E = "table";
     private static final String IMAGE_E = "img";
+    private static final String GIF_E = "gif";
 
     private static final String TYPE = "e";
     private static final String CONTENT = "c";
@@ -113,6 +115,35 @@ public class RichTextJSONConverter implements Visitor {
         uploadedImagePlugin.setUploadedImages(uploadedImages);
         Markwon markwon = MarkdownUtils.createContentSubmissionRedditMarkwon(
                 context, uploadedImagePlugin);
+
+        List<Node> nodes = MarkwonReducer.directChildren().reduce(markwon.parse(markdown));
+
+        JSONObject richText = new JSONObject();
+
+        for (Node n : nodes) {
+            n.accept(this);
+        }
+
+        richText.put(DOCUMENT, document);
+        return richText.toString();
+    }
+
+    /**
+     *
+     * @param context
+     * @param markdown
+     * @param uploadedImages
+     * @param giphyGif
+     * @param uploadedImagesMap this is for editing comment with giphy gifs. Too lazy to convert UploadedImage to GiphyGif.
+     * @return
+     * @throws JSONException
+     */
+    public String constructRichTextJSON(Context context, String markdown,
+                                        List<UploadedImage> uploadedImages, @Nullable GiphyGif giphyGif) throws JSONException {
+        UploadedImagePlugin uploadedImagePlugin = new UploadedImagePlugin();
+        uploadedImagePlugin.setUploadedImages(uploadedImages);
+        Markwon markwon = MarkdownUtils.createContentSubmissionRedditMarkwon(
+                context, uploadedImagePlugin, new GiphyGifPlugin(giphyGif, uploadedImages));
 
         List<Node> nodes = MarkwonReducer.directChildren().reduce(markwon.parse(markdown));
 
@@ -578,6 +609,17 @@ public class RichTextJSONConverter implements Visitor {
                 nodeJSON.put(TYPE, IMAGE_E);
                 nodeJSON.put(IMAGE_ID, ((UploadedImageBlock) customBlock).uploadeImage.imageUrlOrKey);
                 nodeJSON.put(CONTENT, ((UploadedImageBlock) customBlock).uploadeImage.getCaption());
+
+                document.put(nodeJSON);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (customBlock instanceof GiphyGifBlock) {
+            //Nothing is allowed inside this block.
+            try {
+                JSONObject nodeJSON = new JSONObject();
+                nodeJSON.put(TYPE, GIF_E);
+                nodeJSON.put(IMAGE_ID, ((GiphyGifBlock) customBlock).giphyGif.id);
 
                 document.put(nodeJSON);
             } catch (JSONException e) {

@@ -32,7 +32,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_gravity="center_vertical"
                 android:drawablePadding="32dp"
-                android:text="@string/settings_enable_nsfw_title"
+                android:text="@string/settings_over_18_title"
                 android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
@@ -65,7 +65,7 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="16dp"
                 android:layout_gravity="center_vertical"
-                android:text="@string/settings_blur_nsfw_title"
+                android:text="@string/settings_blur_over_18_title"
                 android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
@@ -98,7 +98,7 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="16dp"
                 android:layout_gravity="center_vertical"
-                android:text="@string/settings_do_not_blur_nsfw_in_nsfw_subreddits_title"
+                android:text="@string/settings_do_not_blur_over_18_in_over_18_subreddits_title"
                 android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
@@ -179,7 +179,7 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="16dp"
                 android:layout_gravity="center_vertical"
-                android:text="@string/settings_disable_nsfw_forever_title"
+                android:text="@string/settings_disable_over_18_forever_title"
                 android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />

@@ -40,9 +40,6 @@ import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.SaveThing;
-import ml.docilealligator.infinityforreddit.SortType;
-import ml.docilealligator.infinityforreddit.VoteThing;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
@@ -77,6 +74,9 @@ import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.thing.SaveThing;
+import ml.docilealligator.infinityforreddit.thing.SortType;
+import ml.docilealligator.infinityforreddit.thing.VoteThing;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -1052,18 +1052,30 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         }
     }
 
-    public void editComment(String commentAuthor, String commentContentMarkdown, int position) {
-        if (commentAuthor != null) {
-            mVisibleComments.get(position).setAuthor(commentAuthor);
+    public void editComment(Comment comment, int position) {
+        if (position < mVisibleComments.size() && position >= 0) {
+            Comment oldComment = mVisibleComments.get(position);
+            if (oldComment.getId().equals(comment.getId())) {
+                oldComment.setCommentMarkdown(comment.getCommentMarkdown());
+                oldComment.setMediaMetadataMap(comment.getMediaMetadataMap());
+
+                if (mIsSingleCommentThreadMode) {
+                    notifyItemChanged(position + 1);
+                } else {
+                    notifyItemChanged(position);
+                }
+            }
         }
+    }
 
-        mVisibleComments.get(position).setSubmittedByAuthor(mVisibleComments.get(position).isSubmitter());
-
-        mVisibleComments.get(position).setCommentMarkdown(commentContentMarkdown);
-        if (mIsSingleCommentThreadMode) {
-            notifyItemChanged(position + 1);
-        } else {
-            notifyItemChanged(position);
+    public void editComment(String commentContentMarkdown, int position) {
+        if (position < mVisibleComments.size() && position >= 0) {
+            mVisibleComments.get(position).setCommentMarkdown(commentContentMarkdown);
+            if (mIsSingleCommentThreadMode) {
+                notifyItemChanged(position + 1);
+            } else {
+                notifyItemChanged(position);
+            }
         }
     }
 
@@ -1086,6 +1098,15 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
             }
         }
+    }
+
+    public void toggleReplyNotifications(String fullName, int position) {
+        if (mVisibleComments != null && position >= 0 && position < mVisibleComments.size()) {
+            if (mVisibleComments.get(position).getFullName().equals(fullName)) {
+                mVisibleComments.get(position).toggleSendReplies();
+            }
+        }
+        //TODO The comment's position may change
     }
 
     public int getNextParentCommentPosition(int currentPosition) {
@@ -1356,12 +1377,12 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             LinearLayoutManagerBugFixed linearLayoutManager = new SwipeLockLinearLayoutManager(mActivity, new SwipeLockInterface() {
                 @Override
                 public void lockSwipe() {
-                    ((ViewPostDetailActivity) mActivity).lockSwipeRightToGoBack();
+                    mActivity.lockSwipeRightToGoBack();
                 }
 
                 @Override
                 public void unlockSwipe() {
-                    ((ViewPostDetailActivity) mActivity).unlockSwipeRightToGoBack();
+                    mActivity.unlockSwipeRightToGoBack();
                 }
             });
             commentMarkdownView.setLayoutManager(linearLayoutManager);

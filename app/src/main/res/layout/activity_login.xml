@@ -51,6 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:layout_gravity="bottom|end"
+        android:contentDescription="@string/content_description_alternative_login_method"
         android:src="@drawable/ic_login_24dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

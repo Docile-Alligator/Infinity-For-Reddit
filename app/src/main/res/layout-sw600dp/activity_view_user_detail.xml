@@ -15,14 +15,15 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar_layout_view_user_detail_activity"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:titleEnabled="false"
             app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
             app:toolbarId="@+id/toolbar_view_user_detail_activity">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <pl.droidsonroids.gif.GifImageView
                     android:id="@+id/banner_image_view_view_user_detail_activity"
@@ -31,81 +32,99 @@
                     android:layout_height="160dp"
                     android:contentDescription="@string/content_description_banner_imageview" />
 
-                <pl.droidsonroids.gif.GifImageView
-                    android:id="@+id/icon_gif_image_view_view_user_detail_activity"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:layout_marginTop="-36dp"
-                    android:layout_below="@id/banner_image_view_view_user_detail_activity"
-                    android:layout_centerHorizontal="true"
-                    android:elevation="4dp" />
-
-                <LinearLayout
-                    android:id="@+id/toolbar_linear_layout_view_user_detail_activity"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/toolbar_constraint_layout_view_user_detail_activity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="36dp"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:layout_below="@id/banner_image_view_view_user_detail_activity">
+                    android:padding="16dp">
+
+                    <pl.droidsonroids.gif.GifImageView
+                        android:id="@+id/icon_gif_image_view_view_user_detail_activity"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/karma_text_view_view_user_detail_activity" />
 
                     <TextView
                         android:id="@+id/user_name_text_view_view_user_detail_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginStart="16dp"
+                        android:paddingTop="8dp"
                         android:textSize="?attr/font_18"
                         android:fontFamily="?attr/font_family"
-                        android:layout_gravity="center_horizontal"/>
+                        app:layout_constraintVertical_chainStyle="packed"
+                        app:layout_constraintStart_toEndOf="@id/icon_gif_image_view_view_user_detail_activity"
+                        app:layout_constraintTop_toTopOf="@id/icon_gif_image_view_view_user_detail_activity"
+                        app:layout_constraintBottom_toTopOf="@id/subscribe_user_chip_view_user_detail_activity" />
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/subscribe_user_chip_view_user_detail_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:layout_gravity="center_horizontal"
+                        android:layout_marginStart="16dp"
                         android:visibility="gone"
-                        app:chipStrokeColor="#00000000" />
+                        app:chipStrokeColor="#00000000"
+                        app:layout_constraintStart_toEndOf="@id/icon_gif_image_view_view_user_detail_activity"
+                        app:layout_constraintTop_toBottomOf="@id/user_name_text_view_view_user_detail_activity"
+                        app:layout_constraintBottom_toBottomOf="@id/icon_gif_image_view_view_user_detail_activity"
+                        tools:visibility="visible" />
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/karma_text_view_view_user_detail_activity"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp">
+                        android:layout_marginTop="16dp"
+                        android:textSize="?attr/font_default"
+                        android:fontFamily="?attr/font_family"
+                        app:layout_constraintEnd_toStartOf="@id/cakeday_text_view_view_user_detail_activity"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/barrier5"
+                        app:layout_constraintHorizontal_bias="0" />
 
-                        <TextView
-                            android:id="@+id/karma_text_view_view_user_detail_activity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_toStartOf="@id/cakeday_text_view_view_user_detail_activity"
-                            android:textSize="?attr/font_default"
-                            android:fontFamily="?attr/font_family" />
-
-                        <TextView
-                            android:id="@+id/cakeday_text_view_view_user_detail_activity"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="end"
-                            android:layout_alignParentEnd="true"
-                            android:textSize="?attr/font_default"
-                            android:fontFamily="?attr/font_family" />
-
-                    </RelativeLayout>
+                    <TextView
+                        android:id="@+id/cakeday_text_view_view_user_detail_activity"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="end"
+                        android:textSize="?attr/font_default"
+                        android:fontFamily="?attr/font_family"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/barrier5" />
 
                     <TextView
                         android:id="@+id/description_text_view_view_user_detail_activity"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginTop="16dp"
                         android:textSize="?attr/font_default"
                         android:fontFamily="?attr/font_family"
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        app:layout_constraintTop_toBottomOf="@id/barrier6"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        tools:visibility="visible" />
 
-                </LinearLayout>
+                    <androidx.constraintlayout.widget.Barrier
+                        android:id="@+id/barrier5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:barrierDirection="bottom"
+                        app:constraint_referenced_ids="icon_gif_image_view_view_user_detail_activity,subscribe_user_chip_view_user_detail_activity" />
 
-            </RelativeLayout>
+                    <androidx.constraintlayout.widget.Barrier
+                        android:id="@+id/barrier6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:barrierDirection="bottom"
+                        app:constraint_referenced_ids="karma_text_view_view_user_detail_activity,cakeday_text_view_view_user_detail_activity" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar_view_user_detail_activity"
@@ -166,6 +185,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:contentDescription="@null" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

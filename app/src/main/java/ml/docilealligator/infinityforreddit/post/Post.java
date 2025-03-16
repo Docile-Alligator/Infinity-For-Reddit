@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Map;
 
-import ml.docilealligator.infinityforreddit.MediaMetadata;
+import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 
 /**

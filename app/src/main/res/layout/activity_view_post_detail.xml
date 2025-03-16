@@ -90,10 +90,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:padding="8dp"
-                android:src="@drawable/ic_arrow_upward_black_24dp"
+                android:src="@drawable/ic_arrow_upward_day_night_24dp"
                 android:background="?actionBarItemBackground"
                 android:clickable="true"
-                android:focusable="true" />
+                android:focusable="true"
+                android:contentDescription="@string/content_description_previous_result" />
 
             <ImageView
                 android:id="@+id/next_result_image_view_view_post_detail_activity"
@@ -101,10 +102,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:padding="8dp"
-                android:src="@drawable/ic_arrow_downward_black_24dp"
+                android:src="@drawable/ic_arrow_downward_day_night_24dp"
                 android:background="?actionBarItemBackground"
                 android:clickable="true"
-                android:focusable="true" />
+                android:focusable="true"
+                android:contentDescription="@string/content_description_next_result" />
 
             <ImageView
                 android:id="@+id/close_search_panel_image_view_view_post_detail_activity"
@@ -115,7 +117,8 @@
                 android:src="@drawable/ic_close_24dp"
                 android:background="?actionBarItemBackground"
                 android:clickable="true"
-                android:focusable="true" />
+                android:focusable="true"
+                android:contentDescription="@string/content_description_close_search_panel" />
 
         </LinearLayout>
 

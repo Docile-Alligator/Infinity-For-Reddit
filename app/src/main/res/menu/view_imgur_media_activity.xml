@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_download_all_imgur_album_media_view_imgur_media_activity"
+        android:orderInCategory="10"
+        android:title="@string/action_download_all_imgur_album_media"
+        app:showAsAction="never" />
+</menu>

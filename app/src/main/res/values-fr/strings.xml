@@ -65,10 +65,7 @@
     <string name="action_unhide_post">"Afficher la publication"</string>
     <string name="action_edit_post">"Éditer la publication"</string>
     <string name="action_delete_post">"Supprimer la publication"</string>
-    <string name="action_mark_nsfw">"Marquer comme NSFW"</string>
 
-    <!-- Fuzzy -->
-    <string name="action_unmark_nsfw">"Ne pas marquer comme NSFW"</string>
     <string name="action_mark_spoiler">"Marquer comme Spoiler"</string>
 
     <!-- Fuzzy -->
@@ -111,7 +108,6 @@ Appuyez pour réessayer."</string>
     <string name="refresh_post_failed">"Erreur d'actualisation de la publication"</string>
     <string name="load_messages_failed">"Erreur de chargement des messages. Appuyez pour réessayer."</string>
     <string name="no_messages">"Vide"</string>
-    <string name="nsfw">"NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="karma_info">"Karma: %1$d"</string>
@@ -152,7 +148,6 @@ Appuyez pour réessayer."</string>
     <string name="follow_failed">"Échec du suivi"</string>
     <string name="unfollowed">"Suivi annulé"</string>
     <string name="unfollow_failed">"Echec de l'annulation du suivi"</string>
-    <string name="content_description_banner_imageview">"Image de la bannière du subreddit"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Rechercher n'importe quoi"</string>
     <string name="no_posts_no_lazy_mode">"Aucune publication disponible"</string>
@@ -303,13 +298,6 @@ Appuyez pour réessayer."</string>
     <string name="delete_post_success">"Suppression réussie"</string>
     <string name="delete_post_failed">"Suppression échouée"</string>
 
-    <!-- Fuzzy -->
-    <string name="mark_nsfw_success">"Marquage NSFW réussi"</string>
-    <string name="mark_nsfw_failed">"Marquage NSFW échoué"</string>
-
-    <!-- Fuzzy -->
-    <string name="unmark_nsfw_success">"Annulation de la marque NSFW réussie"</string>
-    <string name="unmark_nsfw_failed">"Annulation de la marque NSFW échouée"</string>
     <string name="mark_spoiler_success">"Marquage comme spoiler réussi"</string>
     <string name="mark_spoiler_failed">"Marquage comme spoiler échoué"</string>
 
@@ -352,9 +340,6 @@ Appuyez pour réessayer."</string>
     <string name="settings_mute_autoplaying_videos_title">"Couper le son des vidéos se lisant automatiquement"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_autoplay_nsfw_videos_title">"Lire automatiquement les vidéos NSFW"</string>
-
-    <!-- Fuzzy -->
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Décalage de la zone visible des vidéos se lisant automatiquement (Portrait)"</string>
 
     <!-- Fuzzy -->
@@ -379,7 +364,6 @@ peut ne pas fonctionner sur Android 11"</string>
     <string name="settings_volume_keys_navigate_comments_title">"Utiliser les boutons de volume pour naviguer dans les commentaires des publications"</string>
     <string name="settings_volume_keys_navigate_posts_title">"Utiliser les boutons de volume pour naviguer dans les publications"</string>
     <string name="settings_mute_video_title">"Couper le son des vidéos"</string>
-    <string name="settings_mute_nsfw_video_title">"Couper le son des vidéos NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="settings_video_player_ignore_nav_bar_title">"Ignorer la barre de navigation dans le lecteur vidéo"</string>
@@ -422,8 +406,6 @@ peut ne pas fonctionner sur Android 11"</string>
     <string name="settings_font_size_title">"Taille de police"</string>
     <string name="settings_title_font_size_title">"Taille de police du titre"</string>
     <string name="settings_content_font_size_title">"Taille de police du contenu"</string>
-    <string name="settings_enable_nsfw_title">"Afficher le contenu NSFW"</string>
-    <string name="settings_blur_nsfw_title">"Flouter les images NSFW"</string>
     <string name="settings_blur_spoiler_title">"Flouter les images Spoiler"</string>
     <string name="settings_about_master_title">"À propos"</string>
     <string name="settings_acknowledgement_master_title">"Reconnaissance"</string>
@@ -573,8 +555,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <!-- Removed '/!\'  because it was causing weird characters inside the app
 
 https://s3.eu-west-1.amazonaws.com/po-pub/i/dFZKKms9HbrDGOlcgW9QTcwF.jpg -->
-    <string name="enable_nsfw">"Activer NSFW"</string>
-    <string name="disable_nsfw">"Désactiver NSFW ?"</string>
     <string name="cannot_save_image">"Ne peut pas enregistrer l'image"</string>
     <string name="cannot_save_gif">"Ne peut pas enregistrer le gif"</string>
     <string name="cannot_get_storage">"Ne peut pas accéder au stockage"</string>
@@ -674,10 +654,6 @@ https://s3.eu-west-1.amazonaws.com/po-pub/i/dFZKKms9HbrDGOlcgW9QTcwF.jpg -->
     <string name="theme_item_spoiler_background_color_detail">"Appliqué à : couleur de fond de l'étiquette spoiler"</string>
     <string name="theme_item_spoiler_text_color">"Couleur du texte spoiler"</string>
     <string name="theme_item_spoiler_text_color_detail">"Appliqué à : couleur du texte dans l'étiquette spoiler"</string>
-    <string name="theme_item_nsfw_background_color">"Couleur du fond NSFW"</string>
-    <string name="theme_item_nsfw_background_color_detail">"Appliqué à : fond de l'étiquette NSFW"</string>
-    <string name="theme_item_nsfw_text_color">"Couleur du texte NSFW"</string>
-    <string name="theme_item_nsfw_text_color_detail">"Appliqué à : Couleur du texte de l'étiquette NSFW"</string>
     <string name="theme_item_flair_background_color">"Couleur d'arrière-plan du flair"</string>
 
     <!-- I don't think we need to translate "flair" and "tag"? -->
@@ -873,7 +849,6 @@ Exemple: motdepasse: 123456"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Nombre de colonnes dans le flux"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Portrait"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Paysage"</string>
-    <string name="settings_nsfw_and_spoiler_title">"PSPT &amp; Divulgacher"</string>
     <string name="settings_delete_all_legacy_settings_title">"Supprimer tout les anciens réglages"</string>
     <string name="restart_app_see_changes">"Redémarrer l'application pour voir les changements"</string>
     <string name="settings_tab_count">"Nombre d'onglets"</string>
@@ -940,8 +915,6 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
 
     <!-- Fuzzy -->
     <string name="warning">"Avertissement "</string>
-    <string name="this_is_a_nsfw_subreddit">"Cette Subreddit est PSPT (Pas Sécurisé Pour le Travail) "</string>
-    <string name="this_user_has_nsfw_content">"Cet utilisateur poste du contenu NSFW"</string>
     <string name="dismiss">"Annuler"</string>
     <string name="leave">"Quitter"</string>
 
@@ -952,10 +925,6 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="go_to_user">"Aller à l'utilisateur"</string>
     <string name="go_to_thing_hint">"Nom"</string>
     <string name="random">"Aléatoire"</string>
-    <string name="random_subreddit">"Subreddit aléatoire"</string>
-    <string name="random_nsfw_subreddit">"Subreddit NSFW aléatoire"</string>
-    <string name="random_post">"Post aléatoire"</string>
-    <string name="random_nsfw_post">"Post NSFW aléatoire"</string>
     <string name="fetch_random_thing_failed">"Réessayer plus-tard"</string>
     <string name="downloading">"Téléchargement"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all et r/popular"</string>
@@ -1021,7 +990,6 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="delete_all_read_posts_success">"Suppression de tous les post lus avec succès"</string>
     <string name="hide_read_posts">"Cacher les posts lus"</string>
     <string name="filter_posts">"Filtrer les posts"</string>
-    <string name="only_nsfw">"Seulement NSFW"</string>
     <string name="only_spoiler">"Seulement Spoiler"</string>
     <string name="title_excludes_strings_hint">"Titre: exclure les mots clés (mot1, mot2)"</string>
 
@@ -1074,7 +1042,6 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="action_share_link">"Partager le Lien"</string>
     <string name="action_copy_link">"Copier le Lien"</string>
     <string name="action_add_to_post_filter">"Ajouter aux Filtres de Post"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Ne pas cacher les images NSFW dans les Subreddits"</string>
     <string name="settings_show_avatar_on_the_right">"Voir l'avatar à droite"</string>
     <string name="settings_backup_settings_title">"Paramètres de Sauvegarde"</string>
     <string name="settings_restore_settings_title">"Restaurer les Paramètres"</string>
@@ -1150,7 +1117,6 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="settings_hide_post_flair">"Cacher le Flair du Post"</string>
     <string name="settings_crash_reports_title">"Rapports de Crash"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Dangereux"</string>
-    <string name="settings_disable_nsfw_forever_title">"Désactiver NSFW pour toujours"</string>
     <string name="settings_show_only_one_comment_level_indicator">"Afficher un seul indicateur de niveau de commentaire"</string>
     <string name="save_comment">"Sauvegarder"</string>
     <string name="unsave_comment">"Ne pas enregistrer"</string>
@@ -1159,11 +1125,6 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
 
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"Les rapports de crash sont supprimés"</string>
-
-    <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"Une fois activé, NSFW sera définitivement désactivé, que le paramètre NSFW soit activé ou non. Et cette option est irréversible, le seul moyen de réactiver NSFW est d'effacer les données de l'application.
-
-Vous voulez toujours l'activer ?"</string>
     <string name="reply">"Répondre"</string>
 
     <!-- Fuzzy -->
@@ -1275,8 +1236,6 @@ Cliquer pour réessayer."</string>
     <string name="app_lock_timeout_24_hours">"24 heures"</string>
     <string name="edit_profile_activity_label">"Éditer le profil"</string>
     <string name="action_contact_mods">"Contacter les modérateurs"</string>
-    <string name="settings_save_nsfw_media_in_different_folder_title">"Sauvegarder le contenu NSFW dans une destination différente"</string>
-    <string name="settings_nsfw_download_location_title">"Destination des téléchargements NSFW"</string>
     <string name="fetch_streamable_video_failed">"Échec de la récupération de la vidéo Streamable"</string>
 
     <!-- EditProfileService Notification -->

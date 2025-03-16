@@ -17,9 +17,9 @@ import java.util.Collections;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.adapters.SelectedSubredditsRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SelectSubredditsOrUsersOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -151,7 +151,7 @@ public class SelectedSubredditsAndUsersActivity extends BaseActivity implements 
                     if (subreddits == null) {
                         subreddits = new ArrayList<>();
                     }
-                    adapter.addUserInSubredditType("u_" + data.getStringExtra(SearchActivity.EXTRA_RETURN_USER_NAME));
+                    adapter.addUserInSubredditType("u_" + data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME));
                 }
             }
         }

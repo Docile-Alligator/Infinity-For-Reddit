@@ -14,7 +14,8 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.UploadedImage;
+import ml.docilealligator.infinityforreddit.thing.GiphyGif;
+import ml.docilealligator.infinityforreddit.thing.UploadedImage;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.markdown.RichTextJSONConverter;
@@ -27,16 +28,17 @@ import retrofit2.Retrofit;
 public class SendComment {
     public static void sendComment(Context context, Executor executor, Handler handler,
                                    String commentMarkdown, String thingFullname, int parentDepth,
-                                   List<UploadedImage> uploadedImages,
+                                   List<UploadedImage> uploadedImages, @Nullable GiphyGif giphyGif,
                                    Retrofit newAuthenticatorOauthRetrofit, Account account,
                                    SendCommentListener sendCommentListener) {
         Map<String, String> headers = APIUtils.getOAuthHeader(account.getAccessToken());
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.API_TYPE_KEY, "json");
         params.put(APIUtils.RETURN_RTJSON_KEY, "true");
-        if (!uploadedImages.isEmpty()) {
+        if (!uploadedImages.isEmpty() || giphyGif != null) {
             try {
-                params.put(APIUtils.RICHTEXT_JSON_KEY, new RichTextJSONConverter().constructRichTextJSON(context, commentMarkdown, uploadedImages));
+                params.put(APIUtils.RICHTEXT_JSON_KEY, new RichTextJSONConverter().constructRichTextJSON(
+                        context, commentMarkdown, uploadedImages, giphyGif));
                 params.put(APIUtils.TEXT_KEY, "");
             } catch (JSONException e) {
                 sendCommentListener.sendCommentFailed(context.getString(R.string.convert_to_richtext_json_failed));

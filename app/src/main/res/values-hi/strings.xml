@@ -62,8 +62,6 @@
     <string name="action_unhide_post">"पोस्ट दिखाएं"</string>
     <string name="action_edit_post">"पोस्ट संपादित करें"</string>
     <string name="action_delete_post">"पोस्ट मिटायें"</string>
-    <string name="action_mark_nsfw">"NSFW चिन्ह लगाएं"</string>
-    <string name="action_unmark_nsfw">"NSFW चिन्ह हटाएं"</string>
     <string name="action_mark_spoiler">"Spoiler चिन्ह लगाएं"</string>
     <string name="action_unmark_spoiler">"Spoiler चिन्ह हटाएं"</string>
     <string name="action_edit_flair">"फ्लेयर संपादित करें"</string>
@@ -113,7 +111,6 @@
     <string name="load_messages_failed">"संदेश दिखाने में त्रुटि।
 पुनः प्रयास के लिए यहां दबाएं।"</string>
     <string name="no_messages">"रिक्त "</string>
-    <string name="nsfw">"NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="karma_info">"कर्म: %1$d"</string>
@@ -155,7 +152,6 @@
     <string name="follow_failed">"अनुसरण असफल"</string>
     <string name="unfollowed">"अनफॉलोड"</string>
     <string name="unfollow_failed">"अ-अनुसरण असफल"</string>
-    <string name="content_description_banner_imageview">"सबरैडिट बैनर चित्र"</string>
     <string name="app_label">"इनफिनिटी"</string>
     <string name="search_hint">"कुछ खोजिए"</string>
     <string name="no_posts_no_lazy_mode">"कोई पोस्ट उपलब्ध नहीं"</string>
@@ -307,14 +303,6 @@ Behavior -->
     <string name="delete_post_failed">"हटाना असफल "</string>
 
     <!-- Fuzzy -->
-    <string name="mark_nsfw_success">"NSFW चिह्नीकरण सफल "</string>
-    <string name="mark_nsfw_failed">"NSFW चिह्नीकरण असफल "</string>
-
-    <!-- Fuzzy -->
-    <string name="unmark_nsfw_success">"NSFW अचिह्नीकरण सफल "</string>
-    <string name="unmark_nsfw_failed">"NSFW अचिह्नीकरण असफल"</string>
-
-    <!-- Fuzzy -->
     <string name="mark_spoiler_success">"Spoiler चिह्नीकरण सफल"</string>
     <string name="mark_spoiler_failed">"Spolier चिह्नीकरण असफल"</string>
 
@@ -351,7 +339,6 @@ Behavior -->
     <string name="settigns_video_title">"वीडियो "</string>
     <string name="settings_video_autoplay_title">"वीडियो स्वचालन"</string>
     <string name="settings_mute_autoplaying_videos_title">"स्वचालित वीडियोज को मौन करें "</string>
-    <string name="settings_autoplay_nsfw_videos_title">"स्वचालित NSFW वीडियोड"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"स्वचालित वीडियो के दृश्य क्षेत्र का संतुलन (खड़े में)"</string>
 
     <!-- Fuzzy -->
@@ -373,9 +360,6 @@ Behavior -->
     <string name="settings_volume_keys_navigate_comments_title">"पोस्ट्स में टिप्पणी नेवीगेशन के लिए वॉल्यूम कुंजियों का प्रयोग "</string>
     <string name="settings_volume_keys_navigate_posts_title">"पोस्ट्स नेवीगेशन के लिए वॉल्यूम कुंजियों का प्रयोग "</string>
     <string name="settings_mute_video_title">"मौन वीडियोज "</string>
-
-    <!-- Are those commands or a state? Like 'search' is a state in 'search opration' but is a command in 'search something'. Hindi has different appraoch for these two. -->
-    <string name="settings_mute_nsfw_video_title">"मौन NSFW वीडियोज"</string>
 
     <!-- Fuzzy -->
     <string name="settings_video_player_ignore_nav_bar_title">"वीडियो प्लेयर में नेवीगेशन बार का छिपना"</string>
@@ -418,8 +402,6 @@ Behavior -->
     <string name="settings_font_size_title">"फॉन्ट का आकार "</string>
     <string name="settings_title_font_size_title">"शीर्षक फॉन्ट का आकार "</string>
     <string name="settings_content_font_size_title">"अंतःवस्तु फॉन्ट का आकार "</string>
-    <string name="settings_enable_nsfw_title">"NSFW शुरू करें "</string>
-    <string name="settings_blur_nsfw_title">"धुंधले NSFW चित्र "</string>
     <string name="settings_blur_spoiler_title">"धुंधले Spoiler चित्र "</string>
     <string name="settings_about_master_title">"एप के बारे में"</string>
     <string name="settings_acknowledgement_master_title">"स्वीकृति"</string>
@@ -561,8 +543,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit_success">"सफलतापूर्वक मिटाई गई "</string>
     <string name="delete_multi_reddit_failed">"मिटाना असफल "</string>
     <string name="delete_multi_reddit_dialog_message">"क्या आप निश्चित हैं? "</string>
-    <string name="enable_nsfw">"NSFW शुरू करें "</string>
-    <string name="disable_nsfw">"NSFW बंद करें "</string>
     <string name="cannot_save_image">"चित्र सुरक्षित करने में असफल "</string>
     <string name="cannot_save_gif">"जिफ सुरक्षित करने में असफल "</string>
     <string name="cannot_get_storage">"एप्प स्टोरेज तक अभिगम असफल "</string>
@@ -658,10 +638,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_spoiler_background_color_detail">"पर लागू होगा: Spoiler टैग की पृष्ठभूमि "</string>
     <string name="theme_item_spoiler_text_color">"Spoiler टेक्स्ट रंग "</string>
     <string name="theme_item_spoiler_text_color_detail">"पर लागू होगा: Spoiler टैग में टेक्स्ट का रंग "</string>
-    <string name="theme_item_nsfw_background_color">"NSFW पृष्टभूमि रंग "</string>
-    <string name="theme_item_nsfw_background_color_detail">"पर लागू होगा: NSFW टैग की पृष्टभूमि "</string>
-    <string name="theme_item_nsfw_text_color">"NSFW टेक्स्ट रंग "</string>
-    <string name="theme_item_nsfw_text_color_detail">"पर लागू होगा: NSFW टैग के टेक्स्ट का रंग "</string>
     <string name="theme_item_flair_background_color">"फ्लेयर पृष्ठभूमि रंग "</string>
     <string name="theme_item_flair_background_color_detail">"पर लागू होगा: फ्लेयर टैग की पृष्ठभूमि"</string>
     <string name="theme_item_flair_text_color">"फ्लेयर टेक्स्ट रंग "</string>
@@ -853,7 +829,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_number_of_columns_in_post_feed_title">"पोस्ट फीड में स्तम्भों की संख्या "</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"ऊर्ध्वाधर"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">" क्षैतिज "</string>
-    <string name="settings_nsfw_and_spoiler_title">"समाचारपत्र एवं स्प्वाॅइलर"</string>
     <string name="settings_delete_all_legacy_settings_title">"सभी पुरानी सैटिंग्स को मिटाएं"</string>
     <string name="restart_app_see_changes">"परिवर्तन देखने के लिए एप्प को पुनः शुरू करें "</string>
     <string name="settings_tab_count">"टैब संख्या "</string>
@@ -924,8 +899,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 
     <!-- Fuzzy -->
     <string name="warning">"चेतावनी "</string>
-    <string name="this_is_a_nsfw_subreddit">"यह एक NSFW सबरैडिट है "</string>
-    <string name="this_user_has_nsfw_content">"इस यूजर के पास NSFW सामग्री है। "</string>
     <string name="dismiss">"रद्द करें "</string>
     <string name="leave">"निकासी "</string>
 
@@ -936,10 +909,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="go_to_user">"यूजर पर जाएं "</string>
     <string name="go_to_thing_hint">"नाम "</string>
     <string name="random">"यादृच्छिक "</string>
-    <string name="random_subreddit">"यादृच्छिक सबरैडिट "</string>
-    <string name="random_nsfw_subreddit">"यादृच्छिक NSFW सबरैडिट"</string>
-    <string name="random_post">"यादृच्छिक पोस्ट "</string>
-    <string name="random_nsfw_post">"यादृच्छिक NSFW पोस्ट "</string>
     <string name="fetch_random_thing_failed">"बाद में पुनः प्रयास करें"</string>
     <string name="downloading">"डाउनलोड हो रहा है "</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all एवं r/popular"</string>
@@ -1001,7 +970,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_all_read_posts_success">"पढ़े हुए सारे पोस्टों को पूर्णतः डिलीट करें"</string>
     <string name="hide_read_posts">"पढ़े हुए पोस्ट ना दिखाएं"</string>
     <string name="filter_posts">"पोस्ट को छानें"</string>
-    <string name="only_nsfw">"केवल NSFW"</string>
     <string name="only_spoiler">"केवल Spoiler"</string>
     <string name="title_excludes_strings_hint">"शीर्षक: इन शब्दों का प्रयोग ना करें (जैसे- key1,key2)"</string>
     <string name="title_excludes_regex_hint">"शीर्षक: रेगेक्स को शामिल नहीं करता है"</string>

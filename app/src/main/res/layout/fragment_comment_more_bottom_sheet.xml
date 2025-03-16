@@ -27,7 +27,7 @@
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
             android:visibility="gone"
-            app:drawableStartCompat="@drawable/ic_edit_24dp" />
+            app:drawableStartCompat="@drawable/ic_edit_day_night_24dp" />
 
         <TextView
             android:id="@+id/delete_text_view_comment_more_bottom_sheet_fragment"
@@ -46,7 +46,7 @@
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
             android:visibility="gone"
-            app:drawableStartCompat="@drawable/ic_delete_24dp" />
+            app:drawableStartCompat="@drawable/ic_delete_day_night_24dp" />
 
         <TextView
             android:id="@+id/reply_text_view_comment_more_bottom_sheet_fragment"
@@ -66,7 +66,7 @@
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
             android:visibility="gone"
-            app:drawableStartCompat="@drawable/ic_reply_24dp" />
+            app:drawableStartCompat="@drawable/ic_reply_day_night_24dp" />
 
         <TextView
             android:id="@+id/save_text_view_comment_more_bottom_sheet_fragment"
@@ -103,7 +103,7 @@
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
-            app:drawableStartCompat="@drawable/ic_share_24dp" />
+            app:drawableStartCompat="@drawable/ic_share_day_night_24dp" />
 
         <TextView
             android:id="@+id/copy_text_view_comment_more_bottom_sheet_fragment"
@@ -122,7 +122,7 @@
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
-            app:drawableStartCompat="@drawable/ic_copy_24dp" />
+            app:drawableStartCompat="@drawable/ic_copy_day_night_24dp" />
 
         <TextView
             android:id="@+id/report_view_comment_more_bottom_sheet_fragment"
@@ -141,7 +141,7 @@
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
-            app:drawableStartCompat="@drawable/ic_report_24dp" />
+            app:drawableStartCompat="@drawable/ic_report_day_night_24dp" />
 
         <TextView
             android:id="@+id/add_to_comment_filter_view_comment_more_bottom_sheet_fragment"
@@ -160,7 +160,26 @@
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
-            app:drawableStartCompat="@drawable/ic_filter_24dp" />
+            app:drawableStartCompat="@drawable/ic_filter_day_night_24dp" />
+
+        <TextView
+            android:id="@+id/notification_view_comment_more_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawablePadding="48dp"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
+            android:visibility="gone"
+            app:drawableStartCompat="@drawable/ic_notifications_day_night_24dp" />
 
     </LinearLayout>
 

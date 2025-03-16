@@ -60,8 +60,6 @@
     <string name="action_unhide_post">"投稿を再表示"</string>
     <string name="action_edit_post">"投稿を編集"</string>
     <string name="action_delete_post">"投稿を削除"</string>
-    <string name="action_mark_nsfw">"NSFWとマーク"</string>
-    <string name="action_unmark_nsfw">"NSFWマークを解除"</string>
     <string name="action_mark_spoiler">"ネタバレとマーク"</string>
     <string name="action_unmark_spoiler">"ネタバレマークを解除"</string>
     <string name="action_edit_flair">"フレアーを編集"</string>
@@ -105,7 +103,6 @@
     <string name="load_messages_failed">"メッセージをロード中にエラーが発生しました。
 タップでリトライします。"</string>
     <string name="no_messages">"なし"</string>
-    <string name="nsfw">"NSFW"</string>
 
     <!-- Fuzzy -->
     <string name="karma_info">"カルマ: %1$d"</string>
@@ -157,7 +154,6 @@
     <string name="follow_failed">"フォローに失敗しました"</string>
     <string name="unfollowed">"フォローを解除しました"</string>
     <string name="unfollow_failed">"フォローの解除に失敗しました"</string>
-    <string name="content_description_banner_imageview">"Subredditのバナー画像"</string>
     <string name="app_label">"ホーム - Infinity"</string>
     <string name="search_hint">"何でも検索してみてください"</string>
     <string name="no_posts_no_lazy_mode">"投稿がありません"</string>
@@ -306,14 +302,6 @@
     <string name="delete_post_failed">"削除に失敗しました"</string>
 
     <!-- Fuzzy -->
-    <string name="mark_nsfw_success">"NSFWとマークしました"</string>
-    <string name="mark_nsfw_failed">"NSFWマークができませんでした"</string>
-
-    <!-- Fuzzy -->
-    <string name="unmark_nsfw_success">"NSFWマークを解除しました"</string>
-    <string name="unmark_nsfw_failed">"NSFWマークを解除できませんでした"</string>
-
-    <!-- Fuzzy -->
     <string name="mark_spoiler_success">"ネタバレとマークしました"</string>
     <string name="mark_spoiler_failed">"ネタバレマークができませんでした"</string>
 
@@ -350,7 +338,6 @@
     <string name="settigns_video_title">"動画"</string>
     <string name="settings_video_autoplay_title">"動画を自動再生"</string>
     <string name="settings_mute_autoplaying_videos_title">"自動再生の動画をミュート"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"NSFW動画を自動再生"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"自動再生開始の表示オフセット(縦画面時)"</string>
 
     <!-- Fuzzy -->
@@ -374,7 +361,6 @@
     <string name="settings_volume_keys_navigate_comments_title">"音量ボタンで投稿画面のコメントをナビゲート"</string>
     <string name="settings_volume_keys_navigate_posts_title">"音量ボタンで投稿をナビゲート"</string>
     <string name="settings_mute_video_title">"動画をミュート再生"</string>
-    <string name="settings_mute_nsfw_video_title">"NSFWの動画をミュート再生"</string>
 
     <!-- Fuzzy -->
     <string name="settings_video_player_ignore_nav_bar_title">"動画プレーヤーでナビゲーションバーを無視"</string>
@@ -417,8 +403,6 @@
     <string name="settings_font_size_title">"フォントサイズ"</string>
     <string name="settings_title_font_size_title">"フォントサイズ"</string>
     <string name="settings_content_font_size_title">"フォントサイズ"</string>
-    <string name="settings_enable_nsfw_title">"NSFWを有効化"</string>
-    <string name="settings_blur_nsfw_title">"NSFW画像をぼかして表示"</string>
     <string name="settings_blur_spoiler_title">"ネタバレ画像をぼかして表示"</string>
 
     <!-- Fuzzy -->
@@ -564,8 +548,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit_success">"削除が完了しました"</string>
     <string name="delete_multi_reddit_failed">"削除できませんでした"</string>
     <string name="delete_multi_reddit_dialog_message">"よろしいですか？"</string>
-    <string name="enable_nsfw">"NSFWを有効化"</string>
-    <string name="disable_nsfw">"NSFWを無効化"</string>
     <string name="cannot_save_image">"画像を保存できませんでした"</string>
     <string name="cannot_save_gif">"GIFを保存できませんでした"</string>
     <string name="cannot_get_storage">"アプリストレージにアクセスできませんでした"</string>
@@ -663,10 +645,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_spoiler_background_color_detail">"適用先: ネタバレ フレアーの背景"</string>
     <string name="theme_item_spoiler_text_color">"ネタバレ テキスト"</string>
     <string name="theme_item_spoiler_text_color_detail">"適用先: ネタバレ フレアーのテキスト"</string>
-    <string name="theme_item_nsfw_background_color">"NSFW 背景"</string>
-    <string name="theme_item_nsfw_background_color_detail">"適用先: NSFWフレアーの背景"</string>
-    <string name="theme_item_nsfw_text_color">"NSFW テキスト"</string>
-    <string name="theme_item_nsfw_text_color_detail">"適用先: NSFWフレアーのテキスト"</string>
     <string name="theme_item_flair_background_color">"フレアー 背景"</string>
     <string name="theme_item_flair_background_color_detail">"適用先: フレアーの背景"</string>
     <string name="theme_item_flair_text_color">"フレアー テキスト"</string>
@@ -868,7 +846,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_number_of_columns_in_post_feed_title">"投稿フィードの表示列数"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"縦画面時"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"横画面時"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFW(職場閲覧注意)とネタバレ"</string>
     <string name="settings_delete_all_legacy_settings_title">"古い設定データを削除"</string>
     <string name="restart_app_see_changes">"変更を適用するにはアプリを再起動してください"</string>
     <string name="settings_tab_count">"タブ数"</string>
@@ -936,8 +913,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 
     <!-- Fuzzy -->
     <string name="warning">"警告"</string>
-    <string name="this_is_a_nsfw_subreddit">"このSubredditはNSFWです"</string>
-    <string name="this_user_has_nsfw_content">"このユーザーはNSFWの投稿を含んでいます"</string>
     <string name="dismiss">"無視する"</string>
     <string name="leave">"離れる"</string>
 
@@ -948,10 +923,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="go_to_user">"ユーザーに移動"</string>
     <string name="go_to_thing_hint">"名前"</string>
     <string name="random">"ランダム"</string>
-    <string name="random_subreddit">"ランダムなSubredditに移動"</string>
-    <string name="random_nsfw_subreddit">"ランダムなNSFW Subredditに移動"</string>
-    <string name="random_post">"ランダムな投稿に移動"</string>
-    <string name="random_nsfw_post">"ランダムなNSFW投稿に移動"</string>
     <string name="fetch_random_thing_failed">"後ほど再度お試しください"</string>
     <string name="downloading">"ダウンロード中"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all と r/popular"</string>
@@ -1001,7 +972,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="open_link">"リンクを開く"</string>
     <string name="hide_read_posts">"既読の投稿を非表示にする"</string>
     <string name="filter_posts">"投稿をフィルタリング"</string>
-    <string name="only_nsfw">"NSFWのみ"</string>
     <string name="only_spoiler">"ネタバレのみ"</string>
     <string name="title_excludes_strings_hint">"タイトル: 除外するキーワード (key1,key2)"</string>
     <string name="title_excludes_regex_hint">"タイトル: 除外する正規表現"</string>
@@ -1038,7 +1008,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="action_share_link">"リンクを共有"</string>
     <string name="action_copy_link">"リンクをコピー"</string>
     <string name="action_add_to_post_filter">"投稿フィルターに追加"</string>
-    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"NSFWのSubredditではNSFW画像をぼかさない"</string>
     <string name="settings_show_avatar_on_the_right">"アバターを右側に表示"</string>
     <string name="settings_backup_settings_title">"設定をバックアップ"</string>
     <string name="settings_restore_settings_title">"設定を復元"</string>
@@ -1087,7 +1056,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="inbox_with_count">"受信トレイ (%1$d)"</string>
     <string name="settings_swipe_vertically_to_go_back_from_media_title">"縦方向にスワイプして画像やGIF動画の画面から戻る"</string>
     <string name="settings_crash_reports_title">"クラッシュレポート"</string>
-    <string name="settings_disable_nsfw_forever_title">"NSFWを永久に無効にする"</string>
     <string name="save_comment">"保存"</string>
     <string name="unsave_comment">"保存しない"</string>
     <string name="copy_multi_reddit_path">"Multiredditのパスをコピー"</string>
@@ -1095,11 +1063,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 
     <!-- Fuzzy -->
     <string name="crash_reports_deleted">"クラッシュレポートが削除されました"</string>
-
-    <!-- Fuzzy -->
-    <string name="disable_nsfw_forever_message">"一度有効にすると、NSFW設定が有効かどうかに関係なく、NSFWは永続的に無効になります。そして、このオプションは元に戻せません。アプリのデータを消去することによってのみ、NSFWを再度有効にすることができます。
-
-それでも有効にしますか？"</string>
     <string name="reply">"返信"</string>
     <string name="post_gallery_activity_label">"ギャラリー投稿"</string>
     <string name="action_share_post_link">"投稿リンクを共有"</string>

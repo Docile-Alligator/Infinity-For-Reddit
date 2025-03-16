@@ -698,6 +698,14 @@
         <item>@string/save_locally_and_online</item>
     </string-array>
 
+    <string-array name="save_theme_options_anonymous_included">
+        <item>@string/save_locally</item>
+        <item>@string/save_online</item>
+        <item>@string/save_online_anonymous</item>
+        <item>@string/save_locally_and_online</item>
+        <item>@string/save_locally_and_online_anonymous</item>
+    </string-array>
+
     <string-array name="settings_embedded_media_type">
         <item>@string/all</item>
         <item>@string/image_and_gif</item>

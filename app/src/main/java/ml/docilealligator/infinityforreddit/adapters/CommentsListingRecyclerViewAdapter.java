@@ -34,8 +34,8 @@ import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.SaveThing;
-import ml.docilealligator.infinityforreddit.VoteThing;
+import ml.docilealligator.infinityforreddit.thing.SaveThing;
+import ml.docilealligator.infinityforreddit.thing.VoteThing;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
@@ -365,10 +365,27 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         }
     }
 
+    public void editComment(Comment comment, int position) {
+        Comment oldComment = getItem(position);
+        if (oldComment != null) {
+            oldComment.setCommentMarkdown(comment.getCommentMarkdown());
+            oldComment.setMediaMetadataMap(comment.getMediaMetadataMap());
+            notifyItemChanged(position);
+        }
+    }
+
     public void editComment(String commentContentMarkdown, int position) {
         Comment comment = getItem(position);
         if (comment != null) {
             comment.setCommentMarkdown(commentContentMarkdown);
+            notifyItemChanged(position);
+        }
+    }
+
+    public void toggleReplyNotifications(int position) {
+        Comment comment = getItem(position);
+        if (comment != null) {
+            comment.toggleSendReplies();
             notifyItemChanged(position);
         }
     }
