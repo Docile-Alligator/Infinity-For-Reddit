@@ -94,7 +94,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeVideoAutoplayEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.events.ShowDividerInCompactLayoutPreferenceEvent;
-import ml.docilealligator.infinityforreddit.events.ShowThumbnailOnTheRightInCompactLayoutEvent;
+import ml.docilealligator.infinityforreddit.events.ShowThumbnailOnTheLeftInCompactLayoutEvent;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -740,9 +740,9 @@ public abstract class PostFragmentBase extends Fragment {
     }
 
     @Subscribe
-    public void onShowThumbnailOnTheRightInCompactLayoutEvent(ShowThumbnailOnTheRightInCompactLayoutEvent showThumbnailOnTheRightInCompactLayoutEvent) {
+    public void onShowThumbnailOnTheLeftInCompactLayoutEvent(ShowThumbnailOnTheLeftInCompactLayoutEvent showThumbnailOnTheLeftInCompactLayoutEvent) {
         if (getPostAdapter() != null) {
-            getPostAdapter().setShowThumbnailOnTheRightInCompactLayout(showThumbnailOnTheRightInCompactLayoutEvent.showThumbnailOnTheRightInCompactLayout);
+            getPostAdapter().setShowThumbnailOnTheLeftInCompactLayout(showThumbnailOnTheLeftInCompactLayoutEvent.showThumbnailOnTheLeftInCompactLayout);
             refreshAdapter();
         }
     }

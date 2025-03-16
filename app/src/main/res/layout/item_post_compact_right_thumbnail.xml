@@ -32,12 +32,12 @@
             android:layout_marginEnd="8dp"
             android:fontFamily="?attr/font_family"
             android:textSize="?attr/font_default"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_item_post_compact_right_thumbnail"
             app:layout_constraintStart_toEndOf="@id/icon_gif_image_view_item_post_compact_right_thumbnail"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintHorizontal_bias="0" />
+            app:layout_constrainedWidth="true" />
 
         <ImageView
             android:id="@+id/stickied_post_image_view_item_post_compact_right_thumbnail"
@@ -74,68 +74,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <RelativeLayout
-            android:id="@+id/image_view_wrapper_item_post_compact_right_thumbnail"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_marginStart="16dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/image_view_item_post_compact_right_thumbnail"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/thumbnail_compact_layout_rounded_edge"
-                    android:scaleType="center" />
-
-                <ImageView
-                    android:id="@+id/play_button_image_view_item_post_compact_right_thumbnail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_margin="0dp"
-                    android:background="@drawable/play_button_round_background"
-                    android:visibility="gone" />
-
-            </FrameLayout>
-
-            <ProgressBar
-                android:id="@+id/progress_bar_item_post_compact_right_thumbnail"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_centerInParent="true"
-                android:visibility="gone" />
-
-        </RelativeLayout>
-
-        <FrameLayout
-            android:id="@+id/frame_layout_image_view_no_preview_link_item_post_compact_right_thumbnail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:visibility="gone"
-            android:background="@drawable/thumbnail_compact_layout_rounded_edge"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/image_view_no_preview_link_item_post_compact_right_thumbnail"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:scaleType="center"
-                android:src="@drawable/ic_link_day_night_24dp"
-                app:tint="@android:color/tab_indicator_text" />
-
-        </FrameLayout>
-
         <TextView
             android:id="@+id/title_text_view_item_post_compact_right_thumbnail"
             android:layout_width="0dp"
@@ -146,8 +84,8 @@
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/title_font_18"
             app:layout_constraintBottom_toTopOf="@id/flow_layout_item_post_compact_right_thumbnail"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/barrier2"
+            app:layout_constraintEnd_toStartOf="@id/barrier2"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.nex3z.flowlayout.FlowLayout
@@ -162,8 +100,8 @@
             app:flChildSpacingForLastRow="align"
             app:flRowSpacing="8dp"
             app:layout_constraintBottom_toTopOf="@id/link_text_view_item_post_compact_right_thumbnail"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/barrier2"
+            app:layout_constraintEnd_toStartOf="@id/barrier2"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/title_text_view_item_post_compact_right_thumbnail">
 
             <com.libRG.CustomTextView
@@ -250,15 +188,80 @@
             android:textSize="?attr/font_12"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/barrier2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/flow_layout_item_post_compact_right_thumbnail" />
+
+        <RelativeLayout
+            android:id="@+id/image_view_wrapper_item_post_compact_right_thumbnail"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/barrier2"
-            app:layout_constraintTop_toBottomOf="@id/flow_layout_item_post_compact_right_thumbnail" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/image_view_item_post_compact_right_thumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/thumbnail_compact_layout_rounded_edge"
+                    android:scaleType="centerCrop" />
+
+                <ImageView
+                    android:id="@+id/play_button_image_view_item_post_compact_right_thumbnail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="0dp"
+                    android:padding="4dp"
+                    android:background="@drawable/play_button_round_background"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+
+            <ProgressBar
+                android:id="@+id/progress_bar_item_post_compact_right_thumbnail"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/frame_layout_image_view_no_preview_link_item_post_compact_right_thumbnail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            android:background="@drawable/thumbnail_compact_layout_rounded_edge"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/barrier2"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/image_view_no_preview_link_item_post_compact_right_thumbnail"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:scaleType="center"
+                android:src="@drawable/ic_link_day_night_24dp"
+                app:tint="@android:color/tab_indicator_text" />
+
+        </FrameLayout>
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:barrierDirection="end"
+            app:barrierDirection="start"
             app:constraint_referenced_ids="image_view_wrapper_item_post_compact_right_thumbnail,frame_layout_image_view_no_preview_link_item_post_compact_right_thumbnail" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

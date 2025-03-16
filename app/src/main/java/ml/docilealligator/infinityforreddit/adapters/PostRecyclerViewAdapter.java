@@ -98,6 +98,7 @@ import ml.docilealligator.infinityforreddit.databinding.ItemPostCard3VideoTypeAu
 import ml.docilealligator.infinityforreddit.databinding.ItemPostCard3VideoTypeAutoplayLegacyControllerBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostCard3WithPreviewBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostCompact2Binding;
+import ml.docilealligator.infinityforreddit.databinding.ItemPostCompact2RightThumbnailBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostCompactBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostCompactRightThumbnailBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostGalleryBinding;
@@ -232,7 +233,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private boolean mAutoplay = false;
     private boolean mAutoplayNsfwVideos;
     private boolean mMuteAutoplayingVideos;
-    private boolean mShowThumbnailOnTheRightInCompactLayout;
+    private boolean mShowThumbnailOnTheLeftInCompactLayout;
     private double mStartAutoplayVisibleAreaOffset;
     private boolean mMuteNSFWVideo;
     private boolean mLongPressToHideToolbarInCompactLayout;
@@ -298,7 +299,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             }
             mAutoplayNsfwVideos = sharedPreferences.getBoolean(SharedPreferencesUtils.AUTOPLAY_NSFW_VIDEOS, true);
             mMuteAutoplayingVideos = sharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_AUTOPLAYING_VIDEOS, true);
-            mShowThumbnailOnTheRightInCompactLayout = sharedPreferences.getBoolean(
+            mShowThumbnailOnTheLeftInCompactLayout = sharedPreferences.getBoolean(
                     SharedPreferencesUtils.SHOW_THUMBNAIL_ON_THE_LEFT_IN_COMPACT_LAYOUT, false);
 
             Resources resources = activity.getResources();
@@ -574,16 +575,16 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         } else if (viewType == VIEW_TYPE_POST_CARD_TEXT_TYPE) {
             return new PostTextTypeViewHolder(ItemPostTextBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         } else if (viewType == VIEW_TYPE_POST_COMPACT) {
-            if (mShowThumbnailOnTheRightInCompactLayout) {
-                return new PostCompactRightThumbnailViewHolder(ItemPostCompactRightThumbnailBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-            } else {
+            if (mShowThumbnailOnTheLeftInCompactLayout) {
                 return new PostCompactLeftThumbnailViewHolder(ItemPostCompactBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+            } else {
+                return new PostCompactRightThumbnailViewHolder(ItemPostCompactRightThumbnailBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
             }
         } else if (viewType == VIEW_TYPE_POST_COMPACT_2) {
-            if (mShowThumbnailOnTheRightInCompactLayout) {
+            if (mShowThumbnailOnTheLeftInCompactLayout) {
                 return new PostCompact2LeftThumbnailViewHolder(ItemPostCompact2Binding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
             } else {
-                return new PostCompact2LeftThumbnailViewHolder(ItemPostCompact2Binding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+                return new PostCompact2RightThumbnailViewHolder(ItemPostCompact2RightThumbnailBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
             }
         } else if (viewType == VIEW_TYPE_POST_GALLERY) {
             return new PostGalleryViewHolder(ItemPostGalleryBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
@@ -1487,8 +1488,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         mMuteAutoplayingVideos = muteAutoplayingVideos;
     }
 
-    public void setShowThumbnailOnTheRightInCompactLayout(boolean showThumbnailOnTheRightInCompactLayout) {
-        mShowThumbnailOnTheRightInCompactLayout = showThumbnailOnTheRightInCompactLayout;
+    public void setShowThumbnailOnTheLeftInCompactLayout(boolean showThumbnailOnTheLeftInCompactLayout) {
+        mShowThumbnailOnTheLeftInCompactLayout = showThumbnailOnTheLeftInCompactLayout;
     }
 
     public void setStartAutoplayVisibleAreaOffset(double startAutoplayVisibleAreaOffset) {
@@ -4041,6 +4042,40 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     null,
                     null,
                     binding.dividerItemPostCompact2);
+        }
+    }
+
+    class PostCompact2RightThumbnailViewHolder extends PostCompactBaseViewHolder {
+        PostCompact2RightThumbnailViewHolder(@NonNull ItemPostCompact2RightThumbnailBinding binding) {
+            super(binding.getRoot());
+
+            setBaseView(binding.iconGifImageViewItemPostCompact2RightThumbnail,
+                    binding.nameTextViewItemPostCompact2RightThumbnail,
+                    binding.stickiedPostImageViewItemPostCompact2RightThumbnail,
+                    binding.postTimeTextViewItemPostCompact2RightThumbnail,
+                    binding.titleTextViewItemPostCompact2RightThumbnail,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    binding.imageViewWrapperItemPostCompact2RightThumbnail,
+                    binding.progressBarItemPostCompact2RightThumbnail,
+                    binding.imageViewItemPostCompact2RightThumbnail,
+                    binding.playButtonImageViewItemPostCompact2RightThumbnail,
+                    binding.frameLayoutImageViewNoPreviewLinkItemPostCompact2RightThumbnail,
+                    binding.imageViewNoPreviewLinkItemPostCompact2RightThumbnail,
+                    null,
+                    binding.upvoteButtonItemPostCompact2RightThumbnail,
+                    binding.scoreTextViewItemPostCompact2RightThumbnail,
+                    binding.downvoteButtonItemPostCompact2RightThumbnail,
+                    null,
+                    null,
+                    null,
+                    binding.dividerItemPostCompact2RightThumbnail);
         }
     }
 
