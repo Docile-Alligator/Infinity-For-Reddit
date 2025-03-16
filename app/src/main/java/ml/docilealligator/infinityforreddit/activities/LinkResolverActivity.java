@@ -21,7 +21,6 @@ import org.apache.commons.io.FilenameUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -42,7 +41,6 @@ public class LinkResolverActivity extends AppCompatActivity {
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
     public static final String EXTRA_IS_NSFW = "EIN";
 
-    private static final Pattern REDDIT_IMAGE_PATTERN =  Pattern.compile("^/media$");
     private static final String POST_PATTERN = "/r/[\\w-]+/comments/\\w+/?\\w+/?";
     private static final String POST_PATTERN_2 = "/(u|U|user)/[\\w-]+/comments/\\w+/?\\w+/?";
     private static final String POST_PATTERN_3 = "/[\\w-]+$";
@@ -59,6 +57,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String IMGUR_GALLERY_PATTERN = "/gallery/\\w+/?";
     private static final String IMGUR_ALBUM_PATTERN = "/(album|a)/\\w+/?";
     private static final String IMGUR_IMAGE_PATTERN = "/\\w+/?";
+    private static final String REDDIT_IMAGE_PATTERN =  "^/media$";
     private static final String WIKI_PATTERN = "/[rR]/[\\w-]+/(wiki|w)(?:/[\\w-]+)*";
     private static final String GOOGLE_AMP_PATTERN = "/amp/s/amp.reddit.com/.*";
     private static final String STREAMABLE_PATTERN = "/\\w+/?";
@@ -188,7 +187,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 startActivity(intent);
                             } else if (path.equals("/report")) {
                                 openInWebView(uri);
-                            } else if (REDDIT_IMAGE_PATTERN.matcher(path).matches()) {
+                            } else if (path.matches(REDDIT_IMAGE_PATTERN)) {
                                 // reddit.com/media, actual image url is stored in the "url" query param
                                 try {
                                     Intent intent = new Intent(this, ViewImageOrGifActivity.class);
