@@ -31,11 +31,11 @@ abstract class NetworkModule {
     @Provides
     @Named("base")
     @Singleton
-    static OkHttpClient provideBaseOkhttp(@Named("default") SharedPreferences mSharedPreferences) {
-        boolean proxyEnabled = mSharedPreferences.getBoolean(SharedPreferencesUtils.PROXY_ENABLED, false);
-        Proxy.Type proxyType = Proxy.Type.valueOf(mSharedPreferences.getString(SharedPreferencesUtils.PROXY_TYPE, "HTTP"));
-        String proxyHost = mSharedPreferences.getString(SharedPreferencesUtils.PROXY_HOSTNAME, "127.0.0.1");
-        int proxyPort = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.PROXY_PORT, "1080"));
+    static OkHttpClient provideBaseOkhttp(@Named("proxy") SharedPreferences mProxySharedPreferences) {
+        boolean proxyEnabled = mProxySharedPreferences.getBoolean(SharedPreferencesUtils.PROXY_ENABLED, false);
+        Proxy.Type proxyType = Proxy.Type.valueOf(mProxySharedPreferences.getString(SharedPreferencesUtils.PROXY_TYPE, "HTTP"));
+        String proxyHost = mProxySharedPreferences.getString(SharedPreferencesUtils.PROXY_HOSTNAME, "127.0.0.1");
+        int proxyPort = Integer.parseInt(mProxySharedPreferences.getString(SharedPreferencesUtils.PROXY_PORT, "1080"));
 
         var builder =  new OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)

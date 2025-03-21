@@ -145,6 +145,13 @@ abstract class AppModule {
     }
 
     @Provides
+    @Named("proxy")
+    @Singleton
+    static SharedPreferences provideProxySharedPreferences(Application application) {
+        return application.getSharedPreferences(SharedPreferencesUtils.PROXY_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+    }
+
+    @Provides
     @Singleton
     static CustomThemeWrapper provideCustomThemeWrapper(@Named("light_theme") SharedPreferences lightThemeSharedPreferences,
                                                  @Named("dark_theme") SharedPreferences darkThemeSharedPreferences,

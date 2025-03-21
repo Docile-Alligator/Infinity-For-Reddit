@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.preference.EditTextPreference;
+import androidx.preference.PreferenceManager;
 
 import com.google.common.net.InetAddresses;
 
@@ -22,6 +23,8 @@ public class ProxyPreferenceFragment extends CustomFontPreferenceFragmentCompat 
 
     @Override
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
+        PreferenceManager preferenceManager = getPreferenceManager();
+        preferenceManager.setSharedPreferencesName(SharedPreferencesUtils.PROXY_SHARED_PREFERENCES_FILE);
         setPreferencesFromResource(R.xml.proxy_preferences, rootKey);
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
