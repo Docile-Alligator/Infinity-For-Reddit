@@ -307,9 +307,7 @@
     <string name="settings_video_autoplay_title">"둥영상 자동 재생"</string>
     <string name="settings_mute_autoplaying_videos_title">"자동 재생된 둥영상 음소거"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"화면에 보이지 않아도 자동재생(초상화)"</string>
-    <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"영상이 보일시 자동재생"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"화면에 보이지 않아도 자동재생(렌드스케이프)"</string>
-    <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"보일경우 자동재생 비활성화"</string>
     <string name="settings_immersive_interface_summary">"모든 페이지에 적용되지 않음"</string>
     <string name="settings_customize_tabs_in_main_page_title">"메인 페이지에 커스터마이징 탭"</string>
     <string name="settings_enable_bottom_app_bar_title">"하단 내비게이션 활성화"</string>
