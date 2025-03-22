@@ -39,6 +39,14 @@
         app:title="@string/settings_default_playback_speed_title"
         app:useSimpleSummaryProvider="true" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+        app:defaultValue="0"
+        app:key="reddit_video_default_resolution_no_data_saving"
+        android:title="@string/settings_reddit_video_default_resolution"
+        app:entries="@array/settings_reddit_video_default_resolution"
+        app:entryValues="@array/settings_reddit_video_default_resolution_values"
+        app:useSimpleSummaryProvider="true" />
+
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceCategory
         app:title="@string/settings_video_autoplay_title" />
 

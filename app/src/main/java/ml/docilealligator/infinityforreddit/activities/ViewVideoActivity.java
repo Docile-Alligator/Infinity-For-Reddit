@@ -149,6 +149,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     private static final String SUBREDDIT_NAME_STATE = "SNS";
     private static final String ID_STATE=  "IS";
     private static final String PLAYBACK_SPEED_STATE = "PSS";
+    private static final String SET_NON_DATA_SAVING_MODE_DEFAULT_RESOLUTION_ALREADY_STATE = "PSS";
 
     public Typeface typeface;
 
@@ -171,6 +172,8 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     private int videoType;
     private boolean isDataSavingMode;
     private int dataSavingModeDefaultResolution;
+    private int nonDataSavingModeDefaultResolution;
+    private boolean setNonDataSavingModeDefaultResolutionAlready = false;
     private Integer originalOrientation;
     private int playbackSpeed = 100;
     private boolean useBottomAppBar;
@@ -332,6 +335,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             isDataSavingMode = networkType == Utils.NETWORK_TYPE_CELLULAR;
         }
         dataSavingModeDefaultResolution = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION, "360"));
+        nonDataSavingModeDefaultResolution = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION_NO_DATA_SAVING, "0"));
 
         if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.VIDEO_PLAYER_IGNORE_NAV_BAR, false)) {
             LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
@@ -398,11 +402,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         }
 
         trackSelector = new DefaultTrackSelector(this);
-        if (videoType == VIDEO_TYPE_NORMAL && isDataSavingMode && dataSavingModeDefaultResolution > 0) {
-            trackSelector.setParameters(
-                    trackSelector.buildUponParameters()
-                            .setMaxVideoSize(dataSavingModeDefaultResolution, dataSavingModeDefaultResolution));
-        }
         player = new ExoPlayer.Builder(this)
                 .setTrackSelector(trackSelector)
                 .setRenderersFactory(new DefaultRenderersFactory(this).setEnableDecoderFallback(true))
@@ -495,6 +494,24 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             });
         }
 
+        if (savedInstanceState == null) {
+            mVideoUri = intent.getData();
+            videoType = getIntent().getIntExtra(EXTRA_VIDEO_TYPE, VIDEO_TYPE_NORMAL);
+            subredditName = intent.getStringExtra(EXTRA_SUBREDDIT);
+            id = intent.getStringExtra(EXTRA_ID);
+            setPlaybackSpeed(Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_PLAYBACK_SPEED, "100")));
+        } else {
+            String videoUrl = savedInstanceState.getString(VIDEO_URI_STATE);
+            if (videoUrl != null) {
+                mVideoUri = Uri.parse(videoUrl);
+            }
+            videoType = savedInstanceState.getInt(VIDEO_TYPE_STATE);
+            subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
+            id = savedInstanceState.getString(ID_STATE);
+            setNonDataSavingModeDefaultResolutionAlready = savedInstanceState.getBoolean(SET_NON_DATA_SAVING_MODE_DEFAULT_RESOLUTION_ALREADY_STATE);
+            setPlaybackSpeed(savedInstanceState.getInt(PLAYBACK_SPEED_STATE));
+        }
+
         MaterialButton playPauseButton = findViewById(R.id.exo_play_pause_button_exo_playback_control_view);
         Drawable playDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_24dp, null);
         Drawable pauseDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pause_24dp, null);
@@ -530,6 +547,66 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                                 ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
                             }
                         });
+
+                        if (!setNonDataSavingModeDefaultResolutionAlready) {
+                            int desiredResolution = 0;
+                            if (isDataSavingMode) {
+                                if (dataSavingModeDefaultResolution > 0) {
+                                    desiredResolution = dataSavingModeDefaultResolution;
+                                }
+                            } else if (nonDataSavingModeDefaultResolution > 0) {
+                                desiredResolution = nonDataSavingModeDefaultResolution;
+                            }
+
+                            if (desiredResolution > 0) {
+                                TrackSelectionOverride trackSelectionOverride = null;
+                                int bestTrackIndex = -1;
+                                int bestResolution = -1;
+                                int worstResolution = Integer.MAX_VALUE;
+                                int worstTrackIndex = -1;
+                                Tracks.Group bestTrackGroup = null;
+                                Tracks.Group worstTrackGroup = null;
+                                for (Tracks.Group trackGroup : tracks.getGroups()) {
+                                    if (trackGroup.getType() == C.TRACK_TYPE_VIDEO) {
+                                        for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
+                                            int trackResolution = Math.min(trackGroup.getTrackFormat(trackIndex).height, trackGroup.getTrackFormat(trackIndex).width);
+                                            if (trackResolution <= desiredResolution && trackResolution > bestResolution) {
+                                                bestTrackIndex = trackIndex;
+                                                bestResolution = trackResolution;
+                                                bestTrackGroup = trackGroup;
+                                            }
+                                            if (trackResolution < worstResolution) {
+                                                worstTrackIndex = trackIndex;
+                                                worstResolution = trackResolution;
+                                                worstTrackGroup = trackGroup;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (bestTrackIndex != -1 && bestTrackGroup != null) {
+                                    trackSelectionOverride = new TrackSelectionOverride(
+                                            bestTrackGroup.getMediaTrackGroup(),
+                                            ImmutableList.of(bestTrackIndex)
+                                    );
+                                } else if (worstTrackIndex != -1 && worstTrackGroup != null) {
+                                    trackSelectionOverride = new TrackSelectionOverride(
+                                            worstTrackGroup.getMediaTrackGroup(),
+                                            ImmutableList.of(worstTrackIndex)
+                                    );
+                                }
+
+                                if (trackSelectionOverride != null) {
+                                    player.setTrackSelectionParameters(
+                                            player.getTrackSelectionParameters()
+                                                    .buildUpon()
+                                                    .addOverride(trackSelectionOverride)
+                                                    .build()
+                                    );
+                                }
+                            }
+                            setNonDataSavingModeDefaultResolutionAlready = true;
+                        }
                     }
 
                     for (Tracks.Group trackGroup : tracks.getGroups()) {
@@ -561,6 +638,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                                     }
                                 });
                             }
+                            break;
                         }
                     }
                 } else {
@@ -573,21 +651,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 loadFallbackVideo(savedInstanceState);
             }
         });
-
-        if (savedInstanceState == null) {
-            mVideoUri = intent.getData();
-            videoType = getIntent().getIntExtra(EXTRA_VIDEO_TYPE, VIDEO_TYPE_NORMAL);
-        } else {
-            String videoUrl = savedInstanceState.getString(VIDEO_URI_STATE);
-            if (videoUrl != null) {
-                mVideoUri = Uri.parse(videoUrl);
-            }
-            videoType = savedInstanceState.getInt(VIDEO_TYPE_STATE);
-            subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
-            id = savedInstanceState.getString(ID_STATE);
-            playbackSpeed = savedInstanceState.getInt(PLAYBACK_SPEED_STATE);
-        }
-        setPlaybackSpeed(Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_PLAYBACK_SPEED, "100")));
 
         // Produces DataSource instances through which media data is loaded.
         dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
@@ -623,8 +686,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             }
         } else {
             videoDownloadUrl = intent.getStringExtra(EXTRA_VIDEO_DOWNLOAD_URL);
-            subredditName = intent.getStringExtra(EXTRA_SUBREDDIT);
-            id = intent.getStringExtra(EXTRA_ID);
             videoFileName = subredditName + "-" + id + ".mp4";
         }
 
@@ -973,6 +1034,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             outState.putString(ID_STATE, id);
         }
         outState.putInt(PLAYBACK_SPEED_STATE, playbackSpeed);
+        outState.putBoolean(SET_NON_DATA_SAVING_MODE_DEFAULT_RESOLUTION_ALREADY_STATE, setNonDataSavingModeDefaultResolutionAlready);
     }
 
     @Override

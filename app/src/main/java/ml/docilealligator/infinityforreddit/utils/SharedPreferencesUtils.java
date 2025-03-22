@@ -224,6 +224,7 @@ public class SharedPreferencesUtils {
     private static final String POST_DETAIL_FAB_PORTRAIT_Y_BASE = "fab_portrait_y_";
     private static final String POST_DETAIL_FAB_LANDSCAPE_X_BASE = "fab_landscape_x_";
     private static final String POST_DETAIL_FAB_LANDSCAPE_Y_BASE = "fab_landscape_y_";
+    public static final String REDDIT_VIDEO_DEFAULT_RESOLUTION_NO_DATA_SAVING = "reddit_video_default_resolution_no_data_saving";
 
     public static String getPostDetailFabPortraitX(@Nullable Display display) {
         if (display == null) {
