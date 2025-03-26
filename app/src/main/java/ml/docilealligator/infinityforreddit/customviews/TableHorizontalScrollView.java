@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.ViewConfiguration;
 import android.view.ViewParent;
 import android.widget.HorizontalScrollView;
 
@@ -25,28 +26,29 @@ public class TableHorizontalScrollView extends HorizontalScrollView {
     private float lastY = 0.0f;
     private boolean allowScroll;
     private boolean isViewPager2Enabled;
+    private int touchSlop;
 
     public TableHorizontalScrollView(Context context) {
         super(context);
-        init();
+        init(context);
     }
 
     public TableHorizontalScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context);
     }
 
     public TableHorizontalScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        init(context);
     }
 
     public TableHorizontalScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
+        init(context);
     }
 
-    private void init() {
+    private void init(Context context) {
         new Handler(Looper.getMainLooper()).post(() -> {
             ViewParent parent = getParent();
             while (parent != null) {
@@ -61,13 +63,15 @@ public class TableHorizontalScrollView extends HorizontalScrollView {
 
                 parent = parent.getParent();
             }
+
+            touchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
         });
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         processMotionEvent(ev);
-        return allowScroll;
+        return allowScroll || super.onInterceptTouchEvent(ev);
     }
 
     @Override
@@ -81,7 +85,6 @@ public class TableHorizontalScrollView extends HorizontalScrollView {
             case MotionEvent.ACTION_DOWN:
                 lastX = ev.getX();
                 lastY = ev.getY();
-                allowScroll = true;
 
                 if (toroContainer != null) {
                     toroContainer.requestDisallowInterceptTouchEvent(true);
@@ -113,7 +116,7 @@ public class TableHorizontalScrollView extends HorizontalScrollView {
                 float dx = Math.abs(currentX - lastX);
                 float dy = Math.abs(currentY - lastY);
 
-                allowScroll = dy < dx;
+                allowScroll = dy < dx && dy > touchSlop && dx > touchSlop;
 
                 if (toroContainer != null) {
                     toroContainer.requestDisallowInterceptTouchEvent(allowScroll);
