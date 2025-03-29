@@ -885,12 +885,12 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     }
 
     public void loadIcon(String authorName, LoadIconListener loadIconListener) {
-        if (activity.authorIcons.containsKey(authorName)) {
-            loadIconListener.loadIconSuccess(authorName, activity.authorIcons.get(authorName));
+        if (activity.mAuthorIcons.containsKey(authorName)) {
+            loadIconListener.loadIconSuccess(authorName, activity.mAuthorIcons.get(authorName));
         } else {
             LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, authorName,
                     mRetrofit, iconImageUrl -> {
-                        activity.authorIcons.put(authorName, iconImageUrl);
+                        activity.mAuthorIcons.put(authorName, iconImageUrl);
                         loadIconListener.loadIconSuccess(authorName, iconImageUrl);
                     });
         }

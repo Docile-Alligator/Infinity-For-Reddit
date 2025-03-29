@@ -657,6 +657,7 @@
     <string name="settings_proxy_type">Proxy Type</string>
     <string name="settings_proxy_hostname">Hostname</string>
     <string name="settings_proxy_port">Port</string>
+    <string name="settings_hide_fab_in_post_details">Hide Floating Action Button</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

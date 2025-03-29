@@ -37,6 +37,11 @@
         app:key="hide_the_number_of_comments"
         app:title="@string/settings_hide_the_number_of_comments" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="hide_fab_in_post_details"
+        app:title="@string/settings_hide_fab_in_post_details" />
+
     <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="15"
         app:entries="@array/settings_embedded_media_type"
