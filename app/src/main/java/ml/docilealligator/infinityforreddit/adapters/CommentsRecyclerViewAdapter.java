@@ -30,6 +30,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executor;
 
@@ -77,6 +78,7 @@ import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.thing.SaveThing;
 import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.thing.VoteThing;
+import ml.docilealligator.infinityforreddit.user.UserProfileImagesBatchLoader;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -451,20 +453,24 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
 
                 if (comment.getAuthorIconUrl() == null) {
-                    mFragment.loadIcon(comment.getAuthor(), (authorName, iconUrl) -> {
-                        if (authorName.equals(comment.getAuthor())) {
-                            comment.setAuthorIconUrl(iconUrl);
-                        }
+                    int startIndex = translatePositionToCommentIndex(position);
+                    if (startIndex >= 0) {
+                        List<Comment> commentBatch = mVisibleComments.subList(startIndex, Math.min(mVisibleComments.size(), UserProfileImagesBatchLoader.BATCH_SIZE + startIndex));
+                        mFragment.loadIcon(commentBatch, (authorFullName, iconUrl) -> {
+                            if (authorFullName.equals(comment.getAuthorFullName())) {
+                                comment.setAuthorIconUrl(iconUrl);
+                            }
 
-                        Comment currentComment = getCurrentComment(holder);
-                        if (currentComment != null && authorName.equals(currentComment.getAuthor())) {
-                            mGlide.load(iconUrl)
-                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                    .error(mGlide.load(R.drawable.subreddit_default_icon)
-                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                                    .into(((CommentBaseViewHolder) holder).authorIconImageView);
-                        }
-                    });
+                            Comment currentComment = getCurrentComment(holder);
+                            if (currentComment != null && authorFullName.equals(currentComment.getAuthorFullName())) {
+                                mGlide.load(iconUrl)
+                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                        .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                                        .into(((CommentBaseViewHolder) holder).authorIconImageView);
+                            }
+                        });
+                    }
                 } else {
                     mGlide.load(comment.getAuthorIconUrl())
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -592,20 +598,24 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 ((CommentFullyCollapsedViewHolder) holder).binding.userNameTextViewItemCommentFullyCollapsed.setText(authorWithPrefix);
 
                 if (comment.getAuthorIconUrl() == null) {
-                    mFragment.loadIcon(comment.getAuthor(), (authorName, iconUrl) -> {
-                        if (authorName.equals(comment.getAuthor())) {
-                            comment.setAuthorIconUrl(iconUrl);
-                        }
+                    int startIndex = translatePositionToCommentIndex(position);
+                    if (startIndex >= 0) {
+                        List<Comment> commentBatch = mVisibleComments.subList(startIndex, Math.min(mVisibleComments.size(), UserProfileImagesBatchLoader.BATCH_SIZE + startIndex));
+                        mFragment.loadIcon(commentBatch, (authorFullName, iconUrl) -> {
+                            if (authorFullName.equals(comment.getAuthorFullName())) {
+                                comment.setAuthorIconUrl(iconUrl);
+                            }
 
-                        Comment currentComment = getCurrentComment(holder);
-                        if (currentComment != null && authorName.equals(currentComment.getAuthor())) {
-                            mGlide.load(iconUrl)
-                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                    .error(mGlide.load(R.drawable.subreddit_default_icon)
-                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                                    .into(((CommentFullyCollapsedViewHolder) holder).binding.authorIconImageViewItemCommentFullyCollapsed);
-                        }
-                    });
+                            Comment currentComment = getCurrentComment(holder);
+                            if (currentComment != null && authorFullName.equals(currentComment.getAuthorFullName())) {
+                                mGlide.load(iconUrl)
+                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                        .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                                        .into(((CommentFullyCollapsedViewHolder) holder).binding.authorIconImageViewItemCommentFullyCollapsed);
+                            }
+                        });
+                    }
                 } else {
                     mGlide.load(comment.getAuthorIconUrl())
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -845,6 +855,20 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         }
 
         return null;
+    }
+
+    private int translatePositionToCommentIndex(int position) {
+        if (mIsSingleCommentThreadMode) {
+            if (position - 1 >= 0 && position - 1 < mVisibleComments.size()) {
+                return position - 1;
+            }
+        } else {
+            if (position >= 0 && position < mVisibleComments.size()) {
+                return position;
+            }
+        }
+
+        return -1;
     }
 
     private int getParentPosition(int position) {

@@ -27,6 +27,7 @@ import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -41,10 +42,8 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -79,6 +78,7 @@ import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.thing.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.viewmodels.ViewPostDetailActivityViewModel;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -147,7 +147,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @State
     @LoadingMorePostsStatus
     int mLoadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING;
-    public Map<String, String> mAuthorIcons = new HashMap<>();
+    public ViewPostDetailActivityViewModel viewPostDetailActivityViewModel;
     private FragmentManager mFragmentManager;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private long mPostFragmentId;
@@ -291,6 +291,9 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                 binding.fabViewPostDetailActivity.setCoordinates();
             }
         });
+
+        viewPostDetailActivityViewModel = new ViewModelProvider(this, new ViewPostDetailActivityViewModel.Factory(mExecutor,
+                mHandler, mRedditDataRoomDatabase, mRetrofit)).get(ViewPostDetailActivityViewModel.class);
 
         checkNewAccountAndBindView(savedInstanceState);
     }
@@ -890,6 +893,10 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         if (mSliderPanel != null) {
             mSliderPanel.unlock();
         }
+    }
+
+    public void loadAuthorIcons(List<Comment> comments, ViewPostDetailActivityViewModel.LoadIconListener loadIconListener) {
+        viewPostDetailActivityViewModel.loadAuthorImages(comments, loadIconListener);
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {

@@ -426,4 +426,7 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("/api/sendreplies")
     Call<String> toggleRepliesNotification(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @GET("/api/user_data_by_account_ids.json")
+    Call<String> loadPartialUserData(@Query("ids") String commaSeparatedUserFullNames);
 }

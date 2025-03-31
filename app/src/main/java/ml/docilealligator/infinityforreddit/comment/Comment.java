@@ -31,6 +31,7 @@ public class Comment implements Parcelable {
     private String id;
     private String fullName;
     private String author;
+    private String authorFullName;
     private String authorFlair;
     private String authorFlairHTML;
     private String authorIconUrl;
@@ -64,7 +65,7 @@ public class Comment implements Parcelable {
     private long editedTimeMillis;
     private Map<String, MediaMetadata> mediaMetadataMap;
 
-    public Comment(String id, String fullName, String author, String authorFlair,
+    public Comment(String id, String fullName, String author, String authorFullName, String authorFlair,
                    String authorFlairHTML, String linkAuthor,
                    long commentTimeMillis, String commentMarkdown, String commentRawText,
                    String linkId, String subredditName, String parentId, int score,
@@ -74,6 +75,7 @@ public class Comment implements Parcelable {
         this.id = id;
         this.fullName = fullName;
         this.author = author;
+        this.authorFullName = authorFullName;
         this.authorFlair = authorFlair;
         this.authorFlairHTML = authorFlairHTML;
         this.linkAuthor = linkAuthor;
@@ -122,6 +124,7 @@ public class Comment implements Parcelable {
         id = in.readString();
         fullName = in.readString();
         author = in.readString();
+        authorFullName = in.readString();
         authorFlair = in.readString();
         authorFlairHTML = in.readString();
         authorIconUrl = in.readString();
@@ -175,6 +178,10 @@ public class Comment implements Parcelable {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getAuthorFullName() {
+        return authorFullName;
     }
 
     public String getAuthorFlair() {
@@ -440,6 +447,7 @@ public class Comment implements Parcelable {
         parcel.writeString(id);
         parcel.writeString(fullName);
         parcel.writeString(author);
+        parcel.writeString(authorFullName);
         parcel.writeString(authorFlair);
         parcel.writeString(authorFlairHTML);
         parcel.writeString(authorIconUrl);

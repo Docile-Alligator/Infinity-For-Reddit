@@ -54,6 +54,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -76,7 +77,6 @@ import ml.docilealligator.infinityforreddit.adapters.CommentsRecyclerViewAdapter
 import ml.docilealligator.infinityforreddit.adapters.PostDetailRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
-import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostCommentSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.comment.Comment;
@@ -114,6 +114,7 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
 import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
 import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
+import ml.docilealligator.infinityforreddit.viewmodels.ViewPostDetailActivityViewModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -884,16 +885,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         }
     }
 
-    public void loadIcon(String authorName, LoadIconListener loadIconListener) {
-        if (activity.mAuthorIcons.containsKey(authorName)) {
-            loadIconListener.loadIconSuccess(authorName, activity.mAuthorIcons.get(authorName));
-        } else {
-            LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, authorName,
-                    mRetrofit, iconImageUrl -> {
-                        activity.mAuthorIcons.put(authorName, iconImageUrl);
-                        loadIconListener.loadIconSuccess(authorName, iconImageUrl);
-                    });
-        }
+    public void loadIcon(List<Comment> comments, ViewPostDetailActivityViewModel.LoadIconListener loadIconListener) {
+        activity.loadAuthorIcons(comments, loadIconListener);
     }
 
     @Override
@@ -2006,9 +1999,5 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mPostAdapter != null) {
             mPostAdapter.setCanPlayVideo(hasWindowsFocus);
         }
-    }
-
-    public interface LoadIconListener {
-        void loadIconSuccess(String authorName, String iconUrl);
     }
 }

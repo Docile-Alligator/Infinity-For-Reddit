@@ -257,6 +257,7 @@ public class ParseComment {
         String id = singleCommentData.getString(JSONUtils.ID_KEY);
         String fullName = singleCommentData.getString(JSONUtils.NAME_KEY);
         String author = singleCommentData.getString(JSONUtils.AUTHOR_KEY);
+        String authorFullname = singleCommentData.getString(JSONUtils.AUTHOR_FULLNAME_KEY);
         StringBuilder authorFlairHTMLBuilder = new StringBuilder();
         if (singleCommentData.has(JSONUtils.AUTHOR_FLAIR_RICHTEXT_KEY)) {
             JSONArray flairArray = singleCommentData.getJSONArray(JSONUtils.AUTHOR_FLAIR_RICHTEXT_KEY);
@@ -310,7 +311,7 @@ public class ParseComment {
         // this key can either be a bool (false) or a long (edited timestamp)
         long edited = singleCommentData.optLong(JSONUtils.EDITED_KEY) * 1000;
 
-        return new Comment(id, fullName, author, authorFlair, authorFlairHTMLBuilder.toString(),
+        return new Comment(id, fullName, author, authorFullname, authorFlair, authorFlairHTMLBuilder.toString(),
                 linkAuthor, submitTime, commentMarkdown, commentRawText,
                 linkId, subredditName, parentId, score, voteType, isSubmitter, distinguished,
                 permalink, depth, collapsed, hasReply, scoreHidden, saved, sendReplies, edited,
