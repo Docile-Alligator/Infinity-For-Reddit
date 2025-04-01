@@ -47,6 +47,7 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -231,7 +232,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 findViewById(R.id.option_1_bottom_app_bar), findViewById(R.id.option_2_bottom_app_bar),
                 findViewById(R.id.option_3_bottom_app_bar), findViewById(R.id.option_4_bottom_app_bar),
                 findViewById(R.id.fab_main_activity),
-                findViewById(R.id.navigation_rail), showBottomAppBar);
+                findViewById(R.id.navigation_rail), customThemeWrapper, showBottomAppBar);
 
         EventBus.getDefault().register(this);
 
@@ -506,7 +507,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
                 postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
                 break;
-
         }
     }
 
@@ -553,6 +553,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         }
     }
 
+    @ExperimentalBadgeUtils
     private void bindView() {
         if (isFinishing() || isDestroyed()) {
             return;
@@ -565,6 +566,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
             if (optionCount == 2) {
                 navigationWrapper.bindOptionDrawableResource(getBottomAppBarOptionDrawableResource(option1), getBottomAppBarOptionDrawableResource(option2));
+                navigationWrapper.bindOptions(option1, option2);
 
                 if (navigationWrapper.navigationRailView == null) {
                     navigationWrapper.option2BottomAppBar.setOnClickListener(view -> {
@@ -597,6 +599,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 navigationWrapper.bindOptionDrawableResource(getBottomAppBarOptionDrawableResource(option1),
                         getBottomAppBarOptionDrawableResource(option2), getBottomAppBarOptionDrawableResource(option3),
                         getBottomAppBarOptionDrawableResource(option4));
+                navigationWrapper.bindOptions(option1, option2, option3, option4);
 
                 if (navigationWrapper.navigationRailView == null) {
                     navigationWrapper.option1BottomAppBar.setOnClickListener(view -> {
@@ -861,7 +864,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         .show();
             }
         });
-        adapter.setInboxCount(inboxCount);
+        setInboxCount();
         binding.navDrawerRecyclerViewMainActivity.setLayoutManager(new LinearLayoutManagerBugFixed(this));
         binding.navDrawerRecyclerViewMainActivity.setAdapter(adapter.getConcatAdapter());
 
@@ -1098,21 +1101,20 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         if (!mFetchUserInfoSuccess) {
             FetchUserData.fetchUserData(mRedditDataRoomDatabase, mOauthRetrofit, accessToken,
                     accountName, new FetchUserData.FetchUserDataListener() {
-                @Override
-                public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
-                    MainActivity.this.inboxCount = inboxCount;
-                    accountName = userData.getName();
-                    mFetchUserInfoSuccess = true;
-                    if (adapter != null) {
-                        adapter.setInboxCount(inboxCount);
-                    }
-                }
+                        @ExperimentalBadgeUtils
+                        @Override
+                        public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
+                            MainActivity.this.inboxCount = inboxCount;
+                            accountName = userData.getName();
+                            mFetchUserInfoSuccess = true;
+                            setInboxCount();
+                        }
 
-                @Override
-                public void onFetchUserDataFailed() {
-                    mFetchUserInfoSuccess = false;
-                }
-            });
+                        @Override
+                        public void onFetchUserDataFailed() {
+                            mFetchUserInfoSuccess = false;
+                        }
+                    });
             /*FetchMyInfo.fetchAccountInfo(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
                     new FetchMyInfo.FetchMyInfoListener() {
                         @Override
@@ -1127,6 +1129,16 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         }
                     });*/
         }
+    }
+
+    @ExperimentalBadgeUtils
+    private void setInboxCount() {
+        if (adapter != null) {
+            adapter.setInboxCount(inboxCount);
+        }
+        mHandler.post(() -> {
+            navigationWrapper.setInboxCount(this, inboxCount);
+        });
     }
 
     @Override
@@ -1339,11 +1351,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         }
     }
 
+    @ExperimentalBadgeUtils
     @Subscribe
     public void onChangeInboxCountEvent(ChangeInboxCountEvent event) {
-        if (adapter != null) {
-            adapter.setInboxCount(event.inboxCount);
-        }
+        setInboxCount();
     }
 
     @Subscribe

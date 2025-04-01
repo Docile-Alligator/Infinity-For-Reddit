@@ -12,11 +12,15 @@ import android.widget.LinearLayout;
 import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.core.view.MenuItemCompat;
 
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.badge.BadgeUtils;
+import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigationrail.NavigationRailView;
 
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class NavigationWrapper {
@@ -30,10 +34,17 @@ public class NavigationWrapper {
     public NavigationRailView navigationRailView;
     public FloatingActionButton floatingActionButton;
 
+    private CustomThemeWrapper customThemeWrapper;
+    private int option1 = -1;
+    private int option2 = -1;
+    private int option3 = -1;
+    private int option4 = -1;
+
     public NavigationWrapper(BottomAppBar bottomAppBar, LinearLayout linearLayoutBottomAppBar,
                              ImageView option1BottomAppBar, ImageView option2BottomAppBar,
                              ImageView option3BottomAppBar, ImageView option4BottomAppBar,
                              FloatingActionButton floatingActionButton, NavigationRailView navigationRailView,
+                             CustomThemeWrapper customThemeWrapper,
                              boolean showBottomAppBar) {
         this.bottomAppBar = bottomAppBar;
         this.linearLayoutBottomAppBar = linearLayoutBottomAppBar;
@@ -42,6 +53,7 @@ public class NavigationWrapper {
         this.option3BottomAppBar = option3BottomAppBar;
         this.option4BottomAppBar = option4BottomAppBar;
         this.navigationRailView = navigationRailView;
+        this.customThemeWrapper = customThemeWrapper;
         if (navigationRailView != null) {
             if (showBottomAppBar) {
                 this.floatingActionButton = (FloatingActionButton) navigationRailView.getHeaderView();
@@ -112,6 +124,23 @@ public class NavigationWrapper {
                 menu.findItem(R.id.navigation_rail_option_3).setIcon(imageResources[2]);
                 menu.findItem(R.id.navigation_rail_option_4).setIcon(imageResources[3]);
             }
+        }
+    }
+
+    public void bindOptions(int... options) {
+        if (options.length == 2) {
+            if (navigationRailView == null) {
+                option2 = options[0];
+                option4 = options[1];
+            } else {
+                option1 = options[0];
+                option2 = options[1];
+            }
+        } else {
+            option1 = options[0];
+            option2 = options[1];
+            option3 = options[2];
+            option4 = options[3];
         }
     }
 
@@ -202,5 +231,38 @@ public class NavigationWrapper {
         if (navigationRailView == null) {
             floatingActionButton.hide();
         }
+    }
+
+    @ExperimentalBadgeUtils
+    public void setInboxCount(Context context, int inboxCount) {
+        if (inboxCount <= 0) {
+            return;
+        }
+
+        if (option1 == SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_INBOX || option1 == SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX) {
+            if (navigationRailView == null) {
+                BadgeUtils.attachBadgeDrawable(getBadgeDrawable(context, inboxCount), option1BottomAppBar);
+            }
+        } else if (option2 == SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_INBOX || option2 == SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX) {
+            if (navigationRailView == null) {
+                BadgeUtils.attachBadgeDrawable(getBadgeDrawable(context, inboxCount), option2BottomAppBar);
+            }
+        } else if (option3 == SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_INBOX || option3 == SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX) {
+            if (navigationRailView == null) {
+                BadgeUtils.attachBadgeDrawable(getBadgeDrawable(context, inboxCount), option3BottomAppBar);
+            }
+        } else if (option4 == SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_INBOX || option4 == SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX) {
+            if (navigationRailView == null) {
+                BadgeUtils.attachBadgeDrawable(getBadgeDrawable(context, inboxCount), option4BottomAppBar);
+            }
+        }
+    }
+
+    private BadgeDrawable getBadgeDrawable(Context context, int inboxCount) {
+        BadgeDrawable badgeDrawable = BadgeDrawable.create(context);
+        badgeDrawable.setNumber(inboxCount);
+        badgeDrawable.setBackgroundColor(customThemeWrapper.getColorAccent());
+        badgeDrawable.setBadgeTextColor(customThemeWrapper.getButtonTextColor());
+        return badgeDrawable;
     }
 }
