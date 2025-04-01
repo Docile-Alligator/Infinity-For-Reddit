@@ -1105,9 +1105,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         @Override
                         public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
                             MainActivity.this.inboxCount = inboxCount;
+                            mCurrentAccountSharedPreferences.edit().putInt(SharedPreferencesUtils.INBOX_COUNT, inboxCount).apply();
                             accountName = userData.getName();
                             mFetchUserInfoSuccess = true;
-                            setInboxCount();
+                            EventBus.getDefault().post(new ChangeInboxCountEvent(inboxCount));
                         }
 
                         @Override
@@ -1354,6 +1355,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @ExperimentalBadgeUtils
     @Subscribe
     public void onChangeInboxCountEvent(ChangeInboxCountEvent event) {
+        this.inboxCount = event.inboxCount;
         setInboxCount();
     }
 

@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -22,6 +23,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -52,6 +54,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.NavigationWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivityViewMultiRedditDetailBinding;
+import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
 import ml.docilealligator.infinityforreddit.events.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.events.RefreshMultiRedditsEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -140,6 +143,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         return super.onKeyDown(keyCode, event);
     }
 
+    @ExperimentalBadgeUtils
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
@@ -228,6 +232,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
 
             if (optionCount == 2) {
                 navigationWrapper.bindOptionDrawableResource(getBottomAppBarOptionDrawableResource(option1), getBottomAppBarOptionDrawableResource(option2));
+                navigationWrapper.bindOptions(option1, option2);
 
                 if (navigationWrapper.navigationRailView == null) {
                     navigationWrapper.option2BottomAppBar.setOnClickListener(view -> {
@@ -260,6 +265,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                 navigationWrapper.bindOptionDrawableResource(getBottomAppBarOptionDrawableResource(option1),
                         getBottomAppBarOptionDrawableResource(option2), getBottomAppBarOptionDrawableResource(option3),
                         getBottomAppBarOptionDrawableResource(option4));
+                navigationWrapper.bindOptions(option1, option2, option3, option4);
 
                 if (navigationWrapper.navigationRailView == null) {
                     navigationWrapper.option1BottomAppBar.setOnClickListener(view -> {
@@ -416,6 +422,14 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
             fabMoreOptionsBottomSheetFragment.setArguments(bundle);
             fabMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
             return true;
+        });
+
+        navigationWrapper.bottomAppBar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                navigationWrapper.bottomAppBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                setInboxCount(mCurrentAccountSharedPreferences.getInt(SharedPreferencesUtils.INBOX_COUNT, 0));
+            }
         });
     }
 
@@ -998,6 +1012,11 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         }
     }
 
+    @ExperimentalBadgeUtils
+    private void setInboxCount(int inboxCount) {
+        mHandler.post(() -> navigationWrapper.setInboxCount(this, inboxCount));
+    }
+
     @Subscribe
     public void goBackToMainPageEvent(GoBackToMainPageEvent event) {
         finish();
@@ -1008,5 +1027,11 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         if (!getClass().getName().equals(event.excludeActivityClassName)) {
             finish();
         }
+    }
+
+    @ExperimentalBadgeUtils
+    @Subscribe
+    public void onChangeInboxCountEvent(ChangeInboxCountEvent event) {
+        setInboxCount(event.inboxCount);
     }
 }

@@ -39,6 +39,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -85,6 +86,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.NavigationWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivityViewUserDetailBinding;
+import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -661,6 +663,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         }
     }
 
+    @ExperimentalBadgeUtils
     private void initializeViewPager() {
         binding.viewPagerViewUserDetailActivity.setAdapter(sectionsPagerAdapter);
         binding.viewPagerViewUserDetailActivity.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
@@ -720,6 +723,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
             if (optionCount == 2) {
                 navigationWrapper.bindOptionDrawableResource(getBottomAppBarOptionDrawableResource(option1), getBottomAppBarOptionDrawableResource(option2));
+                navigationWrapper.bindOptions(option1, option2);
 
                 if (navigationWrapper.navigationRailView == null) {
                     navigationWrapper.option2BottomAppBar.setOnClickListener(view -> {
@@ -752,6 +756,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 navigationWrapper.bindOptionDrawableResource(getBottomAppBarOptionDrawableResource(option1),
                         getBottomAppBarOptionDrawableResource(option2), getBottomAppBarOptionDrawableResource(option3),
                         getBottomAppBarOptionDrawableResource(option4));
+                navigationWrapper.bindOptions(option1, option2, option3, option4);
 
                 if (navigationWrapper.navigationRailView == null) {
                     navigationWrapper.option1BottomAppBar.setOnClickListener(view -> {
@@ -911,6 +916,14 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             fabMoreOptionsBottomSheetFragment.setArguments(bundle);
             fabMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
             return true;
+        });
+
+        navigationWrapper.bottomAppBar.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                navigationWrapper.bottomAppBar.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                setInboxCount(mCurrentAccountSharedPreferences.getInt(SharedPreferencesUtils.INBOX_COUNT, 0));
+            }
         });
     }
 
@@ -1115,6 +1128,11 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
     public void toggleReplyNotifications(Comment comment, int position) {
         sectionsPagerAdapter.toggleCommentReplyNotification(comment, position);
+    }
+
+    @ExperimentalBadgeUtils
+    private void setInboxCount(int inboxCount) {
+        mHandler.post(() -> navigationWrapper.setInboxCount(this, inboxCount));
     }
 
     @Override
@@ -1536,6 +1554,12 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Subscribe
     public void goBackToMainPageEvent(GoBackToMainPageEvent event) {
         finish();
+    }
+
+    @ExperimentalBadgeUtils
+    @Subscribe
+    public void onChangeInboxCountEvent(ChangeInboxCountEvent event) {
+        setInboxCount(event.inboxCount);
     }
 
     @Override

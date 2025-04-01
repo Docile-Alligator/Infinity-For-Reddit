@@ -400,6 +400,7 @@ public class SharedPreferencesUtils {
     public static final String ACCESS_TOKEN = "access_token";
     public static final String ACCOUNT_IMAGE_URL = "account_image_url";
     public static final String REDGIFS_ACCESS_TOKEN = "redgifs_access_token";
+    public static final String INBOX_COUNT = "inbox_count";
 
     public static final String NAVIGATION_DRAWER_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.navigation_drawer";
     public static final String COLLAPSE_ACCOUNT_SECTION = "collapse_account_section";
