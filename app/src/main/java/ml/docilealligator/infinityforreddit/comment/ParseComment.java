@@ -257,7 +257,13 @@ public class ParseComment {
         String id = singleCommentData.getString(JSONUtils.ID_KEY);
         String fullName = singleCommentData.getString(JSONUtils.NAME_KEY);
         String author = singleCommentData.getString(JSONUtils.AUTHOR_KEY);
-        String authorFullname = singleCommentData.getString(JSONUtils.AUTHOR_FULLNAME_KEY);
+
+        String authorFullname = "";
+
+        if (singleCommentData.has(JSONUtils.AUTHOR_FULLNAME_KEY)) {
+            authorFullname = singleCommentData.getString(JSONUtils.AUTHOR_FULLNAME_KEY);
+        }
+
         StringBuilder authorFlairHTMLBuilder = new StringBuilder();
         if (singleCommentData.has(JSONUtils.AUTHOR_FLAIR_RICHTEXT_KEY)) {
             JSONArray flairArray = singleCommentData.getJSONArray(JSONUtils.AUTHOR_FLAIR_RICHTEXT_KEY);
