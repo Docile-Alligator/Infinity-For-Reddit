@@ -153,7 +153,7 @@ public class UserProfileImagesBatchLoader {
             JSONObject jsonResponse = new JSONObject(response);
             for (String s : mLoadingAuthorFullNames) {
                 try {
-                    mAuthorFullNameToImageMap.put(s, jsonResponse.getJSONObject(s).getString(JSONUtils.PROFILE_IMG_KEY));
+                    mAuthorFullNameToImageMap.put(s, jsonResponse.getJSONObject(s).getString(JSONUtils.PROFILE_IMG_KEY).replaceAll("&amp;","&"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

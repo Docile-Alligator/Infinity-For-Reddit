@@ -452,31 +452,33 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                             currentUserDrawable, null, null, null);
                 }
 
-                if (comment.getAuthorIconUrl() == null) {
-                    int startIndex = translatePositionToCommentIndex(position);
-                    if (startIndex >= 0) {
-                        List<Comment> commentBatch = mVisibleComments.subList(startIndex, Math.min(mVisibleComments.size(), UserProfileImagesBatchLoader.BATCH_SIZE + startIndex));
-                        mFragment.loadIcon(commentBatch, (authorFullName, iconUrl) -> {
-                            if (authorFullName.equals(comment.getAuthorFullName())) {
-                                comment.setAuthorIconUrl(iconUrl);
-                            }
+                if (mShowAuthorAvatar) {
+                    if (comment.getAuthorIconUrl() == null) {
+                        int startIndex = translatePositionToCommentIndex(position);
+                        if (startIndex >= 0) {
+                            List<Comment> commentBatch = mVisibleComments.subList(startIndex, Math.min(mVisibleComments.size(), UserProfileImagesBatchLoader.BATCH_SIZE + startIndex));
+                            mFragment.loadIcon(commentBatch, (authorFullName, iconUrl) -> {
+                                if (authorFullName.equals(comment.getAuthorFullName())) {
+                                    comment.setAuthorIconUrl(iconUrl);
+                                }
 
-                            Comment currentComment = getCurrentComment(holder);
-                            if (currentComment != null && authorFullName.equals(currentComment.getAuthorFullName())) {
-                                mGlide.load(iconUrl)
-                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                        .error(mGlide.load(R.drawable.subreddit_default_icon)
-                                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                                        .into(((CommentBaseViewHolder) holder).authorIconImageView);
-                            }
-                        });
+                                Comment currentComment = getCurrentComment(holder);
+                                if (currentComment != null && authorFullName.equals(currentComment.getAuthorFullName())) {
+                                    mGlide.load(iconUrl)
+                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                            .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                                            .into(((CommentBaseViewHolder) holder).authorIconImageView);
+                                }
+                            });
+                        }
+                    } else {
+                        mGlide.load(comment.getAuthorIconUrl())
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                                .into(((CommentBaseViewHolder) holder).authorIconImageView);
                     }
-                } else {
-                    mGlide.load(comment.getAuthorIconUrl())
-                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                            .error(mGlide.load(R.drawable.subreddit_default_icon)
-                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                            .into(((CommentBaseViewHolder) holder).authorIconImageView);
                 }
 
                 if (mShowElapsedTime) {
@@ -597,31 +599,33 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 String authorWithPrefix = "u/" + comment.getAuthor();
                 ((CommentFullyCollapsedViewHolder) holder).binding.userNameTextViewItemCommentFullyCollapsed.setText(authorWithPrefix);
 
-                if (comment.getAuthorIconUrl() == null) {
-                    int startIndex = translatePositionToCommentIndex(position);
-                    if (startIndex >= 0) {
-                        List<Comment> commentBatch = mVisibleComments.subList(startIndex, Math.min(mVisibleComments.size(), UserProfileImagesBatchLoader.BATCH_SIZE + startIndex));
-                        mFragment.loadIcon(commentBatch, (authorFullName, iconUrl) -> {
-                            if (authorFullName.equals(comment.getAuthorFullName())) {
-                                comment.setAuthorIconUrl(iconUrl);
-                            }
+                if (mShowAuthorAvatar) {
+                    if (comment.getAuthorIconUrl() == null) {
+                        int startIndex = translatePositionToCommentIndex(position);
+                        if (startIndex >= 0) {
+                            List<Comment> commentBatch = mVisibleComments.subList(startIndex, Math.min(mVisibleComments.size(), UserProfileImagesBatchLoader.BATCH_SIZE + startIndex));
+                            mFragment.loadIcon(commentBatch, (authorFullName, iconUrl) -> {
+                                if (authorFullName.equals(comment.getAuthorFullName())) {
+                                    comment.setAuthorIconUrl(iconUrl);
+                                }
 
-                            Comment currentComment = getCurrentComment(holder);
-                            if (currentComment != null && authorFullName.equals(currentComment.getAuthorFullName())) {
-                                mGlide.load(iconUrl)
-                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                        .error(mGlide.load(R.drawable.subreddit_default_icon)
-                                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                                        .into(((CommentFullyCollapsedViewHolder) holder).binding.authorIconImageViewItemCommentFullyCollapsed);
-                            }
-                        });
+                                Comment currentComment = getCurrentComment(holder);
+                                if (currentComment != null && authorFullName.equals(currentComment.getAuthorFullName())) {
+                                    mGlide.load(iconUrl)
+                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                            .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                                            .into(((CommentFullyCollapsedViewHolder) holder).binding.authorIconImageViewItemCommentFullyCollapsed);
+                                }
+                            });
+                        }
+                    } else {
+                        mGlide.load(comment.getAuthorIconUrl())
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                                .into(((CommentFullyCollapsedViewHolder) holder).binding.authorIconImageViewItemCommentFullyCollapsed);
                     }
-                } else {
-                    mGlide.load(comment.getAuthorIconUrl())
-                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                            .error(mGlide.load(R.drawable.subreddit_default_icon)
-                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                            .into(((CommentFullyCollapsedViewHolder) holder).binding.authorIconImageViewItemCommentFullyCollapsed);
                 }
 
                 if (comment.getChildCount() > 0) {
