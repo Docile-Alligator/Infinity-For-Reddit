@@ -1069,7 +1069,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         }
 
         if (!accountName.equals(Account.ANONYMOUS_ACCOUNT) && !mFetchSubscriptionsSuccess) {
-            FetchSubscribedThing.fetchSubscribedThing(mOauthRetrofit, accessToken, accountName, null,
+            FetchSubscribedThing.fetchSubscribedThing(mExecutor, mHandler, mOauthRetrofit, accessToken, accountName, null,
                     new ArrayList<>(), new ArrayList<>(),
                     new ArrayList<>(),
                     new FetchSubscribedThing.FetchSubscribedThingListener() {
