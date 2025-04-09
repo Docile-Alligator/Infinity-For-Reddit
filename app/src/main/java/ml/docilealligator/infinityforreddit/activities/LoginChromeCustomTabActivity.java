@@ -135,8 +135,9 @@ public class LoginChromeCustomTabActivity extends BaseActivity {
                                 String accessToken = responseJSON.getString(APIUtils.ACCESS_TOKEN_KEY);
                                 String refreshToken = responseJSON.getString(APIUtils.REFRESH_TOKEN_KEY);
 
-                                FetchMyInfo.fetchAccountInfo(mOauthRetrofit, mRedditDataRoomDatabase,
-                                        accessToken, new FetchMyInfo.FetchMyInfoListener() {
+                                FetchMyInfo.fetchAccountInfo(mExecutor, mHandler, mOauthRetrofit,
+                                        mRedditDataRoomDatabase, accessToken,
+                                        new FetchMyInfo.FetchMyInfoListener() {
                                             @Override
                                             public void onFetchMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
                                                 mCurrentAccountSharedPreferences.edit().putString(SharedPreferencesUtils.ACCESS_TOKEN, accessToken)
