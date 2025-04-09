@@ -16,20 +16,21 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.user.FetchUserFlairs;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.user.SelectUserFlair;
-import ml.docilealligator.infinityforreddit.user.UserFlair;
 import ml.docilealligator.infinityforreddit.adapters.UserFlairRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivitySelectUserFlairBinding;
+import ml.docilealligator.infinityforreddit.user.FetchUserFlairs;
+import ml.docilealligator.infinityforreddit.user.SelectUserFlair;
+import ml.docilealligator.infinityforreddit.user.UserFlair;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
@@ -50,6 +51,8 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private LinearLayoutManagerBugFixed mLinearLayoutManager;
     private ArrayList<UserFlair> mUserFlairs;
     private String mSubredditName;
@@ -157,7 +160,7 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
     }
 
     private void selectUserFlair(@Nullable UserFlair userFlair) {
-        SelectUserFlair.selectUserFlair(mOauthRetrofit, accessToken, userFlair, mSubredditName, accountName,
+        SelectUserFlair.selectUserFlair(mExecutor, mHandler, mOauthRetrofit, accessToken, userFlair, mSubredditName, accountName,
                 new SelectUserFlair.SelectUserFlairListener() {
                     @Override
                     public void success() {
