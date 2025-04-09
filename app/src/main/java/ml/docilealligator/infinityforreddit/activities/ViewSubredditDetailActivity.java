@@ -28,6 +28,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -553,6 +554,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         subscribedColor = mCustomThemeWrapper.getSubscribed();
     }
 
+    @OptIn(markerClass = ExperimentalBadgeUtils.class)
     private void checkNewAccountAndBindView() {
         if (mNewAccountName != null) {
             if (accountName.equals(Account.ANONYMOUS_ACCOUNT) || !accountName.equals(mNewAccountName)) {

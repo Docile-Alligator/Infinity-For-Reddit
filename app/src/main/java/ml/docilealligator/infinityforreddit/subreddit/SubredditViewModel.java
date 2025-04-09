@@ -20,10 +20,6 @@ public class SubredditViewModel extends ViewModel {
         return mSubredditLiveData;
     }
 
-    public void insert(SubredditData subredditData) {
-        mSubredditRepository.insert(subredditData);
-    }
-
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
 
         private final RedditDataRoomDatabase mRedditDataRoomDatabase;
