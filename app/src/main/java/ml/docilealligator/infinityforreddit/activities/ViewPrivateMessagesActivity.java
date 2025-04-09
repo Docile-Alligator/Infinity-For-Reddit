@@ -158,9 +158,9 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
                         }
                         isSendingMessage = true;
                         binding.sendImageViewViewPrivateMessagesActivity.setColorFilter(mSecondaryTextColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                        ReplyMessage.replyMessage(binding.editTextViewPrivateMessagesActivity.getText().toString(), replyTo.getFullname(),
-                                getResources().getConfiguration().locale, mOauthRetrofit, accessToken,
-                                new ReplyMessage.ReplyMessageListener() {
+                        ReplyMessage.replyMessage(mExecutor, mHandler, binding.editTextViewPrivateMessagesActivity.getText().toString(),
+                                replyTo.getFullname(), getResources().getConfiguration().locale,
+                                mOauthRetrofit, accessToken, new ReplyMessage.ReplyMessageListener() {
                                     @Override
                                     public void replyMessageSuccess(Message message) {
                                         if (mAdapter != null) {

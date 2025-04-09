@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -36,6 +38,8 @@ public class SendPrivateMessageActivity extends BaseActivity {
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private String mAccessToken;
     private boolean isSubmitting = false;
     private ActivitySendPrivateMessageBinding binding;
@@ -105,7 +109,7 @@ public class SendPrivateMessageActivity extends BaseActivity {
                 Snackbar sendingSnackbar = Snackbar.make(binding.getRoot(), R.string.sending_message, Snackbar.LENGTH_INDEFINITE);
                 sendingSnackbar.show();
 
-                ComposeMessage.composeMessage(mOauthRetrofit, mAccessToken, getResources().getConfiguration().locale,
+                ComposeMessage.composeMessage(mExecutor, mHandler, mOauthRetrofit, mAccessToken, getResources().getConfiguration().locale,
                         binding.usernameEditTextSendPrivateMessageActivity.getText().toString(), binding.subjetEditTextSendPrivateMessageActivity.getText().toString(),
                         binding.contentEditTextSendPrivateMessageActivity.getText().toString(), new ComposeMessage.ComposeMessageListener() {
                             @Override

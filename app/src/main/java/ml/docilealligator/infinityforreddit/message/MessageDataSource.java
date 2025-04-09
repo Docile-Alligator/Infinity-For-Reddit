@@ -1,17 +1,22 @@
 package ml.docilealligator.infinityforreddit.message;
 
+import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.NetworkState;
 import retrofit2.Retrofit;
 
 class MessageDataSource extends PageKeyedDataSource<String, Message> {
+    private final Executor executor;
+    private final Handler handler;
     private final Retrofit oauthRetrofit;
     private final Locale locale;
     private final String accessToken;
@@ -25,7 +30,9 @@ class MessageDataSource extends PageKeyedDataSource<String, Message> {
     private LoadParams<String> params;
     private LoadCallback<String, Message> callback;
 
-    MessageDataSource(Retrofit oauthRetrofit, Locale locale, String accessToken, String where) {
+    MessageDataSource(Executor executor, Handler handler, Retrofit oauthRetrofit, Locale locale, String accessToken, String where) {
+        this.executor = executor;
+        this.handler = handler;
         this.oauthRetrofit = oauthRetrofit;
         this.locale = locale;
         this.accessToken = accessToken;
@@ -60,17 +67,17 @@ class MessageDataSource extends PageKeyedDataSource<String, Message> {
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, Message> callback) {
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
-        FetchMessage.fetchInbox(oauthRetrofit, locale, accessToken, where, null, messageType,
+        FetchMessage.fetchInbox(executor, handler, oauthRetrofit, locale, accessToken, where, null, messageType,
                 new FetchMessage.FetchMessagesListener() {
             @Override
-            public void fetchSuccess(ArrayList<Message> messages, @Nullable String after) {
-                if (messages.size() == 0) {
+            public void fetchSuccess(List<Message> messages, @Nullable String after) {
+                if (messages.isEmpty()) {
                     hasPostLiveData.postValue(false);
                 } else {
                     hasPostLiveData.postValue(true);
                 }
 
-                if (after == null || after.equals("") || after.equals("null")) {
+                if (after == null || after.isEmpty() || after.equals("null")) {
                     callback.onResult(messages, null, null);
                 } else {
                     callback.onResult(messages, null, after);
@@ -97,11 +104,11 @@ class MessageDataSource extends PageKeyedDataSource<String, Message> {
 
         paginationNetworkStateLiveData.postValue(NetworkState.LOADING);
 
-        FetchMessage.fetchInbox(oauthRetrofit, locale, accessToken, where, params.key, messageType,
+        FetchMessage.fetchInbox(executor, handler, oauthRetrofit, locale, accessToken, where, params.key, messageType,
                 new FetchMessage.FetchMessagesListener() {
             @Override
-            public void fetchSuccess(ArrayList<Message> messages, @Nullable String after) {
-                if (after == null || after.equals("") || after.equals("null")) {
+            public void fetchSuccess(List<Message> messages, @Nullable String after) {
+                if (after == null || after.isEmpty() || after.equals("null")) {
                     callback.onResult(messages, null);
                 } else {
                     callback.onResult(messages, after);

@@ -1,8 +1,7 @@
 package ml.docilealligator.infinityforreddit.message;
 
-import android.os.AsyncTask;
-
 import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,11 +16,7 @@ import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class ParseMessage {
-    public static void parseMessage(String response, Locale locale, int messageType,
-                                    ParseMessageAsyncTaskListener parseMessageAsnycTaskListener) {
-        new ParseMessageAsnycTask(response, locale, messageType, parseMessageAsnycTaskListener).execute();
-    }
-
+    @WorkerThread
     public static ArrayList<Message> parseMessages(JSONArray messageArray, Locale locale, int messageType) {
         ArrayList<Message> messages = new ArrayList<>();
         for (int i = 0; i < messageArray.length(); i++) {
@@ -37,16 +32,9 @@ public class ParseMessage {
         return messages;
     }
 
-    public static void parseRepliedMessage(String response, Locale locale, ParseSentMessageAsyncTaskListener parseSentMessageAsyncTaskListener) {
-        new ParseSentMessageAsnycTask(response, locale, parseSentMessageAsyncTaskListener).execute();
-    }
-
-    public static void parseComposedMessageError(String response, ParseComposedMessageErrorListener parseComposedMessageErrorListener) {
-        new ParseComposedMessageErrorAsncTask(response, parseComposedMessageErrorListener).execute();
-    }
-
+    @WorkerThread
     @Nullable
-    private static Message parseSingleMessage(JSONObject messageJSON, Locale locale, int messageType) throws JSONException {
+    public static Message parseSingleMessage(JSONObject messageJSON, Locale locale, int messageType) throws JSONException {
         String kind = messageJSON.getString(JSONUtils.KIND_KEY);
         if ((messageType == FetchMessage.MESSAGE_TYPE_INBOX && kind.equals("t4")) ||
                 (messageType == FetchMessage.MESSAGE_TYPE_PRIVATE_MESSAGE && !kind.equals("t4"))) {
@@ -94,111 +82,9 @@ public class ParseMessage {
         return message;
     }
 
-    private static class ParseMessageAsnycTask extends AsyncTask<Void, Void, Void> {
-
-        private final String response;
-        private final Locale locale;
-        private ArrayList<Message> messages;
-        private String after;
-        private final int messageType;
-        private final ParseMessageAsyncTaskListener parseMessageAsyncTaskListener;
-        ParseMessageAsnycTask(String response, Locale locale, int messageType,
-                              ParseMessageAsyncTaskListener parseMessageAsnycTaskListener) {
-            this.response = response;
-            this.locale = locale;
-            this.messageType = messageType;
-            messages = new ArrayList<>();
-            this.parseMessageAsyncTaskListener = parseMessageAsnycTaskListener;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                JSONArray messageArray = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                messages = parseMessages(messageArray, locale, messageType);
-                after = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            parseMessageAsyncTaskListener.parseSuccess(messages, after);
-        }
-    }
-
-    private static class ParseSentMessageAsnycTask extends AsyncTask<Void, Void, Void> {
-
-        private final String response;
-        private final Locale locale;
-        private Message message;
-        private String errorMessage;
-        private boolean parseFailed = false;
-        private final ParseSentMessageAsyncTaskListener parseSentMessageAsyncTaskListener;
-
-        ParseSentMessageAsnycTask(String response, Locale locale, ParseSentMessageAsyncTaskListener parseSentMessageAsyncTaskListener) {
-            this.response = response;
-            this.locale = locale;
-            this.parseSentMessageAsyncTaskListener = parseSentMessageAsyncTaskListener;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                JSONObject messageJSON = new JSONObject(response).getJSONObject(JSONUtils.JSON_KEY)
-                        .getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.THINGS_KEY).getJSONObject(0);
-                message = parseSingleMessage(messageJSON, locale, FetchMessage.MESSAGE_TYPE_PRIVATE_MESSAGE);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                errorMessage = parseRepliedMessageErrorMessage(response);
-                parseFailed = true;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (parseFailed) {
-                parseSentMessageAsyncTaskListener.parseFailed(errorMessage);
-            } else {
-                parseSentMessageAsyncTaskListener.parseSuccess(message);
-            }
-        }
-    }
-
-    private static class ParseComposedMessageErrorAsncTask extends AsyncTask<Void, Void, Void> {
-        private final String response;
-        private final ParseComposedMessageErrorListener parseComposedMessageErrorListener;
-        private String errorMessage;
-
-        ParseComposedMessageErrorAsncTask(String response, ParseComposedMessageErrorListener parseComposedMessageErrorListener) {
-            this.response = response;
-            this.parseComposedMessageErrorListener = parseComposedMessageErrorListener;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            errorMessage = parseRepliedMessageErrorMessage(response);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (errorMessage == null) {
-                parseComposedMessageErrorListener.noError();
-            } else {
-                parseComposedMessageErrorListener.error(errorMessage);
-            }
-        }
-    }
-
+    @WorkerThread
     @Nullable
-    private static String parseRepliedMessageErrorMessage(String response) {
+    public static String parseRepliedMessageErrorMessage(String response) {
         try {
             JSONObject responseObject = new JSONObject(response).getJSONObject(JSONUtils.JSON_KEY);
 
@@ -224,19 +110,5 @@ public class ParseMessage {
         }
 
         return null;
-    }
-
-    public interface ParseMessageAsyncTaskListener {
-        void parseSuccess(ArrayList<Message> messages, @Nullable String after);
-    }
-
-    public interface ParseSentMessageAsyncTaskListener {
-        void parseSuccess(Message message);
-        void parseFailed(String errorMessage);
-    }
-
-    public interface ParseComposedMessageErrorListener {
-        void noError();
-        void error(String errorMessage);
     }
 }

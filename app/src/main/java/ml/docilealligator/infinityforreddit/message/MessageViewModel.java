@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.message;
 
+import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -10,6 +12,7 @@ import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
 import java.util.Locale;
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.NetworkState;
 import retrofit2.Retrofit;
@@ -22,8 +25,8 @@ public class MessageViewModel extends ViewModel {
     private final LiveData<PagedList<Message>> messages;
     private final MutableLiveData<String> whereLiveData;
 
-    public MessageViewModel(Retrofit retrofit, Locale locale, String accessToken, String where) {
-        messageDataSourceFactory = new MessageDataSourceFactory(retrofit, locale, accessToken, where);
+    public MessageViewModel(Executor executor, Handler handler, Retrofit retrofit, Locale locale, String accessToken, String where) {
+        messageDataSourceFactory = new MessageDataSourceFactory(executor, handler, retrofit, locale, accessToken, where);
 
         initialLoadingState = Transformations.switchMap(messageDataSourceFactory.getMessageDataSourceLiveData(),
                 MessageDataSource::getInitialLoadStateLiveData);
@@ -75,12 +78,16 @@ public class MessageViewModel extends ViewModel {
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
+        private final Executor executor;
+        private final Handler handler;
         private final Retrofit retrofit;
         private final Locale locale;
         private final String accessToken;
         private final String where;
 
-        public Factory(Retrofit retrofit, Locale locale, String accessToken, String where) {
+        public Factory(Executor executor, Handler handler, Retrofit retrofit, Locale locale, String accessToken, String where) {
+            this.executor = executor;
+            this.handler = handler;
             this.retrofit = retrofit;
             this.locale = locale;
             this.accessToken = accessToken;
@@ -90,7 +97,7 @@ public class MessageViewModel extends ViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new MessageViewModel(retrofit, locale, accessToken, where);
+            return (T) new MessageViewModel(executor, handler, retrofit, locale, accessToken, where);
         }
     }
 }
