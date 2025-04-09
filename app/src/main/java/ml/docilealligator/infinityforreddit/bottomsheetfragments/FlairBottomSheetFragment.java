@@ -3,24 +3,24 @@ package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.subreddit.FetchFlairs;
-import ml.docilealligator.infinityforreddit.subreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
@@ -29,13 +29,12 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.databinding.FragmentFlairBottomSheetBinding;
 import ml.docilealligator.infinityforreddit.events.FlairSelectedEvent;
+import ml.docilealligator.infinityforreddit.subreddit.FetchFlairs;
+import ml.docilealligator.infinityforreddit.subreddit.Flair;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class FlairBottomSheetFragment extends LandscapeExpandedBottomSheetDialogFragment {
 
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
@@ -45,8 +44,11 @@ public class FlairBottomSheetFragment extends LandscapeExpandedBottomSheetDialog
     Retrofit mOauthRetrofit;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private String mSubredditName;
     private BaseActivity mActivity;
+    private Handler mHandler;
     private FlairBottomSheetRecyclerViewAdapter mAdapter;
     private FragmentFlairBottomSheetBinding binding;
 
@@ -80,18 +82,20 @@ public class FlairBottomSheetFragment extends LandscapeExpandedBottomSheetDialog
 
         mSubredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
 
+        mHandler = new Handler(Looper.getMainLooper());
+
         fetchFlairs();
 
         return binding.getRoot();
     }
 
     private void fetchFlairs() {
-        FetchFlairs.fetchFlairsInSubreddit(mOauthRetrofit, mActivity.accessToken,
+        FetchFlairs.fetchFlairsInSubreddit(mExecutor, mHandler, mOauthRetrofit, mActivity.accessToken,
                 mSubredditName, new FetchFlairs.FetchFlairsInSubredditListener() {
                     @Override
-                    public void fetchSuccessful(ArrayList<Flair> flairs) {
+                    public void fetchSuccessful(List<Flair> flairs) {
                         binding.progressBarFlairBottomSheetFragment.setVisibility(View.GONE);
-                        if (flairs == null || flairs.size() == 0) {
+                        if (flairs == null || flairs.isEmpty()) {
                             binding.errorTextViewFlairBottomSheetFragment.setVisibility(View.VISIBLE);
                             binding.errorTextViewFlairBottomSheetFragment.setText(R.string.no_flair);
                         } else {

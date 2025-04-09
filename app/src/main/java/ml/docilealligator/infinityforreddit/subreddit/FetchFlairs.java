@@ -1,103 +1,80 @@
 package ml.docilealligator.infinityforreddit.subreddit;
 
-import android.os.AsyncTask;
+import android.os.Handler;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchFlairs {
-    public static void fetchFlairsInSubreddit(Retrofit oauthRetrofit, String accessToken, String subredditName, FetchFlairsInSubredditListener fetchFlairsInSubredditListener) {
-        RedditAPI api = oauthRetrofit.create(RedditAPI.class);
+    public static void fetchFlairsInSubreddit(Executor executor, Handler handler, Retrofit oauthRetrofit, String accessToken, String subredditName, FetchFlairsInSubredditListener fetchFlairsInSubredditListener) {
+        executor.execute(() -> {
+            RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
-        Call<String> flairsCall = api.getFlairs(APIUtils.getOAuthHeader(accessToken), subredditName);
-        flairsCall.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+            Call<String> flairsCall = api.getFlairs(APIUtils.getOAuthHeader(accessToken), subredditName);
+            try {
+                Response<String> response = flairsCall.execute();
                 if (response.isSuccessful()) {
-                    new ParseFlairsAsyncTask(response.body(), new ParseFlairsAsyncTask.ParseFlairsAsyncTaskListener() {
-                        @Override
-                        public void parseSuccessful(ArrayList<Flair> flairs) {
-                            fetchFlairsInSubredditListener.fetchSuccessful(flairs);
-                        }
-
-                        @Override
-                        public void parseFailed() {
-                            fetchFlairsInSubredditListener.fetchFailed();
-                        }
-                    }).execute();
+                    List<Flair> flairs = parseFlairs(response.body());
+                    if (flairs != null) {
+                        handler.post(() -> fetchFlairsInSubredditListener.fetchSuccessful(flairs));
+                    } else {
+                        handler.post(fetchFlairsInSubredditListener::fetchFailed);
+                    }
                 } else if (response.code() == 403) {
                     //No flairs
-                    fetchFlairsInSubredditListener.fetchSuccessful(null);
+                    handler.post(() -> fetchFlairsInSubredditListener.fetchSuccessful(null));
                 } else {
-                    fetchFlairsInSubredditListener.fetchFailed();
+                    handler.post(fetchFlairsInSubredditListener::fetchFailed);
                 }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                fetchFlairsInSubredditListener.fetchFailed();
+            } catch (IOException e) {
+                e.printStackTrace();
+                handler.post(fetchFlairsInSubredditListener::fetchFailed);
             }
         });
     }
 
-    public interface FetchFlairsInSubredditListener {
-        void fetchSuccessful(ArrayList<Flair> flairs);
-
-        void fetchFailed();
-    }
-
-    private static class ParseFlairsAsyncTask extends AsyncTask<Void, ArrayList<Flair>, ArrayList<Flair>> {
-        private final String response;
-        private final ParseFlairsAsyncTaskListener parseFlairsAsyncTaskListener;
-        ParseFlairsAsyncTask(String response, ParseFlairsAsyncTaskListener parseFlairsAsyncTaskListener) {
-            this.response = response;
-            this.parseFlairsAsyncTaskListener = parseFlairsAsyncTaskListener;
-        }
-
-        @Override
-        protected ArrayList<Flair> doInBackground(Void... voids) {
-            try {
-                JSONArray jsonArray = new JSONArray(response);
-                ArrayList<Flair> flairs = new ArrayList<>();
-                for (int i = 0; i < jsonArray.length(); i++) {
+    @WorkerThread
+    @Nullable
+    private static List<Flair> parseFlairs(String response) {
+        try {
+            JSONArray jsonArray = new JSONArray(response);
+            List<Flair> flairs = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                try {
                     String id = jsonArray.getJSONObject(i).getString(JSONUtils.ID_KEY);
                     String text = jsonArray.getJSONObject(i).getString(JSONUtils.TEXT_KEY);
                     boolean editable = jsonArray.getJSONObject(i).getBoolean(JSONUtils.TEXT_EDITABLE_KEY);
 
                     flairs.add(new Flair(id, text, editable));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                return flairs;
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-            return null;
+            return flairs;
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+        return null;
+    }
 
-        @Override
-        protected void onPostExecute(ArrayList<Flair> strings) {
-            if (strings != null) {
-                parseFlairsAsyncTaskListener.parseSuccessful(strings);
-            } else {
-                parseFlairsAsyncTaskListener.parseFailed();
-            }
-        }
+    public interface FetchFlairsInSubredditListener {
+        void fetchSuccessful(List<Flair> flairs);
 
-        interface ParseFlairsAsyncTaskListener {
-            void parseSuccessful(ArrayList<Flair> flairs);
-
-            void parseFailed();
-        }
+        void fetchFailed();
     }
 }

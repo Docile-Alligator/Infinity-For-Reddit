@@ -11,18 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import ml.docilealligator.infinityforreddit.subreddit.Flair;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.ItemFlairBinding;
+import ml.docilealligator.infinityforreddit.subreddit.Flair;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<FlairBottomSheetRecyclerViewAdapter.FlairViewHolder> {
     private final BaseActivity activity;
-    private ArrayList<Flair> flairs;
+    private List<Flair> flairs;
     private final int flairTextColor;
     private final ItemClickListener itemClickListener;
 
@@ -62,7 +62,7 @@ public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<Fl
             });
         }
 
-        if (flairs.get(holder.getBindingAdapterPosition()).isEditable() && flairs.get(holder.getBindingAdapterPosition()).getText().equals("")) {
+        if (flairs.get(holder.getBindingAdapterPosition()).isEditable() && flairs.get(holder.getBindingAdapterPosition()).getText().isEmpty()) {
             holder.itemView.setOnClickListener(view -> holder.binding.editFlairImageViewItemFlair.performClick());
         } else {
             holder.itemView.setOnClickListener(view -> itemClickListener.onClick(flairs.get(holder.getBindingAdapterPosition())));
@@ -82,7 +82,7 @@ public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<Fl
         holder.binding.editFlairImageViewItemFlair.setVisibility(View.GONE);
     }
 
-    public void changeDataset(ArrayList<Flair> flairs) {
+    public void changeDataset(List<Flair> flairs) {
         this.flairs = flairs;
         notifyDataSetChanged();
     }
