@@ -21,7 +21,7 @@ public class LoadUserData {
                 String iconImageUrl = userData.getIconUrl();
                 handler.post(() -> loadUserDataAsyncTaskListener.loadUserDataSuccess(iconImageUrl));
             } else {
-                handler.post(() -> FetchUserData.fetchUserData(retrofit, userName, new FetchUserData.FetchUserDataListener() {
+                handler.post(() -> FetchUserData.fetchUserData(executor, handler, retrofit, userName, new FetchUserData.FetchUserDataListener() {
                     @Override
                     public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
                         InsertUserData.insertUserData(executor, handler, redditDataRoomDatabase, userData,

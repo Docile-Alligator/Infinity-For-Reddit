@@ -160,8 +160,8 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
             });
         }
 
-        UserListingViewModel.Factory factory = new UserListingViewModel.Factory(mRetrofit, mQuery,
-                sortType, nsfw);
+        UserListingViewModel.Factory factory = new UserListingViewModel.Factory(mExecutor, mActivity.mHandler,
+                mRetrofit, mQuery, sortType, nsfw);
         mUserListingViewModel = new ViewModelProvider(this, factory).get(UserListingViewModel.class);
         mUserListingViewModel.getUsers().observe(getViewLifecycleOwner(), UserData -> mAdapter.submitList(UserData));
 

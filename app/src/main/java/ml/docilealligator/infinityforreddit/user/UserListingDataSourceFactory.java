@@ -1,13 +1,19 @@
 package ml.docilealligator.infinityforreddit.user;
 
+import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
+
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.thing.SortType;
 import retrofit2.Retrofit;
 
 public class UserListingDataSourceFactory extends DataSource.Factory {
+    private final Executor executor;
+    private final Handler handler;
     private final Retrofit retrofit;
     private final String query;
     private SortType sortType;
@@ -16,7 +22,10 @@ public class UserListingDataSourceFactory extends DataSource.Factory {
     private UserListingDataSource userListingDataSource;
     private final MutableLiveData<UserListingDataSource> userListingDataSourceMutableLiveData;
 
-    UserListingDataSourceFactory(Retrofit retrofit, String query, SortType sortType, boolean nsfw) {
+    UserListingDataSourceFactory(Executor executor, Handler handler, Retrofit retrofit, String query,
+                                 SortType sortType, boolean nsfw) {
+        this.executor = executor;
+        this.handler = handler;
         this.retrofit = retrofit;
         this.query = query;
         this.sortType = sortType;
@@ -27,7 +36,7 @@ public class UserListingDataSourceFactory extends DataSource.Factory {
     @NonNull
     @Override
     public DataSource create() {
-        userListingDataSource = new UserListingDataSource(retrofit, query, sortType, nsfw);
+        userListingDataSource = new UserListingDataSource(executor, handler, retrofit, query, sortType, nsfw);
         userListingDataSourceMutableLiveData.postValue(userListingDataSource);
         return userListingDataSource;
     }

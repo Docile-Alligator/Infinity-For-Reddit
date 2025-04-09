@@ -1,10 +1,13 @@
 package ml.docilealligator.infinityforreddit.user;
 
+import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.thing.SortType;
@@ -12,6 +15,8 @@ import retrofit2.Retrofit;
 
 public class UserListingDataSource extends PageKeyedDataSource<String, UserData> {
 
+    private final Executor executor;
+    private final Handler handler;
     private final Retrofit retrofit;
     private final String query;
     private final SortType sortType;
@@ -24,7 +29,9 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
     private PageKeyedDataSource.LoadParams<String> params;
     private PageKeyedDataSource.LoadCallback<String, UserData> callback;
 
-    UserListingDataSource(Retrofit retrofit, String query, SortType sortType, boolean nsfw) {
+    UserListingDataSource(Executor executor, Handler handler, Retrofit retrofit, String query, SortType sortType, boolean nsfw) {
+        this.executor = executor;
+        this.handler = handler;
         this.retrofit = retrofit;
         this.query = query;
         this.sortType = sortType;
@@ -50,11 +57,11 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
     public void loadInitial(@NonNull PageKeyedDataSource.LoadInitialParams<String> params, @NonNull PageKeyedDataSource.LoadInitialCallback<String, UserData> callback) {
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
-        FetchUserData.fetchUserListingData(retrofit, query, null, sortType.getType(), nsfw,
+        FetchUserData.fetchUserListingData(executor, handler, retrofit, query, null, sortType.getType(), nsfw,
                 new FetchUserData.FetchUserListingDataListener() {
                     @Override
-                    public void onFetchUserListingDataSuccess(ArrayList<UserData> UserData, String after) {
-                        hasUserLiveData.postValue(UserData.size() != 0);
+                    public void onFetchUserListingDataSuccess(List<UserData> UserData, String after) {
+                        hasUserLiveData.postValue(!UserData.isEmpty());
 
                         callback.onResult(UserData, null, after);
                         initialLoadStateLiveData.postValue(NetworkState.LOADED);
@@ -77,14 +84,14 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
         this.params = params;
         this.callback = callback;
 
-        if (params.key.equals("null") || params.key.equals("")) {
+        if (params.key.equals("null") || params.key.isEmpty()) {
             return;
         }
 
-        FetchUserData.fetchUserListingData(retrofit, query, params.key, sortType.getType(), nsfw,
+        FetchUserData.fetchUserListingData(executor, handler, retrofit, query, params.key, sortType.getType(), nsfw,
                 new FetchUserData.FetchUserListingDataListener() {
                     @Override
-                    public void onFetchUserListingDataSuccess(ArrayList<UserData> UserData, String after) {
+                    public void onFetchUserListingDataSuccess(List<UserData> UserData, String after) {
                         callback.onResult(UserData, after);
                         paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
                     }

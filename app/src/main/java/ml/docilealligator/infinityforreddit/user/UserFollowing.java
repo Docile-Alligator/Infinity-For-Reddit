@@ -21,18 +21,18 @@ import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 public class UserFollowing {
-    public static void followUser(Retrofit oauthRetrofit, Retrofit retrofit,
+    public static void followUser(Executor executor, Handler handler, Retrofit oauthRetrofit, Retrofit retrofit,
                                   @Nullable String accessToken, String username, @NonNull String accountName,
                                   RedditDataRoomDatabase redditDataRoomDatabase,
                                   UserFollowingListener userFollowingListener) {
-        userFollowing(oauthRetrofit, retrofit, accessToken, username, accountName, "sub",
+        userFollowing(executor, handler, oauthRetrofit, retrofit, accessToken, username, accountName, "sub",
                 redditDataRoomDatabase.subscribedUserDao(), userFollowingListener);
     }
 
     public static void anonymousFollowUser(Executor executor, Handler handler, Retrofit retrofit, String username,
                                            RedditDataRoomDatabase redditDataRoomDatabase,
                                            UserFollowingListener userFollowingListener) {
-        FetchUserData.fetchUserData(retrofit, username, new FetchUserData.FetchUserDataListener() {
+        FetchUserData.fetchUserData(executor, handler, retrofit, username, new FetchUserData.FetchUserDataListener() {
             @Override
             public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
                 executor.execute(() -> {
@@ -53,11 +53,11 @@ public class UserFollowing {
         });
     }
 
-    public static void unfollowUser(Retrofit oauthRetrofit, Retrofit retrofit,
+    public static void unfollowUser(Executor executor, Handler handler, Retrofit oauthRetrofit, Retrofit retrofit,
                                     @Nullable String accessToken, String username, @NonNull String accountName,
                                     RedditDataRoomDatabase redditDataRoomDatabase,
                                     UserFollowingListener userFollowingListener) {
-        userFollowing(oauthRetrofit, retrofit, accessToken, username, accountName, "unsub",
+        userFollowing(executor, handler, oauthRetrofit, retrofit, accessToken, username, accountName, "unsub",
                 redditDataRoomDatabase.subscribedUserDao(), userFollowingListener);
     }
 
@@ -71,7 +71,7 @@ public class UserFollowing {
         });
     }
 
-    private static void userFollowing(Retrofit oauthRetrofit, Retrofit retrofit, @Nullable String accessToken,
+    private static void userFollowing(Executor executor, Handler handler, Retrofit oauthRetrofit, Retrofit retrofit, @Nullable String accessToken,
                                       String username, @NonNull String accountName, String action, SubscribedUserDao subscribedUserDao,
                                       UserFollowingListener userFollowingListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
@@ -86,7 +86,7 @@ public class UserFollowing {
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
                     if (action.equals("sub")) {
-                        FetchUserData.fetchUserData(retrofit, username, new FetchUserData.FetchUserDataListener() {
+                        FetchUserData.fetchUserData(executor, handler, retrofit, username, new FetchUserData.FetchUserDataListener() {
                             @Override
                             public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
                                 new UpdateSubscriptionAsyncTask(subscribedUserDao, userData, accountName, true).execute();

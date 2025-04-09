@@ -1099,7 +1099,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     private void loadUserData() {
         if (!mFetchUserInfoSuccess) {
-            FetchUserData.fetchUserData(mRedditDataRoomDatabase, mOauthRetrofit, accessToken,
+            FetchUserData.fetchUserData(mExecutor, mHandler, mRedditDataRoomDatabase, mOauthRetrofit, accessToken,
                     accountName, new FetchUserData.FetchUserDataListener() {
                         @ExperimentalBadgeUtils
                         @Override

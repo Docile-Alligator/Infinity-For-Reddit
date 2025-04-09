@@ -430,7 +430,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                                                 }
                                             });
                                 } else {
-                                    UserFollowing.followUser(mOauthRetrofit, mRetrofit, accessToken,
+                                    UserFollowing.followUser(mExecutor, mHandler, mOauthRetrofit, mRetrofit, accessToken,
                                             username, accountName, mRedditDataRoomDatabase, new UserFollowing.UserFollowingListener() {
                                                 @Override
                                                 public void onUserFollowingSuccess() {
@@ -465,7 +465,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                                                 }
                                             });
                                 } else {
-                                    UserFollowing.unfollowUser(mOauthRetrofit, mRetrofit, accessToken,
+                                    UserFollowing.unfollowUser(mExecutor, mHandler, mOauthRetrofit, mRetrofit, accessToken,
                                             username, accountName, mRedditDataRoomDatabase, new UserFollowing.UserFollowingListener() {
                                                 @Override
                                                 public void onUserFollowingSuccess() {
@@ -1090,7 +1090,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
     private void fetchUserInfo() {
         if (!mFetchUserInfoSuccess) {
-            FetchUserData.fetchUserData(mRetrofit, username, new FetchUserData.FetchUserDataListener() {
+            FetchUserData.fetchUserData(mExecutor, mHandler, mRetrofit, username, new FetchUserData.FetchUserDataListener() {
                 @Override
                 public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
                     new ViewUserDetailActivity.InsertUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), userData,
