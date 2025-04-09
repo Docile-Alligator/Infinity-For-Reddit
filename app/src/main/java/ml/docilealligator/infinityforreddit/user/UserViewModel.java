@@ -1,9 +1,5 @@
 package ml.docilealligator.infinityforreddit.user;
 
-import android.app.Application;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,10 +17,6 @@ public class UserViewModel extends ViewModel {
 
     public LiveData<UserData> getUserLiveData() {
         return mUserLiveData;
-    }
-
-    public void insert(UserData userData) {
-        mSubredditRepository.insert(userData);
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
