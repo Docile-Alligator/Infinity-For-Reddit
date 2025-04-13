@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.user;
 
-import android.os.AsyncTask;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
@@ -89,7 +88,11 @@ public class UserFollowing {
                         FetchUserData.fetchUserData(executor, handler, retrofit, username, new FetchUserData.FetchUserDataListener() {
                             @Override
                             public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
-                                new UpdateSubscriptionAsyncTask(subscribedUserDao, userData, accountName, true).execute();
+                                executor.execute(() -> {
+                                    SubscribedUserData subscribedUserData = new SubscribedUserData(userData.getName(), userData.getIconUrl(),
+                                            accountName, false);
+                                    subscribedUserDao.insert(subscribedUserData);
+                                });
                             }
 
                             @Override
@@ -97,10 +100,13 @@ public class UserFollowing {
 
                             }
                         });
+                        userFollowingListener.onUserFollowingSuccess();
                     } else {
-                        new UpdateSubscriptionAsyncTask(subscribedUserDao, username, accountName, false).execute();
+                        executor.execute(() -> {
+                            subscribedUserDao.deleteSubscribedUser(username, accountName);
+                            handler.post(userFollowingListener::onUserFollowingSuccess);
+                        });
                     }
-                    userFollowingListener.onUserFollowingSuccess();
                 } else {
                     userFollowingListener.onUserFollowingFail();
                 }
@@ -117,41 +123,5 @@ public class UserFollowing {
         void onUserFollowingSuccess();
 
         void onUserFollowingFail();
-    }
-
-    private static class UpdateSubscriptionAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        private final SubscribedUserDao subscribedUserDao;
-        private String username;
-        private final String accountName;
-        private SubscribedUserData subscribedUserData;
-        private final boolean isSubscribing;
-
-        UpdateSubscriptionAsyncTask(SubscribedUserDao subscribedUserDao, String username,
-                                    @NonNull String accountName, boolean isSubscribing) {
-            this.subscribedUserDao = subscribedUserDao;
-            this.username = username;
-            this.accountName = accountName;
-            this.isSubscribing = isSubscribing;
-        }
-
-        UpdateSubscriptionAsyncTask(SubscribedUserDao subscribedUserDao, UserData userData,
-                                    @NonNull String accountName, boolean isSubscribing) {
-            this.subscribedUserDao = subscribedUserDao;
-            this.subscribedUserData = new SubscribedUserData(userData.getName(), userData.getIconUrl(),
-                    accountName, false);
-            this.accountName = accountName;
-            this.isSubscribing = isSubscribing;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            if (isSubscribing) {
-                subscribedUserDao.insert(subscribedUserData);
-            } else {
-                subscribedUserDao.deleteSubscribedUser(username, accountName);
-            }
-            return null;
-        }
     }
 }

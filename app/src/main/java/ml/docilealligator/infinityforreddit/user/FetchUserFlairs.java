@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.text.Html;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +46,7 @@ public class FetchUserFlairs {
         });
     }
 
+    @WorkerThread
     private static ArrayList<UserFlair> parseUserFlairs(String response) {
         try {
             JSONArray jsonArray = new JSONArray(response);
