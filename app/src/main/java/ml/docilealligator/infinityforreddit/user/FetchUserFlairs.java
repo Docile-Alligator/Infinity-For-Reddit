@@ -1,80 +1,56 @@
 package ml.docilealligator.infinityforreddit.user;
 
-import android.os.AsyncTask;
+import android.os.Handler;
 import android.text.Html;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchUserFlairs {
-    public static void fetchUserFlairsInSubreddit(Retrofit oauthRetrofit, String accessToken, String subredditName, FetchUserFlairsInSubredditListener fetchUserFlairsInSubredditListener) {
-        RedditAPI api = oauthRetrofit.create(RedditAPI.class);
+    public static void fetchUserFlairsInSubreddit(Executor executor, Handler handler, Retrofit oauthRetrofit, String accessToken, String subredditName, FetchUserFlairsInSubredditListener fetchUserFlairsInSubredditListener) {
+        executor.execute(() -> {
+            RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
-        Call<String> flairsCall = api.getUserFlairs(APIUtils.getOAuthHeader(accessToken), subredditName);
-        flairsCall.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+            try {
+                Response<String> response = api.getUserFlairs(APIUtils.getOAuthHeader(accessToken), subredditName).execute();
                 if (response.isSuccessful()) {
-                    new ParseUserFlairsAsyncTask(response.body(), new ParseUserFlairsAsyncTask.ParseUserFlairsAsyncTaskListener() {
-                        @Override
-                        public void parseSuccessful(ArrayList<UserFlair> userFlairs) {
-                            fetchUserFlairsInSubredditListener.fetchSuccessful(userFlairs);
-                        }
-
-                        @Override
-                        public void parseFailed() {
-                            fetchUserFlairsInSubredditListener.fetchFailed();
-                        }
-                    }).execute();
+                    ArrayList<UserFlair> userFlairs = parseUserFlairs(response.body());
+                    if (userFlairs == null) {
+                        handler.post(fetchUserFlairsInSubredditListener::fetchFailed);
+                    } else {
+                        handler.post(() -> fetchUserFlairsInSubredditListener.fetchSuccessful(userFlairs));
+                    }
                 } else if (response.code() == 403) {
                     //No flairs
-                    fetchUserFlairsInSubredditListener.fetchSuccessful(null);
+                    handler.post(() -> fetchUserFlairsInSubredditListener.fetchSuccessful(null));
                 } else {
-                    fetchUserFlairsInSubredditListener.fetchFailed();
+                    handler.post(fetchUserFlairsInSubredditListener::fetchFailed);
                 }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                fetchUserFlairsInSubredditListener.fetchFailed();
+            } catch (IOException e) {
+                handler.post(fetchUserFlairsInSubredditListener::fetchFailed);
             }
         });
     }
 
-    public interface FetchUserFlairsInSubredditListener {
-        void fetchSuccessful(ArrayList<UserFlair> userFlairs);
-
-        void fetchFailed();
-    }
-
-    private static class ParseUserFlairsAsyncTask extends AsyncTask<Void, ArrayList<UserFlair>, ArrayList<UserFlair>> {
-        private final String response;
-        private final ParseUserFlairsAsyncTaskListener parseFlairsAsyncTaskListener;
-
-        ParseUserFlairsAsyncTask(String response, ParseUserFlairsAsyncTaskListener parseFlairsAsyncTaskListener) {
-            this.response = response;
-            this.parseFlairsAsyncTaskListener = parseFlairsAsyncTaskListener;
-        }
-
-        @Override
-        protected ArrayList<UserFlair> doInBackground(Void... voids) {
-            try {
-                JSONArray jsonArray = new JSONArray(response);
-                ArrayList<UserFlair> userFlairs = new ArrayList<>();
-                for (int i = 0; i < jsonArray.length(); i++) {
+    private static ArrayList<UserFlair> parseUserFlairs(String response) {
+        try {
+            JSONArray jsonArray = new JSONArray(response);
+            ArrayList<UserFlair> userFlairs = new ArrayList<>();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                try {
                     JSONObject userFlairObject = jsonArray.getJSONObject(i);
                     String id = userFlairObject.getString(JSONUtils.ID_KEY);
                     String text = userFlairObject.getString(JSONUtils.TEXT_KEY);
@@ -96,27 +72,20 @@ public class FetchUserFlairs {
                     }
 
                     userFlairs.add(new UserFlair(id, text, authorFlairHTMLBuilder.toString(), editable, maxEmojis));
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                return userFlairs;
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-            return null;
+            return userFlairs;
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+        return null;
+    }
 
-        @Override
-        protected void onPostExecute(ArrayList<UserFlair> userFlairs) {
-            if (userFlairs != null) {
-                parseFlairsAsyncTaskListener.parseSuccessful(userFlairs);
-            } else {
-                parseFlairsAsyncTaskListener.parseFailed();
-            }
-        }
+    public interface FetchUserFlairsInSubredditListener {
+        void fetchSuccessful(@Nullable ArrayList<UserFlair> userFlairs);
 
-        interface ParseUserFlairsAsyncTaskListener {
-            void parseSuccessful(ArrayList<UserFlair> userFlairs);
-
-            void parseFailed();
-        }
+        void fetchFailed();
     }
 }

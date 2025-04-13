@@ -95,7 +95,7 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
 
     private void bindView() {
         if (mUserFlairs == null) {
-            FetchUserFlairs.fetchUserFlairsInSubreddit(mOauthRetrofit, accessToken, mSubredditName,
+            FetchUserFlairs.fetchUserFlairsInSubreddit(mExecutor, mHandler, mOauthRetrofit, accessToken, mSubredditName,
                     new FetchUserFlairs.FetchUserFlairsInSubredditListener() {
                         @Override
                         public void fetchSuccessful(ArrayList<UserFlair> userFlairs) {

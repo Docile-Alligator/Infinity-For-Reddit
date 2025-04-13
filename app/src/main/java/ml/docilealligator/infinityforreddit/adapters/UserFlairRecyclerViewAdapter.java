@@ -22,7 +22,8 @@ public class UserFlairRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     private final ArrayList<UserFlair> userFlairs;
     private final ItemClickListener itemClickListener;
 
-    public UserFlairRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper, ArrayList<UserFlair> userFlairs,
+    public UserFlairRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper,
+                                        ArrayList<UserFlair> userFlairs,
                                         ItemClickListener itemClickListener) {
         this.activity = activity;
         this.customThemeWrapper = customThemeWrapper;
