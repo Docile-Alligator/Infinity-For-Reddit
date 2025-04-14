@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,6 +25,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -109,7 +109,6 @@ import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.thing.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.user.BlockUser;
 import ml.docilealligator.infinityforreddit.user.FetchUserData;
-import ml.docilealligator.infinityforreddit.user.UserDao;
 import ml.docilealligator.infinityforreddit.user.UserData;
 import ml.docilealligator.infinityforreddit.user.UserFollowing;
 import ml.docilealligator.infinityforreddit.user.UserViewModel;
@@ -639,6 +638,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         }
     }
 
+    @OptIn(markerClass = ExperimentalBadgeUtils.class)
     private void checkNewAccountAndInitializeViewPager() {
         if (mNewAccountName != null) {
             if (accountName.equals(Account.ANONYMOUS_ACCOUNT) || !accountName.equals(mNewAccountName)) {
@@ -1093,8 +1093,12 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             FetchUserData.fetchUserData(mExecutor, mHandler, mRetrofit, username, new FetchUserData.FetchUserDataListener() {
                 @Override
                 public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
-                    new ViewUserDetailActivity.InsertUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), userData,
-                            () -> mFetchUserInfoSuccess = true).execute();
+                    mExecutor.execute(() -> {
+                        mRedditDataRoomDatabase.userDao().insert(userData);
+                        mHandler.post(() -> {
+                            mFetchUserInfoSuccess = true;
+                        });
+                    });
                 }
 
                 @Override
@@ -1609,34 +1613,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             case PostTypeBottomSheetFragment.TYPE_POLL:
                 intent = new Intent(this, PostPollActivity.class);
                 startActivity(intent);
-        }
-    }
-
-    private static class InsertUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        private final UserDao userDao;
-        private final UserData subredditData;
-        private final InsertUserDataAsyncTaskListener insertUserDataAsyncTaskListener;
-        InsertUserDataAsyncTask(UserDao userDao, UserData userData,
-                                InsertUserDataAsyncTaskListener insertUserDataAsyncTaskListener) {
-            this.userDao = userDao;
-            this.subredditData = userData;
-            this.insertUserDataAsyncTaskListener = insertUserDataAsyncTaskListener;
-        }
-
-        @Override
-        protected Void doInBackground(final Void... params) {
-            userDao.insert(subredditData);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            insertUserDataAsyncTaskListener.insertSuccess();
-        }
-
-        interface InsertUserDataAsyncTaskListener {
-            void insertSuccess();
         }
     }
 
