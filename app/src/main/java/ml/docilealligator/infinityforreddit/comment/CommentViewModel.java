@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.comment;
 
+import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -9,6 +11,8 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
+
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.thing.SortType;
@@ -22,10 +26,10 @@ public class CommentViewModel extends ViewModel {
     private final LiveData<PagedList<Comment>> comments;
     private final MutableLiveData<SortType> sortTypeLiveData;
 
-    public CommentViewModel(Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
-                            String username, SortType sortType, boolean areSavedComments) {
-        commentDataSourceFactory = new CommentDataSourceFactory(retrofit, accessToken, accountName,
-                username, sortType, areSavedComments);
+    public CommentViewModel(Executor executor, Handler handler, Retrofit retrofit, @Nullable String accessToken,
+                            @NonNull String accountName, String username, SortType sortType, boolean areSavedComments) {
+        commentDataSourceFactory = new CommentDataSourceFactory(executor, handler, retrofit, accessToken,
+                accountName, username, sortType, areSavedComments);
 
         initialLoadingState = Transformations.switchMap(commentDataSourceFactory.getCommentDataSourceLiveData(),
                 CommentDataSource::getInitialLoadStateLiveData);
@@ -79,6 +83,8 @@ public class CommentViewModel extends ViewModel {
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
+        private final Executor executor;
+        private final Handler handler;
         private final Retrofit retrofit;
         private final String accessToken;
         private final String accountName;
@@ -86,8 +92,10 @@ public class CommentViewModel extends ViewModel {
         private final SortType sortType;
         private final boolean areSavedComments;
 
-        public Factory(Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName, String username,
-                       SortType sortType, boolean areSavedComments) {
+        public Factory(Executor executor, Handler handler, Retrofit retrofit, @Nullable String accessToken,
+                       @NonNull String accountName, String username, SortType sortType, boolean areSavedComments) {
+            this.executor = executor;
+            this.handler = handler;
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.accountName = accountName;
@@ -99,7 +107,7 @@ public class CommentViewModel extends ViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new CommentViewModel(retrofit, accessToken, accountName, username,
+            return (T) new CommentViewModel(executor, handler, retrofit, accessToken, accountName, username,
                     sortType, areSavedComments);
         }
     }

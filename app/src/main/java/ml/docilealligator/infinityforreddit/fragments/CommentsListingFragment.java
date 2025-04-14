@@ -290,10 +290,11 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
             CommentViewModel.Factory factory;
 
             if (mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                factory = new CommentViewModel.Factory(mRetrofit, null, mActivity.accountName, username, sortType,
+                factory = new CommentViewModel.Factory(mExecutor, mActivity.mHandler, mRetrofit,
+                        null, mActivity.accountName, username, sortType,
                         getArguments().getBoolean(EXTRA_ARE_SAVED_COMMENTS));
             } else {
-                factory = new CommentViewModel.Factory(mOauthRetrofit,
+                factory = new CommentViewModel.Factory(mExecutor, mActivity.mHandler, mOauthRetrofit,
                         mActivity.accessToken, mActivity.accountName, username, sortType,
                         getArguments().getBoolean(EXTRA_ARE_SAVED_COMMENTS));
             }
