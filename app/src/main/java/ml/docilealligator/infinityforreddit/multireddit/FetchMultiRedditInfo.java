@@ -1,9 +1,10 @@
 package ml.docilealligator.infinityforreddit.multireddit;
 
-import android.os.AsyncTask;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,13 +30,21 @@ public class FetchMultiRedditInfo {
         void failed();
     }
 
-    public static void fetchMultiRedditInfo(Retrofit retrofit, String accessToken, String multipath,
+    public static void fetchMultiRedditInfo(Executor executor, Handler handler, Retrofit retrofit,
+                                            String accessToken, String multipath,
                                             FetchMultiRedditInfoListener fetchMultiRedditInfoListener) {
         retrofit.create(RedditAPI.class).getMultiRedditInfo(APIUtils.getOAuthHeader(accessToken), multipath).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    new ParseMultiRedditInfoAsyncTask(response.body(), fetchMultiRedditInfoListener).execute();
+                    executor.execute(() -> {
+                        MultiReddit multiReddit = parseMultiRedditInfo(response.body());
+                        if (multiReddit != null) {
+                            handler.post(() -> fetchMultiRedditInfoListener.success(multiReddit));
+                        } else {
+                            handler.post(fetchMultiRedditInfoListener::failed);
+                        }
+                    });
                 } else {
                     fetchMultiRedditInfoListener.failed();
                 }
@@ -65,58 +74,36 @@ public class FetchMultiRedditInfo {
         });
     }
 
-    private static class ParseMultiRedditInfoAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        private final String response;
-        private final FetchMultiRedditInfoListener fetchMultiRedditInfoListener;
-        private MultiReddit multiReddit;
-        private boolean parseFailed = false;
-
-        public ParseMultiRedditInfoAsyncTask(String response, FetchMultiRedditInfoListener fetchMultiRedditInfoListener) {
-            this.response = response;
-            this.fetchMultiRedditInfoListener = fetchMultiRedditInfoListener;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                JSONObject object = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY);
-                String path = object.getString(JSONUtils.PATH_KEY);
-                String displayName = object.getString(JSONUtils.DISPLAY_NAME_KEY);
-                String name = object.getString(JSONUtils.NAME_KEY);
-                String description = object.getString(JSONUtils.DESCRIPTION_MD_KEY);
-                String copiedFrom = object.getString(JSONUtils.COPIED_FROM_KEY);
-                String iconUrl = object.getString(JSONUtils.ICON_URL_KEY);
-                String visibility = object.getString(JSONUtils.VISIBILITY_KEY);
-                String owner = object.getString(JSONUtils.OWNER_KEY);
-                int nSubscribers = object.getInt(JSONUtils.NUM_SUBSCRIBERS_KEY);
-                long createdUTC = object.getLong(JSONUtils.CREATED_UTC_KEY);
-                boolean over18 = object.getBoolean(JSONUtils.OVER_18_KEY);
-                boolean isSubscriber = object.getBoolean(JSONUtils.IS_SUBSCRIBER_KEY);
-                boolean isFavorite = object.getBoolean(JSONUtils.IS_FAVORITED_KEY);
-                ArrayList<String> subreddits = new ArrayList<>();
-                JSONArray subredditsArray = object.getJSONArray(JSONUtils.SUBREDDITS_KEY);
-                for (int i = 0; i < subredditsArray.length(); i++) {
-                    subreddits.add(subredditsArray.getJSONObject(i).getString(JSONUtils.NAME_KEY));
-                }
-
-                multiReddit = new MultiReddit(path, displayName, name, description, copiedFrom, iconUrl,
-                        visibility, owner, nSubscribers, createdUTC, over18, isSubscriber, isFavorite,
-                        subreddits);
-            } catch (JSONException e) {
-                parseFailed = true;
+    @WorkerThread
+    @Nullable
+    private static MultiReddit parseMultiRedditInfo(String response) {
+        try {
+            JSONObject object = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY);
+            String path = object.getString(JSONUtils.PATH_KEY);
+            String displayName = object.getString(JSONUtils.DISPLAY_NAME_KEY);
+            String name = object.getString(JSONUtils.NAME_KEY);
+            String description = object.getString(JSONUtils.DESCRIPTION_MD_KEY);
+            String copiedFrom = object.getString(JSONUtils.COPIED_FROM_KEY);
+            String iconUrl = object.getString(JSONUtils.ICON_URL_KEY);
+            String visibility = object.getString(JSONUtils.VISIBILITY_KEY);
+            String owner = object.getString(JSONUtils.OWNER_KEY);
+            int nSubscribers = object.getInt(JSONUtils.NUM_SUBSCRIBERS_KEY);
+            long createdUTC = object.getLong(JSONUtils.CREATED_UTC_KEY);
+            boolean over18 = object.getBoolean(JSONUtils.OVER_18_KEY);
+            boolean isSubscriber = object.getBoolean(JSONUtils.IS_SUBSCRIBER_KEY);
+            boolean isFavorite = object.getBoolean(JSONUtils.IS_FAVORITED_KEY);
+            ArrayList<String> subreddits = new ArrayList<>();
+            JSONArray subredditsArray = object.getJSONArray(JSONUtils.SUBREDDITS_KEY);
+            for (int i = 0; i < subredditsArray.length(); i++) {
+                subreddits.add(subredditsArray.getJSONObject(i).getString(JSONUtils.NAME_KEY));
             }
+
+            return new MultiReddit(path, displayName, name, description, copiedFrom, iconUrl,
+                    visibility, owner, nSubscribers, createdUTC, over18, isSubscriber, isFavorite,
+                    subreddits);
+        } catch (JSONException e) {
+            e.printStackTrace();
             return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (parseFailed) {
-                fetchMultiRedditInfoListener.failed();
-            } else {
-                fetchMultiRedditInfoListener.success(multiReddit);
-            }
         }
     }
 }
