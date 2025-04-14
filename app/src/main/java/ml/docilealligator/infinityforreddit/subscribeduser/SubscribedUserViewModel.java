@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit.subscribeduser;
 
-import android.app.Application;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -33,10 +31,6 @@ public class SubscribedUserViewModel extends ViewModel {
 
     public LiveData<List<SubscribedUserData>> getAllFavoriteSubscribedUsers() {
         return mAllFavoriteSubscribedUsers;
-    }
-
-    public void insert(SubscribedUserData subscribedUserData) {
-        mSubscribedUserRepository.insert(subscribedUserData);
     }
 
     public void setSearchQuery(String searchQuery) {

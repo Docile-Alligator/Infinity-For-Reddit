@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit.subscribeduser;
 
-import android.os.AsyncTask;
-
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
@@ -23,24 +21,5 @@ public class SubscribedUserRepository {
 
     LiveData<List<SubscribedUserData>> getAllFavoriteSubscribedUsersWithSearchQuery(String searchQuery) {
         return mSubscribedUserDao.getAllFavoriteSubscribedUsersWithSearchQuery(mAccountName, searchQuery);
-    }
-
-    public void insert(SubscribedUserData subscribedUserData) {
-        new SubscribedUserRepository.insertAsyncTask(mSubscribedUserDao).execute(subscribedUserData);
-    }
-
-    private static class insertAsyncTask extends AsyncTask<SubscribedUserData, Void, Void> {
-
-        private final SubscribedUserDao mAsyncTaskDao;
-
-        insertAsyncTask(SubscribedUserDao dao) {
-            mAsyncTaskDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(final SubscribedUserData... params) {
-            mAsyncTaskDao.insert(params[0]);
-            return null;
-        }
     }
 }
