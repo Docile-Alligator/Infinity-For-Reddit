@@ -1,8 +1,11 @@
 package ml.docilealligator.infinityforreddit.multireddit;
 
+import android.os.Handler;
+
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -17,13 +20,13 @@ public class FetchMyMultiReddits {
         void failed();
     }
 
-    public static void fetchMyMultiReddits(Retrofit oauthRetrofit, String accessToken, FetchMyMultiRedditsListener fetchMyMultiRedditsListener) {
+    public static void fetchMyMultiReddits(Executor executor, Handler handler, Retrofit oauthRetrofit, String accessToken, FetchMyMultiRedditsListener fetchMyMultiRedditsListener) {
         oauthRetrofit.create(RedditAPI.class)
                 .getMyMultiReddits(APIUtils.getOAuthHeader(accessToken)).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParseMultiReddit.parseMultiRedditsList(response.body(), new ParseMultiReddit.ParseMultiRedditsListListener() {
+                    ParseMultiReddit.parseMultiRedditsList(executor, handler, response.body(), new ParseMultiReddit.ParseMultiRedditsListListener() {
                         @Override
                         public void success(ArrayList<MultiReddit> multiReddits) {
                             fetchMyMultiRedditsListener.success(multiReddits);

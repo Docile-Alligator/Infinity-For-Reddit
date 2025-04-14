@@ -25,7 +25,8 @@ public class CreateMultiReddit {
         void failed(int errorType);
     }
 
-    public static void createMultiReddit(Retrofit oauthRetrofit, RedditDataRoomDatabase redditDataRoomDatabase,
+    public static void createMultiReddit(Executor executor, Handler handler, Retrofit oauthRetrofit,
+                                         RedditDataRoomDatabase redditDataRoomDatabase,
                                          String accessToken, String multipath, String model,
                                          CreateMultiRedditListener createMultiRedditListener) {
         Map<String, String> params = new HashMap<>();
@@ -36,18 +37,18 @@ public class CreateMultiReddit {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParseMultiReddit.parseAndSaveMultiReddit(response.body(), redditDataRoomDatabase,
-                            new ParseMultiReddit.ParseMultiRedditListener() {
-                        @Override
-                        public void success() {
-                            createMultiRedditListener.success();
-                        }
+                    ParseMultiReddit.parseAndSaveMultiReddit(executor, handler, response.body(),
+                            redditDataRoomDatabase, new ParseMultiReddit.ParseMultiRedditListener() {
+                                @Override
+                                public void success() {
+                                    createMultiRedditListener.success();
+                                }
 
-                        @Override
-                        public void failed() {
-                            createMultiRedditListener.failed(1);
-                        }
-                    });
+                                @Override
+                                public void failed() {
+                                    createMultiRedditListener.failed(1);
+                                }
+                            });
                 } else {
                     createMultiRedditListener.failed(response.code());
                 }

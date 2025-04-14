@@ -436,22 +436,23 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
 
     private void loadMultiReddits() {
         if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-            FetchMyMultiReddits.fetchMyMultiReddits(mOauthRetrofit, accessToken, new FetchMyMultiReddits.FetchMyMultiRedditsListener() {
-                @Override
-                public void success(ArrayList<MultiReddit> multiReddits) {
-                    InsertMultireddit.insertMultireddits(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddits, accountName, () -> {
-                        mInsertMultiredditSuccess = true;
-                        sectionsPagerAdapter.stopMultiRedditRefreshProgressbar();
-                    });
-                }
+            FetchMyMultiReddits.fetchMyMultiReddits(mExecutor, mHandler, mOauthRetrofit, accessToken,
+                    new FetchMyMultiReddits.FetchMyMultiRedditsListener() {
+                        @Override
+                        public void success(ArrayList<MultiReddit> multiReddits) {
+                            InsertMultireddit.insertMultireddits(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddits, accountName, () -> {
+                                mInsertMultiredditSuccess = true;
+                                sectionsPagerAdapter.stopMultiRedditRefreshProgressbar();
+                            });
+                        }
 
-                @Override
-                public void failed() {
-                    mInsertMultiredditSuccess = false;
-                    sectionsPagerAdapter.stopMultiRedditRefreshProgressbar();
-                    Toast.makeText(SubscribedThingListingActivity.this, R.string.error_loading_multi_reddit_list, Toast.LENGTH_SHORT).show();
-                }
-            });
+                        @Override
+                        public void failed() {
+                            mInsertMultiredditSuccess = false;
+                            sectionsPagerAdapter.stopMultiRedditRefreshProgressbar();
+                            Toast.makeText(SubscribedThingListingActivity.this, R.string.error_loading_multi_reddit_list, Toast.LENGTH_SHORT).show();
+                        }
+                    });
         }
     }
 

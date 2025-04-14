@@ -133,8 +133,8 @@ public class CreateMultiRedditActivity extends BaseActivity {
             if (!accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 String jsonModel = new MultiRedditJSONModel(binding.multiRedditNameEditTextCreateMultiRedditActivity.getText().toString(), binding.descriptionEditTextCreateMultiRedditActivity.getText().toString(),
                         binding.visibilityChipCreateMultiRedditActivity.isChecked(), mSubreddits).createJSONModel();
-                CreateMultiReddit.createMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
-                        "/user/" + accountName + "/m/" + binding.multiRedditNameEditTextCreateMultiRedditActivity.getText().toString(),
+                CreateMultiReddit.createMultiReddit(mExecutor, mHandler, mOauthRetrofit, mRedditDataRoomDatabase,
+                        accessToken, "/user/" + accountName + "/m/" + binding.multiRedditNameEditTextCreateMultiRedditActivity.getText().toString(),
                         jsonModel, new CreateMultiReddit.CreateMultiRedditListener() {
                             @Override
                             public void success() {
