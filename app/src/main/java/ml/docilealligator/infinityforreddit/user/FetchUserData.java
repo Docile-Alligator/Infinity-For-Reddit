@@ -2,13 +2,13 @@ package ml.docilealligator.infinityforreddit.user;
 
 import android.os.Handler;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -19,6 +19,7 @@ import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
@@ -29,80 +30,93 @@ public class FetchUserData {
 
     public static void fetchUserData(Executor executor, Handler handler, RedditDataRoomDatabase redditDataRoomDatabase, Retrofit retrofit,
                                      String accessToken, String userName, FetchUserDataListener fetchUserDataListener) {
-        executor.execute(() -> {
-            RedditAPI api = retrofit.create(RedditAPI.class);
+        RedditAPI api = retrofit.create(RedditAPI.class);
 
-            Call<String> userInfo;
-            if (redditDataRoomDatabase == null) {
-                userInfo = api.getUserData(userName);
-            } else {
-                userInfo = api.getUserDataOauth(APIUtils.getOAuthHeader(accessToken), userName);
+        Call<String> userInfo;
+        if (redditDataRoomDatabase == null) {
+            userInfo = api.getUserData(userName);
+        } else {
+            userInfo = api.getUserDataOauth(APIUtils.getOAuthHeader(accessToken), userName);
+        }
+
+        userInfo.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful()) {
+                    executor.execute(() -> {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response.body());
+                            UserData userData = parseUserDataBase(jsonResponse, true);
+                            if (redditDataRoomDatabase != null) {
+                                redditDataRoomDatabase.accountDao().updateAccountInfo(userData.getName(), userData.getIconUrl(), userData.getBanner(), userData.getTotalKarma());
+                            }
+                            if (jsonResponse.getJSONObject(JSONUtils.DATA_KEY).has(JSONUtils.INBOX_COUNT_KEY)) {
+                                int inboxCount = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getInt(JSONUtils.INBOX_COUNT_KEY);
+                                handler.post(() -> fetchUserDataListener.onFetchUserDataSuccess(userData, inboxCount));
+                            } else {
+                                handler.post(() -> fetchUserDataListener.onFetchUserDataSuccess(userData, -1));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            handler.post(fetchUserDataListener::onFetchUserDataFailed);
+                        }
+                    });
+                } else {
+                    fetchUserDataListener.onFetchUserDataFailed();
+                }
             }
 
-            try {
-                Response<String> response = userInfo.execute();
-                if (response.isSuccessful()) {
-                    JSONObject jsonResponse = new JSONObject(response.body());
-                    UserData userData = parseUserDataBase(jsonResponse, true);
-                    if (redditDataRoomDatabase != null) {
-                        redditDataRoomDatabase.accountDao().updateAccountInfo(userData.getName(), userData.getIconUrl(), userData.getBanner(), userData.getTotalKarma());
-                    }
-                    if (jsonResponse.getJSONObject(JSONUtils.DATA_KEY).has(JSONUtils.INBOX_COUNT_KEY)) {
-                        int inboxCount = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getInt(JSONUtils.INBOX_COUNT_KEY);
-                        handler.post(() -> fetchUserDataListener.onFetchUserDataSuccess(userData, inboxCount));
-                    } else {
-                        handler.post(() -> fetchUserDataListener.onFetchUserDataSuccess(userData, -1));
-                    }
-                } else {
-                    handler.post(fetchUserDataListener::onFetchUserDataFailed);
-                }
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-                handler.post(fetchUserDataListener::onFetchUserDataFailed);
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
+                fetchUserDataListener.onFetchUserDataFailed();
             }
         });
     }
 
     public static void fetchUserListingData(Executor executor, Handler handler, Retrofit retrofit, String query, String after, SortType.Type sortType, boolean nsfw,
                                             FetchUserListingDataListener fetchUserListingDataListener) {
-        executor.execute(() -> {
-            RedditAPI api = retrofit.create(RedditAPI.class);
+        RedditAPI api = retrofit.create(RedditAPI.class);
 
-            Call<String> userInfo = api.searchUsers(query, after, sortType, nsfw ? 1 : 0);
-            String responseString = null;
-            try {
-                Response<String> response = userInfo.execute();
-                responseString = response.body();
+        Call<String> userInfo = api.searchUsers(query, after, sortType, nsfw ? 1 : 0);
+        final String[] responseString = {null};
+        userInfo.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    JSONObject jsonResponse = new JSONObject(responseString);
-                    String newAfter = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
-                    JSONArray children = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                    List<UserData> userDataList = new ArrayList<>();
-                    for (int i = 0; i < children.length(); i++) {
+                    executor.execute(() -> {
                         try {
-                            UserData userData = parseUserDataBase(children.getJSONObject(i), false);
-                            userDataList.add(userData);
+                            responseString[0] = response.body();
+                            JSONObject jsonResponse = new JSONObject(responseString[0]);
+                            String newAfter = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
+                            JSONArray children = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+                            List<UserData> userDataList = new ArrayList<>();
+                            for (int i = 0; i < children.length(); i++) {
+                                try {
+                                    UserData userData = parseUserDataBase(children.getJSONObject(i), false);
+                                    userDataList.add(userData);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            handler.post(() -> fetchUserListingDataListener.onFetchUserListingDataSuccess(userDataList, newAfter));
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            handler.post(() -> {
+                                if (responseString[0] != null && responseString[0].equals("\"{}\"")) {
+                                    fetchUserListingDataListener.onFetchUserListingDataSuccess(new ArrayList<>(), null);
+                                } else {
+                                    fetchUserListingDataListener.onFetchUserListingDataFailed();
+                                }
+                            });
                         }
-                    }
-                    handler.post(() -> fetchUserListingDataListener.onFetchUserListingDataSuccess(userDataList, newAfter));
+                    });
                 } else {
-                    handler.post(fetchUserListingDataListener::onFetchUserListingDataFailed);
+                    fetchUserListingDataListener.onFetchUserListingDataFailed();
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                String finalResponseString = responseString;
-                handler.post(() -> {
-                    if (finalResponseString != null && finalResponseString.equals("\"{}\"")) {
-                        fetchUserListingDataListener.onFetchUserListingDataSuccess(new ArrayList<>(), null);
-                    } else {
-                        fetchUserListingDataListener.onFetchUserListingDataFailed();
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-                handler.post(fetchUserListingDataListener::onFetchUserListingDataFailed);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
+                fetchUserListingDataListener.onFetchUserListingDataFailed();
             }
         });
     }

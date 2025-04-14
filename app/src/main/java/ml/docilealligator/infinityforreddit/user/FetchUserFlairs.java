@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.user;
 import android.os.Handler;
 import android.text.Html;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 
@@ -10,40 +11,45 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchUserFlairs {
     public static void fetchUserFlairsInSubreddit(Executor executor, Handler handler, Retrofit oauthRetrofit, String accessToken, String subredditName, FetchUserFlairsInSubredditListener fetchUserFlairsInSubredditListener) {
-        executor.execute(() -> {
-            RedditAPI api = oauthRetrofit.create(RedditAPI.class);
-
-            try {
-                Response<String> response = api.getUserFlairs(APIUtils.getOAuthHeader(accessToken), subredditName).execute();
-                if (response.isSuccessful()) {
-                    ArrayList<UserFlair> userFlairs = parseUserFlairs(response.body());
-                    if (userFlairs == null) {
-                        handler.post(fetchUserFlairsInSubredditListener::fetchFailed);
-                    } else {
-                        handler.post(() -> fetchUserFlairsInSubredditListener.fetchSuccessful(userFlairs));
+        oauthRetrofit.create(RedditAPI.class).getUserFlairs(APIUtils.getOAuthHeader(accessToken), subredditName)
+                .enqueue(new Callback<>() {
+                    @Override
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                        if (response.isSuccessful()) {
+                            executor.execute(() -> {
+                                ArrayList<UserFlair> userFlairs = parseUserFlairs(response.body());
+                                if (userFlairs == null) {
+                                    handler.post(fetchUserFlairsInSubredditListener::fetchFailed);
+                                } else {
+                                    handler.post(() -> fetchUserFlairsInSubredditListener.fetchSuccessful(userFlairs));
+                                }
+                            });
+                        } else if (response.code() == 403) {
+                            //No flairs
+                            fetchUserFlairsInSubredditListener.fetchSuccessful(null);
+                        } else {
+                            fetchUserFlairsInSubredditListener.fetchFailed();
+                        }
                     }
-                } else if (response.code() == 403) {
-                    //No flairs
-                    handler.post(() -> fetchUserFlairsInSubredditListener.fetchSuccessful(null));
-                } else {
-                    handler.post(fetchUserFlairsInSubredditListener::fetchFailed);
-                }
-            } catch (IOException e) {
-                handler.post(fetchUserFlairsInSubredditListener::fetchFailed);
-            }
-        });
+
+                    @Override
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
+                        fetchUserFlairsInSubredditListener.fetchFailed();
+                    }
+                });
     }
 
     @WorkerThread

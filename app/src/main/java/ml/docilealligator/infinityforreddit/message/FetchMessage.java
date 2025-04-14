@@ -2,13 +2,13 @@ package ml.docilealligator.infinityforreddit.message;
 
 import android.os.Handler;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executor;
@@ -16,6 +16,8 @@ import java.util.concurrent.Executor;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
@@ -33,26 +35,30 @@ public class FetchMessage {
 
     static void fetchInbox(Executor executor, Handler handler,  Retrofit oauthRetrofit, Locale locale, String accessToken, String where,
                            String after, int messageType, FetchMessagesListener fetchMessagesListener) {
-        executor.execute(() -> {
-            try {
-                Response<String> response = oauthRetrofit.create(RedditAPI.class).getMessages(APIUtils.getOAuthHeader(accessToken), where, after).execute();
+        oauthRetrofit.create(RedditAPI.class).getMessages(APIUtils.getOAuthHeader(accessToken), where, after).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    try {
-                        JSONObject jsonResponse = new JSONObject(response.body());
-                        JSONArray messageArray = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                        List<Message> messages = ParseMessage.parseMessages(messageArray, locale, messageType);
-                        String newAfter = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
-                        handler.post(() -> fetchMessagesListener.fetchSuccess(messages, newAfter));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        handler.post(fetchMessagesListener::fetchFailed);
-                    }
+                    executor.execute(() -> {
+                        try {
+                            JSONObject jsonResponse = new JSONObject(response.body());
+                            JSONArray messageArray = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+                            List<Message> messages = ParseMessage.parseMessages(messageArray, locale, messageType);
+                            String newAfter = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
+                            handler.post(() -> fetchMessagesListener.fetchSuccess(messages, newAfter));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            handler.post(fetchMessagesListener::fetchFailed);
+                        }
+                    });
                 } else {
-                    handler.post(fetchMessagesListener::fetchFailed);
+                    fetchMessagesListener.fetchFailed();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-                handler.post(fetchMessagesListener::fetchFailed);
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
+                fetchMessagesListener.fetchFailed();
             }
         });
     }
