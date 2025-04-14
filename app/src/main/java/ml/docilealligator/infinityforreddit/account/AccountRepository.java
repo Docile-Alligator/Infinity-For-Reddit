@@ -1,20 +1,21 @@
 package ml.docilealligator.infinityforreddit.account;
 
-import android.os.AsyncTask;
-
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class AccountRepository {
+    private final Executor mExecutor;
     private final AccountDao mAccountDao;
     private final LiveData<List<Account>> mAccountsExceptCurrentAccountLiveData;
     private final LiveData<Account> mCurrentAccountLiveData;
     private final LiveData<List<Account>> mAllAccountsLiveData;
 
-    AccountRepository(RedditDataRoomDatabase redditDataRoomDatabase) {
+    AccountRepository(Executor executor,  RedditDataRoomDatabase redditDataRoomDatabase) {
+        mExecutor = executor;
         mAccountDao = redditDataRoomDatabase.accountDao();
         mAccountsExceptCurrentAccountLiveData = mAccountDao.getAccountsExceptCurrentAccountLiveData();
         mCurrentAccountLiveData = mAccountDao.getCurrentAccountLiveData();
@@ -33,22 +34,7 @@ public class AccountRepository {
         return mAllAccountsLiveData;
     }
 
-    public void insert(Account Account) {
-        new InsertAsyncTask(mAccountDao).execute(Account);
-    }
-
-    private static class InsertAsyncTask extends AsyncTask<Account, Void, Void> {
-
-        private final AccountDao mAsyncTaskDao;
-
-        InsertAsyncTask(AccountDao dao) {
-            mAsyncTaskDao = dao;
-        }
-
-        @Override
-        protected Void doInBackground(final Account... params) {
-            mAsyncTaskDao.insert(params[0]);
-            return null;
-        }
+    public void insert(Account account) {
+        mExecutor.execute(() -> mAccountDao.insert(account));
     }
 }

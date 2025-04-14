@@ -45,6 +45,8 @@ public class AccountChooserBottomSheetFragment extends LandscapeExpandedBottomSh
     @Inject
     @Named("security")
     SharedPreferences sharedPreferences;
+    @Inject
+    Executor executor;
     BaseActivity activity;
     RecyclerView recyclerView;
     AccountChooserRecyclerViewAdapter adapter;
@@ -85,7 +87,7 @@ public class AccountChooserBottomSheetFragment extends LandscapeExpandedBottomSh
                             @NonNull BiometricPrompt.AuthenticationResult result) {
                         super.onAuthenticationSucceeded(result);
                         accountViewModel = new ViewModelProvider(AccountChooserBottomSheetFragment.this,
-                                new AccountViewModel.Factory(redditDataRoomDatabase)).get(AccountViewModel.class);
+                                new AccountViewModel.Factory(executor, redditDataRoomDatabase)).get(AccountViewModel.class);
                         accountViewModel.getAllAccountsLiveData().observe(getViewLifecycleOwner(), accounts -> {
                             adapter.changeAccountsDataset(accounts);
                         });
@@ -109,7 +111,7 @@ public class AccountChooserBottomSheetFragment extends LandscapeExpandedBottomSh
             }
         } else {
             accountViewModel = new ViewModelProvider(this,
-                    new AccountViewModel.Factory(redditDataRoomDatabase)).get(AccountViewModel.class);
+                    new AccountViewModel.Factory(executor, redditDataRoomDatabase)).get(AccountViewModel.class);
             accountViewModel.getAllAccountsLiveData().observe(getViewLifecycleOwner(), accounts -> {
                 adapter.changeAccountsDataset(accounts);
             });
