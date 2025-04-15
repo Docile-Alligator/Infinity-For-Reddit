@@ -1,5 +1,7 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id("io.qameta.allure") version "2.12.0"
 }
 
 def allureVersion = "2.16.0"
@@ -58,11 +60,22 @@ android {
         }
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
+
     buildFeatures {
         buildConfig = true
         viewBinding = true
     }
     namespace 'ml.docilealligator.infinityforreddit'
+
+    kotlinOptions {
+        jvmTarget = '11'
+    }
 }
 
 dependencies {
@@ -206,6 +219,13 @@ dependencies {
 /**** Builds and flavors ****/
     // debugImplementation because LeakCanary should only run in debug builds.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:x.y'
+
+    debugImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.2'
+    debugImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    testImplementation 'org.mockito:mockito-core:5.0.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.0.0'
+    testImplementation 'org.mockito:mockito-inline:5.0.0'
+    testImplementation 'org.mockito.kotlin:mockito-kotlin:5.0.0'
 
     testImplementation platform("io.qameta.allure:allure-bom:$allureVersion")
     testImplementation "io.qameta.allure:allure-junit5"
