@@ -2,6 +2,15 @@ plugins {
     id 'com.android.application'
 }
 
+def allureVersion = "2.16.0"
+def aspectJVersion = '1.9.21'
+configurations {
+    agent {
+        canBeResolved = true
+        canBeConsumed = true
+    }
+}
+
 android {
     compileSdk 34
     defaultConfig {
@@ -197,4 +206,8 @@ dependencies {
 /**** Builds and flavors ****/
     // debugImplementation because LeakCanary should only run in debug builds.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:x.y'
+
+    testImplementation platform("io.qameta.allure:allure-bom:$allureVersion")
+    testImplementation "io.qameta.allure:allure-junit5"
+    agent "org.aspectj:aspectjweaver:$aspectJVersion"
 }
