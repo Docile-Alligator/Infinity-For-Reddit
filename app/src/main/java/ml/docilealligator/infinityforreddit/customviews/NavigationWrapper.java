@@ -261,7 +261,7 @@ public class NavigationWrapper {
     private BadgeDrawable getBadgeDrawable(Context context, int inboxCount) {
         BadgeDrawable badgeDrawable = BadgeDrawable.create(context);
         badgeDrawable.setNumber(inboxCount);
-        badgeDrawable.setBackgroundColor(customThemeWrapper.getColorAccent());
+        badgeDrawable.setBackgroundColor(customThemeWrapper.getColorPrimaryLightTheme());
         badgeDrawable.setBadgeTextColor(customThemeWrapper.getButtonTextColor());
         return badgeDrawable;
     }
