@@ -21,7 +21,7 @@ android {
         targetSdk 34
         versionCode 191
         versionName "7.4.4"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.kaspersky.kaspresso.runner.KaspressoRunner"
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [eventBusIndex: 'ml.docilealligator.infinityforreddit.EventBusIndex']
@@ -220,14 +220,32 @@ dependencies {
     // debugImplementation because LeakCanary should only run in debug builds.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:x.y'
 
-    debugImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.2'
-    debugImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
-    testImplementation 'org.mockito:mockito-core:5.0.0'
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.0.0'
-    testImplementation 'org.mockito:mockito-inline:5.0.0'
-    testImplementation 'org.mockito.kotlin:mockito-kotlin:5.0.0'
+//    debugImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.2'
+//    debugImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+//    testImplementation 'org.mockito:mockito-core:5.0.0'
+//    testImplementation 'org.mockito:mockito-junit-jupiter:5.0.0'
+//    testImplementation 'org.mockito:mockito-inline:5.0.0'
+//    testImplementation 'org.mockito.kotlin:mockito-kotlin:5.0.0'
 
     testImplementation platform("io.qameta.allure:allure-bom:$allureVersion")
     testImplementation "io.qameta.allure:allure-junit5"
     agent "org.aspectj:aspectjweaver:$aspectJVersion"
+
+//    debugImplementation "junit:junit:4.13.2"
+//    debugImplementation "org.aeonbits.owner:owner:1.0.12"
+//    debugImplementation "androidx.test.ext:junit:1.0.0"
+//    debugImplementation "androidx.test:rules:1.5.0"
+//    debugImplementation "androidx.test:runner:1.5.0"
+//    debugImplementation "androidx.test.espresso:espresso-web:3.5.1"
+//    debugImplementation "androidx.test.espresso:espresso-core:3.5.1"
+//    debugImplementation "androidx.test.espresso:espresso-contrib:3.5.1"
+//    debugImplementation "androidx.test.espresso:espresso-intents:3.5.1"
+
+    debugImplementation 'com.kaspersky.android-components:kaspresso:1.5.3'
+    // Allure support
+    debugImplementation "com.kaspersky.android-components:kaspresso-allure-support:1.5.3"
+//    // Jetpack Compose support
+    debugImplementation "com.kaspersky.android-components:kaspresso-compose-support:1.5.3"
+
+ //   androidTestImplementation 'com.kaspersky.android-components:adbserver-device:1.0.0'
 }
