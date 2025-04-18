@@ -7,9 +7,10 @@ import ml.docilealligator.infinityforreddit.R
 
 object MainScreen : Screen<MainScreen>() {
 
-    val button = KButton {withId(R.id.fab_main_activity)}
+    val button = KButton { withId(R.id.fab_main_activity) }
 
-    val tabLayout = KTabLayout{withId(R.id.tab_layout_main_activity)}
+    val tabLayout = KTabLayout { withId(R.id.tab_layout_main_activity) }
 
-    val navButton = KButton{withContentDescription("Open navigation drawer")}
+    val navButton = KButton { withContentDescription("Open navigation drawer") }
+
 }

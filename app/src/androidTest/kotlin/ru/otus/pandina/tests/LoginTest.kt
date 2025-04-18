@@ -1,24 +1,18 @@
 package ru.otus.pandina.tests
 
 import androidx.test.espresso.web.webdriver.Locator
-import androidx.test.runner.AndroidJUnit4
 import org.junit.Test
-import org.junit.runner.RunWith
 import ru.otus.pandina.screens.MainScreen
 import ru.otus.pandina.screens.UserAgreementFragment
 import ru.otus.pandina.screens.navigation.LoginScreen
 import ru.otus.pandina.screens.navigation.NavigationViewLayout
 
-@RunWith(AndroidJUnit4::class)
+
 class LoginTest : BaseTest() {
 
     @Test
     fun loginTest() {
-        before {
-            activityTestRule.launchActivity(null)
-        }.after {
-
-        }.run {
+        run {
             step("Open navigation") {
                 MainScreen {
                     navButton {
