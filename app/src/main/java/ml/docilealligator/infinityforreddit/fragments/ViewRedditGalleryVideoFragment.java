@@ -33,9 +33,9 @@ import androidx.media3.common.Tracks;
 import androidx.media3.common.util.UnstableApi;
 import androidx.media3.common.util.Util;
 import androidx.media3.datasource.DataSource;
-import androidx.media3.datasource.DefaultHttpDataSource;
 import androidx.media3.datasource.cache.CacheDataSource;
 import androidx.media3.datasource.cache.SimpleCache;
+import androidx.media3.datasource.okhttp.OkHttpDataSource;
 import androidx.media3.exoplayer.DefaultRenderersFactory;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.source.ProgressiveMediaSource;
@@ -58,6 +58,7 @@ import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import okhttp3.OkHttpClient;
 
 public class ViewRedditGalleryVideoFragment extends Fragment {
 
@@ -81,6 +82,9 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     private boolean isMute = false;
     private boolean isDownloading = false;
     private int playbackSpeed = 100;
+    @Inject
+    @Named("media3")
+    OkHttpClient mOkHttpClient;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
@@ -156,7 +160,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
                 .build();
         binding.getPlayerView().setPlayer(player);
         dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
+                .setUpstreamDataSourceFactory(new OkHttpDataSource.Factory(mOkHttpClient).setUserAgent(APIUtils.USER_AGENT));
         player.prepare();
         player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(galleryVideo.url)));
 

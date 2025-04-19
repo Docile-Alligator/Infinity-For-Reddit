@@ -2,6 +2,9 @@ package ml.docilealligator.infinityforreddit;
 
 import android.content.SharedPreferences;
 
+import androidx.annotation.NonNull;
+
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.util.concurrent.TimeUnit;
@@ -19,8 +22,11 @@ import ml.docilealligator.infinityforreddit.network.SortTypeConverterFactory;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import okhttp3.ConnectionPool;
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.guava.GuavaCallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -110,6 +116,48 @@ abstract class NetworkModule {
         return httpClient.newBuilder()
                 .authenticator(new ServerAccessTokenAuthenticator(redditDataRoomDatabase, currentAccountSharedPreferences))
                 .connectionPool(connectionPool)
+                .build();
+    }
+
+    @Provides
+    @Named("media3")
+    @Singleton
+    static OkHttpClient provideMedia3OkHttpClient(@Named("base") OkHttpClient httpClient,
+                                            ConnectionPool connectionPool) {
+        return httpClient.newBuilder()
+                .connectionPool(connectionPool)
+                .followRedirects(false)
+                .addInterceptor(new Interceptor() {
+                    @NonNull
+                    @Override
+                    public Response intercept(@NonNull Chain chain) throws IOException {
+                        Request request = chain.request();
+                        Response response = chain.proceed(request);
+
+                        int redirectCount = 0;
+                        while (isRedirect(response.code()) && redirectCount < 5) {
+                            String location = response.header("Location");
+                            if (location == null) break;
+
+                            HttpUrl newUrl = response.request().url().resolve(location);
+                            if (newUrl == null) break;
+
+                            request = request.newBuilder()
+                                    .url(newUrl)
+                                    .build();
+
+                            response.close(); // Close the previous response before continuing
+                            response = chain.proceed(request);
+                            redirectCount++;
+                        }
+
+                        return response;
+                    }
+
+                    private boolean isRedirect(int code) {
+                        return code == 301 || code == 302 || code == 303 || code == 307 || code == 308;
+                    }
+                })
                 .build();
     }
 

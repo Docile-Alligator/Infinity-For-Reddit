@@ -9,6 +9,7 @@ import androidx.media3.common.util.UnstableApi;
 import androidx.media3.database.StandaloneDatabaseProvider;
 import androidx.media3.datasource.cache.LeastRecentlyUsedCacheEvictor;
 import androidx.media3.datasource.cache.SimpleCache;
+import androidx.media3.datasource.okhttp.OkHttpDataSource;
 import androidx.preference.PreferenceManager;
 
 import java.io.File;
@@ -23,12 +24,14 @@ import dagger.Module;
 import dagger.Provides;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LoopAvailableExoCreator;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.videoautoplay.Config;
 import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
 import ml.docilealligator.infinityforreddit.videoautoplay.MediaSourceBuilder;
 import ml.docilealligator.infinityforreddit.videoautoplay.ToroExo;
+import okhttp3.OkHttpClient;
 
 @Module
 abstract class AppModule {
@@ -188,13 +191,15 @@ abstract class AppModule {
 
     @OptIn(markerClass = UnstableApi.class)
     @Provides
-    static Config providesMediaConfig(Application application, SimpleCache simpleCache) {
+    static Config providesMediaConfig(Application application, SimpleCache simpleCache, @Named("media3")OkHttpClient okHttpClient) {
         return new Config.Builder(application)
+                .setDataSourceFactory(new OkHttpDataSource.Factory(okHttpClient).setUserAgent(APIUtils.USER_AGENT))
                 .setMediaSourceBuilder(MediaSourceBuilder.DEFAULT)
                 .setCache(simpleCache)
                 .build();
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     @Provides
     static ToroExo providesToroExo(Application application) {
         return ToroExo.with(application);
