@@ -66,15 +66,15 @@ class LoginTest : BaseTest() {
                     webView {
                         withElement(
                             Locator.XPATH,
-                            "//h1[text()='Log In']"
+                            "//h1"
                         ) {
                             containsText("Log In")
                         }
                         withElement(
                             Locator.XPATH,
-                            "//*[@id='loginUsername']"
+                            "//*[@id='login-username']"
                         ) {
-                            containsText("Username")
+                            containsText("Email or username")
                             keys("*****")
                         }
                     }
