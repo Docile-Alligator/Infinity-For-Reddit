@@ -1,5 +1,16 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id("io.qameta.allure") version "2.12.0"
+}
+
+def allureVersion = "2.16.0"
+def aspectJVersion = '1.9.21'
+configurations {
+    agent {
+        canBeResolved = true
+        canBeConsumed = true
+    }
 }
 
 android {
@@ -10,7 +21,7 @@ android {
         targetSdk 34
         versionCode 191
         versionName "7.4.4"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.kaspersky.kaspresso.runner.KaspressoRunner"
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [eventBusIndex: 'ml.docilealligator.infinityforreddit.EventBusIndex']
@@ -49,11 +60,22 @@ android {
         }
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
+
     buildFeatures {
         buildConfig = true
         viewBinding = true
     }
     namespace 'ml.docilealligator.infinityforreddit'
+
+    kotlinOptions {
+        jvmTarget = '11'
+    }
 }
 
 dependencies {
@@ -198,4 +220,17 @@ dependencies {
 /**** Builds and flavors ****/
     // debugImplementation because LeakCanary should only run in debug builds.
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:x.y'
+
+    testImplementation platform("io.qameta.allure:allure-bom:$allureVersion")
+    testImplementation "io.qameta.allure:allure-junit5"
+    agent "org.aspectj:aspectjweaver:$aspectJVersion"
+
+    androidTestImplementation "androidx.test.ext:junit:1.0.0"
+    androidTestImplementation "androidx.test:rules:1.5.0"
+    androidTestImplementation "androidx.test:runner:1.5.0"
+
+    androidTestImplementation 'com.kaspersky.android-components:kaspresso:1.5.3'
+    androidTestUtil "androidx.test:orchestrator:1.5.1"
+    // Allure support
+    androidTestImplementation "com.kaspersky.android-components:kaspresso-allure-support:1.5.3"
 }
