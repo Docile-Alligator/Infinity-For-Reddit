@@ -5,11 +5,12 @@ import io.github.kakaocup.kakao.edit.KEditText
 import io.github.kakaocup.kakao.switch.KSwitch
 import io.github.kakaocup.kakao.text.KButton
 import io.github.kakaocup.kakao.text.KTextView
+import io.github.kakaocup.kakao.toolbar.KToolbar
 import ml.docilealligator.infinityforreddit.R
 
 object CustomizePostFilterScreen : KScreen<CustomizePostFilterScreen>() {
 
-    val screenTitle = KTextView { withText(R.string.customize_post_filter_activity_label)}
+    val toolBar = KToolbar{withId(R.id.toolbar_customize_post_filter_activity)}
 
     val customizeFilterEditText = KEditText { withId(R.id.name_text_input_edit_text_customize_post_filter_activity)}
 
@@ -22,8 +23,6 @@ object CustomizePostFilterScreen : KScreen<CustomizePostFilterScreen>() {
     val linkFilterCheckBox = KSwitch { withId(R.id.post_type_link_switch_customize_post_filter_activity)}
 
     val onlyNsfwTextView = KTextView { withId(R.id.only_nsfw_text_view_customize_post_filter_activity)}
-
-    val onlyNsfwSwitch = KSwitch { withId(R.id.only_nsfw_switch_customize_post_filter_activity)}
 
     val saveButton = KButton { withId(R.id.action_save_customize_post_filter_activity)}
     override val layoutId: Int? = null

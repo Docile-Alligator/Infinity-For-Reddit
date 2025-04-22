@@ -1,7 +1,6 @@
 package ru.otus.pandina.tests
 
 import androidx.test.espresso.action.GeneralLocation
-import ml.docilealligator.infinityforreddit.R
 import org.junit.Test
 import ru.otus.pandina.screens.CustomizePostFilterScreen
 import ru.otus.pandina.screens.FilteredPostsScreen
@@ -25,34 +24,12 @@ class MainTest : BaseTest() {
                     }
                 }
             }
-            step("Popular Filtered Posts") {
-                FilteredPostsScreen {
-                    postFragmentList {
-                        isVisible()
-
-                        firstChild<FilteredPostsScreen.PostFragmentItem> {
-                            isVisible()
-                        }
-
-                        lastChild<FilteredPostsScreen.PostFragmentItem> {
-                            isVisible()
-                            title.hasAnyText()
-                            image.isVisible()
-                        }
-
-                        children<FilteredPostsScreen.PostFragmentItem> {
-                            isVisible()
-                        }
-                    }
-                    filterButton {
-                        isVisible()
-                        click()
-                    }
-                }
-            }
             step("Check customize filter") {
                 CustomizePostFilterScreen {
-                    screenTitle.hasText(R.string.customize_post_filter_activity_label)
+                    toolBar {
+                        isVisible()
+                        hasTitle("Customize Post Filter")
+                    }
                     customizeFilterEditText {
                         isEnabled()
                         hasText("New Filter")
@@ -79,15 +56,34 @@ class MainTest : BaseTest() {
                     }
                     onlyNsfwTextView {
                         isVisible()
-                        hasText("Only NSFW")
-                    }
-                    onlyNsfwSwitch {
-                        isVisible()
-                        isNotChecked()
-                        click()
-                        isChecked()
+                        hasText("Only Sensitive Content")
                     }
                     saveButton.click()
+                }
+            }
+            step("Popular Filtered Posts") {
+                FilteredPostsScreen {
+                    postFragmentList {
+                        isVisible()
+
+                        firstChild<FilteredPostsScreen.PostFragmentItem> {
+                            isVisible()
+                        }
+
+                        lastChild<FilteredPostsScreen.PostFragmentItem> {
+                            isVisible()
+                            title.hasAnyText()
+                            image.isVisible()
+                        }
+
+                        children<FilteredPostsScreen.PostFragmentItem> {
+                            isVisible()
+                        }
+                    }
+                    filterButton {
+                        isVisible()
+                        click()
+                    }
                 }
             }
         }
