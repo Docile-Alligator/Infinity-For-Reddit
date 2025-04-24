@@ -86,17 +86,20 @@
         android:id="@+id/action_report_view_post_detail_fragment"
         android:orderInCategory="13"
         android:title="@string/action_report"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false" />
 
     <item
         android:id="@+id/action_crosspost_view_post_detail_fragment"
         android:orderInCategory="14"
         android:title="@string/action_crosspost"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false" />
 
     <item
         android:id="@+id/action_add_to_post_filter_view_post_detail_fragment"
         android:orderInCategory="15"
         android:title="@string/action_add_to_post_filter"
-        app:showAsAction="never" />
+        app:showAsAction="never"
+        android:visible="false" />
 </menu>
