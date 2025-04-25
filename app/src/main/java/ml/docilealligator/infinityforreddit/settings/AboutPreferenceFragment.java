@@ -45,7 +45,7 @@ public class AboutPreferenceFragment extends CustomFontPreferenceFragmentCompat 
         if (ratePreference != null) {
             ratePreference.setOnPreferenceClickListener(preference -> {
                 Intent playStoreIntent = new Intent(Intent.ACTION_VIEW);
-                playStoreIntent.setData(Uri.parse("market://details?id=ml.docilealligator.infinityforreddit"));
+                playStoreIntent.setData(Uri.parse("market://details?id=ml.docilealligator.infinityforreddit.plus"));
                 if (playStoreIntent.resolveActivity(activity.getPackageManager()) != null) {
                     activity.startActivity(playStoreIntent);
                 } else {
