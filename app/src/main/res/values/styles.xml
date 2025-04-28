@@ -55,8 +55,10 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight" />
 
     <style name="MaterialAlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <!-- android:background for dialogs causes a bug where selection toolbar is oversized -->
+        <item name="android:backgroundTint">?attr/cardViewBackgroundColor</item>
+        <item name="colorBackgroundFloating">?attr/cardViewBackgroundColor</item>
         <item name="android:textSize">?attr/font_default</item>
-        <item name="android:background">?attr/cardViewBackgroundColor</item>
         <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialogTitleTextStyle
         </item>
         <item name="materialAlertDialogBodyTextStyle">@style/MaterialAlertDialogBodyTextStyle</item>
@@ -116,7 +118,9 @@
     </style>
 
     <style name="ListPreferenceStyle" parent="ThemeOverlay.AppCompat.Dialog.Alert">
-        <item name="android:background">?attr/cardViewBackgroundColor</item>
+        <!-- android:background for dialogs causes a bug where selection toolbar is oversized -->
+        <item name="android:backgroundTint">?attr/cardViewBackgroundColor</item>
+        <item name="colorBackgroundFloating">?attr/cardViewBackgroundColor</item>
     </style>
     
     <style name="Widget.App.CheckBox.Dark" parent="Widget.Material3.CompoundButton.CheckBox">
