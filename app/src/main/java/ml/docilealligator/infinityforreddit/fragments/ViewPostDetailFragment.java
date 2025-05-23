@@ -1203,16 +1203,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Override
     public void onDestroyView() {
         Bridge.clear(this);
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onDestroy() {
         EventBus.getDefault().unregister(this);
-        if (binding.postDetailRecyclerViewViewPostDetailFragment != null) {
-            binding.postDetailRecyclerViewViewPostDetailFragment.addOnWindowFocusChangedListener(null);
-        }
-        super.onDestroy();
+        binding.postDetailRecyclerViewViewPostDetailFragment.addOnWindowFocusChangedListener(null);
+        super.onDestroyView();
     }
 
     @SuppressLint("RestrictedApi")
