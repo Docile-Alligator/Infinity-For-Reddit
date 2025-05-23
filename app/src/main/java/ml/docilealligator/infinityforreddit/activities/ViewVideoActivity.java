@@ -933,8 +933,8 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     }
 
     public void setPlaybackSpeed(int speed100X) {
-        this.playbackSpeed = speed100X;
-        player.setPlaybackParameters(new PlaybackParameters((float) (speed100X / 100.0)));
+        this.playbackSpeed = speed100X <= 0 ? 100 : speed100X;
+        player.setPlaybackParameters(new PlaybackParameters((speed100X / 100.0f)));
     }
 
     private void requestPermissionAndDownload() {
