@@ -29,15 +29,15 @@ import retrofit2.Retrofit;
 public class UserProfileImagesBatchLoader {
     public static final int BATCH_SIZE = 100;
 
-    private Executor mExecutor;
-    private Handler mHandler;
-    private RedditDataRoomDatabase mRedditDataRoomDatabase;
-    private Retrofit mRetrofit;
-    private Map<String, String> mAuthorFullNameToImageMap;
-    private Queue<Comment> mCommentQueue;
-    private Map<String, ViewPostDetailActivityViewModel.LoadIconListener> mAuthorFullNameToListenerMap;
-    private List<Comment> mCallingComments;
-    private Set<String> mLoadingAuthorFullNames;
+    private final Executor mExecutor;
+    private final Handler mHandler;
+    private final RedditDataRoomDatabase mRedditDataRoomDatabase;
+    private final Retrofit mRetrofit;
+    private final Map<String, String> mAuthorFullNameToImageMap;
+    private final Queue<Comment> mCommentQueue;
+    private final Map<String, ViewPostDetailActivityViewModel.LoadIconListener> mAuthorFullNameToListenerMap;
+    private final List<Comment> mCallingComments;
+    private final Set<String> mLoadingAuthorFullNames;
     private boolean mIsLoadingBatch = false;
 
     public UserProfileImagesBatchLoader(Executor executor, Handler handler, RedditDataRoomDatabase redditDataRoomDatabase,
