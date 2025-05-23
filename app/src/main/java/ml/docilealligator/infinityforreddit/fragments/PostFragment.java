@@ -1385,7 +1385,9 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
 
     @Override
     public void onDestroy() {
-        binding.recyclerViewPostFragment.addOnWindowFocusChangedListener(null);
+        if (mAdapter != null && binding.recyclerViewPostFragment != null) {
+            binding.recyclerViewPostFragment.addOnWindowFocusChangedListener(null);
+        }
         super.onDestroy();
     }
 
