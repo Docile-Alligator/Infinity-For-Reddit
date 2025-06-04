@@ -236,7 +236,7 @@ public class DownloadMediaService extends JobService {
             extras.putString(EXTRA_ALL_GALLERY_IMAGE_URLS, concatUrlsBuilder.toString());
             extras.putString(EXTRA_ALL_GALLERY_IMAGE_MEDIA_TYPES, concatMediaTypesBuilder.toString());
             extras.putString(EXTRA_ALL_GALLERY_IMAGE_FILE_NAMES, concatFileNamesBuilder.toString());
-            extras.putBoolean(EXTRA_IS_ALL_GALLERY_MEDIA, true);
+            extras.putInt(EXTRA_IS_ALL_GALLERY_MEDIA, 1);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
@@ -370,7 +370,7 @@ public class DownloadMediaService extends JobService {
         int randomNotificationIdOffset = new Random().nextInt(10000);
         String notificationTitle = extras.containsKey(EXTRA_FILE_NAME) ?
                 extras.getString(EXTRA_FILE_NAME) :
-                (extras.getBoolean(EXTRA_IS_ALL_GALLERY_MEDIA, false) ?
+                (extras.getInt(EXTRA_IS_ALL_GALLERY_MEDIA, 0) == 1 ?
                         getString(R.string.download_all_gallery_media_notification_title) : getString(R.string.download_all_imgur_album_media_notification_title));
         switch (extras.getInt(EXTRA_MEDIA_TYPE, EXTRA_MEDIA_TYPE_IMAGE)) {
             case EXTRA_MEDIA_TYPE_GIF:
