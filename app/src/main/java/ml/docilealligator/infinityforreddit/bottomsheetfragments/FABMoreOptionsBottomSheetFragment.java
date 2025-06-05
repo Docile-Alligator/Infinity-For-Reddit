@@ -86,10 +86,10 @@ public class FABMoreOptionsBottomSheetFragment extends LandscapeExpandedRoundedB
             dismiss();
         });
 
-        binding.randomTextViewFabMoreOptionsBottomSheetFragment.setOnClickListener(view -> {
+        /*binding.randomTextViewFabMoreOptionsBottomSheetFragment.setOnClickListener(view -> {
             activity.fabOptionSelected(FAB_RANDOM);
             dismiss();
-        });
+        });*/
 
         binding.filterPostsTextViewFabMoreOptionsBottomSheetFragment.setOnClickListener(view -> {
             activity.fabOptionSelected(FAB_FILTER_POSTS);
