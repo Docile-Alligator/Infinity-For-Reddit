@@ -46,6 +46,7 @@
         <item>@string/post_layout_card_2</item>
         <item>@string/post_layout_card_3</item>
         <item>@string/post_layout_compact</item>
+        <item>@string/post_layout_compact_2</item>
         <item>@string/post_layout_gallery</item>
     </string-array>
 
@@ -54,6 +55,7 @@
         <item>3</item>
         <item>4</item>
         <item>1</item>
+        <item>5</item>
         <item>2</item>
     </string-array>
 
