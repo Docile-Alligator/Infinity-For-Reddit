@@ -184,6 +184,30 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                     dismiss();
                 });
 
+                binding.shareTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(ShareLinkBottomSheetFragment.EXTRA_POST_LINK, mPost.getPermalink());
+                    if (mPost.getPostType() != Post.TEXT_TYPE) {
+                        bundle.putInt(ShareLinkBottomSheetFragment.EXTRA_MEDIA_TYPE, mPost.getPostType());
+                        switch (mPost.getPostType()) {
+                            case Post.IMAGE_TYPE:
+                            case Post.GIF_TYPE:
+                            case Post.LINK_TYPE:
+                            case Post.NO_PREVIEW_LINK_TYPE:
+                                bundle.putString(ShareLinkBottomSheetFragment.EXTRA_MEDIA_LINK, mPost.getUrl());
+                                break;
+                            case Post.VIDEO_TYPE:
+                                bundle.putString(ShareLinkBottomSheetFragment.EXTRA_MEDIA_LINK, mPost.getVideoDownloadUrl());
+                                break;
+                        }
+                    }
+                    ShareLinkBottomSheetFragment shareLinkBottomSheetFragment = new ShareLinkBottomSheetFragment();
+                    shareLinkBottomSheetFragment.setArguments(bundle);
+                    shareLinkBottomSheetFragment.show(mBaseActivity.getSupportFragmentManager(), shareLinkBottomSheetFragment.getTag());
+
+                    dismiss();
+                });
+
                 if (mPost.isHidden()) {
                     binding.hidePostTextViewPostOptionsBottomSheetFragment.setText(R.string.action_unhide_post);
                 } else {
