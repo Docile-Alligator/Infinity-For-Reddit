@@ -153,7 +153,6 @@ dependencies {
     def bivVersion = "1.8.1"
     implementation "com.github.piasy:BigImageViewer:$bivVersion"
     implementation "com.github.piasy:GlideImageLoader:$bivVersion"
-    implementation "com.github.piasy:GlideImageViewFactory:$bivVersion"
 
     // Markdown
     def markwonVersion = "4.6.2"
