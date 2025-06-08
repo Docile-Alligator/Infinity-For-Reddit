@@ -41,15 +41,17 @@ public class MaterialYouUtils {
     }
 
     public static void changeThemeSync(Context context,
-                                        RedditDataRoomDatabase redditDataRoomDatabase,
-                                        CustomThemeWrapper customThemeWrapper,
-                                        SharedPreferences lightThemeSharedPreferences,
-                                        SharedPreferences darkThemeSharedPreferences,
-                                        SharedPreferences amoledThemeSharedPreferences) {
+                                       RedditDataRoomDatabase redditDataRoomDatabase,
+                                       CustomThemeWrapper customThemeWrapper,
+                                       SharedPreferences lightThemeSharedPreferences,
+                                       SharedPreferences darkThemeSharedPreferences,
+                                       SharedPreferences amoledThemeSharedPreferences,
+                                       SharedPreferences internalSharedPreferences) {
         try {
             Thread.sleep(2000);
-        } catch (InterruptedException ignored) { }
-        if (changeTheme(context, redditDataRoomDatabase, customThemeWrapper, lightThemeSharedPreferences, darkThemeSharedPreferences, amoledThemeSharedPreferences)) {
+        } catch (InterruptedException ignored) {
+        }
+        if (changeTheme(context, redditDataRoomDatabase, customThemeWrapper, lightThemeSharedPreferences, darkThemeSharedPreferences, amoledThemeSharedPreferences, internalSharedPreferences)) {
             EventBus.getDefault().post(new RecreateActivityEvent());
         }
     }
@@ -60,12 +62,13 @@ public class MaterialYouUtils {
                                         SharedPreferences lightThemeSharedPreferences,
                                         SharedPreferences darkThemeSharedPreferences,
                                         SharedPreferences amoledThemeSharedPreferences,
+                                        SharedPreferences internalSharedPreferences,
                                         @Nullable MaterialYouListener materialYouListener) {
         executor.execute(() -> {
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException ignored) { }
-            if (changeTheme(context, redditDataRoomDatabase, customThemeWrapper, lightThemeSharedPreferences, darkThemeSharedPreferences, amoledThemeSharedPreferences)) {
+            if (changeTheme(context, redditDataRoomDatabase, customThemeWrapper, lightThemeSharedPreferences, darkThemeSharedPreferences, amoledThemeSharedPreferences, internalSharedPreferences)) {
                 handler.post(() -> {
                     if (materialYouListener != null) {
                         materialYouListener.applied();
@@ -77,11 +80,12 @@ public class MaterialYouUtils {
     }
 
     private static boolean changeTheme(Context context,
-                             RedditDataRoomDatabase redditDataRoomDatabase,
-                             CustomThemeWrapper customThemeWrapper,
-                             SharedPreferences lightThemeSharedPreferences,
-                             SharedPreferences darkThemeSharedPreferences,
-                             SharedPreferences amoledThemeSharedPreferences) {
+                                       RedditDataRoomDatabase redditDataRoomDatabase,
+                                       CustomThemeWrapper customThemeWrapper,
+                                       SharedPreferences lightThemeSharedPreferences,
+                                       SharedPreferences darkThemeSharedPreferences,
+                                       SharedPreferences amoledThemeSharedPreferences,
+                                       SharedPreferences internalSharedPreferences) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             CustomTheme lightTheme = CustomThemeWrapper.getIndigo(context);
             CustomTheme darkTheme = CustomThemeWrapper.getIndigoDark(context);
@@ -165,6 +169,8 @@ public class MaterialYouUtils {
             CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(darkTheme, darkThemeSharedPreferences);
             CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(amoledTheme, amoledThemeSharedPreferences);
 
+            internalSharedPreferences.edit().putInt(SharedPreferencesUtils.MATERIAL_YOU_SENTRY_COLOR, context.getColor(android.R.color.system_accent1_100)).apply();
+
             return true;
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
@@ -236,6 +242,8 @@ public class MaterialYouUtils {
                 CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(lightTheme, lightThemeSharedPreferences);
                 CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(darkTheme, darkThemeSharedPreferences);
                 CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(amoledTheme, amoledThemeSharedPreferences);
+
+                internalSharedPreferences.edit().putInt(SharedPreferencesUtils.MATERIAL_YOU_SENTRY_COLOR, wallpaperColors.getPrimaryColor().toArgb()).apply();
 
                 return true;
             }

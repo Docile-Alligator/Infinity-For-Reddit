@@ -32,6 +32,9 @@ public class MaterialYouWorker extends Worker {
     @Named("amoled_theme")
     SharedPreferences amoledThemeSharedPreferences;
     @Inject
+    @Named("internal")
+    SharedPreferences mInternalSharedPreferences;
+    @Inject
     RedditDataRoomDatabase redditDataRoomDatabase;
     @Inject
     CustomThemeWrapper customThemeWrapper;
@@ -49,7 +52,7 @@ public class MaterialYouWorker extends Worker {
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_MATERIAL_YOU, false)) {
             MaterialYouUtils.changeThemeSync(context, redditDataRoomDatabase,
                     customThemeWrapper, lightThemeSharedPreferences, darkThemeSharedPreferences,
-                    amoledThemeSharedPreferences);
+                    amoledThemeSharedPreferences, mInternalSharedPreferences);
         }
 
         return Result.success();

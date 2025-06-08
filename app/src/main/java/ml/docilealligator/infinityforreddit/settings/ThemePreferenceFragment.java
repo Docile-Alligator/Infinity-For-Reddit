@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
@@ -59,6 +60,9 @@ public class ThemePreferenceFragment extends CustomFontPreferenceFragmentCompat 
     SharedPreferences amoledThemeSharedPreferences;
     @Inject
     RedditDataRoomDatabase redditDataRoomDatabase;
+    @Inject
+    @Named("internal")
+    SharedPreferences mInternalSharedPreferences;
     @Inject
     CustomThemeWrapper customThemeWrapper;
     @Inject
@@ -175,10 +179,10 @@ public class ThemePreferenceFragment extends CustomFontPreferenceFragmentCompat 
 
             enableMaterialYouSwitchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 if ((Boolean) newValue) {
-                    MaterialYouUtils.changeThemeASync(activity, executor, new Handler(),
+                    MaterialYouUtils.changeThemeASync(activity, executor, new Handler(Looper.getMainLooper()),
                             redditDataRoomDatabase, customThemeWrapper,
                             lightThemeSharedPreferences, darkThemeSharedPreferences,
-                            amoledThemeSharedPreferences, null);
+                            amoledThemeSharedPreferences, mInternalSharedPreferences, null);
                     applyMaterialYouPreference.setVisible(true);
                 } else {
                     applyMaterialYouPreference.setVisible(false);
@@ -187,10 +191,10 @@ public class ThemePreferenceFragment extends CustomFontPreferenceFragmentCompat 
             });
 
             applyMaterialYouPreference.setOnPreferenceClickListener(preference -> {
-                MaterialYouUtils.changeThemeASync(activity, executor, new Handler(),
+                MaterialYouUtils.changeThemeASync(activity, executor, new Handler(Looper.getMainLooper()),
                         redditDataRoomDatabase, customThemeWrapper,
                         lightThemeSharedPreferences, darkThemeSharedPreferences,
-                        amoledThemeSharedPreferences, null);
+                        amoledThemeSharedPreferences, mInternalSharedPreferences, null);
                 return true;
             });
         }

@@ -426,6 +426,7 @@ public class SharedPreferencesUtils {
     public static final String INTERNAL_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.internal";
     public static final String HAS_REQUESTED_NOTIFICATION_PERMISSION = "has_requested_notification_permission";
     public static final String DO_NOT_SHOW_REDDIT_API_INFO_V2_AGAIN = "do_not_show_reddit_api_info_v2_again";
+    public static final String MATERIAL_YOU_SENTRY_COLOR = "material_you_sentry_color";
 
     public static final String PROXY_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.proxy";
     public static final String PROXY_ENABLED = "proxy_enabled";
