@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.PersistableBundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -45,7 +46,6 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.ImageLoader;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
-import com.github.piasy.biv.view.GlideImageViewFactory;
 
 import java.io.File;
 import java.util.concurrent.Executor;
@@ -57,11 +57,13 @@ import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
 import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 import ml.docilealligator.infinityforreddit.WallpaperSetter;
 import ml.docilealligator.infinityforreddit.asynctasks.SaveBitmapImageToFile;
 import ml.docilealligator.infinityforreddit.asynctasks.SaveGIFToFile;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetAsWallpaperBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.customviews.GlideGifImageViewFactory;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrConfig;
 import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrPosition;
@@ -145,7 +147,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
         glide = Glide.with(this);
 
-        handler = new Handler();
+        handler = new Handler(Looper.getMainLooper());
 
         Intent intent = getIntent();
         mImageUrl = intent.getStringExtra(EXTRA_GIF_URL_KEY);
@@ -229,7 +231,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             }
         });
 
-        binding.imageViewViewImageOrGifActivity.setImageViewFactory(new GlideImageViewFactory());
+        binding.imageViewViewImageOrGifActivity.setImageViewFactory(new GlideGifImageViewFactory(new SaveMemoryCenterInisdeDownsampleStrategy(Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.POST_FEED_MAX_RESOLUTION, "5000000")))));
 
         binding.imageViewViewImageOrGifActivity.setImageLoaderCallback(new ImageLoader.Callback() {
             @Override
