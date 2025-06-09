@@ -14,26 +14,29 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.databinding.FragmentShareLinkBottomSheetBinding;
 import ml.docilealligator.infinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.utils.ShareScreenshotUtilsKt;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
+public class ShareBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
     public static final String EXTRA_POST_LINK = "EPL";
     public static final String EXTRA_MEDIA_LINK = "EML";
     public static final String EXTRA_MEDIA_TYPE = "EMT";
+    public static final String EXTRA_POST = "EP";
 
     private BaseActivity activity;
 
-    public ShareLinkBottomSheetFragment() {
+    public ShareBottomSheetFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -43,6 +46,7 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
 
         String postLink = getArguments().getString(EXTRA_POST_LINK);
         String mediaLink = getArguments().containsKey(EXTRA_MEDIA_LINK) ? getArguments().getString(EXTRA_MEDIA_LINK) : null;
+        Post post = getArguments().getParcelable(EXTRA_POST);
 
         binding.postLinkTextViewShareLinkBottomSheetFragment.setText(postLink);
 
@@ -98,6 +102,25 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
             copyLink(postLink);
             dismiss();
         });
+
+        if (post != null) {
+            binding.shareAsImageTextViewShareLinkBottomSheetFragment.setVisibility(View.VISIBLE);
+
+            binding.shareAsImageTextViewShareLinkBottomSheetFragment.setOnClickListener(view -> {
+                ShareScreenshotUtilsKt.sharePostAsScreenshot(
+                        activity,
+                        post,
+                        activity.customThemeWrapper,
+                        activity.getResources().getConfiguration().locale,
+                        activity.getDefaultSharedPreferences().getString(SharedPreferencesUtils.TIME_FORMAT_KEY,
+                                SharedPreferencesUtils.TIME_FORMAT_DEFAULT_VALUE),
+                        new SaveMemoryCenterInisdeDownsampleStrategy(
+                                Integer.parseInt(activity.getDefaultSharedPreferences()
+                                        .getString(SharedPreferencesUtils.POST_FEED_MAX_RESOLUTION, "5000000")))
+                );
+                dismiss();
+            });
+        }
 
         if (activity.typeface != null) {
             Utils.setFontToAllTextViews(binding.getRoot(), activity.typeface);

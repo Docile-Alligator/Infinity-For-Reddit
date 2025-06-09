@@ -84,7 +84,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.apis.RedgifsAPI;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostOptionsBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareLinkBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
@@ -1414,24 +1414,25 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
     private void shareLink(Post post) {
         Bundle bundle = new Bundle();
-        bundle.putString(ShareLinkBottomSheetFragment.EXTRA_POST_LINK, post.getPermalink());
+        bundle.putString(ShareBottomSheetFragment.EXTRA_POST_LINK, post.getPermalink());
         if (post.getPostType() != Post.TEXT_TYPE) {
-            bundle.putInt(ShareLinkBottomSheetFragment.EXTRA_MEDIA_TYPE, post.getPostType());
+            bundle.putInt(ShareBottomSheetFragment.EXTRA_MEDIA_TYPE, post.getPostType());
             switch (post.getPostType()) {
                 case Post.IMAGE_TYPE:
                 case Post.GIF_TYPE:
                 case Post.LINK_TYPE:
                 case Post.NO_PREVIEW_LINK_TYPE:
-                    bundle.putString(ShareLinkBottomSheetFragment.EXTRA_MEDIA_LINK, post.getUrl());
+                    bundle.putString(ShareBottomSheetFragment.EXTRA_MEDIA_LINK, post.getUrl());
                     break;
                 case Post.VIDEO_TYPE:
-                    bundle.putString(ShareLinkBottomSheetFragment.EXTRA_MEDIA_LINK, post.getVideoDownloadUrl());
+                    bundle.putString(ShareBottomSheetFragment.EXTRA_MEDIA_LINK, post.getVideoDownloadUrl());
                     break;
             }
         }
-        ShareLinkBottomSheetFragment shareLinkBottomSheetFragment = new ShareLinkBottomSheetFragment();
-        shareLinkBottomSheetFragment.setArguments(bundle);
-        shareLinkBottomSheetFragment.show(mActivity.getSupportFragmentManager(), shareLinkBottomSheetFragment.getTag());
+        bundle.putParcelable(ShareBottomSheetFragment.EXTRA_POST, post);
+        ShareBottomSheetFragment shareBottomSheetFragment = new ShareBottomSheetFragment();
+        shareBottomSheetFragment.setArguments(bundle);
+        shareBottomSheetFragment.show(mActivity.getSupportFragmentManager(), shareBottomSheetFragment.getTag());
     }
 
     @Nullable
@@ -2940,7 +2941,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     return false;
                 }
 
-                /*PostOptionsBottomSheetFragment postOptionsBottomSheetFragment;
+                PostOptionsBottomSheetFragment postOptionsBottomSheetFragment;
                 if (post.getPostType() == Post.GALLERY_TYPE && this instanceof PostBaseGalleryTypeViewHolder) {
                     postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(post,
                             getBindingAdapterPosition(),
@@ -2948,9 +2949,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 } else {
                     postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(post, getBindingAdapterPosition());
                 }
-                postOptionsBottomSheetFragment.show(mActivity.getSupportFragmentManager(), postOptionsBottomSheetFragment.getTag());*/
-
-                ShareScreenshotUtilsKt.sharePostAsScreenshot(mActivity, post, mCustomThemeWrapper, mLocale, mTimeFormatPattern, mSaveMemoryCenterInsideDownsampleStrategy);
+                postOptionsBottomSheetFragment.show(mActivity.getSupportFragmentManager(), postOptionsBottomSheetFragment.getTag());
                 return true;
             });
         }

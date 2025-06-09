@@ -63,6 +63,26 @@
             android:background="?attr/selectableItemBackground" />
 
         <TextView
+            android:id="@+id/share_as_image_text_view_share_link_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:text="@string/share_as_image"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
+            android:drawableStart="@drawable/ic_image_day_night_24dp"
+            android:drawablePadding="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            android:visibility="gone" />
+
+        <TextView
             android:id="@+id/media_link_text_view_share_link_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
