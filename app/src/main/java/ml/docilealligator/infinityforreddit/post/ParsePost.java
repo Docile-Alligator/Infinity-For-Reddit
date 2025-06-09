@@ -303,6 +303,10 @@ public class ParsePost {
                 } else {
                     if (isVideo) {
                         //No preview video post
+                        /*
+                            TODO a removed crosspost may not have media JSONObject. This happens in crosspost_parent_list
+                            e.g. https://www.reddit.com/r/hitmanimals/comments/1l6pv0m/mission_failed_agent_47/
+                         */
                         JSONObject redditVideoObject = data.getJSONObject(JSONUtils.MEDIA_KEY).getJSONObject(JSONUtils.REDDIT_VIDEO_KEY);
                         int postType = Post.VIDEO_TYPE;
                         String videoUrl = Html.fromHtml(redditVideoObject.getString(JSONUtils.HLS_URL_KEY)).toString();
