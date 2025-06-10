@@ -6,4 +6,16 @@
         android:orderInCategory="100"
         android:title="@string/action_reset_fab_position"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_next_parent_comment_view_post_detail_activity"
+        android:orderInCategory="101"
+        android:title="@string/action_next_parent_comment"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_previous_parent_comment_view_post_detail_activity"
+        android:orderInCategory="102"
+        android:title="@string/action_previous_parent_comment"
+        app:showAsAction="never" />
 </menu>

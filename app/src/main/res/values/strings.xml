@@ -101,6 +101,8 @@
     <string name="action_reset_fab_position">Reset FAB position</string>
     <string name="action_download_all_gallery_media">Download All Gallery Media</string>
     <string name="action_download_all_imgur_album_media">Download All Imgur Album Media</string>
+    <string name="action_next_parent_comment">Next Top-Level Comment</string>
+    <string name="action_previous_parent_comment">Previous Top-Level Comment</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>

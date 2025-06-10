@@ -250,24 +250,10 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         mVolumeKeysNavigateComments = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOLUME_KEYS_NAVIGATE_COMMENTS, false);
 
         binding.fabViewPostDetailActivity.setOnClickListener(view -> {
-            if (mSectionsPagerAdapter != null) {
-                ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
-                if (fragment != null) {
-                    fragment.scrollToNextParentComment();
-                }
-            }
+            scrollToNextParentComment();
         });
 
-        binding.fabViewPostDetailActivity.setOnLongClickListener(view -> {
-            if (mSectionsPagerAdapter != null) {
-                ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
-                if (fragment != null) {
-                    fragment.scrollToPreviousParentComment();
-                    return true;
-                }
-            }
-            return false;
-        });
+        binding.fabViewPostDetailActivity.setOnLongClickListener(view -> scrollToPreviousParentComment());
 
         if (accountName.equals(Account.ANONYMOUS_ACCOUNT) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             binding.searchTextInputEditTextViewPostDetailActivity.setImeOptions(binding.searchTextInputEditTextViewPostDetailActivity.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
@@ -316,6 +302,27 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
     public void showSnackBar(int resId) {
         Snackbar.make(binding.getRoot(), resId, Snackbar.LENGTH_SHORT).show();
+    }
+
+    public void scrollToNextParentComment() {
+        if (mSectionsPagerAdapter != null) {
+            ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+            if (fragment != null) {
+                fragment.scrollToNextParentComment();
+            }
+        }
+    }
+
+    public boolean scrollToPreviousParentComment() {
+        if (mSectionsPagerAdapter != null) {
+            ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+            if (fragment != null) {
+                fragment.scrollToPreviousParentComment();
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
@@ -792,6 +799,12 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         } else if (item.getItemId() == R.id.action_reset_fab_position_view_post_detail_activity) {
             binding.fabViewPostDetailActivity.resetCoordinates();
             return true;
+        } else if (item.getItemId() == R.id.action_next_parent_comment_view_post_detail_activity) {
+            scrollToNextParentComment();
+            return true;
+        } else if (item.getItemId() == R.id.action_previous_parent_comment_view_post_detail_activity) {
+            scrollToPreviousParentComment();
+            return true;
         }
         return false;
     }
@@ -858,16 +871,13 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (mVolumeKeysNavigateComments) {
-            ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
-            if (fragment != null) {
-                switch (keyCode) {
-                    case KeyEvent.KEYCODE_VOLUME_UP:
-                        fragment.scrollToPreviousParentComment();
-                        return true;
-                    case KeyEvent.KEYCODE_VOLUME_DOWN:
-                        fragment.scrollToNextParentComment();
-                        return true;
-                }
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_VOLUME_UP:
+                    scrollToPreviousParentComment();
+                    return true;
+                case KeyEvent.KEYCODE_VOLUME_DOWN:
+                    scrollToNextParentComment();
+                    return true;
             }
         }
         return super.onKeyDown(keyCode, event);
