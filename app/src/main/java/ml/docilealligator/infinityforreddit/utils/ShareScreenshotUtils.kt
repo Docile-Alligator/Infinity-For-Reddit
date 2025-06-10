@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
@@ -38,6 +39,7 @@ import com.github.alexzhirkevich.customqrgenerator.vector.style.QrVectorLogoShap
 import com.github.alexzhirkevich.customqrgenerator.vector.style.QrVectorPixelShape
 import com.github.alexzhirkevich.customqrgenerator.vector.style.QrVectorShapes
 import jp.wasabeef.glide.transformations.BlurTransformation
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy
 import ml.docilealligator.infinityforreddit.activities.BaseActivity
@@ -56,7 +58,8 @@ fun sharePostAsScreenshot(
     locale: Locale, timeFormatPattern: String,
     saveMemoryCenterInsideDownsampleStrategy: SaveMemoryCenterInisdeDownsampleStrategy
 ) {
-    val binding: SharedPostBinding = SharedPostBinding.inflate(LayoutInflater.from(ContextThemeWrapper(baseActivity, R.style.AppTheme)))
+    //val binding: SharedPostBinding = SharedPostBinding.inflate(LayoutInflater.from(ContextThemeWrapper(baseActivity, R.style.AppTheme)))
+    val binding: SharedPostBinding = SharedPostBinding.inflate(LayoutInflater.from(baseActivity))
 
     binding.titleTextViewSharedPost.text = post.title
     binding.subredditNameTextViewSharedPost.text = post.subredditNamePrefixed
@@ -140,15 +143,18 @@ fun sharePostAsScreenshot(
                     imageRequestBuilder.apply(
                         RequestOptions.bitmapTransform(
                             MultiTransformation(
+                                CenterCrop(),
                                 BlurTransformation(50, 10),
-                                RoundedCorners(16)
+                                RoundedCornersTransformation(4, 0)
                             )
                         )
-                    )
-                        .into(binding.imageViewSharedPost)
+                    ).into(binding.imageViewSharedPost)
                 } else {
-                    imageRequestBuilder.centerInside().apply(RequestOptions().transform(
-                        RoundedCorners(50)
+                    imageRequestBuilder.apply(RequestOptions.bitmapTransform(
+                        MultiTransformation(
+                            CenterCrop(),
+                            RoundedCornersTransformation(50, 0)
+                        )
                     )).downsample(
                         saveMemoryCenterInsideDownsampleStrategy
                     ).into(binding.imageViewSharedPost)
