@@ -197,7 +197,20 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
             Intent intent = new Intent(activity, CommentFilterPreferenceActivity.class);
             intent.putExtra(CommentFilterPreferenceActivity.EXTRA_COMMENT, comment);
             activity.startActivity(intent);
+
+            dismiss();
         });
+
+        if (comment.getDepth() > 0 && activity instanceof ViewPostDetailActivity) {
+            binding.jumpToTopLevelCommentCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
+            binding.jumpToTopLevelCommentCommentMoreBottomSheetFragment.setOnClickListener(view -> {
+                if (activity instanceof ViewPostDetailActivity) {
+                    ((ViewPostDetailActivity) activity).scrollToTopLevelComment(bundle.getInt(EXTRA_POSITION));
+                }
+
+                dismiss();
+            });
+        }
 
         if (activity.typeface != null) {
             Utils.setFontToAllTextViews(binding.getRoot(), activity.typeface);

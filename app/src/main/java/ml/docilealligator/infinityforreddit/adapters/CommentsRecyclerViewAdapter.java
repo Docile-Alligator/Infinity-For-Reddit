@@ -1142,7 +1142,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             if (mIsSingleCommentThreadMode) {
                 for (int i = currentPosition + 1; i - 1 < mVisibleComments.size() && i - 1 >= 0; i++) {
                     if (mVisibleComments.get(i - 1).getDepth() == 0) {
-                        return i;
+                        return i + 1;
                     }
                 }
             } else {
@@ -1161,7 +1161,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             if (mIsSingleCommentThreadMode) {
                 for (int i = currentPosition - 1; i - 1 >= 0; i--) {
                     if (mVisibleComments.get(i - 1).getDepth() == 0) {
-                        return i;
+                        return i + 1;
                     }
                 }
             } else {

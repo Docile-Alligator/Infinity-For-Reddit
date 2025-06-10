@@ -1536,4 +1536,6 @@
     <string name="proxy_http">HTTP</string>
     <string name="proxy_socks">SOCKS</string>
     <string name="proxy_direct">Direct</string>
+    
+    <string name="jump_to_top_level_comment">Jump to Top-Level Comment</string>
 </resources>

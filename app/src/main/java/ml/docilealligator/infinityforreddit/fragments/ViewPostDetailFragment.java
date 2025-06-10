@@ -1861,6 +1861,20 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         }
     }
 
+    public void scrollToTopLevelComment(int position) {
+        RecyclerView chooseYourView = mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView;
+        if (mCommentsAdapter != null && chooseYourView != null) {
+            int viewPosition = mCommentsRecyclerView == null ? (!isSingleCommentThreadMode ? position + 1 : position + 2) : (!isSingleCommentThreadMode ? position : position + 1);
+            int previousParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(viewPosition);
+            if (previousParentPosition < 0) {
+                return;
+            }
+            mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null && !isSingleCommentThreadMode ? previousParentPosition + 1 : previousParentPosition);
+            mIsSmoothScrolling = true;
+            chooseYourView.getLayoutManager().startSmoothScroll(mSmoothScroller);
+        }
+    }
+
     public void delayTransition() {
         TransitionManager.beginDelayedTransition((mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView), new AutoTransition());
     }
