@@ -119,7 +119,7 @@ fun sharePostAsScreenshot(
                             target: Target<Drawable>,
                             isFirstResource: Boolean
                         ): Boolean {
-                            binding.imageViewSharedPost.setVisibility(View.GONE)
+                            binding.imageViewSharedPost.visibility = View.GONE
                             measureView(binding.getRoot())
                             shareScreenshot(baseActivity, getBitmapFromView(binding.getRoot()))
                             return false
@@ -160,17 +160,21 @@ fun sharePostAsScreenshot(
                     ).into(binding.imageViewSharedPost)
                 }
                 return
+            } else {
+                binding.imageViewSharedPost.visibility = View.GONE
             }
         }
 
         Post.NO_PREVIEW_LINK_TYPE -> {
             binding.contentTextViewSharedPost.text = post.url
-            binding.imageViewSharedPost.setVisibility(View.GONE)
+            binding.imageViewSharedPost.visibility = View.GONE
         }
 
         else -> {
-            binding.contentTextViewSharedPost.text = post.selfTextPlainTrimmed
-            binding.imageViewSharedPost.setVisibility(View.GONE)
+            if (post.selfTextPlainTrimmed != null && post.selfTextPlainTrimmed.isNotEmpty()) {
+                binding.contentTextViewSharedPost.text = post.selfTextPlainTrimmed
+            }
+            binding.imageViewSharedPost.visibility = View.GONE
         }
     }
 
