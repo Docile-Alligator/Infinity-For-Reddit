@@ -27,7 +27,7 @@
             android:maxLines="4"
             android:textSize="20sp" />
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/image_view_shared_post"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

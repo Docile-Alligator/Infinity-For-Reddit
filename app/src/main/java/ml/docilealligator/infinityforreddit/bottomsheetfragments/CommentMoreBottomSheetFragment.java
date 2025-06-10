@@ -31,6 +31,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.databinding.FragmentCommentMoreBottomSheetBinding;
+import ml.docilealligator.infinityforreddit.utils.ShareScreenshotUtilsKt;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 
@@ -170,6 +171,11 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
             dismiss();
             activity.copyLink(comment.getPermalink());
             return true;
+        });
+
+        binding.shareAsImageTextViewCommentMoreBottomSheetFragment.setOnClickListener(view -> {
+            dismiss();
+            ShareScreenshotUtilsKt.shareCommentAsScreenshot(activity, comment);
         });
 
         binding.copyTextViewCommentMoreBottomSheetFragment.setOnClickListener(view -> {

@@ -41,7 +41,9 @@ import jp.wasabeef.glide.transformations.BlurTransformation
 import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy
 import ml.docilealligator.infinityforreddit.activities.BaseActivity
+import ml.docilealligator.infinityforreddit.comment.Comment
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
+import ml.docilealligator.infinityforreddit.databinding.SharedCommentBinding
 import ml.docilealligator.infinityforreddit.databinding.SharedPostBinding
 import ml.docilealligator.infinityforreddit.post.Post
 import java.io.File
@@ -92,33 +94,7 @@ fun sharePostAsScreenshot(
     binding.scoreTextViewSharedPost.setTypeface(baseActivity.titleTypeface)
     binding.commentsCountTextViewSharedPost.setTypeface(baseActivity.titleTypeface)
 
-    val data: QrData.Url = QrData.Url(post.permalink)
-    val qrCode: Drawable = QrCodeDrawable(
-        data, QrVectorOptions.Builder()
-            .setLogo(
-                QrVectorLogo(
-                    drawable = ContextCompat.getDrawable(baseActivity, R.mipmap.ic_launcher_round),
-                    size = .3f,
-                    padding = QrVectorLogoPadding.Natural(.1f),
-                    shape = QrVectorLogoShape.Circle
-                )
-            )
-            .setColors(
-                QrVectorColors(
-                    dark = QrVectorColor.Solid(customThemeWrapper.colorAccent),
-                    ball = QrVectorColor.Solid(customThemeWrapper.colorAccent),
-                    frame = QrVectorColor.Solid(customThemeWrapper.colorAccent)
-                )
-            )
-            .setShapes(
-                QrVectorShapes(
-                    darkPixel = QrVectorPixelShape.RoundCorners(0.5f),
-                    ball = QrVectorBallShape.RoundCorners(0.5f),
-                    frame = QrVectorFrameShape.RoundCorners(0.25f),
-                )
-            ).build()
-    )
-    binding.qrCodeImageViewSharedPost.setImageDrawable(qrCode)
+    binding.qrCodeImageViewSharedPost.setImageDrawable(generateQRCode(baseActivity, customThemeWrapper, post.permalink))
 
     when (post.postType) {
         Post.VIDEO_TYPE, Post.GIF_TYPE, Post.IMAGE_TYPE, Post.GALLERY_TYPE, Post.LINK_TYPE -> {
@@ -197,6 +173,32 @@ fun sharePostAsScreenshot(
     shareScreenshot(baseActivity, getBitmapFromView(binding.getRoot()))
 }
 
+fun shareCommentAsScreenshot(
+    baseActivity: BaseActivity, comment: Comment
+) {
+    val binding: SharedCommentBinding = SharedCommentBinding.inflate(LayoutInflater.from(ContextThemeWrapper(baseActivity, R.style.AppTheme)))
+    val customThemeWrapper = baseActivity.customThemeWrapper
+
+    binding.userTextViewSharedComment.text = "— u/" + comment.author
+    binding.contentTextViewSharedComment.text = comment.commentRawText
+
+    binding.root.setBackgroundTintList(ColorStateList.valueOf(customThemeWrapper.filledCardViewBackgroundColor))
+    binding.userTextViewSharedComment.setTextColor(customThemeWrapper.username)
+    binding.contentTextViewSharedComment.setTextColor(customThemeWrapper.commentColor)
+    binding.quoteImageViewSharedComment.setColorFilter(
+        customThemeWrapper.colorPrimary,
+        PorterDuff.Mode.SRC_IN
+    )
+
+    binding.userTextViewSharedComment.setTypeface(baseActivity.typeface)
+    binding.contentTextViewSharedComment.setTypeface(baseActivity.contentTypeface)
+
+    binding.qrCodeImageViewSharedComment.setImageDrawable(generateQRCode(baseActivity, customThemeWrapper, comment.permalink))
+
+    measureView(binding.getRoot())
+    shareScreenshot(baseActivity, getBitmapFromView(binding.getRoot()))
+}
+
 private fun measureView(rootView: View) {
     val specWidth = View.MeasureSpec.makeMeasureSpec(1920, View.MeasureSpec.EXACTLY)
     val specHeight = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
@@ -215,6 +217,35 @@ private fun getBitmapFromView(rootView: View): Bitmap {
     return bitmap
 }
 
+private fun generateQRCode(baseActivity: BaseActivity, customThemeWrapper: CustomThemeWrapper, url: String): Drawable {
+    val data: QrData.Url = QrData.Url(url)
+    return QrCodeDrawable(
+        data, QrVectorOptions.Builder()
+            .setLogo(
+                QrVectorLogo(
+                    drawable = ContextCompat.getDrawable(baseActivity, R.mipmap.ic_launcher_round),
+                    size = .3f,
+                    padding = QrVectorLogoPadding.Natural(.1f),
+                    shape = QrVectorLogoShape.Circle
+                )
+            )
+            .setColors(
+                QrVectorColors(
+                    dark = QrVectorColor.Solid(customThemeWrapper.colorAccent),
+                    ball = QrVectorColor.Solid(customThemeWrapper.colorAccent),
+                    frame = QrVectorColor.Solid(customThemeWrapper.colorAccent)
+                )
+            )
+            .setShapes(
+                QrVectorShapes(
+                    darkPixel = QrVectorPixelShape.RoundCorners(0.5f),
+                    ball = QrVectorBallShape.RoundCorners(0.5f),
+                    frame = QrVectorFrameShape.RoundCorners(0.25f),
+                )
+            ).build()
+    )
+}
+
 private fun shareScreenshot(context: Context, bitmap: Bitmap) {
     try {
         val cachePath = File(context.externalCacheDir, "images")
@@ -222,7 +253,7 @@ private fun shareScreenshot(context: Context, bitmap: Bitmap) {
             cachePath.mkdirs()
         }
 
-        val file = File(cachePath, "shared_post.png")
+        val file = File(cachePath, "shared_view.png")
         val stream = FileOutputStream(file)
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
         stream.close()
