@@ -76,7 +76,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/title_and_image_linear_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -96,8 +96,7 @@
             android:layout_marginStart="8dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/barrier2"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible">
 
@@ -142,8 +141,7 @@
             android:background="@drawable/thumbnail_compact_layout_rounded_edge"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/barrier2"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
@@ -166,9 +164,20 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/title_font_18" />
+            android:textSize="?attr/title_font_18"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/barrier2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-    </LinearLayout>
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="image_view_wrapper_item_post_compact_2,frame_layout_image_view_no_preview_link_item_post_compact_2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/vote_button_groups_linear_layout"
