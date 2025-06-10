@@ -159,9 +159,8 @@ fun sharePostAsScreenshot(
                         saveMemoryCenterInsideDownsampleStrategy
                     ).into(binding.imageViewSharedPost)
                 }
-            } else {
+                return
             }
-            return
         }
 
         Post.NO_PREVIEW_LINK_TYPE -> {
