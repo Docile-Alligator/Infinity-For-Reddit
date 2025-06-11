@@ -325,6 +325,15 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         return false;
     }
 
+    public void scrollToParentComment(int position, int currentDepth) {
+        if (mSectionsPagerAdapter != null) {
+            ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+            if (fragment != null) {
+                fragment.scrollToParentComment(position, currentDepth);
+            }
+        }
+    }
+
     @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
@@ -741,15 +750,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                     });
                 }
             });
-        }
-    }
-
-    public void scrollToTopLevelComment(int position) {
-        if (mSectionsPagerAdapter != null) {
-            ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
-            if (fragment != null) {
-                fragment.scrollToTopLevelComment(position);
-            }
         }
     }
 

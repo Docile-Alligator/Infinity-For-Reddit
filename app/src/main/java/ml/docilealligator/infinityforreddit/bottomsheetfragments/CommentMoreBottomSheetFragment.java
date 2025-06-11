@@ -202,10 +202,10 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
         });
 
         if (comment.getDepth() > 0 && activity instanceof ViewPostDetailActivity) {
-            binding.jumpToTopLevelCommentCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
-            binding.jumpToTopLevelCommentCommentMoreBottomSheetFragment.setOnClickListener(view -> {
+            binding.jumpToParentCommentCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
+            binding.jumpToParentCommentCommentMoreBottomSheetFragment.setOnClickListener(view -> {
                 if (activity instanceof ViewPostDetailActivity) {
-                    ((ViewPostDetailActivity) activity).scrollToTopLevelComment(bundle.getInt(EXTRA_POSITION));
+                    ((ViewPostDetailActivity) activity).scrollToParentComment(bundle.getInt(EXTRA_POSITION), comment.getDepth());
                 }
 
                 dismiss();

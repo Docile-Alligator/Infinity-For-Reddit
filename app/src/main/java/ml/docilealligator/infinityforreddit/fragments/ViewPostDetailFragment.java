@@ -1861,11 +1861,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         }
     }
 
-    public void scrollToTopLevelComment(int position) {
+    public void scrollToParentComment(int position, int currentDepth) {
         RecyclerView chooseYourView = mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView;
         if (mCommentsAdapter != null && chooseYourView != null) {
             int viewPosition = mCommentsRecyclerView == null ? (!isSingleCommentThreadMode ? position + 1 : position + 2) : (!isSingleCommentThreadMode ? position : position + 1);
-            int previousParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(viewPosition);
+            int previousParentPosition = mCommentsAdapter.getParentCommentPosition(viewPosition, currentDepth);
             if (previousParentPosition < 0) {
                 return;
             }

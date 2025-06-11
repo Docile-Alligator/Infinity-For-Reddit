@@ -1175,6 +1175,25 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         return -1;
     }
 
+    public int getParentCommentPosition(int currentPosition, int currentDepth) {
+        if (mVisibleComments != null && !mVisibleComments.isEmpty()) {
+            if (mIsSingleCommentThreadMode) {
+                for (int i = currentPosition - 1; i - 1 >= 0; i--) {
+                    if (mVisibleComments.get(i - 1).getDepth() == currentDepth - 1) {
+                        return i + 1;
+                    }
+                }
+            } else {
+                for (int i = currentPosition - 1; i >= 0; i--) {
+                    if (mVisibleComments.get(i).getDepth() == currentDepth - 1) {
+                        return i;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
     public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction, int swipeLeftAction, int swipeRightAction) {
         if (viewHolder instanceof CommentBaseViewHolder) {
             if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.START) {

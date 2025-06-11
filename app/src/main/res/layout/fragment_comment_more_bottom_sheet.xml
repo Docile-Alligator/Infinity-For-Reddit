@@ -201,7 +201,7 @@
             app:drawableStartCompat="@drawable/ic_notifications_day_night_24dp" />
 
         <TextView
-            android:id="@+id/jump_to_top_level_comment_comment_more_bottom_sheet_fragment"
+            android:id="@+id/jump_to_parent_comment_comment_more_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
@@ -213,7 +213,7 @@
             android:paddingTop="16dp"
             android:paddingEnd="32dp"
             android:paddingBottom="16dp"
-            android:text="@string/jump_to_top_level_comment"
+            android:text="@string/jump_to_parent_comment"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
