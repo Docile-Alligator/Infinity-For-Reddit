@@ -25,6 +25,11 @@
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
+        app:key="hide_upvote_ratio"
+        app:title="@string/settings_hide_upvote_ratio_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+        app:defaultValue="false"
         app:key="hide_subreddit_and_user_prefix"
         app:title="@string/settings_hide_subreddit_and_user_prefix" />
 
@@ -37,5 +42,18 @@
         app:defaultValue="false"
         app:key="hide_the_number_of_comments"
         app:title="@string/settings_hide_the_number_of_comments" />
+
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="hide_fab_in_post_details"
+        app:title="@string/settings_hide_fab_in_post_details" />
+
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+        app:defaultValue="15"
+        app:entries="@array/settings_embedded_media_type"
+        app:entryValues="@array/settings_embedded_media_type_values"
+        app:key="embedded_media_type"
+        app:title="@string/settings_embedded_media_type_title"
+        app:useSimpleSummaryProvider="true" />
 
 </PreferenceScreen>
