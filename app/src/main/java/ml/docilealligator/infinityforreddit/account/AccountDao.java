@@ -50,6 +50,10 @@ public interface AccountDao {
     LiveData<Account> getCurrentAccountLiveData();
 
     @Query("UPDATE accounts SET profile_image_url = :profileImageUrl, banner_image_url = :bannerImageUrl, " +
+            "karma = :karma, is_mod = :isMod WHERE username = :username")
+    void updateAccountInfo(String username, String profileImageUrl, String bannerImageUrl, int karma, boolean isMod);
+
+    @Query("UPDATE accounts SET profile_image_url = :profileImageUrl, banner_image_url = :bannerImageUrl, " +
             "karma = :karma WHERE username = :username")
     void updateAccountInfo(String username, String profileImageUrl, String bannerImageUrl, int karma);
 

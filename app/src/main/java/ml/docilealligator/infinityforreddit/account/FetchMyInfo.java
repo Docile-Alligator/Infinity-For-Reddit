@@ -35,10 +35,11 @@ public class FetchMyInfo {
                             String profileImageUrl = Html.fromHtml(jsonResponse.getString(JSONUtils.ICON_IMG_KEY)).toString();
                             String bannerImageUrl = !jsonResponse.isNull(JSONUtils.SUBREDDIT_KEY) ? Html.fromHtml(jsonResponse.getJSONObject(JSONUtils.SUBREDDIT_KEY).getString(JSONUtils.BANNER_IMG_KEY)).toString() : null;
                             int karma = jsonResponse.getInt(JSONUtils.TOTAL_KARMA_KEY);
+                            boolean isMod = jsonResponse.getBoolean(JSONUtils.IS_MOD_KEY);
 
-                            redditDataRoomDatabase.accountDao().updateAccountInfo(name, profileImageUrl, bannerImageUrl, karma);
+                            redditDataRoomDatabase.accountDao().updateAccountInfo(name, profileImageUrl, bannerImageUrl, karma, isMod);
 
-                            handler.post(() -> fetchMyInfoListener.onFetchMyInfoSuccess(name, profileImageUrl, bannerImageUrl, karma));
+                            handler.post(() -> fetchMyInfoListener.onFetchMyInfoSuccess(name, profileImageUrl, bannerImageUrl, karma, isMod));
                         } catch (JSONException e) {
                             handler.post(() -> fetchMyInfoListener.onFetchMyInfoFailed(true));
                         }
@@ -56,7 +57,7 @@ public class FetchMyInfo {
     }
 
     public interface FetchMyInfoListener {
-        void onFetchMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma);
+        void onFetchMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma, boolean isMod);
 
         void onFetchMyInfoFailed(boolean parseFailed);
     }
