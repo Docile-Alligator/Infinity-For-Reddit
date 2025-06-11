@@ -48,7 +48,7 @@ public class FetchUserData {
                             JSONObject jsonResponse = new JSONObject(response.body());
                             UserData userData = parseUserDataBase(jsonResponse, true);
                             if (redditDataRoomDatabase != null) {
-                                redditDataRoomDatabase.accountDao().updateAccountInfo(userData.getName(), userData.getIconUrl(), userData.getBanner(), userData.getTotalKarma());
+                                redditDataRoomDatabase.accountDao().updateAccountInfo(userData.getName(), userData.getIconUrl(), userData.getBanner(), userData.getTotalKarma(), userData.isMod());
                             }
                             if (jsonResponse.getJSONObject(JSONUtils.DATA_KEY).has(JSONUtils.INBOX_COUNT_KEY)) {
                                 int inboxCount = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getInt(JSONUtils.INBOX_COUNT_KEY);
@@ -154,9 +154,10 @@ public class FetchUserData {
         boolean isNsfw = userDataJson.getJSONObject(JSONUtils.SUBREDDIT_KEY).getBoolean(JSONUtils.OVER_18_KEY);
         String description = userDataJson.getJSONObject(JSONUtils.SUBREDDIT_KEY).getString(JSONUtils.PUBLIC_DESCRIPTION_KEY);
         String title = userDataJson.getJSONObject(JSONUtils.SUBREDDIT_KEY).getString(JSONUtils.TITLE_KEY);
+        boolean isMod = userDataJson.getBoolean(JSONUtils.IS_MOD_KEY);
 
         return new UserData(userName, iconImageUrl, bannerImageUrl, linkKarma, commentKarma, awarderKarma,
-                awardeeKarma, totalKarma, cakeday, isGold, isFriend, canBeFollowed, isNsfw, description, title);
+                awardeeKarma, totalKarma, cakeday, isGold, isFriend, canBeFollowed, isNsfw, description, title, isMod);
     }
 
     public interface FetchUserDataListener {

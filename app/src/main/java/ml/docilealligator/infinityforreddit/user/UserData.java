@@ -42,6 +42,30 @@ public class UserData {
     private final String title;
     @Ignore
     private boolean isSelected;
+    @Ignore
+    private boolean isMod;
+
+    public UserData(@NonNull String name, String iconUrl, String banner, int linkKarma, int commentKarma,
+                    int awarderKarma, int awardeeKarma, int totalKarma, long cakeday, boolean isGold,
+                    boolean isFriend, boolean canBeFollowed, boolean isNSFW, String description, String title, boolean isMod) {
+        this.name = name;
+        this.iconUrl = iconUrl;
+        this.banner = banner;
+        this.commentKarma = commentKarma;
+        this.linkKarma = linkKarma;
+        this.awarderKarma = awarderKarma;
+        this.awardeeKarma = awardeeKarma;
+        this.totalKarma = totalKarma;
+        this.cakeday = cakeday;
+        this.isGold = isGold;
+        this.isFriend = isFriend;
+        this.canBeFollowed = canBeFollowed;
+        this.isNSFW = isNSFW;
+        this.description = description;
+        this.title = title;
+        this.isSelected = false;
+        this.isMod = isMod;
+    }
 
     public UserData(@NonNull String name, String iconUrl, String banner, int linkKarma, int commentKarma,
                     int awarderKarma, int awardeeKarma, int totalKarma, long cakeday, boolean isGold,
@@ -62,6 +86,7 @@ public class UserData {
         this.description = description;
         this.title = title;
         this.isSelected = false;
+        this.isMod = false;
     }
 
     @NonNull
@@ -131,5 +156,9 @@ public class UserData {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    public boolean isMod() {
+        return isMod;
     }
 }

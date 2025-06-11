@@ -53,10 +53,6 @@ public interface AccountDao {
             "karma = :karma, is_mod = :isMod WHERE username = :username")
     void updateAccountInfo(String username, String profileImageUrl, String bannerImageUrl, int karma, boolean isMod);
 
-    @Query("UPDATE accounts SET profile_image_url = :profileImageUrl, banner_image_url = :bannerImageUrl, " +
-            "karma = :karma WHERE username = :username")
-    void updateAccountInfo(String username, String profileImageUrl, String bannerImageUrl, int karma);
-
     @Query("SELECT * FROM accounts WHERE is_current_user = 0 AND username != '-' ORDER BY username COLLATE NOCASE ASC")
     LiveData<List<Account>> getAccountsExceptCurrentAccountLiveData();
 
