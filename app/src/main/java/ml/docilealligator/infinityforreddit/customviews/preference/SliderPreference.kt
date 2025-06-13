@@ -1,7 +1,9 @@
 package ml.docilealligator.infinityforreddit.customviews.preference
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.content.res.TypedArray
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.util.AttributeSet
@@ -102,6 +104,9 @@ class SliderPreference @JvmOverloads constructor(
             if (summaryTextView is TextView) {
                 summaryTextView.setTextColor(it.secondaryTextColor)
             }
+
+            slider?.thumbTintList = ColorStateList.valueOf(it.colorAccent)
+            slider?.trackActiveTintList = ColorStateList.valueOf(it.colorAccent)
         }
 
         if (typeface != null) {
