@@ -8,7 +8,7 @@ import androidx.preference.SwitchPreference;
 import org.greenrobot.eventbus.EventBus;
 
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceFragmentCompat;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableSwipingBetweenTabsEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeEnableSwipeActionSwitchEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeSwipeActionEvent;

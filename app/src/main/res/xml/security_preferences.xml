@@ -1,24 +1,24 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="require_auth_to_account_section"
         app:title="@string/settings_require_authentication_to_show_accounts" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="secure_mode"
         app:title="@string/settings_secure_mode_title"
         app:summary="@string/settings_secure_mode_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="app_lock"
         app:icon="@drawable/ic_lock_day_night_24dp"
         app:title="@string/settings_app_lock_title"
         app:summary="@string/settings_app_lock_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="600000"
         app:entries="@array/settings_app_lock_timeout"
         app:entryValues="@array/settings_app_lock_timeout_values"

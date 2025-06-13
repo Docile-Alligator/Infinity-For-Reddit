@@ -3,7 +3,7 @@ package ml.docilealligator.infinityforreddit.settings;
 import android.os.Bundle;
 
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceFragmentCompat;
 
 public class SortTypePreferenceFragment extends CustomFontPreferenceFragmentCompat {
 

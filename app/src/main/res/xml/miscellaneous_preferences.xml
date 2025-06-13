@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="save_front_page_scrolled_position"
         app:title="@string/settings_save_front_page_scrolled_position_title"
         app:summary="@string/settings_save_front_page_scrolled_position_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="0"
         app:entries="@array/link_handler"
         app:entryValues="@array/link_handler_values"
@@ -16,7 +16,7 @@
         app:title="@string/settings_link_handler_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="0"
         app:entries="@array/main_page_back_button_action"
         app:entryValues="@array/main_page_back_button_action_values"
@@ -25,13 +25,13 @@
         app:title="@string/settings_main_page_back_button_action"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="enable_search_history"
         app:title="@string/settings_enable_search_history_title"
         app:summary="@string/only_for_logged_in_user" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="auto"
         app:entries="@array/settings_language"
         app:entryValues="@array/settings_language_values"
@@ -40,15 +40,15 @@
         app:title="@string/settings_language_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceCategory
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceCategory
         app:title="@string/settings_miscellaneous_dangerous_group_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:icon="@drawable/ic_info_preference_day_night_24dp"
         app:summary="@string/settings_post_feed_max_resolution_warning_title"
         app:enabled="false" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontEditTextPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontEditTextPreference
         app:defaultValue="5000000"
         app:key="post_feed_max_resolution"
         app:title="@string/settings_post_feed_max_resolution_title"

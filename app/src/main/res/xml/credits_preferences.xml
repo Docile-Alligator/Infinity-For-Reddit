@@ -2,56 +2,56 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         android:key="icon_foreground"
         app:title="@string/settings_credits_icon_foreground_title"
         android:summary="@string/settings_credits_icon_foreground_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         android:key="icon_background"
         app:title="@string/settings_credits_icon_background_title"
         android:summary="@string/settings_credits_icon_background_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         android:key="error_image"
         app:title="@string/settings_credits_error_image_title"
         android:summary="@string/settings_credits_error_image_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         android:key="crosspost_icon"
         app:title="@string/settings_credits_crosspost_icon_title"
         android:summary="@string/settings_credits_crosspost_icon_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         android:key="thumbtack_icon"
         app:title="@string/settings_credits_thumbtack_icon_title"
         android:summary="@string/settings_credits_thumbtack_icon_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         android:key="best_rocket_icon"
         app:title="@string/settings_credits_best_rocket_icon_title"
         android:summary="@string/settings_credits_best_rocket_icon_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         android:key="material_icons"
         app:title="@string/settings_credits_material_icons_title"/>
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="national_flags"
         app:title="@string/settings_credits_national_flags"
         android:summary="@string/settings_credits_national_flags_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="ufo_capturing_animation"
         app:title="@string/settings_credits_ufo_capturing_animation_title"
         android:summary="https://lottiefiles.com/33858-ufo-capturing-animation" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="love_animation"
         app:title="@string/settings_credits_love_animation_title"
         android:summary="https://lottiefiles.com/52103-love" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="lock_screen_animation"
         app:title="@string/settings_credits_lock_screen_animation_title"
         android:summary="https://lottiefiles.com/69178-cool" />

@@ -1,66 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="swipe_to_go_back_from_post_detail"
         app:title="@string/settings_swipe_to_go_back_title"
         app:summary="@string/settings_swipe_to_go_back_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="swipe_vertically_to_go_back_from_media"
         app:title="@string/settings_swipe_vertically_to_go_back_from_media_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="lock_jump_to_next_top_level_comment_button"
         app:title="@string/settings_lock_jump_to_next_top_level_comment_button_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="swipe_up_to_hide_jump_to_next_top_level_comments_button"
         app:title="@string/settings_swipe_up_to_hide_jump_to_next_top_level_comment_button_title"
         app:isPreferenceVisible="false" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="lock_bottom_app_bar"
         app:title="@string/settings_lock_bottom_app_bar_title"
         app:isPreferenceVisible="false" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="volume_keys_navigate_comments"
         app:title="@string/settings_volume_keys_navigate_comments_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="volume_keys_navigate_posts"
         app:title="@string/settings_volume_keys_navigate_posts_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="swap_tap_and_long_in_comments"
         app:title="@string/settings_swap_tap_and_long_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="pull_to_refresh"
         app:title="@string/settings_pull_to_refresh_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="swipe_between_posts"
         app:title="@string/settings_swipe_between_posts_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="pinch_to_zoom_video"
         app:title="@string/settings_pinch_to_zoom_video_title"
         app:summary="@string/settings_experimental_feature" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:title="@string/settings_swipe_action_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.SwipeActionPreferenceFragment" />
 

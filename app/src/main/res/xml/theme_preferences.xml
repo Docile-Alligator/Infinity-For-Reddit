@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
     
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="2"
         app:entryValues="@array/settings_theme_values"
         app:key="theme"
@@ -9,53 +9,53 @@
         app:title="@string/settings_theme_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="amoled_dark"
         app:icon="@drawable/ic_amoled_theme_preference_day_night_24dp"
         app:title="@string/settings_amoled_dark_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceCategory
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceCategory
         app:title="@string/settings_category_customization_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="customize_light_theme"
         app:icon="@drawable/ic_light_theme_preference_day_night_24dp"
         app:title="@string/settings_customize_light_theme_title"
         app:isPreferenceVisible="false" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="customize_dark_theme"
         app:icon="@drawable/ic_dark_theme_preference_day_night_24dp"
         app:title="@string/settings_customize_dark_theme_title"
         app:isPreferenceVisible="false" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="customize_amoled_theme"
         app:icon="@drawable/ic_amoled_theme_preference_day_night_24dp"
         app:title="@string/settings_customize_amoled_theme_title"
         app:isPreferenceVisible="false" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="manage_themes"
         app:icon="@drawable/ic_edit_day_night_24dp"
         app:title="@string/settings_manage_themes_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceCategory
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceCategory
         app:title="@string/settings_category_material_you_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:icon="@drawable/ic_info_preference_day_night_24dp"
         app:summary="@string/settings_enable_material_you_warning_summary"
         app:enabled="false" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="enable_material_you"
         app:title="@string/settings_enable_material_you_title"
         app:summary="@string/settings_enable_material_you_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="apply_material_you"
         app:title="@string/settings_apply_material_you_title"
         app:summary="@string/settings_apply_material_you_summary" />

@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="delete_all_subreddits_data_in_database"
         app:title="@string/settings_delete_all_subreddits_data_in_database_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="delete_all_users_data_in_database"
         app:title="@string/settings_delete_all_users_data_in_database_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="delete_all_sort_type_data_in_database"
         app:title="@string/settings_delete_all_sort_type_data_in_database_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="delete_all_post_layout_data_in_database"
         app:title="@string/settings_delete_all_post_layout_data_in_database_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="delete_all_themes_in_database"
         app:title="@string/settings_delete_all_themes_in_database_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="delete_front_page_scrolled_positions_in_database"
         app:title="@string/settings_delete_front_page_scrolled_positions_in_database_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="delete_read_posts_in_database"
         app:title="@string/settings_delete_read_posts_in_database_title"
         app:summary=""
     />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="delete_all_legacy_settings"
         app:title="@string/settings_delete_all_legacy_settings_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="reset_all_settings"
         app:title="@string/settings_reset_all_settings_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="backup_settings"
         app:title="@string/settings_backup_settings_title"
         app:summary="@string/settings_backup_settings_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:key="restore_settings"
         app:title="@string/settings_restore_settings_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:title="@string/settings_crash_reports_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.CrashReportsFragment" />
 

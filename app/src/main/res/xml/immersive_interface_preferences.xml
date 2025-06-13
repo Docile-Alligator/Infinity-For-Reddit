@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="immersive_interface"
         app:title="@string/settings_immersive_interface_title"
         app:summary="@string/settings_immersive_interface_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="immersive_interface_ignore_nav_bar"
         app:title="@string/settings_immersive_interface_ignore_nav_bar_title"
         app:summary="@string/settings_immersive_interface_ignore_nav_bar_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="disable_immersive_interface_in_landscape_mode"
         app:title="@string/settings_disable_immersive_interface_in_landscape_mode"/>

@@ -2,51 +2,51 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:title="@string/settings_acknowledgement_master_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.AcknowledgementFragment" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:title="@string/settings_credits_master_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.CreditsPreferenceFragment" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         android:key="translation"
         app:title="@string/settings_translation_title"
         app:summary="@string/settings_translation_summary"
         app:fragment="ml.docilealligator.infinityforreddit.settings.TranslationFragment"/>
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         android:key="open_source"
         app:title="@string/settings_open_source_title"
         app:summary="@string/settings_open_source_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         android:key="rate"
         app:title="@string/settings_rate_title"
         app:summary="@string/settings_rate_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         android:key="email"
         app:title="@string/settings_email_title"
         app:summary="@string/settings_email_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         android:key="reddit_account"
         app:title="@string/settings_reddit_account_title"
         app:summary="@string/settings_reddit_account_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         android:key="subreddit"
         app:title="@string/settings_subreddit_title"
         app:summary="@string/settings_subreddit_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         android:key="share"
         app:title="@string/settings_share_title"
         app:summary="@string/settings_share_summary" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         android:key="version"
         app:title="@string/settings_version_title"
         app:summary="@string/settings_version_summary" />

@@ -35,7 +35,7 @@ import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllSubreddits;
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllThemes;
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllUsers;
 import ml.docilealligator.infinityforreddit.asynctasks.RestoreSettings;
-import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceFragmentCompat;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostDao;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;

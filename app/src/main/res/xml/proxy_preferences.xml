@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="proxy_enabled"
         app:title="@string/settings_proxy_enabled"
         app:summary="@string/restart_app_see_changes" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="HTTP"
         app:entries="@array/settings_proxy_type"
         app:entryValues="@array/settings_proxy_type_values"
@@ -15,13 +15,13 @@
         app:title="@string/settings_proxy_type"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontEditTextPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontEditTextPreference
         app:defaultValue="127.0.0.1"
         app:key="proxy_hostname"
         app:title="@string/settings_proxy_hostname"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontEditTextPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontEditTextPreference
         app:defaultValue="1080"
         app:key="proxy_port"
         app:title="@string/settings_proxy_port"

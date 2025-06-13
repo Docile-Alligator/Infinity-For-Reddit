@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:icon="@drawable/ic_info_preference_day_night_24dp"
         app:summary="@string/settings_swipe_action_info_summary"
         app:enabled="false" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="enable_swipe_action"
         app:title="@string/settings_enable_swipe_action_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="0"
         app:entries="@array/settings_swipe_actions"
         app:entryValues="@array/settings_swipe_actions_values"
@@ -19,7 +19,7 @@
         app:title="@string/settings_swipe_action_swipe_left_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="1"
         app:entries="@array/settings_swipe_actions"
         app:entryValues="@array/settings_swipe_actions_values"
@@ -27,7 +27,7 @@
         app:title="@string/settings_swipe_action_swipe_right_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="0.3"
         app:entries="@array/settings_swipe_action_threshold"
         app:entryValues="@array/settings_swipe_action_threshold"
@@ -35,12 +35,12 @@
         app:title="@string/settings_swipe_action_threshold"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="vibrate_when_action_triggered"
         app:title="@string/settings_swipe_action_haptic_feedback_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="disable_swiping_between_tabs"
         app:title="@string/settings_disable_swiping_between_tabs_title" />

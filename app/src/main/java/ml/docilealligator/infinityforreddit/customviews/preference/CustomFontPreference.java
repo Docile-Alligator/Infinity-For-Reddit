@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.customviews;
+package ml.docilealligator.infinityforreddit.customviews.preference;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -7,30 +7,30 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.preference.EditTextPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceViewHolder;
 
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapperReceiver;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 
-public class CustomFontEditTextPreference extends EditTextPreference implements CustomFontReceiver, CustomThemeWrapperReceiver {
+public class CustomFontPreference extends Preference implements CustomFontReceiver, CustomThemeWrapperReceiver {
     private CustomThemeWrapper customThemeWrapper;
     private Typeface typeface;
 
-    public CustomFontEditTextPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public CustomFontPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
-    public CustomFontEditTextPreference(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomFontPreference(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public CustomFontEditTextPreference(Context context, AttributeSet attrs) {
+    public CustomFontPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public CustomFontEditTextPreference(Context context) {
+    public CustomFontPreference(Context context) {
         super(context);
     }
 

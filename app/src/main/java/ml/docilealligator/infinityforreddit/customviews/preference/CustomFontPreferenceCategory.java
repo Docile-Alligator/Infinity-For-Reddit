@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.customviews;
+package ml.docilealligator.infinityforreddit.customviews.preference;
 
 import android.content.Context;
 import android.graphics.Typeface;

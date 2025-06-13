@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="0"
         android:entries="@array/settings_default_post_layout"
         app:entryValues="@array/settings_default_post_layout_values"
@@ -10,7 +10,7 @@
         app:title="@string/settings_default_post_layout"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="-1"
         android:entries="@array/settings_default_link_post_layout"
         app:entryValues="@array/settings_default_link_post_layout_values"
@@ -18,72 +18,72 @@
         app:title="@string/settings_default_link_post_layout"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:title="@string/settings_number_of_columns_in_post_feed_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.NumberOfColumnsInPostFeedPreferenceFragment" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="hide_post_type"
         app:title="@string/settings_hide_post_type" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="hide_post_flair"
         app:title="@string/settings_hide_post_flair" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="hide_subreddit_and_user_prefix"
         app:title="@string/settings_hide_subreddit_and_user_prefix" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="hide_the_number_of_votes"
         app:title="@string/settings_hide_the_number_of_votes" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="hide_the_number_of_comments"
         app:title="@string/settings_hide_the_number_of_comments" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="hide_text_post_content"
         app:title="@string/settings_hide_text_post_content" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="fixed_height_preview_in_card"
         app:title="@string/settings_fixed_height_preview_in_card_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceCategory
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceCategory
         app:title="@string/post_layout_compact" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="show_divider_in_compact_layout"
         app:title="@string/settings_show_divider_in_compact_layout" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="show_thumbnail_on_the_left_in_compact_layout"
         app:title="@string/settings_show_thumbnail_on_the_left_in_compact_layout" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="long_press_to_hide_toolbar_in_compact_layout"
         app:title="@string/settings_long_press_to_hide_toolbar_in_compact_layout_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="post_compact_layout_toolbar_hidden_by_default"
         app:title="@string/settings_post_compact_layout_toolbar_hidden_by_default_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceCategory
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceCategory
         app:title="@string/post_layout_gallery" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         android:defaultValue="false"
         app:key="click_to_show_media_in_gallery_layout"
         app:title="@string/settings_click_to_show_media_in_gallery_layout" />

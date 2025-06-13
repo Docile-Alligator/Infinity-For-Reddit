@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:icon="@drawable/ic_info_preference_day_night_24dp"
         app:summary="@string/restart_app_see_changes"
         app:enabled="false" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="enable_fold_support"
         app:title="@string/settings_enable_fold_support_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceCategory
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceCategory
         app:title="@string/post_layout_card" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="1"
         app:entries="@array/settings_number_of_columns_in_post_feed"
         app:entryValues="@array/settings_number_of_columns_in_post_feed"
@@ -21,7 +21,7 @@
         app:title="@string/settings_number_of_columns_in_post_feed_portrait_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="2"
         app:entries="@array/settings_number_of_columns_in_post_feed"
         app:entryValues="@array/settings_number_of_columns_in_post_feed"
@@ -29,7 +29,7 @@
         app:title="@string/settings_number_of_columns_in_post_feed_landscape_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="2"
         app:entries="@array/settings_number_of_columns_in_post_feed"
         app:entryValues="@array/settings_number_of_columns_in_post_feed"
@@ -38,7 +38,7 @@
         app:useSimpleSummaryProvider="true"
         app:dependency="enable_fold_support" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="2"
         app:entries="@array/settings_number_of_columns_in_post_feed"
         app:entryValues="@array/settings_number_of_columns_in_post_feed"
@@ -47,10 +47,10 @@
         app:useSimpleSummaryProvider="true"
         app:dependency="enable_fold_support"/>
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceCategory
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceCategory
         app:title="@string/post_layout_card_2" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="1"
         app:entries="@array/settings_number_of_columns_in_post_feed"
         app:entryValues="@array/settings_number_of_columns_in_post_feed"
@@ -58,7 +58,7 @@
         app:title="@string/settings_number_of_columns_in_post_feed_portrait_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="2"
         app:entries="@array/settings_number_of_columns_in_post_feed"
         app:entryValues="@array/settings_number_of_columns_in_post_feed"
@@ -66,10 +66,10 @@
         app:title="@string/settings_number_of_columns_in_post_feed_landscape_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceCategory
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceCategory
         app:title="@string/post_layout_compact" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="1"
         app:entries="@array/settings_number_of_columns_in_post_feed"
         app:entryValues="@array/settings_number_of_columns_in_post_feed"
@@ -77,7 +77,7 @@
         app:title="@string/settings_number_of_columns_in_post_feed_portrait_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="2"
         app:entries="@array/settings_number_of_columns_in_post_feed"
         app:entryValues="@array/settings_number_of_columns_in_post_feed"
@@ -85,10 +85,10 @@
         app:title="@string/settings_number_of_columns_in_post_feed_landscape_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceCategory
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceCategory
         app:title="@string/post_layout_gallery" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="2"
         app:entries="@array/settings_number_of_columns_in_post_feed"
         app:entryValues="@array/settings_number_of_columns_in_post_feed"
@@ -96,7 +96,7 @@
         app:title="@string/settings_number_of_columns_in_post_feed_portrait_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="2"
         app:entries="@array/settings_number_of_columns_in_post_feed"
         app:entryValues="@array/settings_number_of_columns_in_post_feed"
