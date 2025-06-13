@@ -26,7 +26,6 @@ public class CustomFontSwitchPreference extends SwitchPreference implements Cust
     public CustomFontSwitchPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         setWidgetLayoutResource(R.layout.preference_switch);
-
     }
 
     public CustomFontSwitchPreference(Context context, AttributeSet attrs, int defStyleAttr) {
