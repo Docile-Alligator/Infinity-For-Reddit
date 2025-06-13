@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit.markdown;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.SpannableString;
@@ -32,12 +31,12 @@ import io.noties.markwon.recycler.MarkwonAdapter;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
-import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.databinding.MarkdownImageAndGifBlockBinding;
+import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
@@ -211,7 +210,7 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
             super(binding.getRoot());
             this.binding = binding;
 
-            binding.progressBarMarkdownImageAndGifBlock.setIndeterminateTintList(ColorStateList.valueOf(colorAccent));
+            binding.progressBarMarkdownImageAndGifBlock.setIndicatorColor(colorAccent);
             binding.loadImageErrorTextViewMarkdownImageAndGifBlock.setTextColor(primaryTextColor);
             binding.captionTextViewMarkdownImageAndGifBlock.setTextColor(postContentColor);
             binding.captionTextViewMarkdownImageAndGifBlock.setLinkTextColor(linkColor);

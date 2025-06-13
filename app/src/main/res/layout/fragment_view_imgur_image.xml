@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ViewImgurImageFragment">
 
-    <ProgressBar
+    <com.google.android.material.loadingindicator.LoadingIndicator
         android:id="@+id/progress_bar_view_imgur_image_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

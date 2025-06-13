@@ -695,7 +695,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         }
 
         if (mVideoUri == null) {
-            binding.getProgressBar().setVisibility(View.VISIBLE);
+            binding.getLoadingIndicator().setVisibility(View.VISIBLE);
 
             VideoLinkFetcher.fetchVideoLink(mExecutor, new Handler(getMainLooper()), mRetrofit, mVReddItRetrofit,
                     mRedgifsRetrofit, mStreamableApiProvider, mCurrentAccountSharedPreferences, videoType,
@@ -707,7 +707,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                             videoType = VIDEO_TYPE_NORMAL;
                             videoFileName = fileName;
 
-                            binding.getProgressBar().setVisibility(View.GONE);
+                            binding.getLoadingIndicator().setVisibility(View.GONE);
                             mVideoUri = Uri.parse(post.getVideoUrl());
                             subredditName = post.getSubredditName();
                             id = post.getId();
@@ -725,7 +725,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                             videoType = VIDEO_TYPE_IMGUR;
                             videoFileName = fileName;
 
-                            binding.getProgressBar().setVisibility(View.GONE);
+                            binding.getLoadingIndicator().setVisibility(View.GONE);
                             mVideoUri = Uri.parse(videoUrl);
                             ViewVideoActivity.this.videoDownloadUrl = videoDownloadUrl;
                             videoFileName = "Imgur-" + FilenameUtils.getName(videoDownloadUrl);
@@ -739,7 +739,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                         public void onFetchRedgifsVideoLinkSuccess(String webm, String mp4) {
                             videoType = VIDEO_TYPE_REDGIFS;
 
-                            binding.getProgressBar().setVisibility(View.GONE);
+                            binding.getLoadingIndicator().setVisibility(View.GONE);
                             mVideoUri = Uri.parse(webm);
                             videoDownloadUrl = mp4;
                             preparePlayer(savedInstanceState);
@@ -751,7 +751,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                         public void onFetchStreamableVideoLinkSuccess(StreamableVideo streamableVideo) {
                             videoType = VIDEO_TYPE_STREAMABLE;
 
-                            binding.getProgressBar().setVisibility(View.GONE);
+                            binding.getLoadingIndicator().setVisibility(View.GONE);
                             if (streamableVideo.mp4 == null && streamableVideo.mp4Mobile == null) {
                                 Toast.makeText(ViewVideoActivity.this, R.string.fetch_streamable_video_failed, Toast.LENGTH_SHORT).show();
                                 return;
@@ -776,7 +776,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
                         @Override
                         public void failed(@Nullable Integer messageRes) {
-                            binding.getProgressBar().setVisibility(View.GONE);
+                            binding.getLoadingIndicator().setVisibility(View.GONE);
                             if (videoType == VIDEO_TYPE_V_REDD_IT) {
                                 if (messageRes != null) {
                                     Toast.makeText(ViewVideoActivity.this, messageRes, Toast.LENGTH_LONG).show();

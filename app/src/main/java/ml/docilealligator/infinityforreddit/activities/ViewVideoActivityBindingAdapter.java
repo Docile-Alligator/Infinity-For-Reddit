@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.activities;
 
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -8,6 +7,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.loadingindicator.LoadingIndicator;
 
 import app.futured.hauler.HaulerView;
 import app.futured.hauler.LockableNestedScrollView;
@@ -59,7 +59,7 @@ public class ViewVideoActivityBindingAdapter {
         return binding == null ? zoomableBinding.coordinatorLayoutViewVideoActivity : binding.coordinatorLayoutViewVideoActivity;
     }
 
-    public ProgressBar getProgressBar() {
+    public LoadingIndicator getLoadingIndicator() {
         return binding == null ? zoomableBinding.progressBarViewVideoActivity : binding.progressBarViewVideoActivity;
     }
 

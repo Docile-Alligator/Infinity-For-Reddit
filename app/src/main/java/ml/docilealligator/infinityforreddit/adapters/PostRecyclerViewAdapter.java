@@ -19,7 +19,6 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +54,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.loadingindicator.LoadingIndicator;
 import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
 
@@ -120,7 +120,6 @@ import ml.docilealligator.infinityforreddit.thing.SaveThing;
 import ml.docilealligator.infinityforreddit.thing.StreamableVideo;
 import ml.docilealligator.infinityforreddit.thing.VoteThing;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
-import ml.docilealligator.infinityforreddit.utils.ShareScreenshotUtilsKt;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import ml.docilealligator.infinityforreddit.videoautoplay.CacheManager;
@@ -1038,7 +1037,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     }
                     if (post.getPreviews() != null && !post.getPreviews().isEmpty()) {
                         ((PostCompactBaseViewHolder) holder).imageView.setVisibility(View.VISIBLE);
-                        ((PostCompactBaseViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+                        ((PostCompactBaseViewHolder) holder).loadingIndicator.setVisibility(View.VISIBLE);
                         loadImage(holder);
                     }
                 }
@@ -1349,7 +1348,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
     private void loadImage(final RecyclerView.ViewHolder holder) {
         if (holder instanceof PostWithPreviewTypeViewHolder) {
-            ((PostWithPreviewTypeViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+            ((PostWithPreviewTypeViewHolder) holder).loadingIndicator.setVisibility(View.VISIBLE);
             Post post = ((PostWithPreviewTypeViewHolder) holder).post;
             Post.Preview preview = ((PostWithPreviewTypeViewHolder) holder).preview;
             if (preview != null) {
@@ -1636,7 +1635,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     ((PostWithPreviewTypeViewHolder) holder).imageView.setVisibility(View.GONE);
                     ((PostWithPreviewTypeViewHolder) holder).loadImageErrorTextView.setVisibility(View.GONE);
                     ((PostWithPreviewTypeViewHolder) holder).imageViewNoPreviewGallery.setVisibility(View.GONE);
-                    ((PostWithPreviewTypeViewHolder) holder).progressBar.setVisibility(View.GONE);
+                    ((PostWithPreviewTypeViewHolder) holder).loadingIndicator.setVisibility(View.GONE);
                     ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicator.setVisibility(View.GONE);
                     ((PostWithPreviewTypeViewHolder) holder).linkTextView.setVisibility(View.GONE);
                 } else if (holder instanceof PostBaseGalleryTypeViewHolder) {
@@ -1654,7 +1653,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 if (((PostCompactBaseViewHolder) holder).linkTextView != null) {
                     ((PostCompactBaseViewHolder) holder).linkTextView.setVisibility(View.GONE);
                 }
-                ((PostCompactBaseViewHolder) holder).progressBar.setVisibility(View.GONE);
+                ((PostCompactBaseViewHolder) holder).loadingIndicator.setVisibility(View.GONE);
                 ((PostCompactBaseViewHolder) holder).imageView.setVisibility(View.GONE);
                 ((PostCompactBaseViewHolder) holder).playButtonImageView.setVisibility(View.GONE);
                 ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.GONE);
@@ -3194,7 +3193,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     class PostWithPreviewTypeViewHolder extends PostBaseViewHolder {
         TextView linkTextView;
         ImageView imageViewNoPreviewGallery;
-        ProgressBar progressBar;
+        LoadingIndicator loadingIndicator;
         ImageView videoOrGifIndicator;
         TextView loadImageErrorTextView;
         @Nullable
@@ -3260,7 +3259,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                          MaterialButton shareButton,
                          TextView linkTextView,
                          ImageView imageViewNoPreviewGallery,
-                         ProgressBar progressBar,
+                         LoadingIndicator loadingIndicator,
                          ImageView videoOrGifIndicator,
                          TextView loadImageErrorTextView,
                          @Nullable FrameLayout imageWrapperFrameLayout,
@@ -3289,7 +3288,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
             this.linkTextView = linkTextView;
             this.imageViewNoPreviewGallery = imageViewNoPreviewGallery;
-            this.progressBar = progressBar;
+            this.loadingIndicator = loadingIndicator;
             this.videoOrGifIndicator = videoOrGifIndicator;
             this.loadImageErrorTextView = loadImageErrorTextView;
             this.imageWrapperFrameLayout = imageWrapperFrameLayout;
@@ -3302,7 +3301,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             linkTextView.setTextColor(mSecondaryTextColor);
             imageViewNoPreviewGallery.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
             imageViewNoPreviewGallery.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
-            progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
+            loadingIndicator.setIndicatorColor(mColorAccent);
             videoOrGifIndicator.setColorFilter(mMediaIndicatorIconTint, PorterDuff.Mode.SRC_IN);
             videoOrGifIndicator.setBackgroundTintList(ColorStateList.valueOf(mMediaIndicatorBackgroundColor));
             loadImageErrorTextView.setTextColor(mPrimaryTextColor);
@@ -3322,7 +3321,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             imageView.setOnLongClickListener(view -> itemView.performLongClick());
 
             loadImageErrorTextView.setOnClickListener(view -> {
-                progressBar.setVisibility(View.VISIBLE);
+                loadingIndicator.setVisibility(View.VISIBLE);
                 loadImageErrorTextView.setVisibility(View.GONE);
                 loadImage(this);
             });
@@ -3336,7 +3335,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             glideRequestListener = new RequestListener<>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    progressBar.setVisibility(View.GONE);
+                    loadingIndicator.setVisibility(View.GONE);
                     loadImageErrorTextView.setVisibility(View.VISIBLE);
                     return false;
                 }
@@ -3344,7 +3343,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 @Override
                 public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                     loadImageErrorTextView.setVisibility(View.GONE);
-                    progressBar.setVisibility(View.GONE);
+                    loadingIndicator.setVisibility(View.GONE);
                     return false;
                 }
             };
@@ -3687,7 +3686,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         TextView nameTextView;
         @Nullable TextView linkTextView;
         RelativeLayout relativeLayout;
-        ProgressBar progressBar;
+        LoadingIndicator loadingIndicator;
         ImageView imageView;
         ImageView playButtonImageView;
         FrameLayout noPreviewPostImageFrameLayout;
@@ -3714,7 +3713,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                          @Nullable CustomTextView flairTextView,
                          @Nullable TextView linkTextView,
                          RelativeLayout relativeLayout,
-                         ProgressBar progressBar,
+                         LoadingIndicator loadingIndicator,
                          ImageView imageView,
                          ImageView playButtonImageView,
                          FrameLayout noPreviewLinkImageFrameLayout,
@@ -3749,7 +3748,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             this.nameTextView = nameTextView;
             this.linkTextView = linkTextView;
             this.relativeLayout = relativeLayout;
-            this.progressBar = progressBar;
+            this.loadingIndicator = loadingIndicator;
             this.imageView = imageView;
             this.playButtonImageView = playButtonImageView;
             this.noPreviewPostImageFrameLayout = noPreviewLinkImageFrameLayout;
@@ -3847,7 +3846,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             }
             playButtonImageView.setColorFilter(mMediaIndicatorIconTint, PorterDuff.Mode.SRC_IN);
             playButtonImageView.setBackgroundTintList(ColorStateList.valueOf(mMediaIndicatorBackgroundColor));
-            progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
+            loadingIndicator.setIndicatorColor(mColorAccent);
             noPreviewLinkImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
             noPreviewLinkImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
             upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
@@ -3913,13 +3912,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             requestListener = new RequestListener<>() {
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, @NonNull Target<Drawable> target, boolean isFirstResource) {
-                    progressBar.setVisibility(View.GONE);
+                    loadingIndicator.setVisibility(View.GONE);
                     return false;
                 }
 
                 @Override
                 public boolean onResourceReady(@NonNull Drawable resource, @NonNull Object model, Target<Drawable> target, @NonNull DataSource dataSource, boolean isFirstResource) {
-                    progressBar.setVisibility(View.GONE);
+                    loadingIndicator.setVisibility(View.GONE);
                     return false;
                 }
             };
@@ -4106,7 +4105,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             }
             itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
             binding.titleTextViewItemPostGallery.setTextColor(mPostTitleColor);
-            binding.progressBarItemPostGallery.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
+            binding.progressBarItemPostGallery.setIndicatorColor(mColorAccent);
             binding.imageViewNoPreviewItemPostGallery.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
             binding.imageViewNoPreviewItemPostGallery.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
             binding.videoOrGifIndicatorImageViewItemPostGallery.setColorFilter(mMediaIndicatorIconTint, PorterDuff.Mode.SRC_IN);

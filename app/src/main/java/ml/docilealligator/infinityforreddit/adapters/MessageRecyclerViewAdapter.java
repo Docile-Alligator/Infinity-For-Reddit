@@ -347,7 +347,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         LoadingViewHolder(@NonNull ItemFooterLoadingBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            binding.progressBarItemFooterLoading.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
+            binding.progressBarItemFooterLoading.setIndicatorColor(mColorAccent);
         }
     }
 }

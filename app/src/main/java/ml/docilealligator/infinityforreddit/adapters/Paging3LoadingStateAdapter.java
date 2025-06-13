@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -13,6 +12,7 @@ import androidx.paging.LoadStateAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.loadingindicator.LoadingIndicator;
 
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
@@ -43,7 +43,7 @@ public class Paging3LoadingStateAdapter extends LoadStateAdapter<Paging3LoadingS
     }
 
     class LoadStateViewHolder extends RecyclerView.ViewHolder {
-        private final ProgressBar mProgressBar;
+        private final LoadingIndicator mLoadingIndicator;
         private final RelativeLayout mErrorView;
         private final TextView mErrorMsg;
         private final MaterialButton mRetry;
@@ -51,7 +51,7 @@ public class Paging3LoadingStateAdapter extends LoadStateAdapter<Paging3LoadingS
         LoadStateViewHolder(@NonNull View itemView, @NonNull View.OnClickListener retryCallback) {
             super(itemView);
 
-            mProgressBar = itemView.findViewById(R.id.progress_bar_item_paging_3_load_state);
+            mLoadingIndicator = itemView.findViewById(R.id.progress_bar_item_paging_3_load_state);
             mErrorView = itemView.findViewById(R.id.error_view_relative_layout_item_paging_3_load_state);
             mErrorMsg = itemView.findViewById(R.id.error_text_view_item_paging_3_load_state);
             mRetry = itemView.findViewById(R.id.retry_button_item_paging_3_load_state);
@@ -70,7 +70,7 @@ public class Paging3LoadingStateAdapter extends LoadStateAdapter<Paging3LoadingS
         }
 
         public void bind(LoadState loadState) {
-            mProgressBar.setVisibility(loadState instanceof LoadState.Loading
+            mLoadingIndicator.setVisibility(loadState instanceof LoadState.Loading
                     ? View.VISIBLE : View.GONE);
             mErrorView.setVisibility(loadState instanceof LoadState.Error
                     ? View.VISIBLE : View.GONE);

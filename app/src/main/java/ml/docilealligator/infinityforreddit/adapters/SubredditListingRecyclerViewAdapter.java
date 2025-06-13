@@ -292,7 +292,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
         LoadingViewHolder(@NonNull ItemFooterLoadingBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            binding.progressBarItemFooterLoading.setIndeterminateTintList(ColorStateList.valueOf(colorAccent));
+            binding.progressBarItemFooterLoading.setIndicatorColor(colorAccent);
         }
     }
 }

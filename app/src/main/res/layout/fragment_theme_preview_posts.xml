@@ -221,7 +221,7 @@
                 android:textSize="?attr/font_12"
                 android:fontFamily="?attr/font_family" />
 
-            <ProgressBar
+            <com.google.android.material.loadingindicator.LoadingIndicator
                 android:id="@+id/progress_bar_theme_preview_posts_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

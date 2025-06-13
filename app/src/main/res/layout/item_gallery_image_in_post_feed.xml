@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true" />
 
-        <ProgressBar
+        <com.google.android.material.loadingindicator.LoadingIndicator
             android:id="@+id/progress_bar_item_gallery_image_in_post_feed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

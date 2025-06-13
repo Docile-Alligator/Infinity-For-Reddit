@@ -37,7 +37,7 @@
             android:background="@drawable/play_button_round_background"
             android:visibility="gone" />
 
-        <ProgressBar
+        <com.google.android.material.loadingindicator.LoadingIndicator
             android:id="@+id/progress_bar_item_post_card_2_with_preview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true" />
 
-        <ProgressBar
+        <com.google.android.material.loadingindicator.LoadingIndicator
             android:id="@+id/progress_bar_markdown_image_and_gif_block"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

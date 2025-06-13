@@ -38,7 +38,7 @@
                 app:controller_layout_id="@layout/exo_playback_control_view"
                 app:animation_enabled="false" />
 
-            <ProgressBar
+            <com.google.android.material.loadingindicator.LoadingIndicator
                 android:id="@+id/progress_bar_view_video_activity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

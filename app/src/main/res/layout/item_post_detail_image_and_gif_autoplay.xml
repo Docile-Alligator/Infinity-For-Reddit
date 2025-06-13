@@ -211,7 +211,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true">
 
-            <ProgressBar
+            <com.google.android.material.loadingindicator.LoadingIndicator
                 android:id="@+id/progress_bar_item_post_detail_image_and_gif_autoplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

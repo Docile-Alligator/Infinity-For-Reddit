@@ -33,7 +33,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ProgressBar
+    <com.google.android.material.loadingindicator.LoadingIndicator
         android:id="@+id/progress_bar_edit_multi_reddit_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

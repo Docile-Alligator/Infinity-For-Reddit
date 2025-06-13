@@ -851,7 +851,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
         LoadingViewHolder(@NonNull ItemFooterLoadingBinding binding) {
             super(binding.getRoot());
-            binding.progressBarItemFooterLoading.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
+            binding.progressBarItemFooterLoading.setIndicatorColor(mColorAccent);
         }
     }
 }

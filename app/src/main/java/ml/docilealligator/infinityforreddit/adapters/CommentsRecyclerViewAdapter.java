@@ -2030,7 +2030,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         IsLoadingMoreCommentsViewHolder(@NonNull ItemCommentFooterLoadingBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            binding.progressBarItemCommentFooterLoading.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
+            binding.progressBarItemCommentFooterLoading.setIndicatorColor(mColorAccent);
         }
     }
 

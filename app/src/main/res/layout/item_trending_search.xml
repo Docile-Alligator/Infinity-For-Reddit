@@ -24,7 +24,7 @@
             android:adjustViewBounds="true"
             android:scaleType="fitStart" />
 
-        <ProgressBar
+        <com.google.android.material.loadingindicator.LoadingIndicator
             android:id="@+id/progress_bar_item_trending_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

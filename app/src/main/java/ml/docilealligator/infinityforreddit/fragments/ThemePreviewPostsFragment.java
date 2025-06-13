@@ -69,7 +69,7 @@ public class ThemePreviewPostsFragment extends Fragment {
         binding.lockedImageViewThemePreviewPostsFragment.setColorFilter(customTheme.lockedIconTint, PorterDuff.Mode.SRC_IN);
         binding.crosspostImageViewThemePreviewPostsFragment.setColorFilter(customTheme.crosspostIconTint, PorterDuff.Mode.SRC_IN);
         binding.linkTextViewThemePreviewPostsFragment.setTextColor(customTheme.secondaryTextColor);
-        binding.progressBarThemePreviewPostsFragment.setIndeterminateTintList(ColorStateList.valueOf(customTheme.colorAccent));
+        binding.progressBarThemePreviewPostsFragment.setIndicatorColor(customTheme.colorAccent);
         binding.imageViewNoPreviewLinkThemePreviewPostsFragment.setBackgroundColor(customTheme.noPreviewPostTypeBackgroundColor);
         binding.upvoteButtonThemePreviewPostsFragment.setIconTint(ColorStateList.valueOf(customTheme.postIconAndInfoColor));
         binding.upvoteButtonThemePreviewPostsFragment.setTextColor(customTheme.postIconAndInfoColor);
