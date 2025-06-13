@@ -6,6 +6,7 @@ import android.content.res.ColorStateList
 import android.util.AttributeSet
 import com.google.android.material.materialswitch.MaterialSwitch
 import ml.docilealligator.infinityforreddit.Infinity
+import ml.docilealligator.infinityforreddit.utils.getMaterialSwitchTrackColorFromThumbColor
 
 class ThemedMaterialSwitch @JvmOverloads constructor(
     context: Context,
@@ -21,7 +22,7 @@ class ThemedMaterialSwitch @JvmOverloads constructor(
                 intArrayOf(R.attr.state_checked)
             )
             val colors = intArrayOf(
-                customThemeWrapper.colorPrimary
+                getMaterialSwitchTrackColorFromThumbColor(customThemeWrapper.colorAccent)
             )
             setTrackTintList(ColorStateList(states, colors))
         }
