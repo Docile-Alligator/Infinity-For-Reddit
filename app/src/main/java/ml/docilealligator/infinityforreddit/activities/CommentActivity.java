@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +23,8 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -50,6 +54,7 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import kotlin.Unit;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
@@ -60,6 +65,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomS
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.GiphyGifInfoBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.comment.Comment;
+import ml.docilealligator.infinityforreddit.comment.CommentDraft;
 import ml.docilealligator.infinityforreddit.comment.SendComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
@@ -73,11 +79,13 @@ import ml.docilealligator.infinityforreddit.markdown.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.network.AnyAccountAccessTokenAuthenticator;
+import ml.docilealligator.infinityforreddit.repositories.CommentActivityRepository;
 import ml.docilealligator.infinityforreddit.thing.GiphyGif;
 import ml.docilealligator.infinityforreddit.thing.UploadedImage;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.viewmodels.CommentActivityViewModel;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -135,6 +143,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     private ArrayList<UploadedImage> uploadedImages = new ArrayList<>();
     private GiphyGif giphyGif;
     private Menu mMenu;
+    public CommentActivityViewModel commentActivityViewModel;
 
     /**
      * Post or comment body text color
@@ -332,6 +341,22 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         Utils.showKeyboard(this, new Handler(), binding.commentCommentEditText);
 
         Giphy.INSTANCE.configure(this, APIUtils.GIPHY_GIF_API_KEY);
+
+        commentActivityViewModel = new ViewModelProvider(
+                this,
+                CommentActivityViewModel.Companion.provideFactory(new CommentActivityRepository(mRedditDataRoomDatabase.commentDraftDao()))
+        ).get(CommentActivityViewModel.class);
+
+        if (savedInstanceState == null) {
+            commentActivityViewModel.getCommentDraft(parentFullname).observe(this, new Observer<CommentDraft>() {
+                @Override
+                public void onChanged(CommentDraft commentDraft) {
+                    if (commentDraft != null) {
+                        binding.commentCommentEditText.setText(commentDraft.getContent());
+                    }
+                }
+            });
+        }
     }
 
     private void loadCurrentAccount() {
@@ -497,13 +522,23 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         }
     }
 
-    private void promptAlertDialog(int titleResId, int messageResId) {
+    private void promptAlertDialog(int titleResId, int messageResId, boolean canSaveDraft) {
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(titleResId)
                 .setMessage(messageResId)
                 .setPositiveButton(R.string.yes, (dialogInterface, i)
-                        -> finish())
-                .setNegativeButton(R.string.no, null)
+                        -> {
+                    if (canSaveDraft) {
+                        commentActivityViewModel.saveCommentDraft(parentFullname, binding.commentCommentEditText.getText().toString(), () -> {
+                            finish();
+                            return Unit.INSTANCE;
+                        });
+                    } else {
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.no, (dialog, which) -> finish())
+                .setNeutralButton(R.string.cancel, null)
                 .show();
     }
 
@@ -530,12 +565,12 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     @Override
     public void onBackPressed() {
         if (isSubmitting) {
-            promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_edit_comment_detail);
+            promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_edit_comment_detail, false);
         } else {
             if (binding.commentCommentEditText.getText().toString().equals("")) {
                 finish();
             } else {
-                promptAlertDialog(R.string.discard, R.string.discard_detail);
+                promptAlertDialog(R.string.save_comment_draft, R.string.save_comment_draft_detail, true);
             }
         }
     }
