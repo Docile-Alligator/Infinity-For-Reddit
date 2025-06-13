@@ -3,13 +3,11 @@ package ml.docilealligator.infinityforreddit.customviews.preference
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.TypedArray
-import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.view.VelocityTrackerCompat.recycle
 import androidx.preference.Preference
 import androidx.preference.Preference.SummaryProvider
 import androidx.preference.PreferenceViewHolder
@@ -17,7 +15,7 @@ import com.google.android.material.slider.Slider
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils
+import ml.docilealligator.infinityforreddit.utils.deriveContrastingColor
 
 class SliderPreference @JvmOverloads constructor(
     context: Context,
@@ -105,6 +103,7 @@ class SliderPreference @JvmOverloads constructor(
 
             slider?.thumbTintList = ColorStateList.valueOf(it.colorAccent)
             slider?.trackActiveTintList = ColorStateList.valueOf(it.colorAccent)
+            slider?.trackInactiveTintList = ColorStateList.valueOf(deriveContrastingColor(it.colorAccent))
         }
 
         if (typeface != null) {
