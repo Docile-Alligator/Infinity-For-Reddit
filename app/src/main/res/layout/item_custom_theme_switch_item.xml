@@ -34,7 +34,7 @@
 
     </LinearLayout>
 
-    <com.google.android.material.materialswitch.MaterialSwitch
+    <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
         android:id="@+id/theme_item_switch_item_custom_theme_switch_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

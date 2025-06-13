@@ -37,7 +37,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                 android:id="@+id/enable_nsfw_switch_nsfw_and_spoiler_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                 android:id="@+id/blur_nsfw_switch_nsfw_and_spoiler_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                 android:id="@+id/do_not_blur_nsfw_in_nsfw_subreddits_switch_nsfw_and_spoiler_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                 android:id="@+id/blur_spoiler_switch_nsfw_and_spoiler_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -184,7 +184,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                 android:id="@+id/disable_nsfw_forever_switch_nsfw_and_spoiler_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

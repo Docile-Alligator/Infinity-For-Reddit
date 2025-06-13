@@ -51,7 +51,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                 android:id="@+id/mark_posts_as_read_switch_post_history_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
                 android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                 android:id="@+id/read_posts_limit_switch_post_history_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -138,7 +138,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                 android:id="@+id/mark_posts_as_read_after_voting_switch_post_history_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -170,7 +170,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                 android:id="@+id/mark_posts_as_read_on_scroll_switch_post_history_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -202,7 +202,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                 android:id="@+id/hide_read_posts_automatically_switch_post_history_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -147,45 +147,6 @@
 
             </com.google.android.material.chip.ChipGroup>
 
-            <!--<LinearLayout
-                android:id="@+id/visibility_wrapper_linear_layout_create_multi_reddit_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <TextView
-                    android:id="@+id/visibility_text_view_create_multi_reddit_activity"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/private_multi_reddit"
-                    android:textSize="?attr/font_default"
-                    android:fontFamily="?attr/font_family" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/visibility_switch_create_multi_reddit_activity"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:checked="true" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/select_subreddit_text_view_create_multi_reddit_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="@string/select_subreddits_and_users"
-                android:textSize="?attr/font_default"
-                android:fontFamily="?attr/font_family"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground" />-->
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

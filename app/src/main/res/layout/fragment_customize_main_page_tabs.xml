@@ -84,7 +84,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                 android:id="@+id/show_tab_names_switch_material_customize_main_page_tabs_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -524,7 +524,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                 android:id="@+id/show_favorite_multireddits_switch_material_customize_main_page_tabs_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -555,7 +555,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                 android:id="@+id/show_multireddits_switch_material_customize_main_page_tabs_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -586,7 +586,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                 android:id="@+id/show_favorite_subscribed_subreddits_switch_material_customize_main_page_tabs_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -617,7 +617,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.materialswitch.MaterialSwitch
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                 android:id="@+id/show_subscribed_subreddits_switch_material_customize_main_page_tabs_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

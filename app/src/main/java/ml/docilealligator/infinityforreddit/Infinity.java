@@ -236,6 +236,10 @@ public class Infinity extends Application implements LifecycleObserver {
         return mAppComponent;
     }
 
+    public CustomThemeWrapper getCustomThemeWrapper() {
+        return customThemeWrapper;
+    }
+
     @Subscribe
     public void onToggleSecureModeEvent(ToggleSecureModeEvent secureModeEvent) {
         isSecureMode = secureModeEvent.isSecureMode;

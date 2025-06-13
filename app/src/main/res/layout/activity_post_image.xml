@@ -183,7 +183,7 @@
                         android:textSize="?attr/font_default"
                         android:fontFamily="?attr/font_family" />
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
+                    <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                         android:id="@+id/receive_post_reply_notifications_switch_material_post_image_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

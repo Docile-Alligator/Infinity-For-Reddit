@@ -149,7 +149,7 @@
                             android:fontFamily="?attr/font_default"
                             android:textSize="?attr/font_default" />
 
-                        <com.google.android.material.materialswitch.MaterialSwitch
+                        <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                             android:id="@+id/post_type_text_switch_customize_post_filter_activity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -180,7 +180,7 @@
                             android:fontFamily="?attr/font_default"
                             android:textSize="?attr/font_default" />
 
-                        <com.google.android.material.materialswitch.MaterialSwitch
+                        <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                             android:id="@+id/post_type_link_switch_customize_post_filter_activity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -211,7 +211,7 @@
                             android:fontFamily="?attr/font_default"
                             android:textSize="?attr/font_default" />
 
-                        <com.google.android.material.materialswitch.MaterialSwitch
+                        <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                             android:id="@+id/post_type_image_switch_customize_post_filter_activity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -242,7 +242,7 @@
                             android:fontFamily="?attr/font_default"
                             android:textSize="?attr/font_default" />
 
-                        <com.google.android.material.materialswitch.MaterialSwitch
+                        <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                             android:id="@+id/post_type_gif_switch_customize_post_filter_activity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -273,7 +273,7 @@
                             android:fontFamily="?attr/font_default"
                             android:textSize="?attr/font_default" />
 
-                        <com.google.android.material.materialswitch.MaterialSwitch
+                        <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                             android:id="@+id/post_type_video_switch_customize_post_filter_activity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -304,7 +304,7 @@
                             android:fontFamily="?attr/font_default"
                             android:textSize="?attr/font_default" />
 
-                        <com.google.android.material.materialswitch.MaterialSwitch
+                        <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                             android:id="@+id/post_type_gallery_switch_customize_post_filter_activity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -368,7 +368,7 @@
                             android:fontFamily="?attr/font_default"
                             android:textSize="?attr/font_default" />
 
-                        <com.google.android.material.materialswitch.MaterialSwitch
+                        <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                             android:id="@+id/only_nsfw_switch_customize_post_filter_activity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -399,7 +399,7 @@
                             android:fontFamily="?attr/font_default"
                             android:textSize="?attr/font_default" />
 
-                        <com.google.android.material.materialswitch.MaterialSwitch
+                        <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                             android:id="@+id/only_spoiler_switch_customize_post_filter_activity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"

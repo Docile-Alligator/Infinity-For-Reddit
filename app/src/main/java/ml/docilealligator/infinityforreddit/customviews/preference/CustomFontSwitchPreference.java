@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.customviews.preference;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
@@ -66,15 +65,6 @@ public class CustomFontSwitchPreference extends SwitchPreference implements Cust
         });
 
         if (customThemeWrapper != null) {
-            materialSwitch.setThumbTintList(ColorStateList.valueOf(customThemeWrapper.getColorAccent()));
-            int[][] states = new int[][] {
-                    new int[] { android.R.attr.state_checked }
-            };
-            int[] colors = new int[] {
-                    customThemeWrapper.getColorPrimary()
-            };
-            materialSwitch.setTrackTintList(new ColorStateList(states, colors));
-
             if (iconImageView instanceof ImageView) {
                 if (isEnabled()) {
                     ((ImageView) iconImageView).setColorFilter(customThemeWrapper.getPrimaryIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
