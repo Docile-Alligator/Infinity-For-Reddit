@@ -51,8 +51,8 @@
     </declare-styleable>
 
     <declare-styleable name="SliderPreference">
-        <attr name="sliderMin" format="float" />
-        <attr name="sliderMax" format="float" />
-        <attr name="sliderStepSize" format="float" />
+        <attr name="sliderMin" format="integer" />
+        <attr name="sliderMax" format="integer" />
+        <attr name="sliderStepSize" format="integer" />
     </declare-styleable>
 </resources>

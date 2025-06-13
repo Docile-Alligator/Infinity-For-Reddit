@@ -56,9 +56,9 @@
         app:key="hide_the_number_of_votes_in_comments"
         app:title="@string/settings_hide_the_number_of_votes" />
 
-    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSeekBarPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.SliderPreference
         app:defaultValue="5"
-        android:max="10"
+        app:sliderMax="10"
         app:key="show_fewer_toolbar_options_threshold"
         app:title="@string/settings_show_fewer_toolbar_options_threshold_title"
         app:singleLineTitle="false" />

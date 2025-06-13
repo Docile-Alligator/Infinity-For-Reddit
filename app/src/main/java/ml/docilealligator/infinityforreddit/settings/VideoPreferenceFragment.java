@@ -5,8 +5,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.preference.ListPreference;
-import androidx.preference.Preference;
-import androidx.preference.SeekBarPreference;
 import androidx.preference.SwitchPreference;
 
 import org.greenrobot.eventbus.EventBus;
@@ -17,6 +15,7 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceFragmentCompat;
+import ml.docilealligator.infinityforreddit.customviews.preference.SliderPreference;
 import ml.docilealligator.infinityforreddit.events.ChangeAutoplayNsfwVideosEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeEasierToWatchInFullScreenEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeMuteAutoplayingVideosEvent;
@@ -44,8 +43,8 @@ public class VideoPreferenceFragment extends CustomFontPreferenceFragmentCompat 
         SwitchPreference muteNSFWVideosSwitchPreference = findPreference(SharedPreferencesUtils.MUTE_NSFW_VIDEO);
         SwitchPreference autoplayNsfwVideosSwitchPreference = findPreference(SharedPreferencesUtils.AUTOPLAY_NSFW_VIDEOS);
         SwitchPreference easierToWatchInFullScreenSwitchPreference = findPreference(SharedPreferencesUtils.EASIER_TO_WATCH_IN_FULL_SCREEN);
-        SeekBarPreference startAutoplayVisibleAreaOffsetPortrait = findPreference(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_PORTRAIT);
-        SeekBarPreference startAutoplayVisibleAreaOffsetLandscape = findPreference(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_LANDSCAPE);
+        SliderPreference startAutoplayVisibleAreaOffsetPortrait = findPreference(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_PORTRAIT);
+        SliderPreference startAutoplayVisibleAreaOffsetLandscape = findPreference(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_LANDSCAPE);
 
         if (videoAutoplayListPreference != null && autoplayNsfwVideosSwitchPreference != null) {
             videoAutoplayListPreference.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -90,29 +89,21 @@ public class VideoPreferenceFragment extends CustomFontPreferenceFragmentCompat 
         int orientation = getResources().getConfiguration().orientation;
 
         if (startAutoplayVisibleAreaOffsetPortrait != null) {
-            startAutoplayVisibleAreaOffsetPortrait.setSummary(
-                    getString(R.string.settings_start_autoplay_visible_area_offset_portrait_summary,
-                            sharedPreferences.getInt(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_PORTRAIT, 75)));
-            startAutoplayVisibleAreaOffsetPortrait.setOnPreferenceChangeListener((Preference.OnPreferenceChangeListener) (preference, newValue) -> {
+            startAutoplayVisibleAreaOffsetPortrait.setSummaryTemplate(R.string.settings_start_autoplay_visible_area_offset_portrait_summary);
+            startAutoplayVisibleAreaOffsetPortrait.setOnPreferenceChangeListener((preference, newValue) -> {
                 if (orientation == Configuration.ORIENTATION_PORTRAIT) {
                     EventBus.getDefault().post(new ChangeStartAutoplayVisibleAreaOffsetEvent((Integer) newValue));
                 }
-                startAutoplayVisibleAreaOffsetPortrait.setSummary(
-                        getString(R.string.settings_start_autoplay_visible_area_offset_portrait_summary, (Integer) newValue));
                 return true;
             });
         }
 
         if (startAutoplayVisibleAreaOffsetLandscape != null) {
-            startAutoplayVisibleAreaOffsetLandscape.setSummary(
-                    getString(R.string.settings_start_autoplay_visible_area_offset_portrait_summary,
-                            sharedPreferences.getInt(SharedPreferencesUtils.START_AUTOPLAY_VISIBLE_AREA_OFFSET_LANDSCAPE, 50)));
-            startAutoplayVisibleAreaOffsetLandscape.setOnPreferenceChangeListener((Preference.OnPreferenceChangeListener) (preference, newValue) -> {
+            startAutoplayVisibleAreaOffsetLandscape.setSummaryTemplate(R.string.settings_start_autoplay_visible_area_offset_landscape_summary);
+            startAutoplayVisibleAreaOffsetLandscape.setOnPreferenceChangeListener((preference, newValue) -> {
                 if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
                     EventBus.getDefault().post(new ChangeStartAutoplayVisibleAreaOffsetEvent((Integer) newValue));
                 }
-                startAutoplayVisibleAreaOffsetLandscape.setSummary(
-                        getString(R.string.settings_start_autoplay_visible_area_offset_landscape_summary, (Integer) newValue));
                 return true;
             });
         }

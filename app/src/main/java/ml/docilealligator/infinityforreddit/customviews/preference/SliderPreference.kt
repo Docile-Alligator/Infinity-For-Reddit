@@ -9,6 +9,7 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.VelocityTrackerCompat.recycle
 import androidx.preference.Preference
 import androidx.preference.Preference.SummaryProvider
 import androidx.preference.PreferenceViewHolder
@@ -16,6 +17,7 @@ import com.google.android.material.slider.Slider
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils
 
 class SliderPreference @JvmOverloads constructor(
     context: Context,
@@ -46,20 +48,16 @@ class SliderPreference @JvmOverloads constructor(
             preference.getPersistedInt(defaultValue).toString()
         }
 
-        val a = context.obtainStyledAttributes(
-            attrs, R.styleable.Preference, defStyleAttr, defStyleRes
-        )
-
         context.theme.obtainStyledAttributes(
             attrs,
             R.styleable.SliderPreference,
-            0, 0).apply {
+            0, 0).let {
             try {
-                min = a.getInt(R.styleable.SliderPreference_sliderMin, 0)
-                max = a.getInt(R.styleable.SliderPreference_sliderMax, 100)
-                stepSize = a.getInt(R.styleable.SliderPreference_sliderStepSize, 1)
+                min = it.getInt(R.styleable.SliderPreference_sliderMin, 0)
+                max = it.getInt(R.styleable.SliderPreference_sliderMax, 100)
+                stepSize = it.getInt(R.styleable.SliderPreference_sliderStepSize, 1)
             } finally {
-                recycle()
+                it.recycle()
             }
         }
     }
@@ -130,5 +128,13 @@ class SliderPreference @JvmOverloads constructor(
 
     override fun onGetDefaultValue(a: TypedArray, index: Int): Any? {
         return a.getInt(index, 0)
+    }
+
+    fun setSummaryTemplate(stringResId: Int) {
+        summaryProvider = SummaryProvider<SliderPreference> { preference ->
+            context.getString(
+                stringResId,
+                preference.getPersistedInt(defaultValue))
+        }
     }
 }

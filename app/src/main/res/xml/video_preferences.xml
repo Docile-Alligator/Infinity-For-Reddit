@@ -85,16 +85,16 @@
         app:key="easier_to_watch_in_full_screen"
         app:title="@string/settings_easier_to_watch_in_full_screen_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSeekBarPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.SliderPreference
         app:defaultValue="75"
-        android:max="100"
+        app:sliderMax="100"
         app:key="start_autoplay_visible_area_offset_portrait"
         app:title="@string/settings_start_autoplay_visible_area_offset_portrait_title"
         app:singleLineTitle="false" />
 
-    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSeekBarPreference
+    <ml.docilealligator.infinityforreddit.customviews.preference.SliderPreference
         app:defaultValue="50"
-        android:max="100"
+        app:sliderMax="100"
         app:key="start_autoplay_visible_area_offset_landscape"
         app:title="@string/settings_start_autoplay_visible_area_offset_landscape_title"
         app:singleLineTitle="false" />
