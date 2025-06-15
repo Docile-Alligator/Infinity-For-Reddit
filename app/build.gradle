@@ -68,7 +68,7 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.activity:activity:1.9.0'
+    implementation 'androidx.activity:activity:1.10.1'
     implementation 'androidx.core:core-ktx:1.16.0'
     def lifecycleVersion = "2.7.0"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
@@ -90,6 +90,7 @@ dependencies {
     implementation 'androidx.viewpager2:viewpager2:1.1.0'
     implementation 'androidx.work:work-runtime:2.9.0'
     implementation 'com.google.android.material:material:1.14.0-alpha01'
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-beta01"
 
 /** ExoPlayer **/
     def media3_version = "1.4.0-alpha02"
