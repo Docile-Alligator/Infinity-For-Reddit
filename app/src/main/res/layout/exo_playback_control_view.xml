@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linear_layout_exo_playback_control_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -32,81 +33,83 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mute_exo_playback_control_view"
+            style="?attr/materialIconButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:strokeWidth="0dp"
-            app:iconSize="24dp"
-            app:iconTint="@null"
-            app:backgroundTint="#444141"
             android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            style="?attr/materialIconButtonOutlinedStyle" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@id/exo_rew"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:strokeWidth="0dp"
-            app:icon="@drawable/ic_fast_rewind_24dp"
+            app:backgroundTint="#444141"
             app:iconSize="24dp"
             app:iconTint="@null"
-            app:backgroundTint="#444141"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/exo_play_pause_button_exo_playback_control_view"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toStartOf="@id/button_group_exo_playback_control_view"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            style="?attr/materialIconButtonOutlinedStyle" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeWidth="0dp"
+            tools:visibility="visible" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/exo_play_pause_button_exo_playback_control_view"
+        <com.google.android.material.button.MaterialButtonGroup
+            android:id="@+id/button_group_exo_playback_control_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:strokeWidth="0dp"
-            app:icon="@drawable/ic_play_arrow_24dp"
-            app:iconSize="36dp"
-            app:iconTint="@null"
-            app:backgroundTint="@color/colorAccent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:spacing="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/exo_ffwd"
+            app:layout_constraintEnd_toStartOf="@+id/hd_exo_playback_control_view"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/exo_rew"
-            style="?attr/materialIconButtonOutlinedStyle" />
+            app:layout_constraintStart_toEndOf="@id/mute_exo_playback_control_view"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@id/exo_ffwd"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:strokeWidth="0dp"
-            app:icon="@drawable/ic_fast_forward_24dp"
-            app:iconSize="24dp"
-            app:iconTint="@null"
-            app:backgroundTint="#444141"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/exo_play_pause_button_exo_playback_control_view"
-            style="?attr/materialIconButtonOutlinedStyle" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@id/exo_rew"
+                style="?attr/materialIconButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:backgroundTint="#444141"
+                app:icon="@drawable/ic_fast_rewind_24dp"
+                app:iconSize="24dp"
+                app:iconTint="@null"
+                app:strokeWidth="0dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/exo_play_pause_button_exo_playback_control_view"
+                style="?attr/materialIconButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:backgroundTint="@color/colorAccent"
+                app:icon="@drawable/ic_play_arrow_24dp"
+                app:iconSize="36dp"
+                app:iconTint="@null"
+                app:strokeWidth="0dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@id/exo_ffwd"
+                style="?attr/materialIconButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:backgroundTint="#444141"
+                app:icon="@drawable/ic_fast_forward_24dp"
+                app:iconSize="24dp"
+                app:iconTint="@null"
+                app:strokeWidth="0dp" />
+
+        </com.google.android.material.button.MaterialButtonGroup>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/hd_exo_playback_control_view"
+            style="?attr/materialIconButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:strokeWidth="0dp"
+            app:backgroundTint="#444141"
             app:icon="@drawable/ic_video_quality_24dp"
             app:iconSize="24dp"
             app:iconTint="@null"
-            app:backgroundTint="#444141"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            style="?attr/materialIconButtonOutlinedStyle" />
+            app:layout_constraintStart_toEndOf="@id/button_group_exo_playback_control_view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeWidth="0dp"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Matrix;
@@ -75,7 +76,6 @@ import androidx.media3.ui.PlayerControlView;
 import androidx.media3.ui.PlayerView;
 import androidx.media3.ui.TrackSelectionDialogBuilder;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.common.collect.ImmutableList;
 import com.otaliastudios.zoom.ZoomEngine;
 import com.otaliastudios.zoom.ZoomSurfaceView;
@@ -284,6 +284,8 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             binding = new ViewVideoActivityBindingAdapter(ActivityViewVideoBinding.inflate(getLayoutInflater()));
             setContentView(binding.getRoot());
         }
+
+        applyCustomTheme();
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
@@ -517,10 +519,9 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             setPlaybackSpeed(savedInstanceState.getInt(PLAYBACK_SPEED_STATE, 100));
         }
 
-        MaterialButton playPauseButton = findViewById(R.id.exo_play_pause_button_exo_playback_control_view);
         Drawable playDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_play_arrow_24dp, null);
         Drawable pauseDrawable = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_pause_24dp, null);
-        playPauseButton.setOnClickListener(view -> {
+        binding.getPlayPauseButton().setOnClickListener(view -> {
             Util.handlePlayPauseButtonAction(player);
         });
 
@@ -531,7 +532,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                         Player.EVENT_PLAY_WHEN_READY_CHANGED,
                         Player.EVENT_PLAYBACK_STATE_CHANGED,
                         Player.EVENT_PLAYBACK_SUPPRESSION_REASON_CHANGED)) {
-                    playPauseButton.setIcon(Util.shouldShowPlayButton(player) ? playDrawable : pauseDrawable);
+                    binding.getPlayPauseButton().setIcon(Util.shouldShowPlayButton(player) ? playDrawable : pauseDrawable);
                 }
             }
 
@@ -808,6 +809,11 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 getOnBackPressedDispatcher().onBackPressed();
             }
         });
+    }
+
+    private void applyCustomTheme() {
+        binding.getPlayPauseButton().setBackgroundColor(mCustomThemeWrapper.getColorAccent());
+        binding.getPlayPauseButton().setIconTint(ColorStateList.valueOf(mCustomThemeWrapper.getFABIconColor()));
     }
 
     private void preparePlayer(Bundle savedInstanceState) {
