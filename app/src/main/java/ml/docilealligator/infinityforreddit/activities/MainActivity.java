@@ -255,7 +255,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (isImmersiveInterface()) {
                 binding.drawerLayout.setStatusBarBackgroundColor(Color.TRANSPARENT);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    binding.drawerLayout.setFitsSystemWindows(false);
+                    //binding.drawerLayout.setFitsSystemWindows(false);
                     window.setDecorFitsSystemWindows(false);
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -283,6 +283,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                                     fabParams.bottomMargin = allInsets.bottom;
                                     navigationWrapper.floatingActionButton.setLayoutParams(fabParams);
                                 }
+                            } else {
+                                ViewGroup.MarginLayoutParams navRailParams = (ViewGroup.MarginLayoutParams)
+                                        navigationWrapper.navigationRailView.getLayoutParams();
+                                navRailParams.bottomMargin = allInsets.bottom;
+                                navRailParams.setMarginStart(allInsets.left);
+                                navigationWrapper.navigationRailView.setLayoutParams(navRailParams);
                             }
 
                             if (navigationWrapper.bottomAppBar != null) {
@@ -301,9 +307,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             View toolbar = binding.includedAppBar.toolbar;
                             ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
                             params.topMargin = allInsets.top;
-                            params.setMarginStart(params.getMarginStart() + allInsets.left);
-                            params.setMarginEnd(params.getMarginEnd() + allInsets.right);
+                            params.setMarginStart(allInsets.left);
+                            params.setMarginEnd(allInsets.right);
                             toolbar.setLayoutParams(params);
+
+                            binding.includedAppBar.tabLayoutMainActivity.setPadding(
+                                    allInsets.left, 0, allInsets.right, 0
+                            );
 
                             return WindowInsetsCompat.CONSUMED;
                         }
