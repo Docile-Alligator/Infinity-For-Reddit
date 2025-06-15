@@ -6,7 +6,6 @@ import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackI
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -18,6 +17,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.LoadState;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,7 +48,6 @@ import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.AccountPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.AccountSavedThingActivity;
 import ml.docilealligator.infinityforreddit.activities.ActivityToolbarInterface;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomizePostFilterActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
@@ -188,14 +190,21 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
 
         Resources resources = getResources();
 
-        if ((activity != null && activity.isImmersiveInterface())) {
-            binding.recyclerViewPostFragment.setPadding(0, 0, 0, ((BaseActivity) activity).getNavBarHeight());
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-                && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
-            int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-            if (navBarResourceId > 0) {
-                binding.recyclerViewPostFragment.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
-            }
+        if (activity.isImmersiveInterface()) {
+            ViewCompat.setOnApplyWindowInsetsListener(activity.getWindow().getDecorView(), new OnApplyWindowInsetsListener() {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                    Insets allInsets = insets.getInsets(
+                            WindowInsetsCompat.Type.systemBars()
+                                    | WindowInsetsCompat.Type.displayCutout()
+                    );
+                    binding.recyclerViewPostFragment.setPadding(
+                            0, 0, 0, allInsets.bottom
+                    );
+                    return insets;
+                }
+            });
         }
 
         binding.swipeRefreshLayoutPostFragment.setEnabled(mSharedPreferences.getBoolean(SharedPreferencesUtils.PULL_TO_REFRESH, true));

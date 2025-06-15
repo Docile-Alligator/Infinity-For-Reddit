@@ -261,80 +261,91 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
-                    ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
-                        @NonNull
-                        @Override
-                        public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                            Insets allInsets = insets.getInsets(
-                                    WindowInsetsCompat.Type.systemBars()
-                                            | WindowInsetsCompat.Type.displayCutout()
-                            );
+                ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
+                    @NonNull
+                    @Override
+                    public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                        Insets allInsets = insets.getInsets(
+                                WindowInsetsCompat.Type.systemBars()
+                                        | WindowInsetsCompat.Type.displayCutout()
+                        );
 
-                            if (navigationWrapper.navigationRailView == null) {
-                                if (navigationWrapper.bottomAppBar.getVisibility() != View.VISIBLE) {
-                                    ViewGroup.MarginLayoutParams fabParams = (ViewGroup.MarginLayoutParams)
-                                            navigationWrapper.floatingActionButton.getLayoutParams();
-                                    fabParams.bottomMargin = (int) Utils.convertDpToPixel(16, MainActivity.this) + allInsets.bottom;
-                                    navigationWrapper.floatingActionButton.setLayoutParams(fabParams);
-                                } else {
-                                    ViewGroup.MarginLayoutParams fabParams = (ViewGroup.MarginLayoutParams)
-                                            navigationWrapper.floatingActionButton.getLayoutParams();
-                                    fabParams.bottomMargin = allInsets.bottom;
-                                    navigationWrapper.floatingActionButton.setLayoutParams(fabParams);
-                                }
+                        if (navigationWrapper.navigationRailView == null) {
+                            if (navigationWrapper.bottomAppBar.getVisibility() != View.VISIBLE) {
+                                ViewGroup.MarginLayoutParams fabParams = (ViewGroup.MarginLayoutParams)
+                                        navigationWrapper.floatingActionButton.getLayoutParams();
+                                fabParams.bottomMargin = (int) Utils.convertDpToPixel(16, MainActivity.this) + allInsets.bottom;
+                                fabParams.rightMargin = (int) Utils.convertDpToPixel(16, MainActivity.this) + allInsets.right;
+                                navigationWrapper.floatingActionButton.setLayoutParams(fabParams);
+                            } else {
+                                ViewGroup.MarginLayoutParams fabParams = (ViewGroup.MarginLayoutParams)
+                                        navigationWrapper.floatingActionButton.getLayoutParams();
+                                fabParams.bottomMargin = allInsets.bottom;
+                                navigationWrapper.floatingActionButton.setLayoutParams(fabParams);
+                            }
+                        } else {
+                            if (navigationWrapper.navigationRailView.getVisibility() != View.VISIBLE) {
+                                ViewGroup.MarginLayoutParams fabParams = (ViewGroup.MarginLayoutParams)
+                                        navigationWrapper.floatingActionButton.getLayoutParams();
+                                fabParams.bottomMargin = (int) Utils.convertDpToPixel(16, MainActivity.this) + allInsets.bottom;
+                                fabParams.rightMargin = (int) Utils.convertDpToPixel(16, MainActivity.this) + allInsets.right;
+                                navigationWrapper.floatingActionButton.setLayoutParams(fabParams);
+
+                                binding.includedAppBar.viewPagerMainActivity.setPadding(allInsets.left, 0, allInsets.right, 0);
                             } else {
                                 ViewGroup.MarginLayoutParams navRailParams = (ViewGroup.MarginLayoutParams)
                                         navigationWrapper.navigationRailView.getLayoutParams();
                                 navRailParams.bottomMargin = allInsets.bottom;
                                 navRailParams.setMarginStart(allInsets.left);
                                 navigationWrapper.navigationRailView.setLayoutParams(navRailParams);
+                                navigationWrapper.navigationRailView.setFitsSystemWindows(false);
+                                navigationWrapper.navigationRailView.setPadding(0, 0, 0, 0);
+
+                                binding.includedAppBar.viewPagerMainActivity.setPadding(0, 0, allInsets.right, 0);
                             }
-
-                            if (navigationWrapper.bottomAppBar != null) {
-                                navigationWrapper.linearLayoutBottomAppBar.setPadding(
-                                        navigationWrapper.linearLayoutBottomAppBar.getPaddingLeft(),
-                                        navigationWrapper.linearLayoutBottomAppBar.getPaddingTop(),
-                                        navigationWrapper.linearLayoutBottomAppBar.getPaddingRight(),
-                                        allInsets.bottom
-                                );
-                            }
-
-                            binding.navDrawerRecyclerViewMainActivity.setPadding(
-                                    0, 0, 0, allInsets.bottom
-                            );
-
-                            View toolbar = binding.includedAppBar.toolbar;
-                            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-                            params.topMargin = allInsets.top;
-                            params.setMarginStart(allInsets.left);
-                            params.setMarginEnd(allInsets.right);
-                            toolbar.setLayoutParams(params);
-
-                            binding.includedAppBar.tabLayoutMainActivity.setPadding(
-                                    allInsets.left, 0, allInsets.right, 0
-                            );
-
-                            return WindowInsetsCompat.CONSUMED;
                         }
-                    });
-                } else {
-                    adjustToolbar(binding.includedAppBar.toolbar);
 
-                    int navBarHeight = getNavBarHeight();
-                    if (navBarHeight > 0) {
-                        if (navigationWrapper.navigationRailView == null) {
-                            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) navigationWrapper.floatingActionButton.getLayoutParams();
-                            params.bottomMargin += navBarHeight;
-                            navigationWrapper.floatingActionButton.setLayoutParams(params);
-                        }
                         if (navigationWrapper.bottomAppBar != null) {
-                            navigationWrapper.linearLayoutBottomAppBar.setPadding(navigationWrapper.linearLayoutBottomAppBar.getPaddingLeft(),
-                                    navigationWrapper.linearLayoutBottomAppBar.getPaddingTop(), navigationWrapper.linearLayoutBottomAppBar.getPaddingRight(), navBarHeight);
+                            navigationWrapper.linearLayoutBottomAppBar.setPadding(
+                                    navigationWrapper.linearLayoutBottomAppBar.getPaddingLeft(),
+                                    navigationWrapper.linearLayoutBottomAppBar.getPaddingTop(),
+                                    navigationWrapper.linearLayoutBottomAppBar.getPaddingRight(),
+                                    allInsets.bottom
+                            );
                         }
-                        binding.navDrawerRecyclerViewMainActivity.setPadding(0, 0, 0, navBarHeight);
+
+                        View toolbar = binding.includedAppBar.toolbar;
+                        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
+                        params.topMargin = allInsets.top;
+                        params.setMarginStart(allInsets.left);
+                        params.setMarginEnd(allInsets.right);
+                        toolbar.setLayoutParams(params);
+
+                        ViewGroup.MarginLayoutParams navRailParams = (ViewGroup.MarginLayoutParams)
+                                binding.includedAppBar.tabLayoutMainActivity.getLayoutParams();
+                        navRailParams.setMarginStart(allInsets.left);
+                        navRailParams.setMarginEnd(allInsets.right);
+                        binding.includedAppBar.tabLayoutMainActivity.setLayoutParams(navRailParams);
+
+                        return WindowInsetsCompat.CONSUMED;
                     }
-                }
+                });
+
+                /*adjustToolbar(binding.includedAppBar.toolbar);
+
+                int navBarHeight = getNavBarHeight();
+                if (navBarHeight > 0) {
+                    if (navigationWrapper.navigationRailView == null) {
+                        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) navigationWrapper.floatingActionButton.getLayoutParams();
+                        params.bottomMargin += navBarHeight;
+                        navigationWrapper.floatingActionButton.setLayoutParams(params);
+                    }
+                    if (navigationWrapper.bottomAppBar != null) {
+                        navigationWrapper.linearLayoutBottomAppBar.setPadding(navigationWrapper.linearLayoutBottomAppBar.getPaddingLeft(),
+                                navigationWrapper.linearLayoutBottomAppBar.getPaddingTop(), navigationWrapper.linearLayoutBottomAppBar.getPaddingRight(), navBarHeight);
+                    }
+                    binding.navDrawerRecyclerViewMainActivity.setPadding(0, 0, 0, navBarHeight);
+                }*/
             } else {
                 binding.drawerLayout.setStatusBarBackgroundColor(mCustomThemeWrapper.getColorPrimaryDark());
             }
