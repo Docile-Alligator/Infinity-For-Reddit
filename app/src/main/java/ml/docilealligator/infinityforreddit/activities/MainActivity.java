@@ -255,7 +255,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (isImmersiveInterface()) {
                 binding.drawerLayout.setStatusBarBackgroundColor(Color.TRANSPARENT);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    //binding.drawerLayout.setFitsSystemWindows(false);
+                    binding.drawerLayout.setFitsSystemWindows(false);
                     window.setDecorFitsSystemWindows(false);
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
