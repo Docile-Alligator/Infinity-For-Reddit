@@ -6,6 +6,10 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
@@ -37,6 +41,24 @@ public abstract class CustomFontPreferenceFragmentCompat extends PreferenceFragm
         }
 
         view.setBackgroundColor(activity.customThemeWrapper.getBackgroundColor());
+
+        if (activity.isImmersiveInterface()) {
+            View recyclerView = getListView();
+            if (recyclerView != null) {
+                ViewCompat.setOnApplyWindowInsetsListener(view, new OnApplyWindowInsetsListener() {
+                    @NonNull
+                    @Override
+                    public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                        Insets allInsets = insets.getInsets(
+                                WindowInsetsCompat.Type.systemBars()
+                                        | WindowInsetsCompat.Type.displayCutout()
+                        );
+                        recyclerView.setPadding(0, 0, 0, allInsets.bottom);
+                        return WindowInsetsCompat.CONSUMED;
+                    }
+                });
+            }
+        }
     }
 
     @Override

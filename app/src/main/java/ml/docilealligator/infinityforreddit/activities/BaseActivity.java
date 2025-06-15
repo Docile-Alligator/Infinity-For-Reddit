@@ -369,7 +369,10 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
         hasDrawerLayout = true;
     }
 
-    public void setImmersiveModeNotApplicable() {
+    public void setImmersiveModeNotApplicableBelowAndroid16() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            return;
+        }
         isImmersiveInterfaceApplicable = false;
     }
 
