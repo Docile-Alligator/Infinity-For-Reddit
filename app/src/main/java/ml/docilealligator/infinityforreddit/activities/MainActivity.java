@@ -272,34 +272,36 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
                         if (navigationWrapper.navigationRailView == null) {
                             if (navigationWrapper.bottomAppBar.getVisibility() != View.VISIBLE) {
-                                ViewGroup.MarginLayoutParams fabParams = (ViewGroup.MarginLayoutParams)
-                                        navigationWrapper.floatingActionButton.getLayoutParams();
-                                fabParams.bottomMargin = (int) Utils.convertDpToPixel(16, MainActivity.this) + allInsets.bottom;
-                                fabParams.rightMargin = (int) Utils.convertDpToPixel(16, MainActivity.this) + allInsets.right;
-                                navigationWrapper.floatingActionButton.setLayoutParams(fabParams);
+                                setMargins(navigationWrapper.floatingActionButton,
+                                        BaseActivity.IGNORE_MARGIN,
+                                        BaseActivity.IGNORE_MARGIN,
+                                        (int) Utils.convertDpToPixel(16, MainActivity.this) + allInsets.right,
+                                        (int) Utils.convertDpToPixel(16, MainActivity.this) + allInsets.bottom);
                             } else {
-                                ViewGroup.MarginLayoutParams fabParams = (ViewGroup.MarginLayoutParams)
-                                        navigationWrapper.floatingActionButton.getLayoutParams();
-                                fabParams.bottomMargin = allInsets.bottom;
-                                navigationWrapper.floatingActionButton.setLayoutParams(fabParams);
+                                setMargins(navigationWrapper.floatingActionButton,
+                                        BaseActivity.IGNORE_MARGIN,
+                                        BaseActivity.IGNORE_MARGIN,
+                                        BaseActivity.IGNORE_MARGIN,
+                                        allInsets.bottom);
                             }
                         } else {
                             if (navigationWrapper.navigationRailView.getVisibility() != View.VISIBLE) {
-                                ViewGroup.MarginLayoutParams fabParams = (ViewGroup.MarginLayoutParams)
-                                        navigationWrapper.floatingActionButton.getLayoutParams();
-                                fabParams.bottomMargin = (int) Utils.convertDpToPixel(16, MainActivity.this) + allInsets.bottom;
-                                fabParams.rightMargin = (int) Utils.convertDpToPixel(16, MainActivity.this) + allInsets.right;
-                                navigationWrapper.floatingActionButton.setLayoutParams(fabParams);
+                                setMargins(navigationWrapper.floatingActionButton,
+                                        BaseActivity.IGNORE_MARGIN,
+                                        BaseActivity.IGNORE_MARGIN,
+                                        (int) Utils.convertDpToPixel(16, MainActivity.this) + allInsets.right,
+                                        (int) Utils.convertDpToPixel(16, MainActivity.this) + allInsets.bottom);
 
                                 binding.includedAppBar.viewPagerMainActivity.setPadding(allInsets.left, 0, allInsets.right, 0);
                             } else {
-                                ViewGroup.MarginLayoutParams navRailParams = (ViewGroup.MarginLayoutParams)
-                                        navigationWrapper.navigationRailView.getLayoutParams();
-                                navRailParams.bottomMargin = allInsets.bottom;
-                                navRailParams.setMarginStart(allInsets.left);
-                                navigationWrapper.navigationRailView.setLayoutParams(navRailParams);
                                 navigationWrapper.navigationRailView.setFitsSystemWindows(false);
                                 navigationWrapper.navigationRailView.setPadding(0, 0, 0, 0);
+
+                                setMargins(navigationWrapper.navigationRailView,
+                                        allInsets.left,
+                                        BaseActivity.IGNORE_MARGIN,
+                                        BaseActivity.IGNORE_MARGIN,
+                                        allInsets.bottom);
 
                                 binding.includedAppBar.viewPagerMainActivity.setPadding(0, 0, allInsets.right, 0);
                             }
@@ -314,18 +316,17 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             );
                         }
 
-                        View toolbar = binding.includedAppBar.toolbar;
-                        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
-                        params.topMargin = allInsets.top;
-                        params.setMarginStart(allInsets.left);
-                        params.setMarginEnd(allInsets.right);
-                        toolbar.setLayoutParams(params);
+                        setMargins(binding.includedAppBar.toolbar,
+                                allInsets.left,
+                                allInsets.top,
+                                allInsets.right,
+                                BaseActivity.IGNORE_MARGIN);
 
-                        ViewGroup.MarginLayoutParams navRailParams = (ViewGroup.MarginLayoutParams)
-                                binding.includedAppBar.tabLayoutMainActivity.getLayoutParams();
-                        navRailParams.setMarginStart(allInsets.left);
-                        navRailParams.setMarginEnd(allInsets.right);
-                        binding.includedAppBar.tabLayoutMainActivity.setLayoutParams(navRailParams);
+                        setMargins(binding.includedAppBar.tabLayoutMainActivity,
+                                allInsets.left,
+                                BaseActivity.IGNORE_MARGIN,
+                                allInsets.right,
+                                BaseActivity.IGNORE_MARGIN);
 
                         return WindowInsetsCompat.CONSUMED;
                     }
