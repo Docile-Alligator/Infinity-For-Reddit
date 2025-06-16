@@ -21,6 +21,10 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -170,8 +174,38 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         isReplying = intent.getExtras().getBoolean(EXTRA_IS_REPLYING_KEY);
         applyCustomTheme();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
-            addOnOffsetChangedListener(binding.commentAppbarLayout);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (isChangeStatusBarIconColor()) {
+                addOnOffsetChangedListener(binding.commentAppbarLayout);
+            }
+
+            if (isImmersiveInterface()) {
+                ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
+                    @NonNull
+                    @Override
+                    public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                        Insets allInsets = insets.getInsets(
+                                WindowInsetsCompat.Type.systemBars()
+                                        | WindowInsetsCompat.Type.displayCutout()
+                        );
+
+                        setMargins(binding.commentToolbar,
+                                allInsets.left,
+                                allInsets.top,
+                                allInsets.right,
+                                BaseActivity.IGNORE_MARGIN);
+
+                        binding.linearLayoutCommentActivity.setPadding(
+                                allInsets.left,
+                                0,
+                                allInsets.right,
+                                allInsets.bottom
+                        );
+
+                        return insets;
+                    }
+                });
+            }
         }
 
         mGlide = Glide.with(this);
