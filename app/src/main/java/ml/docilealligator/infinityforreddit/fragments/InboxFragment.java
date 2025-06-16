@@ -8,6 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.PagedList;
@@ -87,7 +91,21 @@ public class InboxFragment extends Fragment implements FragmentCommunicator {
         mGlide = Glide.with(this);
 
         if (mActivity.isImmersiveInterface()) {
-            binding.recyclerViewInboxFragment.setPadding(0, 0, 0, mActivity.getNavBarHeight());
+            ViewCompat.setOnApplyWindowInsetsListener(mActivity.getWindow().getDecorView(), new OnApplyWindowInsetsListener() {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                    Insets allInsets = insets.getInsets(
+                            WindowInsetsCompat.Type.systemBars()
+                                    | WindowInsetsCompat.Type.displayCutout()
+                    );
+
+                    binding.recyclerViewInboxFragment.setPadding(0, 0, 0, allInsets.bottom);
+
+                    return insets;
+                }
+            });
+            //binding.recyclerViewInboxFragment.setPadding(0, 0, 0, mActivity.getNavBarHeight());
         }
 
         mWhere = arguments.getString(EXTRA_MESSAGE_WHERE, FetchMessage.WHERE_INBOX);

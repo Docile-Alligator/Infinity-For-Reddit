@@ -15,7 +15,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -38,7 +41,6 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.AccountManagement;
@@ -52,6 +54,7 @@ import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.InboxFragment;
 import ml.docilealligator.infinityforreddit.message.FetchMessage;
 import ml.docilealligator.infinityforreddit.message.Message;
+import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -118,14 +121,51 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
-                adjustToolbar(binding.toolbarInboxActivity);
+                ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
+                    @NonNull
+                    @Override
+                    public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                        Insets allInsets = insets.getInsets(
+                                WindowInsetsCompat.Type.systemBars()
+                                        | WindowInsetsCompat.Type.displayCutout()
+                        );
+
+                        setMargins(binding.toolbarInboxActivity,
+                                allInsets.left,
+                                allInsets.top,
+                                allInsets.right,
+                                BaseActivity.IGNORE_MARGIN);
+
+                        binding.viewPagerInboxActivity.setPadding(
+                                allInsets.left,
+                                0,
+                                allInsets.right,
+                                allInsets.bottom);
+
+                        setMargins(binding.fabInboxActivity,
+                                BaseActivity.IGNORE_MARGIN,
+                                BaseActivity.IGNORE_MARGIN,
+                                (int) Utils.convertDpToPixel(16, InboxActivity.this) + allInsets.right,
+                                (int) Utils.convertDpToPixel(16, InboxActivity.this) + allInsets.bottom);
+
+                        setMargins(binding.tabLayoutInboxActivity,
+                                allInsets.left,
+                                BaseActivity.IGNORE_MARGIN,
+                                allInsets.right,
+                                BaseActivity.IGNORE_MARGIN);
+
+                        return WindowInsetsCompat.CONSUMED;
+                    }
+                });
+
+                /*adjustToolbar(binding.toolbarInboxActivity);
 
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {
                     CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) binding.fabInboxActivity.getLayoutParams();
                     params.bottomMargin += navBarHeight;
                     binding.fabInboxActivity.setLayoutParams(params);
-                }
+                }*/
             }
         }
 
