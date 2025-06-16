@@ -32,8 +32,10 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/content_wrapper_view_customize_comment_filter_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -42,7 +44,7 @@
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/name_card_view_customize_post_filter_activity"
+                android:id="@+id/name_card_view_customize_comment_filter_activity"
                 style="?attr/materialCardViewFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -58,7 +60,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/name_explanation_text_view_customize_post_filter_activity"
+                        android:id="@+id/name_explanation_text_view_customize_comment_filter_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="?attr/font_family"
@@ -96,7 +98,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/display_mode_card_view_customize_post_filter_activity"
+                android:id="@+id/display_mode_card_view_customize_comment_filter_activity"
                 style="?attr/materialCardViewFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -112,7 +114,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/display_mode_explanation_text_view_customize_post_filter_activity"
+                        android:id="@+id/display_mode_explanation_text_view_customize_comment_filter_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="8dp"
@@ -156,7 +158,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/exclude_strings_card_view_customize_post_filter_activity"
+                android:id="@+id/exclude_strings_card_view_customize_comment_filter_activity"
                 style="?attr/materialCardViewFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -172,7 +174,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/exclude_strings_explanation_text_view_customize_post_filter_activity"
+                        android:id="@+id/exclude_strings_explanation_text_view_customize_comment_filter_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="8dp"
@@ -210,7 +212,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/exclude_users_card_view_customize_post_filter_activity"
+                android:id="@+id/exclude_users_card_view_customize_comment_filter_activity"
                 style="?attr/materialCardViewFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -226,7 +228,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/exclude_users_explanation_text_view_customize_post_filter_activity"
+                        android:id="@+id/exclude_users_explanation_text_view_customize_comment_filter_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="?attr/font_family"
@@ -281,7 +283,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/vote_card_view_customize_post_filter_activity"
+                android:id="@+id/vote_card_view_customize_comment_filter_activity"
                 style="?attr/materialCardViewFilledStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -297,7 +299,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/min_vote_explanation_text_view_customize_post_filter_activity"
+                        android:id="@+id/min_vote_explanation_text_view_customize_comment_filter_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="?attr/font_family"
@@ -332,7 +334,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
-                        android:id="@+id/max_vote_explanation_text_view_customize_post_filter_activity"
+                        android:id="@+id/max_vote_explanation_text_view_customize_comment_filter_activity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="?attr/font_family"
