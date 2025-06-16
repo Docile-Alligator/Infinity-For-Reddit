@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,44 +68,42 @@ public class CommentFilterPreferenceActivity extends BaseActivity {
 
         applyCustomTheme();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (isImmersiveInterface()) {
             if (isChangeStatusBarIconColor()) {
                 addOnOffsetChangedListener(binding.appbarLayoutCommentFilterPreferenceActivity);
             }
 
-            if (isImmersiveInterface()) {
-                ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
-                    @NonNull
-                    @Override
-                    public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = insets.getInsets(
-                                WindowInsetsCompat.Type.systemBars()
-                                        | WindowInsetsCompat.Type.displayCutout()
-                        );
+            ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                    Insets allInsets = insets.getInsets(
+                            WindowInsetsCompat.Type.systemBars()
+                                    | WindowInsetsCompat.Type.displayCutout()
+                    );
 
-                        setMargins(binding.toolbarCommentFilterPreferenceActivity,
-                                allInsets.left,
-                                allInsets.top,
-                                allInsets.right,
-                                BaseActivity.IGNORE_MARGIN);
+                    setMargins(binding.toolbarCommentFilterPreferenceActivity,
+                            allInsets.left,
+                            allInsets.top,
+                            allInsets.right,
+                            BaseActivity.IGNORE_MARGIN);
 
-                        binding.recyclerViewCommentFilterPreferenceActivity.setPadding(
-                                allInsets.left,
-                                0,
-                                allInsets.right,
-                                allInsets.bottom
-                        );
+                    binding.recyclerViewCommentFilterPreferenceActivity.setPadding(
+                            allInsets.left,
+                            0,
+                            allInsets.right,
+                            allInsets.bottom
+                    );
 
-                        setMargins(binding.fabCommentFilterPreferenceActivity,
-                                BaseActivity.IGNORE_MARGIN,
-                                BaseActivity.IGNORE_MARGIN,
-                                (int) Utils.convertDpToPixel(16, CommentFilterPreferenceActivity.this) + allInsets.right,
-                                (int) Utils.convertDpToPixel(16, CommentFilterPreferenceActivity.this) + allInsets.bottom);
+                    setMargins(binding.fabCommentFilterPreferenceActivity,
+                            BaseActivity.IGNORE_MARGIN,
+                            BaseActivity.IGNORE_MARGIN,
+                            (int) Utils.convertDpToPixel(16, CommentFilterPreferenceActivity.this) + allInsets.right,
+                            (int) Utils.convertDpToPixel(16, CommentFilterPreferenceActivity.this) + allInsets.bottom);
 
-                        return WindowInsetsCompat.CONSUMED;
-                    }
-                });
-            }
+                    return WindowInsetsCompat.CONSUMED;
+                }
+            });
         }
 
         setSupportActionBar(binding.toolbarCommentFilterPreferenceActivity);
