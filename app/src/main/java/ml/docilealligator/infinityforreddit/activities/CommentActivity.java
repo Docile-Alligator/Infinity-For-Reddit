@@ -202,7 +202,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                                 allInsets.bottom
                         );
 
-                        return insets;
+                        return WindowInsetsCompat.CONSUMED;
                     }
                 });
             }

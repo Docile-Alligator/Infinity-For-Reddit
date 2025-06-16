@@ -2,11 +2,17 @@ package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -27,6 +33,7 @@ import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterWithUsage
 import ml.docilealligator.infinityforreddit.commentfilter.DeleteCommentFilter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCommentFilterPreferenceBinding;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class CommentFilterPreferenceActivity extends BaseActivity {
 
@@ -61,6 +68,46 @@ public class CommentFilterPreferenceActivity extends BaseActivity {
         setContentView(binding.getRoot());
 
         applyCustomTheme();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (isChangeStatusBarIconColor()) {
+                addOnOffsetChangedListener(binding.appbarLayoutCommentFilterPreferenceActivity);
+            }
+
+            if (isImmersiveInterface()) {
+                ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
+                    @NonNull
+                    @Override
+                    public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                        Insets allInsets = insets.getInsets(
+                                WindowInsetsCompat.Type.systemBars()
+                                        | WindowInsetsCompat.Type.displayCutout()
+                        );
+
+                        setMargins(binding.toolbarCommentFilterPreferenceActivity,
+                                allInsets.left,
+                                allInsets.top,
+                                allInsets.right,
+                                BaseActivity.IGNORE_MARGIN);
+
+                        binding.recyclerViewCommentFilterPreferenceActivity.setPadding(
+                                allInsets.left,
+                                0,
+                                allInsets.right,
+                                allInsets.bottom
+                        );
+
+                        setMargins(binding.fabCommentFilterPreferenceActivity,
+                                BaseActivity.IGNORE_MARGIN,
+                                BaseActivity.IGNORE_MARGIN,
+                                (int) Utils.convertDpToPixel(16, CommentFilterPreferenceActivity.this) + allInsets.right,
+                                (int) Utils.convertDpToPixel(16, CommentFilterPreferenceActivity.this) + allInsets.bottom);
+
+                        return WindowInsetsCompat.CONSUMED;
+                    }
+                });
+            }
+        }
 
         setSupportActionBar(binding.toolbarCommentFilterPreferenceActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
