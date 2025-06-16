@@ -243,7 +243,7 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
 
         int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
         savePostFeedScrolledPosition = mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION, false);
-        Locale locale = getResources().getConfiguration().locale;
+        Locale locale = resources.getConfiguration().locale;
 
         int usage;
         String nameOfUsage;

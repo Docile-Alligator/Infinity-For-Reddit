@@ -17,7 +17,10 @@ import android.view.inputmethod.EditorInfo;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -38,14 +41,10 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.fragments.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
-import ml.docilealligator.infinityforreddit.thing.SortType;
-import ml.docilealligator.infinityforreddit.thing.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.SubredditAutocompleteRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
@@ -61,6 +60,7 @@ import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivitySearchResultBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.fragments.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.fragments.SubredditListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.UserListingFragment;
@@ -69,6 +69,9 @@ import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.recentsearchquery.InsertRecentSearchQuery;
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
+import ml.docilealligator.infinityforreddit.thing.SortType;
+import ml.docilealligator.infinityforreddit.thing.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -163,14 +166,47 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
-                adjustToolbar(binding.toolbarSearchResultActivity);
+
+                ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
+                    @NonNull
+                    @Override
+                    public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                        Insets allInsets = insets.getInsets(
+                                WindowInsetsCompat.Type.systemBars()
+                                        | WindowInsetsCompat.Type.displayCutout()
+                        );
+
+                        setMargins(binding.toolbarSearchResultActivity,
+                                allInsets.left,
+                                allInsets.top,
+                                allInsets.right,
+                                BaseActivity.IGNORE_MARGIN);
+
+                        binding.viewPagerSearchResultActivity.setPadding(allInsets.left, 0, allInsets.right, 0);
+
+                        setMargins(binding.fabSearchResultActivity,
+                                BaseActivity.IGNORE_MARGIN,
+                                BaseActivity.IGNORE_MARGIN,
+                                (int) Utils.convertDpToPixel(16, SearchResultActivity.this) + allInsets.right,
+                                (int) Utils.convertDpToPixel(16, SearchResultActivity.this) + allInsets.bottom);
+
+                        setMargins(binding.tabLayoutSearchResultActivity,
+                                allInsets.left,
+                                BaseActivity.IGNORE_MARGIN,
+                                allInsets.right,
+                                BaseActivity.IGNORE_MARGIN);
+
+                        return WindowInsetsCompat.CONSUMED;
+                    }
+                });
+                /*adjustToolbar(binding.toolbarSearchResultActivity);
 
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {
                     CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) binding.fabSearchResultActivity.getLayoutParams();
                     params.bottomMargin += navBarHeight;
                     binding.fabSearchResultActivity.setLayoutParams(params);
-                }
+                }*/
             }
         }
 
