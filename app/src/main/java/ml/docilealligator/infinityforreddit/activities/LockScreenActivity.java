@@ -5,11 +5,16 @@ import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTI
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import java.util.concurrent.Executor;
 
@@ -45,6 +50,28 @@ public class LockScreenActivity extends BaseActivity {
         setContentView(binding.getRoot());
 
         applyCustomTheme();
+
+        if (isImmersiveInterface()) {
+            ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                    Insets allInsets = insets.getInsets(
+                            WindowInsetsCompat.Type.systemBars()
+                                    | WindowInsetsCompat.Type.displayCutout()
+                    );
+
+                    binding.getRoot().setPadding(
+                            allInsets.left,
+                            allInsets.top,
+                            allInsets.right,
+                            allInsets.bottom
+                    );
+
+                    return WindowInsetsCompat.CONSUMED;
+                }
+            });
+        }
 
         binding.unlockButtonLockScreenActivity.setOnClickListener(view -> {
             authenticate();
