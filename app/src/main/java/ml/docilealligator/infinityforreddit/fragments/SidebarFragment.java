@@ -13,6 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
@@ -99,6 +103,23 @@ public class SidebarFragment extends Fragment {
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         EventBus.getDefault().register(this);
+
+        if (activity.isImmersiveInterface()) {
+            ViewCompat.setOnApplyWindowInsetsListener(activity.getWindow().getDecorView(), new OnApplyWindowInsetsListener() {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                    Insets allInsets = insets.getInsets(
+                            WindowInsetsCompat.Type.systemBars()
+                                    | WindowInsetsCompat.Type.displayCutout()
+                    );
+                    binding.markdownRecyclerViewSidebarFragment.setPadding(
+                            0, 0, 0, allInsets.bottom
+                    );
+                    return insets;
+                }
+            });
+        }
 
         subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
         if (subredditName == null) {

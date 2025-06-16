@@ -5,7 +5,6 @@ import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackI
 
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -43,7 +42,6 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.account.Account;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.adapters.Paging3LoadingStateAdapter;
 import ml.docilealligator.infinityforreddit.adapters.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
@@ -144,15 +142,15 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
 
         Resources resources = getResources();
 
-        if ((activity != null && activity.isImmersiveInterface())) {
-            binding.recyclerViewHistoryPostFragment.setPadding(0, 0, 0, ((BaseActivity) activity).getNavBarHeight());
+        /*if (activity.isImmersiveInterface()) {
+            binding.recyclerViewHistoryPostFragment.setPadding(0, 0, 0, activity.getNavBarHeight());
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
             int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
             if (navBarResourceId > 0) {
                 binding.recyclerViewHistoryPostFragment.setPadding(0, 0, 0, resources.getDimensionPixelSize(navBarResourceId));
             }
-        }
+        }*/
 
         binding.swipeRefreshLayoutHistoryPostFragment.setEnabled(mSharedPreferences.getBoolean(SharedPreferencesUtils.PULL_TO_REFRESH, true));
         binding.swipeRefreshLayoutHistoryPostFragment.setOnRefreshListener(this::refresh);

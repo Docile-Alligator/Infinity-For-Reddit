@@ -294,14 +294,14 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
         });
     }
 
-    protected void adjustToolbar(Toolbar toolbar) {
+    /*protected void adjustToolbar(Toolbar toolbar) {
         int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (statusBarResourceId > 0) {
             ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
             params.topMargin = getResources().getDimensionPixelSize(statusBarResourceId);
             toolbar.setLayoutParams(params);
         }
-    }
+    }*/
 
     protected void addOnOffsetChangedListener(AppBarLayout appBarLayout) {
         View decorView = getWindow().getDecorView();
@@ -317,7 +317,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
         });
     }
 
-    public int getNavBarHeight() {
+    /*public int getNavBarHeight() {
         if (isImmersiveInterfaceApplicable && immersiveInterface && getDefaultSharedPreferences().getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_IGNORE_NAV_BAR_KEY, false)) {
             return 0;
         }
@@ -328,7 +328,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
             return resources.getDimensionPixelSize(navBarResourceId);
         }
         return 0;
-    }
+    }*/
 
     public int getStatusBarHeight() {
         int result = 0;

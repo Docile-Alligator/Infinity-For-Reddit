@@ -13,6 +13,10 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -119,8 +123,35 @@ public class WikiActivity extends BaseActivity {
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
-                adjustToolbar(binding.toolbarCommentWikiActivity);
-                binding.contentMarkdownViewCommentWikiActivity.setPadding(binding.contentMarkdownViewCommentWikiActivity.getPaddingLeft(), 0, binding.contentMarkdownViewCommentWikiActivity.getPaddingRight(), getNavBarHeight());
+
+                ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
+                    @NonNull
+                    @Override
+                    public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                        Insets allInsets = insets.getInsets(
+                                WindowInsetsCompat.Type.systemBars()
+                                        | WindowInsetsCompat.Type.displayCutout()
+                        );
+
+                        setMargins(binding.toolbarCommentWikiActivity,
+                                allInsets.left,
+                                allInsets.top,
+                                allInsets.right,
+                                BaseActivity.IGNORE_MARGIN);
+
+                        int padding16 = (int) Utils.convertDpToPixel(16, WikiActivity.this);
+
+                        binding.contentMarkdownViewCommentWikiActivity.setPadding(
+                                padding16 + allInsets.left,
+                                0,
+                                padding16 + allInsets.right,
+                                allInsets.bottom);
+
+                        return WindowInsetsCompat.CONSUMED;
+                    }
+                });
+                /*adjustToolbar(binding.toolbarCommentWikiActivity);
+                binding.contentMarkdownViewCommentWikiActivity.setPadding(binding.contentMarkdownViewCommentWikiActivity.getPaddingLeft(), 0, binding.contentMarkdownViewCommentWikiActivity.getPaddingRight(), getNavBarHeight());*/
             }
         }
 
