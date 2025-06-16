@@ -9,11 +9,16 @@ import android.os.Bundle;
 import android.text.Spanned;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -38,6 +43,7 @@ import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class FullMarkdownActivity extends BaseActivity {
 
@@ -89,8 +95,33 @@ public class FullMarkdownActivity extends BaseActivity {
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
-                adjustToolbar(binding.toolbarCommentFullMarkdownActivity);
-                binding.contentRecyclerViewCommentFullMarkdownActivity.setPadding(binding.contentRecyclerViewCommentFullMarkdownActivity.getPaddingLeft(), 0, binding.contentRecyclerViewCommentFullMarkdownActivity.getPaddingRight(), getNavBarHeight());
+
+                ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
+                    @NonNull
+                    @Override
+                    public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                        Insets allInsets = insets.getInsets(
+                                WindowInsetsCompat.Type.systemBars()
+                                        | WindowInsetsCompat.Type.displayCutout()
+                        );
+
+                        setMargins(binding.toolbarCommentFullMarkdownActivity,
+                                allInsets.left,
+                                allInsets.top,
+                                allInsets.right,
+                                BaseActivity.IGNORE_MARGIN);
+
+                        binding.contentRecyclerViewCommentFullMarkdownActivity.setPadding(
+                                (int) Utils.convertDpToPixel(16, FullMarkdownActivity.this) + allInsets.left,
+                                0,
+                                (int) Utils.convertDpToPixel(16, FullMarkdownActivity.this) + allInsets.right,
+                                allInsets.bottom);
+
+                        return WindowInsetsCompat.CONSUMED;
+                    }
+                });
+                /*adjustToolbar(binding.toolbarCommentFullMarkdownActivity);
+                binding.contentRecyclerViewCommentFullMarkdownActivity.setPadding(binding.contentRecyclerViewCommentFullMarkdownActivity.getPaddingLeft(), 0, binding.contentRecyclerViewCommentFullMarkdownActivity.getPaddingRight(), getNavBarHeight());*/
             }
         }
 
