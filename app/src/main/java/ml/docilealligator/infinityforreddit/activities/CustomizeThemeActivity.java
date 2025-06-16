@@ -11,6 +11,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
@@ -103,6 +107,38 @@ public class CustomizeThemeActivity extends BaseActivity {
         setContentView(binding.getRoot());
 
         applyCustomTheme();
+
+        if (isImmersiveInterface()) {
+            if (isChangeStatusBarIconColor()) {
+                addOnOffsetChangedListener(binding.appbarLayoutCustomizeThemeActivity);
+            }
+
+            ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                    Insets allInsets = insets.getInsets(
+                            WindowInsetsCompat.Type.systemBars()
+                                    | WindowInsetsCompat.Type.displayCutout()
+                    );
+
+                    setMargins(binding.toolbarCustomizeThemeActivity,
+                            allInsets.left,
+                            allInsets.top,
+                            allInsets.right,
+                            BaseActivity.IGNORE_MARGIN);
+
+                    binding.recyclerViewCustomizeThemeActivity.setPadding(
+                            allInsets.left,
+                            0,
+                            allInsets.right,
+                            allInsets.bottom
+                    );
+
+                    return WindowInsetsCompat.CONSUMED;
+                }
+            });
+        }
 
         setSupportActionBar(binding.toolbarCustomizeThemeActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
