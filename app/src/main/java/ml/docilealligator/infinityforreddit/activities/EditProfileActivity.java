@@ -5,7 +5,6 @@ import android.app.job.JobScheduler;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.Gravity;
@@ -19,6 +18,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
@@ -83,8 +86,36 @@ public class EditProfileActivity extends BaseActivity {
 
         applyCustomTheme();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
-            addOnOffsetChangedListener(binding.appbarLayoutViewEditProfileActivity);
+        if (isImmersiveInterface()) {
+            if (isChangeStatusBarIconColor()) {
+                addOnOffsetChangedListener(binding.appbarLayoutViewEditProfileActivity);
+            }
+
+            ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                    Insets allInsets = insets.getInsets(
+                            WindowInsetsCompat.Type.systemBars()
+                                    | WindowInsetsCompat.Type.displayCutout()
+                    );
+
+                    setMargins(binding.toolbarViewEditProfileActivity,
+                            allInsets.left,
+                            allInsets.top,
+                            allInsets.right,
+                            BaseActivity.IGNORE_MARGIN);
+
+                    binding.nestedScrollViewEditProfileActivity.setPadding(
+                            allInsets.left,
+                            0,
+                            allInsets.right,
+                            allInsets.bottom
+                    );
+
+                    return WindowInsetsCompat.CONSUMED;
+                }
+            });
         }
 
         setSupportActionBar(binding.toolbarViewEditProfileActivity);
