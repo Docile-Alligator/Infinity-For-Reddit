@@ -8,7 +8,6 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,7 +24,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -122,8 +124,9 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
                 }
         }
 
-        boolean immersiveInterface = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-                mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true);
+        boolean immersiveInterface = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+                mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true))
+                || Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM;
         boolean changeStatusBarIconColor = false;
         if (immersiveInterface) {
             changeStatusBarIconColor = customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface;
@@ -194,7 +197,51 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
-                adjustToolbar(binding.toolbar);
+
+                ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
+                    @NonNull
+                    @Override
+                    public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                        Insets allInsets = insets.getInsets(
+                                WindowInsetsCompat.Type.systemBars()
+                                        | WindowInsetsCompat.Type.displayCutout()
+                        );
+
+                        int padding16 = (int) Utils.convertDpToPixel(16, CustomThemePreviewActivity.this);
+
+                        setMargins(binding.fabThemePreviewActivity,
+                                BaseActivity.IGNORE_MARGIN,
+                                BaseActivity.IGNORE_MARGIN,
+                                BaseActivity.IGNORE_MARGIN,
+                                allInsets.bottom);
+
+                        binding.toolbarLinearLayoutThemePreviewActivity.setPadding(
+                                padding16 + allInsets.left,
+                                binding.toolbar.getPaddingTop(),
+                                padding16 + allInsets.right,
+                                binding.toolbar.getPaddingBottom());
+
+                        binding.viewPagerThemePreviewActivity.setPadding(allInsets.left, 0, allInsets.right, 0);
+
+                        binding.linearLayoutBottomAppBarThemePreviewActivity.setPadding(
+                                binding.linearLayoutBottomAppBarThemePreviewActivity.getPaddingLeft(),
+                                binding.linearLayoutBottomAppBarThemePreviewActivity.getPaddingTop(),
+                                binding.linearLayoutBottomAppBarThemePreviewActivity.getPaddingRight(),
+                                allInsets.bottom
+                        );
+
+                        setMargins(binding.toolbar,
+                                allInsets.left,
+                                allInsets.top,
+                                allInsets.right,
+                                BaseActivity.IGNORE_MARGIN);
+
+                        binding.tabLayoutThemePreviewActivity.setPadding(allInsets.left, 0, allInsets.right, 0);
+
+                        return WindowInsetsCompat.CONSUMED;
+                    }
+                });
+                /*adjustToolbar(binding.toolbar);
 
                 Resources resources = getResources();
                 int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
@@ -207,7 +254,7 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
                         binding.linearLayoutBottomAppBarThemePreviewActivity.setPadding(0,
                                 (int) (6 * getResources().getDisplayMetrics().density), 0, navBarHeight);
                     }
-                }
+                }*/
             }
 
             if (changeStatusBarIconColor) {
@@ -288,6 +335,28 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
         binding.tabLayoutThemePreviewActivity.setupWithViewPager(binding.viewPagerThemePreviewActivity);
     }
 
+    public static <T extends View> void setMargins(T view, int left, int top, int right, int bottom) {
+        ViewGroup.LayoutParams lp = view.getLayoutParams();
+        if (lp instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) lp;
+
+            if (top >= 0) {
+                marginParams.topMargin = top;
+            }
+            if (bottom >= 0) {
+                marginParams.bottomMargin = bottom;
+            }
+            if (left >= 0) {
+                marginParams.setMarginStart(left);
+            }
+            if (right >= 0) {
+                marginParams.setMarginEnd(right);
+            }
+
+            view.setLayoutParams(marginParams);
+        }
+    }
+
     private void applyCustomTheme() {
         binding.coordinatorLayoutThemePreviewActivity.setBackgroundColor(customTheme.backgroundColor);
         binding.appbarLayoutThemePreviewActivity.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -307,7 +376,6 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
         collapsedTabTextColor = customTheme.tabLayoutWithCollapsedCollapsingToolbarTextColor;
         collapsedTabIndicatorColor = customTheme.tabLayoutWithCollapsedCollapsingToolbarTabIndicator;
         collapsedTabBackgroundColor = customTheme.tabLayoutWithCollapsedCollapsingToolbarTabBackground;
-        binding.linearLayoutBottomAppBarThemePreviewActivity.setBackgroundColor(customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground);
         binding.extraPaddingViewThemePreviewActivity.setBackgroundColor(customTheme.colorPrimary);
         binding.subredditNameTextViewThemePreviewActivity.setTextColor(customTheme.subreddit);
         binding.userNameTextViewThemePreviewActivity.setTextColor(customTheme.username);
