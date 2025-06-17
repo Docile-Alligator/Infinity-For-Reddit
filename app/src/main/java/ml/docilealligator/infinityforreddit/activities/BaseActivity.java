@@ -330,14 +330,14 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
         return 0;
     }*/
 
-    public int getStatusBarHeight() {
+    /*public int getStatusBarHeight() {
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             result = getResources().getDimensionPixelSize(resourceId);
         }
         return result;
-    }
+    }*/
 
     public static <T extends View> void setMargins(T view, int left, int top, int right, int bottom) {
         ViewGroup.LayoutParams lp = view.getLayoutParams();

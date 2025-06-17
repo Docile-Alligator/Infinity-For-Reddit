@@ -11,7 +11,6 @@ import android.content.res.Configuration;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,6 +79,7 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
     private int subscribedColor;
     private int systemVisibilityToolbarExpanded = 0;
     private int systemVisibilityToolbarCollapsed = 0;
+    private int topSystemBarHeight;
     private SliderPanel mSliderPanel;
     private ActivityThemePreviewBinding binding;
 
@@ -206,6 +206,8 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
                                 WindowInsetsCompat.Type.systemBars()
                                         | WindowInsetsCompat.Type.displayCutout()
                         );
+
+                        topSystemBarHeight = allInsets.top;
 
                         int padding16 = (int) Utils.convertDpToPixel(16, CustomThemePreviewActivity.this);
 
@@ -363,7 +365,7 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
             @Override
             public void onGlobalLayout() {
                 binding.appbarLayoutThemePreviewActivity.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                binding.collapsingToolbarLayoutThemePreviewActivity.setScrimVisibleHeightTrigger(binding.toolbar.getHeight() + binding.tabLayoutThemePreviewActivity.getHeight() + getStatusBarHeight() * 2);
+                binding.collapsingToolbarLayoutThemePreviewActivity.setScrimVisibleHeightTrigger(binding.toolbar.getHeight() + binding.tabLayoutThemePreviewActivity.getHeight() + topSystemBarHeight * 2);
             }
         });
         binding.collapsingToolbarLayoutThemePreviewActivity.setContentScrimColor(customTheme.colorPrimary);
@@ -401,14 +403,14 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
         }
     }
 
-    private int getStatusBarHeight() {
+    /*private int getStatusBarHeight() {
         int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
             result = getResources().getDimensionPixelSize(resourceId);
         }
         return result;
-    }
+    }*/
 
     protected void applyAppBarLayoutAndToolbarTheme(AppBarLayout appBarLayout, Toolbar toolbar) {
         appBarLayout.setBackgroundColor(customTheme.colorPrimary);
@@ -431,7 +433,7 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
         }
     }
 
-    private void adjustToolbar(Toolbar toolbar) {
+    /*private void adjustToolbar(Toolbar toolbar) {
         int statusBarResourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (statusBarResourceId > 0) {
             ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) toolbar.getLayoutParams();
@@ -444,7 +446,7 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
                         TypedValue.complexToDimensionPixelSize(tv.data, getResources().getDisplayMetrics()) + statusBarHeight, 0, 0);
             }
         }
-    }
+    }*/
 
     protected void applyTabLayoutTheme(TabLayout tabLayout) {
         int toolbarAndTabBackgroundColor = customTheme.colorPrimary;

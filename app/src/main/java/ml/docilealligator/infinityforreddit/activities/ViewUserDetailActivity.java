@@ -191,6 +191,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private int unsubscribedColor;
     private int subscribedColor;
     private int fabOption;
+    private int topSystemBarHeight;
     private boolean showToast = false;
     private boolean hideFab;
     private boolean showBottomAppBar;
@@ -282,6 +283,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                                 WindowInsetsCompat.Type.systemBars()
                                         | WindowInsetsCompat.Type.displayCutout()
                         );
+
+                        topSystemBarHeight = allInsets.top;
 
                         int padding16 = (int) Utils.convertDpToPixel(16, ViewUserDetailActivity.this);
 
@@ -686,7 +689,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             @Override
             public void onGlobalLayout() {
                 binding.appbarLayoutViewUserDetail.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                binding.collapsingToolbarLayoutViewUserDetailActivity.setScrimVisibleHeightTrigger(binding.toolbarViewUserDetailActivity.getHeight() + binding.tabLayoutViewUserDetailActivity.getHeight() + getStatusBarHeight() * 2);
+                binding.collapsingToolbarLayoutViewUserDetailActivity.setScrimVisibleHeightTrigger(binding.toolbarViewUserDetailActivity.getHeight() + binding.tabLayoutViewUserDetailActivity.getHeight() + topSystemBarHeight * 2);
             }
         });
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutViewUserDetail,

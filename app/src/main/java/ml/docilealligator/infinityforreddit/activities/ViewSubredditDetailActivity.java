@@ -202,6 +202,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private int unsubscribedColor;
     private int subscribedColor;
     private int fabOption;
+    private int topSystemBarHeight;
     private MaterialAlertDialogBuilder nsfwWarningBuilder;
     private Bitmap subredditIconBitmap;
     private ActivityViewSubredditDetailBinding binding;
@@ -252,6 +253,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                                 WindowInsetsCompat.Type.systemBars()
                                         | WindowInsetsCompat.Type.displayCutout()
                         );
+
+                        topSystemBarHeight = allInsets.top;
 
                         int padding16 = (int) Utils.convertDpToPixel(16, ViewSubredditDetailActivity.this);
 
@@ -597,7 +600,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             @Override
             public void onGlobalLayout() {
                 binding.appbarLayoutViewSubredditDetailActivity.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                binding.collapsingToolbarLayoutViewSubredditDetailActivity.setScrimVisibleHeightTrigger(binding.toolbar.getHeight() + binding.tabLayoutViewSubredditDetailActivity.getHeight() + getStatusBarHeight() * 2);
+                binding.collapsingToolbarLayoutViewSubredditDetailActivity.setScrimVisibleHeightTrigger(binding.toolbar.getHeight() + binding.tabLayoutViewSubredditDetailActivity.getHeight() + topSystemBarHeight * 2);
             }
         });
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutViewSubredditDetailActivity,
