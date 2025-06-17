@@ -14,10 +14,10 @@
         android:layout_height="match_parent" />
 
     <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation_view_main_activity"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:id="@+id/navigation_view_main_activity">
+        android:layout_gravity="start">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/nav_drawer_recycler_view_main_activity"

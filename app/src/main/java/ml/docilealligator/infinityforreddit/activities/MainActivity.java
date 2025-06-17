@@ -270,6 +270,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                                         | WindowInsetsCompat.Type.displayCutout()
                         );
 
+                        binding.navigationViewMainActivity.setPadding(allInsets.left, 0, 0, 0);
+
                         if (navigationWrapper.navigationRailView == null) {
                             if (navigationWrapper.bottomAppBar.getVisibility() != View.VISIBLE) {
                                 setMargins(navigationWrapper.floatingActionButton,
@@ -327,6 +329,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                                 BaseActivity.IGNORE_MARGIN,
                                 allInsets.right,
                                 BaseActivity.IGNORE_MARGIN);
+
+                        binding.navDrawerRecyclerViewMainActivity.setPadding(0, 0, 0, allInsets.bottom);
 
                         return WindowInsetsCompat.CONSUMED;
                     }
