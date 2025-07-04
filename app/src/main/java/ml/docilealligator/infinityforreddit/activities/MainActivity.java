@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -396,6 +397,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             fragment.setCancelable(false);
             fragment.show(getSupportFragmentManager(), fragment.getTag());
         }*/
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                handleBackPress();
+            }
+        });
 
         initializeNotificationAndBindView();
     }
@@ -1263,8 +1271,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         return false;
     }
 
-    @Override
-    public void onBackPressed() {
+    private void handleBackPress() {
         if (binding.drawerLayout.isOpen()) {
             binding.drawerLayout.close();
         } else {
@@ -1278,7 +1285,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             } else if (mBackButtonAction == SharedPreferencesUtils.MAIN_PAGE_BACK_BUTTON_ACTION_OPEN_NAVIGATION_DRAWER) {
                 binding.drawerLayout.open();
             } else {
-                super.onBackPressed();
+                finish();
             }
         }
     }
