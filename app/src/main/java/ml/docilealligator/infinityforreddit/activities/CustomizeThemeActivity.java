@@ -282,7 +282,7 @@ public class CustomizeThemeActivity extends BaseActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == android.R.id.home) {
-            finish();
+            triggerBackPress();
             return true;
         } else if (itemId == R.id.action_preview_customize_theme_activity) {
             Intent intent = new Intent(this, CustomThemePreviewActivity.class);
