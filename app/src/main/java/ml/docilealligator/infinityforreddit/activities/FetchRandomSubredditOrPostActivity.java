@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
+
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -81,12 +83,15 @@ public class FetchRandomSubredditOrPostActivity extends BaseActivity {
                 finish();
             }
         });
-    }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        isCanceled = true;
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                isCanceled = true;
+                setEnabled(false);
+                triggerBackPress();
+            }
+        });
     }
 
     @Override
