@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
@@ -78,6 +79,13 @@ public class LockScreenActivity extends BaseActivity {
         });
 
         authenticate();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+
+            }
+        });
     }
 
     private void authenticate() {
@@ -131,7 +139,4 @@ public class LockScreenActivity extends BaseActivity {
             binding.unlockButtonLockScreenActivity.setTypeface(typeface);
         }
     }
-
-    @Override
-    public void onBackPressed() { }
 }
