@@ -156,7 +156,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private long mPostFragmentId;
     private int mPostListPosition;
-    private int mOrientation;
     private boolean mVolumeKeysNavigateComments;
     private boolean mIsNsfwSubreddit;
     private boolean mHideFab;
@@ -268,8 +267,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         if (savedInstanceState == null) {
             post = getIntent().getParcelableExtra(EXTRA_POST_DATA);
         }
-
-        mOrientation = getResources().getConfiguration().orientation;
 
         binding.toolbarViewPostDetailActivity.setTitle("");
         setSupportActionBar(binding.toolbarViewPostDetailActivity);
@@ -826,7 +823,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
+            triggerBackPress();
             return true;
         } else if (item.getItemId() == R.id.action_reset_fab_position_view_post_detail_activity) {
             binding.fabViewPostDetailActivity.resetCoordinates();
@@ -881,15 +878,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         Bridge.saveInstanceState(this, outState);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (mOrientation == getResources().getConfiguration().orientation) {
-            super.onBackPressed();
-        } else {
-            finish();
-        }
     }
 
     @Override

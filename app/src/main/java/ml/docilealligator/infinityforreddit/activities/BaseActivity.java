@@ -523,4 +523,8 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
             Toast.makeText(this, R.string.copy_link_failed, Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void triggerBackPress() {
+        getOnBackPressedDispatcher().onBackPressed();
+    }
 }

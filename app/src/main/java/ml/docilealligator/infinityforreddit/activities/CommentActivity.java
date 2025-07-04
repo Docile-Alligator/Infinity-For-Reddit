@@ -389,7 +389,19 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                handleBackPress();
+                if (isSubmitting) {
+                    promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_edit_comment_detail, false);
+                } else {
+                    if (binding.commentCommentEditText.getText().toString().isEmpty()) {
+                        commentActivityViewModel.deleteCommentDraft(parentFullname, () -> {
+                            setEnabled(false);
+                            triggerBackPress();
+                            return Unit.INSTANCE;
+                        });
+                    } else {
+                        promptAlertDialog(R.string.save_comment_draft, R.string.save_comment_draft_detail, true);
+                    }
+                }
             }
         });
     }
@@ -479,7 +491,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == android.R.id.home) {
-            getOnBackPressedDispatcher().onBackPressed();
+            triggerBackPress();
             return true;
         } else if (itemId == R.id.action_preview_comment_activity) {
             Intent intent = new Intent(this, FullMarkdownActivity.class);
@@ -596,21 +608,6 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                         accessToken, binding.commentCommentEditText, binding.commentCoordinatorLayout, capturedImageUri, uploadedImages);
             } else if (requestCode == MARKDOWN_PREVIEW_REQUEST_CODE) {
                 sendComment(mMenu == null ? null : mMenu.findItem(R.id.action_send_comment_activity));
-            }
-        }
-    }
-
-    private void handleBackPress() {
-        if (isSubmitting) {
-            promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_edit_comment_detail, false);
-        } else {
-            if (binding.commentCommentEditText.getText().toString().isEmpty()) {
-                commentActivityViewModel.deleteCommentDraft(parentFullname, () -> {
-                    finish();
-                    return Unit.INSTANCE;
-                });
-            } else {
-                promptAlertDialog(R.string.save_comment_draft, R.string.save_comment_draft_detail, true);
             }
         }
     }

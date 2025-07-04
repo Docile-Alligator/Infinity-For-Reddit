@@ -401,7 +401,26 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                handleBackPress();
+                if (binding.drawerLayout.isOpen()) {
+                    binding.drawerLayout.close();
+                } else {
+                    if (mBackButtonAction == SharedPreferencesUtils.MAIN_PAGE_BACK_BUTTON_ACTION_CONFIRM_EXIT) {
+                        new MaterialAlertDialogBuilder(MainActivity.this, R.style.MaterialAlertDialogTheme)
+                                .setTitle(R.string.exit_app)
+                                .setPositiveButton(R.string.yes, (dialogInterface, i)
+                                        -> {
+                                    setEnabled(false);
+                                    triggerBackPress();
+                                })
+                                .setNegativeButton(R.string.no, null)
+                                .show();
+                    } else if (mBackButtonAction == SharedPreferencesUtils.MAIN_PAGE_BACK_BUTTON_ACTION_OPEN_NAVIGATION_DRAWER) {
+                        binding.drawerLayout.open();
+                    } else {
+                        setEnabled(false);
+                        triggerBackPress();
+                    }
+                }
             }
         });
 
@@ -1269,25 +1288,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             return true;
         }
         return false;
-    }
-
-    private void handleBackPress() {
-        if (binding.drawerLayout.isOpen()) {
-            binding.drawerLayout.close();
-        } else {
-            if (mBackButtonAction == SharedPreferencesUtils.MAIN_PAGE_BACK_BUTTON_ACTION_CONFIRM_EXIT) {
-                new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
-                        .setTitle(R.string.exit_app)
-                        .setPositiveButton(R.string.yes, (dialogInterface, i)
-                                -> finish())
-                        .setNegativeButton(R.string.no, null)
-                        .show();
-            } else if (mBackButtonAction == SharedPreferencesUtils.MAIN_PAGE_BACK_BUTTON_ACTION_OPEN_NAVIGATION_DRAWER) {
-                binding.drawerLayout.open();
-            } else {
-                finish();
-            }
-        }
     }
 
     @Override

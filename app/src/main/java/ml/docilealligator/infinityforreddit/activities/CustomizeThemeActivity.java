@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.OnApplyWindowInsetsListener;
@@ -253,6 +254,21 @@ public class CustomizeThemeActivity extends BaseActivity {
             binding.recyclerViewCustomizeThemeActivity.setAdapter(adapter);
             adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
         }
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                new MaterialAlertDialogBuilder(CustomizeThemeActivity.this, R.style.MaterialAlertDialogTheme)
+                        .setTitle(R.string.discard)
+                        .setPositiveButton(R.string.discard_dialog_button, (dialogInterface, i)
+                                -> {
+                            setEnabled(false);
+                            triggerBackPress();
+                        })
+                        .setNegativeButton(R.string.no, null)
+                        .show();
+            }
+        });
     }
 
     @Override
@@ -404,16 +420,6 @@ public class CustomizeThemeActivity extends BaseActivity {
             outState.putParcelableArrayList(CUSTOM_THEME_SETTINGS_ITEMS_STATE, customThemeSettingsItems);
             outState.putString(THEME_NAME_STATE, adapter.getThemeName());
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
-                .setTitle(R.string.discard)
-                .setPositiveButton(R.string.discard_dialog_button, (dialogInterface, i)
-                        -> super.onBackPressed())
-                .setNegativeButton(R.string.no, null)
-                .show();
     }
 
     @Override
