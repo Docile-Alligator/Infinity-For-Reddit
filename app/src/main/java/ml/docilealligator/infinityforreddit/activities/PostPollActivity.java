@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
@@ -378,6 +379,29 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
         binding.markdownBottomBarRecyclerViewPostPollActivity.setLayoutManager(new LinearLayoutManagerBugFixed(this,
                 LinearLayoutManager.HORIZONTAL, true).setStackFromEndAndReturnCurrentObject());
         binding.markdownBottomBarRecyclerViewPostPollActivity.setAdapter(adapter);
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (isPosting) {
+                    promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
+                } else {
+                    if (!binding.postTitleEditTextPostPollActivity.getText().toString().isEmpty()
+                            || !binding.postContentEditTextPostPollActivity.getText().toString().isEmpty()
+                            || !binding.option1TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
+                            || !binding.option2TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
+                            || !binding.option3TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
+                            || !binding.option4TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
+                            || !binding.option5TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
+                            || !binding.option6TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
+                        promptAlertDialog(R.string.discard, R.string.discard_detail);
+                    } else {
+                        setEnabled(false);
+                        triggerBackPress();
+                    }
+                }
+            }
+        });
     }
 
     private void loadCurrentAccount() {
@@ -572,23 +596,7 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == android.R.id.home) {
-            if (isPosting) {
-                promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
-                return true;
-            } else {
-                if (!binding.postTitleEditTextPostPollActivity.getText().toString().isEmpty()
-                        || !binding.postContentEditTextPostPollActivity.getText().toString().isEmpty()
-                        || !binding.option1TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
-                        || !binding.option2TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
-                        || !binding.option3TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
-                        || !binding.option4TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
-                        || !binding.option5TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
-                        || !binding.option6TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
-                    promptAlertDialog(R.string.discard, R.string.discard_detail);
-                    return true;
-                }
-            }
-            finish();
+            triggerBackPress();
             return true;
         } else if (itemId == R.id.action_preview_post_poll_activity) {
             Intent intent = new Intent(this, FullMarkdownActivity.class);
@@ -690,26 +698,6 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
 
         JobInfo jobInfo = SubmitPostService.constructJobInfo(this, payloadJSON.length() * 2L, extras);
         ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (isPosting) {
-            promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
-        } else {
-            if (!binding.postTitleEditTextPostPollActivity.getText().toString().isEmpty()
-                    || !binding.postContentEditTextPostPollActivity.getText().toString().isEmpty()
-                    || !binding.option1TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
-                    || !binding.option2TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
-                    || !binding.option3TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
-                    || !binding.option4TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
-                    || !binding.option5TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()
-                    || !binding.option6TextInputLayoutEditTextPostPollActivity.getText().toString().isEmpty()) {
-                promptAlertDialog(R.string.discard, R.string.discard_detail);
-            } else {
-                finish();
-            }
-        }
     }
 
     @Override
