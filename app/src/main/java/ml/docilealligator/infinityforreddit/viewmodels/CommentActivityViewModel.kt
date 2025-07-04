@@ -23,6 +23,13 @@ class CommentActivityViewModel(
         }
     }
 
+    fun deleteCommentDraft(parentFullname: String, onDeleted: () -> Unit) {
+        viewModelScope.launch {
+            commentActivityRepository.deleteCommentDraft(parentFullname)
+            onDeleted()
+        }
+    }
+
     companion object {
         fun provideFactory(commentActivityRepository: CommentActivityRepository) : ViewModelProvider.Factory {
             return object: ViewModelProvider.Factory {

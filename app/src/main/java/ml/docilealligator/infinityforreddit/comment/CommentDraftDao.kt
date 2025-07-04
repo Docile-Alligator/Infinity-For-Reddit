@@ -13,7 +13,7 @@ interface CommentDraftDao {
     suspend fun insert(commentDraft: CommentDraft)
 
     @Delete
-    fun delete(commentDraft: CommentDraft)
+    suspend fun delete(commentDraft: CommentDraft)
 
     @Query("SELECT * FROM comment_draft WHERE parent_full_name = :parentFullName")
     fun getCommentDraftLiveData(parentFullName: String): LiveData<CommentDraft>

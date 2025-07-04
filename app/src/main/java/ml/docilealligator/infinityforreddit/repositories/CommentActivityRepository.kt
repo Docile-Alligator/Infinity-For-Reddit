@@ -7,11 +7,15 @@ import ml.docilealligator.infinityforreddit.comment.CommentDraftDao
 class CommentActivityRepository(
     private val commentDraftDao: CommentDraftDao
 ) {
-    public fun getCommentDraft(parentFullname: String): LiveData<CommentDraft> {
+    fun getCommentDraft(parentFullname: String): LiveData<CommentDraft> {
         return commentDraftDao.getCommentDraftLiveData(parentFullname)
     }
 
-    public suspend fun saveCommentDraft(parentFullname: String, content: String) {
+    suspend fun saveCommentDraft(parentFullname: String, content: String) {
         commentDraftDao.insert(CommentDraft(parentFullname, content, System.currentTimeMillis()))
+    }
+
+    suspend fun deleteCommentDraft(parentFullname: String) {
+        commentDraftDao.delete(CommentDraft(parentFullname, "", 0))
     }
 }

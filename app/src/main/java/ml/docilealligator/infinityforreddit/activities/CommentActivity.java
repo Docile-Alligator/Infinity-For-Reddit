@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,7 +26,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
@@ -67,7 +67,6 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomS
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.GiphyGifInfoBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.comment.Comment;
-import ml.docilealligator.infinityforreddit.comment.CommentDraft;
 import ml.docilealligator.infinityforreddit.comment.SendComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
@@ -380,15 +379,19 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         ).get(CommentActivityViewModel.class);
 
         if (savedInstanceState == null) {
-            commentActivityViewModel.getCommentDraft(parentFullname).observe(this, new Observer<CommentDraft>() {
-                @Override
-                public void onChanged(CommentDraft commentDraft) {
-                    if (commentDraft != null) {
-                        binding.commentCommentEditText.setText(commentDraft.getContent());
-                    }
+            commentActivityViewModel.getCommentDraft(parentFullname).observe(this, commentDraft -> {
+                if (commentDraft != null) {
+                    binding.commentCommentEditText.setText(commentDraft.getContent());
                 }
             });
         }
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                handleBackPress();
+            }
+        });
     }
 
     private void loadCurrentAccount() {
@@ -476,7 +479,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == android.R.id.home) {
-            onBackPressed();
+            getOnBackPressedDispatcher().onBackPressed();
             return true;
         } else if (itemId == R.id.action_preview_comment_activity) {
             Intent intent = new Intent(this, FullMarkdownActivity.class);
@@ -532,7 +535,10 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                                 returnIntent.putExtra(EXTRA_PARENT_POSITION_KEY, parentPosition);
                             }
                             setResult(RESULT_OK, returnIntent);
-                            finish();
+                            commentActivityViewModel.deleteCommentDraft(parentFullname, () -> {
+                                finish();
+                                return Unit.INSTANCE;
+                            });
                         }
 
                         @Override
@@ -594,13 +600,15 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         }
     }
 
-    @Override
-    public void onBackPressed() {
+    private void handleBackPress() {
         if (isSubmitting) {
             promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_edit_comment_detail, false);
         } else {
-            if (binding.commentCommentEditText.getText().toString().equals("")) {
-                finish();
+            if (binding.commentCommentEditText.getText().toString().isEmpty()) {
+                commentActivityViewModel.deleteCommentDraft(parentFullname, () -> {
+                    finish();
+                    return Unit.INSTANCE;
+                });
             } else {
                 promptAlertDialog(R.string.save_comment_draft, R.string.save_comment_draft_detail, true);
             }
