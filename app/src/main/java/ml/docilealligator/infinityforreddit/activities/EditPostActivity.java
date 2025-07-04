@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -14,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
@@ -40,7 +40,6 @@ import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.thing.UploadedImage;
 import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesBottomSheetFragment;
@@ -48,6 +47,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.ActivityEditPostBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.thing.UploadedImage;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -178,6 +178,22 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
 
         binding.postContentEditTextEditPostActivity.requestFocus();
         Utils.showKeyboard(this, new Handler(), binding.postContentEditTextEditPostActivity);
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (isSubmitting) {
+                    promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_edit_post_detail);
+                } else {
+                    if (binding.postContentEditTextEditPostActivity.getText().toString().equals(mPostContent)) {
+                        setEnabled(false);
+                        triggerBackPress();
+                    } else {
+                        promptAlertDialog(R.string.discard, R.string.discard_detail);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -235,7 +251,7 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
             editPost();
             return true;
         } else if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
+            triggerBackPress();
             return true;
         }
         return false;
@@ -307,19 +323,6 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
                         -> finish())
                 .setNegativeButton(R.string.no, null)
                 .show();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (isSubmitting) {
-            promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_edit_post_detail);
-        } else {
-            if (binding.postContentEditTextEditPostActivity.getText().toString().equals(mPostContent)) {
-                finish();
-            } else {
-                promptAlertDialog(R.string.discard, R.string.discard_detail);
-            }
-        }
     }
 
     @Override
