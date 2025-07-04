@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
@@ -18,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
@@ -50,11 +50,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.subreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
@@ -66,6 +64,8 @@ import ml.docilealligator.infinityforreddit.databinding.ActivityPostVideoBinding
 import ml.docilealligator.infinityforreddit.events.SubmitVideoOrGifPostEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.services.SubmitPostService;
+import ml.docilealligator.infinityforreddit.subreddit.Flair;
+import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
@@ -408,6 +408,24 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         binding.markdownBottomBarRecyclerViewPostVideoActivity.setLayoutManager(new LinearLayoutManagerBugFixed(this,
                 LinearLayoutManager.HORIZONTAL, true).setStackFromEndAndReturnCurrentObject());
         binding.markdownBottomBarRecyclerViewPostVideoActivity.setAdapter(adapter);
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (isPosting) {
+                    promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
+                } else {
+                    if (!binding.postTitleEditTextPostVideoActivity.getText().toString().isEmpty()
+                            || !binding.postContentEditTextPostVideoActivity.getText().toString().isEmpty()
+                            || videoUri != null) {
+                        promptAlertDialog(R.string.discard, R.string.discard_detail);
+                    } else {
+                        setEnabled(false);
+                        triggerBackPress();
+                    }
+                }
+            }
+        });
     }
 
     private void loadCurrentAccount() {
@@ -547,18 +565,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == android.R.id.home) {
-            if (isPosting) {
-                promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
-                return true;
-            } else {
-                if (!binding.postTitleEditTextPostVideoActivity.getText().toString().isEmpty()
-                        || !binding.postContentEditTextPostVideoActivity.getText().toString().isEmpty()
-                        || videoUri != null) {
-                    promptAlertDialog(R.string.discard, R.string.discard_detail);
-                    return true;
-                }
-            }
-            finish();
+            triggerBackPress();
             return true;
         } else if (itemId == R.id.action_send_post_video_activity) {
             if (!subredditSelected) {
@@ -636,21 +643,6 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         }
 
         return false;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (isPosting) {
-            promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
-        } else {
-            if (!binding.postTitleEditTextPostVideoActivity.getText().toString().isEmpty()
-                    || !binding.postContentEditTextPostVideoActivity.getText().toString().isEmpty()
-                    || videoUri != null) {
-                promptAlertDialog(R.string.discard, R.string.discard_detail);
-            } else {
-                finish();
-            }
-        }
     }
 
     @Override
