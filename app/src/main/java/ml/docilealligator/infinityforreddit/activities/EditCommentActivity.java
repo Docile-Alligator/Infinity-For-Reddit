@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
@@ -219,6 +220,22 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
         Utils.showKeyboard(this, new Handler(), binding.commentEditTextEditCommentActivity);
 
         Giphy.INSTANCE.configure(this, APIUtils.GIPHY_GIF_API_KEY);
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (isSubmitting) {
+                    promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_edit_comment_detail);
+                } else {
+                    if (binding.commentEditTextEditCommentActivity.getText().toString().equals(mCommentContent)) {
+                        setEnabled(false);
+                        triggerBackPress();
+                    } else {
+                        promptAlertDialog(R.string.discard, R.string.discard_detail);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -271,7 +288,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
             editComment();
             return true;
         } else if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
+            triggerBackPress();
             return true;
         }
         return false;
@@ -383,19 +400,6 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(UPLOADED_IMAGES_STATE, uploadedImages);
         outState.putParcelable(GIPHY_GIF_STATE, giphyGif);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (isSubmitting) {
-            promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_edit_comment_detail);
-        } else {
-            if (binding.commentEditTextEditCommentActivity.getText().toString().equals(mCommentContent)) {
-                finish();
-            } else {
-                promptAlertDialog(R.string.discard, R.string.discard_detail);
-            }
-        }
     }
 
     @Override
