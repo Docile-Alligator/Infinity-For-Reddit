@@ -17,6 +17,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -260,6 +261,22 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
             finish();
         });
 
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (binding.searchEditTextSubscribedThingListingActivity.getVisibility() == View.VISIBLE) {
+                    Utils.hideKeyboard(SubscribedThingListingActivity.this);
+                    binding.searchEditTextSubscribedThingListingActivity.setVisibility(View.GONE);
+                    binding.searchEditTextSubscribedThingListingActivity.setText("");
+                    mMenu.findItem(R.id.action_search_subscribed_thing_listing_activity).setVisible(true);
+                    sectionsPagerAdapter.changeSearchQuery("");
+                } else {
+                    setEnabled(false);
+                    triggerBackPress();
+                }
+            }
+        });
+
         initializeViewPagerAndLoadSubscriptions();
     }
 
@@ -368,32 +385,11 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
             }
             return true;
         } else if (item.getItemId() == android.R.id.home) {
-            if (binding.searchEditTextSubscribedThingListingActivity.getVisibility() == View.VISIBLE) {
-                Utils.hideKeyboard(this);
-                binding.searchEditTextSubscribedThingListingActivity.setVisibility(View.GONE);
-                binding.searchEditTextSubscribedThingListingActivity.setText("");
-                mMenu.findItem(R.id.action_search_subscribed_thing_listing_activity).setVisible(true);
-                sectionsPagerAdapter.changeSearchQuery("");
-                return true;
-            }
-            finish();
+            triggerBackPress();
             return true;
         }
 
         return false;
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (binding.searchEditTextSubscribedThingListingActivity.getVisibility() == View.VISIBLE) {
-            Utils.hideKeyboard(this);
-            binding.searchEditTextSubscribedThingListingActivity.setVisibility(View.GONE);
-            binding.searchEditTextSubscribedThingListingActivity.setText("");
-            mMenu.findItem(R.id.action_search_subscribed_thing_listing_activity).setVisible(true);
-            sectionsPagerAdapter.changeSearchQuery("");
-        } else {
-            super.onBackPressed();
-        }
     }
 
     @Override
