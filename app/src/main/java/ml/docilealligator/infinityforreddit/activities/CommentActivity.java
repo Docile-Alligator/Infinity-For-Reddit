@@ -186,6 +186,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                         Insets allInsets = insets.getInsets(
                                 WindowInsetsCompat.Type.systemBars()
                                         | WindowInsetsCompat.Type.displayCutout()
+                                        | WindowInsetsCompat.Type.ime()
                         );
 
                         setMargins(binding.commentToolbar,
