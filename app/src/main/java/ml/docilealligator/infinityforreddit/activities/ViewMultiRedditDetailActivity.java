@@ -221,13 +221,14 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                                 binding.frameLayoutViewMultiRedditDetailActivity.setPadding(allInsets.left, 0, allInsets.right, 0);
                             } else {
                                 navigationWrapper.navigationRailView.setFitsSystemWindows(false);
-                                navigationWrapper.navigationRailView.setPadding(0, 0, 0, 0);
+                                navigationWrapper.navigationRailView.setPadding(0, 0, 0, allInsets.bottom);
 
                                 setMargins(navigationWrapper.navigationRailView,
                                         allInsets.left,
                                         BaseActivity.IGNORE_MARGIN,
                                         BaseActivity.IGNORE_MARGIN,
-                                        allInsets.bottom);
+                                        BaseActivity.IGNORE_MARGIN
+                                );
 
                                 binding.frameLayoutViewMultiRedditDetailActivity.setPadding(0, 0, allInsets.right, 0);
                             }
