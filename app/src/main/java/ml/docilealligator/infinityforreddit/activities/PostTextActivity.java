@@ -165,6 +165,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
                     Insets allInsets = insets.getInsets(
                             WindowInsetsCompat.Type.systemBars()
                                     | WindowInsetsCompat.Type.displayCutout()
+                                    | WindowInsetsCompat.Type.ime()
                     );
 
                     setMargins(binding.toolbarPostTextActivity,

@@ -170,6 +170,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
                     Insets allInsets = insets.getInsets(
                             WindowInsetsCompat.Type.systemBars()
                                     | WindowInsetsCompat.Type.displayCutout()
+                                    | WindowInsetsCompat.Type.ime()
                     );
 
                     setMargins(binding.toolbarPostVideoActivity,

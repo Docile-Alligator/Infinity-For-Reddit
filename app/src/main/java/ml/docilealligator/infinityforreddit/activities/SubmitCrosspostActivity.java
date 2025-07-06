@@ -151,6 +151,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
                     Insets allInsets = insets.getInsets(
                             WindowInsetsCompat.Type.systemBars()
                                     | WindowInsetsCompat.Type.displayCutout()
+                                    | WindowInsetsCompat.Type.ime()
                     );
 
                     setMargins(binding.toolbarSubmitCrosspostActivity,

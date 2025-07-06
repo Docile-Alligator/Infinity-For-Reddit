@@ -102,6 +102,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
                     Insets allInsets = insets.getInsets(
                             WindowInsetsCompat.Type.systemBars()
                                     | WindowInsetsCompat.Type.displayCutout()
+                                    | WindowInsetsCompat.Type.ime()
                     );
 
                     setMargins(binding.toolbarCustomizePostFilterActivity,

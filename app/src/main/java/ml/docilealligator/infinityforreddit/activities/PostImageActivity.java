@@ -157,6 +157,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
                     Insets allInsets = insets.getInsets(
                             WindowInsetsCompat.Type.systemBars()
                                     | WindowInsetsCompat.Type.displayCutout()
+                                    | WindowInsetsCompat.Type.ime()
                     );
 
                     setMargins(binding.toolbarPostImageActivity,

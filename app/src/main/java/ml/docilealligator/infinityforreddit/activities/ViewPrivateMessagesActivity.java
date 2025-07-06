@@ -111,6 +111,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
                     Insets allInsets = insets.getInsets(
                             WindowInsetsCompat.Type.systemBars()
                                     | WindowInsetsCompat.Type.displayCutout()
+                                    | WindowInsetsCompat.Type.ime()
                     );
 
                     setMargins(binding.toolbarViewPrivateMessagesActivity,
