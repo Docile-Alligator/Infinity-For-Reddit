@@ -4599,7 +4599,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     }
 
     @UnstableApi
-    class PostMaterial3CardVideoAutoplayViewHolder extends PostBaseVideoAutoplayViewHolder {
+    public class PostMaterial3CardVideoAutoplayViewHolder extends PostBaseVideoAutoplayViewHolder {
         PostMaterial3CardVideoAutoplayViewHolder(ItemPostCard3VideoTypeAutoplayBinding binding) {
             super(binding.getRoot(),
                     binding.iconGifImageViewItemPostCard3VideoTypeAutoplay,
@@ -4639,7 +4639,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     }
 
     @UnstableApi
-    class PostMaterial3CardVideoAutoplayLegacyControllerViewHolder extends PostBaseVideoAutoplayViewHolder {
+    public class PostMaterial3CardVideoAutoplayLegacyControllerViewHolder extends PostBaseVideoAutoplayViewHolder {
         PostMaterial3CardVideoAutoplayLegacyControllerViewHolder(ItemPostCard3VideoTypeAutoplayLegacyControllerBinding binding) {
             super(binding.getRoot(),
                     binding.iconGifImageViewItemPostCard3VideoTypeAutoplay,
@@ -4751,7 +4751,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     }
 
-    class PostMaterial3CardTextTypeViewHolder extends PostTextTypeViewHolder {
+    public class PostMaterial3CardTextTypeViewHolder extends PostTextTypeViewHolder {
         PostMaterial3CardTextTypeViewHolder(@NonNull ItemPostCard3TextBinding binding) {
             super(binding.getRoot());
             setBaseView(

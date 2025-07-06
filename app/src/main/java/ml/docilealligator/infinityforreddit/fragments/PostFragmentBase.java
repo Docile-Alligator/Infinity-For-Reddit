@@ -27,12 +27,14 @@ import android.widget.Toast;
 import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.media3.common.util.UnstableApi;
 import androidx.paging.ItemSnapshotList;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearSmoothScroller;
@@ -940,18 +942,25 @@ public abstract class PostFragmentBase extends Fragment {
 
     protected static class StaggeredGridLayoutManagerItemOffsetDecoration extends RecyclerView.ItemDecoration {
 
-        private final int mItemOffset;
+        private final int mHalfOffset;
+        private final int mQuaterOffset;
+        private final int mCard3HorizontalSpace;
+        private final int mCard3VerticalSpace;
         private final int mNColumns;
 
         StaggeredGridLayoutManagerItemOffsetDecoration(int itemOffset, int nColumns) {
-            mItemOffset = itemOffset;
             mNColumns = nColumns;
+            mCard3HorizontalSpace = -itemOffset / 4 * 3;
+            mCard3VerticalSpace = -itemOffset / 4;
+            mHalfOffset = itemOffset / 2;
+            mQuaterOffset = itemOffset / 4;
         }
 
         StaggeredGridLayoutManagerItemOffsetDecoration(@NonNull Context context, @DimenRes int itemOffsetId, int nColumns) {
             this(context.getResources().getDimensionPixelSize(itemOffsetId), nColumns);
         }
 
+        @OptIn(markerClass = UnstableApi.class)
         @Override
         public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent,
                                    @NonNull RecyclerView.State state) {
@@ -961,21 +970,46 @@ public abstract class PostFragmentBase extends Fragment {
 
             int spanIndex = layoutParams.getSpanIndex();
 
-            int halfOffset = mItemOffset / 2;
+            int viewPosition = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewLayoutPosition();
+            if (parent.getAdapter() != null) {
+                RecyclerView.ViewHolder viewHolder = parent.getChildViewHolder(view);
+                if (viewHolder instanceof PostRecyclerViewAdapter.PostMaterial3CardVideoAutoplayViewHolder ||
+                        viewHolder instanceof PostRecyclerViewAdapter.PostMaterial3CardVideoAutoplayLegacyControllerViewHolder ||
+                        viewHolder instanceof PostRecyclerViewAdapter.PostMaterial3CardWithPreviewViewHolder ||
+                        viewHolder instanceof PostRecyclerViewAdapter.PostMaterial3CardGalleryTypeViewHolder ||
+                        viewHolder instanceof PostRecyclerViewAdapter.PostMaterial3CardTextTypeViewHolder) {
+                    if (mNColumns == 2) {
+                        if (spanIndex == 0) {
+                            outRect.set(-mHalfOffset, mCard3VerticalSpace, mCard3HorizontalSpace, mCard3VerticalSpace);
+                        } else {
+                            outRect.set(mCard3HorizontalSpace, mCard3VerticalSpace, -mHalfOffset, mCard3VerticalSpace);
+                        }
+                    } else if (mNColumns == 3) {
+                        if (spanIndex == 0) {
+                            outRect.set(-mHalfOffset, mCard3VerticalSpace, mCard3HorizontalSpace, mCard3VerticalSpace);
+                        } else if (spanIndex == 1) {
+                            outRect.set(mCard3HorizontalSpace, mCard3VerticalSpace, mCard3HorizontalSpace, mCard3VerticalSpace);
+                        } else {
+                            outRect.set(mCard3HorizontalSpace, mCard3VerticalSpace, -mHalfOffset, mCard3VerticalSpace);
+                        }
+                    }
+                    return;
+                }
+            }
 
             if (mNColumns == 2) {
                 if (spanIndex == 0) {
-                    outRect.set(halfOffset, 0, halfOffset / 2, 0);
+                    outRect.set(mHalfOffset, 0, mQuaterOffset, 0);
                 } else {
-                    outRect.set(halfOffset / 2, 0, halfOffset, 0);
+                    outRect.set(mQuaterOffset, 0, mHalfOffset, 0);
                 }
             } else if (mNColumns == 3) {
                 if (spanIndex == 0) {
-                    outRect.set(halfOffset, 0, halfOffset / 2, 0);
+                    outRect.set(mHalfOffset, 0, mQuaterOffset, 0);
                 } else if (spanIndex == 1) {
-                    outRect.set(halfOffset / 2, 0, halfOffset / 2, 0);
+                    outRect.set(mQuaterOffset, 0, mQuaterOffset, 0);
                 } else {
-                    outRect.set(halfOffset / 2, 0, halfOffset, 0);
+                    outRect.set(mQuaterOffset, 0, mHalfOffset, 0);
                 }
             }
         }
