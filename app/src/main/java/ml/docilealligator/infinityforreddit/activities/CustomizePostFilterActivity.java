@@ -99,24 +99,30 @@ public class CustomizePostFilterActivity extends BaseActivity {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
+                    Insets windowInsets = insets.getInsets(
                             WindowInsetsCompat.Type.systemBars()
                                     | WindowInsetsCompat.Type.displayCutout()
-                                    | WindowInsetsCompat.Type.ime()
                     );
+                    Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
 
                     setMargins(binding.toolbarCustomizePostFilterActivity,
-                            allInsets.left,
-                            allInsets.top,
-                            allInsets.right,
+                            windowInsets.left,
+                            windowInsets.top,
+                            windowInsets.right,
                             BaseActivity.IGNORE_MARGIN);
 
                     binding.contentWrapperViewCustomizePostFilterActivity.setPadding(
-                            allInsets.left,
+                            windowInsets.left,
                             0,
-                            allInsets.right,
-                            allInsets.bottom
+                            windowInsets.right,
+                            windowInsets.bottom
                     );
+
+                    setMargins(binding.contentWrapperViewCustomizePostFilterActivity,
+                            BaseActivity.IGNORE_MARGIN,
+                            BaseActivity.IGNORE_MARGIN,
+                            BaseActivity.IGNORE_MARGIN,
+                            imeInsets.bottom);
 
                     return WindowInsetsCompat.CONSUMED;
                 }

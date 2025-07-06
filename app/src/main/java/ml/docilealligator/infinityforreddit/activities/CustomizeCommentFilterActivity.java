@@ -94,23 +94,30 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
+                    Insets windowInsets = insets.getInsets(
                             WindowInsetsCompat.Type.systemBars()
                                     | WindowInsetsCompat.Type.displayCutout()
                     );
+                    Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
 
                     setMargins(binding.toolbarCustomizeCommentFilterActivity,
-                            allInsets.left,
-                            allInsets.top,
-                            allInsets.right,
+                            windowInsets.left,
+                            windowInsets.top,
+                            windowInsets.right,
                             BaseActivity.IGNORE_MARGIN);
 
                     binding.contentWrapperViewCustomizeCommentFilterActivity.setPadding(
-                            allInsets.left,
+                            windowInsets.left,
                             0,
-                            allInsets.right,
-                            allInsets.bottom
+                            windowInsets.right,
+                            windowInsets.bottom
                     );
+
+                    setMargins(binding.contentWrapperViewCustomizeCommentFilterActivity,
+                            BaseActivity.IGNORE_MARGIN,
+                            BaseActivity.IGNORE_MARGIN,
+                            BaseActivity.IGNORE_MARGIN,
+                            imeInsets.bottom);
 
                     return WindowInsetsCompat.CONSUMED;
                 }
@@ -246,6 +253,7 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
 
         binding.excludeUsersCardViewCustomizeCommentFilterActivity.setCardBackgroundColor(filledCardViewBackgroundColor);
         binding.excludeUsersExplanationTextViewCustomizeCommentFilterActivity.setTextColor(primaryTextColor);
+        binding.excludeUsersTextInputLayoutCustomizeCommentFilterActivity.setBoxStrokeColor(primaryTextColor);
         binding.excludeUsersTextInputLayoutCustomizeCommentFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         binding.excludeUsersTextInputEditTextCustomizeCommentFilterActivity.setTextColor(primaryTextColor);
         binding.addUsersImageViewCustomizeCommentFilterActivity.setImageDrawable(Utils.getTintedDrawable(this, R.drawable.ic_add_24dp, primaryIconColor));
