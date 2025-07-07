@@ -749,4 +749,28 @@
         <item>DIRECT</item>
     </string-array>
 
+    <string-array name="settings_long_press_post_non_media_area_action">
+        <item>@string/none</item>
+        <item>@string/show_post_options</item>
+        <item>@string/preview_in_fullscreen</item>
+    </string-array>
+
+    <string-array name="settings_long_press_post_non_media_area_action_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="settings_long_press_post_media_action">
+        <item>@string/none</item>
+        <item>@string/show_post_options</item>
+        <item>@string/preview_in_fullscreen</item>
+    </string-array>
+
+    <string-array name="settings_long_press_post_media_action_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
 </resources>

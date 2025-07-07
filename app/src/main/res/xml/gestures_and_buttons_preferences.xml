@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="true"
@@ -59,6 +60,22 @@
         app:key="pinch_to_zoom_video"
         app:title="@string/settings_pinch_to_zoom_video_title"
         app:summary="@string/settings_experimental_feature" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
+        app:defaultValue="1"
+        android:entries="@array/settings_long_press_post_non_media_area_action"
+        app:entryValues="@array/settings_long_press_post_non_media_area_action_values"
+        app:key="long_press_post_non_media_area"
+        app:title="@string/long_press_post_non_media_area"
+        app:useSimpleSummaryProvider="true" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
+        app:defaultValue="1"
+        android:entries="@array/settings_long_press_post_media_action"
+        app:entryValues="@array/settings_long_press_post_media_action_values"
+        app:key="long_press_post_media"
+        app:title="@string/long_press_post_media"
+        app:useSimpleSummaryProvider="true" />
 
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:title="@string/settings_swipe_action_title"

@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -43,6 +44,8 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.lang.reflect.Field;
 import java.util.Locale;
 
@@ -51,6 +54,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
+import ml.docilealligator.infinityforreddit.events.FinishViewMediaActivityEvent;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.font.FontFamily;
@@ -71,6 +75,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
     private boolean isImmersiveInterfaceApplicable = true;
     private int systemVisibilityToolbarExpanded = 0;
     private int systemVisibilityToolbarCollapsed = 0;
+    private boolean shouldTrackFullscreenMediaPeekTouchEvent;
     public CustomThemeWrapper customThemeWrapper;
     public Typeface typeface;
     public Typeface titleTypeface;
@@ -259,6 +264,18 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
     protected void onDestroy() {
         super.onDestroy();
         mHandler.removeCallbacksAndMessages(null);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (shouldTrackFullscreenMediaPeekTouchEvent) {
+            if (ev.getAction() == MotionEvent.ACTION_CANCEL || ev.getAction() == MotionEvent.ACTION_UP) {
+                shouldTrackFullscreenMediaPeekTouchEvent = false;
+                EventBus.getDefault().post(new FinishViewMediaActivityEvent());
+            }
+            return true;
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
     public abstract SharedPreferences getDefaultSharedPreferences();
@@ -526,5 +543,9 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
 
     public void triggerBackPress() {
         getOnBackPressedDispatcher().onBackPressed();
+    }
+
+    public void setShouldTrackFullscreenMediaPeekTouchEvent(boolean value) {
+        shouldTrackFullscreenMediaPeekTouchEvent = value;
     }
 }

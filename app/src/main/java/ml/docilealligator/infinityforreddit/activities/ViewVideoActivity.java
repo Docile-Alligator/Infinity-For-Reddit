@@ -81,6 +81,8 @@ import com.otaliastudios.zoom.ZoomEngine;
 import com.otaliastudios.zoom.ZoomSurfaceView;
 
 import org.apache.commons.io.FilenameUtils;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.concurrent.Executor;
 
@@ -99,6 +101,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBo
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.ActivityViewVideoBinding;
 import ml.docilealligator.infinityforreddit.databinding.ActivityViewVideoZoomableBinding;
+import ml.docilealligator.infinityforreddit.events.FinishViewMediaActivityEvent;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.font.FontFamily;
@@ -284,6 +287,8 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             binding = new ViewVideoActivityBindingAdapter(ActivityViewVideoBinding.inflate(getLayoutInflater()));
             setContentView(binding.getRoot());
         }
+
+        EventBus.getDefault().register(this);
 
         applyCustomTheme();
 
@@ -905,6 +910,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
     @Override
     protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
         player.seekToDefaultPosition();
         player.stop();
@@ -1051,5 +1057,10 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     @Override
     public void setCustomFont(Typeface typeface, Typeface titleTypeface, Typeface contentTypeface) {
         this.typeface = typeface;
+    }
+
+    @Subscribe
+    public void onFinishViewMediaActivityEvent(FinishViewMediaActivityEvent e) {
+        finish();
     }
 }

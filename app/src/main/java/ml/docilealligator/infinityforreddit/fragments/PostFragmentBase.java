@@ -102,6 +102,7 @@ import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.events.ShowDividerInCompactLayoutPreferenceEvent;
 import ml.docilealligator.infinityforreddit.events.ShowThumbnailOnTheLeftInCompactLayoutEvent;
 import ml.docilealligator.infinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesLiveDataKt;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
@@ -339,6 +340,18 @@ public abstract class PostFragmentBase extends Fragment {
                 }
             });
         }
+
+        SharedPreferencesLiveDataKt.stringLiveData(mSharedPreferences, SharedPreferencesUtils.LONG_PRESS_POST_NON_MEDIA_AREA, SharedPreferencesUtils.LONG_PRESS_POST_VALUE_SHOW_POST_OPTIONS).observe(getViewLifecycleOwner(), s -> {
+            if (getPostAdapter() != null) {
+                getPostAdapter().setLongPressPostNonMediaAreaAction(s);
+            }
+        });
+
+        SharedPreferencesLiveDataKt.stringLiveData(mSharedPreferences, SharedPreferencesUtils.LONG_PRESS_POST_MEDIA, SharedPreferencesUtils.LONG_PRESS_POST_VALUE_SHOW_POST_OPTIONS).observe(getViewLifecycleOwner(), s -> {
+            if (getPostAdapter() != null) {
+                getPostAdapter().setLongPressPostMediaAction(s);
+            }
+        });
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -970,7 +983,6 @@ public abstract class PostFragmentBase extends Fragment {
 
             int spanIndex = layoutParams.getSpanIndex();
 
-            int viewPosition = ((RecyclerView.LayoutParams) view.getLayoutParams()).getViewLayoutPosition();
             if (parent.getAdapter() != null) {
                 RecyclerView.ViewHolder viewHolder = parent.getChildViewHolder(view);
                 if (viewHolder instanceof PostRecyclerViewAdapter.PostMaterial3CardVideoAutoplayViewHolder ||
