@@ -109,10 +109,6 @@ public class SettingsActivity extends BaseActivity implements
         }
 
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
-            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                setTitle(R.string.settings_activity_label);
-                return;
-            }
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_layout_settings_activity);
             if (fragment instanceof AboutPreferenceFragment) {
                 setTitle(R.string.settings_about_master_title);
@@ -126,6 +122,8 @@ public class SettingsActivity extends BaseActivity implements
                 setTitle(R.string.settings_category_post_title);
             } else if (fragment instanceof AdvancedPreferenceFragment) {
                 setTitle(R.string.settings_advanced_master_title);
+            } else if (fragment instanceof MainPreferenceFragment) {
+                setTitle(R.string.settings_activity_label);
             }
         });
     }
