@@ -58,24 +58,4 @@ public class AspectRatioGifImageView extends GifImageView {
             }
         }
     }
-
-    /*@Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-
-        int desiredHeight = (int) (widthSize * ratio);
-        int selectedHeight;
-
-        if(heightMode == MeasureSpec.EXACTLY) {
-            selectedHeight = heightSize;
-        } else if(heightMode == MeasureSpec.AT_MOST) {
-            selectedHeight = Math.min(heightSize, desiredHeight);
-        } else {
-            selectedHeight = desiredHeight;
-        }
-        super.onMeasure(MeasureSpec.makeMeasureSpec(widthSize, MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(selectedHeight, MeasureSpec.EXACTLY));
-    }*/
 }

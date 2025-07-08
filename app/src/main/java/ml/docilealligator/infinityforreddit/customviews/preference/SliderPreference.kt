@@ -49,7 +49,8 @@ class SliderPreference @JvmOverloads constructor(
         context.theme.obtainStyledAttributes(
             attrs,
             R.styleable.SliderPreference,
-            0, 0).let {
+            0, 0
+        ).let {
             try {
                 min = it.getInt(R.styleable.SliderPreference_sliderMin, 0)
                 max = it.getInt(R.styleable.SliderPreference_sliderMax, 100)

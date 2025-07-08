@@ -55,4 +55,9 @@
         <attr name="sliderMax" format="integer" />
         <attr name="sliderStepSize" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="CustomFontPreference">
+        <attr name="top" format="boolean" />
+        <attr name="bottom" format="boolean" />
+    </declare-styleable>
 </resources>

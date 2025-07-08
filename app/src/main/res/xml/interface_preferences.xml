@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:title="@string/settings_font_title"
@@ -67,6 +68,15 @@
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
         app:title="@string/settings_category_comment_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.CommentPreferenceFragment" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
+        app:defaultValue="2.5"
+        android:entries="@array/settings_lazy_mode_interval"
+        app:entryValues="@array/settings_lazy_mode_interval_values"
+        app:key="lazy_mode_interval"
+        app:icon="@drawable/ic_access_time_day_night_24dp"
+        app:title="@string/settings_lazy_mode_interval_title"
+        app:useSimpleSummaryProvider="true" />
 
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceCategory
         app:title="@string/settings_category_post_and_comment_title" />
