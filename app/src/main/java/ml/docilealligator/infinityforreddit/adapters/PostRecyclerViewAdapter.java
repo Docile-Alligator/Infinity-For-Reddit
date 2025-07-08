@@ -1792,10 +1792,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         openMedia(post, 0, videoProgress, false);
     }
 
-    private void openMedia(Post post, long videoProgress, boolean peekMedia) {
-        openMedia(post, 0, videoProgress, peekMedia);
-    }
-
     private void openMedia(Post post, int galleryItemIndex, long videoProgress, boolean peekMedia) {
         if (canStartActivity) {
             canStartActivity = false;
@@ -1866,12 +1862,16 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     intent.putExtra(ViewImageOrGifActivity.EXTRA_IS_NSFW, post.isNSFW());
                     mActivity.startActivity(intent);
                 }
-            } else if (!peekMedia && post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
-                Intent intent = new Intent(mActivity, LinkResolverActivity.class);
-                Uri uri = Uri.parse(post.getUrl());
-                intent.setData(uri);
-                intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, post.isNSFW());
-                mActivity.startActivity(intent);
+            } else if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
+                if (peekMedia) {
+                    canStartActivity = true;
+                } else {
+                    Intent intent = new Intent(mActivity, LinkResolverActivity.class);
+                    Uri uri = Uri.parse(post.getUrl());
+                    intent.setData(uri);
+                    intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, post.isNSFW());
+                    mActivity.startActivity(intent);
+                }
             } else if (post.getPostType() == Post.GALLERY_TYPE) {
                 mActivity.setShouldTrackFullscreenMediaPeekTouchEvent(true);
 
@@ -3376,7 +3376,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 imageView.performClick();
             });
 
-            imageViewNoPreviewGallery.setOnLongClickListener(view -> itemView.performLongClick());
+            imageViewNoPreviewGallery.setOnLongClickListener(view -> imageView.performLongClick());
 
             glideRequestListener = new RequestListener<>() {
                 @Override
