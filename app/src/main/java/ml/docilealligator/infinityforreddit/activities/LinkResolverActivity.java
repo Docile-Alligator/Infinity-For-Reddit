@@ -312,7 +312,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                             if (path.startsWith("/CL0/")) {
                                 handleUri(Uri.parse(path.substring("/CL0/".length())));
                             }
-                        } else if (authority.contains("redgifs.com")) {
+                        }/* else if (authority.contains("redgifs.com")) {
                             if (path.matches(REDGIFS_PATTERN)) {
                                 Intent intent = new Intent(this, ViewVideoActivity.class);
                                 intent.putExtra(ViewVideoActivity.EXTRA_REDGIFS_ID, path.substring(path.lastIndexOf("/") + 1));
@@ -322,7 +322,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                             } else {
                                 deepLinkError(uri);
                             }
-                        } else if (authority.contains("imgur.com")) {
+                        }*/ else if (authority.contains("imgur.com")) {
                             if (path.matches(IMGUR_GALLERY_PATTERN)) {
                                 Intent intent = new Intent(this, ViewImgurMediaActivity.class);
                                 intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_GALLERY);
