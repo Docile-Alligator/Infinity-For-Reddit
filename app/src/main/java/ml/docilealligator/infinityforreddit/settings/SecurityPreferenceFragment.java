@@ -94,7 +94,7 @@ public class SecurityPreferenceFragment extends CustomFontPreferenceFragmentComp
 
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
-                activity.onBackPressed();
+                activity.triggerBackPress();
             }
         });
 

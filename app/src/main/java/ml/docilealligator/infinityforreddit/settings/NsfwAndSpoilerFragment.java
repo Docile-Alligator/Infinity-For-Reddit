@@ -176,7 +176,7 @@ public class NsfwAndSpoilerFragment extends Fragment {
                 .setTitle(getString(R.string.warning))
                 .setView(messageTextView)
                 .setPositiveButton(R.string.agree, (dialogInterface, i) -> dialogInterface.dismiss())
-                .setNegativeButton(R.string.do_not_agree, (dialogInterface, i) -> activity.onBackPressed())
+                .setNegativeButton(R.string.do_not_agree, (dialogInterface, i) -> activity.triggerBackPress())
                 .setCancelable(false)
                 .show();
 

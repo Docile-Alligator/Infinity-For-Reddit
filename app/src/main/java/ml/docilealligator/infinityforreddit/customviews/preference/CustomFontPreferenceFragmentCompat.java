@@ -53,7 +53,7 @@ public abstract class CustomFontPreferenceFragmentCompat extends PreferenceFragm
                                 WindowInsetsCompat.Type.systemBars()
                                         | WindowInsetsCompat.Type.displayCutout()
                         );
-                        recyclerView.setPadding(0, 0, 0, allInsets.bottom);
+                        recyclerView.setPadding(allInsets.left, 0, allInsets.right, allInsets.bottom);
                         return WindowInsetsCompat.CONSUMED;
                     }
                 });

@@ -129,7 +129,7 @@ public class CustomThemeWrapper {
 
     public int getFilledCardViewBackgroundColor() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.FILLED_CARD_VIEW_BACKGROUND_COLOR,
-                getDefaultColor("#E6F4FF", "#242424", "#000000"));
+                getDefaultColor("#EDF6FD", "#242424", "#000000"));
     }
 
     public int getReadPostFilledCardViewBackgroundColor() {
