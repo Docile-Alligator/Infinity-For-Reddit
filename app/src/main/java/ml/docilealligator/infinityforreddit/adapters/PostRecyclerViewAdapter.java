@@ -1796,7 +1796,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         if (canStartActivity) {
             canStartActivity = false;
             if (post.getPostType() == Post.VIDEO_TYPE) {
-                mActivity.setShouldTrackFullscreenMediaPeekTouchEvent(true);
+                if (peekMedia) {
+                    mActivity.setShouldTrackFullscreenMediaPeekTouchEvent(true);
+                }
 
                 Intent intent = new Intent(mActivity, ViewVideoActivity.class);
                 if (post.isImgur()) {
@@ -1829,7 +1831,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, post.isNSFW());
                 mActivity.startActivity(intent);
             } else if (post.getPostType() == Post.IMAGE_TYPE) {
-                mActivity.setShouldTrackFullscreenMediaPeekTouchEvent(true);
+                if (peekMedia) {
+                    mActivity.setShouldTrackFullscreenMediaPeekTouchEvent(true);
+                }
 
                 Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
                 intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, post.getUrl());
@@ -1840,7 +1844,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 intent.putExtra(ViewImageOrGifActivity.EXTRA_IS_NSFW, post.isNSFW());
                 mActivity.startActivity(intent);
             } else if (post.getPostType() == Post.GIF_TYPE) {
-                mActivity.setShouldTrackFullscreenMediaPeekTouchEvent(true);
+                if (peekMedia) {
+                    mActivity.setShouldTrackFullscreenMediaPeekTouchEvent(true);
+                }
 
                 if (post.getMp4Variant() != null) {
                     Intent intent = new Intent(mActivity, ViewVideoActivity.class);
@@ -1873,7 +1879,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     mActivity.startActivity(intent);
                 }
             } else if (post.getPostType() == Post.GALLERY_TYPE) {
-                mActivity.setShouldTrackFullscreenMediaPeekTouchEvent(true);
+                if (peekMedia) {
+                    mActivity.setShouldTrackFullscreenMediaPeekTouchEvent(true);
+                }
 
                 Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
                 intent.putExtra(ViewRedditGalleryActivity.EXTRA_POST, post);

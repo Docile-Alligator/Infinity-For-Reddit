@@ -45,6 +45,7 @@
             app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0"
             app:strokeWidth="0dp"
             tools:visibility="visible" />
 
@@ -54,9 +55,9 @@
             android:layout_height="wrap_content"
             android:spacing="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/hd_exo_playback_control_view"
+            app:layout_constraintEnd_toStartOf="@+id/endBarrier"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@id/mute_exo_playback_control_view"
+            app:layout_constraintStart_toEndOf="@id/startBarrier"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.button.MaterialButton
@@ -108,8 +109,25 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/button_group_exo_playback_control_view"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="1"
             app:strokeWidth="0dp"
             tools:visibility="visible" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/startBarrier"
+            app:barrierDirection="start"
+            app:constraint_referenced_ids="mute_exo_playback_control_view"
+            app:barrierAllowsGoneWidgets="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/endBarrier"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="hd_exo_playback_control_view"
+            app:barrierAllowsGoneWidgets="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
