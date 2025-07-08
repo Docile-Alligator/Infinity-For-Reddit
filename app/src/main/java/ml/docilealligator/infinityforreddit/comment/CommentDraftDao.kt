@@ -15,6 +15,6 @@ interface CommentDraftDao {
     @Delete
     suspend fun delete(commentDraft: CommentDraft)
 
-    @Query("SELECT * FROM comment_draft WHERE parent_full_name = :parentFullName")
-    fun getCommentDraftLiveData(parentFullName: String): LiveData<CommentDraft>
+    @Query("SELECT * FROM comment_draft WHERE full_name = :fullName AND draft_type = :draftType")
+    fun getCommentDraftLiveData(fullName: String, draftType: DraftType): LiveData<CommentDraft>
 }

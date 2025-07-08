@@ -8,39 +8,39 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.comment.CommentDraft
 import ml.docilealligator.infinityforreddit.comment.DraftType
-import ml.docilealligator.infinityforreddit.repositories.CommentActivityRepository
+import ml.docilealligator.infinityforreddit.repositories.EditCommentActivityRepository
 
-class CommentActivityViewModel(
-    private val commentActivityRepository: CommentActivityRepository
+class EditCommentActivityViewModel(
+    private val editCommentActivityRepository: EditCommentActivityRepository
 ): ViewModel() {
     fun getCommentDraft(fullname: String): LiveData<CommentDraft> {
-        return commentActivityRepository.getCommentDraft(fullname)
+        return editCommentActivityRepository.getCommentDraft(fullname)
     }
 
     fun saveCommentDraft(fullname: String, content: String, onSaved: () -> Unit) {
         viewModelScope.launch {
-            commentActivityRepository.saveCommentDraft(fullname, content)
+            editCommentActivityRepository.saveCommentDraft(fullname, content)
             onSaved()
         }
     }
 
-    fun deleteCommentDraft(fullname: String, onDeleted: () -> Unit) {
+    fun deleteCommentDraft(fullname: String,  onDeleted: () -> Unit) {
         viewModelScope.launch {
-            commentActivityRepository.deleteCommentDraft(fullname)
+            editCommentActivityRepository.deleteCommentDraft(fullname)
             onDeleted()
         }
     }
 
     companion object {
-        fun provideFactory(commentActivityRepository: CommentActivityRepository) : ViewModelProvider.Factory {
+        fun provideFactory(editCommentActivityRepository: EditCommentActivityRepository) : ViewModelProvider.Factory {
             return object: ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(
                     modelClass: Class<T>,
                     extras: CreationExtras
                 ): T {
-                    return CommentActivityViewModel(
-                        commentActivityRepository,
+                    return EditCommentActivityViewModel(
+                        editCommentActivityRepository,
                     ) as T
                 }
             }

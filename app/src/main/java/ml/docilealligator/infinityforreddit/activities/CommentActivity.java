@@ -588,7 +588,11 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                         finish();
                     }
                 })
-                .setNegativeButton(R.string.no, (dialog, which) -> finish())
+                .setNegativeButton(R.string.no, (dialog, which) -> {
+                    if (canSaveDraft) {
+                        finish();
+                    }
+                })
                 .setNeutralButton(R.string.cancel, null)
                 .show();
     }

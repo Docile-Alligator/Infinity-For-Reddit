@@ -21,6 +21,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.giphy.sdk.core.models.Media;
@@ -45,8 +46,10 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import kotlin.Unit;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesBottomSheetFragment;
@@ -57,12 +60,14 @@ import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFi
 import ml.docilealligator.infinityforreddit.databinding.ActivityEditCommentBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.RichTextJSONConverter;
+import ml.docilealligator.infinityforreddit.repositories.EditCommentActivityRepository;
 import ml.docilealligator.infinityforreddit.thing.GiphyGif;
 import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 import ml.docilealligator.infinityforreddit.thing.UploadedImage;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.viewmodels.EditCommentActivityViewModel;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
@@ -91,6 +96,8 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
     @Named("upload_media")
     Retrofit mUploadMediaRetrofit;
     @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
@@ -108,6 +115,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
     private ArrayList<UploadedImage> uploadedImages = new ArrayList<>();
     private GiphyGif giphyGif;
     private ActivityEditCommentBinding binding;
+    public EditCommentActivityViewModel editCommentActivityViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,17 +230,34 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
 
         Giphy.INSTANCE.configure(this, APIUtils.GIPHY_GIF_API_KEY);
 
+        editCommentActivityViewModel = new ViewModelProvider(
+                this,
+                EditCommentActivityViewModel.Companion.provideFactory(new EditCommentActivityRepository(mRedditDataRoomDatabase.commentDraftDao()))
+        ).get(EditCommentActivityViewModel.class);
+
+        if (savedInstanceState == null) {
+            editCommentActivityViewModel.getCommentDraft(mFullName).observe(this, commentDraft -> {
+                if (commentDraft != null && !commentDraft.getContent().isEmpty()) {
+                    binding.commentEditTextEditCommentActivity.setText(commentDraft.getContent());
+                }
+            });
+        }
+
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 if (isSubmitting) {
-                    promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_edit_comment_detail);
+                    promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_edit_comment_detail, false);
                 } else {
-                    if (binding.commentEditTextEditCommentActivity.getText().toString().equals(mCommentContent)) {
-                        setEnabled(false);
-                        triggerBackPress();
+                    String content = binding.commentEditTextEditCommentActivity.getText().toString();
+                    if (content.isEmpty() || content.equals(mCommentContent)) {
+                        editCommentActivityViewModel.deleteCommentDraft(mFullName, () -> {
+                            setEnabled(false);
+                            triggerBackPress();
+                            return Unit.INSTANCE;
+                        });
                     } else {
-                        promptAlertDialog(R.string.discard, R.string.discard_detail);
+                        promptAlertDialog(R.string.save_comment_draft, R.string.save_comment_draft_detail, true);
                     }
                 }
             }
@@ -334,7 +359,10 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
                             returnIntent.putExtra(RETURN_EXTRA_EDITED_COMMENT_POSITION, getIntent().getExtras().getInt(EXTRA_POSITION));
                             setResult(RESULT_OK, returnIntent);
 
-                            finish();
+                            editCommentActivityViewModel.deleteCommentDraft(mFullName, () -> {
+                                finish();
+                                return Unit.INSTANCE;
+                            });
                         });
                     } else {
                         handler.post(() -> {
@@ -359,20 +387,37 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
                         returnIntent.putExtra(RETURN_EXTRA_EDITED_COMMENT_POSITION, getIntent().getExtras().getInt(EXTRA_POSITION));
                         setResult(RESULT_OK, returnIntent);
 
-                        finish();
+                        editCommentActivityViewModel.deleteCommentDraft(mFullName, () -> {
+                            finish();
+                            return Unit.INSTANCE;
+                        });
                     });
                 }
             });
         }
     }
 
-    private void promptAlertDialog(int titleResId, int messageResId) {
+    private void promptAlertDialog(int titleResId, int messageResId, boolean canSaveDraft) {
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(titleResId)
                 .setMessage(messageResId)
-                .setPositiveButton(R.string.discard_dialog_button, (dialogInterface, i)
-                        -> finish())
-                .setNegativeButton(R.string.no, null)
+                .setPositiveButton(R.string.yes, (dialogInterface, i)
+                        -> {
+                    if (canSaveDraft) {
+                        editCommentActivityViewModel.saveCommentDraft(mFullName, binding.commentEditTextEditCommentActivity.getText().toString(), () -> {
+                            finish();
+                            return Unit.INSTANCE;
+                        });
+                    } else {
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.no, (dialog, which) -> {
+                    if (canSaveDraft) {
+                        finish();
+                    }
+                })
+                .setNeutralButton(R.string.cancel, null)
                 .show();
     }
 
