@@ -25,11 +25,17 @@ public abstract class CustomFontPreferenceFragmentCompat extends PreferenceFragm
             "androidx.preference.PreferenceFragment.DIALOG";
 
     protected SettingsActivity activity;
+    protected View view;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.view = view;
 
+        applyStyle();
+    }
+
+    protected void applyStyle() {
         PreferenceScreen preferenceScreen = getPreferenceScreen();
         if (preferenceScreen == null)
             return;

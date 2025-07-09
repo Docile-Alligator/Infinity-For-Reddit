@@ -78,6 +78,8 @@ public class SecurityPreferenceFragment extends CustomFontPreferenceFragmentComp
                 return true;
             });
         }
+
+        applyStyle();
     }
 
     @Override
