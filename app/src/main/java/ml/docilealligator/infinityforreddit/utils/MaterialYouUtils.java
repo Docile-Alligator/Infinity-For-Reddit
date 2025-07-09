@@ -96,7 +96,7 @@ public class MaterialYouUtils {
             lightTheme.colorAccent = context.getColor(android.R.color.system_accent3_300);
             lightTheme.colorPrimaryLightTheme = lightTheme.colorPrimary;
             lightTheme.backgroundColor = context.getColor(android.R.color.system_neutral1_50);
-            lightTheme.cardViewBackgroundColor = context.getColor(android.R.color.system_neutral2_10);
+            lightTheme.cardViewBackgroundColor = context.getColor(android.R.color.system_accent3_10);
             lightTheme.filledCardViewBackgroundColor = lightTheme.cardViewBackgroundColor;
             lightTheme.commentBackgroundColor = context.getColor(android.R.color.system_neutral2_10);
             lightTheme.awardedCommentBackgroundColor = context.getColor(android.R.color.system_neutral2_10);

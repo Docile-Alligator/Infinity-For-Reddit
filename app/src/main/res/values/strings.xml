@@ -1546,4 +1546,6 @@
     <string name="long_press_post_media">Long Press on Media</string>
     <string name="show_post_options">Show Post Options</string>
     <string name="preview_in_fullscreen">Preview in Fullscreen</string>
+
+    <string name="moderation">Moderation</string>
 </resources>

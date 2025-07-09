@@ -268,7 +268,16 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                     intent.putExtra(ReportActivity.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
                     intent.putExtra(ReportActivity.EXTRA_THING_FULLNAME, mPost.getFullName());
                     startActivity(intent);
+
+                    dismiss();
                 });
+
+                if (mPost.isCanModPost()) {
+                    binding.modTextViewPostOptionsBottomSheetFragment.setVisibility(View.VISIBLE);
+                    binding.modTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {
+                        dismiss();
+                    });
+                }
             }
         }
 

@@ -200,6 +200,7 @@ public class JSONUtils {
     public static final String PROFILE_IMG_KEY = "profile_img";
     public static final String AUTHOR_FULLNAME_KEY = "author_fullname";
     public static final String IS_MOD_KEY = "is_mod";
+    public static final String CAN_MOD_POST_KEY = "can_mod_post";
 
     @Nullable
     public static Map<String, MediaMetadata> parseMediaMetadata(JSONObject data) {
