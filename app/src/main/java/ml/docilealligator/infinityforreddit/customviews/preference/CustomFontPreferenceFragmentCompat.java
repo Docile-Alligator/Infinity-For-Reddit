@@ -11,6 +11,7 @@ import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -76,6 +77,11 @@ public abstract class CustomFontPreferenceFragmentCompat extends PreferenceFragm
     public boolean onPreferenceDisplayDialog(@NonNull PreferenceFragmentCompat caller, @NonNull Preference pref) {
         if (pref instanceof ListPreference) {
             DialogFragment f = CustomStyleListPreferenceDialogFragmentCompat.newInstance(pref.getKey());
+            f.setTargetFragment(this, 0);
+            f.show(getParentFragmentManager(), DIALOG_FRAGMENT_TAG);
+            return true;
+        } else if (pref instanceof EditTextPreference) {
+            DialogFragment f = CustomStyleEditTextPreferenceDialogFragmentCompat.newInstance(pref.getKey());
             f.setTargetFragment(this, 0);
             f.show(getParentFragmentManager(), DIALOG_FRAGMENT_TAG);
             return true;
