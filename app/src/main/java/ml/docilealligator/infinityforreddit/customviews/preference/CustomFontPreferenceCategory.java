@@ -10,8 +10,9 @@ import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceViewHolder;
 
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapperReceiver;
+import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapperReceiver;
 
 public class CustomFontPreferenceCategory extends PreferenceCategory implements CustomFontReceiver, CustomThemeWrapperReceiver {
     private CustomThemeWrapper customThemeWrapper;
@@ -37,6 +38,11 @@ public class CustomFontPreferenceCategory extends PreferenceCategory implements 
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
         View titleTextView = holder.findViewById(android.R.id.title);
+        holder.setDividerAllowedAbove(false);
+        View iconView = holder.findViewById(R.id.icon_frame);
+        if (iconView != null) {
+            iconView.setVisibility(View.GONE);
+        }
 
         if (customThemeWrapper != null) {
             if (titleTextView instanceof TextView) {

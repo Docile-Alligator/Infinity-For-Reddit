@@ -10,15 +10,20 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
 
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapperReceiver;
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapperReceiver;
 
-public abstract class CustomFontPreferenceFragmentCompat extends PreferenceFragmentCompat {
+public abstract class CustomFontPreferenceFragmentCompat extends PreferenceFragmentCompat implements PreferenceFragmentCompat.OnPreferenceDisplayDialogCallback {
+    private static final String DIALOG_FRAGMENT_TAG =
+            "androidx.preference.PreferenceFragment.DIALOG";
+
     protected SettingsActivity activity;
 
     @Override
@@ -59,6 +64,18 @@ public abstract class CustomFontPreferenceFragmentCompat extends PreferenceFragm
                 });
             }
         }
+    }
+
+    @Override
+    public boolean onPreferenceDisplayDialog(@NonNull PreferenceFragmentCompat caller, @NonNull Preference pref) {
+        if (pref instanceof ListPreference) {
+            DialogFragment f = CustomStyleListPreferenceDialogFragmentCompat.newInstance(pref.getKey());
+            f.setTargetFragment(this, 0);
+            f.show(getParentFragmentManager(), DIALOG_FRAGMENT_TAG);
+            return true;
+        }
+
+        return false;
     }
 
     @Override
