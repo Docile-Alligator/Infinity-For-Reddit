@@ -429,4 +429,8 @@ public interface RedditAPI {
 
     @GET("/api/user_data_by_account_ids.json")
     Call<String> loadPartialUserData(@Query("ids") String commaSeparatedUserFullNames);
+
+    @FormUrlEncoded
+    @POST("/api/approve")
+    Call<String> approveThing(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

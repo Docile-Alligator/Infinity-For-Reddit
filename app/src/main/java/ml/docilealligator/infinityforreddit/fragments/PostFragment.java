@@ -14,9 +14,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.LoadState;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +40,7 @@ import javax.inject.Provider;
 
 import ml.docilealligator.infinityforreddit.FetchPostFilterAndConcatenatedSubredditNames;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.PostModerationActionHandler;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.account.Account;
@@ -58,6 +61,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeSavePostFeedScrolledPositionEvent;
 import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragmentEvent;
 import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
+import ml.docilealligator.infinityforreddit.moderation.ModerationEvent;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.post.PostViewModel;
@@ -79,7 +83,7 @@ import retrofit2.Retrofit;
 /**
  * A simple {@link PostFragmentBase} subclass.
  */
-public class PostFragment extends PostFragmentBase implements FragmentCommunicator {
+public class PostFragment extends PostFragmentBase implements FragmentCommunicator, PostModerationActionHandler {
 
     public static final String EXTRA_NAME = "EN";
     public static final String EXTRA_USER_NAME = "EUN";
@@ -877,6 +881,13 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
     private void bindPostViewModel() {
         mPostViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> mAdapter.submitData(getViewLifecycleOwner().getLifecycle(), posts));
 
+        mPostViewModel.moderationEventLiveData.observe(getViewLifecycleOwner(), new Observer<>() {
+            @Override
+            public void onChanged(ModerationEvent moderationEvent) {
+                Toast.makeText(activity, R.string.approved, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         mAdapter.addLoadStateListener(combinedLoadStates -> {
             LoadState refreshLoadState = combinedLoadStates.getRefresh();
             LoadState appendLoadState = combinedLoadStates.getAppend();
@@ -1381,5 +1392,10 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
         if (mAdapter != null) {
             mAdapter.setCanPlayVideo(hasWindowsFocus);
         }
+    }
+
+    @Override
+    public void approvePost(@Nullable Post post) {
+        mPostViewModel.approvePost(post);
     }
 }

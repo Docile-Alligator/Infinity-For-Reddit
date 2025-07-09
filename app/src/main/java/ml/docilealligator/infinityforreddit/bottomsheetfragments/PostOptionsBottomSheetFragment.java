@@ -176,7 +176,12 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                 bundle.putParcelable(ShareBottomSheetFragment.EXTRA_POST, mPost);
                 ShareBottomSheetFragment shareBottomSheetFragment = new ShareBottomSheetFragment();
                 shareBottomSheetFragment.setArguments(bundle);
-                shareBottomSheetFragment.show(mBaseActivity.getSupportFragmentManager(), shareBottomSheetFragment.getTag());
+                Fragment parentFragment = getParentFragment();
+                if (parentFragment != null) {
+                    shareBottomSheetFragment.show(parentFragment.getChildFragmentManager(), shareBottomSheetFragment.getTag());
+                } else {
+                    shareBottomSheetFragment.show(mBaseActivity.getSupportFragmentManager(), shareBottomSheetFragment.getTag());
+                }
 
                 dismiss();
             });
@@ -275,6 +280,13 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                 if (mPost.isCanModPost()) {
                     binding.modTextViewPostOptionsBottomSheetFragment.setVisibility(View.VISIBLE);
                     binding.modTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {
+                        ModerationActionBottomSheetFragment moderationActionBottomSheetFragment = ModerationActionBottomSheetFragment.newInstance(mPost);
+                        Fragment parentFragment = getParentFragment();
+                        if (parentFragment != null) {
+                            moderationActionBottomSheetFragment.show(parentFragment.getChildFragmentManager(), moderationActionBottomSheetFragment.getTag());
+                        } else {
+                            moderationActionBottomSheetFragment.show(mBaseActivity.getSupportFragmentManager(), moderationActionBottomSheetFragment.getTag());
+                        }
                         dismiss();
                     });
                 }

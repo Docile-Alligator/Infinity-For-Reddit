@@ -351,7 +351,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 textView.setOnLongClickListener(view -> {
                     if (textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
                         CopyTextBottomSheetFragment.show(
-                                mActivity.getSupportFragmentManager(),
+                                mFragment.getChildFragmentManager(),
                                 mPost.getSelfTextPlain(), mPost.getSelfText()
                         );
                         return true;
@@ -382,7 +382,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 Bundle bundle = new Bundle();
                 bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
                 urlMenuBottomSheetFragment.setArguments(bundle);
-                urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+                urlMenuBottomSheetFragment.show(fragment.getChildFragmentManager(), urlMenuBottomSheetFragment.getTag());
             }
             return true;
         };
@@ -1267,7 +1267,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 } else {
                     postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(mPost, mFragment.getPostListPosition());
                 }
-                postOptionsBottomSheetFragment.show(mActivity.getSupportFragmentManager(), postOptionsBottomSheetFragment.getTag());
+                postOptionsBottomSheetFragment.show(mFragment.getChildFragmentManager(), postOptionsBottomSheetFragment.getTag());
                 return true;
             });
 
@@ -1344,7 +1344,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
             mMarkwonAdapter.setOnLongClickListener(v -> {
                 CopyTextBottomSheetFragment.show(
-                        mActivity.getSupportFragmentManager(),
+                        mFragment.getChildFragmentManager(),
                         mPost.getSelfTextPlain(), mPost.getSelfText()
                 );
                 return true;
@@ -1630,7 +1630,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 bundle.putParcelable(ShareBottomSheetFragment.EXTRA_POST, mPost);
                 ShareBottomSheetFragment shareBottomSheetFragment = new ShareBottomSheetFragment();
                 shareBottomSheetFragment.setArguments(bundle);
-                shareBottomSheetFragment.show(mActivity.getSupportFragmentManager(), shareBottomSheetFragment.getTag());
+                shareBottomSheetFragment.show(mFragment.getChildFragmentManager(), shareBottomSheetFragment.getTag());
             });
 
             this.shareButton.setOnLongClickListener(view -> {

@@ -1540,7 +1540,7 @@
     <string name="proxy_http">HTTP</string>
     <string name="proxy_socks">SOCKS</string>
     <string name="proxy_direct">Direct</string>
-    
+
     <string name="jump_to_parent_comment">Jump to Parent Comment</string>
     <string name="long_press_post_non_media_area">Long Press on Post (Non-Media Area)</string>
     <string name="long_press_post_media">Long Press on Media</string>
@@ -1548,4 +1548,9 @@
     <string name="preview_in_fullscreen">Preview in Fullscreen</string>
 
     <string name="moderation">Moderation</string>
+    <string name="approve">Approve</string>
+    <string name="approved">Approved</string>
+    <string name="approve_failed">Approve failed</string>
+    <string name="remove">Remove</string>
+    <string name="mark_as_spam">Mark as spam</string>
 </resources>
