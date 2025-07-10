@@ -494,27 +494,88 @@ public class PostViewModel extends ViewModel {
         }
     }
 
-    public void approvePost(@Nullable Post post) {
-        if (post == null) {
-            moderationEventLiveData.postValue(ModerationEvent.APPROVE_FAILED);
-            return;
-        }
-
+    public void approvePost(@NonNull Post post, int position) {
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.ID_KEY, post.getFullName());
         retrofit.create(RedditAPI.class).approveThing(APIUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    moderationEventLiveData.postValue(ModerationEvent.APPROVED);
+                    moderationEventLiveData.postValue(new ModerationEvent.Approved(post, position));
                 } else {
-                    moderationEventLiveData.postValue(ModerationEvent.APPROVE_FAILED);
+                    moderationEventLiveData.postValue(new ModerationEvent.ApproveFailed(post, position));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
-                moderationEventLiveData.postValue(ModerationEvent.APPROVE_FAILED);
+                moderationEventLiveData.postValue(new ModerationEvent.ApproveFailed(post, position));
+            }
+        });
+    }
+
+    public void removePost(@NonNull Post post, int position, boolean isSpam) {
+        Map<String, String> params = new HashMap<>();
+        params.put(APIUtils.ID_KEY, post.getFullName());
+        params.put(APIUtils.SPAM_KEY, Boolean.toString(isSpam));
+        retrofit.create(RedditAPI.class).removeThing(APIUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful()) {
+                    moderationEventLiveData.postValue(isSpam ? new ModerationEvent.MarkedAsSpam(post, position): new ModerationEvent.Removed(post, position));
+                } else {
+                    moderationEventLiveData.postValue(isSpam ? new ModerationEvent.MarkAsSpamFailed(post, position) : new ModerationEvent.RemoveFailed(post, position));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
+                moderationEventLiveData.postValue(isSpam ? new ModerationEvent.MarkAsSpamFailed(post, position) : new ModerationEvent.RemoveFailed(post, position));
+            }
+        });
+    }
+
+    public void toggleStickyPost(@NonNull Post post, int position) {
+        Map<String, String> params = new HashMap<>();
+        params.put(APIUtils.ID_KEY, post.getFullName());
+        params.put(APIUtils.STATE_KEY, Boolean.toString(!post.isStickied()));
+        params.put(APIUtils.API_TYPE_KEY, APIUtils.API_TYPE_JSON);
+        retrofit.create(RedditAPI.class).toggleStickyPost(APIUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful()) {
+                    post.setIsStickied(!post.isStickied());
+                    moderationEventLiveData.postValue(post.isStickied() ? new ModerationEvent.SetStickyPost(post, position): new ModerationEvent.UnsetStickyPost(post, position));
+                } else {
+                    moderationEventLiveData.postValue(post.isStickied() ? new ModerationEvent.UnsetStickyPostFailed(post, position) : new ModerationEvent.SetStickyPostFailed(post, position));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
+                moderationEventLiveData.postValue(post.isStickied() ? new ModerationEvent.UnsetStickyPostFailed(post, position) : new ModerationEvent.SetStickyPostFailed(post, position));
+            }
+        });
+    }
+
+    public void toggleLockPost(@NonNull Post post, int position) {
+        Map<String, String> params = new HashMap<>();
+        params.put(APIUtils.ID_KEY, post.getFullName());
+        Call<String> call = post.isLocked() ? retrofit.create(RedditAPI.class).unLockThing(APIUtils.getOAuthHeader(accessToken), params) : retrofit.create(RedditAPI.class).lockThing(APIUtils.getOAuthHeader(accessToken), params);
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful()) {
+                    post.setIsLocked(!post.isLocked());
+                    moderationEventLiveData.postValue(post.isLocked() ? new ModerationEvent.Locked(post, position): new ModerationEvent.Unlocked(post, position));
+                } else {
+                    moderationEventLiveData.postValue(post.isLocked() ? new ModerationEvent.UnlockFailed(post, position) : new ModerationEvent.LockFailed(post, position));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
+                moderationEventLiveData.postValue(post.isLocked() ? new ModerationEvent.UnlockFailed(post, position) : new ModerationEvent.LockFailed(post, position));
             }
         });
     }

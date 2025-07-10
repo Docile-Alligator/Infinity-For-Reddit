@@ -71,6 +71,43 @@
             android:textSize="?attr/font_default"
             app:drawableTint="?attr/primaryTextColor" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/toggle_sticky_text_view_moderation_action_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawablePadding="48dp"
+            android:focusable="true"
+            android:fontFamily="?attr/font_family"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:text="@string/mark_as_spam"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            app:drawableTint="?attr/primaryTextColor" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/toggle_lock_text_view_moderation_action_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawablePadding="48dp"
+            android:focusable="true"
+            android:fontFamily="?attr/font_family"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            app:drawableTint="?attr/primaryTextColor" />
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

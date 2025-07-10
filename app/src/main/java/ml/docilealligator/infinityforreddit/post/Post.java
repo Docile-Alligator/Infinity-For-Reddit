@@ -62,9 +62,9 @@ public class Post implements Parcelable {
     private boolean hidden;
     private boolean spoiler;
     private boolean nsfw;
-    private final boolean stickied;
+    private boolean stickied;
     private final boolean archived;
-    private final boolean locked;
+    private boolean locked;
     private boolean saved;
     private final boolean isCrosspost;
     private boolean isRead;
@@ -542,12 +542,20 @@ public class Post implements Parcelable {
         return stickied;
     }
 
+    public void setIsStickied(boolean value) {
+        stickied = value;
+    }
+
     public boolean isArchived() {
         return archived;
     }
 
     public boolean isLocked() {
         return locked;
+    }
+
+    public void setIsLocked(boolean value) {
+        locked = value;
     }
 
     public boolean isSaved() {

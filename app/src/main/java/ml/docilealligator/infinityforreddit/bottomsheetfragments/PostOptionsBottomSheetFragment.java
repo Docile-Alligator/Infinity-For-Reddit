@@ -280,7 +280,7 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                 if (mPost.isCanModPost()) {
                     binding.modTextViewPostOptionsBottomSheetFragment.setVisibility(View.VISIBLE);
                     binding.modTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {
-                        ModerationActionBottomSheetFragment moderationActionBottomSheetFragment = ModerationActionBottomSheetFragment.newInstance(mPost);
+                        ModerationActionBottomSheetFragment moderationActionBottomSheetFragment = ModerationActionBottomSheetFragment.newInstance(mPost, getArguments().getInt(EXTRA_POST_LIST_POSITION, 0));
                         Fragment parentFragment = getParentFragment();
                         if (parentFragment != null) {
                             moderationActionBottomSheetFragment.show(parentFragment.getChildFragmentManager(), moderationActionBottomSheetFragment.getTag());

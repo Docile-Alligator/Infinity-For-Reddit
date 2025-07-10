@@ -1,5 +1,27 @@
 package ml.docilealligator.infinityforreddit.moderation
 
-enum class ModerationEvent {
-    APPROVED, APPROVE_FAILED, REMOVED, REMOVE_FAILED, MARKED_AS_SPAM, MARK_AS_SPAM_FAILED
+import ml.docilealligator.infinityforreddit.R
+import ml.docilealligator.infinityforreddit.post.Post
+
+sealed class ModerationEvent(open val post: Post, open val position: Int, val toastMessageResId: Int) {
+    data class Approved(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.approved)
+    data class ApproveFailed(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.approve_failed)
+
+    data class Removed(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.removed)
+    data class RemoveFailed(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.remove_failed)
+
+    data class MarkedAsSpam(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.marked_as_spam)
+    data class MarkAsSpamFailed(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.mark_as_spam_failed)
+
+    data class SetStickyPost(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.set_sticky_post)
+    data class SetStickyPostFailed(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.set_sticky_post_failed)
+
+    data class UnsetStickyPost(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.unset_sticky_post)
+    data class UnsetStickyPostFailed(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.unset_sticky_post_failed)
+
+    data class Locked(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.locked)
+    data class LockFailed(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.lock_failed)
+
+    data class Unlocked(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.unlocked)
+    data class UnlockFailed(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.unlock_failed)
 }

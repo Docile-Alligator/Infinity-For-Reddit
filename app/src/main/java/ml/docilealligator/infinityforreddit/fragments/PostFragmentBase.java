@@ -622,6 +622,8 @@ public abstract class PostFragmentBase extends Fragment {
                 post.setSpoiler(event.post.isSpoiler());
                 post.setFlair(event.post.getFlair());
                 post.setSaved(event.post.isSaved());
+                post.setIsStickied(event.post.isStickied());
+                post.setIsLocked(event.post.isLocked());
                 if (event.post.isRead()) {
                     post.markAsRead();
                 }

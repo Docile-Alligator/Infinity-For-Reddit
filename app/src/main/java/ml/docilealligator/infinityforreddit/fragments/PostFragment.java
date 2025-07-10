@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.LoadState;
 import androidx.recyclerview.widget.RecyclerView;
@@ -60,8 +59,8 @@ import ml.docilealligator.infinityforreddit.events.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeSavePostFeedScrolledPositionEvent;
 import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragmentEvent;
+import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
-import ml.docilealligator.infinityforreddit.moderation.ModerationEvent;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.post.PostViewModel;
@@ -881,11 +880,9 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
     private void bindPostViewModel() {
         mPostViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> mAdapter.submitData(getViewLifecycleOwner().getLifecycle(), posts));
 
-        mPostViewModel.moderationEventLiveData.observe(getViewLifecycleOwner(), new Observer<>() {
-            @Override
-            public void onChanged(ModerationEvent moderationEvent) {
-                Toast.makeText(activity, R.string.approved, Toast.LENGTH_SHORT).show();
-            }
+        mPostViewModel.moderationEventLiveData.observe(getViewLifecycleOwner(), moderationEvent -> {
+            EventBus.getDefault().post(new PostUpdateEventToPostList(moderationEvent.getPost(), moderationEvent.getPosition()));
+            Toast.makeText(activity, moderationEvent.getToastMessageResId(), Toast.LENGTH_SHORT).show();
         });
 
         mAdapter.addLoadStateListener(combinedLoadStates -> {
@@ -1395,7 +1392,22 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
     }
 
     @Override
-    public void approvePost(@Nullable Post post) {
-        mPostViewModel.approvePost(post);
+    public void approvePost(@NonNull Post post, int position) {
+        mPostViewModel.approvePost(post, position);
+    }
+
+    @Override
+    public void removePost(@NonNull Post post, int position, boolean isSpam) {
+        mPostViewModel.removePost(post, position, isSpam);
+    }
+
+    @Override
+    public void toggleSticky(@NonNull Post post, int position) {
+        mPostViewModel.toggleStickyPost(post, position);
+    }
+
+    @Override
+    public void toggleLock(@NonNull Post post, int position) {
+        mPostViewModel.toggleLockPost(post, position);
     }
 }
