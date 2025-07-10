@@ -69,7 +69,7 @@ public class Post implements Parcelable {
     private final boolean isCrosspost;
     private boolean isRead;
     private String crosspostParentId;
-    private final String distinguished;
+    private String distinguished;
     private final String suggestedSort;
     private String mp4Variant;
     private ArrayList<Preview> previews = new ArrayList<>();
@@ -406,6 +406,10 @@ public class Post implements Parcelable {
 
     public boolean isModerator() {
         return distinguished != null && distinguished.equals("moderator");
+    }
+
+    public void setIsModerator(boolean value) {
+        distinguished = value ? "moderator" : null;
     }
 
     public boolean isAdmin() {

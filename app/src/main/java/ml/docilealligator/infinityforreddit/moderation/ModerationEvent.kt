@@ -36,4 +36,10 @@ sealed class ModerationEvent(open val post: Post, open val position: Int, val to
 
     data class UnmarkedSpoiler(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.unmark_spoiler_success)
     data class UnmarkSpoilerFailed(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.unmark_spoiler_failed)
+
+    data class DistinguishedAsMod(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.distinguished_as_mod)
+    data class DistinguishAsModFailed(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.distinguish_as_mod_failed)
+
+    data class UndistinguishedAsMod(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.undistinguished_as_mod)
+    data class UndistinguishAsModFailed(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.undistinguish_as_mod_failed)
 }

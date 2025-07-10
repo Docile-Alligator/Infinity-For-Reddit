@@ -449,4 +449,8 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("/api/unlock")
     Call<String> unLockThing(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @FormUrlEncoded
+    @POST("/api/distinguish")
+    Call<String> toggleDistinguishedThing(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

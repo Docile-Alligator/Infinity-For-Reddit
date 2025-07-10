@@ -9,4 +9,5 @@ interface PostModerationActionHandler {
     fun toggleLock(post: Post, position: Int)
     fun toggleNSFW(post: Post, position: Int)
     fun toggleSpoiler(post: Post, position: Int)
+    fun toggleMod(post: Post, position: Int)
 }

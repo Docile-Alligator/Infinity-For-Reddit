@@ -623,4 +623,26 @@ public class PostViewModel extends ViewModel {
             }
         });
     }
+
+    public void toggleMod(@NonNull Post post, int position) {
+        Map<String, String> params = new HashMap<>();
+        params.put(APIUtils.ID_KEY, post.getFullName());
+        params.put(APIUtils.HOW_KEY, post.isModerator() ? APIUtils.HOW_NO : APIUtils.HOW_YES);
+        retrofit.create(RedditAPI.class).toggleDistinguishedThing(APIUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful()) {
+                    post.setIsModerator(!post.isModerator());
+                    moderationEventLiveData.postValue(post.isModerator() ? new ModerationEvent.DistinguishedAsMod(post, position): new ModerationEvent.UndistinguishedAsMod(post, position));
+                } else {
+                    moderationEventLiveData.postValue(post.isModerator() ? new ModerationEvent.UndistinguishAsModFailed(post, position) : new ModerationEvent.DistinguishAsModFailed(post, position));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
+                moderationEventLiveData.postValue(post.isModerator() ? new ModerationEvent.UndistinguishAsModFailed(post, position) : new ModerationEvent.DistinguishAsModFailed(post, position));
+            }
+        });
+    }
 }

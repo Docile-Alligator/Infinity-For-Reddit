@@ -67,7 +67,10 @@ class ModerationActionBottomSheetFragment : LandscapeExpandedRoundedBottomSheetD
                         AppCompatResources.getDrawable(it, if (post.isNSFW) R.drawable.ic_unmark_nsfw_24dp else R.drawable.ic_mark_nsfw_24dp), null, null, null
                     )
                     binding.toggleSpoilerTextViewModerationActionBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(
-                        AppCompatResources.getDrawable(it, if (post.isLocked) R.drawable.ic_unmark_spoiler_24dp else R.drawable.ic_spoiler_24dp), null, null, null
+                        AppCompatResources.getDrawable(it, if (post.isSpoiler) R.drawable.ic_unmark_spoiler_24dp else R.drawable.ic_spoiler_24dp), null, null, null
+                    )
+                    binding.toggleModTextViewModerationActionBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(
+                        AppCompatResources.getDrawable(it, if (post.isModerator) R.drawable.ic_undistinguish_as_mod_24dp else R.drawable.ic_distinguish_as_mod_24dp), null, null, null
                     )
                 }
 
@@ -92,6 +95,12 @@ class ModerationActionBottomSheetFragment : LandscapeExpandedRoundedBottomSheetD
                 binding.toggleSpoilerTextViewModerationActionBottomSheetFragment.setText(if (post.isSpoiler) R.string.action_unmark_spoiler else R.string.action_mark_spoiler)
                 binding.toggleSpoilerTextViewModerationActionBottomSheetFragment.setOnClickListener {
                     (parentFragment as PostModerationActionHandler).toggleSpoiler(post, position)
+                    dismiss()
+                }
+
+                binding.toggleModTextViewModerationActionBottomSheetFragment.setText(if (post.isModerator) R.string.undistinguish_as_mod else R.string.distinguish_as_mod)
+                binding.toggleModTextViewModerationActionBottomSheetFragment.setOnClickListener {
+                    (parentFragment as PostModerationActionHandler).toggleMod(post, position)
                     dismiss()
                 }
             }
