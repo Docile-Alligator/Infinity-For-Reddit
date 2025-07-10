@@ -1662,7 +1662,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.ID_KEY, mPost.getFullName());
         mOauthRetrofit.create(RedditAPI.class).markNSFW(APIUtils.getOAuthHeader(activity.accessToken), params)
-                .enqueue(new Callback<String>() {
+                .enqueue(new Callback<>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if (response.isSuccessful()) {

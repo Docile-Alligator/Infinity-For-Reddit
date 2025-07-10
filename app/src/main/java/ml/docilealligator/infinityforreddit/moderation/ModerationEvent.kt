@@ -24,4 +24,16 @@ sealed class ModerationEvent(open val post: Post, open val position: Int, val to
 
     data class Unlocked(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.unlocked)
     data class UnlockFailed(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.unlock_failed)
+
+    data class MarkedNSFW(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.mark_nsfw_success)
+    data class MarkNSFWFailed(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.mark_nsfw_failed)
+
+    data class UnmarkedNSFW(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.unmark_nsfw_success)
+    data class UnmarkNSFWFailed(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.unmark_nsfw_failed)
+
+    data class MarkedSpoiler(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.mark_spoiler_success)
+    data class MarkSpoilerFailed(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.mark_spoiler_failed)
+
+    data class UnmarkedSpoiler(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.unmark_spoiler_success)
+    data class UnmarkSpoilerFailed(override val post: Post, override val position: Int) : ModerationEvent(post, position, R.string.unmark_spoiler_failed)
 }

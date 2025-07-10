@@ -56,25 +56,42 @@ class ModerationActionBottomSheetFragment : LandscapeExpandedRoundedBottomSheetD
                     dismiss()
                 }
 
-                binding.toggleStickyTextViewModerationActionBottomSheetFragment.setText(if (post.isStickied) R.string.unset_sticky_post else R.string.set_sticky_post)
                 activity?.let {
                     binding.toggleStickyTextViewModerationActionBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(
                         AppCompatResources.getDrawable(it, if (post.isStickied) R.drawable.ic_unstick_post_24dp else R.drawable.ic_stick_post_24dp), null, null, null
                     )
+                    binding.toggleLockTextViewModerationActionBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(
+                        AppCompatResources.getDrawable(it, if (post.isLocked) R.drawable.ic_unlock_24dp else R.drawable.ic_lock_day_night_24dp), null, null, null
+                    )
+                    binding.toggleNsfwTextViewModerationActionBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(
+                        AppCompatResources.getDrawable(it, if (post.isNSFW) R.drawable.ic_unmark_nsfw_24dp else R.drawable.ic_mark_nsfw_24dp), null, null, null
+                    )
+                    binding.toggleSpoilerTextViewModerationActionBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(
+                        AppCompatResources.getDrawable(it, if (post.isLocked) R.drawable.ic_unmark_spoiler_24dp else R.drawable.ic_spoiler_24dp), null, null, null
+                    )
                 }
+
+                binding.toggleStickyTextViewModerationActionBottomSheetFragment.setText(if (post.isStickied) R.string.unset_sticky_post else R.string.set_sticky_post)
                 binding.toggleStickyTextViewModerationActionBottomSheetFragment.setOnClickListener {
                     (parentFragment as PostModerationActionHandler).toggleSticky(post, position)
                     dismiss()
                 }
 
                 binding.toggleLockTextViewModerationActionBottomSheetFragment.setText(if (post.isLocked) R.string.unlock else R.string.lock)
-                activity?.let {
-                    binding.toggleLockTextViewModerationActionBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(
-                        AppCompatResources.getDrawable(it, if (post.isLocked) R.drawable.ic_unlock_24dp else R.drawable.ic_lock_day_night_24dp), null, null, null
-                    )
-                }
                 binding.toggleLockTextViewModerationActionBottomSheetFragment.setOnClickListener {
                     (parentFragment as PostModerationActionHandler).toggleLock(post, position)
+                    dismiss()
+                }
+
+                binding.toggleNsfwTextViewModerationActionBottomSheetFragment.setText(if (post.isNSFW) R.string.action_unmark_nsfw else R.string.action_mark_nsfw)
+                binding.toggleNsfwTextViewModerationActionBottomSheetFragment.setOnClickListener {
+                    (parentFragment as PostModerationActionHandler).toggleNSFW(post, position)
+                    dismiss()
+                }
+
+                binding.toggleSpoilerTextViewModerationActionBottomSheetFragment.setText(if (post.isSpoiler) R.string.action_unmark_spoiler else R.string.action_mark_spoiler)
+                binding.toggleSpoilerTextViewModerationActionBottomSheetFragment.setOnClickListener {
+                    (parentFragment as PostModerationActionHandler).toggleSpoiler(post, position)
                     dismiss()
                 }
             }

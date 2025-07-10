@@ -579,4 +579,48 @@ public class PostViewModel extends ViewModel {
             }
         });
     }
+
+    public void toggleNSFW(@NonNull Post post, int position) {
+        Map<String, String> params = new HashMap<>();
+        params.put(APIUtils.ID_KEY, post.getFullName());
+        Call<String> call = post.isNSFW() ? retrofit.create(RedditAPI.class).unmarkNSFW(APIUtils.getOAuthHeader(accessToken), params) : retrofit.create(RedditAPI.class).markNSFW(APIUtils.getOAuthHeader(accessToken), params);
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful()) {
+                    post.setNSFW(!post.isNSFW());
+                    moderationEventLiveData.postValue(post.isNSFW() ? new ModerationEvent.MarkedNSFW(post, position): new ModerationEvent.UnmarkedNSFW(post, position));
+                } else {
+                    moderationEventLiveData.postValue(post.isNSFW() ? new ModerationEvent.UnmarkNSFWFailed(post, position) : new ModerationEvent.MarkNSFWFailed(post, position));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
+                moderationEventLiveData.postValue(post.isNSFW() ? new ModerationEvent.UnmarkNSFWFailed(post, position) : new ModerationEvent.MarkNSFWFailed(post, position));
+            }
+        });
+    }
+
+    public void toggleSpoiler(@NonNull Post post, int position) {
+        Map<String, String> params = new HashMap<>();
+        params.put(APIUtils.ID_KEY, post.getFullName());
+        Call<String> call = post.isSpoiler() ? retrofit.create(RedditAPI.class).unmarkSpoiler(APIUtils.getOAuthHeader(accessToken), params) : retrofit.create(RedditAPI.class).markSpoiler(APIUtils.getOAuthHeader(accessToken), params);
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful()) {
+                    post.setSpoiler(!post.isSpoiler());
+                    moderationEventLiveData.postValue(post.isSpoiler() ? new ModerationEvent.MarkedSpoiler(post, position): new ModerationEvent.UnmarkedSpoiler(post, position));
+                } else {
+                    moderationEventLiveData.postValue(post.isSpoiler() ? new ModerationEvent.UnmarkSpoilerFailed(post, position) : new ModerationEvent.MarkSpoilerFailed(post, position));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
+                moderationEventLiveData.postValue(post.isSpoiler() ? new ModerationEvent.UnmarkSpoilerFailed(post, position) : new ModerationEvent.MarkSpoilerFailed(post, position));
+            }
+        });
+    }
 }

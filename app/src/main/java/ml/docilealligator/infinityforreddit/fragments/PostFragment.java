@@ -1410,4 +1410,14 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
     public void toggleLock(@NonNull Post post, int position) {
         mPostViewModel.toggleLockPost(post, position);
     }
+
+    @Override
+    public void toggleNSFW(@NonNull Post post, int position) {
+        mPostViewModel.toggleNSFW(post, position);
+    }
+
+    @Override
+    public void toggleSpoiler(@NonNull Post post, int position) {
+        mPostViewModel.toggleSpoiler(post, position);
+    }
 }
