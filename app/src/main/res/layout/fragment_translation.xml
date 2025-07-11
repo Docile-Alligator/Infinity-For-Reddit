@@ -5,4 +5,5 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:layoutManager="ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed"
+    android:clipToPadding="false"
     tools:context=".settings.TranslationFragment" />
