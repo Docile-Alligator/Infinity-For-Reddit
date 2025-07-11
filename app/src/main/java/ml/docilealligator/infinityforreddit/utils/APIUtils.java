@@ -114,6 +114,11 @@ public class APIUtils {
     public static final String REFERER_KEY = "Referer";
     public static final String REVEDDIT_REFERER = "https://www.reveddit.com/";
 
+    public static final String SPAM_KEY = "spam";
+    public static final String HOW_KEY = "how";
+    public static final String HOW_YES = "yes";
+    public static final String HOW_NO = "no";
+
     public static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();
         String credentials = String.format("%s:%s", APIUtils.CLIENT_ID, "");
