@@ -1247,9 +1247,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         if (adapter != null) {
             adapter.setInboxCount(inboxCount);
         }
-        mHandler.post(() -> {
-            navigationWrapper.setInboxCount(this, inboxCount);
-        });
+        mHandler.post(() -> navigationWrapper.setInboxCount(this, inboxCount));
     }
 
     @Override
