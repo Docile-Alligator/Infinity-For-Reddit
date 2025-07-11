@@ -1125,12 +1125,15 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof PostDetailBaseViewHolder) {
+            ((PostDetailBaseViewHolder) holder).userTextView.setTextColor(mUsernameColor);
+            ((PostDetailBaseViewHolder) holder).userTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             ((PostDetailBaseViewHolder) holder).upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
             ((PostDetailBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             ((PostDetailBaseViewHolder) holder).scoreTextView.setTextColor(mPostIconAndInfoColor);
             ((PostDetailBaseViewHolder) holder).downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
             ((PostDetailBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             ((PostDetailBaseViewHolder) holder).flairTextView.setVisibility(View.GONE);
+            ((PostDetailBaseViewHolder) holder).lockedImageView.setVisibility(View.GONE);
             ((PostDetailBaseViewHolder) holder).spoilerTextView.setVisibility(View.GONE);
             ((PostDetailBaseViewHolder) holder).nsfwTextView.setVisibility(View.GONE);
             ((PostDetailBaseViewHolder) holder).contentMarkdownView.setVisibility(View.GONE);

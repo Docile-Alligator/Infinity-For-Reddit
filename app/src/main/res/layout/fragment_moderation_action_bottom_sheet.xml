@@ -85,7 +85,6 @@
             android:paddingTop="16dp"
             android:paddingEnd="32dp"
             android:paddingBottom="16dp"
-            android:text="@string/mark_as_spam"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             app:drawableTint="?attr/primaryTextColor" />

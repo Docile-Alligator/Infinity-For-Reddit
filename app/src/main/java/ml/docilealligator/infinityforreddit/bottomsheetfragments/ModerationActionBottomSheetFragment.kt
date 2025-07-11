@@ -103,6 +103,8 @@ class ModerationActionBottomSheetFragment : LandscapeExpandedRoundedBottomSheetD
                     (parentFragment as PostModerationActionHandler).toggleMod(post, position)
                     dismiss()
                 }
+            } else {
+                dismiss()
             }
         }
         return binding.root

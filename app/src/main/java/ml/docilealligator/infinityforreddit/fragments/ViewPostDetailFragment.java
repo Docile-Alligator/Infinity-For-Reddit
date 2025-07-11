@@ -39,6 +39,7 @@ import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -68,6 +69,7 @@ import javax.inject.Named;
 import javax.inject.Provider;
 
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.PostModerationActionHandler;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.account.Account;
@@ -119,12 +121,13 @@ import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
 import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
 import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
 import ml.docilealligator.infinityforreddit.viewmodels.ViewPostDetailActivityViewModel;
+import ml.docilealligator.infinityforreddit.viewmodels.ViewPostDetailFragmentViewModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class ViewPostDetailFragment extends Fragment implements FragmentCommunicator {
+public class ViewPostDetailFragment extends Fragment implements FragmentCommunicator, PostModerationActionHandler {
 
     public static final String EXTRA_POST_DATA = "EPD";
     public static final String EXTRA_POST_ID = "EPI";
@@ -234,6 +237,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private int scrollPosition;
     private FragmentViewPostDetailBinding binding;
     private RecyclerView mCommentsRecyclerView;
+    public ViewPostDetailFragmentViewModel viewPostDetailFragmentViewModel;
 
     public ViewPostDetailFragment() {
         // Required empty public constructor
@@ -565,6 +569,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             postListPosition = getArguments().getInt(EXTRA_POST_LIST_POSITION, -1);
         }
 
+        viewPostDetailFragmentViewModel = new ViewModelProvider(
+                this,
+                ViewPostDetailFragmentViewModel.Companion.provideFactory(mOauthRetrofit, activity.accessToken)
+        ).get(ViewPostDetailFragmentViewModel.class);
+
         bindView();
 
         return binding.getRoot();
@@ -647,6 +656,15 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         binding.postDetailRecyclerViewViewPostDetailFragment.setPlayerInitializer(order -> {
             VolumeInfo volumeInfo = new VolumeInfo(true, 0f);
             return new PlaybackInfo(INDEX_UNSET, TIME_UNSET, volumeInfo);
+        });
+
+        viewPostDetailFragmentViewModel.getModerationEventLiveData().observe(getViewLifecycleOwner(), moderationEvent -> {
+            mPost = moderationEvent.getPost();
+            if (mPostAdapter != null) {
+                mPostAdapter.updatePost(mPost);
+            }
+            EventBus.getDefault().post(new PostUpdateEventToPostList(moderationEvent.getPost(), moderationEvent.getPosition()));
+            Toast.makeText(activity, moderationEvent.getToastMessageResId(), Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -1613,7 +1631,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             public void fetchPostSuccess(Post post) {
                                 if (isAdded()) {
                                     mPost = post;
-                                    mPostAdapter.updatePost(mPost);
+                                    if (mPostAdapter != null) {
+                                        mPostAdapter.updatePost(mPost);
+                                    }
                                     EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                     setupMenu();
                                     binding.swipeRefreshLayoutViewPostDetailFragment.setRefreshing(false);
@@ -2030,5 +2050,40 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mPostAdapter != null) {
             mPostAdapter.setCanPlayVideo(hasWindowsFocus);
         }
+    }
+
+    @Override
+    public void approvePost(@NonNull Post post, int position) {
+        viewPostDetailFragmentViewModel.approvePost(post, position);
+    }
+
+    @Override
+    public void removePost(@NonNull Post post, int position, boolean isSpam) {
+        viewPostDetailFragmentViewModel.removePost(post, position, isSpam);
+    }
+
+    @Override
+    public void toggleSticky(@NonNull Post post, int position) {
+        viewPostDetailFragmentViewModel.toggleSticky(post, position);
+    }
+
+    @Override
+    public void toggleLock(@NonNull Post post, int position) {
+        viewPostDetailFragmentViewModel.toggleLock(post, position);
+    }
+
+    @Override
+    public void toggleNSFW(@NonNull Post post, int position) {
+        viewPostDetailFragmentViewModel.toggleNSFW(post, position);
+    }
+
+    @Override
+    public void toggleSpoiler(@NonNull Post post, int position) {
+        viewPostDetailFragmentViewModel.toggleSpoiler(post, position);
+    }
+
+    @Override
+    public void toggleMod(@NonNull Post post, int position) {
+        viewPostDetailFragmentViewModel.toggleMod(post, position);
     }
 }

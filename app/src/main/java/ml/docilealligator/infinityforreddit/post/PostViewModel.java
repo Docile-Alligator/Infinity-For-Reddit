@@ -535,7 +535,7 @@ public class PostViewModel extends ViewModel {
         });
     }
 
-    public void toggleStickyPost(@NonNull Post post, int position) {
+    public void toggleSticky(@NonNull Post post, int position) {
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.ID_KEY, post.getFullName());
         params.put(APIUtils.STATE_KEY, Boolean.toString(!post.isStickied()));
@@ -558,7 +558,7 @@ public class PostViewModel extends ViewModel {
         });
     }
 
-    public void toggleLockPost(@NonNull Post post, int position) {
+    public void toggleLock(@NonNull Post post, int position) {
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.ID_KEY, post.getFullName());
         Call<String> call = post.isLocked() ? retrofit.create(RedditAPI.class).unLockThing(APIUtils.getOAuthHeader(accessToken), params) : retrofit.create(RedditAPI.class).lockThing(APIUtils.getOAuthHeader(accessToken), params);

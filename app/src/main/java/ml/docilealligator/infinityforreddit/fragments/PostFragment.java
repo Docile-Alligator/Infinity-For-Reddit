@@ -1403,12 +1403,12 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
 
     @Override
     public void toggleSticky(@NonNull Post post, int position) {
-        mPostViewModel.toggleStickyPost(post, position);
+        mPostViewModel.toggleSticky(post, position);
     }
 
     @Override
     public void toggleLock(@NonNull Post post, int position) {
-        mPostViewModel.toggleLockPost(post, position);
+        mPostViewModel.toggleLock(post, position);
     }
 
     @Override
