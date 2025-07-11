@@ -26,7 +26,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.adapters.FlairBottomSheetRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.databinding.FragmentFlairBottomSheetBinding;
 import ml.docilealligator.infinityforreddit.events.FlairSelectedEvent;
 import ml.docilealligator.infinityforreddit.subreddit.FetchFlairs;
@@ -35,7 +35,7 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 
-public class FlairBottomSheetFragment extends LandscapeExpandedBottomSheetDialogFragment {
+public class FlairBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_VIEW_POST_DETAIL_FRAGMENT_ID = "EPFI";

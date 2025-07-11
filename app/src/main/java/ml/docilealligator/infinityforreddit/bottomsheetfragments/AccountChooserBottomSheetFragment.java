@@ -15,7 +15,6 @@ import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
@@ -32,11 +31,12 @@ import ml.docilealligator.infinityforreddit.account.AccountViewModel;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.adapters.AccountChooserRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.databinding.FragmentAccountChooserBottomSheetBinding;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
-public class AccountChooserBottomSheetFragment extends LandscapeExpandedBottomSheetDialogFragment {
+public class AccountChooserBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     @Inject
     RedditDataRoomDatabase redditDataRoomDatabase;
@@ -48,7 +48,6 @@ public class AccountChooserBottomSheetFragment extends LandscapeExpandedBottomSh
     @Inject
     Executor executor;
     BaseActivity activity;
-    RecyclerView recyclerView;
     AccountChooserRecyclerViewAdapter adapter;
     AccountViewModel accountViewModel;
 
@@ -60,13 +59,12 @@ public class AccountChooserBottomSheetFragment extends LandscapeExpandedBottomSh
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_account_chooser_bottom_sheet, container, false);
+        FragmentAccountChooserBottomSheetBinding binding = FragmentAccountChooserBottomSheetBinding.inflate(inflater, container, false);
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         Utils.hideKeyboard(activity);
 
-        recyclerView = rootView.findViewById(R.id.recycler_view_account_chooser_bottom_sheet_fragment);
         adapter = new AccountChooserRecyclerViewAdapter(activity, customThemeWrapper, Glide.with(this),
                 account -> {
                     if (activity instanceof AccountChooserListener) {
@@ -74,7 +72,7 @@ public class AccountChooserBottomSheetFragment extends LandscapeExpandedBottomSh
                     }
                     dismiss();
                 });
-        recyclerView.setAdapter(adapter);
+        binding.recyclerViewAccountChooserBottomSheetFragment.setAdapter(adapter);
 
         if (sharedPreferences.getBoolean(SharedPreferencesUtils.REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER, false)) {
             BiometricManager biometricManager = BiometricManager.from(activity);
@@ -117,7 +115,7 @@ public class AccountChooserBottomSheetFragment extends LandscapeExpandedBottomSh
             });
         }
 
-        return rootView;
+        return binding.getRoot();
     }
 
     @Override

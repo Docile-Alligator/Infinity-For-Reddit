@@ -71,9 +71,6 @@ public class AcknowledgementFragment extends Fragment {
         acknowledgements.add(new Acknowledgement("Customized and Expandable TextView",
                 "Simple library to change the Textview as rectangle, circle and square shapes",
                 Uri.parse("https://github.com/Rajagopalr3/CustomizedTextView")));
-        acknowledgements.add(new Acknowledgement("Rounded Bottom Sheet",
-                "Bottom sheet with rounded corners",
-                Uri.parse("https://github.com/Deishelon/RoundedBottomSheet")));
         acknowledgements.add(new Acknowledgement("Bridge",
                 "A library for avoiding TransactionTooLargeException during state saving and restoration",
                 Uri.parse("https://github.com/livefront/bridge")));

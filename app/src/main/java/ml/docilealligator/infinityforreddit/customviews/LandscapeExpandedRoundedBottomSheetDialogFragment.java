@@ -2,10 +2,10 @@ package ml.docilealligator.infinityforreddit.customviews;
 
 import android.view.View;
 
-import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class LandscapeExpandedRoundedBottomSheetDialogFragment extends RoundedBottomSheetDialogFragment {
+public class LandscapeExpandedRoundedBottomSheetDialogFragment extends BottomSheetDialogFragment {
     @Override
     public void onStart() {
         super.onStart();

@@ -6,6 +6,10 @@
     android:orientation="vertical"
     android:paddingBottom="8dp">
 
+    <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/new_type_text_view_user_thing_sort_type_bottom_sheet_fragment"
         android:layout_width="match_parent"

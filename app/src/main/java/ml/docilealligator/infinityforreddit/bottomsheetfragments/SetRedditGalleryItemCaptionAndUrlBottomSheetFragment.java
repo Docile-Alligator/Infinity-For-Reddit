@@ -16,15 +16,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-
 import java.lang.reflect.Field;
 
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.PostGalleryActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.databinding.FragmentSetRedditGalleryItemCaptionAndUrlBottomSheetBinding;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class SetRedditGalleryItemCaptionAndUrlBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
@@ -34,11 +31,6 @@ public class SetRedditGalleryItemCaptionAndUrlBottomSheetFragment extends Landsc
     public static final String EXTRA_URL = "EU";
 
     private PostGalleryActivity mActivity;
-    private TextInputLayout captionTextInputLayout;
-    private TextInputEditText captionTextInputEditText;
-    private TextInputLayout urlTextInputLayout;
-    private TextInputEditText urlTextInputEditText;
-    private MaterialButton okButton;
 
     public SetRedditGalleryItemCaptionAndUrlBottomSheetFragment() {
 
@@ -47,41 +39,35 @@ public class SetRedditGalleryItemCaptionAndUrlBottomSheetFragment extends Landsc
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_set_reddit_gallery_item_caption_and_url_bottom_sheet, container, false);
-
-        captionTextInputLayout = rootView.findViewById(R.id.caption_text_input_layout_set_reddit_gallery_item_caption_and_url_bottom_sheet_fragment);
-        captionTextInputEditText = rootView.findViewById(R.id.caption_text_input_edit_text_set_reddit_gallery_item_caption_and_url_bottom_sheet_fragment);
-        urlTextInputLayout = rootView.findViewById(R.id.url_text_input_layout_set_reddit_gallery_item_caption_and_url_bottom_sheet_fragment);
-        urlTextInputEditText = rootView.findViewById(R.id.url_text_input_edit_text_set_reddit_gallery_item_caption_and_url_bottom_sheet_fragment);
-        okButton = rootView.findViewById(R.id.ok_button_set_reddit_gallery_item_caption_and_url_bottom_sheet_fragment);
+        FragmentSetRedditGalleryItemCaptionAndUrlBottomSheetBinding binding = FragmentSetRedditGalleryItemCaptionAndUrlBottomSheetBinding.inflate(inflater, container, false);
 
         int primaryTextColor = mActivity.getResources().getColor(R.color.primaryTextColor);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            captionTextInputLayout.setCursorColor(ColorStateList.valueOf(primaryTextColor));
-            urlTextInputLayout.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.captionTextInputLayoutSetRedditGalleryItemCaptionAndUrlBottomSheetFragment.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.urlTextInputLayoutSetRedditGalleryItemCaptionAndUrlBottomSheetFragment.setCursorColor(ColorStateList.valueOf(primaryTextColor));
         } else {
-            setCursorDrawableColor(captionTextInputEditText, primaryTextColor);
-            setCursorDrawableColor(urlTextInputEditText, primaryTextColor);
+            setCursorDrawableColor(binding.captionTextInputEditTextSetRedditGalleryItemCaptionAndUrlBottomSheetFragment, primaryTextColor);
+            setCursorDrawableColor(binding.urlTextInputEditTextSetRedditGalleryItemCaptionAndUrlBottomSheetFragment, primaryTextColor);
         }
 
         int position = getArguments().getInt(EXTRA_POSITION, -1);
         String caption = getArguments().getString(EXTRA_CAPTION, "");
         String url = getArguments().getString(EXTRA_URL, "");
 
-        captionTextInputEditText.setText(caption);
-        urlTextInputEditText.setText(url);
+        binding.captionTextInputEditTextSetRedditGalleryItemCaptionAndUrlBottomSheetFragment.setText(caption);
+        binding.urlTextInputEditTextSetRedditGalleryItemCaptionAndUrlBottomSheetFragment.setText(url);
 
-        okButton.setOnClickListener(view -> {
-            mActivity.setCaptionAndUrl(position, captionTextInputEditText.getText().toString(), urlTextInputEditText.getText().toString());
+        binding.okButtonSetRedditGalleryItemCaptionAndUrlBottomSheetFragment.setOnClickListener(view -> {
+            mActivity.setCaptionAndUrl(position, binding.captionTextInputEditTextSetRedditGalleryItemCaptionAndUrlBottomSheetFragment.getText().toString(), binding.urlTextInputEditTextSetRedditGalleryItemCaptionAndUrlBottomSheetFragment.getText().toString());
             dismiss();
         });
 
         if (mActivity.typeface != null) {
-            Utils.setFontToAllTextViews(rootView, mActivity.typeface);
+            Utils.setFontToAllTextViews(binding.getRoot(), mActivity.typeface);
         }
 
-        return rootView;
+        return binding.getRoot();
     }
 
     private void setCursorDrawableColor(EditText editText, int color) {

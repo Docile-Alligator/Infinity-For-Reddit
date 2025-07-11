@@ -11,6 +11,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/caption_text_input_layout_set_reddit_gallery_item_caption_and_url_bottom_sheet_fragment"
             android:layout_width="match_parent"

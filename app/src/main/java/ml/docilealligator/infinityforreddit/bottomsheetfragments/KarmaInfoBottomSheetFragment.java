@@ -4,27 +4,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
+import androidx.annotation.NonNull;
 
-import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.databinding.FragmentKarmaInfoBottomSheetBinding;
 
-public class KarmaInfoBottomSheetFragment extends RoundedBottomSheetDialogFragment {
+public class KarmaInfoBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
     public static final String EXTRA_POST_KARMA = "EPK";
     public static final String EXTRA_COMMENT_KARMA = "ECK";
     public static final String EXTRA_AWARDER_KARMA = "EARK";
     public static final String EXTRA_AWARDEE_KARMA = "EAEK";
-
-    private int postKarma;
-    private int commentKarma;
-    private int awarderKarma;
-    private int awardeeKarma;
-
-    public KarmaInfoBottomSheetFragment() {
-        // Required empty public constructor
-    }
-
 
     public static KarmaInfoBottomSheetFragment newInstance(int postKarma, int commentKarma, int awarderKarma, int awardeeKarma) {
         KarmaInfoBottomSheetFragment fragment = new KarmaInfoBottomSheetFragment();
@@ -37,27 +27,26 @@ public class KarmaInfoBottomSheetFragment extends RoundedBottomSheetDialogFragme
         return fragment;
     }
 
+    public KarmaInfoBottomSheetFragment() {
+        // Required empty public constructor
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_karma_info_bottom_sheet, container, false);
+        FragmentKarmaInfoBottomSheetBinding binding = FragmentKarmaInfoBottomSheetBinding.inflate(inflater, container, false);
 
-        postKarma = getArguments().getInt(EXTRA_POST_KARMA, 0);
-        commentKarma = getArguments().getInt(EXTRA_COMMENT_KARMA, 0);
-        awarderKarma = getArguments().getInt(EXTRA_AWARDER_KARMA, 0);
-        awardeeKarma = getArguments().getInt(EXTRA_AWARDEE_KARMA, 0);
+        int postKarma = getArguments().getInt(EXTRA_POST_KARMA, 0);
+        int commentKarma = getArguments().getInt(EXTRA_COMMENT_KARMA, 0);
+        int awarderKarma = getArguments().getInt(EXTRA_AWARDER_KARMA, 0);
+        int awardeeKarma = getArguments().getInt(EXTRA_AWARDEE_KARMA, 0);
 
-        TextView postKarmaTextView = rootView.findViewById(R.id.post_karma_karma_info_bottom_sheet_fragment);
-        TextView commentKarmaTextView = rootView.findViewById(R.id.comment_karma_karma_info_bottom_sheet_fragment);
-        TextView awarderKarmaTextView = rootView.findViewById(R.id.awarder_karma_karma_info_bottom_sheet_fragment);
-        TextView awardeeKarmaTextView = rootView.findViewById(R.id.awardee_karma_karma_info_bottom_sheet_fragment);
+        binding.postKarmaKarmaInfoBottomSheetFragment.setText(Integer.toString(postKarma));
+        binding.commentKarmaKarmaInfoBottomSheetFragment.setText(Integer.toString(commentKarma));
+        binding.awarderKarmaKarmaInfoBottomSheetFragment.setText(Integer.toString(awarderKarma));
+        binding.awardeeKarmaKarmaInfoBottomSheetFragment.setText(Integer.toString(awardeeKarma));
 
-        postKarmaTextView.setText(Integer.toString(postKarma));
-        commentKarmaTextView.setText(Integer.toString(commentKarma));
-        awarderKarmaTextView.setText(Integer.toString(awarderKarma));
-        awardeeKarmaTextView.setText(Integer.toString(awardeeKarma));
-
-        return rootView;
+        return binding.getRoot();
     }
 }

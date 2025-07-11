@@ -186,9 +186,6 @@ dependencies {
     // Dismiss gesturing
     implementation 'app.futured.hauler:hauler:5.0.0'
 
-    // Bottom sheet with rounded corners
-    implementation 'com.github.Deishelon:RoundedBottomSheet:1.0.1'
-
     // FlowLayout (auto-spacing)
     implementation 'com.nex3z:flow-layout:1.3.3'
 
