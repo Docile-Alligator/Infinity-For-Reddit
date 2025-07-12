@@ -57,6 +57,63 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom" />
 
+    <!--<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="48dp"
+        android:gravity="center"
+        app:layout_behavior="com.google.android.material.behavior.HideViewOnScrollBehavior">
+
+        <com.google.android.material.floatingtoolbar.FloatingToolbarLayout
+            android:id="@+id/floating_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:useCompatPadding="true"
+            app:marginBottomSystemWindowInsets="false"
+            android:elevation="3dp">
+
+            &lt;!&ndash; floating toolbar sample content &ndash;&gt;
+            <com.google.android.material.overflow.OverflowLinearLayout
+                android:id="@+id/floating_toolbar_child"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/floating_toolbar_button_bold"
+                    style="?attr/materialIconButtonFilledStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    app:icon="@drawable/ic_launcher_foreground" />
+
+                <Button
+                    android:id="@+id/floating_toolbar_button_italic"
+                    style="?attr/materialIconButtonFilledStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_launcher_foreground" />
+
+                <Button
+                    android:id="@+id/floating_toolbar_button_underlined"
+                    style="?attr/materialIconButtonFilledStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/ic_launcher_foreground" />
+            </com.google.android.material.overflow.OverflowLinearLayout>
+
+        </com.google.android.material.floatingtoolbar.FloatingToolbarLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp" />
+
+    </LinearLayout>-->
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_main_activity"
         android:layout_width="wrap_content"
