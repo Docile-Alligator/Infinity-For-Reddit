@@ -660,6 +660,7 @@
     <string name="settings_proxy_hostname">Hostname</string>
     <string name="settings_proxy_port">Port</string>
     <string name="settings_hide_fab_in_post_details">Hide Floating Action Button</string>
+    <string name="settings_category_media_title">Media</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -1543,7 +1544,7 @@
 
     <string name="jump_to_parent_comment">Jump to Parent Comment</string>
     <string name="long_press_post_non_media_area">Long Press on Post (Non-Media Area)</string>
-    <string name="long_press_post_media">Long Press on Media</string>
+    <string name="long_press_post_media">Long Press on Post Media</string>
     <string name="show_post_options">Show Post Options</string>
     <string name="preview_in_fullscreen">Preview in Fullscreen</string>
 

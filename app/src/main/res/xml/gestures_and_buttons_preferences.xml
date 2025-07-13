@@ -9,9 +9,37 @@
         app:summary="@string/settings_swipe_to_go_back_summary" />
 
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="lock_bottom_app_bar"
+        app:title="@string/settings_lock_bottom_app_bar_title"
+        app:isPreferenceVisible="false" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
+        app:defaultValue="true"
+        app:key="pull_to_refresh"
+        app:title="@string/settings_pull_to_refresh_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="swipe_between_posts"
+        app:title="@string/settings_swipe_between_posts_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceCategory
+        app:title="@string/settings_category_media_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="swipe_vertically_to_go_back_from_media"
         app:title="@string/settings_swipe_vertically_to_go_back_from_media_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="pinch_to_zoom_video"
+        app:title="@string/settings_pinch_to_zoom_video_title"
+        app:summary="@string/settings_experimental_feature" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceCategory
+        app:title="@string/settings_category_comment_title" />
 
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
@@ -26,40 +54,21 @@
 
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
-        app:key="lock_bottom_app_bar"
-        app:title="@string/settings_lock_bottom_app_bar_title"
-        app:isPreferenceVisible="false" />
-
-    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
-        app:defaultValue="false"
         app:key="volume_keys_navigate_comments"
         app:title="@string/settings_volume_keys_navigate_comments_title" />
-
-    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
-        app:defaultValue="false"
-        app:key="volume_keys_navigate_posts"
-        app:title="@string/settings_volume_keys_navigate_posts_title" />
 
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="swap_tap_and_long_in_comments"
         app:title="@string/settings_swap_tap_and_long_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
-        app:defaultValue="true"
-        app:key="pull_to_refresh"
-        app:title="@string/settings_pull_to_refresh_title" />
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceCategory
+        app:title="@string/settings_category_post_title" />
 
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
-        app:key="swipe_between_posts"
-        app:title="@string/settings_swipe_between_posts_title" />
-
-    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
-        app:defaultValue="false"
-        app:key="pinch_to_zoom_video"
-        app:title="@string/settings_pinch_to_zoom_video_title"
-        app:summary="@string/settings_experimental_feature" />
+        app:key="volume_keys_navigate_posts"
+        app:title="@string/settings_volume_keys_navigate_posts_title" />
 
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="1"
