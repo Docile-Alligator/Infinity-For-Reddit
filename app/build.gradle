@@ -10,7 +10,7 @@ android {
         minSdk 21
         targetSdk 35
         versionCode 193
-        versionName "7.5.1"
+        versionName "8.0.0-beta1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
