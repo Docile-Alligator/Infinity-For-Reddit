@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
+        app:icon="@drawable/ic_info_preference_day_night_24dp"
+        app:summary="@string/settings_data_saving_mode_info_summary"
+        app:enabled="false" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
+        app:defaultValue="0"
+        app:key="data_saving_mode"
+        android:title="@string/settings_data_saving_mode"
+        app:entries="@array/settings_data_saving_mode"
+        app:entryValues="@array/settings_data_saving_mode_values"
+        app:useSimpleSummaryProvider="true" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="disable_image_preview"
+        android:title="@string/settings_disable_image_preview_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="only_disable_preview_in_video_and_gif_posts"
+        android:title="@string/settings_only_disable_preview_in_video_and_gif_posts_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
+        app:defaultValue="360"
+        app:key="reddit_video_default_resolution"
+        android:title="@string/settings_reddit_video_default_resolution"
+        app:entries="@array/settings_reddit_video_default_resolution"
+        app:entryValues="@array/settings_reddit_video_default_resolution_values"
+        app:useSimpleSummaryProvider="true" />
+    <ListPreference
+        android:key="comment_image_mode"
+        android:title="Show images and GIFs in comments"
+        android:entries="@array/comment_image_mode_entries"
+        android:entryValues="@array/comment_image_mode_values"
+        android:defaultValue="always_on" />
+    <ListPreference
+        android:key="comment_image_link_replace_mode"
+        android:title="Show as link: images, GIFs, or both"
+        android:summary="Choose which media to replace with a link in comments"
+        android:entries="@array/comment_image_link_replace_mode_entries"
+        android:entryValues="@array/comment_image_link_replace_mode_values"
+        android:defaultValue="both" />
+    <ListPreference
+        android:key="media_quality_mode"
+        android:title="Default media quality"
+        android:summary="Choose how image/video quality is selected"
+        android:entries="@array/media_quality_mode_entries"
+        android:entryValues="@array/media_quality_mode_values"
+        android:defaultValue="auto" />
+</PreferenceScreen>

@@ -1,0 +1,807 @@
+<resources>
+    <string-array name="settings_notification_interval">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>2 hours</item>
+        <item>3 hours</item>
+        <item>4 hours</item>
+        <item>6 hours</item>
+        <item>12 hours</item>
+        <item>1 day</item>
+    </string-array>
+
+    <string-array name="settings_notification_interval_values">
+        <item>15</item>
+        <item>30</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>6</item>
+        <item>12</item>
+        <item>24</item>
+    </string-array>
+
+    <string-array name="settings_theme_q">
+        <item>@string/light_theme</item>
+        <item>@string/dark_theme</item>
+        <item>@string/device_default</item>
+    </string-array>
+
+    <string-array name="settings_theme">
+        <item>@string/light_theme</item>
+        <item>@string/dark_theme</item>
+        <item>@string/set_by_battery_saver</item>
+    </string-array>
+
+    <string-array name="settings_theme_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="settings_default_post_layout">
+        <item>@string/post_layout_card</item>
+        <item>@string/post_layout_card_2</item>
+        <item>@string/post_layout_card_3</item>
+        <item>@string/post_layout_compact</item>
+        <item>@string/post_layout_compact_2</item>
+        <item>@string/post_layout_gallery</item>
+    </string-array>
+
+    <string-array name="settings_default_post_layout_values">
+        <item>0</item>
+        <item>3</item>
+        <item>4</item>
+        <item>1</item>
+        <item>5</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="settings_default_link_post_layout">
+        <item>@string/link_post_layout_auto</item>
+        <item>@string/post_layout_card</item>
+        <item>@string/post_layout_card_2</item>
+        <item>@string/post_layout_card_3</item>
+        <item>@string/post_layout_compact</item>
+        <item>@string/post_layout_gallery</item>
+        <item>@string/post_layout_compact_2</item>
+    </string-array>
+
+    <string-array name="settings_default_link_post_layout_values">
+        <item>-1</item>
+        <item>0</item>
+        <item>3</item>
+        <item>4</item>
+        <item>1</item>
+        <item>2</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="settings_video_autoplay">
+        <item>@string/always_on</item>
+        <item>@string/only_on_wifi</item>
+        <item>@string/never</item>
+    </string-array>
+
+    <string-array name="settings_video_autoplay_values">
+        <item>2</item>
+        <item>1</item>
+        <item>0</item>
+    </string-array>
+
+    <string-array name="settings_lazy_mode_interval">
+        <item>1s</item>
+        <item>2s</item>
+        <item>2.5s</item>
+        <item>3s</item>
+        <item>5s</item>
+        <item>7s</item>
+        <item>10s</item>
+    </string-array>
+
+    <string-array name="settings_lazy_mode_interval_values">
+        <item>1</item>
+        <item>2</item>
+        <item>2.5</item>
+        <item>3</item>
+        <item>5</item>
+        <item>7</item>
+        <item>10</item>
+    </string-array>
+
+    <string-array name="settings_font_size">
+        <item>@string/extra_small</item>
+        <item>@string/small</item>
+        <item>@string/normal</item>
+        <item>@string/large</item>
+        <item>@string/extra_large</item>
+    </string-array>
+
+    <string-array name="settings_font_size_values">
+        <item>XSmall</item>
+        <item>Small</item>
+        <item>Normal</item>
+        <item>Large</item>
+        <item>XLarge</item>
+    </string-array>
+
+    <string-array name="settings_title_font_size">
+        <item>@string/extra_small</item>
+        <item>@string/small</item>
+        <item>@string/normal</item>
+        <item>@string/large</item>
+        <item>@string/extra_large</item>
+    </string-array>
+
+    <string-array name="settings_title_font_size_values">
+        <item>XSmall</item>
+        <item>Small</item>
+        <item>Normal</item>
+        <item>Large</item>
+        <item>XLarge</item>
+    </string-array>
+
+    <string-array name="settings_content_font_size">
+        <item>@string/extra_small</item>
+        <item>@string/small</item>
+        <item>@string/normal</item>
+        <item>@string/large</item>
+        <item>@string/extra_large</item>
+        <item>@string/enormously_large</item>
+    </string-array>
+
+    <string-array name="settings_content_font_size_values">
+        <item>XSmall</item>
+        <item>Small</item>
+        <item>Normal</item>
+        <item>Large</item>
+        <item>XLarge</item>
+        <item>XXLarge</item>
+    </string-array>
+
+    <string-array name="settings_font_family">
+        <item>@string/default_in_array</item>
+        <item>Balsamiq Sans</item>
+        <item>Balsamiq Sans Bold</item>
+        <item>Noto Sans</item>
+        <item>Noto Sans Bold</item>
+        <item>Harmonia Sans</item>
+        <item>Harmonia Sans Bold (No Italic)</item>
+        <item>Roboto Condensed</item>
+        <item>Roboto Condensed Bold</item>
+        <item>Inter (No Italic)</item>
+        <item>Inter Bold (No Italic)</item>
+        <item>Manrope (No Italic)</item>
+        <item>Manrope Bold (No Italic)</item>
+        <item>Sriracha</item>
+        <item>Atkinson Hyperlegible</item>
+        <item>Atkinson Hyperlegible Bold</item>
+        <item>@string/settings_custom_font_family_title</item>
+    </string-array>
+
+    <string-array name="settings_font_family_values">
+        <item>Default</item>
+        <item>BalsamiqSans</item>
+        <item>BalsamiqSansBold</item>
+        <item>NotoSans</item>
+        <item>NotoSansBold</item>
+        <item>HarmoniaSans</item>
+        <item>HarmoniaSansBold</item>
+        <item>RobotoCondensed</item>
+        <item>RobotoCondensedBold</item>
+        <item>Inter</item>
+        <item>InterBold</item>
+        <item>Manrope</item>
+        <item>ManropeBold</item>
+        <item>Sriracha</item>
+        <item>AtkinsonHyperlegible</item>
+        <item>AtkinsonHyperlegibleBold</item>
+        <item>Custom</item>
+    </string-array>
+
+    <string-array name="settings_tab_post_type">
+        <item>@string/home</item>
+        <item>@string/popular</item>
+        <item>@string/all</item>
+        <item>@string/subreddit</item>
+        <item>@string/multi_reddit</item>
+        <item>@string/user</item>
+        <item>@string/upvoted</item>
+        <item>@string/downvoted</item>
+        <item>@string/hidden</item>
+        <item>@string/saved</item>
+    </string-array>
+
+    <string-array name="settings_tab_post_type_anonymous">
+        <item>@string/home</item>
+        <item>@string/popular</item>
+        <item>@string/all</item>
+        <item>@string/subreddit</item>
+        <item>@string/multi_reddit</item>
+        <item>@string/user</item>
+    </string-array>
+
+    <string-array name="settings_time_format">
+        <!-- 2020/01/23 23:45 -->
+        <item>Jan 23, 2020, 23:45</item>
+        <item>Jan 23, 2020, 11:45 PM</item>
+        <item>23 Jan, 2020, 23:45</item>
+        <item>23 Jan, 2020, 11:45 PM</item>
+        <item>1/23/2020 23:45</item>
+        <item>1/23/2020 11:45 PM</item>
+        <item>23/1/2020 23:45</item>
+        <item>23/1/2020 11:45 PM</item>
+        <item>2020/1/23 23:45</item>
+        <item>2020/1/23 11:45 PM</item>
+        <item>1-23-2020 23:45</item>
+        <item>1-23-2020 11:45 PM</item>
+        <item>23-1-2020 23:45</item>
+        <item>23-1-2020 11:45 PM</item>
+        <item>2020-1-23 23:45</item>
+        <item>2020-1-23 11:45 PM</item>
+        <item>1.23.2020 23:45</item>
+        <item>1.23.2020 11:45 PM</item>
+        <item>23.1.2020 23:45</item>
+        <item>23.1.2020 11:45 PM</item>
+        <item>2020.1.23 23:45</item>
+        <item>2020.1.23 11:45 PM</item>
+    </string-array>
+
+    <string-array name="settings_time_format_values">
+        <item>MMM d, yyyy, HH:mm</item>
+        <item>MMM d, yyyy, hh:mm a</item>
+        <item>d MMM yyyy, HH:mm</item>
+        <item>d MMM yyyy, hh:mm a</item>
+        <item>M/d/yyyy HH:mm</item>
+        <item>M/d/yyyy hh:mm a</item>
+        <item>d/M/yyyy HH:mm</item>
+        <item>d/M/yyyy hh:mm a</item>
+        <item>yyyy/M/d HH:mm</item>
+        <item>yyyy/M/d hh:mm a</item>
+        <item>M-d-yyyy HH:mm</item>
+        <item>M-d-yyyy hh:mm a</item>
+        <item>d-M-yyyy HH:mm</item>
+        <item>d-M-yyyy hh:mm a</item>
+        <item>yyyy-M-d HH:mm</item>
+        <item>yyyy-M-d hh:mm a</item>
+        <item>M.d.yyyy HH:mm</item>
+        <item>M.d.yyyy hh:mm a</item>
+        <item>d.M.yyyy HH:mm</item>
+        <item>d.M.yyyy hh:mm a</item>
+        <item>yyyy.M.d HH:mm</item>
+        <item>yyyy.M.d hh:mm a</item>
+    </string-array>
+
+    <string-array name="settings_number_of_columns_in_post_feed">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="settings_main_page_tab_count">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="settings_bottom_app_bar_option_count_options">
+        <item>2</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="settings_main_activity_bottom_app_bar_options">
+        <item>@string/subscriptions</item>
+        <item>@string/multi_reddits</item>
+        <item>@string/inbox</item>
+        <item>@string/profile</item>
+        <item>@string/submit_post</item>
+        <item>@string/refresh</item>
+        <item>@string/change_sort_type</item>
+        <item>@string/change_post_layout</item>
+        <item>@string/search</item>
+        <item>@string/go_to_subreddit</item>
+        <item>@string/go_to_user</item>
+        <item>@string/random</item>
+        <item>@string/hide_read_posts</item>
+        <item>@string/filter_posts</item>
+        <item>@string/upvoted</item>
+        <item>@string/downvoted</item>
+        <item>@string/hidden</item>
+        <item>@string/saved</item>
+        <item>@string/go_to_top</item>
+    </string-array>
+
+    <string-array name="settings_main_activity_bottom_app_bar_options_anonymous">
+        <item>@string/subscriptions</item>
+        <item>@string/multi_reddits</item>
+        <item>@string/refresh</item>
+        <item>@string/change_sort_type</item>
+        <item>@string/change_post_layout</item>
+        <item>@string/search</item>
+        <item>@string/go_to_subreddit</item>
+        <item>@string/go_to_user</item>
+        <item>@string/random</item>
+        <item>@string/filter_posts</item>
+        <item>@string/go_to_top</item>
+    </string-array>
+
+    <string-array name="settings_main_activity_bottom_app_bar_options_anonymous_values">
+        <item>0</item>
+        <item>1</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>13</item>
+        <item>19</item>
+    </string-array>
+
+    <string-array name="settings_other_activities_bottom_app_bar_options">
+        <item>@string/home</item>
+        <item>@string/subscriptions</item>
+        <item>@string/inbox</item>
+        <item>@string/profile</item>
+        <item>@string/multi_reddits</item>
+        <item>@string/submit_post</item>
+        <item>@string/refresh</item>
+        <item>@string/change_sort_type</item>
+        <item>@string/change_post_layout</item>
+        <item>@string/search</item>
+        <item>@string/go_to_subreddit</item>
+        <item>@string/go_to_user</item>
+        <item>@string/random</item>
+        <item>@string/hide_read_posts</item>
+        <item>@string/filter_posts</item>
+        <item>@string/upvoted</item>
+        <item>@string/downvoted</item>
+        <item>@string/hidden</item>
+        <item>@string/saved</item>
+        <item>@string/go_to_top</item>
+    </string-array>
+
+    <string-array name="settings_other_activities_bottom_app_bar_options_anonymous">
+        <item>@string/home</item>
+        <item>@string/subscriptions</item>
+        <item>@string/multi_reddits</item>
+        <item>@string/refresh</item>
+        <item>@string/change_sort_type</item>
+        <item>@string/change_post_layout</item>
+        <item>@string/search</item>
+        <item>@string/go_to_subreddit</item>
+        <item>@string/go_to_user</item>
+        <item>@string/random</item>
+        <item>@string/filter_posts</item>
+        <item>@string/go_to_top</item>
+    </string-array>
+
+    <string-array name="settings_other_activities_bottom_app_bar_options_anonymous_values">
+        <item>0</item>
+        <item>1</item>
+        <item>4</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>14</item>
+        <item>20</item>
+    </string-array>
+
+    <string-array name="settings_bottom_app_bar_fab_options">
+        <item>@string/submit_post</item>
+        <item>@string/refresh</item>
+        <item>@string/change_sort_type</item>
+        <item>@string/change_post_layout</item>
+        <item>@string/search</item>
+        <item>@string/go_to_subreddit</item>
+        <item>@string/go_to_user</item>
+        <item>@string/random</item>
+        <item>@string/hide_read_posts</item>
+        <item>@string/filter_posts</item>
+        <item>@string/go_to_top</item>
+    </string-array>
+
+    <string-array name="settings_bottom_app_bar_fab_options_anonymous">
+        <item>@string/refresh</item>
+        <item>@string/change_sort_type</item>
+        <item>@string/change_post_layout</item>
+        <item>@string/search</item>
+        <item>@string/go_to_subreddit</item>
+        <item>@string/go_to_user</item>
+        <item>@string/random</item>
+        <item>@string/filter_posts</item>
+        <item>@string/go_to_top</item>
+    </string-array>
+
+    <string-array name="settings_swipe_action_threshold">
+        <item>0.1</item>
+        <item>0.2</item>
+        <item>0.3</item>
+        <item>0.4</item>
+        <item>0.5</item>
+        <item>0.6</item>
+        <item>0.7</item>
+        <item>0.8</item>
+    </string-array>
+
+    <string-array name="settings_data_saving_mode">
+        <item>@string/off</item>
+        <item>@string/only_on_cellular_data</item>
+        <item>@string/always_on</item>
+    </string-array>
+
+    <string-array name="settings_data_saving_mode_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="settings_swipe_actions">
+        <item>@string/upvote</item>
+        <item>@string/downvote</item>
+    </string-array>
+
+    <string-array name="settings_swipe_actions_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="settings_language">
+        <item>Auto</item>
+        <item>简体中文</item>
+        <item>Hrvatski</item>
+        <item>čeština</item>
+        <item>Nederlands</item>
+        <item>English</item>
+        <item>Française</item>
+        <item>Deutsche</item>
+        <item>Ελληνικά</item>
+        <item>हिंदी</item>
+        <item>Magyar</item>
+        <item>Italiana</item>
+        <item>日本語</item>
+        <item>한국인</item>
+        <item>Polskie</item>
+        <item>Português</item>
+        <item>Português (BR)</item>
+        <item>Română</item>
+        <item>русский</item>
+        <item>Soomaali</item>
+        <item>Español</item>
+        <item>தமிழ்</item>
+        <item>Türkçe</item>
+        <item>Українська</item>
+        <item>Tiếng Việt</item>
+    </string-array>
+
+    <string-array name="settings_language_values">
+        <item>auto</item>
+        <item>zh-rCN</item>
+        <item>hr</item>
+        <item>cs</item>
+        <item>nl</item>
+        <item>en</item>
+        <item>fr</item>
+        <item>de</item>
+        <item>el</item>
+        <item>hi</item>
+        <item>hu</item>
+        <item>it</item>
+        <item>ja</item>
+        <item>ko</item>
+        <item>pl</item>
+        <item>pt</item>
+        <item>pt-rBR</item>
+        <item>ro</item>
+        <item>ru</item>
+        <item>so</item>
+        <item>es</item>
+        <item>ta</item>
+        <item>tr-rTR</item>
+        <item>uk</item>
+        <item>vi</item>
+    </string-array>
+
+    <string-array name="settings_subreddit_default_sort_type">
+        <item>Hot</item>
+        <item>New</item>
+        <item>Rising</item>
+        <item>Top</item>
+        <item>Controversial</item>
+    </string-array>
+
+    <string-array name="settings_subreddit_default_sort_type_values">
+        <item>HOT</item>
+        <item>NEW</item>
+        <item>RISING</item>
+        <item>TOP</item>
+        <item>CONTROVERSIAL</item>
+    </string-array>
+
+    <string-array name="settings_user_default_sort_type">
+        <item>New</item>
+        <item>Hot</item>
+        <item>Top</item>
+        <item>Controversial</item>
+    </string-array>
+
+    <string-array name="settings_user_default_sort_type_values">
+        <item>NEW</item>
+        <item>HOT</item>
+        <item>TOP</item>
+        <item>CONTROVERSIAL</item>
+    </string-array>
+
+    <string-array name="settings_default_sort_time">
+        <item>Hour</item>
+        <item>Day</item>
+        <item>Week</item>
+        <item>Month</item>
+        <item>Year</item>
+        <item>All Time</item>
+    </string-array>
+
+    <string-array name="settings_default_sort_time_values">
+        <item>HOUR</item>
+        <item>DAY</item>
+        <item>WEEK</item>
+        <item>MONTH</item>
+        <item>YEAR</item>
+        <item>ALL</item>
+    </string-array>
+
+    <string-array name="settings_default_search_result_tab">
+        <item>@string/posts</item>
+        <item>@string/subreddits</item>
+        <item>@string/users</item>
+    </string-array>
+
+    <string-array name="settings_default_search_result_tab_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="add_to_post_filter_options">
+        <item>@string/exclude_subreddit</item>
+        <item>@string/exclude_user</item>
+        <item>@string/exclude_flair</item>
+        <item>@string/contain_flair</item>
+        <item>@string/exclude_domain</item>
+        <item>@string/contain_domain</item>
+    </string-array>
+
+    <string-array name="add_to_comment_filter_options">
+        <item>@string/exclude_user</item>
+    </string-array>
+
+    <string-array name="settings_app_lock_timeout">
+        <item>@string/app_lock_timeout_immediately</item>
+        <item>@string/app_lock_timeout_1_min</item>
+        <item>@string/app_lock_timeout_2_mins</item>
+        <item>@string/app_lock_timeout_5_mins</item>
+        <item>@string/app_lock_timeout_10_mins</item>
+        <item>@string/app_lock_timeout_15_mins</item>
+        <item>@string/app_lock_timeout_20_mins</item>
+        <item>@string/app_lock_timeout_30_mins</item>
+        <item>@string/app_lock_timeout_1_hour</item>
+        <item>@string/app_lock_timeout_2_hours</item>
+        <item>@string/app_lock_timeout_3_hours</item>
+        <item>@string/app_lock_timeout_4_hours</item>
+        <item>@string/app_lock_timeout_5_hours</item>
+        <item>@string/app_lock_timeout_6_hours</item>
+        <item>@string/app_lock_timeout_12_hours</item>
+        <item>@string/app_lock_timeout_24_hours</item>
+    </string-array>
+
+    <string-array name="settings_app_lock_timeout_values">
+        <item>0</item>
+        <item>60000</item>
+        <item>120000</item>
+        <item>300000</item>
+        <item>600000</item>
+        <item>900000</item>
+        <item>1200000</item>
+        <item>1800000</item>
+        <item>3600000</item>
+        <item>7200000</item>
+        <item>10800000</item>
+        <item>14400000</item>
+        <item>18000000</item>
+        <item>21600000</item>
+        <item>43200000</item>
+        <item>86400000</item>
+    </string-array>
+
+    <string-array name="main_page_back_button_action">
+        <item>@string/default_in_array</item>
+        <item>@string/settings_confirm_to_exit</item>
+        <item>@string/settings_open_navigation_drawer</item>
+    </string-array>
+
+    <string-array name="main_page_back_button_action_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="default_playback_speed">
+        <item>0.25x</item>
+        <item>0.5x</item>
+        <item>0.75x</item>
+        <item>@string/normal</item>
+        <item>1.25x</item>
+        <item>1.5x</item>
+        <item>1.75x</item>
+        <item>2x</item>
+    </string-array>
+
+    <string-array name="default_playback_speed_values">
+        <item>25</item>
+        <item>50</item>
+        <item>75</item>
+        <item>100</item>
+        <item>125</item>
+        <item>150</item>
+        <item>175</item>
+        <item>200</item>
+    </string-array>
+
+    <string-array name="link_handler">
+        <item>@string/settings_link_handler_value_external_browser</item>
+        <item>@string/settings_link_handler_value_custom_tab</item>
+        <item>@string/settings_link_handler_value_internal_browser</item>
+    </string-array>
+
+    <string-array name="link_handler_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="settings_reddit_video_default_resolution">
+        <item>Auto</item>
+        <item>1080p</item>
+        <item>720p</item>
+        <item>480p</item>
+        <item>360p</item>
+        <item>240p</item>
+        <item>144p</item>
+    </string-array>
+
+    <string-array name="settings_reddit_video_default_resolution_values">
+        <item>0</item>
+        <item>1080</item>
+        <item>720</item>
+        <item>480</item>
+        <item>360</item>
+        <item>240</item>
+        <item>144</item>
+    </string-array>
+
+    <string-array name="settings_comment_divider_type">
+        <item>Normal</item>
+        <item>Only on top-level comments</item>
+    </string-array>
+
+    <string-array name="settings_comment_divider_type_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string-array name="save_theme_options">
+        <item>@string/save_locally</item>
+        <item>@string/save_online</item>
+        <item>@string/save_locally_and_online</item>
+    </string-array>
+
+    <string-array name="save_theme_options_anonymous_included">
+        <item>@string/save_locally</item>
+        <item>@string/save_online</item>
+        <item>@string/save_online_anonymous</item>
+        <item>@string/save_locally_and_online</item>
+        <item>@string/save_locally_and_online_anonymous</item>
+    </string-array>
+
+    <string-array name="settings_embedded_media_type">
+        <item>@string/all</item>
+        <item>@string/image_and_gif</item>
+        <item>@string/image_and_emote</item>
+        <item>@string/gif_and_emote</item>
+        <item>@string/image_embedded_media</item>
+        <item>@string/gif</item>
+        <item>@string/emote</item>
+        <item>@string/none</item>
+    </string-array>
+
+    <string-array name="settings_embedded_media_type_values">
+        <item>15</item>
+        <item>7</item>
+        <item>6</item>
+        <item>5</item>
+        <item>3</item>
+        <item>2</item>
+        <item>1</item>
+        <item>0</item>
+    </string-array>
+
+    <string-array name="comment_filter_display_mode">
+        <item>@string/comment_filter_display_mode_remove_comments</item>
+        <item>@string/comment_filter_display_mode_fully_collapse_comments</item>
+    </string-array>
+
+    <string-array name="settings_proxy_type">
+        <item>@string/proxy_http</item>
+        <item>@string/proxy_socks</item>
+        <item>@string/proxy_direct</item>
+    </string-array>
+
+    <string-array name="settings_proxy_type_values">
+        <item>HTTP</item>
+        <item>SOCKS</item>
+        <item>DIRECT</item>
+    </string-array>
+
+    <string-array name="settings_long_press_post_non_media_area_action">
+        <item>@string/none</item>
+        <item>@string/show_post_options</item>
+        <item>@string/preview_in_fullscreen</item>
+    </string-array>
+
+    <string-array name="settings_long_press_post_non_media_area_action_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string-array name="settings_long_press_post_media_action">
+        <item>@string/none</item>
+        <item>@string/show_post_options</item>
+        <item>@string/preview_in_fullscreen</item>
+    </string-array>
+
+    <string-array name="settings_long_press_post_media_action_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="comment_image_mode_entries">
+        <item>Always show</item>
+        <item>Only on unmetered connection</item>
+        <item>Always hide (show as link)</item>
+    </string-array>
+    <string-array name="comment_image_mode_values">
+        <item>always_on</item>
+        <item>only_unmetered</item>
+        <item>always_off</item>
+    </string-array>
+    <string-array name="comment_image_link_replace_mode_entries">
+        <item>Images only</item>
+        <item>GIFs only</item>
+        <item>Both images and GIFs</item>
+    </string-array>
+    <string-array name="comment_image_link_replace_mode_values">
+        <item>images_only</item>
+        <item>gifs_only</item>
+        <item>both</item>
+    </string-array>
+    <string-array name="media_quality_mode_entries">
+        <item>Auto (based on connection)</item>
+        <item>High</item>
+        <item>Medium</item>
+        <item>Low</item>
+    </string-array>
+    <string-array name="media_quality_mode_values">
+        <item>auto</item>
+        <item>high</item>
+        <item>medium</item>
+        <item>low</item>
+    </string-array>
+</resources>
