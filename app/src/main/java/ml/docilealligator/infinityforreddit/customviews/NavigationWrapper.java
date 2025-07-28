@@ -41,6 +41,7 @@ public class NavigationWrapper {
     private int option4 = -1;
 
     private int inboxCount;
+    private BadgeDrawable badgeDrawable;
 
     public NavigationWrapper(BottomAppBar bottomAppBar, LinearLayout linearLayoutBottomAppBar,
                              ImageView option1BottomAppBar, ImageView option2BottomAppBar,
@@ -245,19 +246,39 @@ public class NavigationWrapper {
 
         if (option1 == SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_INBOX || option1 == SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX) {
             if (navigationRailView == null) {
-                BadgeUtils.attachBadgeDrawable(getBadgeDrawable(context, inboxCount, option1BottomAppBar), option1BottomAppBar);
+                if (this.inboxCount == 0) {
+                    BadgeUtils.detachBadgeDrawable(badgeDrawable, option1BottomAppBar);
+                    badgeDrawable = null;
+                } else {
+                    BadgeUtils.attachBadgeDrawable(getBadgeDrawable(context, inboxCount, option1BottomAppBar), option1BottomAppBar);
+                }
             }
         } else if (option2 == SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_INBOX || option2 == SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX) {
             if (navigationRailView == null) {
-                BadgeUtils.attachBadgeDrawable(getBadgeDrawable(context, inboxCount, option2BottomAppBar), option2BottomAppBar);
+                if (this.inboxCount == 0) {
+                    BadgeUtils.detachBadgeDrawable(badgeDrawable, option2BottomAppBar);
+                    badgeDrawable = null;
+                } else {
+                    BadgeUtils.attachBadgeDrawable(getBadgeDrawable(context, inboxCount, option2BottomAppBar), option2BottomAppBar);
+                }
             }
         } else if (option3 == SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_INBOX || option3 == SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX) {
             if (navigationRailView == null) {
-                BadgeUtils.attachBadgeDrawable(getBadgeDrawable(context, inboxCount, option3BottomAppBar), option3BottomAppBar);
+                if (this.inboxCount == 0 && badgeDrawable != null) {
+                    BadgeUtils.detachBadgeDrawable(badgeDrawable, option3BottomAppBar);
+                    badgeDrawable = null;
+                } else {
+                    BadgeUtils.attachBadgeDrawable(getBadgeDrawable(context, inboxCount, option3BottomAppBar), option3BottomAppBar);
+                }
             }
         } else if (option4 == SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_INBOX || option4 == SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX) {
             if (navigationRailView == null) {
-                BadgeUtils.attachBadgeDrawable(getBadgeDrawable(context, inboxCount, option4BottomAppBar), option4BottomAppBar);
+                if (this.inboxCount == 0) {
+                    BadgeUtils.detachBadgeDrawable(badgeDrawable, option4BottomAppBar);
+                    badgeDrawable = null;
+                } else {
+                    BadgeUtils.attachBadgeDrawable(getBadgeDrawable(context, inboxCount, option4BottomAppBar), option4BottomAppBar);
+                }
             }
         }
     }
@@ -268,6 +289,9 @@ public class NavigationWrapper {
         badgeDrawable.setBackgroundColor(customThemeWrapper.getColorAccent());
         badgeDrawable.setBadgeTextColor(customThemeWrapper.getButtonTextColor());
         badgeDrawable.setHorizontalOffset(anchorView.getWidth() / 2);
+
+        this.badgeDrawable = badgeDrawable;
+
         return badgeDrawable;
     }
 }
