@@ -394,6 +394,13 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         }
     }
 
+    public void updateModdedStatus(int position) {
+        Comment originalComment = getItem(position);
+        if (originalComment != null) {
+            notifyItemChanged(position);
+        }
+    }
+
     public void setCanStartActivity(boolean canStartActivity) {
         this.canStartActivity = canStartActivity;
     }

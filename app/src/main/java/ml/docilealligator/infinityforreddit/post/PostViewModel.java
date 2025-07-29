@@ -25,7 +25,7 @@ import java.util.concurrent.Executor;
 import ml.docilealligator.infinityforreddit.SingleLiveEvent;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
-import ml.docilealligator.infinityforreddit.moderation.ModerationEvent;
+import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsListInterface;
 import ml.docilealligator.infinityforreddit.thing.SortType;
@@ -60,7 +60,7 @@ public class PostViewModel extends ViewModel {
     private final MutableLiveData<PostFilter> postFilterLiveData;
     private final SortTypeAndPostFilterLiveData sortTypeAndPostFilterLiveData;
 
-    public final SingleLiveEvent<ModerationEvent> moderationEventLiveData = new SingleLiveEvent<>();
+    public final SingleLiveEvent<PostModerationEvent> moderationEventLiveData = new SingleLiveEvent<>();
 
     // PostPagingSource.TYPE_FRONT_PAGE
     public PostViewModel(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
@@ -501,15 +501,15 @@ public class PostViewModel extends ViewModel {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    moderationEventLiveData.postValue(new ModerationEvent.Approved(post, position));
+                    moderationEventLiveData.postValue(new PostModerationEvent.Approved(post, position));
                 } else {
-                    moderationEventLiveData.postValue(new ModerationEvent.ApproveFailed(post, position));
+                    moderationEventLiveData.postValue(new PostModerationEvent.ApproveFailed(post, position));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
-                moderationEventLiveData.postValue(new ModerationEvent.ApproveFailed(post, position));
+                moderationEventLiveData.postValue(new PostModerationEvent.ApproveFailed(post, position));
             }
         });
     }
@@ -522,15 +522,15 @@ public class PostViewModel extends ViewModel {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    moderationEventLiveData.postValue(isSpam ? new ModerationEvent.MarkedAsSpam(post, position): new ModerationEvent.Removed(post, position));
+                    moderationEventLiveData.postValue(isSpam ? new PostModerationEvent.MarkedAsSpam(post, position): new PostModerationEvent.Removed(post, position));
                 } else {
-                    moderationEventLiveData.postValue(isSpam ? new ModerationEvent.MarkAsSpamFailed(post, position) : new ModerationEvent.RemoveFailed(post, position));
+                    moderationEventLiveData.postValue(isSpam ? new PostModerationEvent.MarkAsSpamFailed(post, position) : new PostModerationEvent.RemoveFailed(post, position));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
-                moderationEventLiveData.postValue(isSpam ? new ModerationEvent.MarkAsSpamFailed(post, position) : new ModerationEvent.RemoveFailed(post, position));
+                moderationEventLiveData.postValue(isSpam ? new PostModerationEvent.MarkAsSpamFailed(post, position) : new PostModerationEvent.RemoveFailed(post, position));
             }
         });
     }
@@ -545,15 +545,15 @@ public class PostViewModel extends ViewModel {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
                     post.setIsStickied(!post.isStickied());
-                    moderationEventLiveData.postValue(post.isStickied() ? new ModerationEvent.SetStickyPost(post, position): new ModerationEvent.UnsetStickyPost(post, position));
+                    moderationEventLiveData.postValue(post.isStickied() ? new PostModerationEvent.SetStickyPost(post, position): new PostModerationEvent.UnsetStickyPost(post, position));
                 } else {
-                    moderationEventLiveData.postValue(post.isStickied() ? new ModerationEvent.UnsetStickyPostFailed(post, position) : new ModerationEvent.SetStickyPostFailed(post, position));
+                    moderationEventLiveData.postValue(post.isStickied() ? new PostModerationEvent.UnsetStickyPostFailed(post, position) : new PostModerationEvent.SetStickyPostFailed(post, position));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
-                moderationEventLiveData.postValue(post.isStickied() ? new ModerationEvent.UnsetStickyPostFailed(post, position) : new ModerationEvent.SetStickyPostFailed(post, position));
+                moderationEventLiveData.postValue(post.isStickied() ? new PostModerationEvent.UnsetStickyPostFailed(post, position) : new PostModerationEvent.SetStickyPostFailed(post, position));
             }
         });
     }
@@ -567,15 +567,15 @@ public class PostViewModel extends ViewModel {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
                     post.setIsLocked(!post.isLocked());
-                    moderationEventLiveData.postValue(post.isLocked() ? new ModerationEvent.Locked(post, position): new ModerationEvent.Unlocked(post, position));
+                    moderationEventLiveData.postValue(post.isLocked() ? new PostModerationEvent.Locked(post, position): new PostModerationEvent.Unlocked(post, position));
                 } else {
-                    moderationEventLiveData.postValue(post.isLocked() ? new ModerationEvent.UnlockFailed(post, position) : new ModerationEvent.LockFailed(post, position));
+                    moderationEventLiveData.postValue(post.isLocked() ? new PostModerationEvent.UnlockFailed(post, position) : new PostModerationEvent.LockFailed(post, position));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
-                moderationEventLiveData.postValue(post.isLocked() ? new ModerationEvent.UnlockFailed(post, position) : new ModerationEvent.LockFailed(post, position));
+                moderationEventLiveData.postValue(post.isLocked() ? new PostModerationEvent.UnlockFailed(post, position) : new PostModerationEvent.LockFailed(post, position));
             }
         });
     }
@@ -589,15 +589,15 @@ public class PostViewModel extends ViewModel {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
                     post.setNSFW(!post.isNSFW());
-                    moderationEventLiveData.postValue(post.isNSFW() ? new ModerationEvent.MarkedNSFW(post, position): new ModerationEvent.UnmarkedNSFW(post, position));
+                    moderationEventLiveData.postValue(post.isNSFW() ? new PostModerationEvent.MarkedNSFW(post, position): new PostModerationEvent.UnmarkedNSFW(post, position));
                 } else {
-                    moderationEventLiveData.postValue(post.isNSFW() ? new ModerationEvent.UnmarkNSFWFailed(post, position) : new ModerationEvent.MarkNSFWFailed(post, position));
+                    moderationEventLiveData.postValue(post.isNSFW() ? new PostModerationEvent.UnmarkNSFWFailed(post, position) : new PostModerationEvent.MarkNSFWFailed(post, position));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
-                moderationEventLiveData.postValue(post.isNSFW() ? new ModerationEvent.UnmarkNSFWFailed(post, position) : new ModerationEvent.MarkNSFWFailed(post, position));
+                moderationEventLiveData.postValue(post.isNSFW() ? new PostModerationEvent.UnmarkNSFWFailed(post, position) : new PostModerationEvent.MarkNSFWFailed(post, position));
             }
         });
     }
@@ -611,15 +611,15 @@ public class PostViewModel extends ViewModel {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
                     post.setSpoiler(!post.isSpoiler());
-                    moderationEventLiveData.postValue(post.isSpoiler() ? new ModerationEvent.MarkedSpoiler(post, position): new ModerationEvent.UnmarkedSpoiler(post, position));
+                    moderationEventLiveData.postValue(post.isSpoiler() ? new PostModerationEvent.MarkedSpoiler(post, position): new PostModerationEvent.UnmarkedSpoiler(post, position));
                 } else {
-                    moderationEventLiveData.postValue(post.isSpoiler() ? new ModerationEvent.UnmarkSpoilerFailed(post, position) : new ModerationEvent.MarkSpoilerFailed(post, position));
+                    moderationEventLiveData.postValue(post.isSpoiler() ? new PostModerationEvent.UnmarkSpoilerFailed(post, position) : new PostModerationEvent.MarkSpoilerFailed(post, position));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
-                moderationEventLiveData.postValue(post.isSpoiler() ? new ModerationEvent.UnmarkSpoilerFailed(post, position) : new ModerationEvent.MarkSpoilerFailed(post, position));
+                moderationEventLiveData.postValue(post.isSpoiler() ? new PostModerationEvent.UnmarkSpoilerFailed(post, position) : new PostModerationEvent.MarkSpoilerFailed(post, position));
             }
         });
     }
@@ -633,15 +633,15 @@ public class PostViewModel extends ViewModel {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
                     post.setIsModerator(!post.isModerator());
-                    moderationEventLiveData.postValue(post.isModerator() ? new ModerationEvent.DistinguishedAsMod(post, position): new ModerationEvent.UndistinguishedAsMod(post, position));
+                    moderationEventLiveData.postValue(post.isModerator() ? new PostModerationEvent.DistinguishedAsMod(post, position): new PostModerationEvent.UndistinguishedAsMod(post, position));
                 } else {
-                    moderationEventLiveData.postValue(post.isModerator() ? new ModerationEvent.UndistinguishAsModFailed(post, position) : new ModerationEvent.DistinguishAsModFailed(post, position));
+                    moderationEventLiveData.postValue(post.isModerator() ? new PostModerationEvent.UndistinguishAsModFailed(post, position) : new PostModerationEvent.DistinguishAsModFailed(post, position));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
-                moderationEventLiveData.postValue(post.isModerator() ? new ModerationEvent.UndistinguishAsModFailed(post, position) : new ModerationEvent.DistinguishAsModFailed(post, position));
+                moderationEventLiveData.postValue(post.isModerator() ? new PostModerationEvent.UndistinguishAsModFailed(post, position) : new PostModerationEvent.DistinguishAsModFailed(post, position));
             }
         });
     }

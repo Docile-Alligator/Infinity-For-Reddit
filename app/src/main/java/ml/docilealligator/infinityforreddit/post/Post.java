@@ -77,6 +77,11 @@ public class Post implements Parcelable {
     private Map<String, MediaMetadata> mediaMetadataMap;
     private ArrayList<Gallery> gallery = new ArrayList<>();
     private boolean canModPost;
+    private boolean approved;
+    private long approvedAtUTC;
+    private String approvedBy;
+    private boolean removed;
+    private boolean spam;
 
     //Text and video posts
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
@@ -84,7 +89,8 @@ public class Post implements Parcelable {
                 String title, String permalink, int score, int postType, int voteType, int nComments,
                 int upvoteRatio, String flair, boolean hidden, boolean spoiler,
                 boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved,
-                boolean isCrosspost, boolean canModPost, String distinguished, String suggestedSort) {
+                boolean isCrosspost, boolean canModPost, boolean approved, long approvedAtUTC, String approvedBy,
+                boolean removed, boolean spam, String distinguished, String suggestedSort) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -111,6 +117,11 @@ public class Post implements Parcelable {
         this.saved = saved;
         this.isCrosspost = isCrosspost;
         this.canModPost = canModPost;
+        this.approved = approved;
+        this.approvedAtUTC = approvedAtUTC;
+        this.approvedBy = approvedBy;
+        this.removed = removed;
+        this.spam = spam;
         this.distinguished = distinguished;
         this.suggestedSort = suggestedSort;
         isRead = false;
@@ -121,7 +132,8 @@ public class Post implements Parcelable {
                 String url, String permalink, int score, int postType, int voteType, int nComments,
                 int upvoteRatio, String flair, boolean hidden, boolean spoiler,
                 boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved,
-                boolean isCrosspost, boolean canModPost, String distinguished, String suggestedSort) {
+                boolean isCrosspost, boolean canModPost, boolean approved, long approvedAtUTC, String approvedBy,
+                boolean removed, boolean spam, String distinguished, String suggestedSort) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -149,6 +161,11 @@ public class Post implements Parcelable {
         this.saved = saved;
         this.isCrosspost = isCrosspost;
         this.canModPost = canModPost;
+        this.approved = approved;
+        this.approvedAtUTC = approvedAtUTC;
+        this.approvedBy = approvedBy;
+        this.removed = removed;
+        this.spam = spam;
         this.distinguished = distinguished;
         this.suggestedSort = suggestedSort;
         isRead = false;
@@ -196,6 +213,10 @@ public class Post implements Parcelable {
         saved = in.readByte() != 0;
         isCrosspost = in.readByte() != 0;
         canModPost = in.readByte() != 0;
+        approved = in.readByte() != 0;
+        approvedAtUTC = in.readLong();
+        approvedBy = in.readString();
+        removed = in.readByte() != 0;
         isRead = in.readByte() != 0;
         crosspostParentId = in.readString();
         distinguished = in.readString();
@@ -532,6 +553,11 @@ public class Post implements Parcelable {
         dest.writeByte((byte) (saved ? 1 : 0));
         dest.writeByte((byte) (isCrosspost ? 1 : 0));
         dest.writeByte((byte) (canModPost ? 1 : 0));
+        dest.writeByte((byte) (approved ? 1 : 0));
+        dest.writeLong(approvedAtUTC);
+        dest.writeString(approvedBy);
+        dest.writeByte((byte) (removed ? 1 : 0));
+        dest.writeByte((byte) (spam ? 1 : 0));
         dest.writeByte((byte) (isRead ? 1 : 0));
         dest.writeString(crosspostParentId);
         dest.writeString(distinguished);
@@ -576,6 +602,43 @@ public class Post implements Parcelable {
 
     public boolean isCanModPost() {
         return canModPost;
+    }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
+    }
+
+    public long getApprovedAtUTC() {
+        return approvedAtUTC;
+    }
+
+    public void setApprovedAtUTC(long approvedAtUTC) {
+        this.approvedAtUTC = approvedAtUTC;
+    }
+
+    public String getApprovedBy() {
+        return approvedBy;
+    }
+
+    public void setApprovedBy(String approvedBy) {
+        this.approvedBy = approvedBy;
+    }
+
+    public boolean isRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(boolean removed, boolean spam) {
+        this.removed = removed;
+        this.spam = spam;
+    }
+
+    public boolean isSpam() {
+        return spam;
     }
 
     public void markAsRead() {

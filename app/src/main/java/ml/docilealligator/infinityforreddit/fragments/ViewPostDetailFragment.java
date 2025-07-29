@@ -68,6 +68,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import ml.docilealligator.infinityforreddit.CommentModerationActionHandler;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.PostModerationActionHandler;
 import ml.docilealligator.infinityforreddit.R;
@@ -127,7 +128,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class ViewPostDetailFragment extends Fragment implements FragmentCommunicator, PostModerationActionHandler {
+public class ViewPostDetailFragment extends Fragment implements FragmentCommunicator, PostModerationActionHandler, CommentModerationActionHandler {
 
     public static final String EXTRA_POST_DATA = "EPD";
     public static final String EXTRA_POST_ID = "EPI";
@@ -571,7 +572,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
         viewPostDetailFragmentViewModel = new ViewModelProvider(
                 this,
-                ViewPostDetailFragmentViewModel.Companion.provideFactory(mOauthRetrofit, activity.accessToken)
+                ViewPostDetailFragmentViewModel.Companion.provideFactory(mOauthRetrofit, activity.accessToken, activity.accountName)
         ).get(ViewPostDetailFragmentViewModel.class);
 
         bindView();
@@ -658,12 +659,19 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             return new PlaybackInfo(INDEX_UNSET, TIME_UNSET, volumeInfo);
         });
 
-        viewPostDetailFragmentViewModel.getModerationEventLiveData().observe(getViewLifecycleOwner(), moderationEvent -> {
+        viewPostDetailFragmentViewModel.getPostModerationEventLiveData().observe(getViewLifecycleOwner(), moderationEvent -> {
             mPost = moderationEvent.getPost();
             if (mPostAdapter != null) {
                 mPostAdapter.updatePost(mPost);
             }
             EventBus.getDefault().post(new PostUpdateEventToPostList(moderationEvent.getPost(), moderationEvent.getPosition()));
+            Toast.makeText(activity, moderationEvent.getToastMessageResId(), Toast.LENGTH_SHORT).show();
+        });
+
+        viewPostDetailFragmentViewModel.getCommentModerationEventLiveData().observe(getViewLifecycleOwner(), moderationEvent -> {
+            if (mCommentsAdapter != null) {
+                mCommentsAdapter.updateModdedStatus(moderationEvent.getComment(), moderationEvent.getPosition());
+            }
             Toast.makeText(activity, moderationEvent.getToastMessageResId(), Toast.LENGTH_SHORT).show();
         });
     }
@@ -2085,5 +2093,20 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Override
     public void toggleMod(@NonNull Post post, int position) {
         viewPostDetailFragmentViewModel.toggleMod(post, position);
+    }
+
+    @Override
+    public void approveComment(@NonNull Comment comment, int position) {
+        viewPostDetailFragmentViewModel.approveComment(comment, position);
+    }
+
+    @Override
+    public void removeComment(@NonNull Comment comment, int position, boolean isSpam) {
+        viewPostDetailFragmentViewModel.removeComment(comment, position, isSpam);
+    }
+
+    @Override
+    public void toggleLock(@NonNull Comment comment, int position) {
+        viewPostDetailFragmentViewModel.toggleLock(comment, position);
     }
 }

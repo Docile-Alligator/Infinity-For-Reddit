@@ -38,6 +38,7 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import ml.docilealligator.infinityforreddit.CommentModerationActionHandler;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
@@ -63,7 +64,7 @@ import retrofit2.Retrofit;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CommentsListingFragment extends Fragment implements FragmentCommunicator {
+public class CommentsListingFragment extends Fragment implements FragmentCommunicator, CommentModerationActionHandler {
 
     public static final String EXTRA_USERNAME = "EN";
     public static final String EXTRA_ARE_SAVED_COMMENTS = "EISC";
@@ -340,6 +341,13 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
             mCommentViewModel.getPaginationNetworkState().observe(getViewLifecycleOwner(), networkState -> mAdapter.setNetworkState(networkState));
 
+            mCommentViewModel.commentModerationEventLiveData.observe(getViewLifecycleOwner(), moderationEvent -> {
+                if (mAdapter != null) {
+                    mAdapter.updateModdedStatus(moderationEvent.getPosition());
+                }
+                Toast.makeText(mActivity, moderationEvent.getToastMessageResId(), Toast.LENGTH_SHORT).show();
+            });
+
             binding.swipeRefreshLayoutViewCommentsListingFragment.setOnRefreshListener(() -> mCommentViewModel.refresh());
         }
     }
@@ -479,5 +487,20 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         if (previousPosition > 0) {
             recyclerView.scrollToPosition(previousPosition);
         }
+    }
+
+    @Override
+    public void approveComment(@NonNull Comment comment, int position) {
+        mCommentViewModel.approveComment(comment, position);
+    }
+
+    @Override
+    public void removeComment(@NonNull Comment comment, int position, boolean isSpam) {
+        mCommentViewModel.removeComment(comment, position, isSpam);
+    }
+
+    @Override
+    public void toggleLock(@NonNull Comment comment, int position) {
+        mCommentViewModel.toggleLock(comment, position);
     }
 }

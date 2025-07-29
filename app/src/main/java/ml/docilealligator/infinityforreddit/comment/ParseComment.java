@@ -313,6 +313,11 @@ public class ParseComment {
         boolean sendReplies = singleCommentData.getBoolean(JSONUtils.SEND_REPLIES_KEY);
         boolean locked = singleCommentData.getBoolean(JSONUtils.LOCKED_KEY);
         boolean canModComment = singleCommentData.getBoolean(JSONUtils.CAN_MOD_POST_KEY);
+        boolean approved = singleCommentData.getBoolean(JSONUtils.APPROVED_KEY);
+        long approvedAtUTC = singleCommentData.isNull(JSONUtils.APPROVED_AT_UTC_KEY) ? 0: singleCommentData.getLong(JSONUtils.APPROVED_AT_UTC_KEY) * 1000;
+        String approvedBy = singleCommentData.getString(JSONUtils.APPROVED_BY_KEY);
+        boolean removed = singleCommentData.getBoolean(JSONUtils.REMOVED_KEY);
+        boolean spam = singleCommentData.getBoolean(JSONUtils.SPAM_KEY);
 
         if (singleCommentData.has(JSONUtils.DEPTH_KEY)) {
             depth = singleCommentData.getInt(JSONUtils.DEPTH_KEY);
@@ -328,7 +333,7 @@ public class ParseComment {
                 linkAuthor, submitTime, commentMarkdown, commentRawText,
                 linkId, subredditName, parentId, score, voteType, isSubmitter, distinguished,
                 permalink, depth, collapsed, hasReply, scoreHidden, saved, sendReplies, locked, canModComment,
-                edited, mediaMetadataMap);
+                approved, approvedAtUTC, approvedBy, removed, spam, edited, mediaMetadataMap);
     }
 
     @Nullable
