@@ -197,6 +197,20 @@
             android:visibility="gone"
             app:drawableTint="?attr/primaryTextColor" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/status_text_view_post_options_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:focusable="true"
+            android:fontFamily="?attr/font_family"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:textColor="?attr/secondaryTextColor"
+            android:textSize="?attr/font_default" />
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

@@ -1573,4 +1573,9 @@
     <string name="distinguish_as_mod_failed">Distinguish as moderator failed</string>
     <string name="undistinguished_as_mod">Undistinguished as moderator</string>
     <string name="undistinguish_as_mod_failed">Undistinguish as moderator failed</string>
+    <string name="approved_status">Approved by %1$s</string>
+    <string name="post_removed_status">This post is removed</string>
+    <string name="post_spam_status">This post is removed as spam</string>
+    <string name="comment_removed_status">This comment is removed</string>
+    <string name="comment_spam_status">This comment is removed as spam</string>
 </resources>

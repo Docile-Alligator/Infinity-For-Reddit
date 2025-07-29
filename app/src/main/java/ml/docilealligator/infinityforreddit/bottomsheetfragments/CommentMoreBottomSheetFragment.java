@@ -226,6 +226,18 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
             });
         }
 
+        if (comment.isApproved()) {
+            binding.statusCommentMoreBottomSheetFragment.setText(getString(R.string.approved_status, comment.getApprovedBy()));
+        } else if (comment.isRemoved()) {
+            if (comment.isSpam()) {
+                binding.statusCommentMoreBottomSheetFragment.setText(R.string.comment_spam_status);
+            } else {
+                binding.statusCommentMoreBottomSheetFragment.setText(R.string.comment_removed_status);
+            }
+        } else {
+            binding.statusCommentMoreBottomSheetFragment.setVisibility(View.GONE);
+        }
+
         if (activity.typeface != null) {
             Utils.setFontToAllTextViews(binding.getRoot(), activity.typeface);
         }

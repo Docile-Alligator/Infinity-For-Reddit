@@ -292,6 +292,18 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                     });
                 }
             }
+
+            if (mPost.isApproved()) {
+                binding.statusTextViewPostOptionsBottomSheetFragment.setText(getString(R.string.approved_status, mPost.getApprovedBy()));
+            } else if (mPost.isRemoved()) {
+                if (mPost.isSpam()) {
+                    binding.statusTextViewPostOptionsBottomSheetFragment.setText(R.string.post_spam_status);
+                } else {
+                    binding.statusTextViewPostOptionsBottomSheetFragment.setText(R.string.post_removed_status);
+                }
+            } else {
+                binding.statusTextViewPostOptionsBottomSheetFragment.setVisibility(View.GONE);
+            }
         }
 
         if (mBaseActivity.typeface != null) {
