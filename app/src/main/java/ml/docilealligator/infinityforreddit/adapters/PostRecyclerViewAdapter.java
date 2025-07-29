@@ -3564,7 +3564,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                     if (position >= 0) {
                                         if (post != null) {
                                             markPostRead(post, true);
-                                            openMedia(post, layoutManager.findFirstVisibleItemPosition());
+                                            openMedia(post, layoutManager.findFirstVisibleItemPosition(), false);
                                         }
                                     }
                                 }
