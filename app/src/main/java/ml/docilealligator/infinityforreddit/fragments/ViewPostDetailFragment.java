@@ -1944,6 +1944,15 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mPost.getId().equals(event.post.getId())) {
             mPost.setVoteType(event.post.getVoteType());
             mPost.setSaved(event.post.isSaved());
+            mPost.setNSFW(event.post.isNSFW());
+            mPost.setSpoiler(event.post.isSpoiler());
+            mPost.setIsStickied(event.post.isStickied());
+            mPost.setApproved(event.post.isApproved());
+            mPost.setApprovedAtUTC(event.post.getApprovedAtUTC());
+            mPost.setApprovedBy(event.post.getApprovedBy());
+            mPost.setRemoved(event.post.isRemoved(), event.post.isSpam());
+            mPost.setIsLocked(event.post.isLocked());
+            mPost.setIsModerator(event.post.isModerator());
             if (mMenu != null) {
                 if (event.post.isSaved()) {
                     mMenu.findItem(R.id.action_save_view_post_detail_fragment).setIcon(mSavedIcon);

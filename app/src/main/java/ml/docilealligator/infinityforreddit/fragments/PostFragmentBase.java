@@ -623,6 +623,10 @@ public abstract class PostFragmentBase extends Fragment {
                 post.setFlair(event.post.getFlair());
                 post.setSaved(event.post.isSaved());
                 post.setIsStickied(event.post.isStickied());
+                post.setApproved(event.post.isApproved());
+                post.setApprovedAtUTC(event.post.getApprovedAtUTC());
+                post.setApprovedBy(event.post.getApprovedBy());
+                post.setRemoved(event.post.isRemoved(), event.post.isSpam());
                 post.setIsLocked(event.post.isLocked());
                 post.setIsModerator(event.post.isModerator());
                 if (event.post.isRead()) {

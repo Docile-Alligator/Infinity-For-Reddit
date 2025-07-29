@@ -58,6 +58,10 @@ class ViewPostDetailFragmentViewModel(
             .enqueue(object : Callback<String?> {
                 override fun onResponse(call: Call<String?>, response: Response<String?>) {
                     if (response.isSuccessful) {
+                        post.isApproved = true
+                        post.approvedBy = accountName
+                        post.approvedAtUTC = System.currentTimeMillis()
+                        post.setRemoved(false, false)
                         postModerationEventLiveData.postValue(Approved(post, position))
                     } else {
                         postModerationEventLiveData.postValue(ApproveFailed(post, position))
@@ -79,6 +83,10 @@ class ViewPostDetailFragmentViewModel(
             .enqueue(object : Callback<String?> {
                 override fun onResponse(call: Call<String?>, response: Response<String?>) {
                     if (response.isSuccessful) {
+                        post.isApproved = false
+                        post.approvedBy = null
+                        post.approvedAtUTC = 0
+                        post.setRemoved(true, isSpam)
                         postModerationEventLiveData.postValue(
                             if (isSpam) MarkedAsSpam(
                                 post,

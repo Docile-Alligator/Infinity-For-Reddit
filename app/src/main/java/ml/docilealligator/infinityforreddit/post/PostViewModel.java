@@ -501,6 +501,10 @@ public class PostViewModel extends ViewModel {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
+                    post.setApproved(true);
+                    post.setApprovedBy(accountName);
+                    post.setApprovedAtUTC(System.currentTimeMillis());
+                    post.setRemoved(false, false);
                     moderationEventLiveData.postValue(new PostModerationEvent.Approved(post, position));
                 } else {
                     moderationEventLiveData.postValue(new PostModerationEvent.ApproveFailed(post, position));
@@ -522,6 +526,10 @@ public class PostViewModel extends ViewModel {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
+                    post.setApproved(false);
+                    post.setApprovedBy(null);
+                    post.setApprovedAtUTC(0);
+                    post.setRemoved(true, isSpam);
                     moderationEventLiveData.postValue(isSpam ? new PostModerationEvent.MarkedAsSpam(post, position): new PostModerationEvent.Removed(post, position));
                 } else {
                     moderationEventLiveData.postValue(isSpam ? new PostModerationEvent.MarkAsSpamFailed(post, position) : new PostModerationEvent.RemoveFailed(post, position));
