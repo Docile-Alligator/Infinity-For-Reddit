@@ -201,19 +201,23 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                 binding.crosspostTextViewPostOptionsBottomSheetFragment.setVisibility(View.GONE);
                 binding.reportTextViewPostOptionsBottomSheetFragment.setVisibility(View.GONE);
             } else {
-                binding.commentTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {
-                    Intent intent = new Intent(mBaseActivity, CommentActivity.class);
-                    intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, mPost.getFullName());
-                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TITLE_KEY, mPost.getTitle());
-                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY, mPost.getSelfText());
-                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_KEY, mPost.getSelfTextPlain());
-                    intent.putExtra(CommentActivity.EXTRA_SUBREDDIT_NAME_KEY, mPost.getSubredditName());
-                    intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, false);
-                    intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, 0);
-                    mBaseActivity.startActivity(intent);
+                if (mPost.isLocked() || mPost.isArchived()) {
+                    binding.commentTextViewPostOptionsBottomSheetFragment.setVisibility(View.GONE);
+                } else {
+                    binding.commentTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {
+                        Intent intent = new Intent(mBaseActivity, CommentActivity.class);
+                        intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, mPost.getFullName());
+                        intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TITLE_KEY, mPost.getTitle());
+                        intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY, mPost.getSelfText());
+                        intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_KEY, mPost.getSelfTextPlain());
+                        intent.putExtra(CommentActivity.EXTRA_SUBREDDIT_NAME_KEY, mPost.getSubredditName());
+                        intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, false);
+                        intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, 0);
+                        mBaseActivity.startActivity(intent);
 
-                    dismiss();
-                });
+                        dismiss();
+                    });
+                }
 
                 if (mPost.isHidden()) {
                     binding.hidePostTextViewPostOptionsBottomSheetFragment.setText(R.string.action_unhide_post);

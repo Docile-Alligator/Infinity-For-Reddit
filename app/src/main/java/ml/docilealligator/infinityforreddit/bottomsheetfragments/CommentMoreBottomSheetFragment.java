@@ -18,7 +18,6 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
@@ -31,6 +30,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.databinding.FragmentCommentMoreBottomSheetBinding;
+import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 import ml.docilealligator.infinityforreddit.utils.ShareScreenshotUtilsKt;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
@@ -124,7 +124,22 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
         }
 
         if (showReplyAndSaveOption) {
-            binding.replyTextViewCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
+            if (!comment.isLocked()) {
+                binding.replyTextViewCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
+                binding.replyTextViewCommentMoreBottomSheetFragment.setOnClickListener(view -> {
+                    Intent intent = new Intent(activity, CommentActivity.class);
+                    intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, comment.getDepth() + 1);
+                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY, comment.getCommentMarkdown());
+                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_KEY, comment.getCommentRawText());
+                    intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, comment.getFullName());
+                    intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, true);
+
+                    intent.putExtra(CommentActivity.EXTRA_PARENT_POSITION_KEY, bundle.getInt(EXTRA_POSITION));
+                    activity.startActivityForResult(intent, CommentActivity.WRITE_COMMENT_REQUEST_CODE);
+
+                    dismiss();
+                });
+            }
             binding.saveTextViewCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
             if (comment.isSaved()) {
                 binding.saveTextViewCommentMoreBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(activity, R.drawable.ic_bookmark_day_night_24dp), null, null, null);
@@ -133,19 +148,6 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
                 binding.saveTextViewCommentMoreBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(activity, R.drawable.ic_bookmark_border_day_night_24dp), null, null, null);
                 binding.saveTextViewCommentMoreBottomSheetFragment.setText(R.string.save_comment);
             }
-            binding.replyTextViewCommentMoreBottomSheetFragment.setOnClickListener(view -> {
-                Intent intent = new Intent(activity, CommentActivity.class);
-                intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, comment.getDepth() + 1);
-                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY, comment.getCommentMarkdown());
-                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_KEY, comment.getCommentRawText());
-                intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, comment.getFullName());
-                intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, true);
-
-                intent.putExtra(CommentActivity.EXTRA_PARENT_POSITION_KEY, bundle.getInt(EXTRA_POSITION));
-                activity.startActivityForResult(intent, CommentActivity.WRITE_COMMENT_REQUEST_CODE);
-
-                dismiss();
-            });
 
             binding.saveTextViewCommentMoreBottomSheetFragment.setOnClickListener(view -> {
                 if (activity instanceof ViewPostDetailActivity) {

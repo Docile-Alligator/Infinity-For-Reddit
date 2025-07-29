@@ -572,7 +572,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     ((CommentBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
                 }
 
-                if (mPost.isLocked()) {
+                if (mPost.isLocked() || comment.isLocked()) {
                     ((CommentBaseViewHolder) holder).replyButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
                 }
 
@@ -1538,6 +1538,11 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                 Comment comment = getCurrentComment(this);
                 if (comment != null) {
+                    if (comment.isLocked()) {
+                        Toast.makeText(mActivity, R.string.locked_comment_reply_unavailable, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     Intent intent = new Intent(mActivity, CommentActivity.class);
                     intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, comment.getDepth() + 1);
                     intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY, comment.getCommentMarkdown());

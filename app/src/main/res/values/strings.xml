@@ -302,6 +302,7 @@
     <string name="archived_post_reply_unavailable">Archived post. Reply unavailable.</string>
     <string name="locked_post_comment_unavailable">Locked post. Comment unavailable.</string>
     <string name="locked_post_reply_unavailable">Locked post. Reply unavailable.</string>
+    <string name="locked_comment_reply_unavailable">Locked comment. Reply unavailable.</string>
 
     <string name="text">TEXT</string>
     <string name="link">LINK</string>
