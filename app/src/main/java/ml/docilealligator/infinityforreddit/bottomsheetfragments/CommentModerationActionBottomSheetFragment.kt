@@ -44,19 +44,28 @@ class CommentModerationActionBottomSheetFragment : LandscapeExpandedRoundedBotto
         )
 
         comment?.let { comment ->
-            binding.approveTextViewCommentModerationActionBottomSheetFragment.setOnClickListener {
-                (parentFragment as CommentModerationActionHandler).approveComment(comment, position)
-                dismiss()
+            if (comment.isApproved) {
+                binding.approveTextViewCommentModerationActionBottomSheetFragment.visibility = View.GONE
+            } else {
+                binding.approveTextViewCommentModerationActionBottomSheetFragment.setOnClickListener {
+                    (parentFragment as CommentModerationActionHandler).approveComment(comment, position)
+                    dismiss()
+                }
             }
 
-            binding.removeTextViewCommentModerationActionBottomSheetFragment.setOnClickListener {
-                (parentFragment as CommentModerationActionHandler).removeComment(comment, position, false)
-                dismiss()
-            }
+            if (comment.isRemoved) {
+                binding.removeTextViewCommentModerationActionBottomSheetFragment.visibility = View.GONE
+                binding.spamTextViewCommentModerationActionBottomSheetFragment.visibility = View.GONE
+            } else {
+                binding.removeTextViewCommentModerationActionBottomSheetFragment.setOnClickListener {
+                    (parentFragment as CommentModerationActionHandler).removeComment(comment, position, false)
+                    dismiss()
+                }
 
-            binding.spamTextViewCommentModerationActionBottomSheetFragment.setOnClickListener {
-                (parentFragment as CommentModerationActionHandler).removeComment(comment, position, true)
-                dismiss()
+                binding.spamTextViewCommentModerationActionBottomSheetFragment.setOnClickListener {
+                    (parentFragment as CommentModerationActionHandler).removeComment(comment, position, true)
+                    dismiss()
+                }
             }
 
             activity?.let {

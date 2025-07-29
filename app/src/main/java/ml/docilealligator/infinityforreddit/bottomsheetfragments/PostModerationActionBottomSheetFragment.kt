@@ -40,19 +40,28 @@ class PostModerationActionBottomSheetFragment : LandscapeExpandedRoundedBottomSh
         val binding: FragmentModerationActionBottomSheetBinding = FragmentModerationActionBottomSheetBinding.inflate(inflater, container, false)
         post?.let { post ->
             if (parentFragment is PostModerationActionHandler) {
-                binding.approveTextViewModerationActionBottomSheetFragment.setOnClickListener {
-                    (parentFragment as PostModerationActionHandler).approvePost(post, position)
-                    dismiss()
+                if (post.isApproved) {
+                    binding.approveTextViewModerationActionBottomSheetFragment.visibility = View.GONE
+                } else {
+                    binding.approveTextViewModerationActionBottomSheetFragment.setOnClickListener {
+                        (parentFragment as PostModerationActionHandler).approvePost(post, position)
+                        dismiss()
+                    }
                 }
 
-                binding.removeTextViewModerationActionBottomSheetFragment.setOnClickListener {
-                    (parentFragment as PostModerationActionHandler).removePost(post, position, false)
-                    dismiss()
-                }
+                if (post.isRemoved) {
+                    binding.removeTextViewModerationActionBottomSheetFragment.visibility = View.GONE
+                    binding.spamTextViewModerationActionBottomSheetFragment.visibility = View.GONE
+                } else {
+                    binding.removeTextViewModerationActionBottomSheetFragment.setOnClickListener {
+                        (parentFragment as PostModerationActionHandler).removePost(post, position, false)
+                        dismiss()
+                    }
 
-                binding.spamTextViewModerationActionBottomSheetFragment.setOnClickListener {
-                    (parentFragment as PostModerationActionHandler).removePost(post, position, true)
-                    dismiss()
+                    binding.spamTextViewModerationActionBottomSheetFragment.setOnClickListener {
+                        (parentFragment as PostModerationActionHandler).removePost(post, position, true)
+                        dismiss()
+                    }
                 }
 
                 activity?.let {
