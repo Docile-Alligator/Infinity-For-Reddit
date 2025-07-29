@@ -16,7 +16,7 @@
             android:layout_height="wrap_content" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/approve_text_view_moderation_action_bottom_sheet_fragment"
+            android:id="@+id/approve_text_view_comment_moderation_action_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -36,7 +36,7 @@
             app:drawableTint="?attr/primaryTextColor" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/remove_text_view_moderation_action_bottom_sheet_fragment"
+            android:id="@+id/remove_text_view_comment_moderation_action_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -56,7 +56,7 @@
             app:drawableTint="?attr/primaryTextColor" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/spam_text_view_moderation_action_bottom_sheet_fragment"
+            android:id="@+id/spam_text_view_comment_moderation_action_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -76,79 +76,7 @@
             app:drawableTint="?attr/primaryTextColor" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/toggle_sticky_text_view_moderation_action_bottom_sheet_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:drawablePadding="48dp"
-            android:focusable="true"
-            android:fontFamily="?attr/font_family"
-            android:paddingStart="32dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="32dp"
-            android:paddingBottom="16dp"
-            android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default"
-            app:drawableTint="?attr/primaryTextColor" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/toggle_lock_text_view_moderation_action_bottom_sheet_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:drawablePadding="48dp"
-            android:focusable="true"
-            android:fontFamily="?attr/font_family"
-            android:paddingStart="32dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="32dp"
-            android:paddingBottom="16dp"
-            android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default"
-            app:drawableTint="?attr/primaryTextColor" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/toggle_nsfw_text_view_moderation_action_bottom_sheet_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:drawablePadding="48dp"
-            android:focusable="true"
-            android:fontFamily="?attr/font_family"
-            android:paddingStart="32dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="32dp"
-            android:paddingBottom="16dp"
-            android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default"
-            app:drawableTint="?attr/primaryTextColor" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/toggle_spoiler_text_view_moderation_action_bottom_sheet_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:drawablePadding="48dp"
-            android:focusable="true"
-            android:fontFamily="?attr/font_family"
-            android:paddingStart="32dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="32dp"
-            android:paddingBottom="16dp"
-            android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default"
-            app:drawableTint="?attr/primaryTextColor" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/toggle_mod_text_view_moderation_action_bottom_sheet_fragment"
+            android:id="@+id/toggle_lock_text_view_comment_moderation_action_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"

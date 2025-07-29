@@ -54,6 +54,8 @@ public class Comment implements Parcelable {
     private boolean scoreHidden;
     private boolean saved;
     private boolean sendReplies;
+    private boolean locked;
+    private boolean canModComment;
     private boolean isExpanded;
     private boolean hasExpandedBefore;
     private boolean isFilteredOut;
@@ -71,7 +73,8 @@ public class Comment implements Parcelable {
                    String linkId, String subredditName, String parentId, int score,
                    int voteType, boolean isSubmitter, String distinguished, String permalink,
                    int depth, boolean collapsed, boolean hasReply,
-                   boolean scoreHidden, boolean saved, boolean sendReplies, long edited, Map<String, MediaMetadata> mediaMetadataMap) {
+                   boolean scoreHidden, boolean saved, boolean sendReplies, boolean locked, boolean canModComment,
+                   long edited, Map<String, MediaMetadata> mediaMetadataMap) {
         this.id = id;
         this.fullName = fullName;
         this.author = author;
@@ -96,6 +99,8 @@ public class Comment implements Parcelable {
         this.scoreHidden = scoreHidden;
         this.saved = saved;
         this.sendReplies = sendReplies;
+        this.locked = locked;
+        this.canModComment = canModComment;
         this.isExpanded = false;
         this.hasExpandedBefore = false;
         this.editedTimeMillis = edited;
@@ -147,6 +152,8 @@ public class Comment implements Parcelable {
         scoreHidden = in.readByte() != 0;
         saved = in.readByte() != 0;
         sendReplies = in.readByte() != 0;
+        locked = in.readByte() != 0;
+        canModComment = in.readByte() != 0;
         isExpanded = in.readByte() != 0;
         hasExpandedBefore = in.readByte() != 0;
         isFilteredOut = in.readByte() != 0;
@@ -312,6 +319,18 @@ public class Comment implements Parcelable {
         sendReplies = !sendReplies;
     }
 
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
+    public boolean isCanModComment() {
+        return canModComment;
+    }
+
     public boolean isExpanded() {
         return isExpanded;
     }
@@ -470,6 +489,8 @@ public class Comment implements Parcelable {
         parcel.writeByte((byte) (scoreHidden ? 1 : 0));
         parcel.writeByte((byte) (saved ? 1 : 0));
         parcel.writeByte((byte) (sendReplies ? 1 : 0));
+        parcel.writeByte((byte) (locked ? 1 : 0));
+        parcel.writeByte((byte) (canModComment ? 1 : 0));
         parcel.writeByte((byte) (isExpanded ? 1 : 0));
         parcel.writeByte((byte) (hasExpandedBefore ? 1 : 0));
         parcel.writeByte((byte) (isFilteredOut ? 1 : 0));

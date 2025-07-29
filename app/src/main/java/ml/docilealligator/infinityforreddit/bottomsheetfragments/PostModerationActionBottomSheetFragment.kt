@@ -11,7 +11,6 @@ import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment
 import ml.docilealligator.infinityforreddit.databinding.FragmentModerationActionBottomSheetBinding
 import ml.docilealligator.infinityforreddit.post.Post
-import org.checkerframework.checker.units.qual.A
 
 
 private const val EXTRA_POST = "EP"
@@ -19,10 +18,10 @@ private const val EXTRA_POSITION = "EPO"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [ModerationActionBottomSheetFragment.newInstance] factory method to
+ * Use the [PostModerationActionBottomSheetFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ModerationActionBottomSheetFragment : LandscapeExpandedRoundedBottomSheetDialogFragment() {
+class PostModerationActionBottomSheetFragment : LandscapeExpandedRoundedBottomSheetDialogFragment() {
     private var post: Post? = null
     private var position: Int = -1
 
@@ -113,7 +112,7 @@ class ModerationActionBottomSheetFragment : LandscapeExpandedRoundedBottomSheetD
     companion object {
         @JvmStatic
         fun newInstance(post: Post, position: Int) =
-            ModerationActionBottomSheetFragment().apply {
+            PostModerationActionBottomSheetFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(EXTRA_POST, post)
                     putInt(EXTRA_POSITION, position)

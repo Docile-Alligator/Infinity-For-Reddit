@@ -281,7 +281,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
                 sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
             }
 
-            mAdapter = new CommentsListingRecyclerViewAdapter(mActivity, mOauthRetrofit, customThemeWrapper,
+            mAdapter = new CommentsListingRecyclerViewAdapter(mActivity, this, mOauthRetrofit, customThemeWrapper,
                     getResources().getConfiguration().locale, mSharedPreferences,
                     mActivity.accessToken, mActivity.accountName,
                     username, () -> mCommentViewModel.retryLoadingMore());

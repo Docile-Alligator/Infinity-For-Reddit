@@ -34,6 +34,7 @@ import ml.docilealligator.infinityforreddit.post.HidePost;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.services.DownloadRedditVideoService;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 /**
@@ -280,17 +281,21 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                 if (mPost.isCanModPost()) {
                     binding.modTextViewPostOptionsBottomSheetFragment.setVisibility(View.VISIBLE);
                     binding.modTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {
-                        ModerationActionBottomSheetFragment moderationActionBottomSheetFragment = ModerationActionBottomSheetFragment.newInstance(mPost, getArguments().getInt(EXTRA_POST_LIST_POSITION, 0));
+                        PostModerationActionBottomSheetFragment postModerationActionBottomSheetFragment = PostModerationActionBottomSheetFragment.newInstance(mPost, getArguments().getInt(EXTRA_POST_LIST_POSITION, 0));
                         Fragment parentFragment = getParentFragment();
                         if (parentFragment != null) {
-                            moderationActionBottomSheetFragment.show(parentFragment.getChildFragmentManager(), moderationActionBottomSheetFragment.getTag());
+                            postModerationActionBottomSheetFragment.show(parentFragment.getChildFragmentManager(), postModerationActionBottomSheetFragment.getTag());
                         } else {
-                            moderationActionBottomSheetFragment.show(mBaseActivity.getSupportFragmentManager(), moderationActionBottomSheetFragment.getTag());
+                            postModerationActionBottomSheetFragment.show(mBaseActivity.getSupportFragmentManager(), postModerationActionBottomSheetFragment.getTag());
                         }
                         dismiss();
                     });
                 }
             }
+        }
+
+        if (mBaseActivity.typeface != null) {
+            Utils.setFontToAllTextViews(binding.getRoot(), mBaseActivity.typeface);
         }
 
         return binding.getRoot();

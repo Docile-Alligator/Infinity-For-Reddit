@@ -212,6 +212,20 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
             });
         }
 
+        if (comment.isCanModComment()) {
+            binding.modCommentMoreBottomSheetFragment.setVisibility(View.VISIBLE);
+            binding.modCommentMoreBottomSheetFragment.setOnClickListener(view -> {
+                CommentModerationActionBottomSheetFragment commentModerationActionBottomSheetFragment = CommentModerationActionBottomSheetFragment.newInstance(comment, bundle.getInt(EXTRA_POSITION));
+                Fragment parentFragment = getParentFragment();
+                if (parentFragment != null) {
+                    commentModerationActionBottomSheetFragment.show(parentFragment.getChildFragmentManager(), commentModerationActionBottomSheetFragment.getTag());
+                } else {
+                    commentModerationActionBottomSheetFragment.show(activity.getSupportFragmentManager(), commentModerationActionBottomSheetFragment.getTag());
+                }
+                dismiss();
+            });
+        }
+
         if (activity.typeface != null) {
             Utils.setFontToAllTextViews(binding.getRoot(), activity.typeface);
         }

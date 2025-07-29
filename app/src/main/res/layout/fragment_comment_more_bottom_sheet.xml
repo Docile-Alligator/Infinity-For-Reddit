@@ -224,6 +224,27 @@
             android:visibility="gone"
             app:drawableStartCompat="@drawable/ic_keyboard_double_arrow_up_day_night_24dp" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/mod_comment_more_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableStart="@drawable/ic_mod_24dp"
+            android:drawablePadding="48dp"
+            android:focusable="true"
+            android:fontFamily="?attr/font_family"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:text="@string/moderation"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:visibility="gone"
+            app:drawableTint="?attr/primaryTextColor" />
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>
