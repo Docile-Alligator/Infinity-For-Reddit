@@ -19,6 +19,7 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.OnApplyWindowInsetsListener;
@@ -300,6 +301,18 @@ public class LoginActivity extends BaseActivity {
                     .setCancelable(false)
                     .show();
         }
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (binding.webviewLoginActivity.canGoBack()) {
+                    binding.webviewLoginActivity.goBack();
+                } else {
+                    setEnabled(false);
+                    triggerBackPress();
+                }
+            }
+        });
     }
 
     @Override

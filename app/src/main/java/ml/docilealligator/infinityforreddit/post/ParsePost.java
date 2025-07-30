@@ -184,10 +184,10 @@ public class ParsePost {
         boolean deleted = !data.isNull(JSONUtils.REMOVED_BY_CATEGORY_KEY) && data.getString(JSONUtils.REMOVED_BY_CATEGORY_KEY).equals("deleted");
         boolean removed = !data.isNull(JSONUtils.REMOVED_BY_CATEGORY_KEY) && data.getString(JSONUtils.REMOVED_BY_CATEGORY_KEY).equals("moderator");
         boolean canModPost = data.getBoolean(JSONUtils.CAN_MOD_POST_KEY);
-        boolean approved = data.getBoolean(JSONUtils.APPROVED_KEY);
-        long approvedAtUTC = data.isNull(JSONUtils.APPROVED_AT_UTC_KEY) ? 0: data.getLong(JSONUtils.APPROVED_AT_UTC_KEY) * 1000;
-        String approvedBy = data.getString(JSONUtils.APPROVED_BY_KEY);
-        boolean spam = data.getBoolean(JSONUtils.SPAM_KEY);
+        boolean approved = data.has(JSONUtils.APPROVED_KEY) && data.getBoolean(JSONUtils.APPROVED_KEY);
+        long approvedAtUTC = data.has(JSONUtils.APPROVED_AT_UTC_KEY) ? (data.isNull(JSONUtils.APPROVED_AT_UTC_KEY) ? 0 : data.getLong(JSONUtils.APPROVED_AT_UTC_KEY) * 1000) : 0;
+        String approvedBy = data.has(JSONUtils.APPROVED_BY_KEY) ? data.getString(JSONUtils.APPROVED_BY_KEY) : null;
+        boolean spam = data.has(JSONUtils.SPAM_KEY) && data.getBoolean(JSONUtils.SPAM_KEY);
 
         StringBuilder postFlairHTMLBuilder = new StringBuilder();
         String flair = "";

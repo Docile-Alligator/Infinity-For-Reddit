@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.InflateException;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +20,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.OnApplyWindowInsetsListener;
@@ -125,6 +125,18 @@ public class WebViewActivity extends BaseActivity {
             }
         };
         binding.webViewWebViewActivity.setWebViewClient(client);
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (binding.webViewWebViewActivity.canGoBack()) {
+                    binding.webViewWebViewActivity.goBack();
+                } else {
+                    setEnabled(false);
+                    triggerBackPress();
+                }
+            }
+        });
     }
 
     @Override
@@ -198,22 +210,6 @@ public class WebViewActivity extends BaseActivity {
             }
         }
         return false;
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (keyCode == KeyEvent.KEYCODE_BACK) {
-                if (binding.webViewWebViewActivity.canGoBack()) {
-                    binding.webViewWebViewActivity.goBack();
-                } else {
-                    finish();
-                }
-                return true;
-            }
-
-        }
-        return super.onKeyDown(keyCode, event);
     }
 
     @Override
