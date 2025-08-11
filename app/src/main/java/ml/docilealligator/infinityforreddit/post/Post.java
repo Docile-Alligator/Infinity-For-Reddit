@@ -217,6 +217,7 @@ public class Post implements Parcelable {
         approvedAtUTC = in.readLong();
         approvedBy = in.readString();
         removed = in.readByte() != 0;
+        spam = in.readByte() != 0;
         isRead = in.readByte() != 0;
         crosspostParentId = in.readString();
         distinguished = in.readString();
