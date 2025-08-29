@@ -1587,6 +1587,14 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         mLongPressPostMediaAction = value;
     }
 
+    public void setDataSavingModeDefaultResolution(int value) {
+        mDataSavingModeDefaultResolution = value;
+    }
+
+    public void setNonDataSavingModeDefaultResolution(int value) {
+        mNonDataSavingModeDefaultResolution = value;
+    }
+
     @OptIn(markerClass = UnstableApi.class)
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {

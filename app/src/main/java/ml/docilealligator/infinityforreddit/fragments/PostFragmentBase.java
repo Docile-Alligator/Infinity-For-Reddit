@@ -353,6 +353,18 @@ public abstract class PostFragmentBase extends Fragment {
             }
         });
 
+        SharedPreferencesLiveDataKt.stringLiveData(mSharedPreferences, SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION, "360").observe(getViewLifecycleOwner(), s -> {
+            if (getPostAdapter() != null) {
+                getPostAdapter().setDataSavingModeDefaultResolution(Integer.parseInt(s));
+            }
+        });
+
+        SharedPreferencesLiveDataKt.stringLiveData(mSharedPreferences, SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION_NO_DATA_SAVING, "0").observe(getViewLifecycleOwner(), s -> {
+            if (getPostAdapter() != null) {
+                getPostAdapter().setNonDataSavingModeDefaultResolution(Integer.parseInt(s));
+            }
+        });
+
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
