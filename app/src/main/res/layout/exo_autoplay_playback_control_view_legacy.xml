@@ -57,6 +57,15 @@
             android:src="@drawable/ic_play_arrow_24dp" />
 
         <ImageView
+            android:id="@+id/video_quality_exo_playback_control_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:layout_toStartOf="@id/mute_exo_playback_control_view"
+            android:src="@drawable/ic_video_quality_24dp"
+            android:visibility="gone" />
+
+        <ImageView
             android:id="@+id/mute_exo_playback_control_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

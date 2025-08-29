@@ -25,7 +25,7 @@ public class ViewVideoActivityBindingAdapter {
     private final MaterialButton forwardButton;
     private final MaterialButton rewindButton;
     private final MaterialButton muteButton;
-    private final MaterialButton hdButton;
+    private final MaterialButton videoQualityButton;
     private final BottomAppBar bottomAppBar;
     private final TextView titleTextView;
     private final MaterialButton backButton;
@@ -38,7 +38,7 @@ public class ViewVideoActivityBindingAdapter {
         forwardButton = binding.getRoot().findViewById(R.id.exo_ffwd);
         rewindButton = binding.getRoot().findViewById(R.id.exo_rew);
         muteButton = binding.getRoot().findViewById(R.id.mute_exo_playback_control_view);
-        hdButton = binding.getRoot().findViewById(R.id.hd_exo_playback_control_view);
+        videoQualityButton = binding.getRoot().findViewById(R.id.video_quality_exo_playback_control_view);
         bottomAppBar = binding.getRoot().findViewById(R.id.bottom_navigation_exo_playback_control_view);
         titleTextView = binding.getRoot().findViewById(R.id.title_text_view_exo_playback_control_view);
         backButton = binding.getRoot().findViewById(R.id.back_button_exo_playback_control_view);
@@ -52,7 +52,7 @@ public class ViewVideoActivityBindingAdapter {
         forwardButton = binding.getRoot().findViewById(R.id.exo_ffwd);
         rewindButton = binding.getRoot().findViewById(R.id.exo_rew);
         muteButton = binding.getRoot().findViewById(R.id.mute_exo_playback_control_view);
-        hdButton = binding.getRoot().findViewById(R.id.hd_exo_playback_control_view);
+        videoQualityButton = binding.getRoot().findViewById(R.id.video_quality_exo_playback_control_view);
         bottomAppBar = binding.getRoot().findViewById(R.id.bottom_navigation_exo_playback_control_view);
         titleTextView = binding.getRoot().findViewById(R.id.title_text_view_exo_playback_control_view);
         backButton = binding.getRoot().findViewById(R.id.back_button_exo_playback_control_view);
@@ -88,8 +88,8 @@ public class ViewVideoActivityBindingAdapter {
         return muteButton;
     }
 
-    public MaterialButton getHdButton() {
-        return hdButton;
+    public MaterialButton getVideoQualityButton() {
+        return videoQualityButton;
     }
 
     public BottomAppBar getBottomAppBar() {

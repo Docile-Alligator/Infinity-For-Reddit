@@ -406,6 +406,10 @@ public class Post implements Parcelable {
         this.isStreamable = isStreamable;
     }
 
+    public boolean isNormalVideo() {
+        return postType == Post.VIDEO_TYPE && !isImgur && !isRedgifs && !isStreamable;
+    }
+
     public boolean isLoadRedgifsOrStreamableVideoSuccess() {
         return loadRedgifsOrStreamableVideoSuccess;
     }

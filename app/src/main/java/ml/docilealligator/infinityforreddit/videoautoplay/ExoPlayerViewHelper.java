@@ -44,138 +44,163 @@ import ml.docilealligator.infinityforreddit.videoautoplay.widget.Container;
 
 public class ExoPlayerViewHelper extends ToroPlayerHelper {
 
-  @NonNull private final ExoPlayable playable;
-  @UnstableApi
-  @NonNull private final MyEventListeners listeners;
-  private final boolean lazyPrepare;
+    @NonNull
+    private final ExoPlayable playable;
+    @UnstableApi
+    @NonNull
+    private final MyEventListeners listeners;
+    private final boolean lazyPrepare;
 
-  // Container is no longer required for constructing new instance.
-  @SuppressWarnings("unused") @RemoveIn(version = "3.6.0") @Deprecated  //
-  public ExoPlayerViewHelper(Container container, @NonNull ToroPlayer player, @NonNull Uri uri) {
-    this(player, uri);
-  }
-
-  public ExoPlayerViewHelper(@NonNull ToroPlayer player, @NonNull Uri uri) {
-    this(player, uri, null);
-  }
-
-  @OptIn(markerClass = UnstableApi.class)
-  public ExoPlayerViewHelper(@NonNull ToroPlayer player, @NonNull Uri uri,
-      @Nullable String fileExt) {
-    this(player, uri, fileExt, with(player.getPlayerView().getContext()).getDefaultCreator());
-  }
-
-  /** Config instance should be kept as global instance. */
-  @OptIn(markerClass = UnstableApi.class)
-  public ExoPlayerViewHelper(@NonNull ToroPlayer player, @NonNull Uri uri, @Nullable String fileExt,
-      @NonNull Config config) {
-    this(player, uri, fileExt,
-        with(player.getPlayerView().getContext()).getCreator(checkNotNull(config)));
-  }
-
-  public ExoPlayerViewHelper(@NonNull ToroPlayer player, @NonNull Uri uri, @Nullable String fileExt,
-      @NonNull ExoCreator creator) {
-    this(player, new ExoPlayable(creator, uri, fileExt));
-  }
-
-  @OptIn(markerClass = UnstableApi.class)
-  public ExoPlayerViewHelper(@NonNull ToroPlayer player, @NonNull ExoPlayable playable) {
-    super(player);
-    //noinspection ConstantConditions
-    if (player.getPlayerView() == null || !(player.getPlayerView() instanceof PlayerView)) {
-      throw new IllegalArgumentException("Require non-null PlayerView");
+    // Container is no longer required for constructing new instance.
+    @SuppressWarnings("unused")
+    @RemoveIn(version = "3.6.0")
+    @Deprecated  //
+    public ExoPlayerViewHelper(Container container, @NonNull ToroPlayer player, @NonNull Uri uri) {
+        this(player, uri);
     }
 
-    listeners = new MyEventListeners();
-    this.playable = playable;
-    this.lazyPrepare = true;
-  }
-
-  @OptIn(markerClass = UnstableApi.class)
-  @Override protected void initialize(@NonNull PlaybackInfo playbackInfo) {
-    playable.setPlaybackInfo(playbackInfo);
-    playable.addEventListener(listeners);
-    playable.addErrorListener(super.getErrorListeners());
-    playable.addOnVolumeChangeListener(super.getVolumeChangeListeners());
-    playable.prepare(!lazyPrepare);
-    playable.setPlayerView((PlayerView) player.getPlayerView());
-  }
-
-  @OptIn(markerClass = UnstableApi.class)
-  @Override public void release() {
-    super.release();
-    playable.setPlayerView(null);
-    playable.removeOnVolumeChangeListener(super.getVolumeChangeListeners());
-    playable.removeErrorListener(super.getErrorListeners());
-    playable.removeEventListener(listeners);
-    playable.release();
-  }
-
-  @Override public void play() {
-    playable.play();
-  }
-
-  @Override public void pause() {
-    playable.pause();
-  }
-
-  @Override public boolean isPlaying() {
-    return playable.isPlaying();
-  }
-
-  @Override public void setVolume(float volume) {
-    playable.setVolume(volume);
-  }
-
-  @Override public float getVolume() {
-    return playable.getVolume();
-  }
-
-  @Override public void setVolumeInfo(@NonNull VolumeInfo volumeInfo) {
-    playable.setVolumeInfo(volumeInfo);
-  }
-
-  @Override @NonNull public VolumeInfo getVolumeInfo() {
-    return playable.getVolumeInfo();
-  }
-
-  @NonNull @Override public PlaybackInfo getLatestPlaybackInfo() {
-    return playable.getPlaybackInfo();
-  }
-
-  @Override public void setPlaybackInfo(@NonNull PlaybackInfo playbackInfo) {
-    this.playable.setPlaybackInfo(playbackInfo);
-  }
-
-  @OptIn(markerClass = UnstableApi.class)
-  public void addEventListener(@NonNull Playable.EventListener listener) {
-    //noinspection ConstantConditions
-    if (listener != null) this.listeners.add(listener);
-  }
-
-  @OptIn(markerClass = UnstableApi.class)
-  public void removeEventListener(Playable.EventListener listener) {
-    this.listeners.remove(listener);
-  }
-
-  // A proxy, to also hook into ToroPlayerHelper's state change event.
-  @UnstableApi
-  private class MyEventListeners extends Playable.EventListeners {
-
-    MyEventListeners() {
+    public ExoPlayerViewHelper(@NonNull ToroPlayer player, @NonNull Uri uri) {
+        this(player, uri, null);
     }
 
-    @Override public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-      ExoPlayerViewHelper.super.onPlayerStateUpdated(playWhenReady, playbackState); // important
-      super.onPlayerStateChanged(playWhenReady, playbackState);
+    @OptIn(markerClass = UnstableApi.class)
+    public ExoPlayerViewHelper(@NonNull ToroPlayer player, @NonNull Uri uri,
+                               @Nullable String fileExt) {
+        this(player, uri, fileExt, with(player.getPlayerView().getContext()).getDefaultCreator());
     }
 
-    @Override public void onRenderedFirstFrame() {
-      super.onRenderedFirstFrame();
-      internalListener.onFirstFrameRendered();
-      for (ToroPlayer.EventListener listener : ExoPlayerViewHelper.super.getEventListeners()) {
-        listener.onFirstFrameRendered();
-      }
+    /**
+     * Config instance should be kept as global instance.
+     */
+    @OptIn(markerClass = UnstableApi.class)
+    public ExoPlayerViewHelper(@NonNull ToroPlayer player, @NonNull Uri uri, @Nullable String fileExt,
+                               @NonNull Config config) {
+        this(player, uri, fileExt,
+                with(player.getPlayerView().getContext()).getCreator(checkNotNull(config)));
     }
-  }
+
+    public ExoPlayerViewHelper(@NonNull ToroPlayer player, @NonNull Uri uri, @Nullable String fileExt,
+                               @NonNull ExoCreator creator) {
+        this(player, new ExoPlayable(creator, uri, fileExt));
+    }
+
+    @OptIn(markerClass = UnstableApi.class)
+    public ExoPlayerViewHelper(@NonNull ToroPlayer player, @NonNull ExoPlayable playable) {
+        super(player);
+        //noinspection ConstantConditions
+        if (player.getPlayerView() == null || !(player.getPlayerView() instanceof PlayerView)) {
+            throw new IllegalArgumentException("Require non-null PlayerView");
+        }
+
+        listeners = new MyEventListeners();
+        this.playable = playable;
+        this.lazyPrepare = true;
+    }
+
+    @OptIn(markerClass = UnstableApi.class)
+    @Override
+    protected void initialize(@NonNull PlaybackInfo playbackInfo) {
+        playable.setPlaybackInfo(playbackInfo);
+        playable.addEventListener(listeners);
+        playable.addErrorListener(super.getErrorListeners());
+        playable.addOnVolumeChangeListener(super.getVolumeChangeListeners());
+        playable.prepare(!lazyPrepare);
+        playable.setPlayerView((PlayerView) player.getPlayerView());
+    }
+
+    @OptIn(markerClass = UnstableApi.class)
+    @Override
+    public void release() {
+        super.release();
+        playable.setPlayerView(null);
+        playable.removeOnVolumeChangeListener(super.getVolumeChangeListeners());
+        playable.removeErrorListener(super.getErrorListeners());
+        playable.removeEventListener(listeners);
+        playable.release();
+    }
+
+    @Override
+    public void play() {
+        playable.play();
+    }
+
+    @Override
+    public void pause() {
+        playable.pause();
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return playable.isPlaying();
+    }
+
+    @Override
+    public void setVolume(float volume) {
+        playable.setVolume(volume);
+    }
+
+    @Override
+    public float getVolume() {
+        return playable.getVolume();
+    }
+
+    @Override
+    public void setVolumeInfo(@NonNull VolumeInfo volumeInfo) {
+        playable.setVolumeInfo(volumeInfo);
+    }
+
+    @Override
+    @NonNull
+    public VolumeInfo getVolumeInfo() {
+        return playable.getVolumeInfo();
+    }
+
+    @NonNull
+    @Override
+    public PlaybackInfo getLatestPlaybackInfo() {
+        return playable.getPlaybackInfo();
+    }
+
+    @Override
+    public void setPlaybackInfo(@NonNull PlaybackInfo playbackInfo) {
+        this.playable.setPlaybackInfo(playbackInfo);
+    }
+
+    @OptIn(markerClass = UnstableApi.class)
+    public void addEventListener(@NonNull Playable.EventListener listener) {
+        //noinspection ConstantConditions
+        if (listener != null) this.listeners.add(listener);
+    }
+
+    @OptIn(markerClass = UnstableApi.class)
+    public void removeEventListener(Playable.EventListener listener) {
+        this.listeners.remove(listener);
+    }
+
+    public ExoPlayer getPlayer() {
+        return playable.player.getPlayer();
+    }
+
+    // A proxy, to also hook into ToroPlayerHelper's state change event.
+    @UnstableApi
+    private class MyEventListeners extends Playable.EventListeners {
+
+        MyEventListeners() {
+        }
+
+        @Override
+        public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+            ExoPlayerViewHelper.super.onPlayerStateUpdated(playWhenReady, playbackState); // important
+            super.onPlayerStateChanged(playWhenReady, playbackState);
+        }
+
+        @Override
+        public void onRenderedFirstFrame() {
+            super.onRenderedFirstFrame();
+            internalListener.onFirstFrameRendered();
+            for (ToroPlayer.EventListener listener : ExoPlayerViewHelper.super.getEventListeners()) {
+                listener.onFirstFrameRendered();
+            }
+        }
+    }
 }

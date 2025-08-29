@@ -96,7 +96,7 @@
         </com.google.android.material.button.MaterialButtonGroup>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/hd_exo_playback_control_view"
+            android:id="@+id/video_quality_exo_playback_control_view"
             style="?attr/materialIconButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -124,7 +124,7 @@
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/endBarrier"
             app:barrierDirection="end"
-            app:constraint_referenced_ids="hd_exo_playback_control_view"
+            app:constraint_referenced_ids="video_quality_exo_playback_control_view"
             app:barrierAllowsGoneWidgets="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
