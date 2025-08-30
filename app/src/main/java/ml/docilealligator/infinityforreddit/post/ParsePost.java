@@ -347,14 +347,30 @@ public class ParsePost {
                         String authority = uri.getAuthority();
 
                         if (authority != null) {
-                            /*if (authority.contains("redgifs.com")) {
-                                String redgifsId = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
-                                post.setPostType(Post.VIDEO_TYPE);
-                                post.setIsRedgifs(true);
-                                post.setVideoUrl(url);
-                                post.setRedgifsId(redgifsId);
-                            } else */
-                            if (authority.equals("streamable.com")) {
+                            if (authority.contains("redgifs.com")) {
+                                String redgifsId = getRedgifsId(data);
+                                if (redgifsId != null) {
+                                    post.setPostType(Post.VIDEO_TYPE);
+                                    post.setIsRedgifs(true);
+                                    post.setVideoUrl(getRedgifsVideoUrl(redgifsId));
+                                    post.setVideoDownloadUrl(post.getVideoUrl());
+                                    post.setRedgifsId(redgifsId);
+                                }
+                                /*try {
+                                    String redgifsId = data.getJSONObject(JSONUtils.MEDIA_KEY).getJSONObject(JSONUtils.O_EMBED_KEY).getString(JSONUtils.THUMBNAIL_URL_KEY);
+                                    redgifsId = redgifsId.substring(redgifsId.lastIndexOf("/") + 1);
+                                    int dashIndex = redgifsId.lastIndexOf("-");
+                                    if (dashIndex >= 0) {
+                                        redgifsId = redgifsId.substring(0, dashIndex);
+                                        post.setPostType(Post.VIDEO_TYPE);
+                                        post.setIsRedgifs(true);
+                                        post.setVideoUrl(url);
+                                        post.setRedgifsId(redgifsId);
+                                    }
+                                } catch (JSONException e) {
+
+                                }*/
+                            } else if (authority.equals("streamable.com")) {
                                 String shortCode = url.substring(url.lastIndexOf("/") + 1);
                                 post.setPostType(Post.VIDEO_TYPE);
                                 post.setIsStreamable(true);
@@ -551,14 +567,22 @@ public class ParsePost {
                             String authority = uri.getAuthority();
 
                             if (authority != null) {
-                                /*if (authority.contains("redgifs.com")) {
-                                    String redgifsId = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
+                                if (authority.contains("redgifs.com")) {
+                                    String redgifsId = getRedgifsId(data);
+                                    if (redgifsId != null) {
+                                        post.setPostType(Post.VIDEO_TYPE);
+                                        post.setIsRedgifs(true);
+                                        post.setVideoUrl(getRedgifsVideoUrl(redgifsId));
+                                        post.setVideoDownloadUrl(post.getVideoUrl());
+                                        post.setRedgifsId(redgifsId);
+                                    }
+
+                                    /*String redgifsId = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
                                     post.setPostType(Post.VIDEO_TYPE);
                                     post.setIsRedgifs(true);
                                     post.setVideoUrl(url);
-                                    post.setRedgifsId(redgifsId);
-                                } else*/
-                                if (authority.equals("streamable.com")) {
+                                    post.setRedgifsId(redgifsId);*/
+                                } else if (authority.equals("streamable.com")) {
                                     String shortCode = url.substring(url.lastIndexOf("/") + 1);
                                     post.setPostType(Post.VIDEO_TYPE);
                                     post.setIsStreamable(true);
@@ -623,14 +647,21 @@ public class ParsePost {
                     String authority = uri.getAuthority();
 
                     if (authority != null) {
-                        /*if (authority.contains("redgifs.com")) {
-                            String redgifsId = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
+                        if (authority.contains("redgifs.com")) {
+                            String redgifsId = getRedgifsId(data);
+                            if (redgifsId != null) {
+                                post.setPostType(Post.VIDEO_TYPE);
+                                post.setIsRedgifs(true);
+                                post.setVideoUrl(getRedgifsVideoUrl(redgifsId));
+                                post.setVideoDownloadUrl(post.getVideoUrl());
+                                post.setRedgifsId(redgifsId);
+                            }
+                            /*String redgifsId = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
                             post.setPostType(Post.VIDEO_TYPE);
                             post.setIsRedgifs(true);
                             post.setVideoUrl(url);
-                            post.setRedgifsId(redgifsId);
-                        } else*/
-                        if (authority.equals("streamable.com")) {
+                            post.setRedgifsId(redgifsId);*/
+                        } else if (authority.equals("streamable.com")) {
                             String shortCode = url.substring(url.lastIndexOf("/") + 1);
                             post.setPostType(Post.VIDEO_TYPE);
                             post.setIsStreamable(true);
@@ -646,16 +677,22 @@ public class ParsePost {
             try {
                 String authority = uri.getAuthority();
                 if (authority != null) {
-                    /*if (authority.contains("redgifs.com")) {
-                        String redgifsId = url.substring(url.lastIndexOf("/") + 1);
+                    if (authority.contains("redgifs.com")) {
+                        String redgifsId = getRedgifsId(data);
+                        if (redgifsId != null) {
+                            post.setIsRedgifs(true);
+                            post.setVideoUrl(getRedgifsVideoUrl(redgifsId));
+                            post.setVideoDownloadUrl(post.getVideoUrl());
+                            post.setRedgifsId(redgifsId);
+                        }
+                        /*String redgifsId = url.substring(url.lastIndexOf("/") + 1);
                         if (redgifsId.contains("-")) {
                             redgifsId = redgifsId.substring(0, redgifsId.indexOf('-'));
                         }
                         post.setIsRedgifs(true);
                         post.setVideoUrl(url);
-                        post.setRedgifsId(redgifsId.toLowerCase());
-                    } else*/
-                    if (authority.equals("streamable.com")) {
+                        post.setRedgifsId(redgifsId.toLowerCase());*/
+                    } else if (authority.equals("streamable.com")) {
                         String shortCode = url.substring(url.lastIndexOf("/") + 1);
                         post.setPostType(Post.VIDEO_TYPE);
                         post.setIsStreamable(true);
@@ -722,14 +759,21 @@ public class ParsePost {
                 String authority = uri.getAuthority();
 
                 if (authority != null) {
-                    /*if (authority.contains("redgifs.com")) {
-                        String redgifsId = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
+                    if (authority.contains("redgifs.com")) {
+                        String redgifsId = getRedgifsId(data);
+                        if (redgifsId != null) {
+                            post.setPostType(Post.VIDEO_TYPE);
+                            post.setIsRedgifs(true);
+                            post.setVideoUrl(getRedgifsVideoUrl(redgifsId));
+                            post.setVideoDownloadUrl(post.getVideoUrl());
+                            post.setRedgifsId(redgifsId);
+                        }
+                        /*String redgifsId = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
                         post.setPostType(Post.VIDEO_TYPE);
                         post.setIsRedgifs(true);
                         post.setVideoUrl(url);
-                        post.setRedgifsId(redgifsId);
-                    } else*/
-                    if (authority.equals("streamable.com")) {
+                        post.setRedgifsId(redgifsId);*/
+                    } else if (authority.equals("streamable.com")) {
                         String shortCode = url.substring(url.lastIndexOf("/") + 1);
                         post.setPostType(Post.VIDEO_TYPE);
                         post.setIsStreamable(true);
@@ -772,6 +816,27 @@ public class ParsePost {
 
         post.setMediaMetadataMap(mediaMetadataMap);
         return post;
+    }
+
+    @Nullable
+    private static String getRedgifsId(JSONObject data) {
+        try {
+            String redgifsId = data.getJSONObject(JSONUtils.MEDIA_KEY).getJSONObject(JSONUtils.O_EMBED_KEY).getString(JSONUtils.THUMBNAIL_URL_KEY);
+            redgifsId = redgifsId.substring(redgifsId.lastIndexOf("/") + 1);
+            int dashIndex = redgifsId.lastIndexOf("-");
+            if (dashIndex >= 0) {
+                return redgifsId.substring(0, dashIndex);
+            }
+
+            return null;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static String getRedgifsVideoUrl(String redgifsId) {
+        return "https://media.redgifs.com/" + redgifsId + ".mp4";
     }
 
     public interface ParsePostsListingListener {

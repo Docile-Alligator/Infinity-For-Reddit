@@ -205,6 +205,8 @@ public class JSONUtils {
     public static final String APPROVED_AT_UTC_KEY = "approved_at_utc";
     public static final String APPROVED_BY_KEY = "approved_by";
     public static final String SPAM_KEY = "spam";
+    public static final String O_EMBED_KEY = "oembed";
+    public static final String THUMBNAIL_URL_KEY = "thumbnail_url";
 
     @Nullable
     public static Map<String, MediaMetadata> parseMediaMetadata(JSONObject data) {
