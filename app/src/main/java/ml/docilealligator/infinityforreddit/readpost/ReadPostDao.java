@@ -26,7 +26,7 @@ public interface ReadPostDao {
     @Query("SELECT COUNT(id) FROM read_posts WHERE username = :username")
     int getReadPostsCount(String username);
 
-    @Query("DELETE FROM read_posts WHERE rowid IN (SELECT rowid FROM read_posts ORDER BY time ASC LIMIT 100) AND username = :username")
+    @Query("DELETE FROM read_posts WHERE rowid IN (SELECT rowid FROM read_posts WHERE username = :username ORDER BY time ASC LIMIT 100)")
     void deleteOldestReadPosts(String username);
 
     @Query("DELETE FROM read_posts")

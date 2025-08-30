@@ -568,10 +568,6 @@ public abstract class PostFragmentBase extends Fragment {
         }
     }
 
-    public void markPostAsRead(Post post) {
-        // no-op
-    }
-
     protected abstract boolean scrollPostsByCount(int count);
 
     protected final void initializeSwipeActionDrawable() {

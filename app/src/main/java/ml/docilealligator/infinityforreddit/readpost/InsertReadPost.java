@@ -9,7 +9,7 @@ public class InsertReadPost {
                                       String username, String postId, int readPostsLimit) {
         executor.execute(() -> {
             ReadPostDao readPostDao = redditDataRoomDatabase.readPostDao();
-            int limit = Math.max(readPostsLimit, 500);
+            int limit = Math.max(readPostsLimit, 100);
             boolean isReadPostLimit = readPostsLimit != -1;
             while (readPostDao.getReadPostsCount(username) > limit && isReadPostLimit) {
                 readPostDao.deleteOldestReadPosts(username);
