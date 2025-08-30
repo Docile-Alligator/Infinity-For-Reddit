@@ -136,7 +136,7 @@ public class DownloadMediaService extends JobService {
             extras.putInt(EXTRA_IS_NSFW, post.isNSFW() ? 1 : 0);
         } else if (post.getPostType() == Post.VIDEO_TYPE) {
             if (post.isStreamable()) {
-                if (post.isLoadRedgifsOrStreamableVideoSuccess()) {
+                if (post.isLoadedStreamableVideoAlready()) {
                     extras.putString(EXTRA_URL, post.getVideoUrl());
                 } else {
                     extras.putString(EXTRA_REDGIFS_ID, post.getRedgifsId());
@@ -144,7 +144,7 @@ public class DownloadMediaService extends JobService {
 
                 extras.putString(EXTRA_FILE_NAME, "Streamable-" + post.getStreamableShortCode() + ".mp4");
             } else if (post.isRedgifs()) {
-                if (post.isLoadRedgifsOrStreamableVideoSuccess()) {
+                if (post.isLoadedStreamableVideoAlready()) {
                     extras.putString(EXTRA_URL, post.getVideoUrl());
                 } else {
                     extras.putString(EXTRA_STREAMABLE_SHORT_CODE, post.getStreamableShortCode());

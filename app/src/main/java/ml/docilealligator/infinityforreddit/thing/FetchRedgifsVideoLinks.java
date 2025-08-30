@@ -10,9 +10,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.FetchVideoLinkListener;
+import ml.docilealligator.infinityforreddit.apis.OhMyDlAPI;
 import ml.docilealligator.infinityforreddit.apis.RedgifsAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
@@ -28,11 +31,25 @@ public class FetchRedgifsVideoLinks {
                                               FetchVideoLinkListener fetchVideoLinkListener) {
         executor.execute(() -> {
             try {
-                Response<String> response = redgifsRetrofit
+                /*Response<String> response = redgifsRetrofit
                         .create(RedgifsAPI.class)
                         .getRedgifsData(
                                 APIUtils.getRedgifsOAuthHeader(currentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")),
                                 redgifsId, APIUtils.USER_AGENT)
+                        .execute();
+                if (response.isSuccessful()) {
+                    parseRedgifsVideoLinks(handler, response.body(), fetchVideoLinkListener);
+                } else {
+                    handler.post(() -> fetchVideoLinkListener.failed(null));
+                }*/
+
+                Map<String, String> params = new HashMap<>();
+                params.put(APIUtils.PLATFORM_KEY, "redgifs");
+                params.put(APIUtils.URL_KEY, "https://www.redgifs.com/watch/" + redgifsId);
+
+                Response<String> response = redgifsRetrofit
+                        .create(OhMyDlAPI.class)
+                        .getRedgifsData(params)
                         .execute();
                 if (response.isSuccessful()) {
                     parseRedgifsVideoLinks(handler, response.body(), fetchVideoLinkListener);
@@ -90,13 +107,16 @@ public class FetchRedgifsVideoLinks {
     private static void parseRedgifsVideoLinks(Handler handler, String response,
                                               FetchVideoLinkListener fetchVideoLinkListener) {
         try {
-            String mp4 = new JSONObject(response).getJSONObject(JSONUtils.GIF_KEY).getJSONObject(JSONUtils.URLS_KEY)
+            /*String mp4 = new JSONObject(response).getJSONObject(JSONUtils.GIF_KEY).getJSONObject(JSONUtils.URLS_KEY)
                     .getString(JSONUtils.HD_KEY);
             if (mp4.contains("-silent")) {
                 mp4 = mp4.substring(0, mp4.indexOf("-silent")) + ".mp4";
             }
             final String mp4Name = mp4;
-            handler.post(() -> fetchVideoLinkListener.onFetchRedgifsVideoLinkSuccess(mp4Name, mp4Name));
+            handler.post(() -> fetchVideoLinkListener.onFetchRedgifsVideoLinkSuccess(mp4Name, mp4Name));*/
+
+            String mp4 = new JSONObject(response).getString(JSONUtils.VIDEO_DOWNLOAD_URL);
+            handler.post(() -> fetchVideoLinkListener.onFetchRedgifsVideoLinkSuccess(mp4, mp4));
         } catch (JSONException e) {
             e.printStackTrace();
             handler.post(() -> fetchVideoLinkListener.failed(null));

@@ -87,7 +87,6 @@ import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
-import ml.docilealligator.infinityforreddit.apis.RedgifsAPI;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
@@ -119,7 +118,6 @@ import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.post.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
-import ml.docilealligator.infinityforreddit.thing.FetchRedgifsVideoLinks;
 import ml.docilealligator.infinityforreddit.thing.SaveThing;
 import ml.docilealligator.infinityforreddit.thing.StreamableVideo;
 import ml.docilealligator.infinityforreddit.thing.VoteThing;
@@ -727,7 +725,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     ((PostDetailBaseVideoAutoplayViewHolder) holder).setVolume((mMuteAutoplayingVideos || (mPost.isNSFW() && mMuteNSFWVideo)) ? 0f : 1f);
                 }
 
-                if (mPost.isRedgifs() && !mPost.isLoadRedgifsOrStreamableVideoSuccess()) {
+                /*if (mPost.isRedgifs() && !mPost.isLoadedStreamableVideoAlready()) {
                     ((PostDetailBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall =
                             mRedgifsRetrofit.create(RedgifsAPI.class)
                                     .getRedgifsData(APIUtils.getRedgifsOAuthHeader(
@@ -740,7 +738,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                 public void onFetchRedgifsVideoLinkSuccess(String webm, String mp4) {
                                     mPost.setVideoDownloadUrl(mp4);
                                     mPost.setVideoUrl(mp4);
-                                    mPost.setLoadRedgifsOrStreamableVideoSuccess(true);
+                                    mPost.setLoadedStreamableVideoAlready(true);
                                     ((PostDetailBaseVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(mPost.getVideoUrl()));
                                 }
 
@@ -749,7 +747,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                     ((PostDetailBaseVideoAutoplayViewHolder) holder).loadFallbackDirectVideo();
                                 }
                             });
-                } else if(mPost.isStreamable() && !mPost.isLoadRedgifsOrStreamableVideoSuccess()) {
+                } else */if(mPost.isStreamable() && !mPost.isLoadedStreamableVideoAlready()) {
                     ((PostDetailBaseVideoAutoplayViewHolder) holder).fetchRedgifsOrStreamableVideoCall =
                             mStreamableApiProvider.get().getStreamableData(mPost.getStreamableShortCode());
                     FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, new Handler(),
@@ -760,7 +758,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                     StreamableVideo.Media media = streamableVideo.mp4 == null ? streamableVideo.mp4Mobile : streamableVideo.mp4;
                                     mPost.setVideoDownloadUrl(media.url);
                                     mPost.setVideoUrl(media.url);
-                                    mPost.setLoadRedgifsOrStreamableVideoSuccess(true);
+                                    mPost.setLoadedStreamableVideoAlready(true);
                                     ((PostDetailBaseVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(mPost.getVideoUrl()));
                                 }
 
@@ -1072,7 +1070,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 } else if (post.isStreamable()) {
                     intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_STREAMABLE);
                     intent.putExtra(ViewVideoActivity.EXTRA_STREAMABLE_SHORT_CODE, post.getStreamableShortCode());
-                    if (post.isLoadRedgifsOrStreamableVideoSuccess()) {
+                    if (post.isLoadedStreamableVideoAlready()) {
                         intent.setData(Uri.parse(post.getVideoUrl()));
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
                     }
@@ -1899,7 +1897,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 mediaUri = Uri.parse(mPost.getVideoFallBackDirectUrl());
                 mPost.setVideoDownloadUrl(mPost.getVideoFallBackDirectUrl());
                 mPost.setVideoUrl(mPost.getVideoFallBackDirectUrl());
-                mPost.setLoadRedgifsOrStreamableVideoSuccess(true);
+                mPost.setLoadedStreamableVideoAlready(true);
                 if (container != null) {
                     container.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
                 }

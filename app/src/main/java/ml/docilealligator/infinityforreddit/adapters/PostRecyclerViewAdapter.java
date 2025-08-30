@@ -121,7 +121,6 @@ import ml.docilealligator.infinityforreddit.post.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
-import ml.docilealligator.infinityforreddit.thing.FetchRedgifsVideoLinks;
 import ml.docilealligator.infinityforreddit.thing.SaveThing;
 import ml.docilealligator.infinityforreddit.thing.StreamableVideo;
 import ml.docilealligator.infinityforreddit.thing.VoteThing;
@@ -1835,7 +1834,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 } else if (post.isStreamable()) {
                     intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_STREAMABLE);
                     intent.putExtra(ViewVideoActivity.EXTRA_STREAMABLE_SHORT_CODE, post.getStreamableShortCode());
-                    if (post.isLoadRedgifsOrStreamableVideoSuccess()) {
+                    if (post.isLoadedStreamableVideoAlready()) {
                         intent.setData(Uri.parse(post.getVideoUrl()));
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
                     }
@@ -2654,7 +2653,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
         void loadVideo(int position) {
             Post post = getPost();
-            if (post.isRedgifs() && !post.isLoadRedgifsOrStreamableVideoSuccess()) {
+            /*if (post.isRedgifs() && !post.isLoadedStreamableVideoAlready()) {
                 fetchRedgifsOrStreamableVideoCall =
                         mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(
                                 APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences
@@ -2667,7 +2666,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             public void onFetchRedgifsVideoLinkSuccess(String webm, String mp4) {
                                 post.setVideoDownloadUrl(mp4);
                                 post.setVideoUrl(mp4);
-                                post.setLoadRedgifsOrStreamableVideoSuccess(true);
+                                post.setLoadedStreamableVideoAlready(true);
                                 if (position == getAdapterPosition()) {
                                     bindVideoUri(Uri.parse(post.getVideoUrl()));
                                 }
@@ -2680,7 +2679,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 }
                             }
                         });
-            } else if(post.isStreamable() && !post.isLoadRedgifsOrStreamableVideoSuccess()) {
+            } else */if(post.isStreamable() && !post.isLoadedStreamableVideoAlready()) {
                 fetchRedgifsOrStreamableVideoCall =
                         mStreamableApiProvider.get().getStreamableData(post.getStreamableShortCode());
                 FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, new Handler(),
@@ -2691,7 +2690,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 StreamableVideo.Media media = streamableVideo.mp4 == null ? streamableVideo.mp4Mobile : streamableVideo.mp4;
                                 post.setVideoDownloadUrl(media.url);
                                 post.setVideoUrl(media.url);
-                                post.setLoadRedgifsOrStreamableVideoSuccess(true);
+                                post.setLoadedStreamableVideoAlready(true);
                                 if (position == getAdapterPosition()) {
                                     bindVideoUri(Uri.parse(post.getVideoUrl()));
                                 }
@@ -2715,7 +2714,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 mediaUri = Uri.parse(post.getVideoFallBackDirectUrl());
                 post.setVideoDownloadUrl(post.getVideoFallBackDirectUrl());
                 post.setVideoUrl(post.getVideoFallBackDirectUrl());
-                post.setLoadRedgifsOrStreamableVideoSuccess(true);
+                post.setLoadedStreamableVideoAlready(true);
                 if (container != null) {
                     container.onScrollStateChanged(RecyclerView.SCROLL_STATE_IDLE);
                 }

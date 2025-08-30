@@ -50,7 +50,7 @@ public class Post implements Parcelable {
     private boolean isImgur;
     private boolean isRedgifs;
     private boolean isStreamable;
-    private boolean loadRedgifsOrStreamableVideoSuccess;
+    private boolean loadedStreamableVideoAlready;
     private final String permalink;
     private String flair;
     private final long postTimeMillis;
@@ -195,7 +195,7 @@ public class Post implements Parcelable {
         isImgur = in.readByte() != 0;
         isRedgifs = in.readByte() != 0;
         isStreamable = in.readByte() != 0;
-        loadRedgifsOrStreamableVideoSuccess = in.readByte() != 0;
+        loadedStreamableVideoAlready = in.readByte() != 0;
         permalink = in.readString();
         flair = in.readString();
         postTimeMillis = in.readLong();
@@ -410,12 +410,12 @@ public class Post implements Parcelable {
         return postType == Post.VIDEO_TYPE && !isImgur && !isRedgifs && !isStreamable;
     }
 
-    public boolean isLoadRedgifsOrStreamableVideoSuccess() {
-        return loadRedgifsOrStreamableVideoSuccess;
+    public boolean isLoadedStreamableVideoAlready() {
+        return loadedStreamableVideoAlready;
     }
 
-    public void setLoadRedgifsOrStreamableVideoSuccess(boolean loadRedgifsOrStreamableVideoSuccess) {
-        this.loadRedgifsOrStreamableVideoSuccess = loadRedgifsOrStreamableVideoSuccess;
+    public void setLoadedStreamableVideoAlready(boolean loadedStreamableVideoAlready) {
+        this.loadedStreamableVideoAlready = loadedStreamableVideoAlready;
     }
 
     public String getPermalink() {
@@ -540,7 +540,7 @@ public class Post implements Parcelable {
         dest.writeByte((byte) (isImgur ? 1 : 0));
         dest.writeByte((byte) (isRedgifs ? 1 : 0));
         dest.writeByte((byte) (isStreamable ? 1 : 0));
-        dest.writeByte((byte) (loadRedgifsOrStreamableVideoSuccess ? 1 : 0));
+        dest.writeByte((byte) (loadedStreamableVideoAlready ? 1 : 0));
         dest.writeString(permalink);
         dest.writeString(flair);
         dest.writeLong(postTimeMillis);

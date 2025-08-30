@@ -684,9 +684,9 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             }
 
             redgifsId = intent.getStringExtra(EXTRA_REDGIFS_ID);
-            if (redgifsId != null && redgifsId.contains("-")) {
+            /*if (redgifsId != null && redgifsId.contains("-")) {
                 redgifsId = redgifsId.substring(0, redgifsId.indexOf('-'));
-            }
+            }*/
             videoFileName = "Redgifs-" + redgifsId + ".mp4";
         } else if (videoType == VIDEO_TYPE_DIRECT || videoType == VIDEO_TYPE_IMGUR) {
             videoDownloadUrl = mVideoUri.toString();
@@ -1007,7 +1007,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
         if (videoType != VIDEO_TYPE_NORMAL) {
             PersistableBundle extras = new PersistableBundle();
-            if (post.getPostType() == Post.GIF_TYPE) {
+            if (post != null && post.getPostType() == Post.GIF_TYPE) {
                 extras.putString(DownloadMediaService.EXTRA_URL, post.getVideoUrl());
                 extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_GIF);
                 extras.putString(DownloadMediaService.EXTRA_FILE_NAME, post.getSubredditName()
