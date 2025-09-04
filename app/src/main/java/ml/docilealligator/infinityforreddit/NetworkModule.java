@@ -44,12 +44,18 @@ abstract class NetworkModule {
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
-                .addInterceptor(chain -> chain.proceed(
-                        chain.request()
-                                .newBuilder()
-                                .header("User-Agent", APIUtils.USER_AGENT)
-                                .build()
-                ));
+                .addInterceptor(chain -> {
+                    if (chain.request().header("User-Agent") == null) {
+                        return chain.proceed(
+                                chain.request()
+                                        .newBuilder()
+                                        .header("User-Agent", APIUtils.USER_AGENT)
+                                        .build()
+                        );
+                    } else {
+                        return chain.proceed(chain.request());
+                    }
+                });
 
         if (proxyEnabled) {
             Proxy.Type proxyType = Proxy.Type.valueOf(mProxySharedPreferences.getString(SharedPreferencesUtils.PROXY_TYPE, "HTTP"));

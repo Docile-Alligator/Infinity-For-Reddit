@@ -284,6 +284,10 @@ public interface RedditAPI {
     ListenableFuture<Response<String>> getSubredditBestPostsListenableFuture(@Path("subredditName") String subredditName, @Path("sortType") SortType.Type sortType,
                                                                              @Query("t") SortType.Time sortTime, @Query("after") String lastItem);
 
+    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=100&always_show_media=1")
+    ListenableFuture<Response<String>> getAnonymousFrontPageOrMultiredditPostsListenableFuture(@Path("subredditName") String subredditName, @Path("sortType") SortType.Type sortType,
+                                                                             @Query("t") SortType.Time sortTime, @Query("after") String lastItem, @Header("User-Agent") String userAgent);
+
     @GET("user/{username}/{where}.json?type=links&raw_json=1&limit=100")
     ListenableFuture<Response<String>> getUserPostsOauthListenableFuture(@Header(APIUtils.AUTHORIZATION_KEY) String authorization,
                                                                          @Path("username") String username,
@@ -354,6 +358,10 @@ public interface RedditAPI {
     @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=100&always_show_media=1")
     Call<String> getSubredditBestPosts(@Path("subredditName") String subredditName, @Path("sortType") SortType.Type sortType,
                                        @Query("t") SortType.Time sortTime, @Query("after") String lastItem);
+
+    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=100&always_show_media=1")
+    Call<String> getAnonymousFrontPageOrMultiredditPosts(@Path("subredditName") String subredditName, @Path("sortType") SortType.Type sortType,
+                                       @Query("t") SortType.Time sortTime, @Query("after") String lastItem, @Header("User-Agent") String userAgent);
 
     @GET("user/{username}/{where}.json?&type=links&raw_json=1&limit=100")
     Call<String> getUserPostsOauth(@Path("username") String username, @Path("where") String where,

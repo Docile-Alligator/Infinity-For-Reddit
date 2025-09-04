@@ -195,7 +195,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
             case TYPE_MULTI_REDDIT:
                 return loadMultiRedditPosts(loadParams, api);
             default:
-                return loadAnonymousHomePosts(loadParams, api);
+                return loadAnonymousFrontPageOrMultiredditPosts(loadParams, api);
         }
     }
 
@@ -351,8 +351,9 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
                 IOException.class, LoadResult.Error::new, executor);
     }
 
-    private ListenableFuture<LoadResult<String, Post>> loadAnonymousHomePosts(@NonNull LoadParams<String> loadParams, RedditAPI api) {
-        ListenableFuture<Response<String>> anonymousHomePosts = api.getSubredditBestPostsListenableFuture(subredditOrUserName, sortType.getType(), sortType.getTime(), loadParams.getKey());
+    private ListenableFuture<LoadResult<String, Post>> loadAnonymousFrontPageOrMultiredditPosts(@NonNull LoadParams<String> loadParams, RedditAPI api) {
+        ListenableFuture<Response<String>> anonymousHomePosts = api.getAnonymousFrontPageOrMultiredditPostsListenableFuture(
+                subredditOrUserName, sortType.getType(), sortType.getTime(), loadParams.getKey(), APIUtils.ANONYMOUS_USER_AGENT);
 
         ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(anonymousHomePosts, this::transformData, executor);
 

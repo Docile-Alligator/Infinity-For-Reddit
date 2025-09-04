@@ -630,7 +630,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                         break;
                     case PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE:
                     case PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT:
-                        call = api.getSubredditBestPosts(concatenatedSubredditNames, sortType, sortTime, afterKey);
+                        call = api.getAnonymousFrontPageOrMultiredditPosts(concatenatedSubredditNames, sortType, sortTime, afterKey, APIUtils.ANONYMOUS_USER_AGENT);
                         break;
                     default:
                         call = api.getBestPosts(sortType, sortTime, afterKey,
