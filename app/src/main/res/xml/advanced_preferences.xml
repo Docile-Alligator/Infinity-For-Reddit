@@ -52,4 +52,9 @@
         app:title="@string/settings_crash_reports_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.CrashReportsFragment" />
 
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
+        app:title="API Keys"
+        app:icon="@drawable/ic_security_day_night_24dp"
+        app:fragment="ml.docilealligator.infinityforreddit.settings.ApiKeysPreferenceFragment" />
+
 </PreferenceScreen>
