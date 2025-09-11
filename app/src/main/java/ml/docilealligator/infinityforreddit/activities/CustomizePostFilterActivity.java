@@ -49,7 +49,9 @@ public class CustomizePostFilterActivity extends BaseActivity {
     public static final String EXTRA_POST_FILTER = "EPF";
     public static final String EXTRA_FROM_SETTINGS = "EFS";
     public static final String EXTRA_EXCLUDE_SUBREDDIT = "EES";
+    public static final String EXTRA_CONTAIN_SUBREDDIT = "ECS";
     public static final String EXTRA_EXCLUDE_USER = "EEU";
+    public static final String EXTRA_CONTAIN_USER = "ECU";
     public static final String EXTRA_EXCLUDE_FLAIR = "EEF";
     public static final String EXTRA_CONTAIN_FLAIR = "ECF";
     public static final String EXTRA_EXCLUDE_DOMAIN = "EED";
@@ -58,8 +60,10 @@ public class CustomizePostFilterActivity extends BaseActivity {
     public static final String RETURN_EXTRA_POST_FILTER = "REPF";
     private static final String POST_FILTER_STATE = "PFS";
     private static final String ORIGINAL_NAME_STATE = "ONS";
-    private static final int ADD_SUBREDDITS_REQUEST_CODE = 1;
-    private static final int ADD_USERS_REQUEST_CODE = 3;
+    private static final int ADD_EXCLUDE_SUBREDDITS_REQUEST_CODE = 1;
+    private static final int ADD_CONTAIN_SUBREDDITS_REQUEST_CODE = 11;
+    private static final int ADD_EXCLUDE_USERS_REQUEST_CODE      = 3;
+    private static final int ADD_CONTAIN_USERS_REQUEST_CODE      = 33;
 
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
@@ -167,16 +171,25 @@ public class CustomizePostFilterActivity extends BaseActivity {
             binding.onlySpoilerSwitchCustomizePostFilterActivity.performClick();
         });
 
-        binding.addSubredditsImageViewCustomizePostFilterActivity.setOnClickListener(view -> {
+        binding.excludeAddSubredditsImageViewCustomizePostFilterActivity.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubredditMultiselectionActivity.class);
-            startActivityForResult(intent, ADD_SUBREDDITS_REQUEST_CODE);
+            startActivityForResult(intent, ADD_EXCLUDE_SUBREDDITS_REQUEST_CODE);
         });
-
-        binding.addUsersImageViewCustomizePostFilterActivity.setOnClickListener(view -> {
+        binding.containAddSubredditsImageViewCustomizePostFilterActivity.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SubredditMultiselectionActivity.class);
+            startActivityForResult(intent, ADD_CONTAIN_SUBREDDITS_REQUEST_CODE);
+        });
+        binding.excludeAddUsersImageViewCustomizePostFilterActivity.setOnClickListener(view -> {
             Intent intent = new Intent(this, SearchActivity.class);
             intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_USERS, true);
             intent.putExtra(SearchActivity.EXTRA_IS_MULTI_SELECTION, true);
-            startActivityForResult(intent, ADD_USERS_REQUEST_CODE);
+            startActivityForResult(intent, ADD_EXCLUDE_USERS_REQUEST_CODE);
+        });
+        binding.containAddUsersImageViewCustomizePostFilterActivity.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SearchActivity.class);
+            intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_USERS, true);
+            intent.putExtra(SearchActivity.EXTRA_IS_MULTI_SELECTION, true);
+            startActivityForResult(intent, ADD_CONTAIN_USERS_REQUEST_CODE);
         });
 
         if (savedInstanceState != null) {
@@ -213,7 +226,9 @@ public class CustomizePostFilterActivity extends BaseActivity {
         binding.titleExcludesRegexTextInputEditTextCustomizePostFilterActivity.setText(postFilter.postTitleExcludesRegex);
         binding.titleContainsRegexTextInputEditTextCustomizePostFilterActivity.setText(postFilter.postTitleContainsRegex);
         binding.excludesSubredditsTextInputEditTextCustomizePostFilterActivity.setText(postFilter.excludeSubreddits);
+        binding.containsSubredditsTextInputEditTextCustomizePostFilterActivity.setText(postFilter.containSubreddits);
         binding.excludesUsersTextInputEditTextCustomizePostFilterActivity.setText(postFilter.excludeUsers);
+        binding.containsUsersTextInputEditTextCustomizePostFilterActivity.setText(postFilter.containUsers);
         binding.excludesFlairsTextInputEditTextCustomizePostFilterActivity.setText(postFilter.excludeFlairs);
         binding.containsFlairsTextInputEditTextCustomizePostFilterActivity.setText(postFilter.containFlairs);
         binding.excludeDomainsTextInputEditTextCustomizePostFilterActivity.setText(postFilter.excludeDomains);
@@ -230,12 +245,26 @@ public class CustomizePostFilterActivity extends BaseActivity {
         String containFlair = intent.getStringExtra(EXTRA_CONTAIN_FLAIR);
         String excludeDomain = intent.getStringExtra(EXTRA_EXCLUDE_DOMAIN);
         String containDomain = intent.getStringExtra(EXTRA_CONTAIN_DOMAIN);
+        String containSubreddit = intent.getStringExtra(EXTRA_CONTAIN_SUBREDDIT);
+        String containUser = intent.getStringExtra(EXTRA_CONTAIN_USER);
 
         if (excludeSubreddit != null && !excludeSubreddit.equals("")) {
             if (!binding.excludesSubredditsTextInputEditTextCustomizePostFilterActivity.getText().toString().equals("")) {
                 binding.excludesSubredditsTextInputEditTextCustomizePostFilterActivity.append(",");
             }
             binding.excludesSubredditsTextInputEditTextCustomizePostFilterActivity.append(excludeSubreddit);
+        }
+        if (containSubreddit != null && !containSubreddit.equals("")) {
+            if (!binding.containsSubredditsTextInputEditTextCustomizePostFilterActivity.getText().toString().equals("")) {
+                binding.containsSubredditsTextInputEditTextCustomizePostFilterActivity.append(",");
+            }
+            binding.containsSubredditsTextInputEditTextCustomizePostFilterActivity.append(containSubreddit);
+        }
+        if (containUser != null && !containUser.equals("")) {
+            if (!binding.containsUsersTextInputEditTextCustomizePostFilterActivity.getText().toString().equals("")) {
+                binding.containsUsersTextInputEditTextCustomizePostFilterActivity.append(",");
+            }
+            binding.containsUsersTextInputEditTextCustomizePostFilterActivity.append(containUser);
         }
         if (excludeUser != null && !excludeUser.equals("")) {
             if (!binding.excludesUsersTextInputEditTextCustomizePostFilterActivity.getText().toString().equals("")) {
@@ -343,18 +372,31 @@ public class CustomizePostFilterActivity extends BaseActivity {
         binding.titleContainsRegexTextInputLayoutCustomizePostFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         binding.titleContainsRegexTextInputEditTextCustomizePostFilterActivity.setTextColor(primaryTextColor);
 
-        binding.subredditsUsersCardViewCustomizePostFilterActivity.setCardBackgroundColor(filledCardViewBackgroundColor);
+        binding.subredditsCardViewCustomizePostFilterActivity.setCardBackgroundColor(filledCardViewBackgroundColor);
         binding.excludeSubredditsExplanationTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
         binding.excludesSubredditsTextInputLayoutCustomizePostFilterActivity.setBoxStrokeColor(primaryTextColor);
         binding.excludesSubredditsTextInputLayoutCustomizePostFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         binding.excludesSubredditsTextInputEditTextCustomizePostFilterActivity.setTextColor(primaryTextColor);
-        binding.addSubredditsImageViewCustomizePostFilterActivity.setImageDrawable(Utils.getTintedDrawable(this, R.drawable.ic_add_24dp, primaryIconColor));
+        binding.excludeAddSubredditsImageViewCustomizePostFilterActivity.setImageDrawable(Utils.getTintedDrawable(this, R.drawable.ic_add_24dp, primaryIconColor));
 
+        binding.containSubredditsExplanationTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
+        binding.containsSubredditsTextInputLayoutCustomizePostFilterActivity.setBoxStrokeColor(primaryTextColor);
+        binding.containsSubredditsTextInputLayoutCustomizePostFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
+        binding.containsSubredditsTextInputEditTextCustomizePostFilterActivity.setTextColor(primaryTextColor);
+        binding.containAddSubredditsImageViewCustomizePostFilterActivity.setImageDrawable(Utils.getTintedDrawable(this, R.drawable.ic_add_24dp, primaryIconColor));
+
+        binding.usersCardViewCustomizePostFilterActivity.setCardBackgroundColor(filledCardViewBackgroundColor);
         binding.excludeUsersExplanationTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
         binding.excludesUsersTextInputLayoutCustomizePostFilterActivity.setBoxStrokeColor(primaryTextColor);
         binding.excludesUsersTextInputLayoutCustomizePostFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         binding.excludesUsersTextInputEditTextCustomizePostFilterActivity.setTextColor(primaryTextColor);
-        binding.addUsersImageViewCustomizePostFilterActivity.setImageDrawable(Utils.getTintedDrawable(this, R.drawable.ic_add_24dp, primaryIconColor));
+        binding.excludeAddUsersImageViewCustomizePostFilterActivity.setImageDrawable(Utils.getTintedDrawable(this, R.drawable.ic_add_24dp, primaryIconColor));
+
+        binding.containUsersExplanationTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
+        binding.containsUsersTextInputLayoutCustomizePostFilterActivity.setBoxStrokeColor(primaryTextColor);
+        binding.containsUsersTextInputLayoutCustomizePostFilterActivity.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
+        binding.containsUsersTextInputEditTextCustomizePostFilterActivity.setTextColor(primaryTextColor);
+        binding.containAddUsersImageViewCustomizePostFilterActivity.setImageDrawable(Utils.getTintedDrawable(this, R.drawable.ic_add_24dp, primaryIconColor));
 
         binding.flairsCardViewCustomizePostFilterActivity.setCardBackgroundColor(filledCardViewBackgroundColor);
         binding.excludeFlairsExplanationTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
@@ -407,7 +449,9 @@ public class CustomizePostFilterActivity extends BaseActivity {
             binding.titleExcludesRegexTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
             binding.titleContainsRegexTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
             binding.excludesSubredditsTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.containsSubredditsTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
             binding.excludesUsersTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
+            binding.containsUsersTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
             binding.excludesFlairsTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
             binding.containsFlairsTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
             binding.excludeDomainsTextInputLayoutCustomizePostFilterActivity.setCursorColor(ColorStateList.valueOf(primaryTextColor));
@@ -423,8 +467,10 @@ public class CustomizePostFilterActivity extends BaseActivity {
             setCursorDrawableColor(binding.titleExcludesRegexTextInputEditTextCustomizePostFilterActivity, primaryTextColor);
             setCursorDrawableColor(binding.titleContainsRegexTextInputEditTextCustomizePostFilterActivity, primaryTextColor);
             setCursorDrawableColor(binding.excludesSubredditsTextInputEditTextCustomizePostFilterActivity, primaryTextColor);
+            setCursorDrawableColor(binding.containsSubredditsTextInputEditTextCustomizePostFilterActivity, primaryTextColor);
             setCursorDrawableColor(binding.excludesUsersTextInputEditTextCustomizePostFilterActivity, primaryTextColor);
             setCursorDrawableColor(binding.excludesFlairsTextInputEditTextCustomizePostFilterActivity, primaryTextColor);
+            setCursorDrawableColor(binding.containsUsersTextInputEditTextCustomizePostFilterActivity, primaryTextColor);
             setCursorDrawableColor(binding.containsFlairsTextInputEditTextCustomizePostFilterActivity, primaryTextColor);
             setCursorDrawableColor(binding.excludeDomainsTextInputEditTextCustomizePostFilterActivity, primaryTextColor);
             setCursorDrawableColor(binding.containDomainsTextInputEditTextCustomizePostFilterActivity, primaryTextColor);
@@ -543,43 +589,41 @@ public class CustomizePostFilterActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null) {
-            if (requestCode == ADD_SUBREDDITS_REQUEST_CODE) {
-                ArrayList<String> subredditNames = data.getStringArrayListExtra(SubredditMultiselectionActivity.EXTRA_RETURN_SELECTED_SUBREDDITS);
-                updateExcludeSubredditNames(subredditNames);
-            } else if (requestCode == ADD_USERS_REQUEST_CODE) {
+            if (requestCode == ADD_EXCLUDE_SUBREDDITS_REQUEST_CODE) {
+                ArrayList<String> subredditNames = data.getStringArrayListExtra(
+                        SubredditMultiselectionActivity.EXTRA_RETURN_SELECTED_SUBREDDITS);
+                updateSubredditsUsersNames(subredditNames, binding.excludesSubredditsTextInputEditTextCustomizePostFilterActivity);
+            } else if (requestCode == ADD_CONTAIN_SUBREDDITS_REQUEST_CODE) {
+                ArrayList<String> subredditNames = data.getStringArrayListExtra(
+                        SubredditMultiselectionActivity.EXTRA_RETURN_SELECTED_SUBREDDITS);
+                updateSubredditsUsersNames(subredditNames, binding.containsSubredditsTextInputEditTextCustomizePostFilterActivity);
+            } else if (requestCode == ADD_EXCLUDE_USERS_REQUEST_CODE) {
                 ArrayList<String> usernames = data.getStringArrayListExtra(SearchActivity.RETURN_EXTRA_SELECTED_USERNAMES);
-                String currentUsers = binding.excludesUsersTextInputEditTextCustomizePostFilterActivity.getText().toString().trim();
-                if (usernames != null && !usernames.isEmpty()) {
-                    if (!currentUsers.isEmpty() && currentUsers.charAt(currentUsers.length() - 1) != ',') {
-                        String newString = currentUsers + ",";
-                        binding.excludesUsersTextInputEditTextCustomizePostFilterActivity.setText(newString);
-                    }
-                    StringBuilder stringBuilder = new StringBuilder();
-                    for (String s : usernames) {
-                        stringBuilder.append(s).append(",");
-                    }
-                    stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-                    binding.excludesUsersTextInputEditTextCustomizePostFilterActivity.append(stringBuilder.toString());
-                }
+                updateSubredditsUsersNames(usernames, binding.excludesUsersTextInputEditTextCustomizePostFilterActivity);
+            } else if (requestCode == ADD_CONTAIN_USERS_REQUEST_CODE) {
+                ArrayList<String> usernames = data.getStringArrayListExtra(SearchActivity.RETURN_EXTRA_SELECTED_USERNAMES);
+                updateSubredditsUsersNames(usernames, binding.containsUsersTextInputEditTextCustomizePostFilterActivity);
             }
         }
     }
 
-    private void updateExcludeSubredditNames(ArrayList<String> subredditNames) {
-        String currentSubreddits = binding.excludesSubredditsTextInputEditTextCustomizePostFilterActivity.getText().toString().trim();
-        if (subredditNames != null && !subredditNames.isEmpty()) {
-            if (!currentSubreddits.isEmpty() && currentSubreddits.charAt(currentSubreddits.length() - 1) != ',') {
-                String newString = currentSubreddits + ",";
-                binding.excludesSubredditsTextInputEditTextCustomizePostFilterActivity.setText(newString);
-            }
-            StringBuilder stringBuilder = new StringBuilder();
-            for (String s : subredditNames) {
-                stringBuilder.append(s).append(",");
-            }
-            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-            binding.excludesSubredditsTextInputEditTextCustomizePostFilterActivity.append(stringBuilder.toString());
+    private void updateSubredditsUsersNames(@Nullable ArrayList<String> subredditNames,
+                                      com.google.android.material.textfield.TextInputEditText targetEditText) {
+        if (subredditNames == null || subredditNames.isEmpty() || targetEditText == null) return;
+
+        String current = targetEditText.getText().toString().trim();
+        if (!current.isEmpty() && current.charAt(current.length() - 1) != ',') {
+            targetEditText.setText(current + ",");
         }
+
+        StringBuilder sb = new StringBuilder();
+        for (String s : subredditNames) {
+            sb.append(s).append(",");
+        }
+        if (sb.length() > 0) sb.deleteCharAt(sb.length() - 1);
+        targetEditText.append(sb.toString());
     }
+
 
     private void constructPostFilter() throws PatternSyntaxException {
         postFilter.name = binding.nameTextInputEditTextCustomizePostFilterActivity.getText().toString();
@@ -596,7 +640,9 @@ public class CustomizePostFilterActivity extends BaseActivity {
         postFilter.postTitleExcludesStrings = binding.titleExcludesStringsTextInputEditTextCustomizePostFilterActivity.getText().toString();
         postFilter.postTitleContainsStrings = binding.titleContainsStringsTextInputEditTextCustomizePostFilterActivity.getText().toString();
         postFilter.excludeSubreddits = binding.excludesSubredditsTextInputEditTextCustomizePostFilterActivity.getText().toString();
+        postFilter.containSubreddits = binding.containsSubredditsTextInputEditTextCustomizePostFilterActivity.getText().toString();
         postFilter.excludeUsers = binding.excludesUsersTextInputEditTextCustomizePostFilterActivity.getText().toString();
+        postFilter.containUsers = binding.containsUsersTextInputEditTextCustomizePostFilterActivity.getText().toString();
         postFilter.excludeFlairs = binding.excludesFlairsTextInputEditTextCustomizePostFilterActivity.getText().toString();
         postFilter.containFlairs = binding.containsFlairsTextInputEditTextCustomizePostFilterActivity.getText().toString();
         postFilter.excludeDomains = binding.excludeDomainsTextInputEditTextCustomizePostFilterActivity.getText().toString();
