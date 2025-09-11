@@ -18,4 +18,7 @@ public interface RedgifsAPI {
     @FormUrlEncoded
     @POST("/v2/oauth/client")
     Call<String> getRedgifsAccessToken(@FieldMap Map<String, String> params);
+
+    @GET("/v2/auth/temporary")
+    Call<String> getRedgifsTemporaryToken();
 }
