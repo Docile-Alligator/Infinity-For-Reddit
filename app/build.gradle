@@ -196,7 +196,7 @@ dependencies {
 
     implementation 'androidx.core:core-splashscreen:1.0.1'
 
-    implementation 'com.giphy.sdk:ui:2.3.15'
+    implementation 'com.giphy.sdk:ui:2.3.18'
 
     implementation 'com.github.alexzhirkevich:custom-qr-generator:2.0.0-alpha01'
 
