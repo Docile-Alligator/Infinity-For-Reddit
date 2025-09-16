@@ -25,13 +25,13 @@ public class ParseSubredditData {
         try {
             JSONObject data = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY);
 
-            int nCurrentOnlineSubscribers = data.getInt(JSONUtils.ACTIVE_USER_COUNT_KEY);
+            //int nCurrentOnlineSubscribers = data.getInt(JSONUtils.ACTIVE_USER_COUNT_KEY);
             SubredditData subredditData = parseSubredditDataSync(data, true);
 
             if (subredditData == null) {
                 handler.post(() -> fetchSubredditDataListener.onFetchSubredditDataFail(false));
             } else {
-                handler.post(() -> fetchSubredditDataListener.onFetchSubredditDataSuccess(subredditData, nCurrentOnlineSubscribers));
+                handler.post(() -> fetchSubredditDataListener.onFetchSubredditDataSuccess(subredditData, 0));
             }
         } catch (JSONException e) {
             e.printStackTrace();
