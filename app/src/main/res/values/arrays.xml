@@ -576,6 +576,8 @@
         <item>@string/contain_flair</item>
         <item>@string/exclude_domain</item>
         <item>@string/contain_domain</item>
+        <item>@string/contain_subreddit</item>
+        <item>@string/contain_user</item>
     </string-array>
 
     <string-array name="add_to_comment_filter_options">

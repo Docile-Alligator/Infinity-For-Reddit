@@ -50,8 +50,12 @@ public class PostFilter implements Parcelable {
     public String postTitleContainsStrings;
     @ColumnInfo(name = "exclude_subreddits")
     public String excludeSubreddits;
+    @ColumnInfo(name = "contain_subreddits")
+    public String containSubreddits;
     @ColumnInfo(name = "exclude_users")
     public String excludeUsers;
+    @ColumnInfo(name = "contain_users")
+    public String containUsers;
     @ColumnInfo(name = "contain_flairs")
     public String containFlairs;
     @ColumnInfo(name = "exclude_flairs")
@@ -93,7 +97,9 @@ public class PostFilter implements Parcelable {
         postTitleExcludesStrings = in.readString();
         postTitleContainsStrings = in.readString();
         excludeSubreddits = in.readString();
+        containSubreddits = in.readString();
         excludeUsers = in.readString();
+        containUsers = in.readString();
         containFlairs = in.readString();
         excludeFlairs = in.readString();
         excludeDomains = in.readString();
@@ -216,12 +222,40 @@ public class PostFilter implements Parcelable {
                 }
             }
         }
+        if (postFilter.containSubreddits != null && !postFilter.containSubreddits.equals("")) {
+            String[] subreddits = postFilter.containSubreddits.split(",", 0);
+            boolean hasRequiredSubreddit = false;
+            String subreddit = post.getSubredditName();
+            for (String s : subreddits) {
+                if (!s.trim().equals("") && subreddit.equalsIgnoreCase(s.trim())) {
+                    hasRequiredSubreddit = true;
+                    break;
+                }
+            }
+            if (!hasRequiredSubreddit) {
+                return false;
+            }
+        }
         if (postFilter.excludeUsers != null && !postFilter.excludeUsers.equals("")) {
             String[] users = postFilter.excludeUsers.split(",", 0);
             for (String u : users) {
                 if (!u.trim().equals("") && post.getAuthor().equalsIgnoreCase(u.trim())) {
                     return false;
                 }
+            }
+        }
+        if (postFilter.containUsers != null && !postFilter.containUsers.equals("")) {
+            String[] users = postFilter.containUsers.split(",", 0);
+            boolean hasRequiredUser = false;
+            String user = post.getAuthor();
+            for (String s : users) {
+                if (!s.trim().equals("") && user.equalsIgnoreCase(s.trim())) {
+                    hasRequiredUser = true;
+                    break;
+                }
+            }
+            if (!hasRequiredUser) {
+                return false;
             }
         }
         if (postFilter.excludeFlairs != null && !postFilter.excludeFlairs.equals("")) {
@@ -321,10 +355,22 @@ public class PostFilter implements Parcelable {
                 postFilter.excludeSubreddits = stringBuilder.toString();
             }
 
+            if (p.containSubreddits != null && !p.containSubreddits.equals("")) {
+                stringBuilder = new StringBuilder(postFilter.containSubreddits == null ? "" : postFilter.containSubreddits);
+                stringBuilder.append(",").append(p.containSubreddits);
+                postFilter.containSubreddits = stringBuilder.toString();
+            }
+
             if (p.excludeUsers != null && !p.excludeUsers.equals("")) {
                 stringBuilder = new StringBuilder(postFilter.excludeUsers == null ? "" : postFilter.excludeUsers);
                 stringBuilder.append(",").append(p.excludeUsers);
                 postFilter.excludeUsers = stringBuilder.toString();
+            }
+
+            if (p.containUsers != null && !p.containUsers.equals("")) {
+                stringBuilder = new StringBuilder(postFilter.containUsers == null ? "" : postFilter.containUsers);
+                stringBuilder.append(",").append(p.containUsers);
+                postFilter.containUsers = stringBuilder.toString();
             }
 
             if (p.containFlairs != null && !p.containFlairs.equals("")) {
@@ -384,7 +430,9 @@ public class PostFilter implements Parcelable {
         parcel.writeString(postTitleExcludesStrings);
         parcel.writeString(postTitleContainsStrings);
         parcel.writeString(excludeSubreddits);
+        parcel.writeString(containSubreddits);
         parcel.writeString(excludeUsers);
+        parcel.writeString(containUsers);
         parcel.writeString(containFlairs);
         parcel.writeString(excludeFlairs);
         parcel.writeString(excludeDomains);

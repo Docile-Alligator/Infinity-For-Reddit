@@ -162,7 +162,7 @@ public class PostFilterPreferenceActivity extends BaseActivity {
 
     public void showPostFilterOptions(Post post, @Nullable PostFilter postFilter) {
         String[] options = getResources().getStringArray(R.array.add_to_post_filter_options);
-        boolean[] selectedOptions = new boolean[]{false, false, false, false, false, false};
+        boolean[] selectedOptions = new boolean[]{false, false, false, false, false, false, false, false};
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(R.string.select)
                 .setMultiChoiceItems(options, selectedOptions, (dialogInterface, i, b) -> selectedOptions[i] = b)
@@ -192,6 +192,12 @@ public class PostFilterPreferenceActivity extends BaseActivity {
                                     break;
                                 case 5:
                                     intent.putExtra(CustomizePostFilterActivity.EXTRA_CONTAIN_DOMAIN, post.getUrl());
+                                    break;
+                                case 6:
+                                    intent.putExtra(CustomizePostFilterActivity.EXTRA_CONTAIN_SUBREDDIT, post.getSubredditName());
+                                    break;
+                                case 7:
+                                    intent.putExtra(CustomizePostFilterActivity.EXTRA_CONTAIN_USER, post.getAuthor());
                                     break;
                             }
                         }

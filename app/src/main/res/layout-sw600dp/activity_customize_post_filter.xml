@@ -602,7 +602,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/subreddits_users_card_view_customize_post_filter_activity"
+                    android:id="@+id/subreddits_card_view_customize_post_filter_activity"
                     style="?attr/materialCardViewFilledStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -646,7 +646,6 @@
                                     android:id="@+id/excludes_subreddits_text_input_edit_text_customize_post_filter_activity"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_weight="1"
                                     android:fontFamily="?attr/font_family"
                                     android:textSize="?attr/font_default"
                                     android:hint="@string/exclude_subreddits_hint"
@@ -655,7 +654,7 @@
                             </com.google.android.material.textfield.TextInputLayout>
 
                             <ImageView
-                                android:id="@+id/add_subreddits_image_view_customize_post_filter_activity"
+                                android:id="@+id/exclude_add_subreddits_image_view_customize_post_filter_activity"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
@@ -668,10 +667,78 @@
                         </LinearLayout>
 
                         <TextView
-                            android:id="@+id/exclude_users_explanation_text_view_customize_post_filter_activity"
+                            android:id="@+id/contain_subreddits_explanation_text_view_customize_post_filter_activity"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            android:text="@string/post_filter_contain_subreddits_explanation"
+                            android:textSize="?attr/font_default"
+                            android:textColor="?attr/primaryTextColor"
+                            android:fontFamily="?attr/font_family" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/contains_subreddits_text_input_layout_customize_post_filter_activity"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:paddingTop="8dp"
+                                android:paddingBottom="16dp"
+                                android:layout_marginStart="16dp"
+                                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/contains_subreddits_text_input_edit_text_customize_post_filter_activity"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="?attr/font_family"
+                                    android:textSize="?attr/font_default"
+                                    android:hint="@string/contain_subreddits_hint"
+                                    android:maxLines="10" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <ImageView
+                                android:id="@+id/contain_add_subreddits_image_view_customize_post_filter_activity"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:padding="16dp"
+                                android:background="?actionBarItemBackground"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:contentDescription="@string/content_description_post_filter_add_subreddit" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/users_card_view_customize_post_filter_activity"
+                    style="?attr/materialCardViewFilledStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/exclude_users_explanation_text_view_customize_post_filter_activity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="16dp"
                             android:paddingBottom="8dp"
                             android:paddingStart="16dp"
                             android:paddingEnd="16dp"
@@ -706,7 +773,58 @@
                             </com.google.android.material.textfield.TextInputLayout>
 
                             <ImageView
-                                android:id="@+id/add_users_image_view_customize_post_filter_activity"
+                                android:id="@+id/exclude_add_users_image_view_customize_post_filter_activity"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:padding="16dp"
+                                android:background="?actionBarItemBackground"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:contentDescription="@string/content_description_post_filter_add_user" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/contain_users_explanation_text_view_customize_post_filter_activity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp"
+                            android:paddingStart="16dp"
+                            android:paddingEnd="16dp"
+                            android:text="@string/post_filter_contain_users_explanation"
+                            android:textSize="?attr/font_default"
+                            android:textColor="?attr/primaryTextColor"
+                            android:fontFamily="?attr/font_family" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/contains_users_text_input_layout_customize_post_filter_activity"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:paddingTop="8dp"
+                                android:paddingBottom="16dp"
+                                android:layout_marginStart="16dp"
+                                style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/contains_users_text_input_edit_text_customize_post_filter_activity"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="?attr/font_family"
+                                    android:textSize="?attr/font_default"
+                                    android:hint="@string/contain_users_hint"
+                                    android:maxLines="10" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <ImageView
+                                android:id="@+id/contain_add_users_image_view_customize_post_filter_activity"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
