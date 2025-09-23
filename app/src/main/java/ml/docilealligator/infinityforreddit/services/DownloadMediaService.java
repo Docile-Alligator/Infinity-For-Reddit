@@ -139,16 +139,13 @@ public class DownloadMediaService extends JobService {
                 if (post.isLoadedStreamableVideoAlready()) {
                     extras.putString(EXTRA_URL, post.getVideoUrl());
                 } else {
-                    extras.putString(EXTRA_REDGIFS_ID, post.getRedgifsId());
+                    extras.putString(EXTRA_STREAMABLE_SHORT_CODE, post.getStreamableShortCode());
                 }
 
                 extras.putString(EXTRA_FILE_NAME, "Streamable-" + post.getStreamableShortCode() + ".mp4");
             } else if (post.isRedgifs()) {
-                if (post.isLoadedStreamableVideoAlready()) {
-                    extras.putString(EXTRA_URL, post.getVideoUrl());
-                } else {
-                    extras.putString(EXTRA_STREAMABLE_SHORT_CODE, post.getStreamableShortCode());
-                }
+                extras.putString(EXTRA_URL, post.getVideoUrl());
+                extras.putString(EXTRA_REDGIFS_ID, post.getRedgifsId());
 
                 String redgifsId = post.getRedgifsId();
                 if (redgifsId != null && redgifsId.contains("-")) {
