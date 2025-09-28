@@ -1,0 +1,100 @@
+name: Android CI (Infinity)
+
+on:
+  workflow_dispatch:
+    inputs:
+      buildType:
+        description: "Gradle task (assembleDebug or assembleRelease)"
+        required: true
+        default: "assembleRelease"
+  push:
+    branches: [ master, main ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      # ---- Reddit API (set these as GitHub Secrets on your fork) ----
+      REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+      REDDIT_REDIRECT_URI: ${{ secrets.REDDIT_REDIRECT_URI }} # e.g. http://127.0.0.1
+      REDDIT_USER_AGENT:  ${{ secrets.REDDIT_USER_AGENT }}    # e.g. yourname-Infinity/1.0
+      # ---- Optional signing (Release) ----
+      SIGNING_KEYSTORE_B64: ${{ secrets.SIGNING_KEYSTORE_B64 }}  # base64 of your .jks/.keystore
+      SIGNING_KEY_ALIAS:    ${{ secrets.SIGNING_KEY_ALIAS }}
+      SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+      SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Gradle wrapper permissions
+        run: chmod +x ./gradlew
+
+      # ---- Inject Reddit API creds into gradle.properties (preferred) ----
+      - name: Write gradle.properties overrides
+        run: |
+          mkdir -p ~/.gradle
+          {
+            echo "redditClientId=${REDDIT_CLIENT_ID}"
+            echo "redditRedirectUri=${REDDIT_REDIRECT_URI}"
+            echo "redditUserAgent=${REDDIT_USER_AGENT}"
+          } >> ~/.gradle/gradle.properties
+
+      # If the project expects values in res/values/strings.xml instead,
+      # uncomment and tweak this step to patch them:
+      # - name: Patch strings.xml with API values (fallback)
+      #   run: |
+      #     XML=app/src/main/res/values/strings.xml
+      #     sed -i "s|<string name=\"reddit_client_id\">.*</string>|<string name=\"reddit_client_id\">${REDDIT_CLIENT_ID}</string>|" "$XML" || true
+      #     sed -i "s|<string name=\"reddit_redirect_uri\">.*</string>|<string name=\"reddit_redirect_uri\">${REDDIT_REDIRECT_URI}</string>|" "$XML" || true
+      #     sed -i "s|<string name=\"reddit_user_agent\">.*</string>|<string name=\"reddit_user_agent\">${REDDIT_USER_AGENT}</string>|" "$XML" || true
+
+      # ---- Optional: configure signing for release builds ----
+      - name: Restore signing keystore (if provided)
+        if: env.SIGNING_KEYSTORE_B64 != ''
+        run: |
+          echo "$SIGNING_KEYSTORE_B64" | base64 -d > signing.jks
+          {
+            echo "MYAPP_UPLOAD_STORE_FILE=signing.jks"
+            echo "MYAPP_UPLOAD_KEY_ALIAS=${SIGNING_KEY_ALIAS}"
+            echo "MYAPP_UPLOAD_STORE_PASSWORD=${SIGNING_STORE_PASSWORD}"
+            echo "MYAPP_UPLOAD_KEY_PASSWORD=${SIGNING_KEY_PASSWORD}"
+          } >> ~/.gradle/gradle.properties
+
+      # If the project doesn't already read these props in build.gradle, you can
+      # add a signingConfig reading MYAPP_* props, or uncomment this patcher:
+      # - name: Ensure release signingConfig (best-effort)
+      #   run: |
+      #     # No-op placeholder: keep your fork’s build.gradle authoritative.
+
+      - name: Build
+        run: ./gradlew ${{ github.event.inputs.buildType || 'assembleRelease' }} --stacktrace
+
+      - name: Locate APKs/AABs
+        id: locate
+        run: |
+          echo "apk_path<<EOF" >> $GITHUB_OUTPUT
+          find app/build/outputs -type f \( -name "*.apk" -o -name "*.aab" \) -print
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: infinity-build
+          path: |
+            app/build/outputs/**/*.apk
+            app/build/outputs/**/*.aab
+          if-no-files-found: warn
