@@ -235,9 +235,10 @@ public class ViewImgurImageFragment extends Fragment {
 
             @Override
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                if (activity.getExternalCacheDir() != null) {
+                File cacheDir = Utils.getCacheDir(activity);
+                if (cacheDir != null) {
                     Toast.makeText(activity, R.string.save_image_first, Toast.LENGTH_SHORT).show();
-                    SaveBitmapImageToFile.SaveBitmapImageToFile(mExecutor, new Handler(), resource, activity.getExternalCacheDir().getPath(),
+                    SaveBitmapImageToFile.SaveBitmapImageToFile(mExecutor, new Handler(), resource, cacheDir.getPath(),
                             imgurMedia.getFileName(),
                             new SaveBitmapImageToFile.SaveBitmapImageToFileListener() {
                                 @Override

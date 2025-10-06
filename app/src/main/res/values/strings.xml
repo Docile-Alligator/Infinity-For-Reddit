@@ -53,7 +53,7 @@
 
     <string name="action_download">Download</string>
     <string name="action_refresh">Refresh</string>
-    <string name="action_add_comment">Add a comment</string>
+    <string name="action_add_comment">Send comment</string>
     <string name="action_save_post">Save post</string>
     <string name="action_view_crosspost_parent">View crosspost parent</string>
     <string name="action_search">Search</string>
@@ -250,6 +250,7 @@
     <string name="no_camera_available">No camera app available</string>
     <string name="error_creating_temp_file">Error creating temp file</string>
 
+    <string name="submit_video_or_gif_post_failed_cannot_get_cache_directory">Unable to submit post: cannot access cache directory</string>
     <string name="video_is_processing">Video is processing. Please wait.</string>
     <string name="image_is_processing">Image is processing. Please wait.</string>
     <string name="gif_is_processing">Gif is processing. Please wait.</string>
@@ -1232,6 +1233,7 @@
     <string name="restore_settings_partially_failed">Some settings may not be restored successfully. Restart the app to see the changes.</string>
     <string name="restore_settings_failed_file_corrupted">Cannot restore settings. The file may be corrupted.</string>
     <string name="restore_settings_failed_cannot_get_file">Cannot access the file</string>
+    <string name="restore_settings_failed_cannot_get_cache_dir">Cannot access cache directory</string>
 
     <string name="suicide_prevention_quote">If you are looking for a sign not to kill yourself, this is it.\u2764</string>
     <string name="do_not_show_this_again">Don\'t show this again</string>

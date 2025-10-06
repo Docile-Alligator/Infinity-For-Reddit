@@ -41,6 +41,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.json.JSONException;
 import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,8 +54,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.noties.markwon.core.spans.CustomTypefaceSpan;
-import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.thing.UploadedImage;
 import retrofit2.Retrofit;
@@ -509,5 +510,25 @@ public final class Utils {
 
     public static <T> int fixIndexOutOfBoundsUsingPredetermined(T[] array, int index, int predeterminedIndex) {
         return index >= array.length ? predeterminedIndex : index;
+    }
+
+    @Nullable
+    public static File getCacheDir(Context context) {
+        File cacheDir = context.getExternalCacheDir();
+        if (cacheDir != null) {
+            return cacheDir;
+        }
+
+        cacheDir = context.getCacheDir();
+        if (cacheDir != null) {
+            return cacheDir;
+        }
+
+        cacheDir = context.getExternalFilesDir(null);
+        if (cacheDir != null) {
+            return cacheDir;
+        }
+
+        return context.getFilesDir();
     }
 }

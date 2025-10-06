@@ -16,6 +16,7 @@ import android.os.PersistableBundle;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -62,6 +63,7 @@ import ml.docilealligator.infinityforreddit.post.SubmitPost;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.NotificationUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import retrofit2.Response;
@@ -291,6 +293,7 @@ public class SubmitPostService extends JobService {
                 .build();
     }
 
+    @WorkerThread
     private void submitTextOrLinkPost(JobParameters parameters, NotificationManagerCompat manager, int randomNotificationIdOffset,
                                       Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount,
                                       String subredditName, String title, String content, @Nullable String url,
@@ -316,6 +319,7 @@ public class SubmitPostService extends JobService {
                 });
     }
 
+    @WorkerThread
     private void submitCrosspost(JobParameters parameters, NotificationManagerCompat manager, int randomNotificationIdOffset,
                                  Executor executor, Handler handler, Retrofit newAuthenticatorOauthRetrofit,
                                  Account selectedAccount, String subredditName,
@@ -340,6 +344,7 @@ public class SubmitPostService extends JobService {
                 });
     }
 
+    @WorkerThread
     private void submitImagePost(JobParameters parameters, NotificationManagerCompat manager, int randomNotificationIdOffset,
                                  Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, Uri mediaUri,
                                  String subredditName, String title, String content, Flair flair,
@@ -373,6 +378,7 @@ public class SubmitPostService extends JobService {
         }
     }
 
+    @WorkerThread
     private void submitVideoPost(JobParameters parameters, NotificationManagerCompat manager, int randomNotificationIdOffset,
                                  Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, Uri mediaUri,
                                  String subredditName, String title, String content, Flair flair,
@@ -380,11 +386,16 @@ public class SubmitPostService extends JobService {
         try {
             InputStream in = getContentResolver().openInputStream(mediaUri);
             String type = getContentResolver().getType(mediaUri);
+            File cacheDir = Utils.getCacheDir(this);
+            if (cacheDir == null) {
+                handler.post(() -> EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(false, false, getString(R.string.submit_video_or_gif_post_failed_cannot_get_cache_directory))));
+                return;
+            }
             String cacheFilePath;
             if (type != null && type.contains("gif")) {
-                cacheFilePath = getExternalCacheDir() + "/" + mediaUri.getLastPathSegment() + ".gif";
+                cacheFilePath = cacheDir + "/" + mediaUri.getLastPathSegment() + ".gif";
             } else {
-                cacheFilePath = getExternalCacheDir() + "/" + mediaUri.getLastPathSegment() + ".mp4";
+                cacheFilePath = cacheDir + "/" + mediaUri.getLastPathSegment() + ".mp4";
             }
 
             copyFileToCache(in, cacheFilePath);
@@ -431,6 +442,7 @@ public class SubmitPostService extends JobService {
         }
     }
 
+    @WorkerThread
     private void submitGalleryPost(JobParameters parameters, NotificationManagerCompat manager, int randomNotificationIdOffset,
                                    Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, String payload) {
         try {
@@ -468,6 +480,7 @@ public class SubmitPostService extends JobService {
         }
     }
 
+    @WorkerThread
     private void submitPollPost(JobParameters parameters, NotificationManagerCompat manager, int randomNotificationIdOffset,
                                 Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, String payload) {
         try {

@@ -405,9 +405,10 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         glide.asBitmap().load(media.hasFallback() ? media.fallbackUrl : media.url).into(new CustomTarget<Bitmap>() {
             @Override
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                if (activity.getExternalCacheDir() != null) {
+                File cacheDir = Utils.getCacheDir(activity);
+                if (cacheDir != null) {
                     Toast.makeText(activity, R.string.save_image_first, Toast.LENGTH_SHORT).show();
-                    SaveBitmapImageToFile.SaveBitmapImageToFile(mExecutor, handler, resource, activity.getExternalCacheDir().getPath(),
+                    SaveBitmapImageToFile.SaveBitmapImageToFile(mExecutor, handler, resource, cacheDir.getPath(),
                             media.fileName,
                             new SaveBitmapImageToFile.SaveBitmapImageToFileListener() {
                                 @Override
@@ -451,8 +452,9 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
             @Override
             public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
-                if (activity.getExternalCacheDir() != null) {
-                    SaveGIFToFile.saveGifToFile(mExecutor, handler, resource, activity.getExternalCacheDir().getPath(), media.fileName,
+                File cacheDir = Utils.getCacheDir(activity);
+                if (cacheDir != null) {
+                    SaveGIFToFile.saveGifToFile(mExecutor, handler, resource, cacheDir.getPath(), media.fileName,
                             new SaveGIFToFile.SaveGIFToFileListener() {
                                 @Override
                                 public void saveSuccess(File imageFile) {

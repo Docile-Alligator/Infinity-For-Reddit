@@ -386,10 +386,11 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
             @Override
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                if (getExternalCacheDir() != null) {
+                File cacheDir = Utils.getCacheDir(ViewImageOrGifActivity.this);
+                if (cacheDir != null) {
                     Toast.makeText(ViewImageOrGifActivity.this, R.string.save_image_first, Toast.LENGTH_SHORT).show();
                     SaveBitmapImageToFile.SaveBitmapImageToFile(mExecutor, handler, resource,
-                            getExternalCacheDir().getPath(), mImageFileName,
+                            cacheDir.getPath(), mImageFileName,
                             new SaveBitmapImageToFile.SaveBitmapImageToFileListener() {
                                 @Override
                                 public void saveSuccess(File imageFile) {
@@ -432,8 +433,9 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
             @Override
             public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
-                if (getExternalCacheDir() != null) {
-                    SaveGIFToFile.saveGifToFile(mExecutor, handler, resource, getExternalCacheDir().getPath(), mImageFileName,
+                File cacheDir = Utils.getCacheDir(ViewImageOrGifActivity.this);
+                if (cacheDir != null) {
+                    SaveGIFToFile.saveGifToFile(mExecutor, handler, resource, cacheDir.getPath(), mImageFileName,
                             new SaveGIFToFile.SaveGIFToFileListener() {
                                 @Override
                                 public void saveSuccess(File imageFile) {
