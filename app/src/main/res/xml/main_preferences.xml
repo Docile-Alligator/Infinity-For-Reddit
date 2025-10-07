@@ -37,6 +37,7 @@
         app:fragment="ml.docilealligator.infinityforreddit.settings.SecurityPreferenceFragment" />
 
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceWithBackground
+        android:key="data_saving_mode_preference"
         app:title="@string/settings_data_saving_mode"
         app:icon="@drawable/ic_data_saving_mode_day_night_24dp"
         app:fragment="ml.docilealligator.infinityforreddit.settings.DataSavingModePreferenceFragment" />

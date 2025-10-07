@@ -156,6 +156,7 @@ public class SharedPreferencesUtils {
     public static final String MUTE_NSFW_VIDEO = "mute_nsfw_video";
     public static final String VIDEO_PLAYER_IGNORE_NAV_BAR = "video_player_ignore_nav_bar";
     public static final String SAVE_FRONT_PAGE_SCROLLED_POSITION = "save_front_page_scrolled_position";
+    public static final String DATA_SAVING_MODE_PREFERENCE = "data_saving_mode_preference";
     public static final String DATA_SAVING_MODE = "data_saving_mode";
     public static final String DATA_SAVING_MODE_OFF = "0";
     public static final String DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA = "1";
