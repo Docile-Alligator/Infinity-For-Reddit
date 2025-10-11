@@ -18,6 +18,14 @@ android {
             }
         }
     }
+    signingConfigs {
+        release {
+            storeFile file("./infinity.jks")
+            storePassword "infinity"
+            keyAlias "cloud.ente.infinity"
+            keyPassword "infinity"
+        }
+    }
     buildTypes {
         release {
             signingConfig signingConfigs.release
@@ -38,14 +46,6 @@ android {
 
     }
 
-    signingConfigs {
-        release {
-            storeFile file("./infinity.jks")
-            storePassword "infinity"
-            keyAlias "cloud.ente.infinity"
-            keyPassword "infinity"
-        }
-    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
