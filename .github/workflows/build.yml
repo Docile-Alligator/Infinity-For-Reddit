@@ -16,6 +16,10 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+    
+    - name: Decrypt JKS
+      run: |
+        echo "$JKS_STRING" | base64 --decode > app/infinity.jks
 
     - name: Change wrapper permissions
       run: chmod +x ./gradlew
