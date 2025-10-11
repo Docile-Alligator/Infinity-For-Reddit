@@ -1,8 +1,6 @@
 name: Build
 
 on:
-  push:
-  pull_request:
   workflow_dispatch:
 
 jobs:
@@ -19,10 +17,12 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Setup and build with Gradle
-      uses: gradle/gradle-build-action@v2
-      with:
-        arguments: build -x lint
+    - name: Change wrapper permissions
+      run: chmod +x ./gradlew
+
+    # Create APK Release
+    - name: Build apk release project (APK)
+      run: ./gradlew assembleRelease
 
     - name: Upload apk
       uses: actions/upload-artifact@v4
