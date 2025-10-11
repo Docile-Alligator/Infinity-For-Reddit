@@ -20,6 +20,7 @@ android {
     }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -34,6 +35,15 @@ android {
             applicationIdSuffix '.debug'
             versionNameSuffix ' (DEBUG)'
         }
+
+        signingConfigs {
+            release {
+                storeFile file("./infinity.jks")
+                storePassword "infinity"
+                keyAlias "cloud.ente.infinity"
+                keyPassword "infinity"
+            }
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -42,6 +52,7 @@ android {
 
     lint {
         disable 'MissingTranslation'
+        baseline = file('lint-baseline.xml')
     }
 
     bundle {
