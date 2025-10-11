@@ -19,7 +19,7 @@ jobs:
     
     - name: Decrypt JKS
       run: |
-        echo "$JKS_STRING" | base64 --decode > app/infinity.jks
+        echo "$JKS_STRING" | base64 --decode > app/infinity.p12
 
     - name: Change wrapper permissions
       run: chmod +x ./gradlew

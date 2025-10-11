@@ -20,10 +20,11 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("./infinity.jks")
+            storeFile file("./infinity.p12")
             storePassword "infinity"
             keyAlias "cloud.ente.infinity"
             keyPassword "infinity"
+            storeType "PKCS12"
         }
     }
     buildTypes {
