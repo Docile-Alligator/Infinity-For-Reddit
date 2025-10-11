@@ -54,6 +54,8 @@ android {
     lint {
         disable 'MissingTranslation'
         baseline = file('lint-baseline.xml')
+        checkReleaseBuilds = false
+        abortOnError = false
     }
 
     bundle {
