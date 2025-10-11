@@ -299,7 +299,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
     }
 
     public boolean isImmersiveInterface() {
-        return immersiveInterface;
+        return immersiveInterface && isImmersiveInterfaceApplicable;
     }
 
     protected void setToolbarGoToTop(Toolbar toolbar) {

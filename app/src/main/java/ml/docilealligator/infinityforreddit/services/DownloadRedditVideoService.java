@@ -53,6 +53,7 @@ import ml.docilealligator.infinityforreddit.broadcastreceivers.DownloadedMediaDe
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.NotificationUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -181,7 +182,7 @@ public class DownloadRedditVideoService extends JobService {
 
             boolean separateDownloadFolder = sharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_FOLDER_FOR_EACH_SUBREDDIT, false);
 
-            File externalCacheDirectory = getExternalCacheDir();
+            File externalCacheDirectory = Utils.getCacheDir(this);
             if (externalCacheDirectory != null) {
                 String destinationFileName = fileNameWithoutExtension + ".mp4";
                 String finalFileNameWithoutExtension = fileNameWithoutExtension;
