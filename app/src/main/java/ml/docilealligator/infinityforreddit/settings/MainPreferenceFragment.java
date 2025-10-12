@@ -22,6 +22,7 @@ import ml.docilealligator.infinityforreddit.activities.CommentFilterPreferenceAc
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.PostFilterPreferenceActivity;
 import ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceFragmentCompat;
+import ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceWithBackground;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class MainPreferenceFragment extends CustomFontPreferenceFragmentCompat {
@@ -36,6 +37,7 @@ public class MainPreferenceFragment extends CustomFontPreferenceFragmentCompat {
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         Preference securityPreference = findPreference(SharedPreferencesUtils.SECURITY);
+        CustomFontPreferenceWithBackground dataSavingModePreference = findPreference(SharedPreferencesUtils.DATA_SAVING_MODE_PREFERENCE);
         Preference postFilterPreference = findPreference(SharedPreferencesUtils.POST_FILTER);
         Preference commentFilterPreference = findPreference(SharedPreferencesUtils.COMMENT_FILTER);
         Preference privacyPolicyPreference = findPreference(SharedPreferencesUtils.PRIVACY_POLICY_KEY);
@@ -45,6 +47,10 @@ public class MainPreferenceFragment extends CustomFontPreferenceFragmentCompat {
         if (biometricManager.canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL) != BiometricManager.BIOMETRIC_SUCCESS) {
             if (securityPreference != null) {
                 securityPreference.setVisible(false);
+
+                if (dataSavingModePreference != null) {
+                    dataSavingModePreference.setTop(true);
+                }
             }
         }
 

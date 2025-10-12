@@ -125,6 +125,10 @@ class CustomFontPreferenceWithBackground @JvmOverloads constructor(
         this.customThemeWrapper = customThemeWrapper
     }
 
+    fun setTop(top: Boolean) {
+        this.top = top
+    }
+
     companion object {
         fun <T : View?> setMargins(view: T, left: Int, top: Int, right: Int, bottom: Int) {
             val lp = view!!.layoutParams
