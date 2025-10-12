@@ -19,9 +19,14 @@ jobs:
     
     - name: Decrypt JKS
       run: |
+        sed -i s/INSERT_CLIENT_ID/${CLIENT_TOKEN}/g app/src/main/java/ml/docilealligator/infinityforreddit/utils/APIUtils.java
+        sed -i s/INSERT_USER_NAME/${REDDIT_USERNAME}/g app/src/main/java/ml/docilealligator/infinityforreddit/utils/APIUtils.java
         echo "$JKS_STRING" | base64 --decode > app/infinity.jks
       env:
         JKS_STRING: ${{ secrets.JKS_STRING }}
+        CLIENT_TOKEN: ${{ secrets.CLIENT_TOKEN }}
+        REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
+
 
     - name: Change wrapper permissions
       run: chmod +x ./gradlew
