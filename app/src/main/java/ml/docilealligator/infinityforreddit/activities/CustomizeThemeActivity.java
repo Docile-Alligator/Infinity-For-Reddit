@@ -153,6 +153,8 @@ public class CustomizeThemeActivity extends BaseActivity {
             themeName = savedInstanceState.getString(THEME_NAME_STATE);
         }
 
+        binding.progressBarCustomizeThemeActivity.setVisibility(View.GONE);
+
         int androidVersion = Build.VERSION.SDK_INT;
 
         if (customThemeSettingsItems == null) {
