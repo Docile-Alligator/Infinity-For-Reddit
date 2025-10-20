@@ -264,7 +264,7 @@ public class NavigationWrapper {
             }
         } else if (option3 == SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_INBOX || option3 == SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX) {
             if (navigationRailView == null) {
-                if (this.inboxCount == 0 && badgeDrawable != null) {
+                if (this.inboxCount == 0) {
                     BadgeUtils.detachBadgeDrawable(badgeDrawable, option3BottomAppBar);
                     badgeDrawable = null;
                 } else {
