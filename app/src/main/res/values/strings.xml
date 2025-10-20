@@ -624,6 +624,8 @@
     <string name="settings_navigation_drawer_enable_hide_karma_title">Hide Account Karma</string>
     <string name="settings_secure_mode_title">Secure Mode</string>
     <string name="settings_secure_mode_summary">Screenshot and video recording are not allowed. No preview in recent app screen.</string>
+    <string name="incognito_keyboard_title">Anonymous Keyboard</string>
+    <string name="incognito_keyboard_summary">Requests the keyboard to avoid learning or storing what’s typed.</string>
     <string name="settings_credits_lock_screen_animation_title">Lock Screen Animation</string>
     <string name="settings_app_lock_title">App Lock</string>
     <string name="settings_app_lock_summary">Require authentication before using the app</string>

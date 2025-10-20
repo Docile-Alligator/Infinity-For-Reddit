@@ -35,6 +35,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCreateMultiRedditBinding;
 import ml.docilealligator.infinityforreddit.multireddit.CreateMultiReddit;
 import ml.docilealligator.infinityforreddit.multireddit.MultiRedditJSONModel;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
@@ -50,6 +51,9 @@ public class CreateMultiRedditActivity extends BaseActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    @Named("security")
+    SharedPreferences mSecuritySharedPreferences;
     @Inject
     @Named("current_account")
     SharedPreferences mCurrentAccountSharedPreferences;
@@ -114,6 +118,9 @@ public class CreateMultiRedditActivity extends BaseActivity {
                 binding.multiRedditNameEditTextCreateMultiRedditActivity.setImeOptions(binding.multiRedditNameEditTextCreateMultiRedditActivity.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
                 binding.descriptionEditTextCreateMultiRedditActivity.setImeOptions(binding.descriptionEditTextCreateMultiRedditActivity.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
             }
+        }else if(mSecuritySharedPreferences.getBoolean(SharedPreferencesUtils.INCOGNITO_KEYBOARD, false)&& Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            binding.multiRedditNameEditTextCreateMultiRedditActivity.setImeOptions(binding.multiRedditNameEditTextCreateMultiRedditActivity.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
+            binding.descriptionEditTextCreateMultiRedditActivity.setImeOptions(binding.descriptionEditTextCreateMultiRedditActivity.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
         }
 
         if (savedInstanceState != null) {

@@ -13,6 +13,12 @@
 
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
+        app:key="incognito_keyboard"
+        app:title="@string/incognito_keyboard_title"
+        app:summary="@string/incognito_keyboard_summary" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
+        app:defaultValue="false"
         app:key="app_lock"
         app:icon="@drawable/ic_lock_day_night_24dp"
         app:title="@string/settings_app_lock_title"

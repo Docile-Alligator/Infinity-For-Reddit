@@ -25,6 +25,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceFragmentCompat;
 import ml.docilealligator.infinityforreddit.events.ChangeAppLockEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeRequireAuthToAccountSectionEvent;
+import ml.docilealligator.infinityforreddit.events.ToggleIncognitoKeyboardEvent;
 import ml.docilealligator.infinityforreddit.events.ToggleSecureModeEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
@@ -50,6 +51,7 @@ public class SecurityPreferenceFragment extends CustomFontPreferenceFragmentComp
 
         SwitchPreference requireAuthToAccountSectionSwitch = findPreference(SharedPreferencesUtils.REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER);
         SwitchPreference secureModeSwitch = findPreference(SharedPreferencesUtils.SECURE_MODE);
+        SwitchPreference incognitoKeyboardSwitch = findPreference(SharedPreferencesUtils.INCOGNITO_KEYBOARD);
         SwitchPreference appLockSwitch = findPreference(SharedPreferencesUtils.APP_LOCK);
         ListPreference appLockTimeoutListPreference = findPreference(SharedPreferencesUtils.APP_LOCK_TIMEOUT);
 
@@ -63,6 +65,13 @@ public class SecurityPreferenceFragment extends CustomFontPreferenceFragmentComp
         if (secureModeSwitch != null) {
             secureModeSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ToggleSecureModeEvent((Boolean) newValue));
+                return true;
+            });
+        }
+
+        if (incognitoKeyboardSwitch != null) {
+            incognitoKeyboardSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                EventBus.getDefault().post(new ToggleIncognitoKeyboardEvent((Boolean) newValue));
                 return true;
             });
         }

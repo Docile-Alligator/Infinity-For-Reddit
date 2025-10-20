@@ -102,6 +102,9 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("security")
+    SharedPreferences mSecuritySharedPreferences;
+    @Inject
     @Named("current_account")
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
@@ -235,7 +238,8 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
             binding.tabLayoutSubscribedThingListingActivity.setVisibility(View.GONE);
         }
 
-        if (accountName.equals(Account.ANONYMOUS_ACCOUNT) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if ((mSecuritySharedPreferences.getBoolean(SharedPreferencesUtils.INCOGNITO_KEYBOARD, false) ||
+                accountName.equals(Account.ANONYMOUS_ACCOUNT)) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             binding.searchEditTextSubscribedThingListingActivity.setImeOptions(binding.searchEditTextSubscribedThingListingActivity.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
         }
 
