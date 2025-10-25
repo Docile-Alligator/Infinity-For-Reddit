@@ -425,6 +425,7 @@ public class SharedPreferencesUtils {
     public static final String SECURITY_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.security";
     public static final String REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER = "require_auth_to_account_section";
     public static final String SECURE_MODE = "secure_mode";
+    public static final String INCOGNITO_KEYBOARD = "incognito_keyboard";
     public static final String APP_LOCK = "app_lock";
     public static final String APP_LOCK_TIMEOUT = "app_lock_timeout";
     public static final String LAST_FOREGROUND_TIME = "last_foreground_time";

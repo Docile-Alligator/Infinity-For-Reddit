@@ -113,6 +113,9 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("security")
+    SharedPreferences mSecuritySharedPreferences;
+    @Inject
     @Named("current_account")
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
@@ -284,7 +287,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         binding.fabViewPostDetailActivity.setOnLongClickListener(view -> scrollToPreviousParentComment());
 
-        if (accountName.equals(Account.ANONYMOUS_ACCOUNT) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if ((mSecuritySharedPreferences.getBoolean(SharedPreferencesUtils.INCOGNITO_KEYBOARD, false) ||
+                accountName.equals(Account.ANONYMOUS_ACCOUNT)) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             binding.searchTextInputEditTextViewPostDetailActivity.setImeOptions(binding.searchTextInputEditTextViewPostDetailActivity.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
         }
 
