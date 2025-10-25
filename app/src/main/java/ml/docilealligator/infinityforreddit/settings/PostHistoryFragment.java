@@ -168,6 +168,7 @@ public class PostHistoryFragment extends Fragment {
         binding.markPostsAsReadAfterVotingTextViewPostHistoryFragment.setTextColor(primaryTextColor);
         binding.markPostsAsReadOnScrollTextViewPostHistoryFragment.setTextColor(primaryTextColor);
         binding.hideReadPostsAutomaticallyTextViewPostHistoryFragment.setTextColor(primaryTextColor);
+        binding.hideReadPostsAutomaticallySummaryTextViewPostHistoryFragment.setTextColor(activity.customThemeWrapper.getSecondaryTextColor());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             binding.readPostsLimitTextInputLayoutPostHistoryFragment.setCursorColor(ColorStateList.valueOf(primaryTextColor));

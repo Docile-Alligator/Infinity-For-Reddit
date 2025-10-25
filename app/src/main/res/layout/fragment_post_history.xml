@@ -182,25 +182,41 @@
             android:id="@+id/hide_read_posts_automatically_linear_layout_post_history_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
             android:paddingStart="72dp"
             android:paddingEnd="16dp"
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackground">
 
-            <TextView
-                android:id="@+id/hide_read_posts_automatically_text_view_post_history_fragment"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginEnd="16dp"
-                android:layout_gravity="center_vertical"
-                android:text="@string/settings_hide_read_posts_automatically_title"
-                android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/font_16"
-                android:fontFamily="?attr/font_family" />
+                android:orientation="vertical"
+                android:paddingStart="0dp"
+                android:paddingEnd="16dp">
+
+                <TextView
+                    android:id="@+id/hide_read_posts_automatically_text_view_post_history_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_hide_read_posts_automatically_title"
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="?attr/font_16"
+                    android:fontFamily="?attr/font_family" />
+
+                <TextView
+                    android:id="@+id/hide_read_posts_automatically_summary_text_view_post_history_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_hide_read_posts_automatically_summary"
+                    android:textColor="?attr/secondaryTextColor"
+                    android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family" />
+
+            </LinearLayout>
 
             <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                 android:id="@+id/hide_read_posts_automatically_switch_post_history_fragment"
