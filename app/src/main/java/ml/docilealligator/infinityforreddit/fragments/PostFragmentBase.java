@@ -559,8 +559,8 @@ public abstract class PostFragmentBase extends Fragment {
                             loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);
                         });
             } else {
-                LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditOrUserName,
-                        mRetrofit, iconImageUrl -> {
+                LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, activity.accessToken,
+                        subredditOrUserName, mOauthRetrofit, mRetrofit, iconImageUrl -> {
                             subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
                             loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);
                         });

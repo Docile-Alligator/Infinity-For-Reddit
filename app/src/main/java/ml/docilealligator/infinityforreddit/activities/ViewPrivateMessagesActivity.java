@@ -249,14 +249,14 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
             mProvideUserAvatarCallbacks.add(provideUserAvatarCallback);
             if (!isLoadingUserAvatar) {
                 LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase,
-                        username, mRetrofit, iconImageUrl -> {
-                    isLoadingUserAvatar = false;
-                    mUserAvatar = iconImageUrl == null ? "" : iconImageUrl;
-                    for (ProvideUserAvatarCallback provideUserAvatarCallbackInArrayList : mProvideUserAvatarCallbacks) {
-                        provideUserAvatarCallbackInArrayList.fetchAvatarSuccess(iconImageUrl);
-                    }
-                    mProvideUserAvatarCallbacks.clear();
-                });
+                        accessToken, username, mOauthRetrofit, mRetrofit, iconImageUrl -> {
+                            isLoadingUserAvatar = false;
+                            mUserAvatar = iconImageUrl == null ? "" : iconImageUrl;
+                            for (ProvideUserAvatarCallback provideUserAvatarCallbackInArrayList : mProvideUserAvatarCallbacks) {
+                                provideUserAvatarCallbackInArrayList.fetchAvatarSuccess(iconImageUrl);
+                            }
+                            mProvideUserAvatarCallbacks.clear();
+                        });
             }
         } else {
             provideUserAvatarCallback.fetchAvatarSuccess(mUserAvatar);
