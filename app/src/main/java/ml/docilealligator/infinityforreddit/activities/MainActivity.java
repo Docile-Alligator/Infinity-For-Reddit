@@ -607,16 +607,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 startActivity(intent);
                 break;
             }
-            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_GO_TO_TOP: {
+            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_GO_TO_TOP:
+            default: {
                 if (sectionsPagerAdapter != null) {
                     sectionsPagerAdapter.goBackToTop();
                 }
                 break;
             }
-            default:
-                PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
-                postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
-                break;
         }
     }
 
@@ -657,9 +654,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_SAVED:
                 return R.drawable.ic_bookmarks_day_night_24dp;
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_GO_TO_TOP:
-                return R.drawable.ic_keyboard_double_arrow_up_day_night_24dp;
             default:
-                return R.drawable.ic_account_circle_day_night_24dp;
+                return R.drawable.ic_keyboard_double_arrow_up_day_night_24dp;
         }
     }
 
@@ -1168,6 +1164,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 view.setContentDescription(getString(R.string.content_description_saved));
                 break;
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_GO_TO_TOP :
+            default:
                 view.setContentDescription(getString(R.string.content_description_go_to_top));
                 break;
         }

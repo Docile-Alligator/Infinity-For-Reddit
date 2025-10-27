@@ -602,16 +602,13 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                 startActivity(intent);
                 break;
             }
-            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_TOP: {
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_TOP:
+            default: {
                 if (mFragment instanceof PostFragment) {
                     ((PostFragment) mFragment).goBackToTop();
                 }
                 break;
             }
-            default:
-                PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
-                postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
-                break;
         }
     }
 
@@ -654,9 +651,8 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SAVED:
                 return R.drawable.ic_bookmarks_day_night_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_TOP:
-                return R.drawable.ic_keyboard_double_arrow_up_day_night_24dp;
             default:
-                return R.drawable.ic_account_circle_day_night_24dp;
+                return R.drawable.ic_keyboard_double_arrow_up_day_night_24dp;
         }
     }
 

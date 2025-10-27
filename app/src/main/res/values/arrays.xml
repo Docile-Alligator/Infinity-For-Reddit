@@ -338,7 +338,7 @@
         <item>10</item>
         <item>11</item>
         <item>13</item>
-        <item>19</item>
+        <item>18</item>
     </string-array>
 
     <string-array name="settings_other_activities_bottom_app_bar_options">
@@ -391,7 +391,7 @@
         <item>11</item>
         <item>12</item>
         <item>14</item>
-        <item>20</item>
+        <item>19</item>
     </string-array>
 
     <string-array name="settings_bottom_app_bar_fab_options">
