@@ -36,6 +36,7 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
@@ -200,6 +201,7 @@ dependencies {
 
     implementation 'com.github.alexzhirkevich:custom-qr-generator:2.0.0-alpha01'
 
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 
 /**** Builds and flavors ****/
     // debugImplementation because LeakCanary should only run in debug builds.
