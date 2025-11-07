@@ -385,6 +385,8 @@
     <string name="settings_save_front_page_scrolled_position_title">Save Scrolled Position in HOME</string>
     <string name="settings_save_front_page_scrolled_position_summary">Browse new posts after refreshing in HOME (Front Page, sort type: Best)</string>
     <string name="settings_link_handler_title">Link Handler</string>
+    <string name="settings_rewrite_twitter_links_title">Rewrite Twitter/X Links</string>
+    <string name="settings_rewrite_twitter_links_summary">Rewrite x.com/twitter.com links to nitter.net</string>
     <string name="settigns_video_title">Video</string>
     <string name="settings_video_autoplay_title">Video Autoplay</string>
     <string name="settings_mute_autoplaying_videos_title">Mute Autoplaying Videos</string>
