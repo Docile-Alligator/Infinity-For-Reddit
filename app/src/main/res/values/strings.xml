@@ -89,7 +89,7 @@
     <string name="action_share_link">Share Link</string>
     <string name="action_copy_link">Copy Link</string>
     <string name="action_open_external_browser">Open in browser</string>
-    <string name="action_always_open_domain_external">Always open domain externally</string>
+    <string name="action_always_open_domain_external">Always open domain in browser</string>
     <string name="action_add_to_post_filter">Add to Post Filter</string>
     <string name="action_delete_logs">Delete Logs</string>
     <string name="action_create_github_issue">Create GitHub Issue</string>
