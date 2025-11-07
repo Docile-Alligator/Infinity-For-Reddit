@@ -625,6 +625,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 return R.drawable.ic_multi_reddit_day_night_24dp;
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_INBOX:
                 return R.drawable.ic_inbox_day_night_24dp;
+            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_PROFILE:
+                return R.drawable.ic_account_circle_day_night_24dp;
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_SUBMIT_POSTS:
                 return R.drawable.ic_add_day_night_24dp;
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_REFRESH:
