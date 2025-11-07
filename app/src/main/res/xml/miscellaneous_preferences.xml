@@ -22,6 +22,11 @@
         app:title="@string/settings_rewrite_twitter_links_title"
         app:summary="@string/settings_rewrite_twitter_links_summary" />
 
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreference
+        app:key="manage_external_browser_domains"
+        app:title="@string/settings_manage_external_browser_domains_title"
+        app:summary="@string/settings_manage_external_browser_domains_summary" />
+
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="0"
         app:entries="@array/main_page_back_button_action"

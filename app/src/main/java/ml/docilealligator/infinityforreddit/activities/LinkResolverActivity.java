@@ -419,6 +419,12 @@ public class LinkResolverActivity extends AppCompatActivity {
             return;
         }
 
+        // Check if domain should always open in external browser
+        if (authority != null && ExternalBrowserDomainUtils.isExternalBrowserDomain(mSharedPreferences, authority)) {
+            openInBrowser(uri, pm, true);
+            return;
+        }
+
         int linkHandler = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.LINK_HANDLER, "0"));
         if (linkHandler == 0) {
             openInBrowser(uri, pm, true);

@@ -23,4 +23,10 @@
         android:orderInCategory="4"
         android:title="@string/action_open_external_browser"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_always_open_domain_external_web_view_activity"
+        android:orderInCategory="5"
+        android:title="@string/action_always_open_domain_external"
+        app:showAsAction="never" />
 </menu>
