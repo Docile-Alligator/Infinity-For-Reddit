@@ -9,6 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import ml.docilealligator.infinityforreddit.R;
@@ -26,6 +30,21 @@ public class FontPreviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_font_preview, container, false);
+
+        if (activity.isImmersiveInterface()) {
+            ViewCompat.setOnApplyWindowInsetsListener(rootView, new OnApplyWindowInsetsListener() {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                    Insets allInsets = insets.getInsets(
+                            WindowInsetsCompat.Type.systemBars()
+                                    | WindowInsetsCompat.Type.displayCutout()
+                    );
+                    rootView.setPadding(allInsets.left, 0, allInsets.right, allInsets.bottom);
+                    return WindowInsetsCompat.CONSUMED;
+                }
+            });
+        }
 
         rootView.setBackgroundColor(activity.customThemeWrapper.getBackgroundColor());
         LinearLayout linearLayout = rootView.findViewById(R.id.linear_layout_font_preview_fragment);
