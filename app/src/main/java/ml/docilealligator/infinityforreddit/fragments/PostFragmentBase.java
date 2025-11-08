@@ -29,10 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.media3.common.util.UnstableApi;
 import androidx.paging.ItemSnapshotList;
@@ -324,23 +321,6 @@ public abstract class PostFragmentBase extends Fragment {
             return false;
         });
 
-        if (activity.isImmersiveInterface()) {
-            ViewCompat.setOnApplyWindowInsetsListener(activity.getWindow().getDecorView(), new OnApplyWindowInsetsListener() {
-                @NonNull
-                @Override
-                public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
-                    getPostRecyclerView().setPadding(
-                            0, 0, 0, allInsets.bottom
-                    );
-                    return insets;
-                }
-            });
-        }
-
         SharedPreferencesLiveDataKt.stringLiveData(mSharedPreferences, SharedPreferencesUtils.LONG_PRESS_POST_NON_MEDIA_AREA, SharedPreferencesUtils.LONG_PRESS_POST_VALUE_SHOW_POST_OPTIONS).observe(getViewLifecycleOwner(), s -> {
             if (getPostAdapter() != null) {
                 getPostAdapter().setLongPressPostNonMediaAreaAction(s);
@@ -366,6 +346,12 @@ public abstract class PostFragmentBase extends Fragment {
         });
 
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ViewCompat.requestApplyInsets(view);
     }
 
     @Override

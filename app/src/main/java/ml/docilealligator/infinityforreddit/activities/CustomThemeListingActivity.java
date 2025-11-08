@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.ViewGroupCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -118,14 +119,12 @@ public class CustomThemeListingActivity extends BaseActivity implements
                 addOnOffsetChangedListener(binding.appbarLayoutCustomizeThemeListingActivity);
             }
 
+            ViewGroupCompat.installCompatInsetsDispatch(binding.getRoot());
             ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
+                    Insets allInsets = Utils.getInsets(insets, false);
 
                     setMargins(binding.toolbarCustomizeThemeListingActivity,
                             allInsets.left,

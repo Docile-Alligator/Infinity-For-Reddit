@@ -34,6 +34,7 @@ import ml.docilealligator.infinityforreddit.databinding.ActivitySearchSubreddits
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.SubredditListingFragment;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class SearchSubredditsResultActivity extends BaseActivity implements ActivityToolbarInterface {
 
@@ -89,10 +90,7 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
                     @NonNull
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = insets.getInsets(
-                                WindowInsetsCompat.Type.systemBars()
-                                        | WindowInsetsCompat.Type.displayCutout()
-                        );
+                        Insets allInsets = Utils.getInsets(insets, false);
 
                         setMargins(binding.toolbarSearchSubredditsResultActivity,
                                 allInsets.left,
@@ -102,7 +100,7 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
 
                         binding.frameLayoutSearchSubredditsResultActivity.setPadding(allInsets.left, 0, allInsets.right, allInsets.bottom);
 
-                        return WindowInsetsCompat.CONSUMED;
+                        return insets;
                     }
                 });
                 //adjustToolbar(binding.toolbarSearchSubredditsResultActivity);

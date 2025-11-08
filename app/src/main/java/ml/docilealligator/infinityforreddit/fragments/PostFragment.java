@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +19,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.LoadState;
 import androidx.recyclerview.widget.RecyclerView;
@@ -183,6 +188,21 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
         setHasOptionsMenu(true);
 
         applyTheme();
+
+        if (activity.isImmersiveInterface()) {
+            ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                    Insets allInsets = Utils.getInsets(insets, false);
+                    getPostRecyclerView().setPadding(
+                            0, 0, 0, allInsets.bottom
+                    );
+                    Log.i("asfsaf", "s " + postFragmentId);
+                    return WindowInsetsCompat.CONSUMED;
+                }
+            });
+        }
 
         binding.recyclerViewPostFragment.addOnWindowFocusChangedListener(this::onWindowFocusChanged);
 

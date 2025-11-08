@@ -16,6 +16,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.LoadState;
 import androidx.recyclerview.widget.RecyclerView;
@@ -137,6 +141,20 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
         setHasOptionsMenu(true);
 
         applyTheme();
+
+        if (activity.isImmersiveInterface()) {
+            ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                    Insets allInsets = Utils.getInsets(insets, false);
+                    getPostRecyclerView().setPadding(
+                            0, 0, 0, allInsets.bottom
+                    );
+                    return WindowInsetsCompat.CONSUMED;
+                }
+            });
+        }
 
         binding.recyclerViewHistoryPostFragment.addOnWindowFocusChangedListener(this::onWindowFocusChanged);
 

@@ -138,10 +138,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                     @NonNull
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = insets.getInsets(
-                                WindowInsetsCompat.Type.systemBars()
-                                        | WindowInsetsCompat.Type.displayCutout()
-                        );
+                        Insets allInsets = Utils.getInsets(insets, false);
 
                         setMargins(binding.toolbarFilteredPostsActivity,
                                 allInsets.left,
@@ -162,7 +159,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                                 (int) Utils.convertDpToPixel(16, FilteredPostsActivity.this) + allInsets.right,
                                 (int) Utils.convertDpToPixel(16, FilteredPostsActivity.this) + allInsets.bottom);
 
-                        return WindowInsetsCompat.CONSUMED;
+                        return insets;
                     }
                 });
 

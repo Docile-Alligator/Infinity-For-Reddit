@@ -20,6 +20,7 @@ import androidx.preference.PreferenceScreen;
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapperReceiver;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public abstract class CustomFontPreferenceFragmentCompat extends PreferenceFragmentCompat implements PreferenceFragmentCompat.OnPreferenceDisplayDialogCallback {
     private static final String DIALOG_FRAGMENT_TAG =
@@ -61,10 +62,7 @@ public abstract class CustomFontPreferenceFragmentCompat extends PreferenceFragm
                     @NonNull
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = insets.getInsets(
-                                WindowInsetsCompat.Type.systemBars()
-                                        | WindowInsetsCompat.Type.displayCutout()
-                        );
+                        Insets allInsets = Utils.getInsets(insets, false);
                         recyclerView.setPadding(allInsets.left, 0, allInsets.right, allInsets.bottom);
                         return WindowInsetsCompat.CONSUMED;
                     }

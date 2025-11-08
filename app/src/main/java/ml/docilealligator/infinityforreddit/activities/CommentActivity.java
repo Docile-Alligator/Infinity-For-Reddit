@@ -183,11 +183,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     @NonNull
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = insets.getInsets(
-                                WindowInsetsCompat.Type.systemBars()
-                                        | WindowInsetsCompat.Type.displayCutout()
-                                        | WindowInsetsCompat.Type.ime()
-                        );
+                        Insets allInsets = Utils.getInsets(insets, true);
 
                         setMargins(binding.commentToolbar,
                                 allInsets.left,

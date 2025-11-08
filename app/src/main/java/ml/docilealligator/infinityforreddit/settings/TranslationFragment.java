@@ -20,6 +20,7 @@ import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.adapters.TranslationFragmentRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.FragmentTranslationBinding;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class TranslationFragment extends Fragment {
 
@@ -49,10 +50,7 @@ public class TranslationFragment extends Fragment {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
+                    Insets allInsets = Utils.getInsets(insets, false);
                     binding.getRoot().setPadding(allInsets.left, 0, allInsets.right, allInsets.bottom);
                     return WindowInsetsCompat.CONSUMED;
                 }

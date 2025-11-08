@@ -161,7 +161,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
 
         boolean userDefinedChangeStatusBarIconColorInImmersiveInterface =
                 customThemeWrapper.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface();
-        if (immersiveInterface && isImmersiveInterfaceApplicable) {
+        if (isImmersiveInterface()) {
             changeStatusBarIconColor = userDefinedChangeStatusBarIconColorInImmersiveInterface;
         } else {
             changeStatusBarIconColor = false;
@@ -217,7 +217,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
                 }
             }
             decorView.setSystemUiVisibility(systemVisibilityToolbarExpanded);
-            if (!(immersiveInterface && isImmersiveInterfaceApplicable)) {
+            if (!isImmersiveInterface()) {
                 window.setNavigationBarColor(customThemeWrapper.getNavBarColor());
                 if (!hasDrawerLayout) {
                     window.setStatusBarColor(customThemeWrapper.getColorPrimaryDark());

@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class FontPreviewFragment extends Fragment {
 
@@ -36,10 +37,7 @@ public class FontPreviewFragment extends Fragment {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
+                    Insets allInsets = Utils.getInsets(insets, false);
                     rootView.setPadding(allInsets.left, 0, allInsets.right, allInsets.bottom);
                     return WindowInsetsCompat.CONSUMED;
                 }

@@ -37,6 +37,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.splashscreen.SplashScreen;
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.ViewGroupCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -260,14 +261,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
 
+                ViewGroupCompat.installCompatInsetsDispatch(binding.getRoot());
                 ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                     @NonNull
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = insets.getInsets(
-                                WindowInsetsCompat.Type.systemBars()
-                                        | WindowInsetsCompat.Type.displayCutout()
-                        );
+                        Insets allInsets = Utils.getInsets(insets, false);
 
                         binding.navigationViewMainActivity.setPadding(allInsets.left, 0, 0, 0);
 
@@ -331,8 +330,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                                 BaseActivity.IGNORE_MARGIN);
 
                         binding.navDrawerRecyclerViewMainActivity.setPadding(0, 0, 0, allInsets.bottom);
-
-                        return WindowInsetsCompat.CONSUMED;
+                        return insets;
                     }
                 });
 

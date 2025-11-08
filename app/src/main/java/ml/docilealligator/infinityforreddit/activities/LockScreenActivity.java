@@ -26,6 +26,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.ActivityLockScreenBinding;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class LockScreenActivity extends BaseActivity {
 
@@ -57,10 +58,7 @@ public class LockScreenActivity extends BaseActivity {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
+                    Insets allInsets = Utils.getInsets(insets, false);
 
                     binding.getRoot().setPadding(
                             allInsets.left,

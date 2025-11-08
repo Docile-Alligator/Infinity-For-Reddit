@@ -105,18 +105,15 @@ public class SidebarFragment extends Fragment {
         EventBus.getDefault().register(this);
 
         if (activity.isImmersiveInterface()) {
-            ViewCompat.setOnApplyWindowInsetsListener(activity.getWindow().getDecorView(), new OnApplyWindowInsetsListener() {
+            ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
+                    Insets allInsets = Utils.getInsets(insets, false);
                     binding.markdownRecyclerViewSidebarFragment.setPadding(
                             0, 0, 0, allInsets.bottom
                     );
-                    return insets;
+                    return WindowInsetsCompat.CONSUMED;
                 }
             });
         }

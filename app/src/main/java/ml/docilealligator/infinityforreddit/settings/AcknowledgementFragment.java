@@ -21,6 +21,7 @@ import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.adapters.AcknowledgementRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.FragmentAcknowledgementBinding;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -126,10 +127,7 @@ public class AcknowledgementFragment extends Fragment {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
+                    Insets allInsets = Utils.getInsets(insets, false);
                     binding.getRoot().setPadding(allInsets.left, 0, allInsets.right, allInsets.bottom);
                     return WindowInsetsCompat.CONSUMED;
                 }

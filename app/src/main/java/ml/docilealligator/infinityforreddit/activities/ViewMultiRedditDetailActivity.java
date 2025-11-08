@@ -191,10 +191,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                     @NonNull
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = insets.getInsets(
-                                WindowInsetsCompat.Type.systemBars()
-                                        | WindowInsetsCompat.Type.displayCutout()
-                        );
+                        Insets allInsets = Utils.getInsets(insets, false);
 
                         if (navigationWrapper.navigationRailView == null) {
                             if (navigationWrapper.bottomAppBar.getVisibility() != View.VISIBLE) {
@@ -249,7 +246,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                                 allInsets.right,
                                 BaseActivity.IGNORE_MARGIN);
 
-                        return WindowInsetsCompat.CONSUMED;
+                        return insets;
                     }
                 });
 

@@ -26,6 +26,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.ActivitySendPrivateMessageBinding;
 import ml.docilealligator.infinityforreddit.message.ComposeMessage;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 public class SendPrivateMessageActivity extends BaseActivity {
@@ -70,11 +71,7 @@ public class SendPrivateMessageActivity extends BaseActivity {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                                    | WindowInsetsCompat.Type.ime()
-                    );
+                    Insets allInsets = Utils.getInsets(insets, true);
 
                     setMargins(binding.toolbarSendPrivateMessageActivity,
                             allInsets.left,

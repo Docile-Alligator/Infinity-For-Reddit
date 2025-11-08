@@ -279,21 +279,18 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         }
 
         if (activity.isImmersiveInterface()) {
-            ViewCompat.setOnApplyWindowInsetsListener(activity.getWindow().getDecorView(), new OnApplyWindowInsetsListener() {
+            ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
+                    Insets allInsets = Utils.getInsets(insets, false);
                     binding.postDetailRecyclerViewViewPostDetailFragment.setPadding(
                             0, 0, 0, (int) Utils.convertDpToPixel(144, activity) + allInsets.bottom
                     );
                     if (mCommentsRecyclerView != null) {
                         mCommentsRecyclerView.setPadding(0, 0, 0, (int) Utils.convertDpToPixel(144, activity) + allInsets.bottom);
                     }
-                    return insets;
+                    return WindowInsetsCompat.CONSUMED;
                 }
             });
             /*binding.postDetailRecyclerViewViewPostDetailFragment.setPadding(0, 0, 0, activity.getNavBarHeight() + binding.postDetailRecyclerViewViewPostDetailFragment.getPaddingBottom());

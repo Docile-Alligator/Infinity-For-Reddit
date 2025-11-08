@@ -94,10 +94,7 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets windowInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
+                    Insets windowInsets = Utils.getInsets(insets, false);
                     Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
 
                     setMargins(binding.toolbarCustomizeCommentFilterActivity,

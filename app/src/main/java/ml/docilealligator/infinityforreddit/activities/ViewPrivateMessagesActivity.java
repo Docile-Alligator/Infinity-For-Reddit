@@ -42,6 +42,7 @@ import ml.docilealligator.infinityforreddit.events.RepliedToPrivateMessageEvent;
 import ml.docilealligator.infinityforreddit.message.Message;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
 import ml.docilealligator.infinityforreddit.message.ReplyMessage;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 public class ViewPrivateMessagesActivity extends BaseActivity implements ActivityToolbarInterface {
@@ -108,11 +109,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                                    | WindowInsetsCompat.Type.ime()
-                    );
+                    Insets allInsets = Utils.getInsets(insets, true);
 
                     setMargins(binding.toolbarViewPrivateMessagesActivity,
                             allInsets.left,
@@ -126,7 +123,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
                             allInsets.right,
                             allInsets.bottom);
 
-                    return WindowInsetsCompat.CONSUMED;
+                    return insets;
                 }
             });
         }
