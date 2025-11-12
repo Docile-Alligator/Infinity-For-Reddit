@@ -119,6 +119,35 @@ public class LinkResolverActivity extends AppCompatActivity {
         if (uri == null) {
             Toast.makeText(this, R.string.no_link_available, Toast.LENGTH_SHORT).show();
         } else {
+            // Rewrite Twitter/X links to nitter.net if enabled
+            boolean rewriteTwitterLinks = mSharedPreferences.getBoolean(
+                    SharedPreferencesUtils.REWRITE_TWITTER_LINKS, false);
+            if (rewriteTwitterLinks) {
+                String authority = uri.getAuthority();
+                if (authority != null && (authority.equals("x.com") || authority.equals("www.x.com") ||
+                        authority.equals("twitter.com") || authority.equals("www.twitter.com"))) {
+                    // Build nitter.net URL with the same path and query
+                    String path = uri.getPath();
+                    String query = uri.getQuery();
+                    String fragment = uri.getFragment();
+
+                    StringBuilder nitterUrl = new StringBuilder("https://nitter.net");
+                    if (path != null && !path.isEmpty()) {
+                        nitterUrl.append(path);
+                    }
+                    if (query != null && !query.isEmpty()) {
+                        nitterUrl.append("?").append(query);
+                    }
+                    if (fragment != null && !fragment.isEmpty()) {
+                        nitterUrl.append("#").append(fragment);
+                    }
+
+                    // Recursively handle the rewritten URL
+                    handleUri(Uri.parse(nitterUrl.toString()));
+                    return;
+                }
+            }
+
             String path = uri.getPath();
             if (path == null) {
                 deepLinkError(uri);
