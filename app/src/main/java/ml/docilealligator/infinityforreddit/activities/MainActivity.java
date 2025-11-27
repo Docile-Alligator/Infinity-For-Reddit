@@ -261,6 +261,16 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
 
+                ViewCompat.setOnApplyWindowInsetsListener(window.getDecorView(), new OnApplyWindowInsetsListener() {
+                    @Override
+                    public @NonNull WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                        Insets inset = insets.getInsets(WindowInsetsCompat.Type.statusBars());
+                        v.setBackgroundColor(customThemeWrapper.getColorPrimary());
+                        v.setPadding(0, inset.top, 0, 0);
+                        return insets;
+                    }
+                });
+
                 ViewGroupCompat.installCompatInsetsDispatch(binding.getRoot());
                 ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                     @NonNull
