@@ -38,7 +38,9 @@
         tools:replace="android:label">
         <activity
             android:name=".activities.CopyMultiRedditActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.Slidable" />
         <activity
             android:name=".activities.LoginChromeCustomTabActivity"
             android:exported="true"
