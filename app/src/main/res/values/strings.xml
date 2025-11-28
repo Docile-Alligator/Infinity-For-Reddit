@@ -387,6 +387,7 @@
     <string name="settings_link_handler_title">Link Handler</string>
     <string name="settigns_video_title">Video</string>
     <string name="settings_video_autoplay_title">Video Autoplay</string>
+    <string name="settings_simultaneous_autoplay_limit_title">Simultaneous Autoplay Limit</string>
     <string name="settings_mute_autoplaying_videos_title">Mute Autoplaying Videos</string>
     <string name="settings_autoplay_nsfw_videos_title">Autoplay Sensitive Videos</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">Autoplay Videos Visible Area Offset (Portrait)</string>
@@ -1246,6 +1247,7 @@
     <string name="always_on">Always On</string>
     <string name="only_on_wifi">Only on Wifi</string>
     <string name="never">Never</string>
+    <string name="unlimited">Unlimited</string>
     <string name="normal">Normal</string>
     <string name="extra_small">Extra Small</string>
     <string name="extra_large">Extra Large</string>
