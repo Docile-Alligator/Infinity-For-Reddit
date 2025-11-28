@@ -363,28 +363,6 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
         });
     }
 
-    /*public int getNavBarHeight() {
-        if (isImmersiveInterfaceApplicable && immersiveInterface && getDefaultSharedPreferences().getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_IGNORE_NAV_BAR_KEY, false)) {
-            return 0;
-        }
-
-        Resources resources = getResources();
-        int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-        if (navBarResourceId > 0) {
-            return resources.getDimensionPixelSize(navBarResourceId);
-        }
-        return 0;
-    }*/
-
-    /*public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }*/
-
     public static <T extends View> void setMargins(T view, int left, int top, int right, int bottom) {
         ViewGroup.LayoutParams lp = view.getLayoutParams();
         if (lp instanceof ViewGroup.MarginLayoutParams) {

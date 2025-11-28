@@ -308,8 +308,6 @@ Toque para tentar de novo."</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Iniciar reprodução automática dos vídeos ao %1$d%% deles estar visível"</string>
     <string name="settings_immersive_interface_title">"Interface Imersiva"</string>
     <string name="settings_immersive_interface_summary">"Não se aplica a toda página"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_title">"Ignorar barra de navegação na interface imersiva"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_summary">"Evitar que a barra de navegação inferior tenha preenchimento extra"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Customizar abas da página inicial"</string>
     <string name="settings_enable_bottom_app_bar_title">"Ativar barra de navegação inferior"</string>
     <string name="settings_category_post_and_comment_title">"Postagem e comentário"</string>
