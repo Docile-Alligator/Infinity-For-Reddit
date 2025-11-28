@@ -311,8 +311,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Videoları %1$d%% göründüğünde otomatik oynatmaya başla"</string>
     <string name="settings_immersive_interface_title">"Sürükleyici Arayüz"</string>
     <string name="settings_immersive_interface_summary">"Tüm Sayfalara Uygulanamaz"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_title">"Sürükleyici Arayüzde Navigasyon Çubuğunu Yoksay"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_summary">"Alt Navigasyon Çubuğunun Ekstra Dolguya Sahip Olmasını Önle"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Ana Sayfadaki Sekmeleri Özelleştir"</string>
     <string name="settings_enable_bottom_app_bar_title">"Alt Navigasyonu Etkinleştir"</string>
     <string name="settings_category_post_and_comment_title">"Gönderi ve Yorum"</string>

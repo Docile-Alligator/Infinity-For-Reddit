@@ -314,8 +314,6 @@ Tippen für Neuversuch."</string>
 
     <!-- Fuzzy -->
     <string name="settings_immersive_interface_summary">"Funktioniert nicht auf allen Seiten"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_title">"Navigationsleiste in der immersiven Oberfläche ignorieren"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_summary">"Weniger Abstand für die untere Navigationsleiste"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Reiter auf der Hauptseite anpassen"</string>
     <string name="settings_enable_bottom_app_bar_title">"Untere Navigation aktivieren"</string>
     <string name="settings_category_post_and_comment_title">"Posten und Kommentieren"</string>

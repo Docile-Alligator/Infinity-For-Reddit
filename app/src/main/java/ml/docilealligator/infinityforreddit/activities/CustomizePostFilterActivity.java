@@ -94,7 +94,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
 
         applyCustomTheme();
 
-        if (isImmersiveInterface()) {
+        if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
             if (isChangeStatusBarIconColor()) {
                 addOnOffsetChangedListener(binding.appbarLayoutCustomizePostFilterActivity);
             }
@@ -103,10 +103,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets windowInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
+                    Insets windowInsets = Utils.getInsets(insets, false, isForcedImmersiveInterface());
                     Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
 
                     setMargins(binding.toolbarCustomizePostFilterActivity,

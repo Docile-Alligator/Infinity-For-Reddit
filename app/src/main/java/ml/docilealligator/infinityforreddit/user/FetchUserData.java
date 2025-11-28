@@ -3,12 +3,14 @@ package ml.docilealligator.infinityforreddit.user;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -25,52 +27,85 @@ import retrofit2.Retrofit;
 
 public class FetchUserData {
     public static void fetchUserData(Executor executor, Handler handler, Retrofit retrofit, String userName, FetchUserDataListener fetchUserDataListener) {
-        fetchUserData(executor, handler, null, retrofit, null, userName, fetchUserDataListener);
+        fetchUserData(executor, handler, null, null, retrofit, null, userName, fetchUserDataListener);
     }
 
-    public static void fetchUserData(Executor executor, Handler handler, RedditDataRoomDatabase redditDataRoomDatabase, Retrofit retrofit,
-                                     String accessToken, String userName, FetchUserDataListener fetchUserDataListener) {
-        RedditAPI api = retrofit.create(RedditAPI.class);
+    public static void fetchUserData(Executor executor, Handler handler, @Nullable RedditDataRoomDatabase redditDataRoomDatabase,
+                                     @Nullable Retrofit oauthRetrofit, @Nullable Retrofit retrofit, String accessToken,
+                                     String username, FetchUserDataListener fetchUserDataListener) {
+        executor.execute(() -> {
+            Call<String> userInfo;
+            boolean isOauth;
+            if (retrofit != null && (redditDataRoomDatabase == null || oauthRetrofit == null)) {
+                userInfo = retrofit.create(RedditAPI.class).getUserData(username);
+                isOauth = false;
+            } else if (oauthRetrofit != null) {
+                userInfo = oauthRetrofit.create(RedditAPI.class).getUserDataOauth(APIUtils.getOAuthHeader(accessToken), username);
+                isOauth = true;
+            } else {
+                // Shouldn't happen, please check why both retrofit are null
+                handler.post(fetchUserDataListener::onFetchUserDataFailed);
+                return;
+            }
 
-        Call<String> userInfo;
-        if (redditDataRoomDatabase == null) {
-            userInfo = api.getUserData(userName);
-        } else {
-            userInfo = api.getUserDataOauth(APIUtils.getOAuthHeader(accessToken), userName);
-        }
-
-        userInfo.enqueue(new Callback<>() {
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+            try {
+                Response<String> response = userInfo.execute();
                 if (response.isSuccessful()) {
-                    executor.execute(() -> {
-                        try {
-                            JSONObject jsonResponse = new JSONObject(response.body());
-                            UserData userData = parseUserDataBase(jsonResponse, true);
-                            if (redditDataRoomDatabase != null) {
-                                redditDataRoomDatabase.accountDao().updateAccountInfo(userData.getName(), userData.getIconUrl(), userData.getBanner(), userData.getTotalKarma(), userData.isMod());
-                            }
-                            if (jsonResponse.getJSONObject(JSONUtils.DATA_KEY).has(JSONUtils.INBOX_COUNT_KEY)) {
-                                int inboxCount = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getInt(JSONUtils.INBOX_COUNT_KEY);
-                                handler.post(() -> fetchUserDataListener.onFetchUserDataSuccess(userData, inboxCount));
-                            } else {
-                                handler.post(() -> fetchUserDataListener.onFetchUserDataSuccess(userData, -1));
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            handler.post(fetchUserDataListener::onFetchUserDataFailed);
-                        }
-                    });
+                    processFetchUserDataResponse(response, handler, redditDataRoomDatabase, fetchUserDataListener);
                 } else {
-                    fetchUserDataListener.onFetchUserDataFailed();
+                    if (oauthRetrofit == null || isOauth) {
+                        handler.post(fetchUserDataListener::onFetchUserDataFailed);
+                    } else {
+                        forceOauthFetchUserData(handler, redditDataRoomDatabase, oauthRetrofit, accessToken,
+                                username, fetchUserDataListener);
+                    }
+                }
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+                if (oauthRetrofit == null || isOauth) {
+                    handler.post(fetchUserDataListener::onFetchUserDataFailed);
+                } else {
+                    forceOauthFetchUserData(handler, redditDataRoomDatabase, oauthRetrofit, accessToken,
+                            username, fetchUserDataListener);
                 }
             }
-
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
-                fetchUserDataListener.onFetchUserDataFailed();
-            }
         });
+    }
+
+    @WorkerThread
+    private static void processFetchUserDataResponse(Response<String> response, Handler handler,
+                                                     @Nullable RedditDataRoomDatabase redditDataRoomDatabase,
+                                                     FetchUserDataListener fetchUserDataListener) throws JSONException {
+        JSONObject jsonResponse = new JSONObject(response.body());
+        UserData userData = parseUserDataBase(jsonResponse, true);
+        if (redditDataRoomDatabase != null) {
+            redditDataRoomDatabase.accountDao().updateAccountInfo(userData.getName(), userData.getIconUrl(), userData.getBanner(), userData.getTotalKarma(), userData.isMod());
+        }
+        if (jsonResponse.getJSONObject(JSONUtils.DATA_KEY).has(JSONUtils.INBOX_COUNT_KEY)) {
+            int inboxCount = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getInt(JSONUtils.INBOX_COUNT_KEY);
+            handler.post(() -> fetchUserDataListener.onFetchUserDataSuccess(userData, inboxCount));
+        } else {
+            handler.post(() -> fetchUserDataListener.onFetchUserDataSuccess(userData, -1));
+        }
+    }
+
+    @WorkerThread
+    private static void forceOauthFetchUserData(Handler handler, @Nullable RedditDataRoomDatabase redditDataRoomDatabase,
+                                                Retrofit oauthRetrofit, String accessToken, String username,
+                                                FetchUserDataListener fetchUserDataListener) {
+        try {
+            Response<String> response = oauthRetrofit.create(RedditAPI.class).getUserDataOauth(
+                    APIUtils.getOAuthHeader(accessToken), username
+            ).execute();
+            if (response.isSuccessful()) {
+                processFetchUserDataResponse(response, handler, redditDataRoomDatabase, fetchUserDataListener);
+            } else {
+                handler.post(fetchUserDataListener::onFetchUserDataFailed);
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            handler.post(fetchUserDataListener::onFetchUserDataFailed);
+        }
     }
 
     public static void fetchUserListingData(Executor executor, Handler handler, Retrofit retrofit, String query, String after, SortType.Type sortType, boolean nsfw,

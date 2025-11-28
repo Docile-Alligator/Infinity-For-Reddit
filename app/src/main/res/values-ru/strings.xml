@@ -321,8 +321,6 @@
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Начинать автовоспроизведение, когда станет доступно %1$d%% видео"</string>
     <string name="settings_immersive_interface_title">"Режим погружения"</string>
     <string name="settings_immersive_interface_summary">"Применимо не ко всем страницам"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_title">"Не использовать панель навигации в режиме погружения"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_summary">"Предотвращает лишний отступ нижней панели навигации"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Настройка вкладок на главном экране"</string>
     <string name="settings_enable_bottom_app_bar_title">"Включить нижнюю панель навигации"</string>
     <string name="settings_category_post_and_comment_title">"Посты и комментарии"</string>

@@ -80,26 +80,27 @@ public class UserFollowing {
         params.put(APIUtils.SR_NAME_KEY, "u_" + username);
 
         Call<String> subredditSubscriptionCall = api.subredditSubscription(APIUtils.getOAuthHeader(accessToken), params);
-        subredditSubscriptionCall.enqueue(new Callback<String>() {
+        subredditSubscriptionCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
                     if (action.equals("sub")) {
-                        FetchUserData.fetchUserData(executor, handler, retrofit, username, new FetchUserData.FetchUserDataListener() {
-                            @Override
-                            public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
-                                executor.execute(() -> {
-                                    SubscribedUserData subscribedUserData = new SubscribedUserData(userData.getName(), userData.getIconUrl(),
-                                            accountName, false);
-                                    subscribedUserDao.insert(subscribedUserData);
+                        FetchUserData.fetchUserData(executor, handler, null, oauthRetrofit, retrofit, accessToken,
+                                username, new FetchUserData.FetchUserDataListener() {
+                                    @Override
+                                    public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
+                                        executor.execute(() -> {
+                                            SubscribedUserData subscribedUserData = new SubscribedUserData(userData.getName(), userData.getIconUrl(),
+                                                    accountName, false);
+                                            subscribedUserDao.insert(subscribedUserData);
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onFetchUserDataFailed() {
+
+                                    }
                                 });
-                            }
-
-                            @Override
-                            public void onFetchUserDataFailed() {
-
-                            }
-                        });
                         userFollowingListener.onUserFollowingSuccess();
                     } else {
                         executor.execute(() -> {

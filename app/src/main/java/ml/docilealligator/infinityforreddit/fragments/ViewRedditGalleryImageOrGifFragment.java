@@ -57,7 +57,6 @@ import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
-import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity;
 import ml.docilealligator.infinityforreddit.asynctasks.SaveBitmapImageToFile;
 import ml.docilealligator.infinityforreddit.asynctasks.SaveGIFToFile;
@@ -194,7 +193,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             }
         });
 
-        //loadImage();
+        loadImage();
 
         String caption = media.caption;
         String captionUrl = media.captionUrl;
@@ -492,7 +491,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                 setAsWallpaperBottomSheetFragment.setArguments(bundle);
                 setAsWallpaperBottomSheetFragment.show(activity.getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
             } else {
-                ((SetAsWallpaperCallback) activity).setToBoth(activity.getCurrentPagePosition());
+                activity.setToBoth(activity.getCurrentPagePosition());
             }
         }
     }
@@ -537,23 +536,13 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroyView() {
+        super.onDestroyView();
         binding.imageViewViewRedditGalleryImageOrGifFragment.cancel();
+        isFallback = false;
         SubsamplingScaleImageView subsamplingScaleImageView = binding.imageViewViewRedditGalleryImageOrGifFragment.getSSIV();
         if (subsamplingScaleImageView != null) {
             subsamplingScaleImageView.recycle();
         }
     }
-
-//    @Override
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//        binding.imageViewViewRedditGalleryImageOrGifFragment.cancel();
-//        isFallback = false;
-//        SubsamplingScaleImageView subsamplingScaleImageView = binding.imageViewViewRedditGalleryImageOrGifFragment.getSSIV();
-//        if (subsamplingScaleImageView != null) {
-//            subsamplingScaleImageView.recycle();
-//        }
-//    }
 }

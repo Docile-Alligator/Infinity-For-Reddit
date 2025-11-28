@@ -17,7 +17,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuItemImpl;
+import androidx.core.graphics.Insets;
 import androidx.core.view.MenuItemCompat;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,7 +46,7 @@ public class CrashReportsFragment extends Fragment {
 
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
-    private SettingsActivity activity;
+    private SettingsActivity mActivity;
 
     public CrashReportsFragment() {
         // Required empty public constructor
@@ -54,13 +58,25 @@ public class CrashReportsFragment extends Fragment {
         // Inflate the layout for this fragment
         RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_crash_reports, container, false);
 
-        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
+        if (mActivity.isImmersiveInterfaceRespectForcedEdgeToEdge()) {
+            ViewCompat.setOnApplyWindowInsetsListener(recyclerView, new OnApplyWindowInsetsListener() {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                    Insets allInsets = Utils.getInsets(insets, false, mActivity.isForcedImmersiveInterface());
+                    recyclerView.setPadding(allInsets.left, 0, allInsets.right, allInsets.bottom);
+                    return WindowInsetsCompat.CONSUMED;
+                }
+            });
+        }
+
+        ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         setHasOptionsMenu(true);
 
-        recyclerView.setAdapter(new CrashReportsRecyclerViewAdapter(activity, CrashyReporter.INSTANCE.getLogsAsStrings()));
+        recyclerView.setAdapter(new CrashReportsRecyclerViewAdapter(mActivity, CrashyReporter.INSTANCE.getLogsAsStrings()));
 
-        recyclerView.setBackgroundColor(activity.customThemeWrapper.getBackgroundColor());
+        recyclerView.setBackgroundColor(mActivity.customThemeWrapper.getBackgroundColor());
 
         return recyclerView;
     }
@@ -75,7 +91,7 @@ public class CrashReportsFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_delete_logs_crash_reports_fragment) {
             CrashyReporter.INSTANCE.purgeLogs();
-            Toast.makeText(activity, R.string.crash_reports_deleted, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivity, R.string.crash_reports_deleted, Toast.LENGTH_SHORT).show();
             return true;
         } else if (item.getItemId() == R.id.action_export_logs_crash_reports_fragment) {
             return createGithubIssueWithLogs();
@@ -121,7 +137,7 @@ public class CrashReportsFragment extends Fragment {
                     MenuItemCompat.setIconTintList(item, ColorStateList
                             .valueOf(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor()));
                 }
-                Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, null);
+                Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, null);
             }
         }
         return true;
@@ -130,6 +146,6 @@ public class CrashReportsFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (SettingsActivity) context;
+        mActivity = (SettingsActivity) context;
     }
 }

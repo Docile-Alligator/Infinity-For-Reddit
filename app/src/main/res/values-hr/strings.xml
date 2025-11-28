@@ -325,8 +325,6 @@
     <!-- Fuzzy -->
     <string name="settings_immersive_interface_summary">"Ne odnosi se na sve stranice
 "</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_title">"Ignoriraj navigacijsku traku u imerzivnom sučelju"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_summary">"Onemogući dodatnu podlogu na donjoj navigacijskoj traci"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Uredi kartice na Glavnoj stranici"</string>
     <string name="settings_enable_bottom_app_bar_title">"Omogući donju navigacijsku traku"</string>
     <string name="settings_category_post_and_comment_title">"Objavi i komentiraj"</string>

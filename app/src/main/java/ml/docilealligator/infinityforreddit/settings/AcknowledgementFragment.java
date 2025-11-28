@@ -21,13 +21,14 @@ import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.adapters.AcknowledgementRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.FragmentAcknowledgementBinding;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class AcknowledgementFragment extends Fragment {
 
-    private SettingsActivity activity;
+    private SettingsActivity mActivity;
 
     public AcknowledgementFragment() {
         // Required empty public constructor
@@ -115,21 +116,18 @@ public class AcknowledgementFragment extends Fragment {
                 "2D zoom and pan behavior for View hierarchies, images, video streams, and much more, written in Kotlin for Android.",
                 Uri.parse("https://github.com/natario1/ZoomLayout")));
 
-        AcknowledgementRecyclerViewAdapter adapter = new AcknowledgementRecyclerViewAdapter(activity, acknowledgements);
-        binding.getRoot().setLayoutManager(new LinearLayoutManagerBugFixed(activity));
+        AcknowledgementRecyclerViewAdapter adapter = new AcknowledgementRecyclerViewAdapter(mActivity, acknowledgements);
+        binding.getRoot().setLayoutManager(new LinearLayoutManagerBugFixed(mActivity));
         binding.getRoot().setAdapter(adapter);
 
-        binding.getRoot().setBackgroundColor(activity.customThemeWrapper.getBackgroundColor());
+        binding.getRoot().setBackgroundColor(mActivity.customThemeWrapper.getBackgroundColor());
 
-        if (activity.isImmersiveInterface()) {
+        if (mActivity.isImmersiveInterfaceRespectForcedEdgeToEdge()) {
             ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
+                    Insets allInsets = Utils.getInsets(insets, false, mActivity.isForcedImmersiveInterface());
                     binding.getRoot().setPadding(allInsets.left, 0, allInsets.right, allInsets.bottom);
                     return WindowInsetsCompat.CONSUMED;
                 }
@@ -142,6 +140,6 @@ public class AcknowledgementFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (SettingsActivity) context;
+        mActivity = (SettingsActivity) context;
     }
 }

@@ -20,12 +20,13 @@ import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.adapters.TranslationFragmentRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.FragmentTranslationBinding;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class TranslationFragment extends Fragment {
 
     @Inject
     CustomThemeWrapper customThemeWrapper;
-    private BaseActivity activity;
+    private BaseActivity mActivity;
 
     public TranslationFragment() {
         // Required empty public constructor
@@ -37,22 +38,19 @@ public class TranslationFragment extends Fragment {
         // Inflate the layout for this fragment
         FragmentTranslationBinding binding = FragmentTranslationBinding.inflate(inflater, container, false);
 
-        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
+        ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
-        TranslationFragmentRecyclerViewAdapter adapter = new TranslationFragmentRecyclerViewAdapter(activity, customThemeWrapper);
+        TranslationFragmentRecyclerViewAdapter adapter = new TranslationFragmentRecyclerViewAdapter(mActivity, customThemeWrapper);
         binding.getRoot().setAdapter(adapter);
 
         binding.getRoot().setBackgroundColor(customThemeWrapper.getBackgroundColor());
 
-        if (activity.isImmersiveInterface()) {
+        if (mActivity.isImmersiveInterfaceRespectForcedEdgeToEdge()) {
             ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
+                    Insets allInsets = Utils.getInsets(insets, false, mActivity.isForcedImmersiveInterface());
                     binding.getRoot().setPadding(allInsets.left, 0, allInsets.right, allInsets.bottom);
                     return WindowInsetsCompat.CONSUMED;
                 }
@@ -65,6 +63,6 @@ public class TranslationFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (BaseActivity) context;
+        mActivity = (BaseActivity) context;
     }
 }

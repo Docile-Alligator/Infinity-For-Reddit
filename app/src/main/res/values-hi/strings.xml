@@ -351,8 +351,6 @@ Behavior -->
 
     <!-- Fuzzy -->
     <string name="settings_immersive_interface_summary">"सभी पृष्ठों पर लागू नहीं होता है"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_title">"इमरसिव इंटरफेस में नेवीगेशन बार को छिपा दें"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_summary">"निचले नेवीगेशन बार को अतिरिक्त स्थान लेने से रोकें "</string>
     <string name="settings_customize_tabs_in_main_page_title">"मुख्य पृष्ट पर टैब्स अनुकूलित करें "</string>
     <string name="settings_enable_bottom_app_bar_title">"निचला नेवीगेशन शुरू करें "</string>
     <string name="settings_category_post_and_comment_title">"पोस्ट एवं टिप्पणी "</string>

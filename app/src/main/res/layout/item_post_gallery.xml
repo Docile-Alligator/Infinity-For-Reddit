@@ -13,8 +13,7 @@
         android:id="@+id/progress_bar_item_post_gallery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
+        android:layout_gravity="center" />
 
     <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
         android:id="@+id/image_view_item_post_gallery"

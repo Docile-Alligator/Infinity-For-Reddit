@@ -331,8 +331,6 @@ Premio means prize, so it's better suited the first word instead of the second o
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Comenzar la reproducción automática cuando %1$d%% del vídeo sea visible"</string>
     <string name="settings_immersive_interface_title">"Interfaz inmersiva"</string>
     <string name="settings_immersive_interface_summary">"No aplica a todas las páginas"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_title">"Ignorar la barra de navegación en la interfaz inmersiva"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_summary">"Bloquear la barra de navegación de tener margen extra"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Personalizar las pestañas de la página principal"</string>
     <string name="settings_enable_bottom_app_bar_title">"Activar barra de navegación inferior"</string>
     <string name="settings_category_post_and_comment_title">"Publicar y comentar"</string>

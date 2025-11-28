@@ -81,7 +81,7 @@ public class SidebarFragment extends Fragment {
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private ViewSubredditDetailActivity activity;
+    private ViewSubredditDetailActivity mActivity;
     private String subredditName;
     private LinearLayoutManagerBugFixed linearLayoutManager;
     private int markdownColor;
@@ -100,30 +100,27 @@ public class SidebarFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentSidebarBinding.inflate(inflater, container, false);
 
-        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
+        ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         EventBus.getDefault().register(this);
 
-        if (activity.isImmersiveInterface()) {
-            ViewCompat.setOnApplyWindowInsetsListener(activity.getWindow().getDecorView(), new OnApplyWindowInsetsListener() {
+        if (mActivity.isImmersiveInterfaceRespectForcedEdgeToEdge()) {
+            ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
+                    Insets allInsets = Utils.getInsets(insets, false, mActivity.isForcedImmersiveInterface());
                     binding.markdownRecyclerViewSidebarFragment.setPadding(
                             0, 0, 0, allInsets.bottom
                     );
-                    return insets;
+                    return WindowInsetsCompat.CONSUMED;
                 }
             });
         }
 
         subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
         if (subredditName == null) {
-            Toast.makeText(activity, R.string.error_getting_subreddit_name, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivity, R.string.error_getting_subreddit_name, Toast.LENGTH_SHORT).show();
             return binding.getRoot();
         }
 
@@ -135,8 +132,8 @@ public class SidebarFragment extends Fragment {
         MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
             @Override
             public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
-                if (activity.contentTypeface != null) {
-                    textView.setTypeface(activity.contentTypeface);
+                if (mActivity.contentTypeface != null) {
+                    textView.setTypeface(mActivity.contentTypeface);
                 }
                 textView.setTextColor(markdownColor);
                 textView.setOnLongClickListener(view -> {
@@ -159,7 +156,7 @@ public class SidebarFragment extends Fragment {
             @Override
             public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                 builder.linkResolver((view, link) -> {
-                    Intent intent = new Intent(activity, LinkResolverActivity.class);
+                    Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                     Uri uri = Uri.parse(link);
                     intent.setData(uri);
                     startActivity(intent);
@@ -172,9 +169,9 @@ public class SidebarFragment extends Fragment {
             return true;
         };
         EmoteCloseBracketInlineProcessor emoteCloseBracketInlineProcessor = new EmoteCloseBracketInlineProcessor();
-        emotePlugin = EmotePlugin.create(activity, SharedPreferencesUtils.EMBEDDED_MEDIA_ALL,
+        emotePlugin = EmotePlugin.create(mActivity, SharedPreferencesUtils.EMBEDDED_MEDIA_ALL,
                 mediaMetadata -> {
-                    Intent imageIntent = new Intent(activity, ViewImageOrGifActivity.class);
+                    Intent imageIntent = new Intent(mActivity, ViewImageOrGifActivity.class);
                     if (mediaMetadata.isGIF) {
                         imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, mediaMetadata.original.url);
                     } else {
@@ -184,10 +181,10 @@ public class SidebarFragment extends Fragment {
                     imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mediaMetadata.fileName);
                 });
         ImageAndGifPlugin imageAndGifPlugin = new ImageAndGifPlugin();
-        imageAndGifEntry = new ImageAndGifEntry(activity,
+        imageAndGifEntry = new ImageAndGifEntry(mActivity,
                 Glide.with(this), SharedPreferencesUtils.EMBEDDED_MEDIA_ALL,
                 mediaMetadata -> {
-                    Intent imageIntent = new Intent(activity, ViewImageOrGifActivity.class);
+                    Intent imageIntent = new Intent(mActivity, ViewImageOrGifActivity.class);
                     if (mediaMetadata.isGIF) {
                         imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, mediaMetadata.original.url);
                     } else {
@@ -196,10 +193,10 @@ public class SidebarFragment extends Fragment {
                     imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, subredditName);
                     imageIntent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mediaMetadata.fileName);
                 });
-        Markwon markwon = MarkdownUtils.createFullRedditMarkwon(activity,
+        Markwon markwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
                 miscPlugin, emoteCloseBracketInlineProcessor, emotePlugin, imageAndGifPlugin, markdownColor,
                 spoilerBackgroundColor, onLinkLongClickListener);
-        CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAndImagesAdapter(activity, imageAndGifEntry);
+        CustomMarkwonAdapter markwonAdapter = MarkdownUtils.createCustomTablesAndImagesAdapter(mActivity, imageAndGifEntry);
         markwonAdapter.setOnLongClickListener(view -> {
             if (sidebarDescription != null && !sidebarDescription.equals("")) {
                 Bundle bundle = new Bundle();
@@ -210,22 +207,22 @@ public class SidebarFragment extends Fragment {
             }
             return true;
         });
-        linearLayoutManager = new LinearLayoutManagerBugFixed(activity);
+        linearLayoutManager = new LinearLayoutManagerBugFixed(mActivity);
         binding.markdownRecyclerViewSidebarFragment.setLayoutManager(linearLayoutManager);
         binding.markdownRecyclerViewSidebarFragment.setAdapter(markwonAdapter);
         binding.markdownRecyclerViewSidebarFragment.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 if (dy > 0) {
-                    activity.contentScrollDown();
+                    mActivity.contentScrollDown();
                 } else if (dy < 0) {
-                    activity.contentScrollUp();
+                    mActivity.contentScrollUp();
                 }
 
             }
         });
 
-        mSubredditViewModel = new ViewModelProvider(activity,
+        mSubredditViewModel = new ViewModelProvider(mActivity,
                 new SubredditViewModel.Factory(mRedditDataRoomDatabase, subredditName))
                 .get(SubredditViewModel.class);
         mSubredditViewModel.getSubredditLiveData().observe(getViewLifecycleOwner(), subredditData -> {
@@ -249,7 +246,7 @@ public class SidebarFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (ViewSubredditDetailActivity) context;
+        mActivity = (ViewSubredditDetailActivity) context;
     }
 
     @Override
@@ -262,8 +259,8 @@ public class SidebarFragment extends Fragment {
         binding.swipeRefreshLayoutSidebarFragment.setRefreshing(true);
         Handler handler = new Handler();
         FetchSubredditData.fetchSubredditData(mExecutor, handler,
-                activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? null : mOauthRetrofit, mRetrofit,
-                subredditName, activity.accessToken, new FetchSubredditData.FetchSubredditDataListener() {
+                mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? null : mOauthRetrofit, mRetrofit,
+                subredditName, mActivity.accessToken, new FetchSubredditData.FetchSubredditDataListener() {
                     @Override
                     public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                         binding.swipeRefreshLayoutSidebarFragment.setRefreshing(false);
@@ -274,7 +271,7 @@ public class SidebarFragment extends Fragment {
                     @Override
                     public void onFetchSubredditDataFail(boolean isQuarantined) {
                         binding.swipeRefreshLayoutSidebarFragment.setRefreshing(false);
-                        Toast.makeText(activity, R.string.cannot_fetch_sidebar, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mActivity, R.string.cannot_fetch_sidebar, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -292,7 +289,7 @@ public class SidebarFragment extends Fragment {
 
     @Subscribe
     public void onChangeNetworkStatusEvent(ChangeNetworkStatusEvent changeNetworkStatusEvent) {
-        String dataSavingMode = activity.getDefaultSharedPreferences().getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
+        String dataSavingMode = mActivity.getDefaultSharedPreferences().getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
         if (dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
             if (emotePlugin != null) {
                 emotePlugin.setDataSavingMode(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_CELLULAR);

@@ -41,6 +41,7 @@ import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFi
 import ml.docilealligator.infinityforreddit.databinding.FragmentFollowedUsersListingBinding;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserViewModel;
 import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 
@@ -84,19 +85,16 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
 
         Resources resources = getResources();
 
-        if ((mActivity instanceof BaseActivity && mActivity.isImmersiveInterface())) {
-            ViewCompat.setOnApplyWindowInsetsListener(mActivity.getWindow().getDecorView(), new OnApplyWindowInsetsListener() {
+        if ((mActivity instanceof BaseActivity && mActivity.isImmersiveInterfaceRespectForcedEdgeToEdge())) {
+            ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
+                    Insets allInsets = Utils.getInsets(insets, false, mActivity.isForcedImmersiveInterface());
                     binding.recyclerViewFollowedUsersListingFragment.setPadding(
                             0, 0, 0, allInsets.bottom
                     );
-                    return insets;
+                    return WindowInsetsCompat.CONSUMED;
                 }
             });
             //binding.recyclerViewFollowedUsersListingFragment.setPadding(0, 0, 0, mActivity.getNavBarHeight());

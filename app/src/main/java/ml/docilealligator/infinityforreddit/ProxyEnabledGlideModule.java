@@ -32,12 +32,14 @@ public class ProxyEnabledGlideModule extends AppGlideModule {
         boolean proxyEnabled = mProxySharedPreferences.getBoolean(SharedPreferencesUtils.PROXY_ENABLED, false);
         if (proxyEnabled) {
             Proxy.Type proxyType = Proxy.Type.valueOf(mProxySharedPreferences.getString(SharedPreferencesUtils.PROXY_TYPE, "HTTP"));
-            String proxyHost = mProxySharedPreferences.getString(SharedPreferencesUtils.PROXY_HOSTNAME, "127.0.0.1");
-            int proxyPort = Integer.parseInt(mProxySharedPreferences.getString(SharedPreferencesUtils.PROXY_PORT, "1080"));
+            if (proxyType != Proxy.Type.DIRECT) {
+                String proxyHost = mProxySharedPreferences.getString(SharedPreferencesUtils.PROXY_HOSTNAME, "127.0.0.1");
+                int proxyPort = Integer.parseInt(mProxySharedPreferences.getString(SharedPreferencesUtils.PROXY_PORT, "1080"));
 
-            InetSocketAddress proxyAddr = new InetSocketAddress(proxyHost, proxyPort);
-            Proxy proxy = new Proxy(proxyType, proxyAddr);
-            builder.proxy(proxy);
+                InetSocketAddress proxyAddr = new InetSocketAddress(proxyHost, proxyPort);
+                Proxy proxy = new Proxy(proxyType, proxyAddr);
+                builder.proxy(proxy);
+            }
         }
 
         OkHttpUrlLoader.Factory factory = new OkHttpUrlLoader.Factory(builder.build());

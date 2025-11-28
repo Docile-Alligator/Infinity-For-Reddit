@@ -279,8 +279,6 @@
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Αυτόματη αναπαραγωγή των βίντεο όταν το %1$d%% είναι ορατό"</string>
     <string name="settings_immersive_interface_title">"Καθηλωτική Διεπαφή"</string>
     <string name="settings_immersive_interface_summary">"Δεν Εφαρμόζεται στη Σελίδα Όλα"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_title">"Αγνόηση Μπάρας Πλοήγησης στην Καθηλωτική Διεπαφή"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_summary">"Αποτρέπει την Κάτω Μπάρα Πλοήγησης να έχει Έξτρα Μέγεθος"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Παραμετροποίηση Καρτελών στην Κύρια Σελίδα"</string>
     <string name="settings_enable_bottom_app_bar_title">"Ενεργοποίηση Κάτω Πλοήγησης"</string>
     <string name="settings_category_post_and_comment_title">"Ανάρτηση και Σχόλια"</string>

@@ -43,6 +43,7 @@ import ml.docilealligator.infinityforreddit.databinding.ActivityCustomizeThemeBi
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -109,7 +110,7 @@ public class CustomizeThemeActivity extends BaseActivity {
 
         applyCustomTheme();
 
-        if (isImmersiveInterface()) {
+        if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
             if (isChangeStatusBarIconColor()) {
                 addOnOffsetChangedListener(binding.appbarLayoutCustomizeThemeActivity);
             }
@@ -118,10 +119,7 @@ public class CustomizeThemeActivity extends BaseActivity {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
+                    Insets allInsets = Utils.getInsets(insets, false, isForcedImmersiveInterface());
 
                     setMargins(binding.toolbarCustomizeThemeActivity,
                             allInsets.left,
@@ -152,6 +150,8 @@ public class CustomizeThemeActivity extends BaseActivity {
             customThemeSettingsItems = savedInstanceState.getParcelableArrayList(CUSTOM_THEME_SETTINGS_ITEMS_STATE);
             themeName = savedInstanceState.getString(THEME_NAME_STATE);
         }
+
+        binding.progressBarCustomizeThemeActivity.setVisibility(View.GONE);
 
         int androidVersion = Build.VERSION.SDK_INT;
 

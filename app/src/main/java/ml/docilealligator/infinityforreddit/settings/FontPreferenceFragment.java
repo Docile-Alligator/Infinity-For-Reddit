@@ -54,7 +54,7 @@ public class FontPreferenceFragment extends CustomFontPreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.font_preferences, rootKey);
 
-        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
+        ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         ListPreference fontFamilyPreference = findPreference(SharedPreferencesUtils.FONT_FAMILY_KEY);
         customFontFamilyPreference = findPreference(SharedPreferencesUtils.CUSTOM_FONT_FAMILY_KEY);
@@ -83,7 +83,7 @@ public class FontPreferenceFragment extends CustomFontPreferenceFragmentCompat {
         if (fontFamilyPreference != null) {
             fontFamilyPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new RecreateActivityEvent());
-                ActivityCompat.recreate(activity);
+                ActivityCompat.recreate(mActivity);
                 return true;
             });
         }
@@ -133,7 +133,7 @@ public class FontPreferenceFragment extends CustomFontPreferenceFragmentCompat {
         if (fontSizePreference != null) {
             fontSizePreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new RecreateActivityEvent());
-                ActivityCompat.recreate(activity);
+                ActivityCompat.recreate(mActivity);
                 return true;
             });
         }
@@ -185,13 +185,13 @@ public class FontPreferenceFragment extends CustomFontPreferenceFragmentCompat {
             default:
                 destinationFontName = "font_family.ttf";
         }
-        File fontDestinationPath = activity.getExternalFilesDir("fonts");
+        File fontDestinationPath = mActivity.getExternalFilesDir("fonts");
 
         Handler handler = new Handler();
 
         executor.execute(() -> {
             File destinationFontFile = new File(fontDestinationPath, destinationFontName);
-            try (InputStream in = activity.getContentResolver().openInputStream(uri);
+            try (InputStream in = mActivity.getContentResolver().openInputStream(uri);
                  OutputStream out = new FileOutputStream(destinationFontFile)) {
                 if (in != null) {
                     byte[] buf = new byte[1024];
@@ -202,31 +202,31 @@ public class FontPreferenceFragment extends CustomFontPreferenceFragmentCompat {
                     try {
                         switch (type) {
                             case 1:
-                                ((Infinity) activity.getApplication()).titleTypeface = Typeface.createFromFile(destinationFontFile);
+                                ((Infinity) mActivity.getApplication()).titleTypeface = Typeface.createFromFile(destinationFontFile);
                                 break;
                             case 2:
-                                ((Infinity) activity.getApplication()).contentTypeface = Typeface.createFromFile(destinationFontFile);
+                                ((Infinity) mActivity.getApplication()).contentTypeface = Typeface.createFromFile(destinationFontFile);
                                 break;
                             default:
-                                ((Infinity) activity.getApplication()).typeface = Typeface.createFromFile(destinationFontFile);
+                                ((Infinity) mActivity.getApplication()).typeface = Typeface.createFromFile(destinationFontFile);
                         }
                     } catch (RuntimeException e) {
                         e.printStackTrace();
-                        handler.post(() -> Toast.makeText(activity, R.string.unable_to_load_font, Toast.LENGTH_SHORT).show());
+                        handler.post(() -> Toast.makeText(mActivity, R.string.unable_to_load_font, Toast.LENGTH_SHORT).show());
                         return;
                     }
                 } else {
-                    handler.post(() -> Toast.makeText(activity, R.string.unable_to_get_font_file, Toast.LENGTH_SHORT).show());
+                    handler.post(() -> Toast.makeText(mActivity, R.string.unable_to_get_font_file, Toast.LENGTH_SHORT).show());
                     return;
                 }
                 handler.post(() -> {
                     EventBus.getDefault().post(new RecreateActivityEvent());
-                    ActivityCompat.recreate(activity);
+                    ActivityCompat.recreate(mActivity);
                 });
             } catch (IOException e) {
                 e.printStackTrace();
                 handler.post(() -> {
-                    Toast.makeText(activity, R.string.unable_to_copy_font_file, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, R.string.unable_to_copy_font_file, Toast.LENGTH_SHORT).show();
                 });
             }
         });
