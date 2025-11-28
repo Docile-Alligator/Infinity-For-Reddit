@@ -116,9 +116,6 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     @Named("current_account")
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
-    @Named("bottom_app_bar")
-    SharedPreferences bottomAppBarSharedPreference;
-    @Inject
     @Named("nsfw_and_spoiler")
     SharedPreferences mNsfwAndSpoilerSharedPreferences;
     @Inject
@@ -383,7 +380,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
             navigationWrapper.floatingActionButton.setLayoutParams(lp);
         }
 
-        fabOption = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
+        fabOption = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
         switch (fabOption) {
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH:
                 navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_refresh_day_night_24dp);
@@ -717,7 +714,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                     autoCompleteRunnable = () -> {
                         subredditAutocompleteCall = mOauthRetrofit.create(RedditAPI.class).subredditAutocomplete(APIUtils.getOAuthHeader(accessToken),
                                 currentQuery, nsfw);
-                        subredditAutocompleteCall.enqueue(new Callback<String>() {
+                        subredditAutocompleteCall.enqueue(new Callback<>() {
                             @Override
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                                 subredditAutocompleteCall = null;
@@ -812,6 +809,14 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_multi_reddit_detail_activity, menu);
+        if (multiReddit == null && multiPath != null) {
+            String[] segments = multiPath.split("/");
+            if (segments.length > 2 && !segments[1].equals(accountName)) {
+                menu.findItem(R.id.action_edit_view_multi_reddit_detail_activity).setVisible(false);
+                menu.findItem(R.id.action_delete_view_multi_reddit_detail_activity).setVisible(false);
+                menu.findItem(R.id.action_copy_view_multi_reddit_detail_activity).setVisible(true);
+            }
+        }
         applyMenuItemTheme(menu);
         return true;
     }
@@ -881,6 +886,10 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                     })
                     .setNegativeButton(R.string.cancel, null)
                     .show();
+            return true;
+        } else if (itemId == R.id.action_copy_view_multi_reddit_detail_activity) {
+            Intent intent = new Intent(this, CopyMultiRedditActivity.class);
+            startActivity(intent);
             return true;
         }
         return false;

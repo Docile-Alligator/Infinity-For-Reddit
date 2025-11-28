@@ -11,6 +11,7 @@ import ml.docilealligator.infinityforreddit.activities.AccountSavedThingActivity
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentFilterPreferenceActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentFilterUsageListingActivity;
+import ml.docilealligator.infinityforreddit.activities.CopyMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.activities.CreateMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomThemeListingActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomThemePreviewActivity;
@@ -317,6 +318,8 @@ public interface AppComponent {
     void inject(PostOptionsBottomSheetFragment postOptionsBottomSheetFragment);
 
     void inject(ProxyPreferenceFragment proxyPreferenceFragment);
+
+    void inject(CopyMultiRedditActivity copyMultiRedditActivity);
 
     @Component.Factory
     interface Factory {

@@ -28,22 +28,24 @@
     <application
         android:name=".Infinity"
         android:allowBackup="false"
+        android:enableOnBackInvokedCallback="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/application_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
-        android:enableOnBackInvokedCallback="true"
         tools:replace="android:label">
         <activity
+            android:name=".activities.CopyMultiRedditActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.LoginChromeCustomTabActivity"
+            android:exported="true"
             android:label="@string/login_activity_label"
-            android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTop"
-            android:exported="true">
-
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -54,7 +56,6 @@
                     android:host="localhost"
                     android:scheme="infinity" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".activities.CommentFilterUsageListingActivity"
@@ -158,8 +159,8 @@
         <service
             android:name=".services.DownloadMediaService"
             android:enabled="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="false" />
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <activity
             android:name=".activities.ViewRedditGalleryActivity"
@@ -176,8 +177,8 @@
         <service
             android:name=".services.DownloadRedditVideoService"
             android:enabled="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="false" />
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <activity
             android:name=".activities.ViewPrivateMessagesActivity"
@@ -456,13 +457,13 @@
         <service
             android:name=".services.SubmitPostService"
             android:enabled="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="false" />
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name=".services.EditProfileService"
             android:enabled="true"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="false" />
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <receiver android:name=".broadcastreceivers.DownloadedMediaDeleteActionBroadcastReceiver" />
     </application>
