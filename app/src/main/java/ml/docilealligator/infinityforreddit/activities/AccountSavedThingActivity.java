@@ -107,7 +107,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
                 addOnOffsetChangedListener(binding.accountSavedThingAppbarLayout);
             }
 
-            if (isImmersiveInterface()) {
+            if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     window.setDecorFitsSystemWindows(false);
                 } else {
@@ -119,7 +119,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
                     @NonNull
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = Utils.getInsets(insets, false);
+                        Insets allInsets = Utils.getInsets(insets, false, isForcedImmersiveInterface());
 
                         setMargins(binding.accountSavedThingToolbar,
                                 allInsets.left,

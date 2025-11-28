@@ -85,12 +85,12 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
 
         Resources resources = getResources();
 
-        if ((mActivity instanceof BaseActivity && mActivity.isImmersiveInterface())) {
+        if ((mActivity instanceof BaseActivity && mActivity.isImmersiveInterfaceRespectForcedEdgeToEdge())) {
             ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = Utils.getInsets(insets, false);
+                    Insets allInsets = Utils.getInsets(insets, false, mActivity.isForcedImmersiveInterface());
                     binding.recyclerViewFollowedUsersListingFragment.setPadding(
                             0, 0, 0, allInsets.bottom
                     );

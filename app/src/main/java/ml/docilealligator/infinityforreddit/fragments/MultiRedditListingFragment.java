@@ -81,12 +81,12 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
 
         applyTheme();
 
-        if ((mActivity != null && mActivity.isImmersiveInterface())) {
+        if ((mActivity != null && mActivity.isImmersiveInterfaceRespectForcedEdgeToEdge())) {
             ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = Utils.getInsets(insets, false);
+                    Insets allInsets = Utils.getInsets(insets, false, mActivity.isForcedImmersiveInterface());
                     binding.recyclerViewMultiRedditListingFragment.setPadding(
                             0, 0, 0, allInsets.bottom
                     );

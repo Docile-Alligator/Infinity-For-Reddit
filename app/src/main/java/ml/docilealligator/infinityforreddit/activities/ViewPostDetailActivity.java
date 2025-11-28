@@ -188,7 +188,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                 addOnOffsetChangedListener(binding.appbarLayoutViewPostDetailActivity);
             }
 
-            if (isImmersiveInterface()) {
+            if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     window.setDecorFitsSystemWindows(false);
                 } else {
@@ -199,7 +199,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                     @NonNull
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = Utils.getInsets(insets, false);
+                        Insets allInsets = Utils.getInsets(insets, false, isForcedImmersiveInterface());
 
                         setMargins(binding.toolbarViewPostDetailActivity,
                                 allInsets.left,

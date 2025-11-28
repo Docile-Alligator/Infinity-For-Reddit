@@ -26,7 +26,7 @@ public abstract class CustomFontPreferenceFragmentCompat extends PreferenceFragm
     private static final String DIALOG_FRAGMENT_TAG =
             "androidx.preference.PreferenceFragment.DIALOG";
 
-    protected SettingsActivity activity;
+    protected SettingsActivity mActivity;
     protected View view;
 
     @Override
@@ -46,23 +46,23 @@ public abstract class CustomFontPreferenceFragmentCompat extends PreferenceFragm
         for (int i = 0; i < preferenceCount; i++) {
             Preference preference = preferenceScreen.getPreference(i);
             if (preference instanceof CustomThemeWrapperReceiver) {
-                ((CustomThemeWrapperReceiver) preference).setCustomThemeWrapper(activity.customThemeWrapper);
+                ((CustomThemeWrapperReceiver) preference).setCustomThemeWrapper(mActivity.customThemeWrapper);
             }
             if (preference instanceof CustomFontReceiver) {
-                ((CustomFontReceiver) preference).setCustomFont(activity.typeface, null, null);
+                ((CustomFontReceiver) preference).setCustomFont(mActivity.typeface, null, null);
             }
         }
 
-        view.setBackgroundColor(activity.customThemeWrapper.getBackgroundColor());
+        view.setBackgroundColor(mActivity.customThemeWrapper.getBackgroundColor());
 
-        if (activity.isImmersiveInterface()) {
+        if (mActivity.isImmersiveInterfaceRespectForcedEdgeToEdge()) {
             View recyclerView = getListView();
             if (recyclerView != null) {
                 ViewCompat.setOnApplyWindowInsetsListener(view, new OnApplyWindowInsetsListener() {
                     @NonNull
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = Utils.getInsets(insets, false);
+                        Insets allInsets = Utils.getInsets(insets, false, mActivity.isForcedImmersiveInterface());
                         recyclerView.setPadding(allInsets.left, 0, allInsets.right, allInsets.bottom);
                         return WindowInsetsCompat.CONSUMED;
                     }
@@ -91,6 +91,6 @@ public abstract class CustomFontPreferenceFragmentCompat extends PreferenceFragm
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (SettingsActivity) context;
+        mActivity = (SettingsActivity) context;
     }
 }

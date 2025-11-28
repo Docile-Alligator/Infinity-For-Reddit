@@ -72,7 +72,7 @@ public class SelectedSubredditsAndUsersActivity extends BaseActivity implements 
             Slidr.attach(this);
         }
 
-        if (isImmersiveInterface()) {
+        if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
             if (isChangeStatusBarIconColor()) {
                 addOnOffsetChangedListener(binding.appbarLayoutSelectedSubredditsAndUsersActivity);
             }
@@ -81,7 +81,7 @@ public class SelectedSubredditsAndUsersActivity extends BaseActivity implements 
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = Utils.getInsets(insets, false);
+                    Insets allInsets = Utils.getInsets(insets, false, isForcedImmersiveInterface());
 
                     setMargins(binding.toolbarSelectedSubredditsAndUsersActivity,
                             allInsets.left,

@@ -134,7 +134,7 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
         // Inflate the layout for this fragment
         binding = FragmentHistoryPostBinding.inflate(inflater, container, false);
 
-        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
+        ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         super.onCreateView(inflater, container, savedInstanceState);
 
@@ -142,12 +142,12 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
 
         applyTheme();
 
-        if (activity.isImmersiveInterface()) {
+        if (mActivity.isImmersiveInterfaceRespectForcedEdgeToEdge()) {
             ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = Utils.getInsets(insets, false);
+                    Insets allInsets = Utils.getInsets(insets, false, mActivity.isForcedImmersiveInterface());
                     getPostRecyclerView().setPadding(
                             0, 0, 0, allInsets.bottom
                     );
@@ -185,14 +185,14 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
             postFragmentId = System.currentTimeMillis() + new Random().nextInt(1000);
         }
 
-        if (activity instanceof RecyclerViewContentScrollingInterface) {
+        if (mActivity instanceof RecyclerViewContentScrollingInterface) {
             binding.recyclerViewHistoryPostFragment.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     if (dy > 0) {
-                        ((RecyclerViewContentScrollingInterface) activity).contentScrollDown();
+                        ((RecyclerViewContentScrollingInterface) mActivity).contentScrollDown();
                     } else if (dy < 0) {
-                        ((RecyclerViewContentScrollingInterface) activity).contentScrollUp();
+                        ((RecyclerViewContentScrollingInterface) mActivity).contentScrollUp();
                     }
                 }
             });
@@ -205,9 +205,9 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
         if (historyType == HISTORY_TYPE_READ_POSTS) {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.HISTORY_POST_LAYOUT_READ_POST, defaultPostLayout);
 
-            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit,
+            mAdapter = new PostRecyclerViewAdapter(mActivity, this, mExecutor, mOauthRetrofit,
                     mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
-                    activity.accessToken, activity.accountName, postType, postLayout, true,
+                    mActivity.accessToken, mActivity.accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences,
                     null, mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
@@ -256,13 +256,13 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
 
         int nColumns = getNColumns(resources);
         if (nColumns == 1) {
-            mLinearLayoutManager = new LinearLayoutManagerBugFixed(activity);
+            mLinearLayoutManager = new LinearLayoutManagerBugFixed(mActivity);
             binding.recyclerViewHistoryPostFragment.setLayoutManager(mLinearLayoutManager);
         } else {
             mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(nColumns, StaggeredGridLayoutManager.VERTICAL);
             binding.recyclerViewHistoryPostFragment.setLayoutManager(mStaggeredGridLayoutManager);
             StaggeredGridLayoutManagerItemOffsetDecoration itemDecoration =
-                    new StaggeredGridLayoutManagerItemOffsetDecoration(activity, R.dimen.staggeredLayoutManagerItemOffset, nColumns);
+                    new StaggeredGridLayoutManagerItemOffsetDecoration(mActivity, R.dimen.staggeredLayoutManagerItemOffset, nColumns);
             binding.recyclerViewHistoryPostFragment.addItemDecoration(itemDecoration);
         }
 
@@ -273,9 +273,9 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
         if (postFilter == null) {
             FetchPostFilterAndConcatenatedSubredditNames.fetchPostFilter(mRedditDataRoomDatabase, mExecutor,
                     new Handler(), PostFilterUsage.HISTORY_TYPE, PostFilterUsage.HISTORY_TYPE_USAGE_READ_POSTS, (postFilter) -> {
-                        if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
+                        if (mActivity != null && !mActivity.isFinishing() && !mActivity.isDestroyed() && !isDetached()) {
                             this.postFilter = postFilter;
-                            postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(activity.accountName + SharedPreferencesUtils.NSFW_BASE, false);
+                            postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(mActivity.accountName + SharedPreferencesUtils.NSFW_BASE, false);
                             initializeAndBindPostViewModel();
                         }
                     });
@@ -326,12 +326,12 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
     private void initializeAndBindPostViewModel() {
         if (postType == HistoryPostPagingSource.TYPE_READ_POSTS) {
             mHistoryPostViewModel = new ViewModelProvider(HistoryPostFragment.this, new HistoryPostViewModel.Factory(mExecutor,
-                    activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, activity.accessToken,
-                    activity.accountName, mSharedPreferences, HistoryPostPagingSource.TYPE_READ_POSTS, postFilter)).get(HistoryPostViewModel.class);
+                    mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, mActivity.accessToken,
+                    mActivity.accountName, mSharedPreferences, HistoryPostPagingSource.TYPE_READ_POSTS, postFilter)).get(HistoryPostViewModel.class);
         } else {
             mHistoryPostViewModel = new ViewModelProvider(HistoryPostFragment.this, new HistoryPostViewModel.Factory(mExecutor,
-                    activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, activity.accessToken,
-                    activity.accountName, mSharedPreferences, HistoryPostPagingSource.TYPE_READ_POSTS, postFilter)).get(HistoryPostViewModel.class);
+                    mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, mActivity.accessToken,
+                    mActivity.accountName, mSharedPreferences, HistoryPostPagingSource.TYPE_READ_POSTS, postFilter)).get(HistoryPostViewModel.class);
         }
 
         bindPostViewModel();
@@ -363,7 +363,7 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
             return null;
         });
 
-        binding.recyclerViewHistoryPostFragment.setAdapter(mAdapter.withLoadStateFooter(new Paging3LoadingStateAdapter(activity, mCustomThemeWrapper, R.string.load_more_posts_error,
+        binding.recyclerViewHistoryPostFragment.setAdapter(mAdapter.withLoadStateFooter(new Paging3LoadingStateAdapter(mActivity, mCustomThemeWrapper, R.string.load_more_posts_error,
                 view -> mAdapter.retry())));
     }
 
@@ -371,14 +371,14 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.history_post_fragment, menu);
         for (int i = 0; i < menu.size(); i++) {
-            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, menu.getItem(i), null);
+            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, menu.getItem(i), null);
         }
         lazyModeItem = menu.findItem(R.id.action_lazy_mode_history_post_fragment);
 
         if (isInLazyMode) {
-            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, lazyModeItem, getString(R.string.action_stop_lazy_mode));
+            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, lazyModeItem, getString(R.string.action_stop_lazy_mode));
         } else {
-            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, lazyModeItem, getString(R.string.action_start_lazy_mode));
+            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, lazyModeItem, getString(R.string.action_start_lazy_mode));
         }
     }
 
@@ -433,7 +433,7 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
 
     @Override
     protected void showErrorView(int stringResId) {
-        if (activity != null && isAdded()) {
+        if (mActivity != null && isAdded()) {
             binding.swipeRefreshLayoutHistoryPostFragment.setRefreshing(false);
             binding.fetchPostInfoLinearLayoutHistoryPostFragment.setVisibility(View.VISIBLE);
             binding.fetchPostInfoTextViewHistoryPostFragment.setText(stringResId);
@@ -478,7 +478,7 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
         }
         int nColumns = getNColumns(getResources());
         if (nColumns == 1) {
-            mLinearLayoutManager = new LinearLayoutManagerBugFixed(activity);
+            mLinearLayoutManager = new LinearLayoutManagerBugFixed(mActivity);
             if (binding.recyclerViewHistoryPostFragment.getItemDecorationCount() > 0) {
                 binding.recyclerViewHistoryPostFragment.removeItemDecorationAt(0);
             }
@@ -491,7 +491,7 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
             }
             binding.recyclerViewHistoryPostFragment.setLayoutManager(mStaggeredGridLayoutManager);
             StaggeredGridLayoutManagerItemOffsetDecoration itemDecoration =
-                    new StaggeredGridLayoutManagerItemOffsetDecoration(activity, R.dimen.staggeredLayoutManagerItemOffset, nColumns);
+                    new StaggeredGridLayoutManagerItemOffsetDecoration(mActivity, R.dimen.staggeredLayoutManagerItemOffset, nColumns);
             binding.recyclerViewHistoryPostFragment.addItemDecoration(itemDecoration);
             mLinearLayoutManager = null;
         }
@@ -511,8 +511,8 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
         binding.swipeRefreshLayoutHistoryPostFragment.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         binding.swipeRefreshLayoutHistoryPostFragment.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         binding.fetchPostInfoTextViewHistoryPostFragment.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
-        if (activity.typeface != null) {
-            binding.fetchPostInfoTextViewHistoryPostFragment.setTypeface(activity.typeface);
+        if (mActivity.typeface != null) {
+            binding.fetchPostInfoTextViewHistoryPostFragment.setTypeface(mActivity.typeface);
         }
     }
 

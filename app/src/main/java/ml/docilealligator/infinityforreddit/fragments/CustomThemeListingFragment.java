@@ -68,7 +68,7 @@ public class CustomThemeListingFragment extends Fragment {
     @Inject
     Executor executor;
     public CustomThemeViewModel customThemeViewModel;
-    private BaseActivity activity;
+    private BaseActivity mActivity;
     private FragmentCustomThemeListingBinding binding;
     private boolean isOnline;
     @Nullable
@@ -81,17 +81,17 @@ public class CustomThemeListingFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
+        ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         // Inflate the layout for this fragment
         binding = FragmentCustomThemeListingBinding.inflate(inflater, container, false);
 
-        if (activity.isImmersiveInterface()) {
+        if (mActivity.isImmersiveInterfaceRespectForcedEdgeToEdge()) {
             ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = Utils.getInsets(insets, false);
+                    Insets allInsets = Utils.getInsets(insets, false, mActivity.isForcedImmersiveInterface());
                     binding.recyclerViewCustomizeThemeListingActivity.setPadding(
                             0, 0, 0, allInsets.bottom
                     );
@@ -108,15 +108,15 @@ public class CustomThemeListingFragment extends Fragment {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 if (dy > 0) {
-                    ((RecyclerViewContentScrollingInterface) activity).contentScrollDown();
+                    ((RecyclerViewContentScrollingInterface) mActivity).contentScrollDown();
                 } else if (dy < 0) {
-                    ((RecyclerViewContentScrollingInterface) activity).contentScrollUp();
+                    ((RecyclerViewContentScrollingInterface) mActivity).contentScrollUp();
                 }
             }
         });
 
         if (isOnline) {
-            OnlineCustomThemeListingRecyclerViewAdapter adapter = new OnlineCustomThemeListingRecyclerViewAdapter(activity);
+            OnlineCustomThemeListingRecyclerViewAdapter adapter = new OnlineCustomThemeListingRecyclerViewAdapter(mActivity);
             binding.recyclerViewCustomizeThemeListingActivity.setAdapter(adapter);
 
             customThemeViewModel = new ViewModelProvider(this,
@@ -136,8 +136,8 @@ public class CustomThemeListingFragment extends Fragment {
                 }
             });
         } else {
-            CustomThemeListingRecyclerViewAdapter adapter = new CustomThemeListingRecyclerViewAdapter(activity,
-                    CustomThemeWrapper.getPredefinedThemes(activity));
+            CustomThemeListingRecyclerViewAdapter adapter = new CustomThemeListingRecyclerViewAdapter(mActivity,
+                    CustomThemeWrapper.getPredefinedThemes(mActivity));
             binding.recyclerViewCustomizeThemeListingActivity.setAdapter(adapter);
 
             customThemeViewModel = new ViewModelProvider(this,
@@ -157,6 +157,6 @@ public class CustomThemeListingFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (BaseActivity) context;
+        mActivity = (BaseActivity) context;
     }
 }

@@ -35,7 +35,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.Insets;
 import androidx.core.view.MenuItemCompat;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -118,8 +122,8 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
 
         boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
         int systemThemeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
-        immersiveInterface = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-                mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) || Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM;
+        immersiveInterface = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+                mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true);
         if (immersiveInterface && config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             immersiveInterface = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_IMMERSIVE_INTERFACE_IN_LANDSCAPE_MODE, false);
         }
@@ -217,6 +221,20 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
                 }
             }
             decorView.setSystemUiVisibility(systemVisibilityToolbarExpanded);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+                ViewCompat.setOnApplyWindowInsetsListener(window.getDecorView(), new OnApplyWindowInsetsListener() {
+                    @Override
+                    public @NonNull WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                        if (!isImmersiveInterface()) {
+                            Insets inset = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+                            v.setBackgroundColor(customThemeWrapper.getColorPrimary());
+                            v.setPadding(inset.left, inset.top, inset.right, 0);
+                        }
+                        return insets;
+                    }
+                });
+            }
+
             if (!isImmersiveInterface()) {
                 window.setNavigationBarColor(customThemeWrapper.getNavBarColor());
                 if (!hasDrawerLayout) {
@@ -298,8 +316,19 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
         return systemVisibilityToolbarCollapsed;
     }
 
-    public boolean isImmersiveInterface() {
+    public boolean isImmersiveInterfaceRespectForcedEdgeToEdge() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            return true;
+        }
         return immersiveInterface && isImmersiveInterfaceApplicable;
+    }
+
+    private boolean isImmersiveInterface() {
+        return immersiveInterface && isImmersiveInterfaceApplicable;
+    }
+
+    public boolean isForcedImmersiveInterface() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM && !immersiveInterface;
     }
 
     protected void setToolbarGoToTop(Toolbar toolbar) {

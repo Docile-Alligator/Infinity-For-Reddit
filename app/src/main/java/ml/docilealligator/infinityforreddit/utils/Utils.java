@@ -534,7 +534,7 @@ public final class Utils {
         return context.getFilesDir();
     }
 
-    public static Insets getInsets(WindowInsetsCompat insets, boolean includeIME) {
+    public static Insets getInsets(WindowInsetsCompat insets, boolean includeIME, boolean forcedImmersiveMode) {
         int insetTypes = WindowInsetsCompat.Type.systemBars()
                 | WindowInsetsCompat.Type.displayCutout();
         if (includeIME) {
@@ -544,7 +544,8 @@ public final class Utils {
             // For Android 10 and below
             return insets.getInsetsIgnoringVisibility(insetTypes);
         } else {
-            return insets.getInsets(insetTypes);
+            Insets originalInsets = insets.getInsets(insetTypes);
+            return forcedImmersiveMode ? Insets.of(0, 0, 0, originalInsets.bottom) : originalInsets;
         }
     }
 }

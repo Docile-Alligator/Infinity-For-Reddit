@@ -140,7 +140,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
 
         applyCustomTheme();
 
-        if (isImmersiveInterface()) {
+        if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
             if (isChangeStatusBarIconColor()) {
                 addOnOffsetChangedListener(binding.appbarLayoutSubmitCrosspostActivity);
             }
@@ -149,7 +149,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = Utils.getInsets(insets, true);
+                    Insets allInsets = Utils.getInsets(insets, true, isForcedImmersiveInterface());
 
                     setMargins(binding.toolbarSubmitCrosspostActivity,
                             allInsets.left,

@@ -100,7 +100,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
 
         applyCustomTheme();
 
-        if (isImmersiveInterface()) {
+        if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
             if (isChangeStatusBarIconColor()) {
                 addOnOffsetChangedListener(binding.appbarLayoutViewPrivateMessagesActivity);
             }
@@ -109,7 +109,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = Utils.getInsets(insets, true);
+                    Insets allInsets = Utils.getInsets(insets, true, isForcedImmersiveInterface());
 
                     setMargins(binding.toolbarViewPrivateMessagesActivity,
                             allInsets.left,

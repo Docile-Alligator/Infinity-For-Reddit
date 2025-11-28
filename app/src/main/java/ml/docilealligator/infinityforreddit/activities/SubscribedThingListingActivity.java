@@ -144,7 +144,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                 addOnOffsetChangedListener(binding.appbarLayoutSubscribedThingListingActivity);
             }
 
-            if (isImmersiveInterface()) {
+            if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     window.setDecorFitsSystemWindows(false);
                 } else {
@@ -156,7 +156,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                     @NonNull
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = Utils.getInsets(insets, true);
+                        Insets allInsets = Utils.getInsets(insets, true, isForcedImmersiveInterface());
 
                         setMargins(binding.toolbarSubscribedThingListingActivity,
                                 allInsets.left,

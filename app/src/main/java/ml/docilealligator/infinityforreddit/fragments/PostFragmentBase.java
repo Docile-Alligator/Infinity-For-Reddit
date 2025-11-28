@@ -121,7 +121,7 @@ public abstract class PostFragmentBase extends Fragment {
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     protected Executor mExecutor;
-    protected BaseActivity activity;
+    protected BaseActivity mActivity;
     protected RequestManager mGlide;
     protected Window window;
     protected MenuItem lazyModeItem;
@@ -161,11 +161,11 @@ public abstract class PostFragmentBase extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         EventBus.getDefault().register(this);
 
-        window = activity.getWindow();
+        window = mActivity.getWindow();
 
         rememberMutingOptionInPostFeed = mSharedPreferences.getBoolean(SharedPreferencesUtils.REMEMBER_MUTING_OPTION_IN_POST_FEED, false);
 
-        smoothScroller = new LinearSmoothScroller(activity) {
+        smoothScroller = new LinearSmoothScroller(mActivity) {
             @Override
             protected int getVerticalSnapPreference() {
                 return LinearSmoothScroller.SNAP_TO_START;
@@ -213,7 +213,7 @@ public abstract class PostFragmentBase extends Fragment {
             }
         };
 
-        mGlide = Glide.with(activity);
+        mGlide = Glide.with(mActivity);
 
         vibrateWhenActionTriggered = mSharedPreferences.getBoolean(SharedPreferencesUtils.VIBRATE_WHEN_ACTION_TRIGGERED, true);
         swipeActionThreshold = Float.parseFloat(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_ACTION_THRESHOLD, "0.3"));
@@ -254,7 +254,7 @@ public abstract class PostFragmentBase extends Fragment {
             @Override
             public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 View itemView = viewHolder.itemView;
-                int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
+                int horizontalOffset = (int) Utils.convertDpToPixel(16, mActivity);
                 if (dX > 0) {
                     if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
                         dX = (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold;
@@ -363,7 +363,7 @@ public abstract class PostFragmentBase extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.activity = (BaseActivity) context;
+        this.mActivity = (BaseActivity) context;
     }
 
     public final boolean handleKeyDown(int keyCode) {
@@ -385,11 +385,11 @@ public abstract class PostFragmentBase extends Fragment {
 
     public boolean startLazyMode() {
         if (!hasPost) {
-            Toast.makeText(activity, R.string.no_posts_no_lazy_mode, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivity, R.string.no_posts_no_lazy_mode, Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        Utils.setTitleWithCustomFontToMenuItem(activity.typeface, lazyModeItem, getString(R.string.action_stop_lazy_mode));
+        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, lazyModeItem, getString(R.string.action_stop_lazy_mode));
 
         if (getPostAdapter() != null && getPostAdapter().isAutoplay()) {
             getPostAdapter().setAutoplay(false);
@@ -402,18 +402,18 @@ public abstract class PostFragmentBase extends Fragment {
         lazyModeInterval = Float.parseFloat(mSharedPreferences.getString(SharedPreferencesUtils.LAZY_MODE_INTERVAL_KEY, "2.5"));
         lazyModeHandler.postDelayed(lazyModeRunnable, (long) (lazyModeInterval * 1000));
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        Toast.makeText(activity, getString(R.string.lazy_mode_start, lazyModeInterval),
+        Toast.makeText(mActivity, getString(R.string.lazy_mode_start, lazyModeInterval),
                 Toast.LENGTH_SHORT).show();
 
         return true;
     }
 
     public void stopLazyMode() {
-        Utils.setTitleWithCustomFontToMenuItem(activity.typeface, lazyModeItem, getString(R.string.action_start_lazy_mode));
+        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, lazyModeItem, getString(R.string.action_start_lazy_mode));
         if (getPostAdapter() != null) {
             String autoplayString = mSharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
             if (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ALWAYS_ON) ||
-                    (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI) && Utils.isConnectedToWifi(activity))) {
+                    (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI) && Utils.isConnectedToWifi(mActivity))) {
                 getPostAdapter().setAutoplay(true);
                 refreshAdapter();
             }
@@ -424,7 +424,7 @@ public abstract class PostFragmentBase extends Fragment {
         lazyModeHandler.removeCallbacks(lazyModeRunnable);
         resumeLazyModeCountDownTimer.cancel();
         window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        Toast.makeText(activity, getString(R.string.lazy_mode_stop), Toast.LENGTH_SHORT).show();
+        Toast.makeText(mActivity, getString(R.string.lazy_mode_stop), Toast.LENGTH_SHORT).show();
     }
 
     public void resumeLazyMode(boolean resumeNow) {
@@ -539,13 +539,13 @@ public abstract class PostFragmentBase extends Fragment {
         } else {
             if (isSubreddit) {
                 LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase,
-                        subredditOrUserName, activity.accessToken, activity.accountName, mOauthRetrofit, mRetrofit,
+                        subredditOrUserName, mActivity.accessToken, mActivity.accountName, mOauthRetrofit, mRetrofit,
                         iconImageUrl -> {
                             subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
                             loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);
                         });
             } else {
-                LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, activity.accessToken,
+                LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, mActivity.accessToken,
                         subredditOrUserName, mOauthRetrofit, mRetrofit, iconImageUrl -> {
                             subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
                             loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);
@@ -559,18 +559,18 @@ public abstract class PostFragmentBase extends Fragment {
     protected final void initializeSwipeActionDrawable() {
         if (swipeRightAction == SharedPreferencesUtils.SWIPE_ACITON_DOWNVOTE) {
             backgroundSwipeRight = new ColorDrawable(mCustomThemeWrapper.getDownvoted());
-            drawableSwipeRight = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_downward_day_night_24dp, null);
+            drawableSwipeRight = ResourcesCompat.getDrawable(mActivity.getResources(), R.drawable.ic_arrow_downward_day_night_24dp, null);
         } else {
             backgroundSwipeRight = new ColorDrawable(mCustomThemeWrapper.getUpvoted());
-            drawableSwipeRight = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_upward_day_night_24dp, null);
+            drawableSwipeRight = ResourcesCompat.getDrawable(mActivity.getResources(), R.drawable.ic_arrow_upward_day_night_24dp, null);
         }
 
         if (swipeLeftAction == SharedPreferencesUtils.SWIPE_ACITON_UPVOTE) {
             backgroundSwipeLeft = new ColorDrawable(mCustomThemeWrapper.getUpvoted());
-            drawableSwipeLeft = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_upward_day_night_24dp, null);
+            drawableSwipeLeft = ResourcesCompat.getDrawable(mActivity.getResources(), R.drawable.ic_arrow_upward_day_night_24dp, null);
         } else {
             backgroundSwipeLeft = new ColorDrawable(mCustomThemeWrapper.getDownvoted());
-            drawableSwipeLeft = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_downward_day_night_24dp, null);
+            drawableSwipeLeft = ResourcesCompat.getDrawable(mActivity.getResources(), R.drawable.ic_arrow_downward_day_night_24dp, null);
         }
     }
 
@@ -707,7 +707,7 @@ public abstract class PostFragmentBase extends Fragment {
             if (changeVideoAutoplayEvent.autoplay.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ALWAYS_ON)) {
                 autoplay = true;
             } else if (changeVideoAutoplayEvent.autoplay.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI)) {
-                autoplay = Utils.isConnectedToWifi(activity);
+                autoplay = Utils.isConnectedToWifi(mActivity);
             }
             getPostAdapter().setAutoplay(autoplay);
             refreshAdapter();
@@ -838,7 +838,7 @@ public abstract class PostFragmentBase extends Fragment {
         if (getPostAdapter() != null) {
             boolean dataSavingMode = false;
             if (changeDataSavingModeEvent.dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
-                dataSavingMode = Utils.isConnectedToCellularData(activity);
+                dataSavingMode = Utils.isConnectedToCellularData(mActivity);
             } else if (changeDataSavingModeEvent.dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ALWAYS)) {
                 dataSavingMode = true;
             }

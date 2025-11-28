@@ -180,7 +180,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                 addOnOffsetChangedListener(binding.appbarLayoutViewMultiRedditDetailActivity);
             }
 
-            if (isImmersiveInterface()) {
+            if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     window.setDecorFitsSystemWindows(false);
                 } else {
@@ -191,7 +191,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                     @NonNull
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = Utils.getInsets(insets, false);
+                        Insets allInsets = Utils.getInsets(insets, false, isForcedImmersiveInterface());
 
                         if (navigationWrapper.navigationRailView == null) {
                             if (navigationWrapper.bottomAppBar.getVisibility() != View.VISIBLE) {

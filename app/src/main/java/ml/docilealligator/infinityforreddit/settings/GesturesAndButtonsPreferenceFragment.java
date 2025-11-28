@@ -32,7 +32,7 @@ public class GesturesAndButtonsPreferenceFragment extends CustomFontPreferenceFr
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.gestures_and_buttons_preferences, rootKey);
-        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
+        ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         SwitchPreference lockJumpToNextTopLevelCommentButtonSwitch =
                 findPreference(SharedPreferencesUtils.LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON);

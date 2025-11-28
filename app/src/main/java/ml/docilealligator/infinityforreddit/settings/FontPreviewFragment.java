@@ -21,7 +21,7 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class FontPreviewFragment extends Fragment {
 
-    private SettingsActivity activity;
+    private SettingsActivity mActivity;
 
     public FontPreviewFragment() {
         // Required empty public constructor
@@ -32,21 +32,21 @@ public class FontPreviewFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_font_preview, container, false);
 
-        if (activity.isImmersiveInterface()) {
+        if (mActivity.isImmersiveInterfaceRespectForcedEdgeToEdge()) {
             ViewCompat.setOnApplyWindowInsetsListener(rootView, new OnApplyWindowInsetsListener() {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = Utils.getInsets(insets, false);
+                    Insets allInsets = Utils.getInsets(insets, false, mActivity.isForcedImmersiveInterface());
                     rootView.setPadding(allInsets.left, 0, allInsets.right, allInsets.bottom);
                     return WindowInsetsCompat.CONSUMED;
                 }
             });
         }
 
-        rootView.setBackgroundColor(activity.customThemeWrapper.getBackgroundColor());
+        rootView.setBackgroundColor(mActivity.customThemeWrapper.getBackgroundColor());
         LinearLayout linearLayout = rootView.findViewById(R.id.linear_layout_font_preview_fragment);
-        int primaryTextColor = activity.customThemeWrapper.getPrimaryTextColor();
+        int primaryTextColor = mActivity.customThemeWrapper.getPrimaryTextColor();
         for (int i = 0; i < linearLayout.getChildCount(); i++) {
             View view = linearLayout.getChildAt(i);
             if (view instanceof TextView) {
@@ -59,6 +59,6 @@ public class FontPreviewFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.activity = (SettingsActivity) context;
+        this.mActivity = (SettingsActivity) context;
     }
 }

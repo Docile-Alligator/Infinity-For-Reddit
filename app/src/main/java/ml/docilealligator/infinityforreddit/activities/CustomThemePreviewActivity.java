@@ -130,7 +130,7 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
                 || Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM;
         boolean changeStatusBarIconColor = false;
         if (immersiveInterface) {
-            changeStatusBarIconColor = customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface;
+            changeStatusBarIconColor = mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true) && customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface;
         }
         boolean isLightStatusbar = customTheme.isLightStatusBar;
         Window window = getWindow();
@@ -199,12 +199,24 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
 
+                if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
+                    ViewCompat.setOnApplyWindowInsetsListener(window.getDecorView(), new OnApplyWindowInsetsListener() {
+                        @Override
+                        public @NonNull WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                            Insets inset = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+                            v.setBackgroundColor(customTheme.colorPrimary);
+                            v.setPadding(inset.left, inset.top, inset.right, 0);
+                            return insets;
+                        }
+                    });
+                }
+
                 ViewGroupCompat.installCompatInsetsDispatch(binding.getRoot());
                 ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                     @NonNull
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = Utils.getInsets(insets, false);
+                        Insets allInsets = Utils.getInsets(insets, false, !mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true));
 
                         topSystemBarHeight = allInsets.top;
 

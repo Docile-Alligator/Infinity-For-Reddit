@@ -252,7 +252,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 addOnOffsetChangedListener(binding.includedAppBar.appbarLayoutMainActivity);
             }
 
-            if (isImmersiveInterface()) {
+            if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
                 binding.drawerLayout.setStatusBarBackgroundColor(Color.TRANSPARENT);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     binding.drawerLayout.setFitsSystemWindows(false);
@@ -261,22 +261,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
 
-                ViewCompat.setOnApplyWindowInsetsListener(window.getDecorView(), new OnApplyWindowInsetsListener() {
-                    @Override
-                    public @NonNull WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets inset = insets.getInsets(WindowInsetsCompat.Type.statusBars());
-                        v.setBackgroundColor(customThemeWrapper.getColorPrimary());
-                        v.setPadding(0, inset.top, 0, 0);
-                        return insets;
-                    }
-                });
-
                 ViewGroupCompat.installCompatInsetsDispatch(binding.getRoot());
                 ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                     @NonNull
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = Utils.getInsets(insets, false);
+                        Insets allInsets = Utils.getInsets(insets, false, isForcedImmersiveInterface());
 
                         binding.navigationViewMainActivity.setPadding(allInsets.left, 0, 0, 0);
 
@@ -360,6 +350,17 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     binding.navDrawerRecyclerViewMainActivity.setPadding(0, 0, 0, navBarHeight);
                 }*/
             } else {
+                /*ViewGroupCompat.installCompatInsetsDispatch(binding.getRoot());
+                ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
+                            @NonNull
+                            @Override
+                            public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                                Insets inset = Utils.getInsets(insets, false);
+
+                                setMargins(binding.drawerLayout, inset.left, inset.top, inset.right, inset.bottom);
+                                return insets;
+                            }
+                });*/
                 binding.drawerLayout.setStatusBarBackgroundColor(mCustomThemeWrapper.getColorPrimaryDark());
             }
         }

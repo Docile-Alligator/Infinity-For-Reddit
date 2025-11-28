@@ -79,7 +79,7 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
                 addOnOffsetChangedListener(binding.appbarLayoutSubredditsMultiselectionActivity);
             }
 
-            if (isImmersiveInterface()) {
+            if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     window.setDecorFitsSystemWindows(false);
                 } else {
@@ -90,7 +90,7 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
                     @NonNull
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = Utils.getInsets(insets, false);
+                        Insets allInsets = Utils.getInsets(insets, false, isForcedImmersiveInterface());
 
                         setMargins(binding.toolbarSubscribedSubredditsMultiselectionActivity,
                                 allInsets.left,

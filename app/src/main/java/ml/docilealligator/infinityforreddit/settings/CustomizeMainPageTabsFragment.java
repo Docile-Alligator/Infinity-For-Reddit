@@ -45,7 +45,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
     @Inject
     @Named("main_activity_tabs")
     SharedPreferences mainActivityTabsSharedPreferences;
-    private SettingsActivity activity;
+    private SettingsActivity mActivity;
     private int tabCount;
     private String tab1CurrentTitle;
     private int tab1CurrentPostType;
@@ -67,97 +67,97 @@ public class CustomizeMainPageTabsFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentCustomizeMainPageTabsBinding.inflate(inflater, container, false);
 
-        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
+        ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
-        binding.getRoot().setBackgroundColor(activity.customThemeWrapper.getBackgroundColor());
+        binding.getRoot().setBackgroundColor(mActivity.customThemeWrapper.getBackgroundColor());
         applyCustomTheme();
 
-        if (activity.isImmersiveInterface()) {
+        if (mActivity.isImmersiveInterfaceRespectForcedEdgeToEdge()) {
             ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = Utils.getInsets(insets, false);
+                    Insets allInsets = Utils.getInsets(insets, false, mActivity.isForcedImmersiveInterface());
                     binding.getRoot().setPadding(allInsets.left, 0, allInsets.right, allInsets.bottom);
                     return WindowInsetsCompat.CONSUMED;
                 }
             });
         }
 
-        if (activity.typeface != null) {
-            Utils.setFontToAllTextViews(binding.getRoot(), activity.typeface);
+        if (mActivity.typeface != null) {
+            Utils.setFontToAllTextViews(binding.getRoot(), mActivity.typeface);
         }
 
         String[] typeValues;
-        if (activity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-            typeValues = activity.getResources().getStringArray(R.array.settings_tab_post_type_anonymous);
+        if (mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            typeValues = mActivity.getResources().getStringArray(R.array.settings_tab_post_type_anonymous);
         } else {
-            typeValues = activity.getResources().getStringArray(R.array.settings_tab_post_type);
+            typeValues = mActivity.getResources().getStringArray(R.array.settings_tab_post_type);
         }
 
-        tabCount = mainActivityTabsSharedPreferences.getInt((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_COUNT, 3);
+        tabCount = mainActivityTabsSharedPreferences.getInt((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_COUNT, 3);
         binding.tabCountTextViewCustomizeMainPageTabsFragment.setText(Integer.toString(tabCount));
         binding.tabCountLinearLayoutCustomizeMainPageTabsFragment.setOnClickListener(view -> {
-            new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+            new MaterialAlertDialogBuilder(mActivity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_tab_count)
                     .setSingleChoiceItems(R.array.settings_main_page_tab_count, tabCount - 1, (dialogInterface, i) -> {
                         tabCount = i + 1;
-                        mainActivityTabsSharedPreferences.edit().putInt((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_COUNT, tabCount).apply();
+                        mainActivityTabsSharedPreferences.edit().putInt((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_COUNT, tabCount).apply();
                         binding.tabCountTextViewCustomizeMainPageTabsFragment.setText(Integer.toString(tabCount));
                         dialogInterface.dismiss();
                     })
                     .show();
         });
 
-        boolean showTabNames = mainActivityTabsSharedPreferences.getBoolean((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_TAB_NAMES, true);
+        boolean showTabNames = mainActivityTabsSharedPreferences.getBoolean((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_TAB_NAMES, true);
         binding.showTabNamesSwitchMaterialCustomizeMainPageTabsFragment.setChecked(showTabNames);
-        binding.showTabNamesSwitchMaterialCustomizeMainPageTabsFragment.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_TAB_NAMES, b).apply());
+        binding.showTabNamesSwitchMaterialCustomizeMainPageTabsFragment.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_TAB_NAMES, b).apply());
         binding.showTabNamesLinearLayoutCustomizeMainPageTabsFragment.setOnClickListener(view -> binding.showTabNamesSwitchMaterialCustomizeMainPageTabsFragment.performClick());
 
-        tab1CurrentTitle = mainActivityTabsSharedPreferences.getString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_TITLE, getString(R.string.home));
-        tab1CurrentPostType = mainActivityTabsSharedPreferences.getInt((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME);
-        if (!activity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+        tab1CurrentTitle = mainActivityTabsSharedPreferences.getString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_TITLE, getString(R.string.home));
+        tab1CurrentPostType = mainActivityTabsSharedPreferences.getInt((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME);
+        if (!mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             tab1CurrentPostType = Utils.fixIndexOutOfBoundsUsingPredetermined(typeValues, tab1CurrentPostType, 1);
         }
-        tab1CurrentName = mainActivityTabsSharedPreferences.getString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, "");
+        tab1CurrentName = mainActivityTabsSharedPreferences.getString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, "");
         binding.tab1TypeSummaryTextViewCustomizeMainPageTabsFragment.setText(typeValues[tab1CurrentPostType]);
         binding.tab1TitleSummaryTextViewCustomizeMainPageTabsFragment.setText(tab1CurrentTitle);
         binding.tab1NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab1CurrentName);
         applyTab1NameView(binding.tab1NameConstraintLayoutCustomizeMainPageTabsFragment, binding.tab1NameTitleTextViewCustomizeMainPageTabsFragment, tab1CurrentPostType);
 
-        View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_edit_text, null);
+        View dialogView = mActivity.getLayoutInflater().inflate(R.layout.dialog_edit_text, null);
         EditText editText = dialogView.findViewById(R.id.edit_text_edit_text_dialog);
 
         binding.tab1TitleLinearLayoutCustomizeMainPageTabsFragment.setOnClickListener(view -> {
             editText.setHint(R.string.settings_tab_title);
             editText.setText(tab1CurrentTitle);
             editText.requestFocus();
-            Utils.showKeyboard(activity, new Handler(), editText);
+            Utils.showKeyboard(mActivity, new Handler(), editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }
-            new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+            new MaterialAlertDialogBuilder(mActivity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_tab_title)
                     .setView(dialogView)
                     .setPositiveButton(R.string.ok, (dialogInterface, i)
                             -> {
                         tab1CurrentTitle = editText.getText().toString();
-                        mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_TITLE, tab1CurrentTitle).apply();
+                        mainActivityTabsSharedPreferences.edit().putString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_TITLE, tab1CurrentTitle).apply();
                         binding.tab1TitleSummaryTextViewCustomizeMainPageTabsFragment.setText(tab1CurrentTitle);
-                        Utils.hideKeyboard(activity);
+                        Utils.hideKeyboard(mActivity);
                     })
                     .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        Utils.hideKeyboard(activity);
+                        Utils.hideKeyboard(mActivity);
                     })
                     .show();
         });
 
         binding.tab1TypeLinearLayoutCustomizeMainPageTabsFragment.setOnClickListener(view -> {
-            new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+            new MaterialAlertDialogBuilder(mActivity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_tab_title)
                     .setSingleChoiceItems(typeValues, tab1CurrentPostType, (dialogInterface, i) -> {
                         tab1CurrentPostType = i;
-                        mainActivityTabsSharedPreferences.edit().putInt((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_POST_TYPE, i).apply();
+                        mainActivityTabsSharedPreferences.edit().putInt((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_POST_TYPE, i).apply();
                         binding.tab1TypeSummaryTextViewCustomizeMainPageTabsFragment.setText(typeValues[i]);
                         applyTab1NameView(binding.tab1NameConstraintLayoutCustomizeMainPageTabsFragment, binding.tab1NameTitleTextViewCustomizeMainPageTabsFragment, i);
                         dialogInterface.dismiss();
@@ -184,34 +184,34 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             editText.setText(tab1CurrentName);
             editText.setHint(titleId);
             editText.requestFocus();
-            Utils.showKeyboard(activity, new Handler(), editText);
+            Utils.showKeyboard(mActivity, new Handler(), editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }
-            new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+            new MaterialAlertDialogBuilder(mActivity, R.style.MaterialAlertDialogTheme)
                     .setTitle(titleId)
                     .setView(dialogView)
                     .setPositiveButton(R.string.ok, (dialogInterface, i)
                             -> {
                         tab1CurrentName = editText.getText().toString();
-                        mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, tab1CurrentName).apply();
+                        mainActivityTabsSharedPreferences.edit().putString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, tab1CurrentName).apply();
                         binding.tab1NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab1CurrentName);
-                        Utils.hideKeyboard(activity);
+                        Utils.hideKeyboard(mActivity);
                     })
                     .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        Utils.hideKeyboard(activity);
+                        Utils.hideKeyboard(mActivity);
                     })
                     .show();
         });
 
         binding.tab1NameAddImageViewCustomizeMainPageTabsFragment.setOnClickListener(view -> selectName(0));
 
-        tab2CurrentTitle = mainActivityTabsSharedPreferences.getString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_TITLE, getString(R.string.popular));
-        tab2CurrentPostType = mainActivityTabsSharedPreferences.getInt((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_POPULAR);
-        if (!activity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+        tab2CurrentTitle = mainActivityTabsSharedPreferences.getString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_TITLE, getString(R.string.popular));
+        tab2CurrentPostType = mainActivityTabsSharedPreferences.getInt((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_POPULAR);
+        if (!mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             tab2CurrentPostType = Utils.fixIndexOutOfBoundsUsingPredetermined(typeValues, tab2CurrentPostType, 1);
         }
-        tab2CurrentName = mainActivityTabsSharedPreferences.getString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, "");
+        tab2CurrentName = mainActivityTabsSharedPreferences.getString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, "");
         binding.tab2TypeSummaryTextViewCustomizeMainPageTabsFragment.setText(typeValues[tab2CurrentPostType]);
         binding.tab2TitleSummaryTextViewCustomizeMainPageTabsFragment.setText(tab2CurrentTitle);
         binding.tab2NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab2CurrentName);
@@ -221,32 +221,32 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             editText.setHint(R.string.settings_tab_title);
             editText.setText(tab2CurrentTitle);
             editText.requestFocus();
-            Utils.showKeyboard(activity, new Handler(), editText);
+            Utils.showKeyboard(mActivity, new Handler(), editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }
-            new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+            new MaterialAlertDialogBuilder(mActivity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_tab_title)
                     .setView(dialogView)
                     .setPositiveButton(R.string.ok, (dialogInterface, i)
                             -> {
                         tab2CurrentTitle = editText.getText().toString();
-                        mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_TITLE, tab2CurrentTitle).apply();
+                        mainActivityTabsSharedPreferences.edit().putString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_TITLE, tab2CurrentTitle).apply();
                         binding.tab2TitleSummaryTextViewCustomizeMainPageTabsFragment.setText(tab2CurrentTitle);
-                        Utils.hideKeyboard(activity);
+                        Utils.hideKeyboard(mActivity);
                     })
                     .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        Utils.hideKeyboard(activity);
+                        Utils.hideKeyboard(mActivity);
                     })
                     .show();
         });
 
         binding.tab2TypeLinearLayoutCustomizeMainPageTabsFragment.setOnClickListener(view -> {
-            new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+            new MaterialAlertDialogBuilder(mActivity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_tab_title)
                     .setSingleChoiceItems(typeValues, tab2CurrentPostType, (dialogInterface, i) -> {
                         tab2CurrentPostType = i;
-                        mainActivityTabsSharedPreferences.edit().putInt((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_POST_TYPE, i).apply();
+                        mainActivityTabsSharedPreferences.edit().putInt((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_POST_TYPE, i).apply();
                         binding.tab2TypeSummaryTextViewCustomizeMainPageTabsFragment.setText(typeValues[i]);
                         applyTab2NameView(binding.tab2NameConstraintLayoutCustomizeMainPageTabsFragment, binding.tab2NameTitleTextViewCustomizeMainPageTabsFragment, i);
                         dialogInterface.dismiss();
@@ -273,34 +273,34 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             editText.setText(tab2CurrentName);
             editText.setHint(titleId);
             editText.requestFocus();
-            Utils.showKeyboard(activity, new Handler(), editText);
+            Utils.showKeyboard(mActivity, new Handler(), editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }
-            new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+            new MaterialAlertDialogBuilder(mActivity, R.style.MaterialAlertDialogTheme)
                     .setTitle(titleId)
                     .setView(dialogView)
                     .setPositiveButton(R.string.ok, (dialogInterface, i)
                             -> {
                         tab2CurrentName = editText.getText().toString();
-                        mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, tab2CurrentName).apply();
+                        mainActivityTabsSharedPreferences.edit().putString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, tab2CurrentName).apply();
                         binding.tab2NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab2CurrentName);
-                        Utils.hideKeyboard(activity);
+                        Utils.hideKeyboard(mActivity);
                     })
                     .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        Utils.hideKeyboard(activity);
+                        Utils.hideKeyboard(mActivity);
                     })
                     .show();
         });
 
         binding.tab2NameAddImageViewCustomizeMainPageTabsFragment.setOnClickListener(view -> selectName(1));
 
-        tab3CurrentTitle = mainActivityTabsSharedPreferences.getString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_TITLE, getString(R.string.all));
-        tab3CurrentPostType = mainActivityTabsSharedPreferences.getInt((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_ALL);
-        if (!activity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+        tab3CurrentTitle = mainActivityTabsSharedPreferences.getString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_TITLE, getString(R.string.all));
+        tab3CurrentPostType = mainActivityTabsSharedPreferences.getInt((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_ALL);
+        if (!mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
             tab3CurrentPostType = Utils.fixIndexOutOfBoundsUsingPredetermined(typeValues, tab3CurrentPostType, 1);
         }
-        tab3CurrentName = mainActivityTabsSharedPreferences.getString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, "");
+        tab3CurrentName = mainActivityTabsSharedPreferences.getString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, "");
         binding.tab3TypeSummaryTextViewCustomizeMainPageTabsFragment.setText(typeValues[tab3CurrentPostType]);
         binding.tab3TitleSummaryTextViewCustomizeMainPageTabsFragment.setText(tab3CurrentTitle);
         binding.tab3NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab3CurrentName);
@@ -310,32 +310,32 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             editText.setHint(R.string.settings_tab_title);
             editText.setText(tab3CurrentTitle);
             editText.requestFocus();
-            Utils.showKeyboard(activity, new Handler(), editText);
+            Utils.showKeyboard(mActivity, new Handler(), editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }
-            new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+            new MaterialAlertDialogBuilder(mActivity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_tab_title)
                     .setView(dialogView)
                     .setPositiveButton(R.string.ok, (dialogInterface, i)
                             -> {
                         tab3CurrentTitle = editText.getText().toString();
-                        mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_TITLE, tab3CurrentTitle).apply();
+                        mainActivityTabsSharedPreferences.edit().putString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_TITLE, tab3CurrentTitle).apply();
                         binding.tab3TitleSummaryTextViewCustomizeMainPageTabsFragment.setText(tab3CurrentTitle);
-                        Utils.hideKeyboard(activity);
+                        Utils.hideKeyboard(mActivity);
                     })
                     .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        Utils.hideKeyboard(activity);
+                        Utils.hideKeyboard(mActivity);
                     })
                     .show();
         });
 
         binding.tab3TypeLinearLayoutCustomizeMainPageTabsFragment.setOnClickListener(view -> {
-            new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+            new MaterialAlertDialogBuilder(mActivity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_tab_title)
                     .setSingleChoiceItems(typeValues, tab3CurrentPostType, (dialogInterface, i) -> {
                         tab3CurrentPostType = i;
-                        mainActivityTabsSharedPreferences.edit().putInt((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_POST_TYPE, i).apply();
+                        mainActivityTabsSharedPreferences.edit().putInt((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_POST_TYPE, i).apply();
                         binding.tab3TypeSummaryTextViewCustomizeMainPageTabsFragment.setText(typeValues[i]);
                         applyTab3NameView(binding.tab3NameConstraintLayoutCustomizeMainPageTabsFragment, binding.tab3NameTitleTextViewCustomizeMainPageTabsFragment, i);
                         dialogInterface.dismiss();
@@ -362,48 +362,48 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             editText.setText(tab3CurrentName);
             editText.setHint(titleId);
             editText.requestFocus();
-            Utils.showKeyboard(activity, new Handler(), editText);
+            Utils.showKeyboard(mActivity, new Handler(), editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }
-            new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+            new MaterialAlertDialogBuilder(mActivity, R.style.MaterialAlertDialogTheme)
                     .setTitle(titleId)
                     .setView(dialogView)
                     .setPositiveButton(R.string.ok, (dialogInterface, i)
                             -> {
                         tab3CurrentName = editText.getText().toString();
-                        mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, tab3CurrentName).apply();
+                        mainActivityTabsSharedPreferences.edit().putString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, tab3CurrentName).apply();
                         binding.tab3NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab3CurrentName);
-                        Utils.hideKeyboard(activity);
+                        Utils.hideKeyboard(mActivity);
                     })
                     .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        Utils.hideKeyboard(activity);
+                        Utils.hideKeyboard(mActivity);
                     })
                     .show();
         });
 
         binding.tab3NameAddImageViewCustomizeMainPageTabsFragment.setOnClickListener(view -> selectName(2));
 
-        binding.showMultiredditsSwitchMaterialCustomizeMainPageTabsFragment.setChecked(mainActivityTabsSharedPreferences.getBoolean((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_MULTIREDDITS, false));
-        binding.showMultiredditsSwitchMaterialCustomizeMainPageTabsFragment.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_MULTIREDDITS, b).apply());
+        binding.showMultiredditsSwitchMaterialCustomizeMainPageTabsFragment.setChecked(mainActivityTabsSharedPreferences.getBoolean((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_MULTIREDDITS, false));
+        binding.showMultiredditsSwitchMaterialCustomizeMainPageTabsFragment.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_MULTIREDDITS, b).apply());
         binding.showMultiredditsLinearLayoutCustomizeMainPageTabsFragment.setOnClickListener(view -> {
             binding.showMultiredditsSwitchMaterialCustomizeMainPageTabsFragment.performClick();
         });
 
-        binding.showFavoriteMultiredditsSwitchMaterialCustomizeMainPageTabsFragment.setChecked(mainActivityTabsSharedPreferences.getBoolean((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_MULTIREDDITS, false));
-        binding.showFavoriteMultiredditsSwitchMaterialCustomizeMainPageTabsFragment.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_MULTIREDDITS, b).apply());
+        binding.showFavoriteMultiredditsSwitchMaterialCustomizeMainPageTabsFragment.setChecked(mainActivityTabsSharedPreferences.getBoolean((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_MULTIREDDITS, false));
+        binding.showFavoriteMultiredditsSwitchMaterialCustomizeMainPageTabsFragment.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_MULTIREDDITS, b).apply());
         binding.showFavoriteMultiredditsLinearLayoutCustomizeMainPageTabsFragment.setOnClickListener(view -> {
             binding.showFavoriteMultiredditsSwitchMaterialCustomizeMainPageTabsFragment.performClick();
         });
 
-        binding.showSubscribedSubredditsSwitchMaterialCustomizeMainPageTabsFragment.setChecked(mainActivityTabsSharedPreferences.getBoolean((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, false));
-        binding.showSubscribedSubredditsSwitchMaterialCustomizeMainPageTabsFragment.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, b).apply());
+        binding.showSubscribedSubredditsSwitchMaterialCustomizeMainPageTabsFragment.setChecked(mainActivityTabsSharedPreferences.getBoolean((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, false));
+        binding.showSubscribedSubredditsSwitchMaterialCustomizeMainPageTabsFragment.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, b).apply());
         binding.showSubscribedSubredditsLinearLayoutCustomizeMainPageTabsFragment.setOnClickListener(view -> {
             binding.showSubscribedSubredditsSwitchMaterialCustomizeMainPageTabsFragment.performClick();
         });
 
-        binding.showFavoriteSubscribedSubredditsSwitchMaterialCustomizeMainPageTabsFragment.setChecked(mainActivityTabsSharedPreferences.getBoolean((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_SUBSCRIBED_SUBREDDITS, false));
-        binding.showFavoriteSubscribedSubredditsSwitchMaterialCustomizeMainPageTabsFragment.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_SUBSCRIBED_SUBREDDITS, b).apply());
+        binding.showFavoriteSubscribedSubredditsSwitchMaterialCustomizeMainPageTabsFragment.setChecked(mainActivityTabsSharedPreferences.getBoolean((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_SUBSCRIBED_SUBREDDITS, false));
+        binding.showFavoriteSubscribedSubredditsSwitchMaterialCustomizeMainPageTabsFragment.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_SUBSCRIBED_SUBREDDITS, b).apply());
         binding.showFavoriteSubscribedSubredditsLinearLayoutCustomizeMainPageTabsFragment.setOnClickListener(view -> {
             binding.showFavoriteSubscribedSubredditsSwitchMaterialCustomizeMainPageTabsFragment.performClick();
         });
@@ -412,12 +412,12 @@ public class CustomizeMainPageTabsFragment extends Fragment {
     }
 
     private void applyCustomTheme() {
-        int primaryTextColor = activity.customThemeWrapper.getPrimaryTextColor();
-        int secondaryTextColor = activity.customThemeWrapper.getSecondaryTextColor();
-        int colorAccent = activity.customThemeWrapper.getColorAccent();
-        int primaryIconColor = activity.customThemeWrapper.getPrimaryIconColor();
+        int primaryTextColor = mActivity.customThemeWrapper.getPrimaryTextColor();
+        int secondaryTextColor = mActivity.customThemeWrapper.getSecondaryTextColor();
+        int colorAccent = mActivity.customThemeWrapper.getColorAccent();
+        int primaryIconColor = mActivity.customThemeWrapper.getPrimaryIconColor();
         binding.infoTextViewCustomizeMainPageTabsFragment.setTextColor(secondaryTextColor);
-        Drawable infoDrawable = Utils.getTintedDrawable(activity, R.drawable.ic_info_preference_day_night_24dp, secondaryTextColor);
+        Drawable infoDrawable = Utils.getTintedDrawable(mActivity, R.drawable.ic_info_preference_day_night_24dp, secondaryTextColor);
         binding.infoTextViewCustomizeMainPageTabsFragment.setCompoundDrawablesWithIntrinsicBounds(infoDrawable, null, null, null);
         binding.tabCountTitleTextViewCustomizeMainPageTabsFragment.setTextColor(primaryTextColor);
         binding.tabCountTextViewCustomizeMainPageTabsFragment.setTextColor(secondaryTextColor);
@@ -517,7 +517,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             case 0:
                 switch (tab1CurrentPostType) {
                     case 3: {
-                        Intent intent = new Intent(activity, SubscribedThingListingActivity.class);
+                        Intent intent = new Intent(mActivity, SubscribedThingListingActivity.class);
                         intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_MODE, true);
                         intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE,
                                 SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE_SUBREDDIT);
@@ -525,7 +525,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                         break;
                     }
                     case 4: {
-                        Intent intent = new Intent(activity, SubscribedThingListingActivity.class);
+                        Intent intent = new Intent(mActivity, SubscribedThingListingActivity.class);
                         intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_MODE, true);
                         intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE,
                                 SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE_MULTIREDDIT);
@@ -533,7 +533,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                         break;
                     }
                     case 5: {
-                        Intent intent = new Intent(activity, SearchActivity.class);
+                        Intent intent = new Intent(mActivity, SearchActivity.class);
                         intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_USERS, true);
                         startActivityForResult(intent, tab);
                         break;
@@ -543,7 +543,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             case 1:
                 switch (tab2CurrentPostType) {
                     case 3: {
-                        Intent intent = new Intent(activity, SubscribedThingListingActivity.class);
+                        Intent intent = new Intent(mActivity, SubscribedThingListingActivity.class);
                         intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_MODE, true);
                         intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE,
                                 SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE_SUBREDDIT);
@@ -551,7 +551,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                         break;
                     }
                     case 4: {
-                        Intent intent = new Intent(activity, SubscribedThingListingActivity.class);
+                        Intent intent = new Intent(mActivity, SubscribedThingListingActivity.class);
                         intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_MODE, true);
                         intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE,
                                 SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE_MULTIREDDIT);
@@ -559,7 +559,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                         break;
                     }
                     case 5: {
-                        Intent intent = new Intent(activity, SearchActivity.class);
+                        Intent intent = new Intent(mActivity, SearchActivity.class);
                         intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_USERS, true);
                         startActivityForResult(intent, tab);
                         break;
@@ -569,7 +569,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             case 2:
                 switch (tab3CurrentPostType) {
                     case 3: {
-                        Intent intent = new Intent(activity, SubscribedThingListingActivity.class);
+                        Intent intent = new Intent(mActivity, SubscribedThingListingActivity.class);
                         intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_MODE, true);
                         intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE,
                                 SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE_SUBREDDIT);
@@ -577,7 +577,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                         break;
                     }
                     case 4: {
-                        Intent intent = new Intent(activity, SubscribedThingListingActivity.class);
+                        Intent intent = new Intent(mActivity, SubscribedThingListingActivity.class);
                         intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_MODE, true);
                         intent.putExtra(SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE,
                                 SubscribedThingListingActivity.EXTRA_THING_SELECTION_TYPE_MULTIREDDIT);
@@ -585,7 +585,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                         break;
                     }
                     case 5: {
-                        Intent intent = new Intent(activity, SearchActivity.class);
+                        Intent intent = new Intent(mActivity, SearchActivity.class);
                         intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_USERS, true);
                         startActivityForResult(intent, tab);
                         break;
@@ -605,54 +605,54 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                     if (thingType == SelectThingReturnKey.THING_TYPE.SUBREDDIT) {
                         tab1CurrentName = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
                         binding.tab1NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab1CurrentName);
-                        mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, tab1CurrentName).apply();
+                        mainActivityTabsSharedPreferences.edit().putString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, tab1CurrentName).apply();
                     } else if (thingType == SelectThingReturnKey.THING_TYPE.MULTIREDDIT) {
                         MultiReddit multireddit = data.getParcelableExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT);
                         if (multireddit != null) {
                             tab1CurrentName = multireddit.getPath();
                             binding.tab1NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab1CurrentName);
-                            mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, tab1CurrentName).apply();
+                            mainActivityTabsSharedPreferences.edit().putString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, tab1CurrentName).apply();
                         }
                     } else if (thingType == SelectThingReturnKey.THING_TYPE.USER) {
                         tab1CurrentName = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
                         binding.tab1NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab1CurrentName);
-                        mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, tab1CurrentName).apply();
+                        mainActivityTabsSharedPreferences.edit().putString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, tab1CurrentName).apply();
                     }
                     break;
                 case 1:
                     if (thingType == SelectThingReturnKey.THING_TYPE.SUBREDDIT) {
                         tab2CurrentName = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
                         binding.tab2NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab2CurrentName);
-                        mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, tab2CurrentName).apply();
+                        mainActivityTabsSharedPreferences.edit().putString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, tab2CurrentName).apply();
                     } else if (thingType == SelectThingReturnKey.THING_TYPE.MULTIREDDIT) {
                         MultiReddit multireddit = data.getParcelableExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT);
                         if (multireddit != null) {
                             tab2CurrentName = multireddit.getPath();
                             binding.tab2NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab2CurrentName);
-                            mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, tab2CurrentName).apply();
+                            mainActivityTabsSharedPreferences.edit().putString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, tab2CurrentName).apply();
                         }
                     } else if (thingType == SelectThingReturnKey.THING_TYPE.USER) {
                         tab2CurrentName = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
                         binding.tab2NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab2CurrentName);
-                        mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, tab2CurrentName).apply();
+                        mainActivityTabsSharedPreferences.edit().putString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, tab2CurrentName).apply();
                     }
                     break;
                 case 2:
                     if (thingType == SelectThingReturnKey.THING_TYPE.SUBREDDIT) {
                         tab3CurrentName = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
                         binding.tab3NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab3CurrentName);
-                        mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, tab3CurrentName).apply();
+                        mainActivityTabsSharedPreferences.edit().putString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, tab3CurrentName).apply();
                     } else if (thingType == SelectThingReturnKey.THING_TYPE.MULTIREDDIT) {
                         MultiReddit multireddit = data.getParcelableExtra(SelectThingReturnKey.RETRUN_EXTRA_MULTIREDDIT);
                         if (multireddit != null) {
                             tab3CurrentName = multireddit.getPath();
                             binding.tab3NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab3CurrentName);
-                            mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, tab3CurrentName).apply();
+                            mainActivityTabsSharedPreferences.edit().putString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, tab3CurrentName).apply();
                         }
                     } else if (thingType == SelectThingReturnKey.THING_TYPE.USER) {
                         tab3CurrentName = data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME);
                         binding.tab3NameSummaryTextViewCustomizeMainPageTabsFragment.setText(tab3CurrentName);
-                        mainActivityTabsSharedPreferences.edit().putString((activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : activity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, tab3CurrentName).apply();
+                        mainActivityTabsSharedPreferences.edit().putString((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, tab3CurrentName).apply();
                     }
                     break;
             }
@@ -662,6 +662,6 @@ public class CustomizeMainPageTabsFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (SettingsActivity) context;
+        mActivity = (SettingsActivity) context;
     }
 }
