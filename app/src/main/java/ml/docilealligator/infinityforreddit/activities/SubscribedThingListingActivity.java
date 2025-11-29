@@ -25,6 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.ViewGroupCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.fragment.app.Fragment;
@@ -143,21 +144,19 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                 addOnOffsetChangedListener(binding.appbarLayoutSubscribedThingListingActivity);
             }
 
-            if (isImmersiveInterface()) {
+            if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     window.setDecorFitsSystemWindows(false);
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
 
+                ViewGroupCompat.installCompatInsetsDispatch(binding.getRoot());
                 ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                     @NonNull
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = insets.getInsets(
-                                WindowInsetsCompat.Type.systemBars()
-                                        | WindowInsetsCompat.Type.displayCutout()
-                        );
+                        Insets allInsets = Utils.getInsets(insets, true, isForcedImmersiveInterface());
 
                         setMargins(binding.toolbarSubscribedThingListingActivity,
                                 allInsets.left,
@@ -173,7 +172,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                                 (int) Utils.convertDpToPixel(16, SubscribedThingListingActivity.this) + allInsets.right,
                                 (int) Utils.convertDpToPixel(16, SubscribedThingListingActivity.this) + allInsets.bottom);
 
-                        return WindowInsetsCompat.CONSUMED;
+                        return insets;
                     }
                 });
 

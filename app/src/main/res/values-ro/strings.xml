@@ -310,8 +310,6 @@ Apăsați pentru reîncărcare."</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Începeți redarea automată a videourilor atunci când sunt %1$,d%% vizibile"</string>
     <string name="settings_immersive_interface_title">"Interfață Imersivă"</string>
     <string name="settings_immersive_interface_summary">"Nu se aplică tuturor paginilor"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_title">"Ignorați bara de navigare în interfața imersivă"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_summary">"Împiedicați bara de navigare de jos din a avea padding suplimentar"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Personalizați filele din pagina principală"</string>
     <string name="settings_enable_bottom_app_bar_title">"Activați navigarea din partea de jos"</string>
     <string name="settings_category_post_and_comment_title">"Postări și comentarii"</string>

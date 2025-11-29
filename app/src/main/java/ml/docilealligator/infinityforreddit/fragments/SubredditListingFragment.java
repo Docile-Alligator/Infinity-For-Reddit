@@ -46,6 +46,7 @@ import ml.docilealligator.infinityforreddit.subreddit.SubredditListingViewModel;
 import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 
@@ -101,19 +102,16 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
         applyTheme();
 
-        if (mActivity.isImmersiveInterface()) {
-            ViewCompat.setOnApplyWindowInsetsListener(mActivity.getWindow().getDecorView(), new OnApplyWindowInsetsListener() {
+        if (mActivity.isImmersiveInterfaceRespectForcedEdgeToEdge()) {
+            ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
+                    Insets allInsets = Utils.getInsets(insets, false, mActivity.isForcedImmersiveInterface());
                     binding.recyclerViewSubredditListingFragment.setPadding(
                             0, 0, 0, allInsets.bottom
                     );
-                    return insets;
+                    return WindowInsetsCompat.CONSUMED;
                 }
             });
             //binding.recyclerViewSubredditListingFragment.setPadding(0, 0, 0, mActivity.getNavBarHeight());

@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.kapt'
 }
 
 android {
@@ -9,8 +10,8 @@ android {
         applicationId "ml.docilealligator.infinityforreddit"
         minSdk 21
         targetSdk 35
-        versionCode 203
-        versionName "8.0.7"
+        versionCode 204
+        versionName "8.0.8"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -54,8 +55,14 @@ android {
     buildFeatures {
         buildConfig = true
         viewBinding = true
+        compose = true
     }
     namespace 'ml.docilealligator.infinityforreddit'
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.14"
+    }
+
     kotlinOptions {
         jvmTarget = '11'
     }
@@ -86,7 +93,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
     def roomVersion = "2.6.1"
     implementation "androidx.room:room-runtime:$roomVersion"
-    annotationProcessor "androidx.room:room-compiler:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-guava:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
     implementation 'androidx.viewpager2:viewpager2:1.1.0'
@@ -117,7 +124,7 @@ dependencies {
     // Dependency injection
     def daggerVersion = '2.51.1'
     implementation "com.google.dagger:dagger:$daggerVersion"
-    annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     // Binding
     compileOnly 'com.android.databinding:viewbinding:8.5.1'
@@ -125,7 +132,7 @@ dependencies {
     // Events
     def eventbusVersion = "3.3.1"
     implementation "org.greenrobot:eventbus:$eventbusVersion"
-    annotationProcessor "org.greenrobot:eventbus-annotation-processor:$eventbusVersion"
+    kapt "org.greenrobot:eventbus-annotation-processor:$eventbusVersion"
 
     // TransactionTooLargeException avoidance
     implementation 'com.github.livefront:bridge:v2.0.2'
@@ -134,7 +141,7 @@ dependencies {
     // NOTE: Deprecated
     def stateVersion = "1.4.1"
     implementation "com.evernote:android-state:$stateVersion"
-    annotationProcessor "com.evernote:android-state-processor:$stateVersion"
+    kapt "com.evernote:android-state-processor:$stateVersion"
 
     // Object to JSON
     // NOTE: Replace with Squareup's Moshi?
@@ -155,7 +162,7 @@ dependencies {
     //Image loading
     def glideVersion = "5.0.5"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+    kapt "com.github.bumptech.glide:compiler:$glideVersion"
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.santalu:aspect-ratio-imageview:1.0.9'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.29'
@@ -202,6 +209,19 @@ dependencies {
     implementation 'com.github.alexzhirkevich:custom-qr-generator:2.0.0-alpha01'
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+
+    // Compose
+    def composeBom = platform('androidx.compose:compose-bom:2025.11.01')
+    implementation composeBom
+    androidTestImplementation composeBom
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+    //implementation 'androidx.compose.material3.adaptive:adaptive'
+    implementation 'androidx.activity:activity-compose:1.10.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4'
+    implementation 'androidx.compose.runtime:runtime-livedata'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0'
 
 /**** Builds and flavors ****/
     // debugImplementation because LeakCanary should only run in debug builds.

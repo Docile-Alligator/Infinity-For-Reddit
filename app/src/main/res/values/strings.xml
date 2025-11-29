@@ -47,6 +47,7 @@
     <string name="subscription_activity_label">Subscription</string>
     <string name="comment_filter_preference_activity_label">Comment Filter</string>
     <string name="customize_comment_filter_activity_label">Customize Comment Filter</string>
+    <string name="copy_multireddit_activity_label">Copy Multireddit</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -74,6 +75,7 @@
     <string name="action_save">Save</string>
     <string name="action_edit_multi_reddit">Edit MultiReddit</string>
     <string name="action_delete_multi_reddit">Delete Multireddit</string>
+    <string name="action_copy_multi_reddit">Copy Multireddit</string>
     <string name="action_share">Share</string>
     <string name="action_preview">Preview</string>
     <string name="action_report">Report</string>
@@ -389,6 +391,7 @@
     <string name="settings_rewrite_twitter_links_summary">Rewrite x.com/twitter.com links to nitter.net</string>
     <string name="settigns_video_title">Video</string>
     <string name="settings_video_autoplay_title">Video Autoplay</string>
+    <string name="settings_simultaneous_autoplay_limit_title">Simultaneous Autoplay Limit</string>
     <string name="settings_mute_autoplaying_videos_title">Mute Autoplaying Videos</string>
     <string name="settings_autoplay_nsfw_videos_title">Autoplay Sensitive Videos</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">Autoplay Videos Visible Area Offset (Portrait)</string>
@@ -397,8 +400,6 @@
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">Start autoplaying videos when %1$d%% of them are visible</string>
     <string name="settings_immersive_interface_title">Immersive Interface</string>
     <string name="settings_immersive_interface_summary">Does Not Apply to All Pages</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_title">Ignore Navigation Bar in Immersive Interface</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_summary">Prevent the Bottom Navigation Bar Having Extra Padding</string>
     <string name="settings_disable_immersive_interface_in_landscape_mode">Disable Immersive Interface in Landscape Mode</string>
     <string name="settings_customize_tabs_in_main_page_title">Customize Tabs in Main Page</string>
     <string name="only_for_logged_in_user">Only for Logged-in User</string>
@@ -1250,6 +1251,7 @@
     <string name="always_on">Always On</string>
     <string name="only_on_wifi">Only on Wifi</string>
     <string name="never">Never</string>
+    <string name="unlimited">Unlimited</string>
     <string name="normal">Normal</string>
     <string name="extra_small">Extra Small</string>
     <string name="extra_large">Extra Large</string>

@@ -286,8 +286,6 @@ Tocca per riprovare."</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Riproduci automaticamente i video quando il %1$d%% di essi è visibile"</string>
     <string name="settings_immersive_interface_title">"Interfaccia Immersiva"</string>
     <string name="settings_immersive_interface_summary">"Non si applica a tutte le pagine"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_title">"Ignora la barra di navigazione nell'interfaccia immersiva"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_summary">"Impedisci che la barra di navigazione inferiore abbia un padding extra"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Personalizza le schede nella pagina principale"</string>
     <string name="settings_enable_bottom_app_bar_title">"Abilita navigazione dal basso"</string>
     <string name="settings_category_post_and_comment_title">"Post e Commenti"</string>

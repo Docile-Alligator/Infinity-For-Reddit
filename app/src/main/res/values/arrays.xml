@@ -91,6 +91,20 @@
         <item>0</item>
     </string-array>
 
+    <string-array name="settings_simultaneous_autoplay_limit">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>@string/unlimited</item>
+    </string-array>
+
+    <string-array name="settings_simultaneous_autoplay_limit_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>-1</item>
+    </string-array>
+
     <string-array name="settings_lazy_mode_interval">
         <item>1s</item>
         <item>2s</item>

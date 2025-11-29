@@ -35,7 +35,7 @@ public class MiscellaneousPreferenceFragment extends CustomFontPreferenceFragmen
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.miscellaneous_preferences, rootKey);
 
-        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
+        ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         ListPreference mainPageBackButtonActionListPreference = findPreference(SharedPreferencesUtils.MAIN_PAGE_BACK_BUTTON_ACTION);
         SwitchPreference savePostFeedScrolledPositionSwitch = findPreference(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION);
@@ -71,12 +71,12 @@ public class MiscellaneousPreferenceFragment extends CustomFontPreferenceFragmen
                 try {
                     int resolution = Integer.parseInt((String) newValue);
                     if (resolution <= 0) {
-                        Toast.makeText(activity, R.string.not_a_valid_number, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mActivity, R.string.not_a_valid_number, Toast.LENGTH_SHORT).show();
                         return false;
                     }
                     EventBus.getDefault().post(new ChangePostFeedMaxResolutionEvent(resolution));
                 } catch (NumberFormatException e) {
-                    Toast.makeText(activity, R.string.not_a_valid_number, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, R.string.not_a_valid_number, Toast.LENGTH_SHORT).show();
                     return false;
                 }
                 return true;

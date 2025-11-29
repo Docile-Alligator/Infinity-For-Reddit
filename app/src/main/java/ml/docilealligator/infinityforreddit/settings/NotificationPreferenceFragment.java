@@ -53,9 +53,9 @@ public class NotificationPreferenceFragment extends CustomFontPreferenceFragment
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.notification_preferences, rootKey);
 
-        workManager = WorkManager.getInstance(activity);
+        workManager = WorkManager.getInstance(mActivity);
 
-        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
+        ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         SwitchPreference enableNotificationSwitchPreference = findPreference(SharedPreferencesUtils.ENABLE_NOTIFICATION_KEY);
         ListPreference notificationIntervalListPreference = findPreference(SharedPreferencesUtils.NOTIFICATION_INTERVAL_KEY);
@@ -131,12 +131,12 @@ public class NotificationPreferenceFragment extends CustomFontPreferenceFragment
             ActivityResultLauncher<String> requestNotificationPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), result -> {
                 mInternalSharedPreferences.edit().putBoolean(SharedPreferencesUtils.HAS_REQUESTED_NOTIFICATION_PERMISSION, true).apply();
                 if (!result) {
-                    activity.showSnackbar(R.string.denied_notification_permission, R.string.go_to_settings, new View.OnClickListener() {
+                    mActivity.showSnackbar(R.string.denied_notification_permission, R.string.go_to_settings, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            Uri uri = Uri.fromParts("package", activity.getPackageName(), null);
+                            Uri uri = Uri.fromParts("package", mActivity.getPackageName(), null);
                             intent.setData(uri);
                             startActivity(intent);
                         }
@@ -144,7 +144,7 @@ public class NotificationPreferenceFragment extends CustomFontPreferenceFragment
                 }
             });
             
-            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(mActivity, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
             }
         }

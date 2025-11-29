@@ -38,6 +38,7 @@ import ml.docilealligator.infinityforreddit.settings.GesturesAndButtonsPreferenc
 import ml.docilealligator.infinityforreddit.settings.InterfacePreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.MainPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.PostPreferenceFragment;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class SettingsActivity extends BaseActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
@@ -75,15 +76,12 @@ public class SettingsActivity extends BaseActivity implements
                 addOnOffsetChangedListener(binding.appbarLayoutSettingsActivity);
             }
 
-            if (isImmersiveInterface()) {
+            if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
                 ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                     @NonNull
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = insets.getInsets(
-                                WindowInsetsCompat.Type.systemBars()
-                                        | WindowInsetsCompat.Type.displayCutout()
-                        );
+                        Insets allInsets = Utils.getInsets(insets, false, isForcedImmersiveInterface());
 
                         setMargins(binding.toolbarSettingsActivity,
                                 allInsets.left,

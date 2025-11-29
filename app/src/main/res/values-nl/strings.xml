@@ -313,8 +313,6 @@ Druk om opnieuw te proberen."</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Speel video's sautomatisch af als %1$d%% ervan zichtbaar is"</string>
     <string name="settings_immersive_interface_title">"Beeldvullende modus"</string>
     <string name="settings_immersive_interface_summary">"Niet van toepassing op alle pagina's"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_title">"Navigatiebalk verbergen in beeldvullende modus"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_summary">"Voorkom dat de onderste navigatiebalk extra opvulling heeft"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Tabbladen op startpagina aanpassen"</string>
     <string name="settings_enable_bottom_app_bar_title">"Onderste navigatiebalk inschakelen"</string>
     <string name="settings_category_post_and_comment_title">"Plaatsen en reageren"</string>

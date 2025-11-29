@@ -50,7 +50,6 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String SHARELINK_SUBREDDIT_PATTERN = "/r/[\\w-]+/s/[\\w-]+";
     private static final String SHARELINK_USER_PATTERN = "/u/[\\w-]+/s/[\\w-]+";
     private static final String SIDEBAR_PATTERN = "/[rR]/[\\w-]+/about/sidebar";
-    private static final String MULTIREDDIT_PATTERN = "/user/[\\w-]+/m/\\w+/?";
     private static final String MULTIREDDIT_PATTERN_2 = "/[rR]/(\\w+\\+?)+/?";
     private static final String REDD_IT_POST_PATTERN = "/\\w+/?";
     private static final String REDGIFS_PATTERN = "/watch/[\\w-]+$";
@@ -230,6 +229,11 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 } catch (Exception e) {
                                     deepLinkError(uri);
                                 }
+                            } else if(segments.size() == 4 && segments.get(0).equals("user") && segments.get(2).equals("m")) {
+                                // Multireddit
+                                Intent intent = new Intent(this, ViewMultiRedditDetailActivity.class);
+                                intent.putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_PATH, path);
+                                startActivity(intent);
                             } else if (path.matches(POST_PATTERN) || path.matches(POST_PATTERN_2)) {
                                 int commentsIndex = segments.lastIndexOf("comments");
                                 if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
@@ -291,10 +295,6 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 Intent intent = new Intent(this, ViewSubredditDetailActivity.class);
                                 intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, path.substring(3, path.length() - 14));
                                 intent.putExtra(ViewSubredditDetailActivity.EXTRA_VIEW_SIDEBAR, true);
-                                startActivity(intent);
-                            } else if (path.matches(MULTIREDDIT_PATTERN)) {
-                                Intent intent = new Intent(this, ViewMultiRedditDetailActivity.class);
-                                intent.putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_PATH, path);
                                 startActivity(intent);
                             } else if (path.matches(MULTIREDDIT_PATTERN_2)) {
                                 String subredditName = path.substring(3);
