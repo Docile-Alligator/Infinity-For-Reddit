@@ -28,6 +28,7 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.utils.ExternalBrowserDomainUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -416,6 +417,12 @@ public class LinkResolverActivity extends AppCompatActivity {
         String authority = uri.getAuthority();
         if(authority != null && (authority.contains("reddit.com") || authority.contains("redd.it") || authority.contains("reddit.app.link"))) {
             openInCustomTabs(uri, pm, false);
+            return;
+        }
+
+        // Check if domain should always open in external browser
+        if (authority != null && ExternalBrowserDomainUtils.isExternalBrowserDomain(mSharedPreferences, authority)) {
+            openInBrowser(uri, pm, true);
             return;
         }
 

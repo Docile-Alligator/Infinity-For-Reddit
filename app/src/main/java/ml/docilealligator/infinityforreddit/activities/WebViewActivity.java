@@ -34,6 +34,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.ActivityWebViewBinding;
+import ml.docilealligator.infinityforreddit.utils.ExternalBrowserDomainUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
@@ -205,6 +206,18 @@ public class WebViewActivity extends BaseActivity {
             } catch (ActivityNotFoundException e) {
                 Toast.makeText(this, R.string.no_activity_found_for_external_browser, Toast.LENGTH_SHORT).show();
             }
+        } else if (item.getItemId() == R.id.action_always_open_domain_external_web_view_activity) {
+            Uri uri = Uri.parse(url);
+            String domain = uri.getAuthority();
+            if (domain != null && !domain.isEmpty()) {
+                ExternalBrowserDomainUtils.addDomain(mSharedPreferences, domain);
+                String normalizedDomain = ExternalBrowserDomainUtils.extractDomain(domain);
+                Toast.makeText(this, getString(R.string.domain_added_to_external_browser, normalizedDomain),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.invalid_domain, Toast.LENGTH_SHORT).show();
+            }
+            return true;
         }
         return false;
     }

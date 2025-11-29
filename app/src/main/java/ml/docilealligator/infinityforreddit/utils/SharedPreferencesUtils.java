@@ -105,6 +105,7 @@ public class SharedPreferencesUtils {
     public static final String MUTE_VIDEO = "mute_video";
     public static final String LINK_HANDLER = "link_handler";
     public static final String REWRITE_TWITTER_LINKS = "rewrite_twitter_links";
+    public static final String EXTERNAL_BROWSER_DOMAINS = "external_browser_domains";
     public static final String VIDEO_AUTOPLAY = "video_autoplay";
     public static final String VIDEO_AUTOPLAY_VALUE_ALWAYS_ON = "2";
     public static final String VIDEO_AUTOPLAY_VALUE_ON_WIFI = "1";
