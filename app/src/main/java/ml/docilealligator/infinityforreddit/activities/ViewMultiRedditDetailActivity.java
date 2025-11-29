@@ -888,8 +888,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                     .show();
             return true;
         } else if (itemId == R.id.action_copy_view_multi_reddit_detail_activity) {
-            Intent intent = new Intent(this, CopyMultiRedditActivity.class);
-            startActivity(intent);
+            CopyMultiRedditActivity.Companion.start(this, "");
             return true;
         }
         return false;

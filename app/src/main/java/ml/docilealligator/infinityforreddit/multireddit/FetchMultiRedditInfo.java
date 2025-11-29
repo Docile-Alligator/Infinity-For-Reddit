@@ -76,7 +76,7 @@ public class FetchMultiRedditInfo {
 
     @WorkerThread
     @Nullable
-    private static MultiReddit parseMultiRedditInfo(String response) {
+    public static MultiReddit parseMultiRedditInfo(String response) {
         try {
             JSONObject object = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY);
             String path = object.getString(JSONUtils.PATH_KEY);

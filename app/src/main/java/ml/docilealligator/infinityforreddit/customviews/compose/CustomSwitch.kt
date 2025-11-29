@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.common.math.LinearTransformation.horizontal
+import ml.docilealligator.infinityforreddit.utils.deriveContrastingColor
 
 @Composable
 fun SwitchRow(
@@ -43,7 +45,11 @@ fun SwitchRow(
 
         Switch(
             checked = checked,
-            onCheckedChange = onCheckedChange
+            onCheckedChange = onCheckedChange,
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = Color(LocalAppTheme.current.colorAccent),
+                checkedTrackColor = Color(deriveContrastingColor(LocalAppTheme.current.colorAccent))
+            )
         )
     }
 }
