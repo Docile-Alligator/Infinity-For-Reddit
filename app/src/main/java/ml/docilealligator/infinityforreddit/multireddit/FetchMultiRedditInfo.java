@@ -65,11 +65,11 @@ public class FetchMultiRedditInfo {
             MultiReddit multiReddit = redditDataRoomDatabase.multiRedditDao().getMultiReddit(multipath, Account.ANONYMOUS_ACCOUNT);
             ArrayList<AnonymousMultiredditSubreddit> anonymousMultiredditSubreddits =
                     (ArrayList<AnonymousMultiredditSubreddit>) redditDataRoomDatabase.anonymousMultiredditSubredditDao().getAllAnonymousMultiRedditSubreddits(multipath);
-            ArrayList<String> subredditNames = new ArrayList<>();
+            ArrayList<ExpandedSubredditInMultiReddit> subreddits = new ArrayList<>();
             for (AnonymousMultiredditSubreddit a : anonymousMultiredditSubreddits) {
-                subredditNames.add(a.getSubredditName());
+                subreddits.add(new ExpandedSubredditInMultiReddit(a.getSubredditName(), multiReddit.getIconUrl()));
             }
-            multiReddit.setSubreddits(subredditNames);
+            multiReddit.setSubreddits(subreddits);
             handler.post(() -> fetchMultiRedditInfoListener.success(multiReddit));
         });
     }
@@ -92,10 +92,16 @@ public class FetchMultiRedditInfo {
             boolean over18 = object.getBoolean(JSONUtils.OVER_18_KEY);
             boolean isSubscriber = object.getBoolean(JSONUtils.IS_SUBSCRIBER_KEY);
             boolean isFavorite = object.getBoolean(JSONUtils.IS_FAVORITED_KEY);
-            ArrayList<String> subreddits = new ArrayList<>();
+            ArrayList<ExpandedSubredditInMultiReddit> subreddits = new ArrayList<>();
             JSONArray subredditsArray = object.getJSONArray(JSONUtils.SUBREDDITS_KEY);
             for (int i = 0; i < subredditsArray.length(); i++) {
-                subreddits.add(subredditsArray.getJSONObject(i).getString(JSONUtils.NAME_KEY));
+                JSONObject subredditData = subredditsArray.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
+                subreddits.add(
+                        new ExpandedSubredditInMultiReddit(
+                                subredditsArray.getJSONObject(i).getString(JSONUtils.NAME_KEY),
+                                subredditData.isNull(JSONUtils.COMMUNITY_ICON_KEY) ? subredditData.getString(JSONUtils.NAME_KEY) : subredditData.getString(JSONUtils.COMMUNITY_ICON_KEY)
+                        )
+                );
             }
 
             return new MultiReddit(path, displayName, name, description, copiedFrom, iconUrl,

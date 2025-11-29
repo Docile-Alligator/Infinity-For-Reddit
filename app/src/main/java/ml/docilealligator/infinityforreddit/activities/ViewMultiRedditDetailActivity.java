@@ -888,7 +888,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                     .show();
             return true;
         } else if (itemId == R.id.action_copy_view_multi_reddit_detail_activity) {
-            CopyMultiRedditActivity.Companion.start(this, "");
+            CopyMultiRedditActivity.Companion.start(this, multiPath);
             return true;
         }
         return false;

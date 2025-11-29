@@ -171,7 +171,7 @@ public class EditMultiRedditActivity extends BaseActivity {
             binding.selectSubredditTextViewEditMultiRedditActivity.setOnClickListener(view -> {
             Intent intent = new Intent(EditMultiRedditActivity.this, SelectedSubredditsAndUsersActivity.class);
             if (multiReddit.getSubreddits() != null) {
-                intent.putStringArrayListExtra(SelectedSubredditsAndUsersActivity.EXTRA_SELECTED_SUBREDDITS, multiReddit.getSubreddits());
+                intent.putParcelableArrayListExtra(SelectedSubredditsAndUsersActivity.EXTRA_SELECTED_SUBREDDITS, multiReddit.getSubreddits());
             }
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
         });
@@ -215,7 +215,7 @@ public class EditMultiRedditActivity extends BaseActivity {
                         });
             } else {
                 String jsonModel = new MultiRedditJSONModel(binding.multiRedditNameEditTextEditMultiRedditActivity.getText().toString(), binding.descriptionEditTextEditMultiRedditActivity.getText().toString(),
-                        binding.visibilitySwitchEditMultiRedditActivity.isChecked(), multiReddit.getSubreddits()).createJSONModel();
+                        binding.visibilitySwitchEditMultiRedditActivity.isChecked(), multiReddit.getSubredditNames()).createJSONModel();
                 EditMultiReddit.editMultiReddit(mRetrofit, accessToken, multiReddit.getPath(),
                         jsonModel, new EditMultiReddit.EditMultiRedditListener() {
                             @Override
@@ -239,7 +239,7 @@ public class EditMultiRedditActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SUBREDDIT_SELECTION_REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null) {
-                multiReddit.setSubreddits(data.getStringArrayListExtra(
+                multiReddit.setSubredditNames(data.getStringArrayListExtra(
                         SelectedSubredditsAndUsersActivity.EXTRA_RETURN_SELECTED_SUBREDDITS));
             }
         }

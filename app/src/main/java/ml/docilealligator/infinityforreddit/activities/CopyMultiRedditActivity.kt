@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -38,7 +39,6 @@ import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingInd
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextField
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.SwitchRow
-import ml.docilealligator.infinityforreddit.multireddit.MultiReddit
 import ml.docilealligator.infinityforreddit.repositories.CopyMultiRedditActivityRepositoryImpl
 import ml.docilealligator.infinityforreddit.viewmodels.CopyMultiRedditActivityViewModel
 import ml.docilealligator.infinityforreddit.viewmodels.CopyMultiRedditActivityViewModel.Companion.provideFactory
@@ -102,6 +102,14 @@ class CopyMultiRedditActivity : BaseActivity() {
             val description = rememberTextFieldState()
             var isPrivate by remember { mutableStateOf(true) }
 
+            LaunchedEffect(multiRedditState) {
+                if (multiRedditState is DataLoadState.Success) {
+                    val multiReddit = (multiRedditState as DataLoadState.Success).data
+                    name.setTextAndPlaceCursorAtEnd(multiReddit.name)
+                    description.setTextAndPlaceCursorAtEnd(multiReddit.description)
+                }
+            }
+
             AppTheme(customThemeWrapper.themeType) {
                 Scaffold(
                     topBar = {
@@ -126,10 +134,10 @@ class CopyMultiRedditActivity : BaseActivity() {
                                 CustomLoadingIndicator()
                             }
                         }
-                        is DataLoadState.Error<*> -> {
+                        is DataLoadState.Error -> {
 
                         }
-                        is DataLoadState.Success<*> -> {
+                        is DataLoadState.Success -> {
                             LazyColumn(
                                 modifier = Modifier.padding(innerPadding)
                             ) {

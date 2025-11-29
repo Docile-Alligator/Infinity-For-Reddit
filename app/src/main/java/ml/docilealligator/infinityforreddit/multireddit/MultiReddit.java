@@ -12,6 +12,7 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import ml.docilealligator.infinityforreddit.account.Account;
 
@@ -51,7 +52,7 @@ public class MultiReddit implements Parcelable {
     @ColumnInfo(name = "is_favorite")
     private boolean isFavorite;
     @Ignore
-    private ArrayList<String> subreddits;
+    private ArrayList<ExpandedSubredditInMultiReddit> subreddits;
 
     public MultiReddit(@NonNull String path, @NonNull String displayName, @NonNull String name,
                        String description, String copiedFrom, String iconUrl, String visibility,
@@ -75,7 +76,7 @@ public class MultiReddit implements Parcelable {
     public MultiReddit(@NonNull String path, @NonNull String displayName, @NonNull String name,
                        String description, String copiedFrom, String iconUrl, String visibility,
                        @NonNull String owner, int nSubscribers, long createdUTC, boolean over18,
-                       boolean isSubscriber, boolean isFavorite, ArrayList<String> subreddits) {
+                       boolean isSubscriber, boolean isFavorite, ArrayList<ExpandedSubredditInMultiReddit> subreddits) {
         this.displayName = displayName;
         this.name = name;
         this.description = description;
@@ -106,8 +107,7 @@ public class MultiReddit implements Parcelable {
         over18 = in.readByte() != 0;
         isSubscriber = in.readByte() != 0;
         isFavorite = in.readByte() != 0;
-        subreddits = new ArrayList<>();
-        in.readStringList(subreddits);
+        subreddits = in.createTypedArrayList(ExpandedSubredditInMultiReddit.CREATOR);
     }
 
     public static final Creator<MultiReddit> CREATOR = new Creator<>() {
@@ -229,12 +229,20 @@ public class MultiReddit implements Parcelable {
         isFavorite = favorite;
     }
 
-    public ArrayList<String> getSubreddits() {
+    public ArrayList<ExpandedSubredditInMultiReddit> getSubreddits() {
         return subreddits;
     }
 
-    public void setSubreddits(ArrayList<String> subreddits) {
+    public ArrayList<String> getSubredditNames() {
+        return new ArrayList<>((subreddits.stream().map(ExpandedSubredditInMultiReddit::getName).collect(Collectors.toList())));
+    }
+
+    public void setSubreddits(ArrayList<ExpandedSubredditInMultiReddit> subreddits) {
         this.subreddits = subreddits;
+    }
+
+    public void setSubredditNames(ArrayList<String> subredditNames) {
+        this.subreddits = new ArrayList<>(subredditNames.stream().map(name -> new ExpandedSubredditInMultiReddit(name, null)).collect(Collectors.toList()));
     }
 
     @Override
@@ -257,7 +265,7 @@ public class MultiReddit implements Parcelable {
         parcel.writeByte((byte) (over18 ? 1 : 0));
         parcel.writeByte((byte) (isSubscriber ? 1 : 0));
         parcel.writeByte((byte) (isFavorite ? 1 : 0));
-        parcel.writeStringList(subreddits);
+        parcel.writeTypedList(subreddits);
     }
 
     @Nullable
