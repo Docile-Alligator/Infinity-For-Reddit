@@ -34,6 +34,7 @@ import ml.docilealligator.infinityforreddit.databinding.ActivitySearchUsersResul
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.UserListingFragment;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class SearchUsersResultActivity extends BaseActivity implements ActivityToolbarInterface {
 
@@ -78,7 +79,7 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
                 addOnOffsetChangedListener(binding.appbarLayoutSearchUsersResultActivity);
             }
 
-            if (isImmersiveInterface()) {
+            if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     window.setDecorFitsSystemWindows(false);
                 } else {
@@ -89,10 +90,7 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
                     @NonNull
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                        Insets allInsets = insets.getInsets(
-                                WindowInsetsCompat.Type.systemBars()
-                                        | WindowInsetsCompat.Type.displayCutout()
-                        );
+                        Insets allInsets = Utils.getInsets(insets, false, isForcedImmersiveInterface());
 
                         setMargins(binding.toolbarSearchUsersResultActivity,
                                 allInsets.left,
@@ -102,7 +100,7 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
 
                         binding.frameLayoutSearchUsersResultActivity.setPadding(allInsets.left, 0, allInsets.right, allInsets.bottom);
 
-                        return WindowInsetsCompat.CONSUMED;
+                        return insets;
                     }
                 });
                 //adjustToolbar(binding.toolbarSearchUsersResultActivity);

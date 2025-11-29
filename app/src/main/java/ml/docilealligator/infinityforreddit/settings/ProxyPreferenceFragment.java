@@ -26,7 +26,7 @@ public class ProxyPreferenceFragment extends CustomFontPreferenceFragmentCompat 
         PreferenceManager preferenceManager = getPreferenceManager();
         preferenceManager.setSharedPreferencesName(SharedPreferencesUtils.PROXY_SHARED_PREFERENCES_FILE);
         setPreferencesFromResource(R.xml.proxy_preferences, rootKey);
-        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
+        ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         EditTextPreference proxyHostnamePref = findPreference(SharedPreferencesUtils.PROXY_HOSTNAME);
         EditTextPreference proxyPortPref = findPreference(SharedPreferencesUtils.PROXY_PORT);
@@ -37,7 +37,7 @@ public class ProxyPreferenceFragment extends CustomFontPreferenceFragmentCompat 
                 boolean isInetAddress = InetAddresses.isInetAddress((String) newValue);
 
                 if (!isInetAddress && !isHostname) {
-                    Toast.makeText(activity, R.string.not_a_valid_ip_or_hostname, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, R.string.not_a_valid_ip_or_hostname, Toast.LENGTH_SHORT).show();
                     return false;
                 }
                 return true;
@@ -49,11 +49,11 @@ public class ProxyPreferenceFragment extends CustomFontPreferenceFragmentCompat 
                 try {
                     int port = Integer.parseInt((String) newValue);
                     if (port < 0 || port > 65535) {
-                        Toast.makeText(activity, R.string.not_a_valid_port, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mActivity, R.string.not_a_valid_port, Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 } catch (NumberFormatException e) {
-                    Toast.makeText(activity, R.string.not_a_valid_number, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, R.string.not_a_valid_number, Toast.LENGTH_SHORT).show();
                     return false;
                 }
                 return true;

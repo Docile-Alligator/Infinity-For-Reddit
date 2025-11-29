@@ -128,19 +128,16 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
         mGlide = Glide.with(mActivity);
 
-        if (mActivity.isImmersiveInterface()) {
-            ViewCompat.setOnApplyWindowInsetsListener(mActivity.getWindow().getDecorView(), new OnApplyWindowInsetsListener() {
+        if (mActivity.isImmersiveInterfaceRespectForcedEdgeToEdge()) {
+            ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
+                    Insets allInsets = Utils.getInsets(insets, false, mActivity.isForcedImmersiveInterface());
                     binding.recyclerViewCommentsListingFragment.setPadding(
                             0, 0, 0, allInsets.bottom
                     );
-                    return insets;
+                    return WindowInsetsCompat.CONSUMED;
                 }
             });
             //binding.recyclerViewCommentsListingFragment.setPadding(0, 0, 0, mActivity.getNavBarHeight());

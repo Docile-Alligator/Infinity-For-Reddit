@@ -88,7 +88,7 @@ public class DownloadRedditVideoService extends JobService {
     @Inject
     Executor executor;
     private NotificationManagerCompat notificationManager;
-    private final String[] possibleAudioUrlSuffices = new String[]{"/DASH_AUDIO_128.mp4", "/DASH_audio.mp4", "/DASH_audio", "/audio.mp4", "/audio"};
+    private final String[] possibleAudioUrlSuffices = new String[]{"/CMAF_AUDIO_128.mp4", "/CMAF_AUDIO_64.mp4", "/DASH_AUDIO_128.mp4", "/DASH_audio.mp4", "/DASH_audio", "/audio.mp4", "/audio"};
 
     public DownloadRedditVideoService() {
     }

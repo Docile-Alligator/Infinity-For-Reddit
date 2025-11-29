@@ -36,7 +36,7 @@ public class CreditsPreferenceFragment extends CustomFontPreferenceFragmentCompa
 
         if (iconForegroundPreference != null) {
             iconForegroundPreference.setOnPreferenceClickListener(preference -> {
-                Intent intent = new Intent(activity, LinkResolverActivity.class);
+                Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://www.freepik.com/free-photos-vectors/technology"));
                 startActivity(intent);
                 return true;
@@ -45,7 +45,7 @@ public class CreditsPreferenceFragment extends CustomFontPreferenceFragmentCompa
 
         if (iconBackgroundPreference != null) {
             iconBackgroundPreference.setOnPreferenceClickListener(preference -> {
-                Intent intent = new Intent(activity, LinkResolverActivity.class);
+                Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://www.freepik.com/free-photos-vectors/background"));
                 startActivity(intent);
                 return true;
@@ -54,7 +54,7 @@ public class CreditsPreferenceFragment extends CustomFontPreferenceFragmentCompa
 
         if (errorImagePreference != null) {
             errorImagePreference.setOnPreferenceClickListener(preference -> {
-                Intent intent = new Intent(activity, LinkResolverActivity.class);
+                Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://www.freepik.com/free-photos-vectors/technology"));
                 startActivity(intent);
                 return true;
@@ -63,7 +63,7 @@ public class CreditsPreferenceFragment extends CustomFontPreferenceFragmentCompa
 
         if (crosspostIconPreference != null) {
             crosspostIconPreference.setOnPreferenceClickListener(preference -> {
-                Intent intent = new Intent(activity, LinkResolverActivity.class);
+                Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://www.flaticon.com/free-icon/crossed-arrows_2291"));
                 startActivity(intent);
                 return true;
@@ -72,7 +72,7 @@ public class CreditsPreferenceFragment extends CustomFontPreferenceFragmentCompa
 
         if (thumbtackIconPreference != null) {
             thumbtackIconPreference.setOnPreferenceClickListener(preference -> {
-                Intent intent = new Intent(activity, LinkResolverActivity.class);
+                Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://www.flaticon.com/free-icon/tack-save-button_61845#term=thumbtack&page=1&position=3"));
                 startActivity(intent);
                 return true;
@@ -81,7 +81,7 @@ public class CreditsPreferenceFragment extends CustomFontPreferenceFragmentCompa
 
         if (bestRocketIconPreference != null) {
             bestRocketIconPreference.setOnPreferenceClickListener(preference -> {
-                Intent intent = new Intent(activity, LinkResolverActivity.class);
+                Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://www.flaticon.com/free-icon/spring-swing-rocket_2929322?term=space%20ship&page=1&position=18"));
                 startActivity(intent);
                 return true;
@@ -90,7 +90,7 @@ public class CreditsPreferenceFragment extends CustomFontPreferenceFragmentCompa
 
         if (materialIconsPreference != null) {
             materialIconsPreference.setOnPreferenceClickListener(preference -> {
-                Intent intent = new Intent(activity, LinkResolverActivity.class);
+                Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://material.io/resources/icons/"));
                 startActivity(intent);
                 return true;
@@ -99,7 +99,7 @@ public class CreditsPreferenceFragment extends CustomFontPreferenceFragmentCompa
 
         if (nationalFlagsPreference != null) {
             nationalFlagsPreference.setOnPreferenceClickListener(preference -> {
-                Intent intent = new Intent(activity, LinkResolverActivity.class);
+                Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://www.flaticon.com/packs/countrys-flags"));
                 startActivity(intent);
                 return true;
@@ -108,7 +108,7 @@ public class CreditsPreferenceFragment extends CustomFontPreferenceFragmentCompa
 
         if (ufoAndCowPreference != null) {
             ufoAndCowPreference.setOnPreferenceClickListener(preference -> {
-                Intent intent = new Intent(activity, LinkResolverActivity.class);
+                Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://lottiefiles.com/33858-ufo-capturing-animation"));
                 startActivity(intent);
                 return true;
@@ -117,7 +117,7 @@ public class CreditsPreferenceFragment extends CustomFontPreferenceFragmentCompa
 
         if (loveAnimationPreference != null) {
             loveAnimationPreference.setOnPreferenceClickListener(preference -> {
-                Intent intent = new Intent(activity, LinkResolverActivity.class);
+                Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://lottiefiles.com/52103-love"));
                 startActivity(intent);
                 return true;
@@ -126,7 +126,7 @@ public class CreditsPreferenceFragment extends CustomFontPreferenceFragmentCompa
 
         if (lockScreenPreference != null) {
             lockScreenPreference.setOnPreferenceClickListener(preference -> {
-                Intent intent = new Intent(activity, LinkResolverActivity.class);
+                Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://lottiefiles.com/69178-cool"));
                 startActivity(intent);
                 return true;

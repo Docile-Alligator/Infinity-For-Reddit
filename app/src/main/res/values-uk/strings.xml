@@ -312,8 +312,6 @@
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Розпочинати самовідтворення відеозаписів, коли їх видно на %1$d%%"</string>
     <string name="settings_immersive_interface_title">"Заглиблений інтерфейс"</string>
     <string name="settings_immersive_interface_summary">"Не застосовувати для всіх сторінок"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_title">"Ігнорувати панель пересування в заглибленому інтерфейсі"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_summary">"Запобігати додатковим відступам на нижній панелі пересування"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Пристосувати вкладки на основній сторінці"</string>
     <string name="settings_enable_bottom_app_bar_title">"Увімкнути нижнє пересування"</string>
     <string name="settings_category_post_and_comment_title">"Дописи і коментарі"</string>

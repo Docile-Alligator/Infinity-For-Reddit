@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import kotlinx.coroutines.flow.Flow;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class LocalCustomThemeRepository {
@@ -12,11 +13,19 @@ public class LocalCustomThemeRepository {
     private final LiveData<CustomTheme> mCurrentDarkCustomTheme;
     private final LiveData<CustomTheme> mCurrentAmoledCustomTheme;
 
-    LocalCustomThemeRepository(RedditDataRoomDatabase redditDataRoomDatabase) {
+    private final Flow<CustomTheme> mCurrentLightCustomThemeFlow;
+    private final Flow<CustomTheme> mCurrentDarkCustomThemeFlow;
+    private final Flow<CustomTheme> mCurrentAmoledCustomThemeFlow;
+
+    public LocalCustomThemeRepository(RedditDataRoomDatabase redditDataRoomDatabase) {
         mAllCustomThemes = redditDataRoomDatabase.customThemeDao().getAllCustomThemes();
         mCurrentLightCustomTheme = redditDataRoomDatabase.customThemeDao().getLightCustomThemeLiveData();
         mCurrentDarkCustomTheme = redditDataRoomDatabase.customThemeDao().getDarkCustomThemeLiveData();
         mCurrentAmoledCustomTheme = redditDataRoomDatabase.customThemeDao().getAmoledCustomThemeLiveData();
+
+        mCurrentLightCustomThemeFlow = redditDataRoomDatabase.customThemeDao().getLightCustomThemeFlow();
+        mCurrentDarkCustomThemeFlow = redditDataRoomDatabase.customThemeDao().getDarkCustomThemeFlow();
+        mCurrentAmoledCustomThemeFlow = redditDataRoomDatabase.customThemeDao().getAmoledCustomThemeFlow();
     }
 
     LiveData<List<CustomTheme>> getAllCustomThemes() {
@@ -33,5 +42,17 @@ public class LocalCustomThemeRepository {
 
     LiveData<CustomTheme> getCurrentAmoledCustomTheme() {
         return mCurrentAmoledCustomTheme;
+    }
+
+    public Flow<CustomTheme> getCurrentLightCustomThemeFlow() {
+        return mCurrentLightCustomThemeFlow;
+    }
+
+    public Flow<CustomTheme> getCurrentDarkCustomThemeFlow() {
+        return mCurrentDarkCustomThemeFlow;
+    }
+
+    public Flow<CustomTheme> getCurrentAmoledCustomThemeFlow() {
+        return mCurrentAmoledCustomThemeFlow;
     }
 }

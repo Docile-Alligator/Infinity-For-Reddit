@@ -312,10 +312,8 @@
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"当 %1$d%% 个视频可见时，开始自动播放"</string>
     <string name="settings_immersive_interface_title">"沉浸式界面"</string>
     <string name="settings_immersive_interface_summary">"不应用到所有页面"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_title">"沉浸式界面下忽略导航栏"</string>
 
     <!-- 请问这个是怎么回事？“Padding”没有翻译，是有特殊的用词吗？ -->
-    <string name="settings_immersive_interface_ignore_nav_bar_summary">"防止底部导航栏有多余的内边距"</string>
     <string name="settings_customize_tabs_in_main_page_title">"自定义主界面标签页"</string>
     <string name="settings_enable_bottom_app_bar_title">"开启底部导航栏"</string>
     <string name="settings_category_post_and_comment_title">"帖子和评论"</string>

@@ -35,6 +35,7 @@ import ml.docilealligator.infinityforreddit.subreddit.Rule;
 import ml.docilealligator.infinityforreddit.thing.ReportReason;
 import ml.docilealligator.infinityforreddit.thing.ReportThing;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 public class ReportActivity extends BaseActivity {
@@ -86,7 +87,7 @@ public class ReportActivity extends BaseActivity {
             Slidr.attach(this);
         }
 
-        if (isImmersiveInterface()) {
+        if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
             if (isChangeStatusBarIconColor()) {
                 addOnOffsetChangedListener(binding.appbarLayoutReportActivity);
             }
@@ -95,10 +96,7 @@ public class ReportActivity extends BaseActivity {
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets allInsets = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
+                    Insets allInsets = Utils.getInsets(insets, false, isForcedImmersiveInterface());
 
                     setMargins(binding.toolbarReportActivity,
                             allInsets.left,

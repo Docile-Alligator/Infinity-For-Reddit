@@ -316,8 +316,6 @@
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Začít automaticky přehrávat video, když je vidět %1$d%% z něj"</string>
     <string name="settings_immersive_interface_title">"Pohlcující rozhraní"</string>
     <string name="settings_immersive_interface_summary">"Nevztahuje se na všechny stránky"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_title">"Ignorovat navigační lištu v pohlcujícím rozhraní"</string>
-    <string name="settings_immersive_interface_ignore_nav_bar_summary">"Zabránit dodatečnému vyplnění spodní navigační lišty"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Přizpůsobit karty na hlavní stránce"</string>
     <string name="settings_enable_bottom_app_bar_title">"Povolit spodní navigaci"</string>
     <string name="settings_category_post_and_comment_title">"Příspěvek a komentář"</string>
