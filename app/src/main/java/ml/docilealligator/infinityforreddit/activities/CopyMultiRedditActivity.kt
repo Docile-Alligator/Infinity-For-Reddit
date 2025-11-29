@@ -1,11 +1,15 @@
 package ml.docilealligator.infinityforreddit.activities
 
+import android.R.attr.contentDescription
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,10 +26,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -38,6 +45,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingIndicator
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextField
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
+import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryIcon
 import ml.docilealligator.infinityforreddit.customviews.compose.SwitchRow
 import ml.docilealligator.infinityforreddit.repositories.CopyMultiRedditActivityRepositoryImpl
 import ml.docilealligator.infinityforreddit.viewmodels.CopyMultiRedditActivityViewModel
@@ -130,12 +138,31 @@ class CopyMultiRedditActivity : BaseActivity() {
                 ) { innerPadding ->
                     when(multiRedditState) {
                         is DataLoadState.Loading -> {
-                            Box(modifier = Modifier.fillMaxSize()) {
-                                CustomLoadingIndicator()
+                            Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+                                CustomLoadingIndicator(
+                                    modifier = Modifier.align(Alignment.Center)
+                                )
                             }
                         }
                         is DataLoadState.Error -> {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(innerPadding)
+                                    .padding(16.dp),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                PrimaryIcon(
+                                    drawableId = R.drawable.ic_error_outline_black_day_night_24dp,
+                                    contentDescription = stringResource(R.string.cannot_fetch_multireddit_tap_to_retry)
+                                )
 
+                                Text(
+                                    stringResource(id = R.string.cannot_fetch_multireddit_tap_to_retry),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
                         is DataLoadState.Success -> {
                             LazyColumn(
