@@ -6,7 +6,7 @@ import retrofit2.http.HeaderMap
 import retrofit2.http.Query
 
 interface RedditAPIKt {
-    @GET("/api/multi/multipath?expand_srs=true")
+    @GET("/api/multi/multipath?expand_srs=true&raw_json=1")
     suspend fun getMultiRedditInfo(
         @HeaderMap headers: MutableMap<String, String>,
         @Query("multipath") multipath: String
