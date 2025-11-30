@@ -5,29 +5,31 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -60,6 +62,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryIcon
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SwitchRow
+import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
 import ml.docilealligator.infinityforreddit.customviews.compose.ToolbarIcon
 import ml.docilealligator.infinityforreddit.multireddit.ExpandedSubredditInMultiReddit
 import ml.docilealligator.infinityforreddit.repositories.CopyMultiRedditActivityRepositoryImpl
@@ -69,10 +72,6 @@ import retrofit2.Retrofit
 import java.util.concurrent.Executor
 import javax.inject.Inject
 import javax.inject.Named
-
-fun startCopyMultiRedditActivity(context: Context) {
-
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 class CopyMultiRedditActivity : BaseActivity() {
@@ -109,6 +108,8 @@ class CopyMultiRedditActivity : BaseActivity() {
 
         super.onCreate(savedInstanceState)
 
+        enableEdgeToEdge()
+
         val multipath = intent.getStringExtra(EXTRA_MULTIPATH) ?: ""
 
         copyMultiRedditActivityViewModel = ViewModelProvider.create(
@@ -119,41 +120,26 @@ class CopyMultiRedditActivity : BaseActivity() {
         copyMultiRedditActivityViewModel.fetchMultiRedditInfo()
 
         setContent {
-            val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-            val multiRedditState by copyMultiRedditActivityViewModel.multiRedditState.collectAsStateWithLifecycle()
-            val name = rememberTextFieldState()
-            val description = rememberTextFieldState()
-            var isPrivate by remember { mutableStateOf(true) }
-
-            LaunchedEffect(multiRedditState) {
-                if (multiRedditState is DataLoadState.Success) {
-                    val multiReddit = (multiRedditState as DataLoadState.Success).data
-                    name.setTextAndPlaceCursorAtEnd(multiReddit.name)
-                    description.setTextAndPlaceCursorAtEnd(multiReddit.description)
-                }
-            }
-
             AppTheme(customThemeWrapper.themeType) {
+                val scrollBehavior = enterAlwaysScrollBehavior()
+                val multiRedditState by copyMultiRedditActivityViewModel.multiRedditState.collectAsStateWithLifecycle()
+                val name = rememberTextFieldState()
+                val description = rememberTextFieldState()
+                var isPrivate by remember { mutableStateOf(true) }
+
+                LaunchedEffect(multiRedditState) {
+                    if (multiRedditState is DataLoadState.Success) {
+                        val multiReddit = (multiRedditState as DataLoadState.Success).data
+                        name.setTextAndPlaceCursorAtEnd(multiReddit.name)
+                        description.setTextAndPlaceCursorAtEnd(multiReddit.description)
+                    }
+                }
+
                 Scaffold(
                     topBar = {
-                        TopAppBar(
-                            colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = Color(LocalAppTheme.current.colorPrimary),
-                                scrolledContainerColor = Color(LocalAppTheme.current.colorPrimary),
-                                titleContentColor = Color(LocalAppTheme.current.toolbarPrimaryTextAndIconColor),
-                            ),
-                            title = {
-                                Text(stringResource(R.string.copy_multireddit_activity_label))
-                            },
-                            navigationIcon = {
-                                IconButton(onClick = {
-                                    finish()
-                                }) {
-                                    ToolbarIcon(
-                                        contentDescription = stringResource(R.string.action_back_content_description)
-                                    )
-                                }
-                            },
+                        ThemedTopAppBar(
+                            titleStringResId = R.string.copy_multireddit_activity_label,
+                            scrollBehavior = scrollBehavior,
                             actions = {
                                 IconButton(onClick = {
 
@@ -163,13 +149,16 @@ class CopyMultiRedditActivity : BaseActivity() {
                                         contentDescription = stringResource(R.string.action_copy_multi_reddit)
                                     )
                                 }
-                            },
-                            scrollBehavior = scrollBehavior
-                        )
+                            }
+                        ) {
+                            finish()
+                        }
                     },
                     modifier = Modifier
                         .fillMaxSize()
                         .nestedScroll(scrollBehavior.nestedScrollConnection)
+                        .windowInsetsPadding(WindowInsets.safeDrawing.only(
+                            WindowInsetsSides.Horizontal))
                 ) { innerPadding ->
                     when(multiRedditState) {
                         is DataLoadState.Loading -> {
