@@ -29,12 +29,15 @@ import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,6 +53,8 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.bumptech.glide.request.RequestOptions
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
+import kotlinx.coroutines.launch
+import ml.docilealligator.infinityforreddit.ActionState
 import ml.docilealligator.infinityforreddit.DataLoadState
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
@@ -65,6 +70,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.SwitchRow
 import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
 import ml.docilealligator.infinityforreddit.customviews.compose.ToolbarIcon
 import ml.docilealligator.infinityforreddit.multireddit.ExpandedSubredditInMultiReddit
+import ml.docilealligator.infinityforreddit.multireddit.MultiReddit
 import ml.docilealligator.infinityforreddit.repositories.CopyMultiRedditActivityRepositoryImpl
 import ml.docilealligator.infinityforreddit.viewmodels.CopyMultiRedditActivityViewModel
 import ml.docilealligator.infinityforreddit.viewmodels.CopyMultiRedditActivityViewModel.Companion.provideFactory
@@ -123,15 +129,44 @@ class CopyMultiRedditActivity : BaseActivity() {
             AppTheme(customThemeWrapper.themeType) {
                 val scrollBehavior = enterAlwaysScrollBehavior()
                 val multiRedditState by copyMultiRedditActivityViewModel.multiRedditState.collectAsStateWithLifecycle()
+                val copyMultiRedditState by copyMultiRedditActivityViewModel.copyMultiRedditState.collectAsStateWithLifecycle()
                 val name = rememberTextFieldState()
                 val description = rememberTextFieldState()
                 var isPrivate by remember { mutableStateOf(true) }
+
+                val scope = rememberCoroutineScope()
+                val snackbarHostState = remember { SnackbarHostState() }
+                val copyingMultiRedditMessage = stringResource(R.string.copying_multi_reddit)
 
                 LaunchedEffect(multiRedditState) {
                     if (multiRedditState is DataLoadState.Success) {
                         val multiReddit = (multiRedditState as DataLoadState.Success).data
                         name.setTextAndPlaceCursorAtEnd(multiReddit.name)
                         description.setTextAndPlaceCursorAtEnd(multiReddit.description)
+                    }
+                }
+
+                LaunchedEffect(copyMultiRedditState) {
+                    when (copyMultiRedditState) {
+                        is ActionState.Error -> {
+                            scope.launch {
+                                snackbarHostState.showSnackbar((copyMultiRedditState as ActionState.Error).message)
+                            }
+                        }
+                        is ActionState.Idle -> {
+
+                        }
+                        is ActionState.Running -> {
+                            scope.launch {
+                                snackbarHostState.showSnackbar(copyingMultiRedditMessage)
+                            }
+                        }
+                        is ActionState.Success<*> -> {
+                            startActivity(Intent(this@CopyMultiRedditActivity, ViewMultiRedditDetailActivity::class.java).apply {
+                                putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_PATH, (copyMultiRedditState as ActionState.Success<MultiReddit>).data.path)
+                            })
+                            finish()
+                        }
                     }
                 }
 
@@ -142,7 +177,12 @@ class CopyMultiRedditActivity : BaseActivity() {
                             scrollBehavior = scrollBehavior,
                             actions = {
                                 IconButton(onClick = {
-
+                                    if (multiRedditState is DataLoadState.Success) {
+                                        copyMultiRedditActivityViewModel.copyMultiRedditInfo(
+                                            name.text.toString(),
+                                            description.text.toString()
+                                        )
+                                    }
                                 }) {
                                     ToolbarIcon(
                                         drawableId = R.drawable.ic_check_circle_toolbar_24dp,
@@ -157,8 +197,14 @@ class CopyMultiRedditActivity : BaseActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                         .nestedScroll(scrollBehavior.nestedScrollConnection)
-                        .windowInsetsPadding(WindowInsets.safeDrawing.only(
-                            WindowInsetsSides.Horizontal))
+                        .windowInsetsPadding(
+                            WindowInsets.safeDrawing.only(
+                                WindowInsetsSides.Horizontal
+                            )
+                        ),
+                    snackbarHost = {
+                        SnackbarHost(hostState = snackbarHostState)
+                    }
                 ) { innerPadding ->
                     when(multiRedditState) {
                         is DataLoadState.Loading -> {

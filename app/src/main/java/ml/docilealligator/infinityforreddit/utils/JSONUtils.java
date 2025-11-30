@@ -208,6 +208,7 @@ public class JSONUtils {
     public static final String O_EMBED_KEY = "oembed";
     public static final String THUMBNAIL_URL_KEY = "thumbnail_url";
     public static final String VIDEO_DOWNLOAD_URL = "videoDownloadUrl";
+    public static final String EXPLANATION_KEY = "explanation";
 
     @Nullable
     public static Map<String, MediaMetadata> parseMediaMetadata(JSONObject data) {

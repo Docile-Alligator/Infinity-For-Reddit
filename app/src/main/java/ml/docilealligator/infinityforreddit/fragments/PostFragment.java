@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -199,7 +198,6 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
                     getPostRecyclerView().setPadding(
                             0, 0, 0, allInsets.bottom
                     );
-                    Log.i("asfsaf", "s " + postFragmentId);
                     return WindowInsetsCompat.CONSUMED;
                 }
             });

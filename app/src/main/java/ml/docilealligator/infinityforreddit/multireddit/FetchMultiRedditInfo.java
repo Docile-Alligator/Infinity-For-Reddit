@@ -95,13 +95,17 @@ public class FetchMultiRedditInfo {
             ArrayList<ExpandedSubredditInMultiReddit> subreddits = new ArrayList<>();
             JSONArray subredditsArray = object.getJSONArray(JSONUtils.SUBREDDITS_KEY);
             for (int i = 0; i < subredditsArray.length(); i++) {
-                JSONObject subredditData = subredditsArray.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-                subreddits.add(
-                        new ExpandedSubredditInMultiReddit(
-                                subredditsArray.getJSONObject(i).getString(JSONUtils.NAME_KEY),
-                                subredditData.isNull(JSONUtils.COMMUNITY_ICON_KEY) ? subredditData.getString(JSONUtils.NAME_KEY) : subredditData.getString(JSONUtils.COMMUNITY_ICON_KEY)
-                        )
-                );
+                try {
+                    JSONObject subredditData = subredditsArray.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
+                    subreddits.add(
+                            new ExpandedSubredditInMultiReddit(
+                                    subredditsArray.getJSONObject(i).getString(JSONUtils.NAME_KEY),
+                                    subredditData.isNull(JSONUtils.COMMUNITY_ICON_KEY) ? subredditData.getString(JSONUtils.NAME_KEY) : subredditData.getString(JSONUtils.COMMUNITY_ICON_KEY)
+                            )
+                    );
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             return new MultiReddit(path, displayName, name, description, copiedFrom, iconUrl,

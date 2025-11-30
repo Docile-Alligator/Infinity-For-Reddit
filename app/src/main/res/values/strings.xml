@@ -1592,4 +1592,6 @@
     <string name="post_spam_status">This post is removed as spam</string>
     <string name="comment_removed_status">This comment is removed</string>
     <string name="comment_spam_status">This comment is removed as spam</string>
+
+    <string name="copying_multi_reddit">Copying</string>
 </resources>
