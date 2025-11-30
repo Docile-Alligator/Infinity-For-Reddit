@@ -7,20 +7,30 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
@@ -36,6 +47,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
+import com.google.common.math.LinearTransformation.horizontal
 import ml.docilealligator.infinityforreddit.DataLoadState
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
@@ -46,7 +61,10 @@ import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingInd
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextField
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryIcon
+import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SwitchRow
+import ml.docilealligator.infinityforreddit.customviews.compose.ToolbarIcon
+import ml.docilealligator.infinityforreddit.multireddit.ExpandedSubredditInMultiReddit
 import ml.docilealligator.infinityforreddit.repositories.CopyMultiRedditActivityRepositoryImpl
 import ml.docilealligator.infinityforreddit.viewmodels.CopyMultiRedditActivityViewModel
 import ml.docilealligator.infinityforreddit.viewmodels.CopyMultiRedditActivityViewModel.Companion.provideFactory
@@ -124,10 +142,20 @@ class CopyMultiRedditActivity : BaseActivity() {
                         TopAppBar(
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = Color(LocalAppTheme.current.colorPrimary),
+                                scrolledContainerColor = Color(LocalAppTheme.current.colorPrimary),
                                 titleContentColor = Color(LocalAppTheme.current.toolbarPrimaryTextAndIconColor),
                             ),
                             title = {
                                 Text(stringResource(R.string.copy_multireddit_activity_label))
+                            },
+                            navigationIcon = {
+                                IconButton(onClick = {
+                                    finish()
+                                }) {
+                                    ToolbarIcon(
+                                        contentDescription = stringResource(R.string.action_back_content_description)
+                                    )
+                                }
                             },
                             scrollBehavior = scrollBehavior
                         )
@@ -138,17 +166,26 @@ class CopyMultiRedditActivity : BaseActivity() {
                 ) { innerPadding ->
                     when(multiRedditState) {
                         is DataLoadState.Loading -> {
-                            Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+                            Box(modifier = Modifier
+                                .fillMaxSize()
+                                .padding(innerPadding)) {
                                 CustomLoadingIndicator(
                                     modifier = Modifier.align(Alignment.Center)
                                 )
                             }
                         }
                         is DataLoadState.Error -> {
+                            val interactionSource = remember { MutableInteractionSource() }
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(innerPadding)
+                                    .clickable(
+                                        interactionSource = interactionSource,
+                                        indication = null
+                                    ) {
+                                        copyMultiRedditActivityViewModel.fetchMultiRedditInfo()
+                                    }
                                     .padding(16.dp),
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally
@@ -158,8 +195,8 @@ class CopyMultiRedditActivity : BaseActivity() {
                                     contentDescription = stringResource(R.string.cannot_fetch_multireddit_tap_to_retry)
                                 )
 
-                                Text(
-                                    stringResource(id = R.string.cannot_fetch_multireddit_tap_to_retry),
+                                PrimaryText(
+                                    R.string.cannot_fetch_multireddit_tap_to_retry,
                                     textAlign = TextAlign.Center
                                 )
                             }
@@ -198,11 +235,37 @@ class CopyMultiRedditActivity : BaseActivity() {
                                         isPrivate = it
                                     }
                                 }
+
+                                items((multiRedditState as DataLoadState.Success).data.subreddits) { subreddit ->
+                                    SubredditRow(subreddit)
+                                }
                             }
                         }
                     }
                 }
             }
+        }
+    }
+
+    @OptIn(ExperimentalGlideComposeApi::class)
+    @Composable
+    fun SubredditRow(expandedSubredditInMultiReddit: ExpandedSubredditInMultiReddit) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            GlideImage(
+                modifier = Modifier
+                    .padding(end = 16.dp)
+                    .size(24.dp),
+                model = expandedSubredditInMultiReddit.iconUrl,
+                failure = placeholder(R.drawable.subreddit_default_icon),
+                contentDescription = expandedSubredditInMultiReddit.name
+            )
+
+            PrimaryText(expandedSubredditInMultiReddit.name)
         }
     }
 
