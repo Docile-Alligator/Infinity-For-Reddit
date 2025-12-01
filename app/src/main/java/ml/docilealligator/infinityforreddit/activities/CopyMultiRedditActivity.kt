@@ -24,8 +24,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.input.rememberTextFieldState
-import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -130,21 +128,13 @@ class CopyMultiRedditActivity : BaseActivity() {
                 val scrollBehavior = enterAlwaysScrollBehavior()
                 val multiRedditState by copyMultiRedditActivityViewModel.multiRedditState.collectAsStateWithLifecycle()
                 val copyMultiRedditState by copyMultiRedditActivityViewModel.copyMultiRedditState.collectAsStateWithLifecycle()
-                val name = rememberTextFieldState()
-                val description = rememberTextFieldState()
+                val name by copyMultiRedditActivityViewModel.name.collectAsStateWithLifecycle()
+                val description by copyMultiRedditActivityViewModel.description.collectAsStateWithLifecycle()
                 var isPrivate by remember { mutableStateOf(true) }
 
                 val scope = rememberCoroutineScope()
                 val snackbarHostState = remember { SnackbarHostState() }
                 val copyingMultiRedditMessage = stringResource(R.string.copying_multi_reddit)
-
-                LaunchedEffect(multiRedditState) {
-                    if (multiRedditState is DataLoadState.Success) {
-                        val multiReddit = (multiRedditState as DataLoadState.Success).data
-                        name.setTextAndPlaceCursorAtEnd(multiReddit.name)
-                        description.setTextAndPlaceCursorAtEnd(multiReddit.description)
-                    }
-                }
 
                 LaunchedEffect(copyMultiRedditState) {
                     when (copyMultiRedditState) {
@@ -178,10 +168,7 @@ class CopyMultiRedditActivity : BaseActivity() {
                             actions = {
                                 IconButton(onClick = {
                                     if (multiRedditState is DataLoadState.Success) {
-                                        copyMultiRedditActivityViewModel.copyMultiRedditInfo(
-                                            name.text.toString(),
-                                            description.text.toString()
-                                        )
+                                        copyMultiRedditActivityViewModel.copyMultiRedditInfo()
                                     }
                                 }) {
                                     ToolbarIcon(
@@ -254,9 +241,11 @@ class CopyMultiRedditActivity : BaseActivity() {
                                             .fillMaxWidth()
                                             .padding(horizontal = 16.dp)
                                             .padding(top = 16.dp, bottom = 8.dp),
-                                        state = name,
+                                        value = name,
                                         placeholder = stringResource(R.string.multi_reddit_name_hint)
-                                    )
+                                    ) {
+                                        copyMultiRedditActivityViewModel.setName(it)
+                                    }
                                 }
 
                                 item {
@@ -265,9 +254,11 @@ class CopyMultiRedditActivity : BaseActivity() {
                                             .fillMaxWidth()
                                             .padding(horizontal = 16.dp)
                                             .padding(top = 8.dp, bottom = 8.dp),
-                                        state = description,
+                                        value = description,
                                         placeholder = stringResource(R.string.multi_reddit_description_hint)
-                                    )
+                                    ) {
+                                        copyMultiRedditActivityViewModel.setDescription(it)
+                                    }
                                 }
 
                                 item {

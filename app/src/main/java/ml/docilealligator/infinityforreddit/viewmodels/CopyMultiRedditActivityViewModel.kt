@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.viewmodels
 
-import android.app.Notification
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -14,29 +13,50 @@ import ml.docilealligator.infinityforreddit.ActionState
 import ml.docilealligator.infinityforreddit.DataLoadState
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit
 import ml.docilealligator.infinityforreddit.repositories.CopyMultiRedditActivityRepository
-import ml.docilealligator.infinityforreddit.repositories.EditCommentActivityRepository
 
 class CopyMultiRedditActivityViewModel(
     val multipath: String,
     val copyMultiRedditActivityRepository: CopyMultiRedditActivityRepository
 ): ViewModel() {
+    private val _name = MutableStateFlow("")
+    val name = _name.asStateFlow()
+
+    private val _description = MutableStateFlow("")
+    val description = _description.asStateFlow()
+
     private val _multiRedditState = MutableStateFlow<DataLoadState<MultiReddit>>(DataLoadState.Loading)
     val multiRedditState: StateFlow<DataLoadState<MultiReddit>> = _multiRedditState.asStateFlow()
 
     private val  _copyMultiRedditState = MutableStateFlow<ActionState>(ActionState.Idle)
     val copyMultiRedditState: StateFlow<ActionState> = _copyMultiRedditState.asStateFlow()
 
+    fun setName(name: String) {
+        _name.value = name
+    }
+
+    fun setDescription(description: String) {
+        _description.value = description
+    }
+
     fun fetchMultiRedditInfo() {
+        if (_multiRedditState.value is DataLoadState.Success) {
+            return
+        }
+
+        _multiRedditState.value = DataLoadState.Loading
+
         viewModelScope.launch {
-            _multiRedditState.value = DataLoadState.Loading
             val multiReddit = copyMultiRedditActivityRepository.fetchMultiRedditInfo(multipath)
             _multiRedditState.value = multiReddit?.let {
+                _name.value = it.name
+                _description.value = it.description
+
                 DataLoadState.Success(it)
             } ?: DataLoadState.Error("Failed to load multiReddit")
         }
     }
 
-    fun copyMultiRedditInfo(name: String, description: String) {
+    fun copyMultiRedditInfo() {
         if (_copyMultiRedditState.value == ActionState.Running) {
             return
         }
@@ -44,7 +64,7 @@ class CopyMultiRedditActivityViewModel(
         _copyMultiRedditState.value = ActionState.Running
 
         viewModelScope.launch {
-            when (val result = copyMultiRedditActivityRepository.copyMultiReddit(multipath, name, description)) {
+            when (val result = copyMultiRedditActivityRepository.copyMultiReddit(multipath, _name.value, _description.value)) {
                 is APIResult.Success -> {
                     _copyMultiRedditState.value = ActionState.Success(result.data)
                 }
