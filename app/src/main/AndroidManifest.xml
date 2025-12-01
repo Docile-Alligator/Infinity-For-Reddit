@@ -40,7 +40,7 @@
             android:name=".activities.CopyMultiRedditActivity"
             android:exported="false"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.Slidable" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.LoginChromeCustomTabActivity"
             android:exported="true"

@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -184,6 +185,7 @@ class CopyMultiRedditActivity : BaseActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                         .nestedScroll(scrollBehavior.nestedScrollConnection)
+                        .imePadding()
                         .windowInsetsPadding(
                             WindowInsets.safeDrawing.only(
                                 WindowInsetsSides.Horizontal
@@ -287,6 +289,11 @@ class CopyMultiRedditActivity : BaseActivity() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .clickable {
+                    startActivity(Intent(this, ViewSubredditDetailActivity::class.java).apply {
+                        putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, expandedSubredditInMultiReddit.name)
+                    })
+                }
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
