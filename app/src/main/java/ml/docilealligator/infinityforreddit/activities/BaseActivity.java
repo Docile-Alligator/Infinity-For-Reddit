@@ -331,6 +331,10 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM && !immersiveInterface;
     }
 
+    public boolean isImmersiveInterfaceEnabled() {
+        return immersiveInterface;
+    }
+
     protected void setToolbarGoToTop(Toolbar toolbar) {
         toolbar.setOnLongClickListener(view -> {
             if (BaseActivity.this instanceof ActivityToolbarInterface) {
