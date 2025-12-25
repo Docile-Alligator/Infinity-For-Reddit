@@ -107,6 +107,9 @@ public class APIUtils {
 
     public static final String MULTIPATH_KEY = "multipath";
     public static final String MODEL_KEY = "model";
+    public static final String FROM_KEY = "from";
+    public static final String DISPLAY_NAME_KEY = "display_name";
+    public static final String DESCRIPTION_MD_KEY = "description_md";
 
     public static final String REASON_KEY = "reason";
 
