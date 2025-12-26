@@ -827,9 +827,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 break;
         }
         navigationWrapper.floatingActionButton.setOnClickListener(view -> {
-            Intent intent = new Intent(this, CopyMultiRedditActivity.class);
-            startActivity(intent);
-            /*switch (fabOption) {
+            switch (fabOption) {
                 case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_REFRESH: {
                     if (sectionsPagerAdapter != null) {
                         sectionsPagerAdapter.refresh();
@@ -878,7 +876,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
                     postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
                     break;
-            }*/
+            }
         });
         navigationWrapper.floatingActionButton.setOnLongClickListener(view -> {
             FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment= new FABMoreOptionsBottomSheetFragment();
