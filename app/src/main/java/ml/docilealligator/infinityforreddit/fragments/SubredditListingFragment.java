@@ -257,17 +257,17 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         return sortType;
     }
 
-    public ArrayList<String> getSelectedSubredditNames() {
+    public ArrayList<SubredditData> getSelectedSubredditNames() {
         if (mSubredditListingViewModel != null) {
             List<SubredditData> allSubreddits = mSubredditListingViewModel.getSubreddits().getValue();
             if (allSubreddits == null) {
                 return null;
             }
 
-            ArrayList<String> selectedSubreddits = new ArrayList<>();
+            ArrayList<SubredditData> selectedSubreddits = new ArrayList<>();
             for (SubredditData s : allSubreddits) {
                 if (s.isSelected()) {
-                    selectedSubreddits.add(s.getName());
+                    selectedSubreddits.add(s);
                 }
             }
             return selectedSubreddits;

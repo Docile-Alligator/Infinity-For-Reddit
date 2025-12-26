@@ -233,10 +233,6 @@ public class MultiReddit implements Parcelable {
         return subreddits;
     }
 
-    public ArrayList<String> getSubredditNames() {
-        return new ArrayList<>((subreddits.stream().map(ExpandedSubredditInMultiReddit::getName).collect(Collectors.toList())));
-    }
-
     public void setSubreddits(ArrayList<ExpandedSubredditInMultiReddit> subreddits) {
         this.subreddits = subreddits;
     }

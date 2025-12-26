@@ -2,10 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp"
-    android:paddingStart="72dp"
-    android:paddingEnd="16dp">
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/icon_image_view_item_selected_subreddit"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center_vertical" />
 
     <TextView
         android:id="@+id/subreddit_name_item_selected_subreddit"
@@ -13,6 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
+        android:layout_marginStart="32dp"
         android:layout_marginEnd="16dp"
         android:textSize="?attr/font_default"
         android:textColor="?attr/primaryTextColor"

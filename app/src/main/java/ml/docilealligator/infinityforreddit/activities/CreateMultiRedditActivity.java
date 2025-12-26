@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +33,7 @@ import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCreateMultiRedditBinding;
 import ml.docilealligator.infinityforreddit.multireddit.CreateMultiReddit;
+import ml.docilealligator.infinityforreddit.multireddit.ExpandedSubredditInMultiReddit;
 import ml.docilealligator.infinityforreddit.multireddit.MultiRedditJSONModel;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
@@ -58,7 +58,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
     @Inject
     Executor mExecutor;
     private ActivityCreateMultiRedditBinding binding;
-    private ArrayList<String> mSubreddits;
+    private ArrayList<ExpandedSubredditInMultiReddit> mSubreddits;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +113,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
         }
 
         if (savedInstanceState != null) {
-            mSubreddits = savedInstanceState.getStringArrayList(SELECTED_SUBREDDITS_STATE);
+            mSubreddits = savedInstanceState.getParcelableArrayList(SELECTED_SUBREDDITS_STATE);
         } else {
             mSubreddits = new ArrayList<>();
         }
@@ -123,19 +123,16 @@ public class CreateMultiRedditActivity extends BaseActivity {
     private void bindView() {
         binding.selectSubredditChipCreateMultiRedditActivity.setOnClickListener(view -> {
             Intent intent = new Intent(CreateMultiRedditActivity.this, SelectedSubredditsAndUsersActivity.class);
-            intent.putStringArrayListExtra(SelectedSubredditsAndUsersActivity.EXTRA_SELECTED_SUBREDDITS, mSubreddits);
+            intent.putParcelableArrayListExtra(SelectedSubredditsAndUsersActivity.EXTRA_SELECTED_SUBREDDITS, mSubreddits);
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
         });
 
-        binding.visibilityChipCreateMultiRedditActivity.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    binding.visibilityChipCreateMultiRedditActivity.setChipBackgroundColor(ColorStateList.valueOf(mCustomThemeWrapper.getFilledCardViewBackgroundColor()));
-                } else {
-                    //Match the background color
-                    binding.visibilityChipCreateMultiRedditActivity.setChipBackgroundColor(ColorStateList.valueOf(mCustomThemeWrapper.getBackgroundColor()));
-                }
+        binding.visibilityChipCreateMultiRedditActivity.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                binding.visibilityChipCreateMultiRedditActivity.setChipBackgroundColor(ColorStateList.valueOf(mCustomThemeWrapper.getFilledCardViewBackgroundColor()));
+            } else {
+                //Match the background color
+                binding.visibilityChipCreateMultiRedditActivity.setChipBackgroundColor(ColorStateList.valueOf(mCustomThemeWrapper.getBackgroundColor()));
             }
         });
     }
@@ -191,7 +188,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
 
                             @Override
                             public void failed(int errorType) {
-                                //Will not be called
+                                Snackbar.make(binding.coordinatorLayoutCreateMultiRedditActivity, R.string.duplicate_multi_reddit, Snackbar.LENGTH_SHORT).show();
                             }
                         });
             }
@@ -204,8 +201,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SUBREDDIT_SELECTION_REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null) {
-                mSubreddits = data.getStringArrayListExtra(
-                        SubredditMultiselectionActivity.EXTRA_RETURN_SELECTED_SUBREDDITS);
+                mSubreddits = data.getParcelableArrayListExtra(SelectedSubredditsAndUsersActivity.EXTRA_RETURN_SELECTED_SUBREDDITS);
             }
         }
     }
@@ -213,7 +209,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putStringArrayList(SELECTED_SUBREDDITS_STATE, mSubreddits);
+        outState.putParcelableArrayList(SELECTED_SUBREDDITS_STATE, mSubreddits);
     }
 
     @Override

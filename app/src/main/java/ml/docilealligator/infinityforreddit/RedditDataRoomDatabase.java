@@ -14,6 +14,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.account.AccountDao;
+import ml.docilealligator.infinityforreddit.account.AccountDaoKt;
 import ml.docilealligator.infinityforreddit.comment.CommentDraft;
 import ml.docilealligator.infinityforreddit.comment.CommentDraftDao;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
@@ -24,8 +25,10 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeDao;
 import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubreddit;
 import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubredditDao;
+import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubredditDaoKt;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.multireddit.MultiRedditDao;
+import ml.docilealligator.infinityforreddit.multireddit.MultiRedditDaoKt;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterDao;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
@@ -46,7 +49,7 @@ import ml.docilealligator.infinityforreddit.user.UserData;
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
         SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class,
         ReadPost.class, PostFilter.class, PostFilterUsage.class, AnonymousMultiredditSubreddit.class,
-        CommentFilter.class, CommentFilterUsage.class, CommentDraft.class}, version = 30, exportSchema = false)
+        CommentFilter.class, CommentFilterUsage.class, CommentDraft.class}, version = 31, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
 
@@ -60,11 +63,13 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                         MIGRATION_17_18, MIGRATION_18_19, MIGRATION_19_20, MIGRATION_20_21,
                         MIGRATION_21_22, MIGRATION_22_23, MIGRATION_23_24, MIGRATION_24_25,
                         MIGRATION_25_26, MIGRATION_26_27, MIGRATION_27_28, MIGRATION_28_29,
-                        MIGRATION_29_30)
+                        MIGRATION_29_30, MIGRATION_30_31)
                 .build();
     }
 
     public abstract AccountDao accountDao();
+
+    public abstract AccountDaoKt accountDaoKt();
 
     public abstract SubredditDao subredditDao();
 
@@ -75,6 +80,8 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     public abstract SubscribedUserDao subscribedUserDao();
 
     public abstract MultiRedditDao multiRedditDao();
+
+    public abstract MultiRedditDaoKt multiRedditDaoKt();
 
     public abstract CustomThemeDao customThemeDao();
 
@@ -87,6 +94,8 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     public abstract PostFilterUsageDao postFilterUsageDao();
 
     public abstract AnonymousMultiredditSubredditDao anonymousMultiredditSubredditDao();
+
+    public abstract AnonymousMultiredditSubredditDaoKt anonymousMultiredditSubredditDaoKt();
 
     public abstract CommentFilterDao commentFilterDao();
 
@@ -466,5 +475,11 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
         }
     };
 
+    private static final Migration MIGRATION_30_31 = new Migration(30, 31) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE anonymous_multireddit_subreddits ADD COLUMN icon_url TEXT");
+        }
+    };
 }
 

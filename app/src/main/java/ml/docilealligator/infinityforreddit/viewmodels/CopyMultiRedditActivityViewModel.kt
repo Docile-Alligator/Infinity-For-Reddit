@@ -8,8 +8,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import ml.docilealligator.infinityforreddit.APIError
 import ml.docilealligator.infinityforreddit.APIResult
 import ml.docilealligator.infinityforreddit.ActionState
+import ml.docilealligator.infinityforreddit.ActionStateError
 import ml.docilealligator.infinityforreddit.DataLoadState
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit
 import ml.docilealligator.infinityforreddit.repositories.CopyMultiRedditActivityRepository
@@ -64,12 +66,20 @@ class CopyMultiRedditActivityViewModel(
         _copyMultiRedditState.value = ActionState.Running
 
         viewModelScope.launch {
-            when (val result = copyMultiRedditActivityRepository.copyMultiReddit(multipath, _name.value, _description.value)) {
+            when (val result = copyMultiRedditActivityRepository.copyMultiReddit(multipath, _name.value, _description.value, (multiRedditState.value as DataLoadState.Success).data.subreddits)) {
                 is APIResult.Success -> {
                     _copyMultiRedditState.value = ActionState.Success(result.data)
                 }
                 is APIResult.Error -> {
-                    _copyMultiRedditState.value = ActionState.Error(result.message)
+                    val error =result.error
+                    when (error) {
+                        is APIError.Message -> _copyMultiRedditState.value = ActionState.Error(
+                            ActionStateError.Message(error.message)
+                        )
+                        is APIError.MessageRes -> _copyMultiRedditState.value = ActionState.Error(
+                            ActionStateError.MessageRes(error.resId)
+                        )
+                    }
                 }
             }
         }

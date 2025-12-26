@@ -215,7 +215,7 @@ public class EditMultiRedditActivity extends BaseActivity {
                         });
             } else {
                 String jsonModel = new MultiRedditJSONModel(binding.multiRedditNameEditTextEditMultiRedditActivity.getText().toString(), binding.descriptionEditTextEditMultiRedditActivity.getText().toString(),
-                        binding.visibilitySwitchEditMultiRedditActivity.isChecked(), multiReddit.getSubredditNames()).createJSONModel();
+                        binding.visibilitySwitchEditMultiRedditActivity.isChecked(), multiReddit.getSubreddits()).createJSONModel();
                 EditMultiReddit.editMultiReddit(mRetrofit, accessToken, multiReddit.getPath(),
                         jsonModel, new EditMultiReddit.EditMultiRedditListener() {
                             @Override

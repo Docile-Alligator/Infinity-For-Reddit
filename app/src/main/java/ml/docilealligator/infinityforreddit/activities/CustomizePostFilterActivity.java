@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.concurrent.Executor;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -40,8 +41,10 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCustomizePostFilterBinding;
+import ml.docilealligator.infinityforreddit.multireddit.ExpandedSubredditInMultiReddit;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.SavePostFilter;
+import ml.docilealligator.infinityforreddit.subreddit.SubredditWithSelection;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class CustomizePostFilterActivity extends BaseActivity {
@@ -587,13 +590,13 @@ public class CustomizePostFilterActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == ADD_EXCLUDE_SUBREDDITS_REQUEST_CODE) {
-                ArrayList<String> subredditNames = data.getStringArrayListExtra(
-                        SubredditMultiselectionActivity.EXTRA_RETURN_SELECTED_SUBREDDITS);
-                updateSubredditsUsersNames(subredditNames, binding.excludesSubredditsTextInputEditTextCustomizePostFilterActivity);
+                ArrayList<SubredditWithSelection> subredditWithSelections = data.getParcelableArrayListExtra(SubredditMultiselectionActivity.EXTRA_RETURN_SELECTED_SUBREDDITS);
+                updateSubredditsUsersNames(new ArrayList<>(subredditWithSelections.stream().map(SubredditWithSelection::getName).collect(Collectors.toList())),
+                        binding.excludesSubredditsTextInputEditTextCustomizePostFilterActivity);
             } else if (requestCode == ADD_CONTAIN_SUBREDDITS_REQUEST_CODE) {
-                ArrayList<String> subredditNames = data.getStringArrayListExtra(
-                        SubredditMultiselectionActivity.EXTRA_RETURN_SELECTED_SUBREDDITS);
-                updateSubredditsUsersNames(subredditNames, binding.containsSubredditsTextInputEditTextCustomizePostFilterActivity);
+                ArrayList<SubredditWithSelection> subredditWithSelections = data.getParcelableArrayListExtra(SubredditMultiselectionActivity.EXTRA_RETURN_SELECTED_SUBREDDITS);
+                updateSubredditsUsersNames(new ArrayList<>(subredditWithSelections.stream().map(SubredditWithSelection::getName).collect(Collectors.toList())),
+                        binding.containsSubredditsTextInputEditTextCustomizePostFilterActivity);
             } else if (requestCode == ADD_EXCLUDE_USERS_REQUEST_CODE) {
                 ArrayList<String> usernames = data.getStringArrayListExtra(SearchActivity.RETURN_EXTRA_SELECTED_USERNAMES);
                 updateSubredditsUsersNames(usernames, binding.excludesUsersTextInputEditTextCustomizePostFilterActivity);

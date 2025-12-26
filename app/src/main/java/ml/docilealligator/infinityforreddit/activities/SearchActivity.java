@@ -76,7 +76,7 @@ public class SearchActivity extends BaseActivity {
     public static final String EXTRA_SEARCH_ONLY_SUBREDDITS = "ESOS";
     public static final String EXTRA_SEARCH_ONLY_USERS = "ESOU";
     public static final String EXTRA_SEARCH_SUBREDDITS_AND_USERS = "ESSAU";
-    public static final String RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES = "RESSN";
+    public static final String RETURN_EXTRA_SELECTED_SUBREDDITS = "RESS";
     public static final String RETURN_EXTRA_SELECTED_USERNAMES = "RESU";
     public static final String EXTRA_IS_MULTI_SELECTION = "EIMS";
     public static final int SUICIDE_PREVENTION_ACTIVITY_REQUEST_CODE = 101;
@@ -196,9 +196,9 @@ public class SearchActivity extends BaseActivity {
             if (searchOnlySubreddits || searchSubredditsAndUsers) {
                 Intent returnIntent = new Intent();
                 if (getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false)) {
-                    ArrayList<String> subredditNameList = new ArrayList<>();
-                    subredditNameList.add(subredditData.getName());
-                    returnIntent.putStringArrayListExtra(RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES, subredditNameList);
+                    ArrayList<SubredditData> subredditList = new ArrayList<>();
+                    subredditList.add(subredditData);
+                    returnIntent.putParcelableArrayListExtra(RETURN_EXTRA_SELECTED_SUBREDDITS, subredditList);
                 } else {
                     returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME, subredditData.getName());
                     returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON, subredditData.getIconUrl());
@@ -573,7 +573,7 @@ public class SearchActivity extends BaseActivity {
             if (requestCode == SUBREDDIT_SEARCH_REQUEST_CODE) {
                 Intent returnIntent = new Intent();
                 if (getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false)) {
-                    returnIntent.putStringArrayListExtra(RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES, data.getStringArrayListExtra(SearchSubredditsResultActivity.RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES));
+                    returnIntent.putParcelableArrayListExtra(RETURN_EXTRA_SELECTED_SUBREDDITS, data.getParcelableArrayListExtra(SearchSubredditsResultActivity.RETURN_EXTRA_SELECTED_SUBREDDITS));
                 } else {
                     returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME, data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME));
                     returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON, data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON));

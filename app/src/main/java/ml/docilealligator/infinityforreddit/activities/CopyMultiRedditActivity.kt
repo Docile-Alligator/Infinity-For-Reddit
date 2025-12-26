@@ -43,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -55,6 +56,7 @@ import com.bumptech.glide.request.RequestOptions
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.ActionState
+import ml.docilealligator.infinityforreddit.ActionStateError
 import ml.docilealligator.infinityforreddit.DataLoadState
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
@@ -124,19 +126,19 @@ class CopyMultiRedditActivity : BaseActivity() {
 
         copyMultiRedditActivityViewModel = ViewModelProvider.create(
             this,
-            provideFactory(multipath, CopyMultiRedditActivityRepositoryImpl(mOauthRetrofit, accessToken ?: ""))
+            provideFactory(multipath, CopyMultiRedditActivityRepositoryImpl(mOauthRetrofit, mRedditDataRoomDatabase, accessToken ?: ""))
         )[CopyMultiRedditActivityViewModel::class.java]
 
         copyMultiRedditActivityViewModel.fetchMultiRedditInfo()
 
         setContent {
             AppTheme(customThemeWrapper.themeType) {
+                val context = LocalContext.current
                 val scrollBehavior = enterAlwaysScrollBehavior()
                 val multiRedditState by copyMultiRedditActivityViewModel.multiRedditState.collectAsStateWithLifecycle()
                 val copyMultiRedditState by copyMultiRedditActivityViewModel.copyMultiRedditState.collectAsStateWithLifecycle()
                 val name by copyMultiRedditActivityViewModel.name.collectAsStateWithLifecycle()
                 val description by copyMultiRedditActivityViewModel.description.collectAsStateWithLifecycle()
-                var isPrivate by remember { mutableStateOf(true) }
 
                 val scope = rememberCoroutineScope()
                 val snackbarHostState = remember { SnackbarHostState() }
@@ -145,8 +147,12 @@ class CopyMultiRedditActivity : BaseActivity() {
                 LaunchedEffect(copyMultiRedditState) {
                     when (copyMultiRedditState) {
                         is ActionState.Error -> {
+                            val error = (copyMultiRedditState as ActionState.Error).error
                             scope.launch {
-                                snackbarHostState.showSnackbar((copyMultiRedditState as ActionState.Error).message)
+                                when (error) {
+                                    is ActionStateError.Message -> snackbarHostState.showSnackbar(error.message)
+                                    is ActionStateError.MessageRes -> snackbarHostState.showSnackbar(context.getString(error.resId))
+                                }
                             }
                         }
                         is ActionState.Idle -> {
@@ -159,7 +165,10 @@ class CopyMultiRedditActivity : BaseActivity() {
                         }
                         is ActionState.Success<*> -> {
                             startActivity(Intent(this@CopyMultiRedditActivity, ViewMultiRedditDetailActivity::class.java).apply {
-                                putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_PATH, (copyMultiRedditState as ActionState.Success<MultiReddit>).data.path)
+                                val data = (copyMultiRedditState as ActionState.Success<*>).data
+                                if (data is MultiReddit) {
+                                    putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_PATH, data.path)
+                                }
                             })
                             finish()
                         }
@@ -264,15 +273,6 @@ class CopyMultiRedditActivity : BaseActivity() {
                                         placeholder = stringResource(R.string.multi_reddit_description_hint)
                                     ) {
                                         copyMultiRedditActivityViewModel.setDescription(it)
-                                    }
-                                }
-
-                                item {
-                                    SwitchRow(
-                                        checked = isPrivate,
-                                        title = stringResource(R.string.private_multi_reddit)
-                                    ) {
-                                        isPrivate = it
                                     }
                                 }
 

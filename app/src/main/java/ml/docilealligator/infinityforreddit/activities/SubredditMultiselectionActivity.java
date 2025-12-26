@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -33,6 +34,8 @@ import ml.docilealligator.infinityforreddit.adapters.SubredditMultiselectionRecy
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.ActivitySubscribedSubredditsMultiselectionBinding;
+import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.subreddit.SubredditWithSelection;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditViewModel;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
@@ -163,7 +166,7 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
         } else if (itemId == R.id.action_save_subreddit_multiselection_activity) {
             if (mAdapter != null) {
                 Intent returnIntent = new Intent();
-                returnIntent.putStringArrayListExtra(EXTRA_RETURN_SELECTED_SUBREDDITS,
+                returnIntent.putParcelableArrayListExtra(EXTRA_RETURN_SELECTED_SUBREDDITS,
                         mAdapter.getAllSelectedSubreddits());
                 setResult(RESULT_OK, returnIntent);
             }
@@ -184,12 +187,14 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SUBREDDIT_SEARCH_REQUEST_CODE && resultCode == RESULT_OK && data != null && mAdapter != null) {
             Intent returnIntent = new Intent();
-            ArrayList<String> selectedSubreddits = mAdapter.getAllSelectedSubreddits();
-            ArrayList<String> searchedSubreddits = data.getStringArrayListExtra(SearchActivity.RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES);
+            ArrayList<SubredditWithSelection> selectedSubreddits = mAdapter.getAllSelectedSubreddits();
+            ArrayList<SubredditData> searchedSubreddits = data.getParcelableArrayListExtra(SearchActivity.RETURN_EXTRA_SELECTED_SUBREDDITS);
             if (searchedSubreddits != null) {
-                selectedSubreddits.addAll(searchedSubreddits);
+                selectedSubreddits.addAll(searchedSubreddits.stream().map(
+                        subredditData -> new SubredditWithSelection(subredditData.getName(), subredditData.getIconUrl())
+                ).collect(Collectors.toList()));
             }
-            returnIntent.putStringArrayListExtra(EXTRA_RETURN_SELECTED_SUBREDDITS, selectedSubreddits);
+            returnIntent.putParcelableArrayListExtra(EXTRA_RETURN_SELECTED_SUBREDDITS, selectedSubreddits);
             setResult(RESULT_OK, returnIntent);
             finish();
         }

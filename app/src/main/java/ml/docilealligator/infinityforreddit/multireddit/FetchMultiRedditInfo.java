@@ -67,7 +67,7 @@ public class FetchMultiRedditInfo {
                     (ArrayList<AnonymousMultiredditSubreddit>) redditDataRoomDatabase.anonymousMultiredditSubredditDao().getAllAnonymousMultiRedditSubreddits(multipath);
             ArrayList<ExpandedSubredditInMultiReddit> subreddits = new ArrayList<>();
             for (AnonymousMultiredditSubreddit a : anonymousMultiredditSubreddits) {
-                subreddits.add(new ExpandedSubredditInMultiReddit(a.getSubredditName(), multiReddit.getIconUrl()));
+                subreddits.add(new ExpandedSubredditInMultiReddit(a.getSubredditName(), a.getIconUrl()));
             }
             multiReddit.setSubreddits(subreddits);
             handler.post(() -> fetchMultiRedditInfoListener.success(multiReddit));
