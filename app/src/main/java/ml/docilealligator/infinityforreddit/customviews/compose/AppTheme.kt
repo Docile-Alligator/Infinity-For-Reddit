@@ -31,15 +31,12 @@ fun AppTheme(themeType: Int, content: @Composable () -> Unit) {
         else -> localCustomThemeRepository.currentLightCustomThemeFlow
     }
 
-    val customTheme by currentThemeFlow.map {
-        it ?: getDefaultTheme(context, themeType)
-    }.collectAsState(
-        getDefaultTheme(context, themeType)
-    )
-
-    CompositionLocalProvider(LocalAppTheme provides customTheme) {
-        MaterialTheme {
-            content()
+    val customTheme by currentThemeFlow.collectAsState(initial = null)
+    customTheme?.let {
+        CompositionLocalProvider(LocalAppTheme provides it) {
+            MaterialTheme {
+                content()
+            }
         }
     }
 }

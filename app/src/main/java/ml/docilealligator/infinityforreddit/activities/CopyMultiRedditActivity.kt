@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -35,10 +36,8 @@ import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,6 +46,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -68,7 +68,6 @@ import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextField
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryIcon
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
-import ml.docilealligator.infinityforreddit.customviews.compose.SwitchRow
 import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
 import ml.docilealligator.infinityforreddit.customviews.compose.ToolbarIcon
 import ml.docilealligator.infinityforreddit.multireddit.ExpandedSubredditInMultiReddit
@@ -131,6 +130,9 @@ class CopyMultiRedditActivity : BaseActivity() {
 
         copyMultiRedditActivityViewModel.fetchMultiRedditInfo()
 
+        val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
+        windowInsetsController.isAppearanceLightStatusBars = customThemeWrapper.isLightStatusBar
+
         setContent {
             AppTheme(customThemeWrapper.themeType) {
                 val context = LocalContext.current
@@ -179,8 +181,9 @@ class CopyMultiRedditActivity : BaseActivity() {
                     topBar = {
                         ThemedTopAppBar(
                             titleStringResId = R.string.copy_multireddit_activity_label,
-                            respectTopInsets = isImmersiveInterfaceEnabled,
+                            isImmersiveInterfaceEnabled = isImmersiveInterfaceEnabled,
                             scrollBehavior = scrollBehavior,
+                            windowInsetsController = windowInsetsController,
                             actions = {
                                 IconButton(onClick = {
                                     if (multiRedditState is DataLoadState.Success) {
@@ -247,7 +250,7 @@ class CopyMultiRedditActivity : BaseActivity() {
                         }
                         is DataLoadState.Success -> {
                             LazyColumn(
-                                modifier = Modifier.background(Color(LocalAppTheme.current.backgroundColor)),
+                                modifier = Modifier.fillMaxSize().background(Color(LocalAppTheme.current.backgroundColor)),
                                 contentPadding = innerPadding
                             ) {
                                 item {

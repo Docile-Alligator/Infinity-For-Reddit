@@ -9,10 +9,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.res.stringResource
+import androidx.core.view.WindowInsetsControllerCompat
 import ml.docilealligator.infinityforreddit.R
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -20,16 +22,27 @@ import ml.docilealligator.infinityforreddit.R
 fun ThemedTopAppBar(
     modifier: Modifier = Modifier,
     titleStringResId: Int,
-    respectTopInsets: Boolean,
+    isImmersiveInterfaceEnabled: Boolean,
     scrollBehavior: TopAppBarScrollBehavior,
+    windowInsetsController: WindowInsetsControllerCompat,
     actions: @Composable RowScope.() -> Unit = {},
     onBack: () -> Unit
 ) {
+    val customTheme = LocalAppTheme.current
+
     val appBarColor = lerp(
-        start = Color(LocalAppTheme.current.colorPrimary),
+        start = Color(customTheme.colorPrimary),
         stop = Color.Transparent,
         fraction = scrollBehavior.state.collapsedFraction
     )
+
+    if (isImmersiveInterfaceEnabled) {
+        LaunchedEffect(scrollBehavior.state.collapsedFraction) {
+            if (customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface) {
+                windowInsetsController.isAppearanceLightStatusBars = if (scrollBehavior.state.collapsedFraction > 0.5f) !customTheme.isLightStatusBar else customTheme.isLightStatusBar
+            }
+        }
+    }
 
     TopAppBar(
         modifier = modifier,
@@ -50,6 +63,6 @@ fun ThemedTopAppBar(
         },
         actions = actions,
         scrollBehavior = scrollBehavior,
-        windowInsets = if (respectTopInsets) TopAppBarDefaults.windowInsets else WindowInsets(0, 0, 0, 0)
+        windowInsets = if (isImmersiveInterfaceEnabled) TopAppBarDefaults.windowInsets else WindowInsets(0, 0, 0, 0)
     )
 }
