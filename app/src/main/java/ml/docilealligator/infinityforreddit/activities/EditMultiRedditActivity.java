@@ -239,7 +239,7 @@ public class EditMultiRedditActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SUBREDDIT_SELECTION_REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null) {
-                multiReddit.setSubredditNames(data.getStringArrayListExtra(
+                multiReddit.setSubreddits(data.getParcelableArrayListExtra(
                         SelectedSubredditsAndUsersActivity.EXTRA_RETURN_SELECTED_SUBREDDITS));
             }
         }
