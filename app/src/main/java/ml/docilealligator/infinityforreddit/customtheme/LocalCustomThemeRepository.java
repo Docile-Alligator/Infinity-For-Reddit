@@ -23,9 +23,9 @@ public class LocalCustomThemeRepository {
         mCurrentDarkCustomTheme = redditDataRoomDatabase.customThemeDao().getDarkCustomThemeLiveData();
         mCurrentAmoledCustomTheme = redditDataRoomDatabase.customThemeDao().getAmoledCustomThemeLiveData();
 
-        mCurrentLightCustomThemeFlow = redditDataRoomDatabase.customThemeDao().getLightCustomThemeFlow();
-        mCurrentDarkCustomThemeFlow = redditDataRoomDatabase.customThemeDao().getDarkCustomThemeFlow();
-        mCurrentAmoledCustomThemeFlow = redditDataRoomDatabase.customThemeDao().getAmoledCustomThemeFlow();
+        mCurrentLightCustomThemeFlow = redditDataRoomDatabase.customThemeDaoKt().getLightCustomThemeFlow();
+        mCurrentDarkCustomThemeFlow = redditDataRoomDatabase.customThemeDaoKt().getDarkCustomThemeFlow();
+        mCurrentAmoledCustomThemeFlow = redditDataRoomDatabase.customThemeDaoKt().getAmoledCustomThemeFlow();
     }
 
     LiveData<List<CustomTheme>> getAllCustomThemes() {

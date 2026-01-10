@@ -8,8 +8,6 @@ import androidx.room.Query;
 
 import java.util.List;
 
-import kotlinx.coroutines.flow.Flow;
-
 @Dao
 public interface CustomThemeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -41,15 +39,6 @@ public interface CustomThemeDao {
 
     @Query("SELECT * FROM custom_themes WHERE is_amoled_theme = 1 LIMIT 1")
     LiveData<CustomTheme> getAmoledCustomThemeLiveData();
-
-    @Query("SELECT * FROM custom_themes WHERE is_light_theme = 1 LIMIT 1")
-    Flow<CustomTheme> getLightCustomThemeFlow();
-
-    @Query("SELECT * FROM custom_themes WHERE is_dark_theme = 1 LIMIT 1")
-    Flow<CustomTheme> getDarkCustomThemeFlow();
-
-    @Query("SELECT * FROM custom_themes WHERE is_amoled_theme = 1 LIMIT 1")
-    Flow<CustomTheme> getAmoledCustomThemeFlow();
 
     @Query("SELECT * FROM custom_themes WHERE name = :name COLLATE NOCASE LIMIT 1")
     CustomTheme getCustomTheme(String name);
