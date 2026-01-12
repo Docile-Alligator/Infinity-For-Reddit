@@ -5,6 +5,9 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
+import static com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED;
+import static com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL;
+
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -436,6 +439,26 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
                     }
                 }
             });
+        }
+    }
+
+    protected void applyAppBarScrollFlagsIfApplicable(@Nullable CollapsingToolbarLayout collapsingToolbarLayout, Toolbar toolbar, @Nullable TabLayout tabLayout) {
+        if (getDefaultSharedPreferences().getBoolean(SharedPreferencesUtils.LOCK_TOOLBAR, false)) {
+            if (collapsingToolbarLayout != null) {
+                AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
+                p.setScrollFlags(SCROLL_FLAG_SCROLL | SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                collapsingToolbarLayout.setLayoutParams(p);
+            } else {
+                AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
+                p.setScrollFlags(SCROLL_FLAG_SCROLL | SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                toolbar.setLayoutParams(p);
+            }
+
+            if (tabLayout != null) {
+                AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) tabLayout.getLayoutParams();
+                p.setScrollFlags(SCROLL_FLAG_SCROLL | SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                tabLayout.setLayoutParams(p);
+            }
         }
     }
 

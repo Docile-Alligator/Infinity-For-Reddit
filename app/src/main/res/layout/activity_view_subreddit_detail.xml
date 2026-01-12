@@ -157,7 +157,6 @@
                 android:layout_height="wrap_content"
                 android:minHeight="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:navigationIcon="?attr/homeAsUpIndicator" />
 

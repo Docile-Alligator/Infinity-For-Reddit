@@ -118,6 +118,7 @@ public class SharedPreferencesUtils {
     public static final String MAIN_PAGE_BACK_BUTTON_ACTION = "main_page_back_button_action";
     public static final int MAIN_PAGE_BACK_BUTTON_ACTION_CONFIRM_EXIT = 1;
     public static final int MAIN_PAGE_BACK_BUTTON_ACTION_OPEN_NAVIGATION_DRAWER = 2;
+    public static final String LOCK_TOOLBAR = "lock_toolbar";
     public static final String LOCK_BOTTOM_APP_BAR = "lock_bottom_app_bar";
     public static final String COMMENT_TOOLBAR_HIDDEN = "comment_toolbar_hidden";
     public static final String COMMENT_TOOLBAR_HIDE_ON_CLICK = "comment_toolbar_hide_on_click";

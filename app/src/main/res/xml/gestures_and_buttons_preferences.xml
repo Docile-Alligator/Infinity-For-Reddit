@@ -10,6 +10,11 @@
 
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
+        app:key="lock_toolbar"
+        app:title="@string/settings_lock_toolbar_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
+        app:defaultValue="false"
         app:key="lock_bottom_app_bar"
         app:title="@string/settings_lock_bottom_app_bar_title"
         app:isPreferenceVisible="false" />

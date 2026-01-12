@@ -439,6 +439,7 @@
     <string name="settings_swipe_to_go_back_summary">Does Not Apply to All Pages</string>
     <string name="settings_swipe_vertically_to_go_back_from_media_title">Swipe Vertically to Go Back From Image and Gif</string>
     <string name="settings_lock_jump_to_next_top_level_comment_button_title">Lock Jump to Next Top-level Comment Button</string>
+    <string name="settings_lock_toolbar_title">Lock Toolbar</string>
     <string name="settings_lock_bottom_app_bar_title">Lock Bottom Navigation Bar</string>
     <string name="settings_swipe_up_to_hide_jump_to_next_top_level_comment_button_title">Swipe Up to Hide Jump to Next Top-level Comment Button</string>
     <string name="settings_lazy_mode_interval_title">Lazy Mode Interval</string>
