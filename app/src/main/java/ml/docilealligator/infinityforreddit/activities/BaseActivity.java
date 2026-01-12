@@ -442,6 +442,14 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
         }
     }
 
+    protected void applyAppBarScrollFlagsIfApplicable(Toolbar toolbar) {
+        applyAppBarScrollFlagsIfApplicable(null, toolbar, null);
+    }
+
+    protected void applyAppBarScrollFlagsIfApplicable(CollapsingToolbarLayout collapsingToolbarLayout, Toolbar toolbar) {
+        applyAppBarScrollFlagsIfApplicable(collapsingToolbarLayout, toolbar, null);
+    }
+
     protected void applyAppBarScrollFlagsIfApplicable(@Nullable CollapsingToolbarLayout collapsingToolbarLayout, Toolbar toolbar, @Nullable TabLayout tabLayout) {
         if (getDefaultSharedPreferences().getBoolean(SharedPreferencesUtils.LOCK_TOOLBAR, false)) {
             if (collapsingToolbarLayout != null) {

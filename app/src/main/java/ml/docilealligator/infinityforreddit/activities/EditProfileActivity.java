@@ -373,7 +373,9 @@ public class EditProfileActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutViewEditProfileActivity, binding.collapsingToolbarLayoutEditProfileActivity, binding.toolbarViewEditProfileActivity);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutViewEditProfileActivity,
+                binding.collapsingToolbarLayoutEditProfileActivity, binding.toolbarViewEditProfileActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutEditProfileActivity, binding.toolbarViewEditProfileActivity);
         binding.rootLayoutViewEditProfileActivity.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         changeColorTextView(binding.contentViewEditProfileActivity, mCustomThemeWrapper.getPrimaryTextColor());
         if (typeface != null) {

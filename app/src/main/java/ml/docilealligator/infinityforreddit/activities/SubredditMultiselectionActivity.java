@@ -225,6 +225,7 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutSubredditsMultiselectionActivity,
                 binding.collapsingToolbarLayoutSubscribedSubredditsMultiselectionActivity, binding.toolbarSubscribedSubredditsMultiselectionActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutSubscribedSubredditsMultiselectionActivity, binding.toolbarSubscribedSubredditsMultiselectionActivity);
         binding.errorTextViewSubscribedSubredditsMultiselectionActivity.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
         if (typeface != null) {
             binding.errorTextViewSubscribedSubredditsMultiselectionActivity.setTypeface(typeface);

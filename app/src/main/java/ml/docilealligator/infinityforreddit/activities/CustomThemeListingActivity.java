@@ -220,7 +220,10 @@ public class CustomThemeListingActivity extends BaseActivity implements
     @Override
     protected void applyCustomTheme() {
         binding.coordinatorLayoutCustomThemeListingActivity.setBackgroundColor(customThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCustomizeThemeListingActivity, binding.collapsingToolbarLayoutCustomizeThemeListingActivity, binding.toolbarCustomizeThemeListingActivity);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCustomizeThemeListingActivity,
+                binding.collapsingToolbarLayoutCustomizeThemeListingActivity, binding.toolbarCustomizeThemeListingActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutCustomizeThemeListingActivity,
+                binding.toolbarCustomizeThemeListingActivity);
         applyFABTheme(binding.fabCustomThemeListingActivity);
         applyTabLayoutTheme(binding.tabLayoutCustomizeThemeListingActivity);
     }

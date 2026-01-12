@@ -237,6 +237,7 @@ public class PostFilterUsageListingActivity extends BaseActivity {
     protected void applyCustomTheme() {
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutPostFilterApplicationActivity,
                 binding.collapsingToolbarLayoutPostFilterApplicationActivity, binding.toolbarPostFilterApplicationActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutPostFilterApplicationActivity, binding.toolbarPostFilterApplicationActivity);
         applyFABTheme(binding.fabPostFilterApplicationActivity);
         binding.getRoot().setBackgroundColor(customThemeWrapper.getBackgroundColor());
     }

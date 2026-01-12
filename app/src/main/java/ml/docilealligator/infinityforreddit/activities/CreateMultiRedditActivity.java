@@ -232,6 +232,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
         binding.coordinatorLayoutCreateMultiRedditActivity.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCreateMultiRedditActivity,
                 binding.collapsingToolbarLayoutCreateMultiRedditActivity, binding.toolbarCreateMultiRedditActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutCreateMultiRedditActivity, binding.toolbarCreateMultiRedditActivity);
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         binding.inputCardViewCreateMultiRedditActivity.setCardBackgroundColor(mCustomThemeWrapper.getFilledCardViewBackgroundColor());
 

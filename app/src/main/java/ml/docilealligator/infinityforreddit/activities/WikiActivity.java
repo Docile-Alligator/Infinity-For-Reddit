@@ -344,6 +344,7 @@ public class WikiActivity extends BaseActivity {
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCommentWikiActivity,
                 binding.collapsingToolbarLayoutWikiActivity, binding.toolbarCommentWikiActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutWikiActivity, binding.toolbarCommentWikiActivity);
         binding.swipeRefreshLayoutWikiActivity.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         binding.swipeRefreshLayoutWikiActivity.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         binding.fetchWikiTextViewWikiActivity.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());

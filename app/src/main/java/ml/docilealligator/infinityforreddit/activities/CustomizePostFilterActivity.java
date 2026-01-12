@@ -318,6 +318,8 @@ public class CustomizePostFilterActivity extends BaseActivity {
         binding.coordinatorLayoutCustomizePostFilterActivity.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCustomizePostFilterActivity,
                 binding.collapsingToolbarLayoutCustomizePostFilterActivity, binding.toolbarCustomizePostFilterActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutCustomizePostFilterActivity,
+                binding.toolbarCustomizePostFilterActivity);
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         int primaryIconColor = mCustomThemeWrapper.getPrimaryIconColor();
         int filledCardViewBackgroundColor = mCustomThemeWrapper.getFilledCardViewBackgroundColor();

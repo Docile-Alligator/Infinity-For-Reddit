@@ -949,6 +949,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutViewMultiRedditDetailActivity,
                 binding.collapsingToolbarLayoutViewMultiRedditDetailActivity, binding.toolbarViewMultiRedditDetailActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutViewMultiRedditDetailActivity, binding.toolbarViewMultiRedditDetailActivity);
         navigationWrapper.applyCustomTheme(mCustomThemeWrapper.getBottomAppBarIconColor(), mCustomThemeWrapper.getBottomAppBarBackgroundColor());
         applyFABTheme(navigationWrapper.floatingActionButton);
     }

@@ -145,6 +145,7 @@ public class SettingsActivity extends BaseActivity implements
     protected void applyCustomTheme() {
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutSettingsActivity,
                 binding.collapsingToolbarLayoutSettingsActivity, binding.toolbarSettingsActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutSettingsActivity, binding.toolbarSettingsActivity);
     }
 
     @Override

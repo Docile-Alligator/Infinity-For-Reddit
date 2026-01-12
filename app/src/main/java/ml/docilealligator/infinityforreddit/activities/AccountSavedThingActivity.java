@@ -178,6 +178,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
                 binding.accountSavedThingAppbarLayout,
                 binding.accountSavedThingCollapsingToolbarLayout,
                 binding.accountSavedThingToolbar);
+        applyAppBarScrollFlagsIfApplicable(binding.accountSavedThingCollapsingToolbarLayout, binding.accountSavedThingToolbar);
         applyTabLayoutTheme(binding.accountSavedThingTabLayout);
     }
 
