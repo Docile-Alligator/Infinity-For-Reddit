@@ -198,7 +198,7 @@ public class CommentFilterPreferenceActivity extends BaseActivity {
     protected void applyCustomTheme() {
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCommentFilterPreferenceActivity,
                 binding.collapsingToolbarLayoutCommentFilterPreferenceActivity, binding.toolbarCommentFilterPreferenceActivity);
-        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutCommentFilterPreferenceActivity, binding.toolbarCommentFilterPreferenceActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutCommentFilterPreferenceActivity);
         applyFABTheme(binding.fabCommentFilterPreferenceActivity);
         binding.getRoot().setBackgroundColor(customThemeWrapper.getBackgroundColor());
     }

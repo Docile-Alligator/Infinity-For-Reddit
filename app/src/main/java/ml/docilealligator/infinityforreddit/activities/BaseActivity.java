@@ -442,30 +442,20 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
         }
     }
 
-    protected void applyAppBarScrollFlagsIfApplicable(Toolbar toolbar) {
-        applyAppBarScrollFlagsIfApplicable(null, toolbar, null);
+    protected void applyAppBarScrollFlagsIfApplicable(CollapsingToolbarLayout collapsingToolbarLayout) {
+        applyAppBarScrollFlagsIfApplicable(collapsingToolbarLayout, null);
     }
 
-    protected void applyAppBarScrollFlagsIfApplicable(CollapsingToolbarLayout collapsingToolbarLayout, Toolbar toolbar) {
-        applyAppBarScrollFlagsIfApplicable(collapsingToolbarLayout, toolbar, null);
-    }
-
-    protected void applyAppBarScrollFlagsIfApplicable(@Nullable CollapsingToolbarLayout collapsingToolbarLayout, Toolbar toolbar, @Nullable TabLayout tabLayout) {
+    protected void applyAppBarScrollFlagsIfApplicable(@NonNull CollapsingToolbarLayout collapsingToolbarLayout, @Nullable TabLayout tabLayout) {
         if (getDefaultSharedPreferences().getBoolean(SharedPreferencesUtils.LOCK_TOOLBAR, false)) {
-            if (collapsingToolbarLayout != null) {
-                AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
-                p.setScrollFlags(SCROLL_FLAG_SCROLL | SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
-                collapsingToolbarLayout.setLayoutParams(p);
-            } else {
-                AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) toolbar.getLayoutParams();
-                p.setScrollFlags(SCROLL_FLAG_SCROLL | SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
-                toolbar.setLayoutParams(p);
-            }
+            AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
+            p.setScrollFlags(SCROLL_FLAG_SCROLL | SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+            collapsingToolbarLayout.setLayoutParams(p);
 
             if (tabLayout != null) {
-                AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) tabLayout.getLayoutParams();
-                p.setScrollFlags(SCROLL_FLAG_SCROLL | SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
-                tabLayout.setLayoutParams(p);
+                AppBarLayout.LayoutParams p1 = (AppBarLayout.LayoutParams) tabLayout.getLayoutParams();
+                p1.setScrollFlags(SCROLL_FLAG_SCROLL | SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                tabLayout.setLayoutParams(p1);
             }
         }
     }

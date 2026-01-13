@@ -222,8 +222,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
         binding.coordinatorLayoutCustomThemeListingActivity.setBackgroundColor(customThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCustomizeThemeListingActivity,
                 binding.collapsingToolbarLayoutCustomizeThemeListingActivity, binding.toolbarCustomizeThemeListingActivity);
-        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutCustomizeThemeListingActivity,
-                binding.toolbarCustomizeThemeListingActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutCustomizeThemeListingActivity);
         applyFABTheme(binding.fabCustomThemeListingActivity);
         applyTabLayoutTheme(binding.tabLayoutCustomizeThemeListingActivity);
     }

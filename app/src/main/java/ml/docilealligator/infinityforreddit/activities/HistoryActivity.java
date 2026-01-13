@@ -154,7 +154,7 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutHistoryActivity,
                 binding.collapsingToolbarLayoutHistoryActivity, binding.toolbarHistoryActivity);
-        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutHistoryActivity, binding.toolbarHistoryActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutHistoryActivity);
         applyTabLayoutTheme(binding.tabLayoutTabLayoutHistoryActivityActivity);
     }
 

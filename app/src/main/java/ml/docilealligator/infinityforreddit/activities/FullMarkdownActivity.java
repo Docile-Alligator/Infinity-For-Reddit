@@ -220,7 +220,7 @@ public class FullMarkdownActivity extends BaseActivity {
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCommentFullMarkdownActivity,
                 binding.collapsingToolbarLayoutCommentFullMarkdownActivity, binding.toolbarCommentFullMarkdownActivity);
-        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutCommentFullMarkdownActivity, binding.toolbarCommentFullMarkdownActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutCommentFullMarkdownActivity);
     }
 
     @Override

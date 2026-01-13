@@ -232,7 +232,7 @@ public class SelectedSubredditsAndUsersActivity extends BaseActivity implements 
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutSelectedSubredditsAndUsersActivity,
                 binding.collapsingToolbarLayoutSelectedSubredditsAndUsersActivity, binding.toolbarSelectedSubredditsAndUsersActivity);
-        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutSelectedSubredditsAndUsersActivity, binding.toolbarSelectedSubredditsAndUsersActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutSelectedSubredditsAndUsersActivity);
         applyFABTheme(binding.fabSelectedSubredditsAndUsersActivity);
     }
 

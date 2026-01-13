@@ -251,7 +251,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutInboxActivity,
                 binding.collapsingToolbarLayoutInboxActivity, binding.toolbarInboxActivity);
-        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutInboxActivity, binding.toolbarInboxActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutInboxActivity);
         applyTabLayoutTheme(binding.tabLayoutInboxActivity);
         applyFABTheme(binding.fabInboxActivity);
     }

@@ -299,7 +299,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutSubscribedThingListingActivity,
                 binding.collapsingToolbarLayoutSubscribedThingListingActivity, binding.toolbarSubscribedThingListingActivity);
-        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutSubscribedThingListingActivity, binding.toolbarSubscribedThingListingActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutSubscribedThingListingActivity);
         applyTabLayoutTheme(binding.tabLayoutSubscribedThingListingActivity);
         applyFABTheme(binding.fabSubscribedThingListingActivity);
         binding.searchEditTextSubscribedThingListingActivity.setTextColor(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());

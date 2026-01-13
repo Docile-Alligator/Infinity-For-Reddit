@@ -169,7 +169,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(
                 binding.accountPostsAppbarLayout, binding.accountPostsCollapsingToolbarLayout,
                 binding.accountPostsToolbar);
-        applyAppBarScrollFlagsIfApplicable(binding.accountPostsCollapsingToolbarLayout, binding.accountPostsToolbar);
+        applyAppBarScrollFlagsIfApplicable(binding.accountPostsCollapsingToolbarLayout);
     }
 
     private void initializeFragment() {

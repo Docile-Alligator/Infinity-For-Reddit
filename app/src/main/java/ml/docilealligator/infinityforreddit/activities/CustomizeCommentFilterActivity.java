@@ -215,8 +215,7 @@ public class CustomizeCommentFilterActivity extends BaseActivity {
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCustomizeCommentFilterActivity,
                 binding.collapsingToolbarLayoutCustomizeCommentFilterActivity, binding.toolbarCustomizeCommentFilterActivity);
-        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutCustomizeCommentFilterActivity,
-                binding.toolbarCustomizeCommentFilterActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutCustomizeCommentFilterActivity);
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         int primaryIconColor = mCustomThemeWrapper.getPrimaryIconColor();
         int filledCardViewBackgroundColor = mCustomThemeWrapper.getFilledCardViewBackgroundColor();

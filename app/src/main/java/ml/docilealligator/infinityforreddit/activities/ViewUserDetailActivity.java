@@ -694,7 +694,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         });
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutViewUserDetail,
                 binding.collapsingToolbarLayoutViewUserDetailActivity, binding.toolbarViewUserDetailActivity, false);
-        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutViewUserDetailActivity, binding.toolbarViewUserDetailActivity,
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutViewUserDetailActivity,
                 binding.tabLayoutViewUserDetailActivity);
         expandedTabTextColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTextColor();
         expandedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabIndicator();

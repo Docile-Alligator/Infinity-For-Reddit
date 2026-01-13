@@ -605,7 +605,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         });
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutViewSubredditDetailActivity,
                 binding.collapsingToolbarLayoutViewSubredditDetailActivity, binding.toolbar, false);
-        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutViewSubredditDetailActivity, binding.toolbar, binding.tabLayoutViewSubredditDetailActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutViewSubredditDetailActivity, binding.tabLayoutViewSubredditDetailActivity);
         expandedTabTextColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTextColor();
         expandedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabIndicator();
         expandedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabBackground();

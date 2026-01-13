@@ -441,7 +441,7 @@ public class CustomizeThemeActivity extends BaseActivity {
     protected void applyCustomTheme() {
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCustomizeThemeActivity,
                 binding.collapsingToolbarLayoutCustomizeThemeActivity, binding.toolbarCustomizeThemeActivity);
-        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutCustomizeThemeActivity, binding.toolbarCustomizeThemeActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutCustomizeThemeActivity);
         binding.coordinatorCustomizeThemeActivity.setBackgroundColor(customThemeWrapper.getBackgroundColor());
         binding.progressBarCustomizeThemeActivity.setIndicatorColor(customThemeWrapper.getColorAccent());
     }

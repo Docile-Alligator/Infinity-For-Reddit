@@ -272,7 +272,7 @@ public class EditMultiRedditActivity extends BaseActivity {
         binding.coordinatorLayoutEditMultiRedditActivity.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutEditMultiRedditActivity,
                 binding.collapsingToolbarLayoutEditMultiRedditActivity, binding.toolbarEditMultiRedditActivity);
-        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutEditMultiRedditActivity, binding.toolbarEditMultiRedditActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutEditMultiRedditActivity);
         binding.progressBarEditMultiRedditActivity.setIndicatorColor(mCustomThemeWrapper.getColorAccent());
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();

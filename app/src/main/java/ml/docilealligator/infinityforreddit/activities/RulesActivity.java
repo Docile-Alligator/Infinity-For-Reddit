@@ -178,7 +178,7 @@ public class RulesActivity extends BaseActivity {
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutRulesActivity,
                 binding.collapsingToolbarLayoutRulesActivity, binding.toolbarRulesActivity);
-        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutRulesActivity, binding.toolbarRulesActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutRulesActivity);
         binding.progressBarRulesActivity.setIndicatorColor(mCustomThemeWrapper.getColorAccent());
         binding.errorTextViewRulesActivity.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
         if (typeface != null) {

@@ -292,7 +292,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutFilteredPostsActivity,
                 binding.collapsingToolbarLayoutFilteredPostsActivity, binding.toolbarFilteredPostsActivity);
-        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutFilteredPostsActivity, binding.toolbarFilteredPostsActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutFilteredPostsActivity);
         applyFABTheme(binding.fabFilteredThingActivity);
     }
 

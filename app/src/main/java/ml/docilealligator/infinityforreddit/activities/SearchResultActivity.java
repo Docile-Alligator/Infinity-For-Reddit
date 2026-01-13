@@ -261,7 +261,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutSearchResultActivity,
                 binding.collapsingToolbarLayoutSearchResultActivity, binding.toolbarSearchResultActivity);
-        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutSearchResultActivity, binding.toolbarSearchResultActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutSearchResultActivity);
         applyTabLayoutTheme(binding.tabLayoutSearchResultActivity);
         applyFABTheme(binding.fabSearchResultActivity);
     }

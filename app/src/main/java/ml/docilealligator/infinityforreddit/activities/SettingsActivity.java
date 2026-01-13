@@ -1,5 +1,9 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import static com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS;
+import static com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL;
+import static com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL;
+
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -38,6 +43,8 @@ import ml.docilealligator.infinityforreddit.settings.GesturesAndButtonsPreferenc
 import ml.docilealligator.infinityforreddit.settings.InterfacePreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.MainPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.PostPreferenceFragment;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesLiveDataKt;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class SettingsActivity extends BaseActivity implements
@@ -124,6 +131,12 @@ public class SettingsActivity extends BaseActivity implements
                 setTitle(R.string.settings_activity_label);
             }
         });
+
+        SharedPreferencesLiveDataKt.booleanLiveData(mSharedPreferences, SharedPreferencesUtils.LOCK_TOOLBAR, false).observe(this, lock -> {
+            AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) binding.collapsingToolbarLayoutSettingsActivity.getLayoutParams();
+            p.setScrollFlags(lock ? SCROLL_FLAG_NO_SCROLL : SCROLL_FLAG_SCROLL | SCROLL_FLAG_ENTER_ALWAYS);
+            binding.collapsingToolbarLayoutSettingsActivity.setLayoutParams(p);
+        });
     }
 
     @Override
@@ -145,7 +158,6 @@ public class SettingsActivity extends BaseActivity implements
     protected void applyCustomTheme() {
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutSettingsActivity,
                 binding.collapsingToolbarLayoutSettingsActivity, binding.toolbarSettingsActivity);
-        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutSettingsActivity, binding.toolbarSettingsActivity);
     }
 
     @Override

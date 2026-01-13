@@ -216,8 +216,7 @@ public class CommentFilterUsageListingActivity extends BaseActivity {
     protected void applyCustomTheme() {
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCommentFilterUsageListingActivity,
                 binding.collapsingToolbarLayoutCommentFilterUsageListingActivity, binding.toolbarCommentFilterUsageListingActivity);
-        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutCommentFilterUsageListingActivity,
-                binding.toolbarCommentFilterUsageListingActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutCommentFilterUsageListingActivity);
         applyFABTheme(binding.fabCommentFilterUsageListingActivity);
         binding.getRoot().setBackgroundColor(customThemeWrapper.getBackgroundColor());
     }

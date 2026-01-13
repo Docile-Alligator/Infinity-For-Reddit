@@ -2,6 +2,9 @@ package ml.docilealligator.infinityforreddit.activities;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+import static com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS;
+import static com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL;
+import static com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL;
 
 import android.Manifest;
 import android.content.Intent;
@@ -53,6 +56,7 @@ import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.tabs.TabLayout;
@@ -124,6 +128,7 @@ import ml.docilealligator.infinityforreddit.user.FetchUserData;
 import ml.docilealligator.infinityforreddit.user.UserData;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesLiveDataKt;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import ml.docilealligator.infinityforreddit.worker.PullNotificationWorker;
@@ -432,6 +437,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     }
                 }
             }
+        });
+
+        SharedPreferencesLiveDataKt.booleanLiveData(mSharedPreferences, SharedPreferencesUtils.LOCK_TOOLBAR, false).observe(this, lock -> {
+            AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) binding.includedAppBar.collapsingToolbarLayoutMainActivity.getLayoutParams();
+            p.setScrollFlags(lock ? SCROLL_FLAG_NO_SCROLL : SCROLL_FLAG_SCROLL | SCROLL_FLAG_ENTER_ALWAYS);
+            binding.includedAppBar.collapsingToolbarLayoutMainActivity.setLayoutParams(p);
         });
 
         initializeNotificationAndBindView();
