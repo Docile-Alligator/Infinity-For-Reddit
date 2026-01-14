@@ -182,44 +182,124 @@
             android:id="@+id/hide_read_posts_automatically_linear_layout_post_history_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
             android:paddingStart="72dp"
             android:paddingEnd="16dp"
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackground">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/hide_read_posts_automatically_text_view_post_history_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingStart="0dp"
-                android:paddingEnd="16dp">
-
-                <TextView
-                    android:id="@+id/hide_read_posts_automatically_text_view_post_history_fragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/settings_hide_read_posts_automatically_title"
-                    android:textColor="?attr/primaryTextColor"
-                    android:textSize="?attr/font_16"
-                    android:fontFamily="?attr/font_family" />
-
-                <TextView
-                    android:id="@+id/hide_read_posts_automatically_summary_text_view_post_history_fragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/settings_hide_read_posts_automatically_summary"
-                    android:textColor="?attr/secondaryTextColor"
-                    android:textSize="?attr/font_default"
-                    android:fontFamily="?attr/font_family" />
-
-            </LinearLayout>
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="center_vertical"
+                android:text="@string/settings_hide_read_posts_automatically_title"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/font_16"
+                android:fontFamily="?attr/font_family" />
 
             <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
                 android:id="@+id/hide_read_posts_automatically_switch_post_history_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/hide_read_posts_automatically_in_subreddits_linear_layout_post_history_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:id="@+id/hide_read_posts_automatically_in_subreddits_text_view_post_history_fragment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="center_vertical"
+                android:text="@string/settings_hide_read_posts_automatically_in_subreddits_title"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/font_16"
+                android:fontFamily="?attr/font_family" />
+
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
+                android:id="@+id/hide_read_posts_automatically_in_subreddits_switch_post_history_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/hide_read_posts_automatically_in_users_linear_layout_post_history_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingStart="72dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="4dp">
+
+            <TextView
+                android:id="@+id/hide_read_posts_automatically_in_users_text_view_post_history_fragment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:fontFamily="?attr/font_family"
+                android:text="@string/settings_hide_read_posts_automatically_in_users_title"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/font_16" />
+
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
+                android:id="@+id/hide_read_posts_automatically_in_users_switch_post_history_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/hide_read_posts_automatically_in_search_linear_layout_post_history_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:id="@+id/hide_read_posts_automatically_in_search_text_view_post_history_fragment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="center_vertical"
+                android:text="@string/settings_hide_read_posts_automatically_in_search_title"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/font_16"
+                android:fontFamily="?attr/font_family" />
+
+            <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
+                android:id="@+id/hide_read_posts_automatically_in_search_switch_post_history_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical" />

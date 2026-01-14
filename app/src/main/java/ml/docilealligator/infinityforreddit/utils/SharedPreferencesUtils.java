@@ -401,6 +401,9 @@ public class SharedPreferencesUtils {
     public static final String MARK_POSTS_AS_READ_AFTER_VOTING_BASE = "_mark_posts_as_read_after_voting";
     public static final String MARK_POSTS_AS_READ_ON_SCROLL_BASE = "_mark_posts_as_read_on_scroll";
     public static final String HIDE_READ_POSTS_AUTOMATICALLY_BASE = "_hide_read_posts_automatically";
+    public static final String HIDE_READ_POSTS_AUTOMATICALLY_IN_SUBREDDITS_BASE = "_hide_read_posts_automatically_in_subreddits";
+    public static final String HIDE_READ_POSTS_AUTOMATICALLY_IN_USERS_BASE = "_hide_read_posts_automatically_in_users";
+    public static final String HIDE_READ_POSTS_AUTOMATICALLY_IN_SEARCH_BASE = "_hide_read_posts_automatically_in_search";
 
     public static final String CURRENT_ACCOUNT_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.current_account";
     public static final String ACCOUNT_NAME = "account_name";
