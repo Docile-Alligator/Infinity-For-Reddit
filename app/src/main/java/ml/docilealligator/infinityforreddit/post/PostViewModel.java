@@ -141,7 +141,7 @@ public class PostViewModel extends ViewModel {
 
         hideReadPostsValue.setValue(postHistorySharedPreferences != null
                 && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false)
-                && (postType != PostPagingSource.TYPE_SUBREDDIT || subredditName.equals("all") || subredditName.equals("popular")));
+                && ((postType != PostPagingSource.TYPE_SUBREDDIT || subredditName.equals("all") || subredditName.equals("popular")) || postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_IN_SUBREDDITS_BASE, false)));
     }
 
     // PostPagingSource.TYPE_MULTI_REDDIT
@@ -226,9 +226,9 @@ public class PostViewModel extends ViewModel {
                                 postPagingData, executor,
                                 post -> !post.isRead() || !hideReadPostsValue.getValue()))), ViewModelKt.getViewModelScope(this));
 
-        hideReadPostsValue.setValue(false);
-        /*hideReadPostsValue.setValue(postHistorySharedPreferences != null
-                && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));*/
+        hideReadPostsValue.setValue(postHistorySharedPreferences != null
+                && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false)
+                && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_IN_USERS_BASE, false));
     }
 
     // postType == PostPagingSource.TYPE_SEARCH
@@ -271,9 +271,9 @@ public class PostViewModel extends ViewModel {
                                 postPagingData, executor,
                                 post -> !post.isRead() || !hideReadPostsValue.getValue()))), ViewModelKt.getViewModelScope(this));
 
-        hideReadPostsValue.setValue(false);
-        /*hideReadPostsValue.setValue(postHistorySharedPreferences != null
-                && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));*/
+        hideReadPostsValue.setValue(postHistorySharedPreferences != null
+                && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false)
+                && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_IN_SEARCH_BASE, false));
     }
 
     public LiveData<PagingData<Post>> getPosts() {
