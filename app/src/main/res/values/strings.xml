@@ -502,6 +502,7 @@
     <string name="settings_apply_material_you_title">Apply Material You</string>
     <string name="settings_apply_material_you_summary">In case Infinity did not change the theme</string>
     <string name="settings_advanced_master_title">Advanced</string>
+    <string name="api_keys_title">API Keys</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">Delete All Subreddits in Database</string>
     <string name="settings_delete_all_users_data_in_database_title">Delete All Users in Database</string>
     <string name="settings_delete_all_sort_type_data_in_database_title">Delete All Sort Types in Database</string>
@@ -556,7 +557,11 @@
     <string name="settings_bottom_app_bar_option_4">Option 4</string>
     <string name="settings_bottom_app_bar_fab">Floating Action Button</string>
     <string name="settings_data_saving_mode">Data Saving Mode</string>
-    <string name="settings_data_saving_mode_info_summary">In data saving mode:\nPreview images are in lower resolution.\nReddit videos are in lower resolution.\nVideo autoplay is disabled.</string>
+    <string name="settings_data_saving_mode_info_summary">In data saving mode:
+Preview images are in lower resolution.
+Reddit videos are in lower resolution.
+Video autoplay is disabled.</string>
+    <string name="settings_override_video_autoplay_in_data_saving_mode_title">Autoplay videos in data saving mode</string>
     <string name="settings_translation_title">Translation</string>
     <string name="settings_translation_summary">Translate this app on POEditor. Thanks to all contributors.</string>
     <string name="settings_credits_national_flags">National Flags</string>
