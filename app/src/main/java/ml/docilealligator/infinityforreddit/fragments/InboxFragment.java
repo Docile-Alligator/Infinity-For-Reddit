@@ -108,7 +108,7 @@ public class InboxFragment extends Fragment implements FragmentCommunicator {
 
         mWhere = arguments.getString(EXTRA_MESSAGE_WHERE, FetchMessage.WHERE_INBOX);
         mAdapter = new MessageRecyclerViewAdapter(mActivity, mOauthRetrofit, mCustomThemeWrapper,
-                mActivity.accessToken, mWhere, () -> mMessageViewModel.retryLoadingMore());
+                mActivity.accessToken, mActivity.accountName, mWhere, () -> mMessageViewModel.retryLoadingMore());
         mLinearLayoutManager = new LinearLayoutManagerBugFixed(mActivity);
         binding.recyclerViewInboxFragment.setLayoutManager(mLinearLayoutManager);
         binding.recyclerViewInboxFragment.setAdapter(mAdapter);

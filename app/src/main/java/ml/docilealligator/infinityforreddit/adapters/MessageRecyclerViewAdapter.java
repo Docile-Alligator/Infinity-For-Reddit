@@ -16,8 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.util.ArrayList;
-
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
@@ -67,6 +65,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
     private final Retrofit mOauthRetrofit;
     private final Markwon mMarkwon;
     private final String mAccessToken;
+    private final String mAccountName;
     private final int mMessageType;
     private NetworkState networkState;
     private final RetryLoadingMoreCallback mRetryLoadingMoreCallback;
@@ -82,7 +81,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
 
     public MessageRecyclerViewAdapter(BaseActivity activity, Retrofit oauthRetrofit,
                                       CustomThemeWrapper customThemeWrapper,
-                                      String accessToken, String where,
+                                      String accessToken, String accountName, String where,
                                       RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
         mActivity = activity;
@@ -130,6 +129,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .build();
         mAccessToken = accessToken;
+        mAccountName = accountName;
         if (where.equals(FetchMessage.WHERE_MESSAGES)) {
             mMessageType = FetchMessage.MESSAGE_TYPE_PRIVATE_MESSAGE;
         } else {
@@ -154,13 +154,9 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         if (holder instanceof DataViewHolder) {
             Message message = getItem(holder.getBindingAdapterPosition());
             if (message != null) {
-                ArrayList<Message> replies = message.getReplies();
-                Message displayedMessage;
-                if (replies != null && !replies.isEmpty() && replies.get(replies.size() - 1) != null) {
-                    displayedMessage = replies.get(replies.size() - 1);
-                } else {
-                    displayedMessage = message;
-                }
+                Message displayedMessage = message.getDisplayedMessage();
+                String recipientUsername = message.getAuthor().equals(mAccountName) ? message.getDestination() : message.getAuthor();
+
                 if (message.isNew()) {
                     if (markAllMessagesAsRead) {
                         message.setNew(false);
@@ -176,53 +172,10 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                     ((DataViewHolder) holder).binding.titleTextViewItemMessage.setVisibility(View.GONE);
                 }
 
-                ((DataViewHolder) holder).binding.authorTextViewItemMessage.setText(displayedMessage.getAuthor());
+                ((DataViewHolder) holder).binding.authorTextViewItemMessage.setText(recipientUsername);
                 String subject = displayedMessage.getSubject().substring(0, 1).toUpperCase() + displayedMessage.getSubject().substring(1);
                 ((DataViewHolder) holder).binding.subjectTextViewItemMessage.setText(subject);
                 mMarkwon.setMarkdown(((DataViewHolder) holder).binding.contentCustomMarkwonViewItemMessage, displayedMessage.getBody());
-
-                holder.itemView.setOnClickListener(view -> {
-                    if (mMessageType == FetchMessage.MESSAGE_TYPE_INBOX
-                            && message.getContext() != null && !message.getContext().equals("")) {
-                        Uri uri = Uri.parse(message.getContext());
-                        Intent intent = new Intent(mActivity, LinkResolverActivity.class);
-                        intent.setData(uri);
-                        mActivity.startActivity(intent);
-                    } else if (mMessageType == FetchMessage.MESSAGE_TYPE_PRIVATE_MESSAGE) {
-                        Intent intent = new Intent(mActivity, ViewPrivateMessagesActivity.class);
-                        intent.putExtra(ViewPrivateMessagesActivity.EXTRA_PRIVATE_MESSAGE_INDEX, holder.getBindingAdapterPosition());
-                        intent.putExtra(ViewPrivateMessagesActivity.EXTRA_MESSAGE_POSITION, holder.getBindingAdapterPosition());
-                        mActivity.startActivity(intent);
-                    }
-
-                    if (displayedMessage.isNew()) {
-                        holder.itemView.setBackgroundColor(mMessageBackgroundColor);
-                        message.setNew(false);
-
-                        ReadMessage.readMessage(mOauthRetrofit, mAccessToken, message.getFullname(),
-                                new ReadMessage.ReadMessageListener() {
-                                    @Override
-                                    public void readSuccess() {
-                                        EventBus.getDefault().post(new ChangeInboxCountEvent(-1));
-                                    }
-
-                                    @Override
-                                    public void readFailed() {
-                                        message.setNew(true);
-                                        holder.itemView.setBackgroundColor(mUnreadMessageBackgroundColor);
-                                    }
-                                });
-                    }
-                });
-
-                ((DataViewHolder) holder).binding.authorTextViewItemMessage.setOnClickListener(view -> {
-                    if (message.isAuthorDeleted()) {
-                        return;
-                    }
-                    Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, message.getAuthor());
-                    mActivity.startActivity(intent);
-                });
             }
         }
     }
@@ -253,7 +206,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         if (holder instanceof DataViewHolder) {
-            ((DataViewHolder) holder).itemView.setBackgroundColor(mMessageBackgroundColor);
+            holder.itemView.setBackgroundColor(mMessageBackgroundColor);
             ((DataViewHolder) holder).binding.titleTextViewItemMessage.setVisibility(View.VISIBLE);
         }
     }
@@ -314,6 +267,55 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
             binding.contentCustomMarkwonViewItemMessage.setTextColor(mSecondaryTextColor);
 
             binding.contentCustomMarkwonViewItemMessage.setMovementMethod(LinkMovementMethod.getInstance());
+
+            itemView.setOnClickListener(view -> {
+                Message message = getItem(getBindingAdapterPosition());
+                if (message == null) {
+                    return;
+                }
+
+                if (mMessageType == FetchMessage.MESSAGE_TYPE_INBOX
+                        && message.getContext() != null && !message.getContext().equals("")) {
+                    Uri uri = Uri.parse(message.getContext());
+                    Intent intent = new Intent(mActivity, LinkResolverActivity.class);
+                    intent.setData(uri);
+                    mActivity.startActivity(intent);
+                } else if (mMessageType == FetchMessage.MESSAGE_TYPE_PRIVATE_MESSAGE) {
+                    Intent intent = new Intent(mActivity, ViewPrivateMessagesActivity.class);
+                    intent.putExtra(ViewPrivateMessagesActivity.EXTRA_PRIVATE_MESSAGE_INDEX, getBindingAdapterPosition());
+                    intent.putExtra(ViewPrivateMessagesActivity.EXTRA_MESSAGE_POSITION, getBindingAdapterPosition());
+                    mActivity.startActivity(intent);
+                }
+
+                if (message.getDisplayedMessage().isNew()) {
+                    itemView.setBackgroundColor(mMessageBackgroundColor);
+                    message.setNew(false);
+
+                    ReadMessage.readMessage(mOauthRetrofit, mAccessToken, message.getFullname(),
+                            new ReadMessage.ReadMessageListener() {
+                                @Override
+                                public void readSuccess() {
+                                    EventBus.getDefault().post(new ChangeInboxCountEvent(-1));
+                                }
+
+                                @Override
+                                public void readFailed() {
+                                    message.setNew(true);
+                                    itemView.setBackgroundColor(mUnreadMessageBackgroundColor);
+                                }
+                            });
+                }
+            });
+
+            binding.authorTextViewItemMessage.setOnClickListener(view -> {
+                Message message = getItem(getBindingAdapterPosition());
+                if (message == null || message.isAuthorDeleted()) {
+                    return;
+                }
+                Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
+                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, message.getAuthor().equals(mAccountName) ? message.getDestination() : message.getAuthor());
+                mActivity.startActivity(intent);
+            });
 
             binding.contentCustomMarkwonViewItemMessage.setOnClickListener(view -> {
                 if (binding.contentCustomMarkwonViewItemMessage.getSelectionStart() == -1 && binding.contentCustomMarkwonViewItemMessage.getSelectionEnd() == -1) {

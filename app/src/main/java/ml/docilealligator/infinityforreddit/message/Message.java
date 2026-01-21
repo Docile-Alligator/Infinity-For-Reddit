@@ -199,6 +199,14 @@ public class Message implements Parcelable {
         replies.add(reply);
     }
 
+    public Message getDisplayedMessage() {
+        if (replies != null && !replies.isEmpty() && replies.get(replies.size() - 1) != null) {
+            return  replies.get(replies.size() - 1);
+        } else {
+            return this;
+        }
+    }
+
     @Override
     public int describeContents() {
         return 0;
