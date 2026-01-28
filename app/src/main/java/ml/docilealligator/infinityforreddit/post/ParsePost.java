@@ -802,7 +802,13 @@ public class ParsePost {
                     if (!selfText.equals("")) {
                         Pattern p = Pattern.compile(">!.+!<");
                         Matcher m = p.matcher(selfText.substring(0, Math.min(selfText.length(), 400)));
+
                         if (m.find()) {
+                            //convert text like ">!    spoiler    !<" to ">! spoiler !<"
+                            String trimmedSpoilers = selfTextPlain.replaceAll("(>!)\\s+", "$1 ");
+                            trimmedSpoilers = trimmedSpoilers.replaceAll("\\s+(!<)", " $1");
+
+                            post.setSelfText(trimmedSpoilers);
                             post.setSelfTextPlainTrimmed("");
                         } else {
                             post.setSelfTextPlainTrimmed(selfTextPlain);
