@@ -162,6 +162,7 @@ public class SharedPreferencesUtils {
     public static final String DATA_SAVING_MODE_OFF = "0";
     public static final String DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA = "1";
     public static final String DATA_SAVING_MODE_ALWAYS = "2";
+    public static final String OVERRIDE_VIDEO_AUTOPLAY_IN_DATA_SAVING_MODE = "override_video_autoplay_in_data_saving_mode";
     public static final String NATIONAL_FLAGS = "national_flags";
     public static final String RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE = "respect_subreddit_recommended_comment_sort_type";
     public static final String UFO_CAPTURING_ANIMATION = "ufo_capturing_animation";
