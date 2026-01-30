@@ -260,6 +260,18 @@ public class JSONUtils {
                         String id = media.getString(JSONUtils.ID_KEY);
                         mediaMetadataMap.put(id, new MediaMetadata(id, e, originalItem, downscaledItem));
                     } catch (JSONException e) {
+                        /*
+                        https://www.reddit.com/r/Leathercraft/comments/1qo3jrv/one_year_of_patina/.json?raw_json=1
+
+                        "media_metadata": {
+"1a9oi91fitfg1": {
+"status": "failed"
+},
+"2ik58hyditfg1": {
+"status": "failed"
+}
+}
+                         */
                         e.printStackTrace();
                     }
                 }

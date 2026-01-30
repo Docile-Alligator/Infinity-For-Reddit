@@ -703,57 +703,77 @@ public class ParsePost {
             } catch (IllegalArgumentException ignore) { }
         } else if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
             if (!data.isNull(JSONUtils.GALLERY_DATA_KEY)) {
-                JSONArray galleryIdsArray = data.getJSONObject(JSONUtils.GALLERY_DATA_KEY).getJSONArray(JSONUtils.ITEMS_KEY);
-                JSONObject galleryObject = data.getJSONObject(JSONUtils.MEDIA_METADATA_KEY);
-                ArrayList<Post.Gallery> gallery = new ArrayList<>();
-                for (int i = 0; i < galleryIdsArray.length(); i++) {
-                    String galleryId = galleryIdsArray.getJSONObject(i).getString(JSONUtils.MEDIA_ID_KEY);
-                    JSONObject singleGalleryObject = galleryObject.getJSONObject(galleryId);
-                    String mimeType = singleGalleryObject.getString(JSONUtils.M_KEY);
-                    String galleryItemUrl;
-                    if (mimeType.contains("jpg") || mimeType.contains("png")) {
-                        galleryItemUrl = singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getString(JSONUtils.U_KEY);
-                    } else {
-                        JSONObject sourceObject = singleGalleryObject.getJSONObject(JSONUtils.S_KEY);
-                        if (mimeType.contains("gif")) {
-                            galleryItemUrl = sourceObject.getString(JSONUtils.GIF_KEY);
+                try {
+                    JSONArray galleryIdsArray = data.getJSONObject(JSONUtils.GALLERY_DATA_KEY).getJSONArray(JSONUtils.ITEMS_KEY);
+                    JSONObject galleryObject = data.getJSONObject(JSONUtils.MEDIA_METADATA_KEY);
+                    ArrayList<Post.Gallery> gallery = new ArrayList<>();
+                    for (int i = 0; i < galleryIdsArray.length(); i++) {
+                        String galleryId = galleryIdsArray.getJSONObject(i).getString(JSONUtils.MEDIA_ID_KEY);
+                        JSONObject singleGalleryObject = galleryObject.getJSONObject(galleryId);
+                        String mimeType = singleGalleryObject.getString(JSONUtils.M_KEY);
+                        String galleryItemUrl;
+                        if (mimeType.contains("jpg") || mimeType.contains("png")) {
+                            galleryItemUrl = singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getString(JSONUtils.U_KEY);
                         } else {
-                            galleryItemUrl = sourceObject.getString(JSONUtils.MP4_KEY);
+                            JSONObject sourceObject = singleGalleryObject.getJSONObject(JSONUtils.S_KEY);
+                            if (mimeType.contains("gif")) {
+                                galleryItemUrl = sourceObject.getString(JSONUtils.GIF_KEY);
+                            } else {
+                                galleryItemUrl = sourceObject.getString(JSONUtils.MP4_KEY);
+                            }
                         }
+
+                        JSONObject galleryItem = galleryIdsArray.getJSONObject(i);
+                        String galleryItemCaption = "";
+                        String galleryItemCaptionUrl = "";
+                        if (galleryItem.has(JSONUtils.CAPTION_KEY)) {
+                            galleryItemCaption = galleryItem.getString(JSONUtils.CAPTION_KEY).trim();
+                        }
+
+                        if (galleryItem.has(JSONUtils.CAPTION_URL_KEY)) {
+                            galleryItemCaptionUrl = galleryItem.getString(JSONUtils.CAPTION_URL_KEY).trim();
+                        }
+
+                        if (previews.isEmpty() && (mimeType.contains("jpg") || mimeType.contains("png"))) {
+                            previews.add(new Post.Preview(galleryItemUrl, singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.X_KEY),
+                                    singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.Y_KEY), galleryItemCaption, galleryItemCaptionUrl));
+                        }
+
+                        Post.Gallery postGalleryItem = new Post.Gallery(mimeType, galleryItemUrl, "", subredditName + "-" + galleryId + "." + mimeType.substring(mimeType.lastIndexOf("/") + 1), galleryItemCaption, galleryItemCaptionUrl);
+
+                        // For issue #558
+                        // Construct a fallback image url
+                        if (!TextUtils.isEmpty(galleryItemUrl) && !TextUtils.isEmpty(mimeType) && (mimeType.contains("jpg") || mimeType.contains("png"))) {
+                            postGalleryItem.setFallbackUrl("https://i.redd.it/" + galleryId + "." +  mimeType.substring(mimeType.lastIndexOf("/") + 1));
+                            postGalleryItem.setHasFallback(true);
+                        }
+
+                        gallery.add(postGalleryItem);
                     }
 
-                    JSONObject galleryItem = galleryIdsArray.getJSONObject(i);
-                    String galleryItemCaption = "";
-                    String galleryItemCaptionUrl = "";
-                    if (galleryItem.has(JSONUtils.CAPTION_KEY)) {
-                        galleryItemCaption = galleryItem.getString(JSONUtils.CAPTION_KEY).trim();
+                    if (!gallery.isEmpty()) {
+                        post.setPostType(Post.GALLERY_TYPE);
+                        post.setGallery(gallery);
+                        post.setPreviews(previews);
                     }
+                } catch (JSONException e) {
+                    /*
+                    https://www.reddit.com/r/Leathercraft/comments/1qo3jrv/one_year_of_patina/.json?raw_json=1
 
-                    if (galleryItem.has(JSONUtils.CAPTION_URL_KEY)) {
-                        galleryItemCaptionUrl = galleryItem.getString(JSONUtils.CAPTION_URL_KEY).trim();
-                    }
-
-                    if (previews.isEmpty() && (mimeType.contains("jpg") || mimeType.contains("png"))) {
-                        previews.add(new Post.Preview(galleryItemUrl, singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.X_KEY),
-                                singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.Y_KEY), galleryItemCaption, galleryItemCaptionUrl));
-                    }
-                    
-                    Post.Gallery postGalleryItem = new Post.Gallery(mimeType, galleryItemUrl, "", subredditName + "-" + galleryId + "." + mimeType.substring(mimeType.lastIndexOf("/") + 1), galleryItemCaption, galleryItemCaptionUrl);
-
-                    // For issue #558
-                    // Construct a fallback image url
-                    if (!TextUtils.isEmpty(galleryItemUrl) && !TextUtils.isEmpty(mimeType) && (mimeType.contains("jpg") || mimeType.contains("png"))) {
-                        postGalleryItem.setFallbackUrl("https://i.redd.it/" + galleryId + "." +  mimeType.substring(mimeType.lastIndexOf("/") + 1));
-                        postGalleryItem.setHasFallback(true);
-                    }
-
-                    gallery.add(postGalleryItem);
-                }
-
-                if (!gallery.isEmpty()) {
-                    post.setPostType(Post.GALLERY_TYPE);
-                    post.setGallery(gallery);
-                    post.setPreviews(previews);
+                    "gallery_data": {
+"items": [
+{
+"media_id": "2ik58hyditfg1",
+"id": 849724223
+},
+{
+"media_id": "1a9oi91fitfg1",
+"id": 849724224
+}
+]
+}
+                     */
+                    e.printStackTrace();
                 }
             } else if (post.getPostType() == Post.LINK_TYPE) {
                 String authority = uri.getAuthority();
