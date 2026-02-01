@@ -671,6 +671,16 @@
     <string name="settings_proxy_port">Port</string>
     <string name="settings_hide_fab_in_post_details">Hide Floating Action Button</string>
     <string name="settings_category_media_title">Media</string>
+    <string name="settings_tab_switching_sensitivity">Tab Switching Sensitivity</string>
+    <string name="settings_swipe_right_to_go_back_sensitivity">Swipe Right to Go Back Sensitivity</string>
+    <string name="settings_swipe_action_sensitivity_in_comments">Swipe Action Sensitivity in Comments</string>
+    <string name="default_sensitivity">Default</string>
+    <string name="low">Low</string>
+    <string name="very_low">Very Low</string>
+    <string name="settings_navigation_drawer_swipe_area">Navigation Drawer Swipe Area</string>
+    <string name="default_swipe_area">Default</string>
+    <string name="larger_swipe_area">Large</string>
+    <string name="very_larger_swipe_area">Very Large</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

@@ -789,4 +789,52 @@
         <item>2</item>
     </string-array>
 
+    <string-array name="settings_tab_switching_sensitivity">
+        <item>@string/default_sensitivity</item>
+        <item>@string/low</item>
+        <item>@string/very_low</item>
+    </string-array>
+
+    <string-array name="settings_tab_switching_sensitivity_values">
+        <item>1</item>
+        <item>4</item>
+        <item>8</item>
+    </string-array>
+
+    <string-array name="settings_swipe_right_to_go_back_sensitivity">
+        <item>@string/default_sensitivity</item>
+        <item>@string/low</item>
+        <item>@string/very_low</item>
+    </string-array>
+
+    <string-array name="settings_swipe_right_to_go_back_sensitivity_values">
+        <item>1</item>
+        <item>0.5</item>
+        <item>0.1</item>
+    </string-array>
+
+    <string-array name="settings_swipe_action_sensitivity_in_comments">
+        <item>@string/default_sensitivity</item>
+        <item>@string/low</item>
+        <item>@string/very_low</item>
+    </string-array>
+
+    <string-array name="settings_swipe_action_sensitivity_in_comments_values">
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+    </string-array>
+
+    <string-array name="settings_navigation_drawer_swipe_area">
+        <item>@string/default_swipe_area</item>
+        <item>@string/larger_swipe_area</item>
+        <item>@string/very_larger_swipe_area</item>
+    </string-array>
+
+    <string-array name="settings_navigation_drawer_swipe_area_values">
+        <item>1</item>
+        <item>5</item>
+        <item>10</item>
+    </string-array>
+
 </resources>

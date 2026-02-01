@@ -29,6 +29,38 @@
         app:key="swipe_between_posts"
         app:title="@string/settings_swipe_between_posts_title" />
 
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
+        app:defaultValue="4"
+        android:entries="@array/settings_tab_switching_sensitivity"
+        app:entryValues="@array/settings_tab_switching_sensitivity_values"
+        app:key="tab_switching_sensitivity"
+        app:title="@string/settings_tab_switching_sensitivity"
+        app:useSimpleSummaryProvider="true" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
+        app:defaultValue="0.1"
+        android:entries="@array/settings_swipe_right_to_go_back_sensitivity"
+        app:entryValues="@array/settings_swipe_right_to_go_back_sensitivity_values"
+        app:key="swipe_right_to_go_back_sensitivity"
+        app:title="@string/settings_swipe_right_to_go_back_sensitivity"
+        app:useSimpleSummaryProvider="true" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
+        app:defaultValue="5"
+        android:entries="@array/settings_swipe_action_sensitivity_in_comments"
+        app:entryValues="@array/settings_swipe_action_sensitivity_in_comments_values"
+        app:key="swipe_action_sensitivity_in_comments"
+        app:title="@string/settings_swipe_action_sensitivity_in_comments"
+        app:useSimpleSummaryProvider="true" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
+        app:defaultValue="1"
+        android:entries="@array/settings_navigation_drawer_swipe_area"
+        app:entryValues="@array/settings_navigation_drawer_swipe_area_values"
+        app:key="navigation_drawer_swipe_area"
+        app:title="@string/settings_navigation_drawer_swipe_area"
+        app:useSimpleSummaryProvider="true" />
+
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceCategory
         app:title="@string/settings_category_media_title" />
 
