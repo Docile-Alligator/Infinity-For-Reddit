@@ -501,7 +501,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
             Object touchSlopBox = touchSlopField.get(recyclerView);
             if (touchSlopBox != null) {
                 int touchSlop = (int) touchSlopBox;
-                touchSlopField.set(recyclerView, touchSlop * 4);
+                touchSlopField.set(recyclerView, touchSlop * Integer.parseInt(getDefaultSharedPreferences().getString(SharedPreferencesUtils.TAB_SWITCHING_SENSITIVITY, "4")));
             }
         } catch (NoSuchFieldException | IllegalAccessException ignore) {}
     }
