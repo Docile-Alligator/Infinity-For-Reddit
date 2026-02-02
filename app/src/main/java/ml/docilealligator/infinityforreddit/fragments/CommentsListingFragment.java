@@ -257,7 +257,10 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         });
 
         if (enableSwipeAction) {
-            touchHelper.attachToRecyclerView(binding.recyclerViewCommentsListingFragment, 5);
+            touchHelper.attachToRecyclerView(
+                    binding.recyclerViewCommentsListingFragment,
+                    Float.parseFloat(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_ACTION_SENSITIVITY_IN_COMMENTS, "5"))
+            );
         }
 
         new Handler().postDelayed(this::bindView, 0);
