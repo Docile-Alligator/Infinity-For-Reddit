@@ -54,7 +54,7 @@
         app:useSimpleSummaryProvider="true" />
 
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
-        app:defaultValue="1"
+        app:defaultValue="0"
         android:entries="@array/settings_navigation_drawer_swipe_area"
         app:entryValues="@array/settings_navigation_drawer_swipe_area_values"
         app:key="navigation_drawer_swipe_area"

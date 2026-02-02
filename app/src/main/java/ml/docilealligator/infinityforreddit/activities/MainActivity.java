@@ -385,6 +385,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 }
             }
         });
+        SharedPreferencesLiveDataKt.stringLiveData(mSharedPreferences, SharedPreferencesUtils.NAVIGATION_DRAWER_SWIPE_AREA, "0").observe(this, swipeArea -> {
+            binding.drawerLayout.setSwipeEdgeSize(Integer.parseInt(swipeArea));
+        });
+
         toggle.syncState();
 
         mViewPager2 = binding.includedAppBar.viewPagerMainActivity;

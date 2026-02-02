@@ -832,9 +832,9 @@
     </string-array>
 
     <string-array name="settings_navigation_drawer_swipe_area_values">
-        <item>1</item>
-        <item>5</item>
-        <item>10</item>
+        <item>0</item>
+        <item>250</item>
+        <item>500</item>
     </string-array>
 
 </resources>
