@@ -33,7 +33,6 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivityHistoryBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -74,9 +73,7 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
 
         applyCustomTheme();
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSliderPanel = Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         mViewPager2 = binding.viewPagerHistoryActivity;
 

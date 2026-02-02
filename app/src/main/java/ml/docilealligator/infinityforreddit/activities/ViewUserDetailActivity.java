@@ -89,7 +89,6 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UserThingSortTy
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.NavigationWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivityViewUserDetailBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
@@ -226,9 +225,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
         applyCustomTheme();
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSliderPanel = Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         mViewPager2 = binding.viewPagerViewUserDetailActivity;
 

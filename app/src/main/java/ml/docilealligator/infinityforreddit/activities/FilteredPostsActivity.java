@@ -39,7 +39,6 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomS
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UserThingSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivityFilteredThingBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.FragmentCommunicator;
@@ -116,9 +115,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
 
         applyCustomTheme();
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSliderPanel = Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();

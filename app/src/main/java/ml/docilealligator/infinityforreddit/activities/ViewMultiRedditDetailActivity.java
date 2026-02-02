@@ -166,9 +166,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
 
         applyCustomTheme();
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSliderPanel = Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();

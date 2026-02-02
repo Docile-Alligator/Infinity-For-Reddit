@@ -32,12 +32,10 @@ import ml.docilealligator.infinityforreddit.adapters.SelectedSubredditsRecyclerV
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SelectSubredditsOrUsersOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivitySelectedSubredditsBinding;
 import ml.docilealligator.infinityforreddit.multireddit.ExpandedSubredditInMultiReddit;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditWithSelection;
 import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class SelectedSubredditsAndUsersActivity extends BaseActivity implements ActivityToolbarInterface {
@@ -74,9 +72,7 @@ public class SelectedSubredditsAndUsersActivity extends BaseActivity implements 
 
         applyCustomTheme();
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
             if (isChangeStatusBarIconColor()) {

@@ -28,13 +28,11 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.ReportReasonRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivityReportBinding;
 import ml.docilealligator.infinityforreddit.post.FetchRules;
 import ml.docilealligator.infinityforreddit.subreddit.Rule;
 import ml.docilealligator.infinityforreddit.thing.ReportReason;
 import ml.docilealligator.infinityforreddit.thing.ReportThing;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
@@ -83,9 +81,7 @@ public class ReportActivity extends BaseActivity {
 
         applyCustomTheme();
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
             if (isChangeStatusBarIconColor()) {

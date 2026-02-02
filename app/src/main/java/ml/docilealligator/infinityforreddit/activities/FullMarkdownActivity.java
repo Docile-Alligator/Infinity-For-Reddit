@@ -37,12 +37,10 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCommentFullMarkdownBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class FullMarkdownActivity extends BaseActivity {
@@ -78,9 +76,7 @@ public class FullMarkdownActivity extends BaseActivity {
 
         setTitle(" ");
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSliderPanel = Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();

@@ -29,12 +29,10 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivitySearchSubredditsResultBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.SubredditListingFragment;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class SearchSubredditsResultActivity extends BaseActivity implements ActivityToolbarInterface {
@@ -69,9 +67,7 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
 
         applyCustomTheme();
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();

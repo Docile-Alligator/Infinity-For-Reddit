@@ -45,13 +45,11 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.SearchActivityRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.adapters.SubredditAutocompleteRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivitySearchBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
@@ -59,6 +57,7 @@ import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQuery;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQueryViewModel;
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -139,9 +138,7 @@ public class SearchActivity extends BaseActivity {
 
         applyCustomTheme();
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
             if (isChangeStatusBarIconColor()) {

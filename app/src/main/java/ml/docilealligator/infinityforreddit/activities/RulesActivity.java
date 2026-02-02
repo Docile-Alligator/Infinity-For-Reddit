@@ -29,8 +29,6 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.RulesRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
-import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.databinding.ActivityRulesBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -77,10 +75,7 @@ public class RulesActivity extends BaseActivity {
 
         applyCustomTheme();
 
-        SliderPanel sliderPanel = null;
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            sliderPanel = Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -133,7 +128,7 @@ public class RulesActivity extends BaseActivity {
 
         mSubredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
 
-        mAdapter = new RulesRecyclerViewAdapter(this, mCustomThemeWrapper, sliderPanel, mSubredditName);
+        mAdapter = new RulesRecyclerViewAdapter(this, mCustomThemeWrapper, mSliderPanel, mSubredditName);
         binding.recyclerViewRulesActivity.setAdapter(mAdapter);
 
         FetchRules.fetchRules(mExecutor, new Handler(),

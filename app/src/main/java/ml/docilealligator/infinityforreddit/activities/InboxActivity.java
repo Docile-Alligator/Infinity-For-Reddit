@@ -46,7 +46,6 @@ import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.AccountManagement;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivityInboxBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
 import ml.docilealligator.infinityforreddit.events.PassPrivateMessageEvent;
@@ -57,7 +56,6 @@ import ml.docilealligator.infinityforreddit.message.FetchMessage;
 import ml.docilealligator.infinityforreddit.message.Message;
 import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -105,9 +103,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
 
         applyCustomTheme();
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSliderPanel = Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();

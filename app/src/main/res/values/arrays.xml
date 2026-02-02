@@ -809,7 +809,7 @@
 
     <string-array name="settings_swipe_right_to_go_back_sensitivity_values">
         <item>1</item>
-        <item>0.5</item>
+        <item>0.2</item>
         <item>0.1</item>
     </string-array>
 

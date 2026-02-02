@@ -56,7 +56,6 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.SearchPostSortT
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SearchUserAndSubredditSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivitySearchResultBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -155,9 +154,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
         applyCustomTheme();
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSliderPanel = Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         mViewPager2 = binding.viewPagerSearchResultActivity;
 
