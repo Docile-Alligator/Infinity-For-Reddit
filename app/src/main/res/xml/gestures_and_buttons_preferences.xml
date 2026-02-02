@@ -29,6 +29,9 @@
         app:key="swipe_between_posts"
         app:title="@string/settings_swipe_between_posts_title" />
 
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceCategory
+        app:title="@string/settings_category_gesture_sensitivity_title" />
+
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontListPreference
         app:defaultValue="4"
         android:entries="@array/settings_tab_switching_sensitivity"

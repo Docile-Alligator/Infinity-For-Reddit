@@ -671,6 +671,7 @@
     <string name="settings_proxy_port">Port</string>
     <string name="settings_hide_fab_in_post_details">Hide Floating Action Button</string>
     <string name="settings_category_media_title">Media</string>
+    <string name="settings_category_gesture_sensitivity_title">Gesture Sensitivity</string>
     <string name="settings_tab_switching_sensitivity">Tab Switching Sensitivity</string>
     <string name="settings_swipe_right_to_go_back_sensitivity">Swipe Right to Go Back Sensitivity</string>
     <string name="settings_swipe_action_sensitivity_in_comments">Swipe Action Sensitivity in Comments</string>
