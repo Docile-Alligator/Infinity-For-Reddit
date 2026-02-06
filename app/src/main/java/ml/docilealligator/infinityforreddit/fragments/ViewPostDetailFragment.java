@@ -725,6 +725,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             } else {
                 saveItem.setVisible(false);
                 hideItem.setVisible(false);
+                mMenu.findItem(R.id.action_crosspost_view_post_detail_fragment).setVisible(false);
             }
 
             if (mPost.getAuthor().equals(mActivity.accountName)) {

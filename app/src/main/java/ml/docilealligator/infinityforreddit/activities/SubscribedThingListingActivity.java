@@ -365,8 +365,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                         imm.showSoftInput(binding.searchEditTextSubscribedThingListingActivity, InputMethodManager.SHOW_IMPLICIT);
                     }
                     return true;
-                }
-                else {
+                } else {
                     intent.putExtra(SearchActivity.EXTRA_SEARCH_SUBREDDITS_AND_USERS, true);
                 }
                 requestSearchThingLauncher.launch(intent);
