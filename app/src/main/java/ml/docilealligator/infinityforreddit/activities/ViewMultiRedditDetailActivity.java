@@ -56,7 +56,6 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomS
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.NavigationWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivityViewMultiRedditDetailBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
 import ml.docilealligator.infinityforreddit.events.GoBackToMainPageEvent;
@@ -531,6 +530,11 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                 Intent intent = new Intent(this, SubscribedThingListingActivity.class);
                 intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
                 startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBMIT_POSTS: {
+                PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
+                postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
                 break;
             }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_REFRESH: {

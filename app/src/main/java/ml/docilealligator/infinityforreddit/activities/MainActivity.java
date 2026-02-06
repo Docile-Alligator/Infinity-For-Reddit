@@ -569,6 +569,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 startActivity(intent);
                 break;
             }
+            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_SUBMIT_POSTS: {
+                PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
+                postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
+                break;
+            }
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_REFRESH: {
                 if (sectionsPagerAdapter != null) {
                     sectionsPagerAdapter.refresh();

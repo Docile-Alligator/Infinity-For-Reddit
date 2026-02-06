@@ -1036,6 +1036,11 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 startActivity(intent);
                 break;
             }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBMIT_POSTS: {
+                PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
+                postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
+                break;
+            }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_REFRESH: {
                 if (sectionsPagerAdapter != null) {
                     sectionsPagerAdapter.refresh();
