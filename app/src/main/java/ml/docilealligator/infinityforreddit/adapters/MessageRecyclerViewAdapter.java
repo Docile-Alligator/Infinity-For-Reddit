@@ -31,6 +31,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPrivateMessagesActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.ItemFooterErrorBinding;
@@ -72,6 +73,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
     private final int mColorAccent;
     private final int mMessageBackgroundColor;
     private final int mUsernameColor;
+    private final int mSubredditColor;
     private final int mPrimaryTextColor;
     private final int mSecondaryTextColor;
     private final int mUnreadMessageBackgroundColor;
@@ -91,6 +93,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         mColorAccent = customThemeWrapper.getColorAccent();
         mMessageBackgroundColor = customThemeWrapper.getCardViewBackgroundColor();
         mUsernameColor = customThemeWrapper.getUsername();
+        mSubredditColor = customThemeWrapper.getSubreddit();
         mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
         int spoilerBackgroundColor = mSecondaryTextColor | 0xFF000000;
@@ -155,7 +158,9 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
             Message message = getItem(holder.getBindingAdapterPosition());
             if (message != null) {
                 Message displayedMessage = message.getDisplayedMessage();
-                String recipientUsername = message.getAuthor().equals(mAccountName) ? message.getDestination() : message.getAuthor();
+                String recipientUsername = message.getRecipient(mAccountName);
+
+                ((DataViewHolder) holder).binding.authorTextViewItemMessage.setTextColor(message.isRecipientASubreddit() ? mSubredditColor : mUsernameColor);
 
                 if (message.isNew()) {
                     if (markAllMessagesAsRead) {
@@ -261,7 +266,6 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 binding.contentCustomMarkwonViewItemMessage.setTypeface(mActivity.contentTypeface);
             }
             itemView.setBackgroundColor(mMessageBackgroundColor);
-            binding.authorTextViewItemMessage.setTextColor(mUsernameColor);
             binding.subjectTextViewItemMessage.setTextColor(mPrimaryTextColor);
             binding.titleTextViewItemMessage.setTextColor(mPrimaryTextColor);
             binding.contentCustomMarkwonViewItemMessage.setTextColor(mSecondaryTextColor);
@@ -312,8 +316,29 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 if (message == null || message.isAuthorDeleted()) {
                     return;
                 }
-                Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, message.getAuthor().equals(mAccountName) ? message.getDestination() : message.getAuthor());
+                Intent intent;
+                if (message.getAuthor() == null || message.getAuthor().equals("null")) {
+                    if (message.getSubredditName() == null || message.getSubredditName().equals("null")) {
+                        intent = new Intent(mActivity, ViewUserDetailActivity.class);
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, message.getDestination());
+                    } else {
+                        intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
+                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, message.getSubredditName());
+                    }
+                } else {
+                    if (message.getAuthor().equals(mAccountName)) {
+                        if (message.getDestination().startsWith("#")) {
+                            intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, message.getSubredditName());
+                        } else {
+                            intent = new Intent(mActivity, ViewUserDetailActivity.class);
+                            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, message.getDestination());
+                        }
+                    } else {
+                        intent = new Intent(mActivity, ViewUserDetailActivity.class);
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, message.getAuthor());
+                    }
+                }
                 mActivity.startActivity(intent);
             });
 

@@ -123,6 +123,26 @@ public class Message implements Parcelable {
         return author;
     }
 
+    public String getRecipient(String accountName) {
+        if (author == null || author.equals("null")) {
+            if (subredditName == null || subredditName.equals("null")) {
+                return destination;
+            } else {
+                return subredditName;
+            }
+        } else {
+            return author.equals(accountName) ? (!destination.startsWith("#") ? destination : subredditName) : author;
+        }
+    }
+
+    public boolean isRecipientASubreddit() {
+        if (author == null || author.equals("null") || destination.startsWith("#")) {
+            return (subredditName != null && !subredditName.equals("null"));
+        }
+
+        return false;
+    }
+
     public boolean isAuthorDeleted() {
         return author != null && author.equals("[deleted]");
     }
