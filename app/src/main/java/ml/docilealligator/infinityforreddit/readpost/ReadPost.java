@@ -24,7 +24,7 @@ public class ReadPost implements Parcelable {
     @ColumnInfo(name = "time")
     private long time;
     @ReadPostType
-    @ColumnInfo(name = "post_history_type")
+    @ColumnInfo(name = "read_post_type")
     private int readPostType;
 
     public ReadPost(@NonNull String username, @NonNull String id, @ReadPostType int readPostType) {

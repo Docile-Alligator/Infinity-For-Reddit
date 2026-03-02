@@ -23,11 +23,14 @@ public interface ReadPostDao {
     @Query("SELECT * FROM read_posts WHERE id = :id LIMIT 1")
     ReadPost getReadPost(String id);
 
-    @Query("SELECT COUNT(id) FROM read_posts WHERE username = :username")
-    int getReadPostsCount(String username);
+    @Query("SELECT COUNT(id) FROM read_posts WHERE username = :username AND read_post_type = :readPostType")
+    int getReadPostsCount(String username, @ReadPostType int readPostType);
 
-    @Query("DELETE FROM read_posts WHERE rowid IN (SELECT rowid FROM read_posts WHERE username = :username ORDER BY time ASC LIMIT 100)")
-    void deleteOldestReadPosts(String username);
+    @Query("DELETE FROM read_posts WHERE username = :username AND id = :postId AND read_post_type = :readPostType")
+    void deleteReadPost(String username, String postId, @ReadPostType int readPostType);
+
+    @Query("DELETE FROM read_posts WHERE rowid IN (SELECT rowid FROM read_posts WHERE username = :username AND read_post_type = :readPostType ORDER BY time ASC LIMIT 100)")
+    void deleteOldestReadPosts(String username, @ReadPostType int readPostType);
 
     @Query("DELETE FROM read_posts")
     void deleteAllReadPosts();

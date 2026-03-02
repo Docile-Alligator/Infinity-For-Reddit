@@ -488,7 +488,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static final Migration MIGRATION_31_32 = new Migration(31, 32) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE read_posts ADD COLUMN post_history_type INTEGER DEFAULT 0 NOT NULL");
+            database.execSQL("ALTER TABLE read_posts ADD COLUMN read_post_type INTEGER DEFAULT 0 NOT NULL");
         }
     };
 }
