@@ -926,16 +926,36 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         } else if (stringId == R.string.history) {
                             intent = new Intent(MainActivity.this, HistoryActivity.class);
                         } else if (stringId == R.string.upvoted) {
-                            intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_UPVOTED);
+                            if (Account.ANONYMOUS_ACCOUNT.equals(accountName)) {
+                                intent = new Intent(MainActivity.this, HistoryActivity.class);
+                                intent.putExtra(HistoryActivity.EXTRA_READ_POST_TYPE, ReadPostType.ANONYMOUS_UPVOTED_POSTS);
+                            } else {
+                                intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_UPVOTED);
+                            }
                         } else if (stringId == R.string.downvoted) {
-                            intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_DOWNVOTED);
+                            if (Account.ANONYMOUS_ACCOUNT.equals(accountName)) {
+                                intent = new Intent(MainActivity.this, HistoryActivity.class);
+                                intent.putExtra(HistoryActivity.EXTRA_READ_POST_TYPE, ReadPostType.ANONYMOUS_DOWNVOTED_POSTS);
+                            } else {
+                                intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_DOWNVOTED);
+                            }
                         } else if (stringId == R.string.hidden) {
-                            intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_HIDDEN);
+                            if (Account.ANONYMOUS_ACCOUNT.equals(accountName)) {
+                                intent = new Intent(MainActivity.this, HistoryActivity.class);
+                                intent.putExtra(HistoryActivity.EXTRA_READ_POST_TYPE, ReadPostType.ANONYMOUS_HIDDEN_POSTS);
+                            } else {
+                                intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_HIDDEN);
+                            }
                         } else if (stringId == R.string.account_saved_thing_activity_label) {
-                            intent = new Intent(MainActivity.this, AccountSavedThingActivity.class);
+                            if (Account.ANONYMOUS_ACCOUNT.equals(accountName)) {
+                                intent = new Intent(MainActivity.this, HistoryActivity.class);
+                                intent.putExtra(HistoryActivity.EXTRA_READ_POST_TYPE, ReadPostType.ANONYMOUS_SAVED_POSTS);
+                            } else {
+                                intent = new Intent(MainActivity.this, AccountSavedThingActivity.class);
+                            }
                         } else if (stringId == R.string.light_theme) {
                             mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "0").apply();
                             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);

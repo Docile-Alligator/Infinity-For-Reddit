@@ -58,6 +58,7 @@ import ml.docilealligator.infinityforreddit.post.HistoryPostPagingSource;
 import ml.docilealligator.infinityforreddit.post.HistoryPostViewModel;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesLiveDataKt;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -68,9 +69,8 @@ import retrofit2.Retrofit;
 
 public class HistoryPostFragment extends PostFragmentBase implements FragmentCommunicator {
 
-    public static final String EXTRA_HISTORY_TYPE = "EHT";
+    public static final String EXTRA_READ_POST_TYPE = "EHT";
     public static final String EXTRA_FILTER = "EF";
-    public static final int HISTORY_TYPE_READ_POSTS = 1;
 
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String RECYCLER_VIEW_POSITION_STATE = "RVPS";
@@ -115,7 +115,8 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
     private PostRecyclerViewAdapter mAdapter;
     private int maxPosition = -1;
     private PostFilter postFilter;
-    private int historyType;
+    @ReadPostType
+    private int readPostType;
     private FragmentHistoryPostBinding binding;
 
     public HistoryPostFragment() {
@@ -199,61 +200,59 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
             });
         }
 
-        historyType = getArguments().getInt(EXTRA_HISTORY_TYPE, HISTORY_TYPE_READ_POSTS);
+        readPostType = getArguments().getInt(EXTRA_READ_POST_TYPE, ReadPostType.READ_POSTS);
         int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
         Locale locale = getResources().getConfiguration().locale;
 
-        if (historyType == HISTORY_TYPE_READ_POSTS) {
-            postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.HISTORY_POST_LAYOUT_READ_POST, defaultPostLayout);
+        postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.HISTORY_POST_LAYOUT_READ_POST, defaultPostLayout);
 
-            mAdapter = new PostRecyclerViewAdapter(mActivity, this, mRedditDataRoomDatabase, mExecutor,
-                    mOauthRetrofit, mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
-                    mActivity.accessToken, mActivity.accountName, postType, postLayout, true,
-                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences,
-                    null, mExoCreator, new PostRecyclerViewAdapter.Callback() {
-                @Override
-                public void typeChipClicked(int filter) {
+        mAdapter = new PostRecyclerViewAdapter(mActivity, this, mRedditDataRoomDatabase, mExecutor,
+                mOauthRetrofit, mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
+                mActivity.accessToken, mActivity.accountName, postType, postLayout, true,
+                mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences,
+                null, mExoCreator, new PostRecyclerViewAdapter.Callback() {
+            @Override
+            public void typeChipClicked(int filter) {
                     /*Intent intent = new Intent(activity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, username);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_USER_WHERE, where);
                     intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
                     startActivity(intent);*/
-                }
+            }
 
-                @Override
-                public void flairChipClicked(String flair) {
+            @Override
+            public void flairChipClicked(String flair) {
                     /*Intent intent = new Intent(activity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, username);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_USER_WHERE, where);
                     intent.putExtra(FilteredPostsActivity.EXTRA_CONTAIN_FLAIR, flair);
                     startActivity(intent);*/
-                }
+            }
 
-                @Override
-                public void nsfwChipClicked() {
+            @Override
+            public void nsfwChipClicked() {
                     /*Intent intent = new Intent(activity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, username);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_USER_WHERE, where);
                     intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                     startActivity(intent);*/
-                }
+            }
 
-                @Override
-                public void currentlyBindItem(int position) {
-                    if (maxPosition < position) {
-                        maxPosition = position;
-                    }
+            @Override
+            public void currentlyBindItem(int position) {
+                if (maxPosition < position) {
+                    maxPosition = position;
                 }
+            }
 
-                @Override
-                public void delayTransition() {
-                    TransitionManager.beginDelayedTransition(binding.recyclerViewHistoryPostFragment, new AutoTransition());
-                }
-            });
-        }
+            @Override
+            public void delayTransition() {
+                TransitionManager.beginDelayedTransition(binding.recyclerViewHistoryPostFragment, new AutoTransition());
+            }
+        });
 
         int nColumns = getNColumns(resources);
         if (nColumns == 1) {
