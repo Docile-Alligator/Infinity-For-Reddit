@@ -336,9 +336,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mOnlyDisablePreviewInVideoAndGifPosts = sharedPreferences.getBoolean(SharedPreferencesUtils.ONLY_DISABLE_PREVIEW_IN_VIDEO_AND_GIF_POSTS, false);
 
             if (postHistorySharedPreferences != null) {
-                mMarkPostsAsRead = postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false);
-                mMarkPostsAsReadAfterVoting = postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false);
-                mMarkPostsAsReadOnScroll = postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_ON_SCROLL_BASE, false);
+                mMarkPostsAsRead = postHistorySharedPreferences.getBoolean(accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false);
+                mMarkPostsAsReadAfterVoting = postHistorySharedPreferences.getBoolean(accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false);
+                mMarkPostsAsReadOnScroll = postHistorySharedPreferences.getBoolean(accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_ON_SCROLL_BASE, false);
                 mHandleReadPost = true;
             }
 
@@ -3112,7 +3112,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 return;
             }
 
-            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !post.isRead() && mMarkPostsAsRead) {
+            if (!post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
                 if (changePostItemColor) {
                     setItemViewBackgroundColor(true);
@@ -4143,7 +4143,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 return;
             }
 
-            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !post.isRead() && mMarkPostsAsRead) {
+            if (!post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
                 if (changePostItemColor) {
                     itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
@@ -4386,7 +4386,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 return;
             }
 
-            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !post.isRead() && mMarkPostsAsRead) {
+            if (!post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
                 if (changePostItemColor) {
                     itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
@@ -4583,7 +4583,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 return;
             }
 
-            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !post.isRead() && mMarkPostsAsRead) {
+            if (!post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
                 if (changePostItemColor) {
                     itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
