@@ -488,7 +488,13 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static final Migration MIGRATION_31_32 = new Migration(31, 32) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE read_posts ADD COLUMN read_post_type INTEGER DEFAULT 0 NOT NULL");
+            database.execSQL("CREATE TABLE read_posts_new"
+                    + "(username TEXT NOT NULL, id TEXT NOT NULL, time INTEGER DEFAULT 0 NOT NULL, "
+                    + "read_post_type INTEGER DEFAULT 0 NOT NULL, PRIMARY KEY(username, id, read_post_type), "
+                    + "FOREIGN KEY(username) REFERENCES accounts(username) ON DELETE CASCADE)");
+            database.execSQL("INSERT INTO read_posts_new (username, id, time, read_post_type) SELECT username, id, time FROM read_posts");
+            database.execSQL("DROP TABLE read_posts");
+            database.execSQL("ALTER TABLE read_posts_new RENAME TO read_posts");
         }
     };
 }

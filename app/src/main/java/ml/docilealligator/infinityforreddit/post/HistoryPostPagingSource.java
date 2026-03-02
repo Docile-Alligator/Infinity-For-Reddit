@@ -14,7 +14,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.account.Account;
@@ -22,6 +24,7 @@ import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.readpost.NullReadPostsList;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.HttpException;
@@ -97,6 +100,10 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
                 if (newPosts == null) {
                     return new LoadResult.Error<>(new Exception("Error parsing posts"));
                 } else {
+                    if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                        setMetadataToAnonymousPosts(newPosts, postType);
+                    }
+
                     if (newPosts.size() < 25) {
                         return new LoadResult.Page<>(new ArrayList<>(newPosts), null, null);
                     }
@@ -108,6 +115,26 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
         } catch (IOException e) {
             e.printStackTrace();
             return new LoadResult.Error<>(new Exception("Response failed"));
+        }
+    }
+
+    private void setMetadataToAnonymousPosts(LinkedHashSet<Post> posts, @ReadPostType int currentReadPostType) {
+        List<ReadPost> readPostsInDatabase = redditDataRoomDatabase.readPostDao().getAllReadPostsForMetadata(accountName, currentReadPostType,
+                posts.stream().map(Post::getId).collect(Collectors.toList()));
+        Map<String, Post> existingPostsMap = posts.stream().collect(Collectors.toMap(Post::getId, post -> post));
+        for (ReadPost r : readPostsInDatabase) {
+            Post existingPost = existingPostsMap.get(r.getId());
+            if (existingPost != null) {
+                if (r.getReadPostType() == ReadPostType.ANONYMOUS_UPVOTED_POSTS) {
+                    existingPost.setVoteType(1);
+                } else if (r.getReadPostType() == ReadPostType.ANONYMOUS_DOWNVOTED_POSTS) {
+                    existingPost.setVoteType(-1);
+                } else if (r.getReadPostType() == ReadPostType.ANONYMOUS_HIDDEN_POSTS) {
+                    existingPost.setHidden(true);
+                } else if (r.getReadPostType() == ReadPostType.ANONYMOUS_SAVED_POSTS) {
+                    existingPost.setSaved(true);
+                }
+            }
         }
     }
 

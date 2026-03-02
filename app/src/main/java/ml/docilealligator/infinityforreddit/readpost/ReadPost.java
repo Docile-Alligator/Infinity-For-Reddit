@@ -11,7 +11,7 @@ import androidx.room.ForeignKey;
 
 import ml.docilealligator.infinityforreddit.account.Account;
 
-@Entity(tableName = "read_posts", primaryKeys = {"username", "id"},
+@Entity(tableName = "read_posts", primaryKeys = {"username", "id", "read_post_type"},
         foreignKeys = @ForeignKey(entity = Account.class, parentColumns = "username",
                 childColumns = "username", onDelete = ForeignKey.CASCADE))
 public class ReadPost implements Parcelable {

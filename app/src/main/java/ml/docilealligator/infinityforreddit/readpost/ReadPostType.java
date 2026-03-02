@@ -10,8 +10,8 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.SOURCE)
 public @interface ReadPostType {
     int READ_POSTS = 0;
-    int ANONYMOUS_SAVED_POSTS = 1;
-    int ANONYMOUS_UPVOTED_POSTS = 2;
-    int ANONYMOUS_DOWNVOTED_POSTS = 3;
-    int ANONYMOUS_HIDDEN_POSTS = 4;
+    int ANONYMOUS_UPVOTED_POSTS = 1;
+    int ANONYMOUS_DOWNVOTED_POSTS = 2;
+    int ANONYMOUS_HIDDEN_POSTS = 3;
+    int ANONYMOUS_SAVED_POSTS = 4;
 }
