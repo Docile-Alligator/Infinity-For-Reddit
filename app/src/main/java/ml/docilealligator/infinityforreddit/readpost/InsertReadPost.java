@@ -6,7 +6,8 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class InsertReadPost {
     public static void insertReadPost(RedditDataRoomDatabase redditDataRoomDatabase, Executor executor,
-                                      String username, String postId, int readPostsLimit) {
+                                      String username, String postId, @ReadPostType int readPostType,
+                                      int readPostsLimit) {
         executor.execute(() -> {
             ReadPostDao readPostDao = redditDataRoomDatabase.readPostDao();
             int limit = Math.max(readPostsLimit, 100);
@@ -15,7 +16,7 @@ public class InsertReadPost {
                 readPostDao.deleteOldestReadPosts(username);
             }
             if (username != null && !username.isEmpty()) {
-                readPostDao.insert(new ReadPost(username, postId));
+                readPostDao.insert(new ReadPost(username, postId, readPostType));
             }
         });
     }
