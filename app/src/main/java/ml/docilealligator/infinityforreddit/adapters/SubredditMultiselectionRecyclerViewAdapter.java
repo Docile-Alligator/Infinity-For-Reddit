@@ -86,11 +86,11 @@ public class SubredditMultiselectionRecyclerViewAdapter extends RecyclerView.Ada
         notifyDataSetChanged();
     }
 
-    public ArrayList<String> getAllSelectedSubreddits() {
-        ArrayList<String> selectedSubreddits = new ArrayList<>();
+    public ArrayList<SubredditWithSelection> getAllSelectedSubreddits() {
+        ArrayList<SubredditWithSelection> selectedSubreddits = new ArrayList<>();
         for (SubredditWithSelection s : subscribedSubreddits) {
             if (s.isSelected()) {
-                selectedSubreddits.add(s.getName());
+                selectedSubreddits.add(s);
             }
         }
         return selectedSubreddits;

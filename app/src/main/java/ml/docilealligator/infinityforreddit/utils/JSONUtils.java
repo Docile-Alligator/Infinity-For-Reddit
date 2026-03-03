@@ -208,6 +208,7 @@ public class JSONUtils {
     public static final String O_EMBED_KEY = "oembed";
     public static final String THUMBNAIL_URL_KEY = "thumbnail_url";
     public static final String VIDEO_DOWNLOAD_URL = "videoDownloadUrl";
+    public static final String EXPLANATION_KEY = "explanation";
 
     @Nullable
     public static Map<String, MediaMetadata> parseMediaMetadata(JSONObject data) {
@@ -219,6 +220,18 @@ public class JSONUtils {
                     try {
                         String k = it.next();
                         JSONObject media = mediaMetadataJSON.getJSONObject(k);
+
+                        // Handle giphy entries with "invalid" status by constructing direct Giphy URLs
+                        if (media.has(STATUS_KEY) && "invalid".equals(media.getString(STATUS_KEY))) {
+                            if (k.startsWith("giphy|")) {
+                                MediaMetadata giphyMetadata = createGiphyFallbackMetadata(k);
+                                if (giphyMetadata != null) {
+                                    mediaMetadataMap.put(k, giphyMetadata);
+                                }
+                            }
+                            continue;
+                        }
+
                         String e = media.getString(JSONUtils.E_KEY);
 
                         JSONObject originalItemJSON = media.getJSONObject(JSONUtils.S_KEY);
@@ -259,6 +272,18 @@ public class JSONUtils {
                         String id = media.getString(JSONUtils.ID_KEY);
                         mediaMetadataMap.put(id, new MediaMetadata(id, e, originalItem, downscaledItem));
                     } catch (JSONException e) {
+                        /*
+                        https://www.reddit.com/r/Leathercraft/comments/1qo3jrv/one_year_of_patina/.json?raw_json=1
+
+                        "media_metadata": {
+"1a9oi91fitfg1": {
+"status": "failed"
+},
+"2ik58hyditfg1": {
+"status": "failed"
+}
+}
+                         */
                         e.printStackTrace();
                     }
                 }
@@ -269,5 +294,30 @@ public class JSONUtils {
         }
 
         return null;
+    }
+
+    /**
+     * Creates a fallback MediaMetadata for giphy entries with "invalid" status.
+     * Extracts the giphy ID from the key (format: "giphy|{id}" or "giphy|{id}|downsized")
+     * and constructs direct Giphy URLs.
+     *
+     * @param key The media_metadata key (e.g., "giphy|abc123|downsized")
+     * @return A MediaMetadata with direct Giphy URLs, or null if the key format is invalid
+     */
+    @Nullable
+    private static MediaMetadata createGiphyFallbackMetadata(String key) {
+        // Key format: "giphy|{id}" or "giphy|{id}|downsized"
+        String[] parts = key.split("\\|");
+        if (parts.length < 2) {
+            return null;
+        }
+
+        String giphyId = parts[1];
+        String gifUrl = "https://media.giphy.com/media/" + giphyId + "/giphy.gif";
+        String mp4Url = "https://media.giphy.com/media/" + giphyId + "/giphy.mp4";
+
+        // Use reasonable default dimensions (will be adjusted when loaded)
+        MediaMetadata.MediaItem originalItem = new MediaMetadata.MediaItem(480, 480, gifUrl, mp4Url);
+        return new MediaMetadata(key, "AnimatedImage", originalItem, originalItem);
     }
 }

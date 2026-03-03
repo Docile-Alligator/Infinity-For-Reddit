@@ -76,9 +76,15 @@ public class ParseMultiReddit {
         boolean isFavorited = singleMultiRedditJSON.getBoolean(JSONUtils.IS_FAVORITED_KEY);
 
         JSONArray subredditsArray = singleMultiRedditJSON.getJSONArray(JSONUtils.SUBREDDITS_KEY);
-        ArrayList<String> subreddits = new ArrayList<>();
-        for (int j = 0; j < subredditsArray.length(); j++) {
-            subreddits.add(subredditsArray.getJSONObject(j).getString(JSONUtils.NAME_KEY));
+        ArrayList<ExpandedSubredditInMultiReddit> subreddits = new ArrayList<>();
+        for (int i = 0; i < subredditsArray.length(); i++) {
+            JSONObject subredditData = subredditsArray.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
+            subreddits.add(
+                    new ExpandedSubredditInMultiReddit(
+                            subredditsArray.getJSONObject(i).getString(JSONUtils.NAME_KEY),
+                            subredditData.isNull(JSONUtils.COMMUNITY_ICON_KEY) ? subredditData.getString(JSONUtils.NAME_KEY) : subredditData.getString(JSONUtils.COMMUNITY_ICON_KEY)
+                    )
+            );
         }
 
         return new MultiReddit(path, displayName, name, description, copiedFrom,

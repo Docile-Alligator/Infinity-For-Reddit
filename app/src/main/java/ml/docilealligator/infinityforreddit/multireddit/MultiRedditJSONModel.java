@@ -13,7 +13,7 @@ public class MultiRedditJSONModel {
     public MultiRedditJSONModel() {}
 
     public MultiRedditJSONModel(String display_name, String description_md, boolean isPrivate,
-                                ArrayList<String> subreddits) {
+                                ArrayList<ExpandedSubredditInMultiReddit> subreddits) {
         this.display_name = display_name;
         this.description_md = description_md;
         if (isPrivate) {
@@ -25,7 +25,7 @@ public class MultiRedditJSONModel {
         if (subreddits != null) {
             this.subreddits = new SubredditInMultiReddit[subreddits.size()];
             for (int i = 0; i < subreddits.size(); i++) {
-                SubredditInMultiReddit subredditInMultiReddit = new SubredditInMultiReddit(subreddits.get(i));
+                SubredditInMultiReddit subredditInMultiReddit = new SubredditInMultiReddit(subreddits.get(i).getName());
                 this.subreddits[i] = subredditInMultiReddit;
             }
         }

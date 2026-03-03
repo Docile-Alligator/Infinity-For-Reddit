@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +23,7 @@ import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.paging.CombinedLoadStates;
 import androidx.paging.LoadState;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -33,6 +33,7 @@ import androidx.transition.TransitionManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -42,6 +43,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 import ml.docilealligator.infinityforreddit.FetchPostFilterAndConcatenatedSubredditNames;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.PostModerationActionHandler;
@@ -75,6 +78,7 @@ import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsList;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsListInterface;
 import ml.docilealligator.infinityforreddit.thing.SortType;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesLiveDataKt;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
@@ -198,7 +202,6 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
                     getPostRecyclerView().setPadding(
                             0, 0, 0, allInsets.bottom
                     );
-                    Log.i("asfsaf", "s " + postFragmentId);
                     return WindowInsetsCompat.CONSUMED;
                 }
             });
@@ -211,7 +214,7 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
         binding.swipeRefreshLayoutPostFragment.setEnabled(mSharedPreferences.getBoolean(SharedPreferencesUtils.PULL_TO_REFRESH, true));
         binding.swipeRefreshLayoutPostFragment.setOnRefreshListener(this::refresh);
 
-        int recyclerViewPosition = 0;
+        int recyclerViewPosition;
         if (savedInstanceState != null) {
             recyclerViewPosition = savedInstanceState.getInt(RECYCLER_VIEW_POSITION_STATE);
 
@@ -220,6 +223,7 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
             concatenatedSubredditNames = savedInstanceState.getString(CONCATENATED_SUBREDDIT_NAMES_STATE);
             postFragmentId = savedInstanceState.getLong(POST_FRAGMENT_ID_STATE);
         } else {
+            recyclerViewPosition = 0;
             postFilter = getArguments().getParcelable(EXTRA_FILTER);
             postFragmentId = System.currentTimeMillis() + new Random().nextInt(1000);
         }
@@ -265,8 +269,8 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
             sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, defaultPostLayout);
 
-            mAdapter = new PostRecyclerViewAdapter(mActivity, this, mExecutor, mOauthRetrofit,
-                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
+            mAdapter = new PostRecyclerViewAdapter(mActivity, this, mRedditDataRoomDatabase, mExecutor,
+                    mOauthRetrofit, mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     mActivity.accessToken, mActivity.accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -342,8 +346,8 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
                 sortType = new SortType(SortType.Type.valueOf(sort));
             }
 
-            mAdapter = new PostRecyclerViewAdapter(mActivity, this, mExecutor, mOauthRetrofit,
-                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
+            mAdapter = new PostRecyclerViewAdapter(mActivity, this, mRedditDataRoomDatabase, mExecutor,
+                    mOauthRetrofit, mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     mActivity.accessToken, mActivity.accountName, postType, postLayout, displaySubredditName,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -414,8 +418,8 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
                 sortType = new SortType(SortType.Type.valueOf(sort));
             }
 
-            mAdapter = new PostRecyclerViewAdapter(mActivity, this, mExecutor, mOauthRetrofit,
-                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
+            mAdapter = new PostRecyclerViewAdapter(mActivity, this, mRedditDataRoomDatabase, mExecutor,
+                    mOauthRetrofit, mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     mActivity.accessToken, mActivity.accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -482,8 +486,8 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
             }
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, defaultPostLayout);
 
-            mAdapter = new PostRecyclerViewAdapter(mActivity, this, mExecutor, mOauthRetrofit,
-                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
+            mAdapter = new PostRecyclerViewAdapter(mActivity, this, mRedditDataRoomDatabase, mExecutor,
+                    mOauthRetrofit, mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     mActivity.accessToken, mActivity.accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -543,8 +547,8 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
 
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
 
-            mAdapter = new PostRecyclerViewAdapter(mActivity, this, mExecutor, mOauthRetrofit,
-                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
+            mAdapter = new PostRecyclerViewAdapter(mActivity, this, mRedditDataRoomDatabase, mExecutor,
+                    mOauthRetrofit, mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     mActivity.accessToken, mActivity.accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -603,8 +607,8 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
 
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiRedditPath, defaultPostLayout);
 
-            mAdapter = new PostRecyclerViewAdapter(mActivity, this, mExecutor, mOauthRetrofit,
-                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
+            mAdapter = new PostRecyclerViewAdapter(mActivity, this, mRedditDataRoomDatabase, mExecutor,
+                    mOauthRetrofit, mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     mActivity.accessToken, mActivity.accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -660,8 +664,8 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
             }
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
 
-            mAdapter = new PostRecyclerViewAdapter(mActivity, this, mExecutor, mOauthRetrofit,
-                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
+            mAdapter = new PostRecyclerViewAdapter(mActivity, this, mRedditDataRoomDatabase, mExecutor,
+                    mOauthRetrofit, mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     mActivity.accessToken, mActivity.accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -716,7 +720,16 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
         }
 
         if (recyclerViewPosition > 0) {
-            binding.recyclerViewPostFragment.scrollToPosition(recyclerViewPosition);
+            mAdapter.addLoadStateListener(new Function1<>() {
+                @Override
+                public Unit invoke(CombinedLoadStates combinedLoadStates) {
+                    if (combinedLoadStates.getRefresh() instanceof LoadState.NotLoading && mAdapter.getItemCount() > 0) {
+                        binding.recyclerViewPostFragment.scrollToPosition(recyclerViewPosition);
+                        mAdapter.removeLoadStateListener(this);
+                    }
+                    return Unit.INSTANCE;
+                }
+            });
         }
 
         if (mActivity instanceof ActivityToolbarInterface) {
@@ -834,6 +847,12 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
         binding.recyclerViewPostFragment.setPlayerInitializer(order -> {
             VolumeInfo volumeInfo = new VolumeInfo(true, 0f);
             return new PlaybackInfo(INDEX_UNSET, TIME_UNSET, volumeInfo);
+        });
+
+        SharedPreferencesLiveDataKt.stringLiveData(mSharedPreferences, SharedPreferencesUtils.SIMULTANEOUS_AUTOPLAY_LIMIT, "1").observe(getViewLifecycleOwner(), limit -> {
+            if (getPostAdapter() != null) {
+                getPostAdapter().setSimultaneousAutoplayLimit(Integer.parseInt(limit));
+            }
         });
 
         return binding.getRoot();
@@ -1438,5 +1457,10 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
     @Override
     public void toggleMod(@NonNull Post post, int position) {
         mPostViewModel.toggleMod(post, position);
+    }
+
+    @Override
+    public void toggleNotification(@NotNull Post post, int position) {
+        mPostViewModel.toggleNotification(post, position);
     }
 }

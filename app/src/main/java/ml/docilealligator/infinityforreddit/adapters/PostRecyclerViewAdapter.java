@@ -76,6 +76,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.FetchVideoLinkListener;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
@@ -120,6 +121,9 @@ import ml.docilealligator.infinityforreddit.post.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostModification;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
 import ml.docilealligator.infinityforreddit.thing.SaveThing;
 import ml.docilealligator.infinityforreddit.thing.StreamableVideo;
 import ml.docilealligator.infinityforreddit.thing.VoteThing;
@@ -129,6 +133,7 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 import ml.docilealligator.infinityforreddit.videoautoplay.CacheManager;
 import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
 import ml.docilealligator.infinityforreddit.videoautoplay.ExoPlayerViewHelper;
+import ml.docilealligator.infinityforreddit.videoautoplay.MultiPlayPlayerSelector;
 import ml.docilealligator.infinityforreddit.videoautoplay.Playable;
 import ml.docilealligator.infinityforreddit.videoautoplay.ToroPlayer;
 import ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil;
@@ -176,6 +181,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private PostFragmentBase mFragment;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences mCurrentAccountSharedPreferences;
+    private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private Executor mExecutor;
     private Retrofit mOauthRetrofit;
     private Retrofit mRedgifsRetrofit;
@@ -250,6 +256,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private boolean mMarkPostsAsRead;
     private boolean mMarkPostsAsReadAfterVoting;
     private boolean mMarkPostsAsReadOnScroll;
+    private int mReadPostsLimit;
     private boolean mHidePostType;
     private boolean mHidePostFlair;
     private boolean mHideSubredditAndUserPrefix;
@@ -261,6 +268,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private boolean mEasierToWatchInFullScreen;
     private int mDataSavingModeDefaultResolution;
     private int mNonDataSavingModeDefaultResolution;
+    private int mSimultaneousAutoplayLimit;
     private String mLongPressPostNonMediaAreaAction = SharedPreferencesUtils.LONG_PRESS_POST_VALUE_SHOW_POST_OPTIONS;
     private String mLongPressPostMediaAction = SharedPreferencesUtils.LONG_PRESS_POST_VALUE_SHOW_POST_OPTIONS;
     private boolean mHandleReadPost;
@@ -268,9 +276,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private Callback mCallback;
     private boolean canPlayVideo = true;
     private RecyclerView.RecycledViewPool mGalleryRecycledViewPool;
+    private MultiPlayPlayerSelector multiPlayPlayerSelector;
 
     // postHistorySharedPreferences will be null when being used in HistoryPostFragment.
-    public PostRecyclerViewAdapter(BaseActivity activity, PostFragmentBase fragment, Executor executor, Retrofit oauthRetrofit,
+    public PostRecyclerViewAdapter(BaseActivity activity, PostFragmentBase fragment, RedditDataRoomDatabase redditDataRoomDatabase,
+                                   Executor executor, Retrofit oauthRetrofit,
                                    Retrofit redgifsRetrofit, Provider<StreamableAPI> streamableApiProvider,
                                    CustomThemeWrapper customThemeWrapper, Locale locale,
                                    @Nullable String accessToken, @NonNull String accountName, int postType, int postLayout, boolean displaySubredditName,
@@ -284,6 +294,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mFragment = fragment;
             mSharedPreferences = sharedPreferences;
             mCurrentAccountSharedPreferences = currentAccountSharedPreferences;
+            mRedditDataRoomDatabase = redditDataRoomDatabase;
             mExecutor = executor;
             mOauthRetrofit = oauthRetrofit;
             mRedgifsRetrofit = redgifsRetrofit;
@@ -332,9 +343,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mOnlyDisablePreviewInVideoAndGifPosts = sharedPreferences.getBoolean(SharedPreferencesUtils.ONLY_DISABLE_PREVIEW_IN_VIDEO_AND_GIF_POSTS, false);
 
             if (postHistorySharedPreferences != null) {
-                mMarkPostsAsRead = postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false);
-                mMarkPostsAsReadAfterVoting = postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false);
-                mMarkPostsAsReadOnScroll = postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_ON_SCROLL_BASE, false);
+                mMarkPostsAsRead = postHistorySharedPreferences.getBoolean(accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false);
+                mMarkPostsAsReadAfterVoting = postHistorySharedPreferences.getBoolean(accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false);
+                mMarkPostsAsReadOnScroll = postHistorySharedPreferences.getBoolean(accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_ON_SCROLL_BASE, false);
+                mReadPostsLimit = ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, postHistorySharedPreferences);
                 mHandleReadPost = true;
             }
 
@@ -349,6 +361,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mEasierToWatchInFullScreen = sharedPreferences.getBoolean(SharedPreferencesUtils.EASIER_TO_WATCH_IN_FULL_SCREEN, false);
             mDataSavingModeDefaultResolution = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION, "360"));
             mNonDataSavingModeDefaultResolution = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION_NO_DATA_SAVING, "0"));
+            mSimultaneousAutoplayLimit = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.SIMULTANEOUS_AUTOPLAY_LIMIT, "1"));
 
             mPostLayout = postLayout;
             mDefaultLinkPostLayout = Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.DEFAULT_LINK_POST_LAYOUT_KEY, "-1"));
@@ -399,6 +412,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mCallback = callback;
 
             mGalleryRecycledViewPool = new RecyclerView.RecycledViewPool();
+            multiPlayPlayerSelector = new MultiPlayPlayerSelector(mSimultaneousAutoplayLimit);
         }
     }
 
@@ -1593,6 +1607,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         mNonDataSavingModeDefaultResolution = value;
     }
 
+    public void setSimultaneousAutoplayLimit(int limit) {
+        mSimultaneousAutoplayLimit = limit;
+        multiPlayPlayerSelector.setSimultaneousAutoplayLimit(limit);
+    }
+
     @OptIn(markerClass = UnstableApi.class)
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
@@ -2377,59 +2396,68 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     }
                     Post post = getItem(position);
                     if (post != null) {
-                        if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                            Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
                         if (post.isSaved()) {
                             saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
-                            SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, post.getFullName(),
-                                    new SaveThing.SaveThingListener() {
-                                        @Override
-                                        public void success() {
-                                            post.setSaved(false);
-                                            if (getBindingAdapterPosition() == position) {
-                                                saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
+                            if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                                ReadPostModification.deleteReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                        post.getId(), ReadPostType.READ_POSTS);
+                                post.setSaved(!post.isSaved());
+                            } else {
+                                SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, post.getFullName(),
+                                        new SaveThing.SaveThingListener() {
+                                            @Override
+                                            public void success() {
+                                                post.setSaved(false);
+                                                if (getBindingAdapterPosition() == position) {
+                                                    saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                                }
+                                                Toast.makeText(mActivity, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
+                                                EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                                             }
-                                            Toast.makeText(mActivity, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
-                                            EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
-                                        }
 
-                                        @Override
-                                        public void failed() {
-                                            post.setSaved(true);
-                                            if (getBindingAdapterPosition() == position) {
-                                                saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
+                                            @Override
+                                            public void failed() {
+                                                post.setSaved(true);
+                                                if (getBindingAdapterPosition() == position) {
+                                                    saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
+                                                }
+                                                Toast.makeText(mActivity, R.string.post_unsaved_failed, Toast.LENGTH_SHORT).show();
+                                                EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                                             }
-                                            Toast.makeText(mActivity, R.string.post_unsaved_failed, Toast.LENGTH_SHORT).show();
-                                            EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
-                                        }
-                                    });
+                                        });
+                            }
                         } else {
                             saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
-                            SaveThing.saveThing(mOauthRetrofit, mAccessToken, post.getFullName(),
-                                    new SaveThing.SaveThingListener() {
-                                        @Override
-                                        public void success() {
-                                            post.setSaved(true);
-                                            if (getBindingAdapterPosition() == position) {
-                                                saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
+                            if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+                                if (mReadPostsLimit > 0) {
+                                    ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                            post.getId(), mReadPostsLimit, ReadPostType.READ_POSTS);
+                                    post.setSaved(!post.isSaved());
+                                }
+                            } else {
+                                SaveThing.saveThing(mOauthRetrofit, mAccessToken, post.getFullName(),
+                                        new SaveThing.SaveThingListener() {
+                                            @Override
+                                            public void success() {
+                                                post.setSaved(true);
+                                                if (getBindingAdapterPosition() == position) {
+                                                    saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
+                                                }
+                                                Toast.makeText(mActivity, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
+                                                EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                                             }
-                                            Toast.makeText(mActivity, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
-                                            EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
-                                        }
 
-                                        @Override
-                                        public void failed() {
-                                            post.setSaved(false);
-                                            if (getBindingAdapterPosition() == position) {
-                                                saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                            @Override
+                                            public void failed() {
+                                                post.setSaved(false);
+                                                if (getBindingAdapterPosition() == position) {
+                                                    saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                                }
+                                                Toast.makeText(mActivity, R.string.post_saved_failed, Toast.LENGTH_SHORT).show();
+                                                EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                                             }
-                                            Toast.makeText(mActivity, R.string.post_saved_failed, Toast.LENGTH_SHORT).show();
-                                            EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
-                                        }
-                                    });
+                                        });
+                            }
                         }
                     }
                 });
@@ -2737,6 +2765,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         public void initialize(@NonNull Container container, @NonNull PlaybackInfo playbackInfo) {
             if (this.container == null) {
                 this.container = container;
+                this.container.setPlayerSelector(multiPlayPlayerSelector);
             }
             if (mediaUri == null) {
                 return;
@@ -3100,7 +3129,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 return;
             }
 
-            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !post.isRead() && mMarkPostsAsRead) {
+            if (!post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
                 if (changePostItemColor) {
                     setItemViewBackgroundColor(true);
@@ -4131,7 +4160,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 return;
             }
 
-            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !post.isRead() && mMarkPostsAsRead) {
+            if (!post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
                 if (changePostItemColor) {
                     itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
@@ -4374,7 +4403,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 return;
             }
 
-            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !post.isRead() && mMarkPostsAsRead) {
+            if (!post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
                 if (changePostItemColor) {
                     itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
@@ -4571,7 +4600,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 return;
             }
 
-            if (!mAccountName.equals(Account.ANONYMOUS_ACCOUNT) && !post.isRead() && mMarkPostsAsRead) {
+            if (!post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
                 if (changePostItemColor) {
                     itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));

@@ -42,4 +42,10 @@ sealed class PostModerationEvent(open val post: Post, open val position: Int, va
 
     data class UndistinguishedAsMod(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.undistinguished_as_mod)
     data class UndistinguishAsModFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.undistinguish_as_mod_failed)
+
+    data class SetReceiveNotification(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.reply_notifications_enabled)
+    data class SetReceiveNotificationFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.toggle_reply_notifications_failed)
+
+    data class UnsetReceiveNotification(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.reply_notifications_disabled)
+    data class UnsetReceiveNotificationFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.toggle_reply_notifications_failed)
 }

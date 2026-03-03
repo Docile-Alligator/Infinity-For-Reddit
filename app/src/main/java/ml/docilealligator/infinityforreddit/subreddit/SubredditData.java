@@ -1,5 +1,8 @@
 package ml.docilealligator.infinityforreddit.subreddit;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -7,7 +10,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "subreddits")
-public class SubredditData {
+public class SubredditData implements Parcelable {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "id")
@@ -48,6 +51,32 @@ public class SubredditData {
         this.isNSFW = isNSFW;
         this.isSelected = false;
     }
+
+    protected SubredditData(Parcel in) {
+        id = in.readString();
+        name = in.readString();
+        iconUrl = in.readString();
+        bannerUrl = in.readString();
+        description = in.readString();
+        sidebarDescription = in.readString();
+        nSubscribers = in.readInt();
+        createdUTC = in.readLong();
+        suggestedCommentSort = in.readString();
+        isNSFW = in.readByte() != 0;
+        isSelected = in.readByte() != 0;
+    }
+
+    public static final Creator<SubredditData> CREATOR = new Creator<SubredditData>() {
+        @Override
+        public SubredditData createFromParcel(Parcel in) {
+            return new SubredditData(in);
+        }
+
+        @Override
+        public SubredditData[] newArray(int size) {
+            return new SubredditData[size];
+        }
+    };
 
     @NonNull
     public String getId() {
@@ -96,5 +125,25 @@ public class SubredditData {
 
     public void setSelected(boolean selected) {
         isSelected = selected;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(name);
+        dest.writeString(iconUrl);
+        dest.writeString(bannerUrl);
+        dest.writeString(description);
+        dest.writeString(sidebarDescription);
+        dest.writeInt(nSubscribers);
+        dest.writeLong(createdUTC);
+        dest.writeString(suggestedCommentSort);
+        dest.writeByte((byte) (isNSFW ? 1 : 0));
+        dest.writeByte((byte) (isSelected ? 1 : 0));
     }
 }

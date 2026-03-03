@@ -23,20 +23,19 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.fragments.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.fragments.PostFragmentBase;
-import ml.docilealligator.infinityforreddit.thing.SortType;
-import ml.docilealligator.infinityforreddit.thing.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivityAccountPostsBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.fragments.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
+import ml.docilealligator.infinityforreddit.fragments.PostFragmentBase;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
+import ml.docilealligator.infinityforreddit.thing.SortType;
+import ml.docilealligator.infinityforreddit.thing.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
@@ -76,9 +75,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
 
         applyCustomTheme();
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSliderPanel = Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -105,7 +102,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
                                 allInsets.right,
                                 BaseActivity.IGNORE_MARGIN);
 
-                        binding.accountPostsFrameLayout.setPadding(allInsets.left, 0, allInsets.right, allInsets.bottom);
+                        binding.accountPostsFrameLayout.setPadding(allInsets.left, 0, allInsets.right, 0);
 
                         return insets;
                     }
@@ -169,6 +166,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(
                 binding.accountPostsAppbarLayout, binding.accountPostsCollapsingToolbarLayout,
                 binding.accountPostsToolbar);
+        applyAppBarScrollFlagsIfApplicable(binding.accountPostsCollapsingToolbarLayout);
     }
 
     private void initializeFragment() {

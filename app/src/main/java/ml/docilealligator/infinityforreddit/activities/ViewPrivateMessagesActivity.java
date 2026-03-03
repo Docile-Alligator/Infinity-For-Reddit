@@ -146,27 +146,40 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     }
 
     private void bindView() {
+        setTitle(privateMessage.getRecipient(accountName));
         if (privateMessage != null) {
             if (privateMessage.getAuthor().equals(accountName)) {
-                setTitle(privateMessage.getDestination());
                 binding.toolbarViewPrivateMessagesActivity.setOnClickListener(view -> {
                     if (privateMessage.isDestinationDeleted()) {
                         return;
                     }
-                    Intent intent = new Intent(this, ViewUserDetailActivity.class);
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, privateMessage.getDestination());
-                    startActivity(intent);
+                    if (privateMessage.getDestination().startsWith("#")) {
+                        Intent intent = new Intent(this, ViewSubredditDetailActivity.class);
+                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, privateMessage.getSubredditName());
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(this, ViewUserDetailActivity.class);
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, privateMessage.getDestination());
+                        startActivity(intent);
+                    }
                 });
             } else {
-                setTitle(privateMessage.getAuthor());
-                binding.toolbarViewPrivateMessagesActivity.setOnClickListener(view -> {
-                    if (privateMessage.isAuthorDeleted()) {
-                        return;
-                    }
-                    Intent intent = new Intent(this, ViewUserDetailActivity.class);
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, privateMessage.getAuthor());
-                    startActivity(intent);
-                });
+                if (privateMessage.getAuthor().equals("null")) {
+                    binding.toolbarViewPrivateMessagesActivity.setOnClickListener(view -> {
+                        Intent intent = new Intent(this, ViewSubredditDetailActivity.class);
+                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, privateMessage.getSubredditName());
+                        startActivity(intent);
+                    });
+                } else {
+                    binding.toolbarViewPrivateMessagesActivity.setOnClickListener(view -> {
+                        if (privateMessage.isAuthorDeleted()) {
+                            return;
+                        }
+                        Intent intent = new Intent(this, ViewUserDetailActivity.class);
+                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, privateMessage.getAuthor());
+                        startActivity(intent);
+                    });
+                }
             }
         }
         mAdapter = new PrivateMessagesDetailRecyclerViewAdapter(this, mSharedPreferences,

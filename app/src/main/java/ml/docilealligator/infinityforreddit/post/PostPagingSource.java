@@ -255,10 +255,12 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     private ListenableFuture<LoadResult<String, Post>> loadSubredditPosts(@NonNull LoadParams<String> loadParams, RedditAPI api) {
         ListenableFuture<Response<String>> subredditPost;
         if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-            subredditPost = api.getSubredditBestPostsListenableFuture(subredditOrUserName, sortType.getType(), sortType.getTime(), loadParams.getKey());
+            subredditPost = api.getSubredditBestPostsListenableFuture(subredditOrUserName, sortType.getType(),
+                    sortType.getTime(), loadParams.getKey(), APIUtils.subredditAPICallLimit(subredditOrUserName));
         } else {
             subredditPost = api.getSubredditBestPostsOauthListenableFuture(subredditOrUserName, sortType.getType(),
-                    sortType.getTime(), loadParams.getKey(), APIUtils.getOAuthHeader(accessToken));
+                    sortType.getTime(), loadParams.getKey(), APIUtils.subredditAPICallLimit(subredditOrUserName),
+                    APIUtils.getOAuthHeader(accessToken));
         }
 
         ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(subredditPost, this::transformData, executor);
@@ -353,7 +355,8 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
 
     private ListenableFuture<LoadResult<String, Post>> loadAnonymousFrontPageOrMultiredditPosts(@NonNull LoadParams<String> loadParams, RedditAPI api) {
         ListenableFuture<Response<String>> anonymousHomePosts = api.getAnonymousFrontPageOrMultiredditPostsListenableFuture(
-                subredditOrUserName, sortType.getType(), sortType.getTime(), loadParams.getKey(), APIUtils.ANONYMOUS_USER_AGENT);
+                subredditOrUserName, sortType.getType(), sortType.getTime(), loadParams.getKey(),
+                APIUtils.subredditAPICallLimit(subredditOrUserName), APIUtils.ANONYMOUS_USER_AGENT);
 
         ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(anonymousHomePosts, this::transformData, executor);
 

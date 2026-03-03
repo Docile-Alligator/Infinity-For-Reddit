@@ -5,6 +5,9 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
+import static com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED;
+import static com.google.android.material.appbar.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL;
+
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -57,6 +60,7 @@ import ml.docilealligator.infinityforreddit.CustomFontReceiver;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.events.FinishViewMediaActivityEvent;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
@@ -331,6 +335,10 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM && !immersiveInterface;
     }
 
+    public boolean isImmersiveInterfaceEnabled() {
+        return immersiveInterface;
+    }
+
     protected void setToolbarGoToTop(Toolbar toolbar) {
         toolbar.setOnLongClickListener(view -> {
             if (BaseActivity.this instanceof ActivityToolbarInterface) {
@@ -435,6 +443,24 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
         }
     }
 
+    protected void applyAppBarScrollFlagsIfApplicable(CollapsingToolbarLayout collapsingToolbarLayout) {
+        applyAppBarScrollFlagsIfApplicable(collapsingToolbarLayout, null);
+    }
+
+    protected void applyAppBarScrollFlagsIfApplicable(@NonNull CollapsingToolbarLayout collapsingToolbarLayout, @Nullable TabLayout tabLayout) {
+        if (getDefaultSharedPreferences().getBoolean(SharedPreferencesUtils.LOCK_TOOLBAR, false)) {
+            AppBarLayout.LayoutParams p = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
+            p.setScrollFlags(SCROLL_FLAG_SCROLL | SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+            collapsingToolbarLayout.setLayoutParams(p);
+
+            if (tabLayout != null) {
+                AppBarLayout.LayoutParams p1 = (AppBarLayout.LayoutParams) tabLayout.getLayoutParams();
+                p1.setScrollFlags(SCROLL_FLAG_SCROLL | SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                tabLayout.setLayoutParams(p1);
+            }
+        }
+    }
+
     @SuppressLint("RestrictedApi")
     protected boolean applyMenuItemTheme(Menu menu) {
         if (customThemeWrapper != null) {
@@ -476,7 +502,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
             Object touchSlopBox = touchSlopField.get(recyclerView);
             if (touchSlopBox != null) {
                 int touchSlop = (int) touchSlopBox;
-                touchSlopField.set(recyclerView, touchSlop * 4);
+                touchSlopField.set(recyclerView, touchSlop * Integer.parseInt(getDefaultSharedPreferences().getString(SharedPreferencesUtils.TAB_SWITCHING_SENSITIVITY, "4")));
             }
         } catch (NoSuchFieldException | IllegalAccessException ignore) {}
     }
@@ -516,6 +542,14 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_TOP:
                 fab.setContentDescription(getString(R.string.content_description_go_to_top));
                 break;
+        }
+    }
+
+    protected void attachSliderPanelIfApplicable() {
+        if (getDefaultSharedPreferences().getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
+            mSliderPanel = Slidr.attach(this,
+                    Float.parseFloat(getDefaultSharedPreferences().getString(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_SENSITIVITY, "0.1"))
+            );
         }
     }
 

@@ -56,7 +56,6 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.SearchPostSortT
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SearchUserAndSubredditSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivitySearchResultBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -65,7 +64,12 @@ import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.fragments.SubredditListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.UserListingFragment;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
+import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
+import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostModification;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
 import ml.docilealligator.infinityforreddit.recentsearchquery.InsertRecentSearchQuery;
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
@@ -83,7 +87,7 @@ import retrofit2.Retrofit;
 public class SearchResultActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, ActivityToolbarInterface,
         FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback, RandomBottomSheetFragment.RandomOptionSelectionCallback,
-        PostTypeBottomSheetFragment.PostTypeSelectionCallback, RecyclerViewContentScrollingInterface {
+        PostTypeBottomSheetFragment.PostTypeSelectionCallback, RecyclerViewContentScrollingInterface, MarkPostAsReadInterface {
 
     public static final String EXTRA_QUERY = "EQ";
     public static final String EXTRA_TRENDING_SOURCE = "ETS";
@@ -118,9 +122,12 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     @Named("current_account")
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
+    @Named("post_history")
+    SharedPreferences mPostHistorySharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
-    Executor executor;
+    Executor mExecutor;
     private Runnable autoCompleteRunnable;
     private Call<String> subredditAutocompleteCall;
     private String mQuery;
@@ -148,9 +155,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
         applyCustomTheme();
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSliderPanel = Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         mViewPager2 = binding.viewPagerSearchResultActivity;
 
@@ -261,6 +266,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutSearchResultActivity,
                 binding.collapsingToolbarLayoutSearchResultActivity, binding.toolbarSearchResultActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutSearchResultActivity);
         applyTabLayoutTheme(binding.tabLayoutSearchResultActivity);
         applyFABTheme(binding.fabSearchResultActivity);
     }
@@ -426,7 +432,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         });
 
         if (!accountName.equals(Account.ANONYMOUS_ACCOUNT) && mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SEARCH_HISTORY, true) && !mInsertSearchQuerySuccess && mQuery != null) {
-            InsertRecentSearchQuery.insertRecentSearchQueryListener(executor, new Handler(getMainLooper()),
+            InsertRecentSearchQuery.insertRecentSearchQueryListener(mExecutor, new Handler(getMainLooper()),
                     mRedditDataRoomDatabase, accountName, mQuery, mSearchInSubredditOrUserName, mSearchInMultiReddit,
                     mSearchInThingType, () -> mInsertSearchQuerySuccess = true);
         }
@@ -673,7 +679,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                                 subredditAutocompleteCall = null;
                                 if (response.isSuccessful()) {
-                                    ParseSubredditData.parseSubredditListingData(executor, handler, response.body(),
+                                    ParseSubredditData.parseSubredditListingData(mExecutor, handler, response.body(),
                                             nsfw, new ParseSubredditData.ParseSubredditListingDataListener() {
                                                 @Override
                                                 public void onParseSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
@@ -805,6 +811,12 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         Intent intent = new Intent(this, FetchRandomSubredditOrPostActivity.class);
         intent.putExtra(FetchRandomSubredditOrPostActivity.EXTRA_RANDOM_OPTION, option);
         startActivity(intent);
+    }
+
+    @Override
+    public void markPostAsRead(Post post) {
+        int readPostsLimit = ReadPostsUtils.GetReadPostsLimit(accountName, mPostHistorySharedPreferences);
+        ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, accountName, post.getId(), readPostsLimit, ReadPostType.READ_POSTS);
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {

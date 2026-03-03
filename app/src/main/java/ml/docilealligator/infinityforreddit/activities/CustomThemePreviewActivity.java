@@ -188,7 +188,8 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
         applyCustomTheme();
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSliderPanel = Slidr.attach(this);
+            mSliderPanel = Slidr.attach(this,
+                    Float.parseFloat(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK_SENSITIVITY, "0.1")));
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

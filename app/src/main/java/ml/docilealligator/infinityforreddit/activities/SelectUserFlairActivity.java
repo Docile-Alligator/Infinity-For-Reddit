@@ -29,12 +29,10 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.adapters.UserFlairRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivitySelectUserFlairBinding;
 import ml.docilealligator.infinityforreddit.user.FetchUserFlairs;
 import ml.docilealligator.infinityforreddit.user.SelectUserFlair;
 import ml.docilealligator.infinityforreddit.user.UserFlair;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
@@ -104,9 +102,7 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
             });
         }
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         setSupportActionBar(binding.toolbarSelectUserFlairActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

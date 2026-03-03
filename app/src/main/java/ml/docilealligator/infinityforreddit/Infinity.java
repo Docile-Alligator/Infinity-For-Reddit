@@ -60,6 +60,8 @@ public class Infinity extends Application implements LifecycleObserver {
     private boolean canStartLockScreenActivity = false;
     private boolean isSecureMode;
     @Inject
+    public RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject

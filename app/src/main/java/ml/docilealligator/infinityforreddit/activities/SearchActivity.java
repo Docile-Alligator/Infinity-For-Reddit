@@ -45,13 +45,11 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.SearchActivityRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.adapters.SubredditAutocompleteRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivitySearchBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
@@ -59,6 +57,7 @@ import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQuery;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQueryViewModel;
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.thing.SelectThingReturnKey;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -76,7 +75,7 @@ public class SearchActivity extends BaseActivity {
     public static final String EXTRA_SEARCH_ONLY_SUBREDDITS = "ESOS";
     public static final String EXTRA_SEARCH_ONLY_USERS = "ESOU";
     public static final String EXTRA_SEARCH_SUBREDDITS_AND_USERS = "ESSAU";
-    public static final String RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES = "RESSN";
+    public static final String RETURN_EXTRA_SELECTED_SUBREDDITS = "RESS";
     public static final String RETURN_EXTRA_SELECTED_USERNAMES = "RESU";
     public static final String EXTRA_IS_MULTI_SELECTION = "EIMS";
     public static final int SUICIDE_PREVENTION_ACTIVITY_REQUEST_CODE = 101;
@@ -139,9 +138,7 @@ public class SearchActivity extends BaseActivity {
 
         applyCustomTheme();
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
             if (isChangeStatusBarIconColor()) {
@@ -196,9 +193,9 @@ public class SearchActivity extends BaseActivity {
             if (searchOnlySubreddits || searchSubredditsAndUsers) {
                 Intent returnIntent = new Intent();
                 if (getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false)) {
-                    ArrayList<String> subredditNameList = new ArrayList<>();
-                    subredditNameList.add(subredditData.getName());
-                    returnIntent.putStringArrayListExtra(RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES, subredditNameList);
+                    ArrayList<SubredditData> subredditList = new ArrayList<>();
+                    subredditList.add(subredditData);
+                    returnIntent.putParcelableArrayListExtra(RETURN_EXTRA_SELECTED_SUBREDDITS, subredditList);
                 } else {
                     returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME, subredditData.getName());
                     returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON, subredditData.getIconUrl());
@@ -573,7 +570,7 @@ public class SearchActivity extends BaseActivity {
             if (requestCode == SUBREDDIT_SEARCH_REQUEST_CODE) {
                 Intent returnIntent = new Intent();
                 if (getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false)) {
-                    returnIntent.putStringArrayListExtra(RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES, data.getStringArrayListExtra(SearchSubredditsResultActivity.RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES));
+                    returnIntent.putParcelableArrayListExtra(RETURN_EXTRA_SELECTED_SUBREDDITS, data.getParcelableArrayListExtra(SearchSubredditsResultActivity.RETURN_EXTRA_SELECTED_SUBREDDITS));
                 } else {
                     returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME, data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_NAME));
                     returnIntent.putExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON, data.getStringExtra(SelectThingReturnKey.RETURN_EXTRA_SUBREDDIT_OR_USER_ICON));

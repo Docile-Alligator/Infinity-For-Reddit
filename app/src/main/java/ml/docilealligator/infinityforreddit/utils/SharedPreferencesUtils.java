@@ -108,6 +108,7 @@ public class SharedPreferencesUtils {
     public static final String VIDEO_AUTOPLAY_VALUE_ALWAYS_ON = "2";
     public static final String VIDEO_AUTOPLAY_VALUE_ON_WIFI = "1";
     public static final String VIDEO_AUTOPLAY_VALUE_NEVER = "0";
+    public static final String SIMULTANEOUS_AUTOPLAY_LIMIT = "simultaneous_autoplay_limit";
     public static final String MUTE_AUTOPLAYING_VIDEOS = "mute_autoplaying_videos";
     public static final String AUTOPLAY_NSFW_VIDEOS = "autoplay_nsfw_videos";
     public static final String LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON = "lock_jump_to_next_top_level_comment_button";
@@ -117,6 +118,7 @@ public class SharedPreferencesUtils {
     public static final String MAIN_PAGE_BACK_BUTTON_ACTION = "main_page_back_button_action";
     public static final int MAIN_PAGE_BACK_BUTTON_ACTION_CONFIRM_EXIT = 1;
     public static final int MAIN_PAGE_BACK_BUTTON_ACTION_OPEN_NAVIGATION_DRAWER = 2;
+    public static final String LOCK_TOOLBAR = "lock_toolbar";
     public static final String LOCK_BOTTOM_APP_BAR = "lock_bottom_app_bar";
     public static final String COMMENT_TOOLBAR_HIDDEN = "comment_toolbar_hidden";
     public static final String COMMENT_TOOLBAR_HIDE_ON_CLICK = "comment_toolbar_hide_on_click";
@@ -231,6 +233,10 @@ public class SharedPreferencesUtils {
     public static final String LONG_PRESS_POST_VALUE_NONE = "0";
     public static final String LONG_PRESS_POST_VALUE_SHOW_POST_OPTIONS = "1";
     public static final String LONG_PRESS_POST_VALUE_PREVIEW_IN_FULLSCREEN = "2";
+    public static final String TAB_SWITCHING_SENSITIVITY = "tab_switching_sensitivity";
+    public static final String SWIPE_RIGHT_TO_GO_BACK_SENSITIVITY = "swipe_right_to_go_back_sensitivity";
+    public static final String SWIPE_ACTION_SENSITIVITY_IN_COMMENTS = "swipe_action_sensitivity_in_comments";
+    public static final String NAVIGATION_DRAWER_SWIPE_AREA = "navigation_drawer_swipe_area";
 
     public static String getPostDetailFabPortraitX(@Nullable Display display) {
         if (display == null) {
@@ -399,6 +405,9 @@ public class SharedPreferencesUtils {
     public static final String MARK_POSTS_AS_READ_AFTER_VOTING_BASE = "_mark_posts_as_read_after_voting";
     public static final String MARK_POSTS_AS_READ_ON_SCROLL_BASE = "_mark_posts_as_read_on_scroll";
     public static final String HIDE_READ_POSTS_AUTOMATICALLY_BASE = "_hide_read_posts_automatically";
+    public static final String HIDE_READ_POSTS_AUTOMATICALLY_IN_SUBREDDITS_BASE = "_hide_read_posts_automatically_in_subreddits";
+    public static final String HIDE_READ_POSTS_AUTOMATICALLY_IN_USERS_BASE = "_hide_read_posts_automatically_in_users";
+    public static final String HIDE_READ_POSTS_AUTOMATICALLY_IN_SEARCH_BASE = "_hide_read_posts_automatically_in_search";
 
     public static final String CURRENT_ACCOUNT_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.current_account";
     public static final String ACCOUNT_NAME = "account_name";

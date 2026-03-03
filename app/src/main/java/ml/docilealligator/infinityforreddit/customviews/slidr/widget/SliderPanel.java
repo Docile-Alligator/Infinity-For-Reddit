@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import androidx.annotation.Nullable;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.ViewGroupCompat;
 
@@ -39,7 +40,7 @@ public class SliderPanel extends FrameLayout {
         super(context);
     }
 
-    public SliderPanel(Context context, View decorView, SlidrConfig config) {
+    public SliderPanel(Context context, View decorView, @Nullable SlidrConfig config) {
         super(context);
         this.decorView = decorView;
         this.config = (config == null ? new SlidrConfig.Builder().build() : config);
@@ -682,7 +683,7 @@ public class SliderPanel extends FrameLayout {
                 edgePosition = ViewDragHelper.EDGE_LEFT;
         }
 
-        dragHelper = ViewDragHelper.create(this, 0.1f, callback);
+        dragHelper = ViewDragHelper.create(this, config.getSensitivity(), callback);
         dragHelper.setMinVelocity(minVel);
         dragHelper.setEdgeTrackingEnabled(edgePosition);
 

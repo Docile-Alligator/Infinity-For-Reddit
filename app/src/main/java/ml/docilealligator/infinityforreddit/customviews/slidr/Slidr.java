@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrConfig;
@@ -28,8 +29,8 @@ public final class Slidr {
      * the user to lock/unlock the sliding mechanism for whatever purpose.
      */
     @NonNull
-    public static SliderPanel attach(@NonNull Activity activity) {
-        return attach(activity, -1, -1);
+    public static SliderPanel attach(@NonNull Activity activity, float sensitivity) {
+        return attach(activity, sensitivity, -1, -1);
     }
 
 
@@ -45,11 +46,11 @@ public final class Slidr {
      * the user to lock/unlock the sliding mechanism for whatever purpose.
      */
     @NonNull
-    public static SliderPanel attach(@NonNull Activity activity, @ColorInt int statusBarColor1,
+    public static SliderPanel attach(@NonNull Activity activity, float sensitivity, @ColorInt int statusBarColor1,
                                      @ColorInt int statusBarColor2) {
 
         // Setup the slider panel and attach it to the decor
-        final SliderPanel panel = attachSliderPanel(activity, null);
+        final SliderPanel panel = attachSliderPanel(activity, new SlidrConfig.Builder().sensitivity(sensitivity).build());
 
         // Set the panel slide listener for when it becomes closed or opened
         panel.setOnPanelSlideListener(new ColorPanelSlideListener(activity, statusBarColor1, statusBarColor2));
@@ -85,7 +86,7 @@ public final class Slidr {
      * Attach a new {@link SliderPanel} to the root of the activity's content
      */
     @NonNull
-    private static SliderPanel attachSliderPanel(@NonNull Activity activity, @NonNull SlidrConfig config) {
+    private static SliderPanel attachSliderPanel(@NonNull Activity activity, @Nullable SlidrConfig config) {
         // Hijack the decorview
         ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
         View oldScreen = decorView.getChildAt(0);

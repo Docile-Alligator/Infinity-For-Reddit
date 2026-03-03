@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.PostModerationActionHandler;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
@@ -272,6 +273,17 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
 
                     dismiss();
                 });
+
+                if (mPost.getAuthor().equals(mBaseActivity.accountName)) {
+                    binding.notificationTextViewPostOptionsBottomSheetFragment.setVisibility(View.VISIBLE);
+                    binding.notificationTextViewPostOptionsBottomSheetFragment.setText(mPost.isSendReplies() ? R.string.disable_reply_notifications : R.string.enable_reply_notifications);
+                    binding.notificationTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {
+                        if (getParentFragment() instanceof PostModerationActionHandler) {
+                            ((PostModerationActionHandler) getParentFragment()).toggleNotification(mPost, getArguments().getInt(EXTRA_POST_LIST_POSITION, 0));
+                        }
+                        dismiss();
+                    });
+                }
 
                 binding.reportTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {
                     Intent intent = new Intent(mBaseActivity, ReportActivity.class);

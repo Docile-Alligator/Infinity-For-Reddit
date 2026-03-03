@@ -56,6 +56,7 @@ import com.livefront.bridge.Bridge;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -106,7 +107,8 @@ import ml.docilealligator.infinityforreddit.post.FetchPost;
 import ml.docilealligator.infinityforreddit.post.HidePost;
 import ml.docilealligator.infinityforreddit.post.ParsePost;
 import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostModification;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
 import ml.docilealligator.infinityforreddit.subreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.Flair;
@@ -532,7 +534,10 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         });
 
         if (enableSwipeAction) {
-            touchHelper.attachToRecyclerView((mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView), 5);
+            touchHelper.attachToRecyclerView(
+                    (mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView),
+                    Float.parseFloat(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_ACTION_SENSITIVITY_IN_COMMENTS, "5"))
+            );
         }
 
         binding.swipeRefreshLayoutViewPostDetailFragment.setOnRefreshListener(() -> refresh(true, true));
@@ -599,6 +604,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mPost == null) {
             fetchPostAndCommentsById(getArguments().getString(EXTRA_POST_ID));
         } else {
+            if (showSensitiveWarning()) {
+                return;
+            }
             setupMenu();
 
             mPostAdapter = new PostDetailRecyclerViewAdapter(mActivity,
@@ -722,6 +730,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             } else {
                 saveItem.setVisible(false);
                 hideItem.setVisible(false);
+                mMenu.findItem(R.id.action_crosspost_view_post_detail_fragment).setVisible(false);
             }
 
             if (mPost.getAuthor().equals(mActivity.accountName)) {
@@ -1200,7 +1209,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mMarkPostsAsRead && mPost != null && !mPost.isRead()) {
             mPost.markAsRead();
             int readPostsLimit = ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences);
-            InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName, mPost.getId(), readPostsLimit);
+            ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName, mPost.getId(), readPostsLimit, ReadPostType.READ_POSTS);
             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
         }
     }
@@ -1303,6 +1312,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         @Override
                         public void onParsePostSuccess(Post post) {
                             mPost = post;
+
+                            if (showSensitiveWarning()) {
+                               return;
+                            }
+
                             tryMarkingPostAsRead();
 
                             setupMenu();
@@ -1678,6 +1692,25 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         } else {
             mActivity.showSnackBar(resId);
         }
+    }
+
+    private boolean showSensitiveWarning() {
+        if (mPost != null && mPost.isNSFW()
+                && (mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false)
+                || !mNsfwAndSpoilerSharedPreferences.getBoolean((mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : (mActivity.accountName)) + SharedPreferencesUtils.NSFW_BASE, false))) {
+            MaterialAlertDialogBuilder sensitiveWarningBuilder = new MaterialAlertDialogBuilder(mActivity, R.style.MaterialAlertDialogTheme)
+                    .setTitle(R.string.warning)
+                    .setMessage(R.string.this_post_contains_sensitive_content)
+                    .setPositiveButton(R.string.leave, (dialogInterface, i)
+                            -> {
+                        mActivity.finish();
+                    })
+                    .setCancelable(false);
+            sensitiveWarningBuilder.show();
+            return true;
+        }
+
+        return false;
     }
 
     private void markNSFW() {
@@ -2100,6 +2133,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Override
     public void toggleMod(@NonNull Post post, int position) {
         viewPostDetailFragmentViewModel.toggleMod(post, position);
+    }
+
+    @Override
+    public void toggleNotification(@NotNull Post post, int position) {
+        viewPostDetailFragmentViewModel.toggleNotification(post, position);
     }
 
     @Override

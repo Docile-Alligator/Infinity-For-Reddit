@@ -48,6 +48,10 @@ public class CustomThemeWrapper {
         }
     }
 
+    public int getThemeType() {
+        return themeType;
+    }
+
     public void setThemeType(int themeType) {
         this.themeType = themeType;
     }

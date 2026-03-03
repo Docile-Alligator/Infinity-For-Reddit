@@ -2,9 +2,7 @@ package ml.docilealligator.infinityforreddit.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
-import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.SingleLiveEvent
 import ml.docilealligator.infinityforreddit.apis.RedditAPI
 import ml.docilealligator.infinityforreddit.comment.Comment
@@ -304,6 +302,43 @@ class ViewPostDetailFragmentViewModel(
                             post,
                             position
                         ) else DistinguishAsModFailed(post, position)
+                    )
+                }
+            })
+    }
+
+    fun toggleNotification(post: Post, position: Int) {
+        val params: MutableMap<String, String> = HashMap()
+        params.put(APIUtils.ID_KEY, post.fullName)
+        params.put(APIUtils.STATE_KEY, (!post.isSendReplies).toString())
+        oauthRetrofit.create(RedditAPI::class.java)
+            .toggleRepliesNotification(APIUtils.getOAuthHeader(accessToken), params)
+            .enqueue(object : Callback<String?> {
+                override fun onResponse(call: Call<String?>, response: Response<String?>) {
+                    if (response.isSuccessful) {
+                        post.isSendReplies = !post.isSendReplies
+                        postModerationEventLiveData.postValue(
+                            if (post.isSendReplies) PostModerationEvent.SetReceiveNotification(
+                                post,
+                                position
+                            ) else PostModerationEvent.UnsetReceiveNotification(post, position)
+                        )
+                    } else {
+                        postModerationEventLiveData.postValue(
+                            if (post.isSendReplies) PostModerationEvent.UnsetReceiveNotificationFailed(
+                                post,
+                                position
+                            ) else PostModerationEvent.SetReceiveNotificationFailed(post, position)
+                        )
+                    }
+                }
+
+                override fun onFailure(call: Call<String?>, throwable: Throwable) {
+                    postModerationEventLiveData.postValue(
+                        if (post.isSendReplies) PostModerationEvent.UnsetReceiveNotificationFailed(
+                            post,
+                            position
+                        ) else PostModerationEvent.SetReceiveNotificationFailed(post, position)
                     )
                 }
             })

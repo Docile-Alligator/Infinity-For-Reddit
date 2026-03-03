@@ -33,18 +33,20 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivityHistoryBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.HistoryPostFragment;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class HistoryActivity extends BaseActivity implements ActivityToolbarInterface,
         PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
+
+    public static final String EXTRA_READ_POST_TYPE = "EHT";
 
     @Inject
     @Named("default")
@@ -57,6 +59,7 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    private int readPostType;
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ActivityHistoryBinding binding;
@@ -74,9 +77,7 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
 
         applyCustomTheme();
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSliderPanel = Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         mViewPager2 = binding.viewPagerHistoryActivity;
 
@@ -107,7 +108,7 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
                                 allInsets.right,
                                 BaseActivity.IGNORE_MARGIN);
 
-                        binding.viewPagerHistoryActivity.setPadding(allInsets.left, 0, allInsets.right, allInsets.bottom);
+                        binding.viewPagerHistoryActivity.setPadding(allInsets.left, 0, allInsets.right, 0);
 
                         return insets;
                     }
@@ -119,6 +120,8 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
         setSupportActionBar(binding.toolbarHistoryActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setToolbarGoToTop(binding.toolbarHistoryActivity);
+
+        readPostType = getIntent().getIntExtra(EXTRA_READ_POST_TYPE, ReadPostType.READ_POSTS);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -154,6 +157,7 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutHistoryActivity,
                 binding.collapsingToolbarLayoutHistoryActivity, binding.toolbarHistoryActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutHistoryActivity);
         applyTabLayoutTheme(binding.tabLayoutTabLayoutHistoryActivityActivity);
     }
 
@@ -263,19 +267,11 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            if (position == 0) {
-                HistoryPostFragment fragment = new HistoryPostFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt(HistoryPostFragment.EXTRA_HISTORY_TYPE, HistoryPostFragment.HISTORY_TYPE_READ_POSTS);
-                fragment.setArguments(bundle);
-                return fragment;
-            } else {
-                HistoryPostFragment fragment = new HistoryPostFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt(HistoryPostFragment.EXTRA_HISTORY_TYPE, HistoryPostFragment.HISTORY_TYPE_READ_POSTS);
-                fragment.setArguments(bundle);
-                return fragment;
-            }
+            HistoryPostFragment fragment = new HistoryPostFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt(HistoryPostFragment.EXTRA_READ_POST_TYPE, readPostType);
+            fragment.setArguments(bundle);
+            return fragment;
         }
 
         @Nullable

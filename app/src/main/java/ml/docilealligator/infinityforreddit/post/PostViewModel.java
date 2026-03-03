@@ -141,7 +141,7 @@ public class PostViewModel extends ViewModel {
 
         hideReadPostsValue.setValue(postHistorySharedPreferences != null
                 && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false)
-                && (postType != PostPagingSource.TYPE_SUBREDDIT || subredditName.equals("all") || subredditName.equals("popular")));
+                && ((postType != PostPagingSource.TYPE_SUBREDDIT || subredditName.equals("all") || subredditName.equals("popular")) || postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_IN_SUBREDDITS_BASE, false)));
     }
 
     // PostPagingSource.TYPE_MULTI_REDDIT
@@ -226,9 +226,9 @@ public class PostViewModel extends ViewModel {
                                 postPagingData, executor,
                                 post -> !post.isRead() || !hideReadPostsValue.getValue()))), ViewModelKt.getViewModelScope(this));
 
-        hideReadPostsValue.setValue(false);
-        /*hideReadPostsValue.setValue(postHistorySharedPreferences != null
-                && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));*/
+        hideReadPostsValue.setValue(postHistorySharedPreferences != null
+                && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false)
+                && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_IN_USERS_BASE, false));
     }
 
     // postType == PostPagingSource.TYPE_SEARCH
@@ -271,9 +271,9 @@ public class PostViewModel extends ViewModel {
                                 postPagingData, executor,
                                 post -> !post.isRead() || !hideReadPostsValue.getValue()))), ViewModelKt.getViewModelScope(this));
 
-        hideReadPostsValue.setValue(false);
-        /*hideReadPostsValue.setValue(postHistorySharedPreferences != null
-                && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));*/
+        hideReadPostsValue.setValue(postHistorySharedPreferences != null
+                && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false)
+                && postHistorySharedPreferences.getBoolean((accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_IN_SEARCH_BASE, false));
     }
 
     public LiveData<PagingData<Post>> getPosts() {
@@ -654,6 +654,28 @@ public class PostViewModel extends ViewModel {
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
                 moderationEventLiveData.postValue(post.isModerator() ? new PostModerationEvent.UndistinguishAsModFailed(post, position) : new PostModerationEvent.DistinguishAsModFailed(post, position));
+            }
+        });
+    }
+
+    public void toggleNotification(@NonNull Post post, int position) {
+        Map<String, String> params = new HashMap<>();
+        params.put(APIUtils.ID_KEY, post.getFullName());
+        params.put(APIUtils.STATE_KEY, String.valueOf(!post.isSendReplies()));
+        retrofit.create(RedditAPI.class).toggleRepliesNotification(APIUtils.getOAuthHeader(accessToken), params).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful()) {
+                    post.setSendReplies(!post.isSendReplies());
+                    moderationEventLiveData.postValue(post.isSendReplies() ? new PostModerationEvent.SetReceiveNotification(post, position): new PostModerationEvent.UnsetReceiveNotification(post, position));
+                } else {
+                    moderationEventLiveData.postValue(post.isSendReplies() ? new PostModerationEvent.UnsetReceiveNotificationFailed(post, position) : new PostModerationEvent.SetReceiveNotificationFailed(post, position));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable throwable) {
+                moderationEventLiveData.postValue(post.isSendReplies() ? new PostModerationEvent.UnsetReceiveNotificationFailed(post, position) : new PostModerationEvent.SetReceiveNotificationFailed(post, position));
             }
         });
     }

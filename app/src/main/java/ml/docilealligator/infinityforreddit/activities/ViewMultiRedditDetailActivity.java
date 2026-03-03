@@ -56,7 +56,6 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomS
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.NavigationWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivityViewMultiRedditDetailBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
 import ml.docilealligator.infinityforreddit.events.GoBackToMainPageEvent;
@@ -70,7 +69,8 @@ import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
-import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostModification;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
@@ -115,9 +115,6 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     @Inject
     @Named("current_account")
     SharedPreferences mCurrentAccountSharedPreferences;
-    @Inject
-    @Named("bottom_app_bar")
-    SharedPreferences bottomAppBarSharedPreference;
     @Inject
     @Named("nsfw_and_spoiler")
     SharedPreferences mNsfwAndSpoilerSharedPreferences;
@@ -169,9 +166,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
 
         applyCustomTheme();
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSliderPanel = Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -383,7 +378,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
             navigationWrapper.floatingActionButton.setLayoutParams(lp);
         }
 
-        fabOption = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
+        fabOption = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
         switch (fabOption) {
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH:
                 navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_refresh_day_night_24dp);
@@ -536,6 +531,11 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                 Intent intent = new Intent(this, SubscribedThingListingActivity.class);
                 intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
                 startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBMIT_POSTS: {
+                PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
+                postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
                 break;
             }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_REFRESH: {
@@ -717,7 +717,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                     autoCompleteRunnable = () -> {
                         subredditAutocompleteCall = mOauthRetrofit.create(RedditAPI.class).subredditAutocomplete(APIUtils.getOAuthHeader(accessToken),
                                 currentQuery, nsfw);
-                        subredditAutocompleteCall.enqueue(new Callback<String>() {
+                        subredditAutocompleteCall.enqueue(new Callback<>() {
                             @Override
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                                 subredditAutocompleteCall = null;
@@ -812,6 +812,14 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_multi_reddit_detail_activity, menu);
+        if (multiReddit == null && multiPath != null) {
+            String[] segments = multiPath.split("/");
+            if (segments.length > 2 && !segments[1].equals(accountName)) {
+                menu.findItem(R.id.action_edit_view_multi_reddit_detail_activity).setVisible(false);
+                menu.findItem(R.id.action_delete_view_multi_reddit_detail_activity).setVisible(false);
+                menu.findItem(R.id.action_copy_view_multi_reddit_detail_activity).setVisible(true);
+            }
+        }
         applyMenuItemTheme(menu);
         return true;
     }
@@ -882,6 +890,9 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                     .setNegativeButton(R.string.cancel, null)
                     .show();
             return true;
+        } else if (itemId == R.id.action_copy_view_multi_reddit_detail_activity) {
+            CopyMultiRedditActivity.Companion.start(this, multiPath);
+            return true;
         }
         return false;
     }
@@ -941,6 +952,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutViewMultiRedditDetailActivity,
                 binding.collapsingToolbarLayoutViewMultiRedditDetailActivity, binding.toolbarViewMultiRedditDetailActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutViewMultiRedditDetailActivity);
         navigationWrapper.applyCustomTheme(mCustomThemeWrapper.getBottomAppBarIconColor(), mCustomThemeWrapper.getBottomAppBarBackgroundColor());
         applyFABTheme(navigationWrapper.floatingActionButton);
     }
@@ -963,7 +975,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     @Override
     public void markPostAsRead(Post post) {
         int readPostsLimit = ReadPostsUtils.GetReadPostsLimit(accountName, mPostHistorySharedPreferences);
-        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, accountName, post.getId(), readPostsLimit);
+        ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, accountName, post.getId(), readPostsLimit, ReadPostType.READ_POSTS);
     }
 
     @Override

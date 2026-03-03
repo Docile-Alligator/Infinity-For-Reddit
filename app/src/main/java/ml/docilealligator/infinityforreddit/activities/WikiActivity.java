@@ -43,7 +43,6 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivityWikiBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -106,9 +105,7 @@ public class WikiActivity extends BaseActivity {
         setSupportActionBar(binding.toolbarCommentWikiActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSliderPanel = Slidr.attach(this);
-        }
+        attachSliderPanelIfApplicable();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -344,6 +341,7 @@ public class WikiActivity extends BaseActivity {
         binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCommentWikiActivity,
                 binding.collapsingToolbarLayoutWikiActivity, binding.toolbarCommentWikiActivity);
+        applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutWikiActivity);
         binding.swipeRefreshLayoutWikiActivity.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         binding.swipeRefreshLayoutWikiActivity.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         binding.fetchWikiTextViewWikiActivity.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
