@@ -22,6 +22,11 @@ public class ReadPostModification {
                 }
 
                 readPostDao.insert(new ReadPost(username, postId, readPostType));
+                if (readPostType == ReadPostType.ANONYMOUS_UPVOTED_POSTS) {
+                    readPostDao.deleteReadPost(username, postId, ReadPostType.ANONYMOUS_DOWNVOTED_POSTS);
+                } else if (readPostType == ReadPostType.ANONYMOUS_DOWNVOTED_POSTS) {
+                    readPostDao.deleteReadPost(username, postId, ReadPostType.ANONYMOUS_UPVOTED_POSTS);
+                }
             }
         });
     }
