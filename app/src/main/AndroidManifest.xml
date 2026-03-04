@@ -80,7 +80,6 @@
         <activity
             android:name=".activities.HistoryActivity"
             android:exported="false"
-            android:label="@string/history_activity_label"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity

@@ -1123,7 +1123,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="comment_karma">"Κάρμα Σχολίων:"</string>
     <string name="awarder_karma">"Κάρμα Βραβευτή:"</string>
     <string name="awardee_karma">"Κάρμα Βραβευμένου:"</string>
-    <string name="history_activity_label">"Ιστορικό"</string>
     <string name="history">"Ιστορικό"</string>
     <string name="settings_easier_to_watch_in_full_screen_title">"Ευκολότερο στη θέαση στην Πλήρη Οθόνη"</string>
     <string name="clear_user_flair">"Εκκαθάριση Σήμανσης"</string>

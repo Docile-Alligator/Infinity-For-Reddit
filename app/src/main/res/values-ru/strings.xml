@@ -1203,7 +1203,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="comment_karma">"Карма комментария:"</string>
     <string name="awarder_karma">"Карма наградителя:"</string>
     <string name="awardee_karma">"Карма награждённого:"</string>
-    <string name="history_activity_label">"История"</string>
     <string name="history">"История"</string>
     <string name="settings_easier_to_watch_in_full_screen_title">"Удобный просмотр в полноэкранном режиме"</string>
     <string name="clear_user_flair">"Очистить флейр"</string>

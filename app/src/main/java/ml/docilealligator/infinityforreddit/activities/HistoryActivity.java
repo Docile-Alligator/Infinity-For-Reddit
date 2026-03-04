@@ -123,6 +123,24 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
         setToolbarGoToTop(binding.toolbarHistoryActivity);
 
         readPostType = getIntent().getIntExtra(EXTRA_READ_POST_TYPE, ReadPostType.READ_POSTS);
+        switch (readPostType) {
+            case ReadPostType.READ_POSTS:
+                setTitle(R.string.history_activity_read_posts_label);
+                break;
+            case ReadPostType.ANONYMOUS_UPVOTED_POSTS:
+                setTitle(R.string.upvoted);
+                break;
+            case ReadPostType.ANONYMOUS_DOWNVOTED_POSTS:
+                setTitle(R.string.downvoted);
+                break;
+            case ReadPostType.ANONYMOUS_HIDDEN_POSTS:
+                setTitle(R.string.hidden);
+                break;
+            case ReadPostType.ANONYMOUS_SAVED_POSTS:
+                setTitle(R.string.saved);
+                break;
+        }
+        binding.toolbarHistoryActivity.setSubtitle(R.string.history_activity_subtitle);
 
         fragmentManager = getSupportFragmentManager();
 

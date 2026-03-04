@@ -1213,7 +1213,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="comment_karma">"Yorum Karması:"</string>
     <string name="awarder_karma">"Ödül Verme Karması:"</string>
     <string name="awardee_karma">"Ödül Alma Karması:"</string>
-    <string name="history_activity_label">"Geçmiş"</string>
     <string name="history">"Geçmiş"</string>
     <string name="settings_easier_to_watch_in_full_screen_title">"Tam Ekranda İzlemek Daha Kolay"</string>
     <string name="clear_user_flair">"Etiket"</string>

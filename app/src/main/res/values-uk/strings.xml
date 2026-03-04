@@ -1187,7 +1187,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="comment_karma">"Карма за коментарі:"</string>
     <string name="awarder_karma">"Карма за надання нагород:"</string>
     <string name="awardee_karma">"Карма за отримання нагород:"</string>
-    <string name="history_activity_label">"Історія"</string>
     <string name="history">"Історія"</string>
     <string name="settings_easier_to_watch_in_full_screen_title">"Легше дивитися на повному екрані"</string>
     <string name="clear_user_flair">"Очистити личку"</string>

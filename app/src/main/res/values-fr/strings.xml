@@ -1320,7 +1320,6 @@ Cliquer pour réessayer."</string>
     <!-- Si quelqu'un trouve une formulation plus courte -->
     <!-- Fuzzy -->
     <string name="awardee_karma">"Karma pour obtention de récompenses:"</string>
-    <string name="history_activity_label">"Historique"</string>
     <string name="history">"Historique"</string>
     <string name="settings_easier_to_watch_in_full_screen_title">"Plus facile à regarder en plein écran"</string>
     <string name="clear_user_flair">"Effacer le Flair"</string>

@@ -7,9 +7,10 @@ import java.lang.annotation.RetentionPolicy;
 
 @IntDef({ReadPostType.INVALID,
         ReadPostType.READ_POSTS,
-        ReadPostType.ANONYMOUS_SAVED_POSTS,
         ReadPostType.ANONYMOUS_UPVOTED_POSTS,
-        ReadPostType.ANONYMOUS_DOWNVOTED_POSTS})
+        ReadPostType.ANONYMOUS_DOWNVOTED_POSTS,
+        ReadPostType.ANONYMOUS_HIDDEN_POSTS,
+        ReadPostType.ANONYMOUS_SAVED_POSTS})
 @Retention(RetentionPolicy.SOURCE)
 public @interface ReadPostType {
     int INVALID = -1;

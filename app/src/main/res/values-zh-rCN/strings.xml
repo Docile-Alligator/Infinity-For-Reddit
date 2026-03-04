@@ -1208,7 +1208,6 @@ Reddit 视频分辨率较低。
     <string name="comment_karma">"评论声望："</string>
     <string name="awarder_karma">"颁奖者声望："</string>
     <string name="awardee_karma">"获奖者声望："</string>
-    <string name="history_activity_label">"历史"</string>
     <string name="history">"历史"</string>
     <string name="settings_easier_to_watch_in_full_screen_title">"全屏时更容易观看"</string>
     <string name="clear_user_flair">"清除头衔"</string>
