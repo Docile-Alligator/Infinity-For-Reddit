@@ -117,7 +117,7 @@ import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.post.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.post.PostPagingSource;
+import ml.docilealligator.infinityforreddit.post.PostType;
 import ml.docilealligator.infinityforreddit.thing.SaveThing;
 import ml.docilealligator.infinityforreddit.thing.StreamableVideo;
 import ml.docilealligator.infinityforreddit.thing.VoteThing;
@@ -1317,7 +1317,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 typeTextView.setOnClickListener(view -> {
                     Intent intent = new Intent(mActivity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
-                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostType.SUBREDDIT);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE_FILTER, mPost.getPostType());
                     mActivity.startActivity(intent);
                 });
@@ -1329,7 +1329,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 flairTextView.setOnClickListener(view -> {
                     Intent intent = new Intent(mActivity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
-                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostType.SUBREDDIT);
                     intent.putExtra(FilteredPostsActivity.EXTRA_CONTAIN_FLAIR, mPost.getFlair());
                     mActivity.startActivity(intent);
                 });
@@ -1340,7 +1340,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             nSFWTextView.setOnClickListener(view -> {
                 Intent intent = new Intent(mActivity, FilteredPostsActivity.class);
                 intent.putExtra(FilteredPostsActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
-                intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
+                intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostType.SUBREDDIT);
                 intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE_FILTER, Post.NSFW_TYPE);
                 mActivity.startActivity(intent);
             });

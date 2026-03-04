@@ -107,6 +107,7 @@ import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
+import ml.docilealligator.infinityforreddit.post.PostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostModification;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
@@ -1681,7 +1682,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(PostFragment.EXTRA_NAME, subredditName);
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostType.SUBREDDIT);
                 fragment.setArguments(bundle);
                 return fragment;
             }

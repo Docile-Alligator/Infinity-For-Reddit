@@ -114,6 +114,7 @@ import ml.docilealligator.infinityforreddit.multireddit.MultiRedditViewModel;
 import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
+import ml.docilealligator.infinityforreddit.post.PostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostModification;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
@@ -1307,10 +1308,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     private void changeSortType() {
-        int currentPostType = sectionsPagerAdapter.getCurrentPostType();
         PostFragment postFragment = sectionsPagerAdapter.getCurrentFragment();
         if (postFragment != null) {
-            SortTypeBottomSheetFragment sortTypeBottomSheetFragment = SortTypeBottomSheetFragment.getNewInstance(currentPostType != PostPagingSource.TYPE_FRONT_PAGE, postFragment.getSortType());
+            SortTypeBottomSheetFragment sortTypeBottomSheetFragment = SortTypeBottomSheetFragment.getNewInstance(
+                    sectionsPagerAdapter.getCurrentPostType() != PostType.FRONT_PAGE, postFragment.getSortType()
+            );
             sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
         }
     }
@@ -1854,20 +1856,20 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, accountName.equals(Account.ANONYMOUS_ACCOUNT) ? PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE : PostPagingSource.TYPE_FRONT_PAGE);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, accountName.equals(Account.ANONYMOUS_ACCOUNT) ? PostType.ANONYMOUS_FRONT_PAGE : PostType.FRONT_PAGE);
                 fragment.setArguments(bundle);
                 return fragment;
             } else if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_ALL) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostType.SUBREDDIT);
                 bundle.putString(PostFragment.EXTRA_NAME, "all");
                 fragment.setArguments(bundle);
                 return fragment;
             } else if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostType.SUBREDDIT);
                 bundle.putString(PostFragment.EXTRA_NAME, name);
                 fragment.setArguments(bundle);
                 return fragment;
@@ -1875,13 +1877,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(PostFragment.EXTRA_NAME, name);
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, accountName.equals(Account.ANONYMOUS_ACCOUNT) ? PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT : PostPagingSource.TYPE_MULTI_REDDIT);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, accountName.equals(Account.ANONYMOUS_ACCOUNT) ? PostType.ANONYMOUS_MULTIREDDIT : PostType.MULTIREDDIT);
                 fragment.setArguments(bundle);
                 return fragment;
             } else if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_USER) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_USER);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostType.USER);
                 bundle.putString(PostFragment.EXTRA_USER_NAME, name);
                 bundle.putString(PostFragment.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_SUBMITTED);
                 fragment.setArguments(bundle);
@@ -1892,7 +1894,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     || postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SAVED) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_USER);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostType.USER);
                 bundle.putString(PostFragment.EXTRA_USER_NAME, accountName);
                 bundle.putBoolean(PostFragment.EXTRA_DISABLE_READ_POSTS, true);
 
@@ -1911,7 +1913,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             } else {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostType.SUBREDDIT);
                 bundle.putString(PostFragment.EXTRA_NAME, "popular");
                 fragment.setArguments(bundle);
                 return fragment;
@@ -1944,12 +1946,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             return false;
         }
 
+        @PostType
         int getCurrentPostType() {
             PostFragment currentFragment = getCurrentFragment();
             if (currentFragment != null) {
                 return currentFragment.getPostType();
             }
-            return PostPagingSource.TYPE_SUBREDDIT;
+            return PostType.SUBREDDIT;
         }
 
         void changeSortType(SortType sortType) {

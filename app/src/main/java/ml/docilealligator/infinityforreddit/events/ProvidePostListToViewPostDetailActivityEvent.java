@@ -2,14 +2,17 @@ package ml.docilealligator.infinityforreddit.events;
 
 import java.util.ArrayList;
 
+import ml.docilealligator.infinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.post.PostType;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsListInterface;
 import ml.docilealligator.infinityforreddit.thing.SortType;
-import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 
 public class ProvidePostListToViewPostDetailActivityEvent {
     public long postFragmentId;
     public ArrayList<Post> posts;
+    @PostType
     public int postType;
     public String subredditName;
     public String concatenatedSubredditNames;
@@ -18,15 +21,18 @@ public class ProvidePostListToViewPostDetailActivityEvent {
     public String multiPath;
     public String query;
     public String trendingSource;
+    @ReadPostType
+    public int readPostType;
     public PostFilter postFilter;
     public SortType sortType;
     public ReadPostsListInterface readPostsList;
 
-    public ProvidePostListToViewPostDetailActivityEvent(long postFragmentId, ArrayList<Post> posts, int postType,
+    public ProvidePostListToViewPostDetailActivityEvent(long postFragmentId, ArrayList<Post> posts, @PostType int postType,
                                                         String subredditName, String concatenatedSubredditNames,
                                                         String username, String userWhere,
                                                         String multiPath, String query, String trendingSource,
-                                                        PostFilter postFilter, SortType sortType, ReadPostsListInterface readPostsList) {
+                                                        @ReadPostType int readPostType, PostFilter postFilter,
+                                                        SortType sortType, ReadPostsListInterface readPostsList) {
         this.postFragmentId = postFragmentId;
         this.posts = posts;
         this.postType = postType;
@@ -37,6 +43,7 @@ public class ProvidePostListToViewPostDetailActivityEvent {
         this.multiPath = multiPath;
         this.query = query;
         this.trendingSource = trendingSource;
+        this.readPostType = readPostType;
         this.postFilter = postFilter;
         this.sortType = sortType;
         this.readPostsList = readPostsList;

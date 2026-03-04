@@ -59,6 +59,7 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @ReadPostType
     private int readPostType;
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;

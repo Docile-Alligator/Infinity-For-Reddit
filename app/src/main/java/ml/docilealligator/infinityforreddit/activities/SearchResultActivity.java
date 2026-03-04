@@ -66,7 +66,7 @@ import ml.docilealligator.infinityforreddit.fragments.UserListingFragment;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.post.PostPagingSource;
+import ml.docilealligator.infinityforreddit.post.PostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostModification;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
@@ -853,15 +853,15 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             Bundle bundle = new Bundle();
             switch (mSearchInThingType) {
                 case SelectThingReturnKey.THING_TYPE.SUBREDDIT:
-                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SEARCH);
+                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostType.SEARCH);
                     bundle.putString(PostFragment.EXTRA_NAME, mSearchInSubredditOrUserName);
                     break;
                 case SelectThingReturnKey.THING_TYPE.USER:
-                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SEARCH);
+                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostType.SEARCH);
                     bundle.putString(PostFragment.EXTRA_NAME, "u_" + mSearchInSubredditOrUserName);
                     break;
                 case SelectThingReturnKey.THING_TYPE.MULTIREDDIT:
-                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_MULTI_REDDIT);
+                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostType.MULTIREDDIT);
                     bundle.putString(PostFragment.EXTRA_NAME, mSearchInMultiReddit.getPath());
             }
             bundle.putString(PostFragment.EXTRA_QUERY, mQuery);

@@ -27,13 +27,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class PostPagingSource extends ListenableFuturePagingSource<String, Post> {
-    public static final int TYPE_FRONT_PAGE = 0;
+    /*public static final int TYPE_FRONT_PAGE = 0;
     public static final int TYPE_SUBREDDIT = 1;
     public static final int TYPE_USER = 2;
     public static final int TYPE_SEARCH = 3;
     public static final int TYPE_MULTI_REDDIT = 4;
     public static final int TYPE_ANONYMOUS_FRONT_PAGE = 5;
-    public static final int TYPE_ANONYMOUS_MULTIREDDIT = 6;
+    public static final int TYPE_ANONYMOUS_MULTIREDDIT = 6;*/
 
     public static final String USER_WHERE_SUBMITTED = "submitted";
     public static final String USER_WHERE_UPVOTED = "upvoted";
@@ -50,6 +50,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     private String subredditOrUserName;
     private String query;
     private String trendingSource;
+    @PostType
     private final int postType;
     private final SortType sortType;
     private final PostFilter postFilter;
@@ -61,7 +62,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
 
     PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences,
-                     SharedPreferences postFeedScrolledPositionSharedPreferences, int postType,
+                     SharedPreferences postFeedScrolledPositionSharedPreferences, @PostType int postType,
                      SortType sortType, PostFilter postFilter, ReadPostsListInterface readPostsList) {
         this.executor = executor;
         this.retrofit = retrofit;
@@ -79,7 +80,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     // PostPagingSource.TYPE_SUBREDDIT || PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE || PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT:
     PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                     String name, int postType, SortType sortType, PostFilter postFilter,
+                     String name, @PostType int postType, SortType sortType, PostFilter postFilter,
                      ReadPostsListInterface readPostsList) {
         this.executor = executor;
         this.retrofit = retrofit;
@@ -109,7 +110,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     // PostPagingSource.TYPE_MULTI_REDDIT
     PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                     String path, String query, int postType, SortType sortType, PostFilter postFilter,
+                     String path, String query, @PostType int postType, SortType sortType, PostFilter postFilter,
                      ReadPostsListInterface readPostsList) {
         this.executor = executor;
         this.retrofit = retrofit;
@@ -136,7 +137,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
 
     PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                     String subredditOrUserName, int postType, SortType sortType, PostFilter postFilter,
+                     String subredditOrUserName, @PostType int postType, SortType sortType, PostFilter postFilter,
                      String where, ReadPostsListInterface readPostsList) {
         this.executor = executor;
         this.retrofit = retrofit;
@@ -155,7 +156,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
 
     PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                     String subredditOrUserName, String query, String trendingSource, int postType,
+                     String subredditOrUserName, String query, String trendingSource, @PostType int postType,
                      SortType sortType, PostFilter postFilter, ReadPostsListInterface readPostsList) {
         this.executor = executor;
         this.retrofit = retrofit;
@@ -184,15 +185,15 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     public ListenableFuture<LoadResult<String, Post>> loadFuture(@NonNull LoadParams<String> loadParams) {
         RedditAPI api = retrofit.create(RedditAPI.class);
         switch (postType) {
-            case TYPE_FRONT_PAGE:
+            case PostType.FRONT_PAGE:
                 return loadHomePosts(loadParams, api);
-            case TYPE_SUBREDDIT:
+            case PostType.SUBREDDIT:
                 return loadSubredditPosts(loadParams, api);
-            case TYPE_USER:
+            case PostType.USER:
                 return loadUserPosts(loadParams, api);
-            case TYPE_SEARCH:
+            case PostType.SEARCH:
                 return loadSearchPosts(loadParams, api);
-            case TYPE_MULTI_REDDIT:
+            case PostType.MULTIREDDIT:
                 return loadMultiRedditPosts(loadParams, api);
             default:
                 return loadAnonymousFrontPageOrMultiredditPosts(loadParams, api);

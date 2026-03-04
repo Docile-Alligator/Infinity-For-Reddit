@@ -32,8 +32,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class HistoryPostPagingSource extends ListenableFuturePagingSource<String, Post> {
-    public static final int TYPE_READ_POSTS = 100;
-
     private final Retrofit retrofit;
     private final Executor executor;
     private final RedditDataRoomDatabase redditDataRoomDatabase;
@@ -41,12 +39,12 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
     private final String accountName;
     private final SharedPreferences sharedPreferences;
     private final String username;
-    private final int postType;
+    private final int readPostType;
     private final PostFilter postFilter;
 
     public HistoryPostPagingSource(Retrofit retrofit, Executor executor, RedditDataRoomDatabase redditDataRoomDatabase,
                                    @Nullable String accessToken, @NonNull String accountName, SharedPreferences sharedPreferences,
-                                   String username, int postType, PostFilter postFilter) {
+                                   String username, int readPostType, PostFilter postFilter) {
         this.retrofit = retrofit;
         this.executor = executor;
         this.redditDataRoomDatabase = redditDataRoomDatabase;
@@ -54,7 +52,7 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
         this.accountName = accountName;
         this.sharedPreferences = sharedPreferences;
         this.username = username;
-        this.postType = postType;
+        this.readPostType = readPostType;
         this.postFilter = postFilter;
     }
 
@@ -67,11 +65,7 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
     @NonNull
     @Override
     public ListenableFuture<LoadResult<String, Post>> loadFuture(@NonNull LoadParams<String> loadParams) {
-        if (postType == TYPE_READ_POSTS) {
-            return loadHomePosts(loadParams, redditDataRoomDatabase);
-        } else {
-            return loadHomePosts(loadParams, redditDataRoomDatabase);
-        }
+        return loadReadPosts(loadParams, redditDataRoomDatabase);
     }
 
     public LoadResult<String, Post> transformData(List<ReadPost> readPosts) {
@@ -101,7 +95,7 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
                     return new LoadResult.Error<>(new Exception("Error parsing posts"));
                 } else {
                     if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                        setMetadataToAnonymousPosts(newPosts, postType);
+                        setMetadataToAnonymousPosts(newPosts);
                     }
 
                     if (newPosts.size() < 25) {
@@ -118,9 +112,9 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
         }
     }
 
-    private void setMetadataToAnonymousPosts(LinkedHashSet<Post> posts, @ReadPostType int currentReadPostType) {
-        List<ReadPost> readPostsInDatabase = redditDataRoomDatabase.readPostDao().getAllReadPostsForMetadata(accountName, currentReadPostType,
-                posts.stream().map(Post::getId).collect(Collectors.toList()));
+    private void setMetadataToAnonymousPosts(LinkedHashSet<Post> posts) {
+        List<ReadPost> readPostsInDatabase = redditDataRoomDatabase.readPostDao().getAllReadPostsForMetadata(
+                accountName, readPostType, posts.stream().map(Post::getId).collect(Collectors.toList()));
         Map<String, Post> existingPostsMap = posts.stream().collect(Collectors.toMap(Post::getId, post -> post));
         for (ReadPost r : readPostsInDatabase) {
             Post existingPost = existingPostsMap.get(r.getId());
@@ -138,9 +132,9 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
         }
     }
 
-    private ListenableFuture<LoadResult<String, Post>> loadHomePosts(@NonNull LoadParams<String> loadParams, RedditDataRoomDatabase redditDataRoomDatabase) {
+    private ListenableFuture<LoadResult<String, Post>> loadReadPosts(@NonNull LoadParams<String> loadParams, RedditDataRoomDatabase redditDataRoomDatabase) {
         Long before = loadParams.getKey() != null ? Long.parseLong(loadParams.getKey()) : null;
-        ListenableFuture<List<ReadPost>> readPosts = redditDataRoomDatabase.readPostDao().getAllReadPostsListenableFuture(username, before);
+        ListenableFuture<List<ReadPost>> readPosts = redditDataRoomDatabase.readPostDao().getAllReadPostsListenableFuture(username, before, readPostType);
 
         ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(readPosts, this::transformData, executor);
 

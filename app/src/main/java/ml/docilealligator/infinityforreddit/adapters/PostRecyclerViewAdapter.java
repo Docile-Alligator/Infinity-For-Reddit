@@ -121,6 +121,7 @@ import ml.docilealligator.infinityforreddit.post.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
+import ml.docilealligator.infinityforreddit.post.PostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostModification;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
@@ -194,6 +195,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private CustomThemeWrapper mCustomThemeWrapper;
     private Locale mLocale;
     private boolean canStartActivity = true;
+    @PostType
     private int mPostType;
     private int mPostLayout;
     private int mDefaultLinkPostLayout;
@@ -283,7 +285,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                    Executor executor, Retrofit oauthRetrofit,
                                    Retrofit redgifsRetrofit, Provider<StreamableAPI> streamableApiProvider,
                                    CustomThemeWrapper customThemeWrapper, Locale locale,
-                                   @Nullable String accessToken, @NonNull String accountName, int postType, int postLayout, boolean displaySubredditName,
+                                   @Nullable String accessToken, @NonNull String accountName, @PostType int postType,
+                                   int postLayout, boolean displaySubredditName,
                                    SharedPreferences sharedPreferences, SharedPreferences currentAccountSharedPreferences,
                                    SharedPreferences nsfwAndSpoilerSharedPreferences,
                                    @Nullable SharedPreferences postHistorySharedPreferences,
@@ -842,7 +845,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     break;
             }
 
-            if (mPostType == PostPagingSource.TYPE_SUBREDDIT && !mDisplaySubredditName && post.isStickied()) {
+            if (mPostType == PostType.SUBREDDIT && !mDisplaySubredditName && post.isStickied()) {
                 ((PostViewHolder) holder).stickiedPostImageView.setVisibility(View.VISIBLE);
                 mGlide.load(R.drawable.ic_thumbtack_24dp).into(((PostViewHolder) holder).stickiedPostImageView);
             }

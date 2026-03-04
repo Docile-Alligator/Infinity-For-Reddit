@@ -54,8 +54,8 @@ import ml.docilealligator.infinityforreddit.databinding.FragmentHistoryPostBindi
 import ml.docilealligator.infinityforreddit.events.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragmentEvent;
 import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
-import ml.docilealligator.infinityforreddit.post.HistoryPostPagingSource;
 import ml.docilealligator.infinityforreddit.post.HistoryPostViewModel;
+import ml.docilealligator.infinityforreddit.post.PostType;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
@@ -74,7 +74,6 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
 
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String RECYCLER_VIEW_POSITION_STATE = "RVPS";
-    private static final String READ_POST_LIST_STATE = "RPLS";
     private static final String POST_FILTER_STATE = "PFS";
     private static final String POST_FRAGMENT_ID_STATE = "PFIS";
 
@@ -111,7 +110,6 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
     ExoCreator mExoCreator;
     @Inject
     Executor mExecutor;
-    private int postType;
     private PostRecyclerViewAdapter mAdapter;
     private int maxPosition = -1;
     private PostFilter postFilter;
@@ -208,7 +206,7 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
 
         mAdapter = new PostRecyclerViewAdapter(mActivity, this, mRedditDataRoomDatabase, mExecutor,
                 mOauthRetrofit, mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
-                mActivity.accessToken, mActivity.accountName, postType, postLayout, true,
+                mActivity.accessToken, mActivity.accountName, PostType.READ_POSTS, postLayout, true,
                 mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences,
                 null, mExoCreator, new PostRecyclerViewAdapter.Callback() {
             @Override
@@ -330,15 +328,9 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
     }
 
     private void initializeAndBindPostViewModel() {
-        if (postType == HistoryPostPagingSource.TYPE_READ_POSTS) {
-            mHistoryPostViewModel = new ViewModelProvider(HistoryPostFragment.this, new HistoryPostViewModel.Factory(mExecutor,
-                    mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, mActivity.accessToken,
-                    mActivity.accountName, mSharedPreferences, HistoryPostPagingSource.TYPE_READ_POSTS, postFilter)).get(HistoryPostViewModel.class);
-        } else {
-            mHistoryPostViewModel = new ViewModelProvider(HistoryPostFragment.this, new HistoryPostViewModel.Factory(mExecutor,
-                    mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, mActivity.accessToken,
-                    mActivity.accountName, mSharedPreferences, HistoryPostPagingSource.TYPE_READ_POSTS, postFilter)).get(HistoryPostViewModel.class);
-        }
+        mHistoryPostViewModel = new ViewModelProvider(HistoryPostFragment.this, new HistoryPostViewModel.Factory(mExecutor,
+                mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, mActivity.accessToken,
+                mActivity.accountName, mSharedPreferences, readPostType, postFilter)).get(HistoryPostViewModel.class);
 
         bindPostViewModel();
     }
@@ -469,10 +461,7 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
     public void changePostLayout(int postLayout, boolean temporary) {
         this.postLayout = postLayout;
         if (!temporary) {
-            switch (postType) {
-                case HistoryPostPagingSource.TYPE_READ_POSTS:
-                    mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.HISTORY_POST_LAYOUT_READ_POST, postLayout).apply();
-            }
+            mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.HISTORY_POST_LAYOUT_READ_POST, postLayout).apply();
         }
 
         int previousPosition = -1;
@@ -583,23 +572,17 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
     public void onChangeDefaultPostLayoutEvent(ChangeDefaultPostLayoutEvent changeDefaultPostLayoutEvent) {
         Bundle bundle = getArguments();
         if (bundle != null) {
-            switch (postType) {
-                case HistoryPostPagingSource.TYPE_READ_POSTS:
-                    if (mPostLayoutSharedPreferences.contains(SharedPreferencesUtils.HISTORY_POST_LAYOUT_READ_POST)) {
-                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout, true);
-                    }
-                    break;
+            if (mPostLayoutSharedPreferences.contains(SharedPreferencesUtils.HISTORY_POST_LAYOUT_READ_POST)) {
+                changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout, true);
             }
         }
     }
 
     @Subscribe
     public void onNeedForPostListFromPostRecyclerViewAdapterEvent(NeedForPostListFromPostFragmentEvent event) {
-        if (postFragmentId == event.postFragmentTimeId && mAdapter != null) {
-            EventBus.getDefault().post(new ProvidePostListToViewPostDetailActivityEvent(postFragmentId,
-                    new ArrayList<>(mAdapter.snapshot()), HistoryPostPagingSource.TYPE_READ_POSTS,
-                    null, null, null, null,
-                    null, null, null, postFilter, null, null));
-        }
+        EventBus.getDefault().post(new ProvidePostListToViewPostDetailActivityEvent(postFragmentId,
+                new ArrayList<>(mAdapter.snapshot()), PostType.READ_POSTS,
+                null, null, null, null,
+                null, null, null, readPostType, postFilter, null, null));
     }
 }

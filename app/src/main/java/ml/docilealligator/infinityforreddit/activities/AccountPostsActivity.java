@@ -34,6 +34,7 @@ import ml.docilealligator.infinityforreddit.fragments.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.fragments.PostFragmentBase;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
+import ml.docilealligator.infinityforreddit.post.PostType;
 import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.thing.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -172,7 +173,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     private void initializeFragment() {
         mFragment = new PostFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_USER);
+        bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostType.USER);
         bundle.putString(PostFragment.EXTRA_USER_NAME, accountName);
         bundle.putString(PostFragment.EXTRA_USER_WHERE, mUserWhere);
         bundle.putBoolean(PostFragment.EXTRA_DISABLE_READ_POSTS, true);
