@@ -113,20 +113,42 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
     }
 
     private void setMetadataToAnonymousPosts(LinkedHashSet<Post> posts) {
+        for (Post p : posts) {
+            switch (readPostType) {
+                case ReadPostType.ANONYMOUS_UPVOTED_POSTS:
+                    p.setVoteType(1);
+                    break;
+                case ReadPostType.ANONYMOUS_DOWNVOTED_POSTS:
+                    p.setVoteType(-1);
+                    break;
+                case ReadPostType.ANONYMOUS_HIDDEN_POSTS:
+                    p.setHidden(true);
+                    break;
+                case ReadPostType.ANONYMOUS_SAVED_POSTS:
+                    p.setSaved(true);
+                    break;
+            }
+        }
+
         List<ReadPost> readPostsInDatabase = redditDataRoomDatabase.readPostDao().getAllReadPostsForMetadata(
                 accountName, readPostType, posts.stream().map(Post::getId).collect(Collectors.toList()));
         Map<String, Post> existingPostsMap = posts.stream().collect(Collectors.toMap(Post::getId, post -> post));
         for (ReadPost r : readPostsInDatabase) {
             Post existingPost = existingPostsMap.get(r.getId());
             if (existingPost != null) {
-                if (r.getReadPostType() == ReadPostType.ANONYMOUS_UPVOTED_POSTS) {
-                    existingPost.setVoteType(1);
-                } else if (r.getReadPostType() == ReadPostType.ANONYMOUS_DOWNVOTED_POSTS) {
-                    existingPost.setVoteType(-1);
-                } else if (r.getReadPostType() == ReadPostType.ANONYMOUS_HIDDEN_POSTS) {
-                    existingPost.setHidden(true);
-                } else if (r.getReadPostType() == ReadPostType.ANONYMOUS_SAVED_POSTS) {
-                    existingPost.setSaved(true);
+                switch (r.getReadPostType()) {
+                    case ReadPostType.ANONYMOUS_UPVOTED_POSTS:
+                        existingPost.setVoteType(1);
+                        break;
+                    case ReadPostType.ANONYMOUS_DOWNVOTED_POSTS:
+                        existingPost.setVoteType(-1);
+                        break;
+                    case ReadPostType.ANONYMOUS_HIDDEN_POSTS:
+                        existingPost.setHidden(true);
+                        break;
+                    case ReadPostType.ANONYMOUS_SAVED_POSTS:
+                        existingPost.setSaved(true);
+                        break;
                 }
             }
         }
