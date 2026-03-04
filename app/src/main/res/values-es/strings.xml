@@ -919,7 +919,6 @@ https://s3.eu-west-1.amazonaws.com/po-pub/i/hJAe7sMhrfJzqjhp9VkDQOVC.PNG -->
     <string name="settings_only_disable_preview_in_video_and_gif_posts_title">"Desactivar previsualización en posts de vídeo y GIFs"</string>
     <string name="settings_enable_search_history_title">"Activar historial de búsqueda"</string>
     <string name="settings_post_history_title">"Historial de publicaciones"</string>
-    <string name="settings_mark_posts_as_read_title">"Marcar publicaciones como leídas"</string>
     <string name="settings_mark_posts_as_read_after_voting_title">"Marcar publicaciones como leídas después de votar"</string>
     <string name="settings_mark_posts_as_read_on_scroll_title">"Marcar posts como leídos al hacer scroll"</string>
     <string name="settings_hide_read_posts_automatically_title">"Ocultar posts leídos automáticamente"</string>

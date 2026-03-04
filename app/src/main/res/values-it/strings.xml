@@ -821,7 +821,6 @@ La riproduzione automatica video è disabilitata."</string>
     <string name="settings_only_disable_preview_in_video_and_gif_posts_title">"Disabilita anteprima solo nei post con video o GIF"</string>
     <string name="settings_enable_search_history_title">"Abilita cronologia di ricerca"</string>
     <string name="settings_post_history_title">"Cronologia dei post"</string>
-    <string name="settings_mark_posts_as_read_title">"Segna il post come letto"</string>
     <string name="settings_mark_posts_as_read_after_voting_title">"Segna i post come letti se votati"</string>
     <string name="settings_mark_posts_as_read_on_scroll_title">"Segna i messaggi come letti allo scorrimento"</string>
     <string name="settings_hide_read_posts_automatically_title">"Nascondi automaticamente i post letti"</string>

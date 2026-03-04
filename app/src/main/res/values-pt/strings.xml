@@ -868,7 +868,6 @@ Reprodução automática de vídeos desativada."</string>
     <string name="settings_only_disable_preview_in_video_and_gif_posts_title">"Desativar Pré-visualização apenas a Publicações Vídeo e GIF"</string>
     <string name="settings_enable_search_history_title">"Ativar Histórico de Pesquisa"</string>
     <string name="settings_post_history_title">"Histórico de Pesquisa"</string>
-    <string name="settings_mark_posts_as_read_title">"Marcar Publicação como Lida"</string>
     <string name="settings_mark_posts_as_read_after_voting_title">"Marcar Publicação como Lida após Votar"</string>
     <string name="settings_mark_posts_as_read_on_scroll_title">"Marcar Publicações como Lidas ao Deslizar"</string>
     <string name="settings_hide_read_posts_automatically_title">"Esconder Publicações Lidas Automaticamente"</string>

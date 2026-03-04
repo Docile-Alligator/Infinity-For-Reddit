@@ -602,7 +602,6 @@
     <string name="settings_post_filter_title">"இடுகை வடிகட்டி"</string>
     <string name="settings_enable_search_history_title">"தேடல் வரலாற்றை இயக்கு"</string>
     <string name="settings_post_history_title">"இடுகை வரலாறு"</string>
-    <string name="settings_mark_posts_as_read_title">"இடுகைகளைப் வாசித்ததாக்கு"</string>
     <string name="settings_mark_posts_as_read_after_voting_title">"வாக்களித்தபின் இடுகைகளை வாசித்ததாக்கு"</string>
     <string name="settings_hide_read_posts_automatically_title">"வாசித்த இடுகைகளை தானாக மறை"</string>
     <string name="settings_sort_type_title">"வரிசைப்படுத்தல் வகை"</string>

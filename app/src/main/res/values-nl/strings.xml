@@ -890,7 +890,6 @@ Automatisch afspelen van video is uitgeschakeld."</string>
     <string name="settings_only_disable_preview_in_video_and_gif_posts_title">"Zet Alleen De Preview Uit in Video en Gif Posts"</string>
     <string name="settings_enable_search_history_title">"Zoekgeschiedenis Inschakelen"</string>
     <string name="settings_post_history_title">"Post Geschiedenis"</string>
-    <string name="settings_mark_posts_as_read_title">"Markeer Posts als Gelezen"</string>
     <string name="settings_mark_posts_as_read_after_voting_title">"Markeer Posts als Gelezen Na het Stemmen"</string>
     <string name="settings_mark_posts_as_read_on_scroll_title">"Markeer berichten als gelezen bij scroll"</string>
     <string name="settings_hide_read_posts_automatically_title">"Verberg Gelezen Posts Automatisch"</string>

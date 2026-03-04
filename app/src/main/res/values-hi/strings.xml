@@ -947,7 +947,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_only_disable_preview_in_video_and_gif_posts_title">"केवल वीडियो और जिफ़ पोस्ट में वीडियो अक्षम करें"</string>
     <string name="settings_enable_search_history_title">"सुरक्षा इतिहास सक्षम करें"</string>
     <string name="settings_post_history_title">"इतिहास के बाद"</string>
-    <string name="settings_mark_posts_as_read_title">"पोस्ट को पढ़ने के रूप में चिह्नित करें"</string>
     <string name="settings_mark_posts_as_read_after_voting_title">"वोट करने के बाद ही पोस्ट को पढ़ा हुआ मार्क करें"</string>
     <string name="settings_mark_posts_as_read_on_scroll_title">"स्क्रोल करते ही पोस्ट को पढ़ा हुआ मार्क करें"</string>
     <string name="settings_hide_read_posts_automatically_title">"पठन पोस्ट स्वचालित रूप से छुपाएँ"</string>

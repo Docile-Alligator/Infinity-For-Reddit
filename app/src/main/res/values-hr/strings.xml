@@ -914,7 +914,6 @@ Reddit videi su niže rezolucije."</string>
     <string name="settings_only_disable_preview_in_video_and_gif_posts_title">"Iskljuci pregled u videima i GIF objavama"</string>
     <string name="settings_enable_search_history_title">"Uključi povijest pretraživanja"</string>
     <string name="settings_post_history_title">"Povijest objava"</string>
-    <string name="settings_mark_posts_as_read_title">"Označi objave kao pročitano"</string>
     <string name="settings_mark_posts_as_read_after_voting_title">"Označi objave kao pročitano nakon glasanja"</string>
     <string name="settings_mark_posts_as_read_on_scroll_title">"Označi objavu kao pročitanu nakon što je prelistana"</string>
     <string name="settings_hide_read_posts_automatically_title">"Sakrij pročitane objave automatski"</string>
