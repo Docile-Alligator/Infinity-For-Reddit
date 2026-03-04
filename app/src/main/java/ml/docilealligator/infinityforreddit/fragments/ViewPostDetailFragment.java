@@ -1209,7 +1209,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mMarkPostsAsRead && mPost != null && !mPost.isRead()) {
             mPost.markAsRead();
             int readPostsLimit = ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences);
-            ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName, mPost.getId(), readPostsLimit, ReadPostType.READ_POSTS);
+            ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName, mPost.getId(), ReadPostType.READ_POSTS, readPostsLimit);
             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
         }
     }

@@ -2403,7 +2403,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
                             if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                                 ReadPostModification.deleteReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
-                                        post.getId(), ReadPostType.READ_POSTS);
+                                        post.getId(), ReadPostType.ANONYMOUS_SAVED_POSTS);
                                 post.setSaved(!post.isSaved());
                             } else {
                                 SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, post.getFullName(),
@@ -2434,7 +2434,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                                 if (mReadPostsLimit > 0) {
                                     ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
-                                            post.getId(), mReadPostsLimit, ReadPostType.READ_POSTS);
+                                            post.getId(), ReadPostType.ANONYMOUS_SAVED_POSTS, mReadPostsLimit);
                                     post.setSaved(!post.isSaved());
                                 }
                             } else {
