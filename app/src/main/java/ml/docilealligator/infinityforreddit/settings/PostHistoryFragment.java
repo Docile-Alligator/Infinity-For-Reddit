@@ -156,8 +156,6 @@ public class PostHistoryFragment extends Fragment {
 
     private void updateOptions() {
         if (binding.markPostsAsReadSwitchPostHistoryFragment.isChecked()) {
-            binding.readPostsLimitLinearLayoutPostHistoryFragment.setVisibility(View.VISIBLE);
-            binding.readPostsLimitTextInputLayoutPostHistoryFragment.setVisibility(View.VISIBLE);
             binding.markPostsAsReadAfterVotingLinearLayoutPostHistoryFragment.setVisibility(View.VISIBLE);
             binding.markPostsAsReadOnScrollLinearLayoutPostHistoryFragment.setVisibility(View.VISIBLE);
             binding.hideReadPostsAutomaticallyLinearLayoutPostHistoryFragment.setVisibility(View.VISIBLE);
@@ -169,8 +167,6 @@ public class PostHistoryFragment extends Fragment {
                     mActivity.accountName + SharedPreferencesUtils.READ_POSTS_LIMIT_ENABLED, true);
             binding.readPostsLimitTextInputLayoutPostHistoryFragment.setVisibility(limitReadPosts ? View.VISIBLE : View.GONE);
         } else {
-            binding.readPostsLimitLinearLayoutPostHistoryFragment.setVisibility(View.GONE);
-            binding.readPostsLimitTextInputLayoutPostHistoryFragment.setVisibility(View.GONE);
             binding.markPostsAsReadAfterVotingLinearLayoutPostHistoryFragment.setVisibility(View.GONE);
             binding.markPostsAsReadOnScrollLinearLayoutPostHistoryFragment.setVisibility(View.GONE);
             binding.hideReadPostsAutomaticallyLinearLayoutPostHistoryFragment.setVisibility(View.GONE);

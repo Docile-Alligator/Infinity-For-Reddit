@@ -120,7 +120,6 @@ import ml.docilealligator.infinityforreddit.fragments.PostFragmentBase;
 import ml.docilealligator.infinityforreddit.post.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.post.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.post.PostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostModification;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
@@ -2180,18 +2179,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
                 Post post = getItem(position);
                 if (post != null) {
-                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                        Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
-                        return;
+                    if (!Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
+                        if (post.isArchived()) {
+                            Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                     }
 
                     if (mMarkPostsAsReadAfterVoting) {
                         markPostRead(post, true);
-                    }
-
-                    if (post.isArchived()) {
-                        Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
-                        return;
                     }
 
                     ColorStateList previousUpvoteButtonIconTint = upvoteButton.getIconTint();
@@ -2222,8 +2218,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         scoreTextView.setTextColor(mPostIconAndInfoColor);
                     }
 
-                    if (!mHideTheNumberOfVotes) {
-                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                    if (Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
+                        ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                post.getId(), ReadPostType.ANONYMOUS_UPVOTED_POSTS, mReadPostsLimit);
+                        EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
+                        return;
+                    } else {
+                        if (!mHideTheNumberOfVotes) {
+                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                        }
                     }
 
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
@@ -2289,18 +2292,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
                 Post post = getItem(position);
                 if (post != null) {
-                    if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                        Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
-                        return;
+                    if (!Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
+                        if (post.isArchived()) {
+                            Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                     }
 
                     if (mMarkPostsAsReadAfterVoting) {
                         markPostRead(post, true);
-                    }
-
-                    if (post.isArchived()) {
-                        Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
-                        return;
                     }
 
                     ColorStateList previousUpvoteButtonIconTint = upvoteButton.getIconTint();
@@ -2331,8 +2331,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         scoreTextView.setTextColor(mPostIconAndInfoColor);
                     }
 
-                    if (!mHideTheNumberOfVotes) {
-                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                    if (Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
+                        ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                post.getId(), ReadPostType.ANONYMOUS_DOWNVOTED_POSTS, mReadPostsLimit);
+                        EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
+                        return;
+                    } else {
+                        if (!mHideTheNumberOfVotes) {
+                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                        }
                     }
 
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
@@ -2405,6 +2412,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 ReadPostModification.deleteReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
                                         post.getId(), ReadPostType.ANONYMOUS_SAVED_POSTS);
                                 post.setSaved(!post.isSaved());
+                                Toast.makeText(mActivity, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
+                                EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                             } else {
                                 SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, post.getFullName(),
                                         new SaveThing.SaveThingListener() {
@@ -2432,11 +2441,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         } else {
                             saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
                             if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                                if (mReadPostsLimit > 0) {
-                                    ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
-                                            post.getId(), ReadPostType.ANONYMOUS_SAVED_POSTS, mReadPostsLimit);
-                                    post.setSaved(!post.isSaved());
-                                }
+                                ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                        post.getId(), ReadPostType.ANONYMOUS_SAVED_POSTS, mReadPostsLimit);
+                                post.setSaved(!post.isSaved());
+                                Toast.makeText(mActivity, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
+                                EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                             } else {
                                 SaveThing.saveThing(mOauthRetrofit, mAccessToken, post.getFullName(),
                                         new SaveThing.SaveThingListener() {
