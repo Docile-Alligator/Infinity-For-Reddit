@@ -181,6 +181,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private PostFragmentBase mFragment;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences mCurrentAccountSharedPreferences;
+    @Nullable
+    private SharedPreferences mPostHistorySharedPreferences;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private Executor mExecutor;
     private Retrofit mOauthRetrofit;
@@ -257,7 +259,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private boolean mMarkPostsAsRead;
     private boolean mMarkPostsAsReadAfterVoting;
     private boolean mMarkPostsAsReadOnScroll;
-    private int mReadPostsLimit;
     private boolean mHidePostType;
     private boolean mHidePostFlair;
     private boolean mHideSubredditAndUserPrefix;
@@ -344,11 +345,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mDisableImagePreview = sharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_IMAGE_PREVIEW, false);
             mOnlyDisablePreviewInVideoAndGifPosts = sharedPreferences.getBoolean(SharedPreferencesUtils.ONLY_DISABLE_PREVIEW_IN_VIDEO_AND_GIF_POSTS, false);
 
+            mPostHistorySharedPreferences = postHistorySharedPreferences;
             if (postHistorySharedPreferences != null) {
                 mMarkPostsAsRead = postHistorySharedPreferences.getBoolean(accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false);
                 mMarkPostsAsReadAfterVoting = postHistorySharedPreferences.getBoolean(accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false);
                 mMarkPostsAsReadOnScroll = postHistorySharedPreferences.getBoolean(accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_ON_SCROLL_BASE, false);
-                mReadPostsLimit = ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, postHistorySharedPreferences);
                 mHandleReadPost = true;
             }
 
@@ -2220,7 +2221,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
                     if (Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
                         ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
-                                post.getId(), ReadPostType.ANONYMOUS_UPVOTED_POSTS, mReadPostsLimit);
+                                post.getId(), ReadPostType.ANONYMOUS_UPVOTED_POSTS,
+                                ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences));
                         EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                         return;
                     } else {
@@ -2333,7 +2335,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
                     if (Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
                         ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
-                                post.getId(), ReadPostType.ANONYMOUS_DOWNVOTED_POSTS, mReadPostsLimit);
+                                post.getId(), ReadPostType.ANONYMOUS_DOWNVOTED_POSTS,
+                                ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences));
                         EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                         return;
                     } else {
@@ -2442,7 +2445,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
                             if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                                 ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
-                                        post.getId(), ReadPostType.ANONYMOUS_SAVED_POSTS, mReadPostsLimit);
+                                        post.getId(), ReadPostType.ANONYMOUS_SAVED_POSTS,
+                                        ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences));
                                 post.setSaved(!post.isSaved());
                                 Toast.makeText(mActivity, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
                                 EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
