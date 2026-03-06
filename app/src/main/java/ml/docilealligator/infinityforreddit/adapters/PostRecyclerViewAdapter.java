@@ -782,7 +782,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
             ((PostViewHolder) holder).titleTextView.setText(post.getTitle());
             if (!mHideTheNumberOfVotes) {
-                ((PostViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                ((PostViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                        post.getScore() + (Account.ANONYMOUS_ACCOUNT.equals(mAccountName) ? 0 : post.getVoteType())));
             } else {
                 ((PostViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.vote));
             }
