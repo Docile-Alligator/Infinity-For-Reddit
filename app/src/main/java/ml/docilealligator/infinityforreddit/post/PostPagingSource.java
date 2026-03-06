@@ -13,8 +13,14 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.readpost.ReadPost;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsListInterface;
 import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.account.Account;
@@ -43,6 +49,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
 
     private final Executor executor;
     private final Retrofit retrofit;
+    private final RedditDataRoomDatabase redditDataRoomDatabase;
     private final String accessToken;
     private final String accountName;
     private final SharedPreferences sharedPreferences;
@@ -60,12 +67,13 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     private final LinkedHashSet<Post> postLinkedHashSet;
     private String previousLastItem;
 
-    PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
-                     SharedPreferences sharedPreferences,
+    PostPagingSource(Executor executor, Retrofit retrofit, RedditDataRoomDatabase redditDataRoomDatabase,
+                     @Nullable String accessToken, @NonNull String accountName, SharedPreferences sharedPreferences,
                      SharedPreferences postFeedScrolledPositionSharedPreferences, @PostType int postType,
                      SortType sortType, PostFilter postFilter, ReadPostsListInterface readPostsList) {
         this.executor = executor;
         this.retrofit = retrofit;
+        this.redditDataRoomDatabase = redditDataRoomDatabase;
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.sharedPreferences = sharedPreferences;
@@ -78,12 +86,14 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     }
 
     // PostPagingSource.TYPE_SUBREDDIT || PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE || PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT:
-    PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
+    PostPagingSource(Executor executor, Retrofit retrofit, RedditDataRoomDatabase redditDataRoomDatabase,
+                     @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                      String name, @PostType int postType, SortType sortType, PostFilter postFilter,
                      ReadPostsListInterface readPostsList) {
         this.executor = executor;
         this.retrofit = retrofit;
+        this.redditDataRoomDatabase = redditDataRoomDatabase;
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.sharedPreferences = sharedPreferences;
@@ -108,12 +118,14 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     }
 
     // PostPagingSource.TYPE_MULTI_REDDIT
-    PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
+    PostPagingSource(Executor executor, Retrofit retrofit, RedditDataRoomDatabase redditDataRoomDatabase,
+                     @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                      String path, String query, @PostType int postType, SortType sortType, PostFilter postFilter,
                      ReadPostsListInterface readPostsList) {
         this.executor = executor;
         this.retrofit = retrofit;
+        this.redditDataRoomDatabase = redditDataRoomDatabase;
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.sharedPreferences = sharedPreferences;
@@ -135,12 +147,14 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
+    PostPagingSource(Executor executor, Retrofit retrofit, RedditDataRoomDatabase redditDataRoomDatabase,
+                     @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                      String subredditOrUserName, @PostType int postType, SortType sortType, PostFilter postFilter,
                      String where, ReadPostsListInterface readPostsList) {
         this.executor = executor;
         this.retrofit = retrofit;
+        this.redditDataRoomDatabase = redditDataRoomDatabase;
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.sharedPreferences = sharedPreferences;
@@ -154,12 +168,14 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostPagingSource(Executor executor, Retrofit retrofit, @Nullable String accessToken, @NonNull String accountName,
+    PostPagingSource(Executor executor, Retrofit retrofit, RedditDataRoomDatabase redditDataRoomDatabase,
+                     @Nullable String accessToken, @NonNull String accountName,
                      SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                      String subredditOrUserName, String query, String trendingSource, @PostType int postType,
                      SortType sortType, PostFilter postFilter, ReadPostsListInterface readPostsList) {
         this.executor = executor;
         this.retrofit = retrofit;
+        this.redditDataRoomDatabase = redditDataRoomDatabase;
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.sharedPreferences = sharedPreferences;
@@ -214,6 +230,10 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
                 }
                 previousLastItem = lastItem;
 
+                if (Account.ANONYMOUS_ACCOUNT.equals(accountName)) {
+                    setMetadataToAnonymousPosts(newPosts);
+                }
+
                 postLinkedHashSet.addAll(newPosts);
                 if (currentPostsSize == postLinkedHashSet.size()) {
                     return new LoadResult.Page<>(new ArrayList<>(), null, lastItem);
@@ -223,6 +243,31 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
             }
         } else {
             return new LoadResult.Error<>(new Exception("Error getting response"));
+        }
+    }
+
+    private void setMetadataToAnonymousPosts(LinkedHashSet<Post> posts) {
+        List<ReadPost> readPostsInDatabase = redditDataRoomDatabase.readPostDao().getAllReadPostsForMetadata(
+                accountName, posts.stream().map(Post::getId).collect(Collectors.toList()));
+        Map<String, Post> existingPostsMap = posts.stream().collect(Collectors.toMap(Post::getId, post -> post));
+        for (ReadPost r : readPostsInDatabase) {
+            Post existingPost = existingPostsMap.get(r.getId());
+            if (existingPost != null) {
+                switch (r.getReadPostType()) {
+                    case ReadPostType.ANONYMOUS_UPVOTED_POSTS:
+                        existingPost.setVoteType(1);
+                        break;
+                    case ReadPostType.ANONYMOUS_DOWNVOTED_POSTS:
+                        existingPost.setVoteType(-1);
+                        break;
+                    case ReadPostType.ANONYMOUS_HIDDEN_POSTS:
+                        existingPost.setHidden(true);
+                        break;
+                    case ReadPostType.ANONYMOUS_SAVED_POSTS:
+                        existingPost.setSaved(true);
+                        break;
+                }
+            }
         }
     }
 
