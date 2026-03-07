@@ -296,10 +296,12 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
                     return;
                 }
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
-                        mAccessToken, binding.postContentEditTextEditPostActivity, binding.coordinatorLayoutEditPostActivity, data.getData(), uploadedImages);
+                        mAccessToken, binding.postContentEditTextEditPostActivity,
+                        binding.coordinatorLayoutEditPostActivity, data.getData(), uploadedImages);
             } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
-                        mAccessToken, binding.postContentEditTextEditPostActivity, binding.coordinatorLayoutEditPostActivity, capturedImageUri, uploadedImages);
+                        mAccessToken, binding.postContentEditTextEditPostActivity,
+                        binding.coordinatorLayoutEditPostActivity, capturedImageUri, uploadedImages);
             } else if (requestCode == MARKDOWN_PREVIEW_REQUEST_CODE) {
                 editPost();
             }

@@ -1,9 +1,13 @@
 package ml.docilealligator.infinityforreddit.utils;
 
+import android.content.ContentResolver;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.webkit.MimeTypeMap;
 
 import androidx.annotation.Nullable;
 
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +17,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,22 +32,8 @@ import retrofit2.Retrofit;
 
 public class UploadImageUtils {
     @Nullable
-    public static String uploadImage(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
-                                     String accessToken, Bitmap image) throws IOException, JSONException, XmlPullParserException {
-        return uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, image, false);
-    }
-
-    @Nullable
-    public static String uploadImage(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
-                                     String accessToken, Bitmap image, boolean getImageKey) throws IOException, JSONException, XmlPullParserException {
-        return uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, image, false, getImageKey);
-    }
-
-    @Nullable
-    public static String uploadImage(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
-                                      String accessToken, Bitmap image,
-                                     boolean returnResponseForGallerySubmission,
-                                     boolean getImageKey) throws IOException, JSONException, XmlPullParserException {
+    public static String uploadVideoPosterImage(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
+                                                String accessToken, Bitmap image) throws IOException, JSONException, XmlPullParserException {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
         Map<String, String> uploadImageParams = new HashMap<>();
@@ -65,13 +56,67 @@ public class UploadImageUtils {
             Call<String> uploadMediaToAWS = uploadMediaToAWSApi.uploadMediaToAWS(nameValuePairsMap, fileToUpload);
             Response<String> uploadMediaToAWSResponse = uploadMediaToAWS.execute();
             if (uploadMediaToAWSResponse.isSuccessful()) {
-                if (returnResponseForGallerySubmission) {
-                    return uploadImageResponse.body();
-                }
-                return parseImageFromXMLResponseFromAWS(uploadMediaToAWSResponse.body(), getImageKey);
+                return parseImageFromXMLResponseFromAWS(uploadMediaToAWSResponse.body(), false);
             } else {
                 return "Error: " + uploadMediaToAWSResponse.code();
             }
+        } else {
+            return "Error: " + uploadImageResponse.message();
+        }
+    }
+
+    @Nullable
+    public static String uploadImage(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit, ContentResolver contentResolver,
+                                     String accessToken, Uri imageUri) throws IOException, JSONException, XmlPullParserException {
+        return uploadImage(oauthRetrofit, uploadMediaRetrofit, contentResolver, accessToken, imageUri, false);
+    }
+
+    @Nullable
+    public static String uploadImage(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit, ContentResolver contentResolver,
+                                     String accessToken, Uri imageUri, boolean getImageKey) throws IOException, JSONException, XmlPullParserException {
+        return uploadImage(oauthRetrofit, uploadMediaRetrofit, contentResolver, accessToken, imageUri, false, getImageKey);
+    }
+
+    @Nullable
+    public static String uploadImage(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit, ContentResolver contentResolver,
+                                     String accessToken, Uri imageUri,
+                                     boolean returnResponseForGallerySubmission,
+                                     boolean getImageKey) throws IOException, JSONException, XmlPullParserException {
+        String mimeType = contentResolver.getType(imageUri);
+        String extension = "jpg";
+        if (mimeType != null) {
+            String extensionFromMimeType = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
+            extension = extensionFromMimeType == null ? extension : extensionFromMimeType;
+        }
+
+        RedditAPI api = oauthRetrofit.create(RedditAPI.class);
+
+        Map<String, String> uploadImageParams = new HashMap<>();
+        uploadImageParams.put(APIUtils.FILEPATH_KEY, "post_image.jpg");
+        uploadImageParams.put(APIUtils.MIMETYPE_KEY, mimeType);
+
+        Call<String> uploadImageCall = api.uploadImage(APIUtils.getOAuthHeader(accessToken), uploadImageParams);
+        Response<String> uploadImageResponse = uploadImageCall.execute();
+        if (uploadImageResponse.isSuccessful()) {
+            Map<String, RequestBody> nameValuePairsMap = parseJSONResponseFromAWS(uploadImageResponse.body());
+            try (InputStream inputStream = contentResolver.openInputStream(imageUri)) {
+                byte[] buf = IOUtils.toByteArray(inputStream);
+                RequestBody fileBody = RequestBody.create(buf, MediaType.parse("application/octet-stream"));
+                MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", "post_image." + extension, fileBody);
+
+                RedditAPI uploadMediaToAWSApi = uploadMediaRetrofit.create(RedditAPI.class);
+                Call<String> uploadMediaToAWS = uploadMediaToAWSApi.uploadMediaToAWS(nameValuePairsMap, fileToUpload);
+                Response<String> uploadMediaToAWSResponse = uploadMediaToAWS.execute();
+                if (uploadMediaToAWSResponse.isSuccessful()) {
+                    if (returnResponseForGallerySubmission) {
+                        return uploadImageResponse.body();
+                    }
+                    return parseImageFromXMLResponseFromAWS(uploadMediaToAWSResponse.body(), getImageKey);
+                } else {
+                    return "Error: " + uploadMediaToAWSResponse.code();
+                }
+            }
+
         } else {
             return "Error: " + uploadImageResponse.message();
         }
