@@ -1110,6 +1110,7 @@
     <string name="top_score">%1$s pts</string>
 
     <string name="login_activity_2fa_prompt">2-factor authentication: &lt;password&gt;:&lt;2FA code&gt;.\nExample: yourpass:123456\nGoogle login or having trouble login: click the bottom right button.</string>
+    <string name="login_activity_internet_disconnected_error">No Internet Connection</string>
 
     <string name="block_user">Block User</string>
     <string name="block_user_success">Blocked</string>
