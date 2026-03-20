@@ -492,7 +492,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                     + "(username TEXT NOT NULL, id TEXT NOT NULL, time INTEGER DEFAULT 0 NOT NULL, "
                     + "read_post_type INTEGER DEFAULT 0 NOT NULL, PRIMARY KEY(username, id, read_post_type), "
                     + "FOREIGN KEY(username) REFERENCES accounts(username) ON DELETE CASCADE)");
-            database.execSQL("INSERT INTO read_posts_new (username, id, time, read_post_type) SELECT username, id, time FROM read_posts");
+            database.execSQL("INSERT INTO read_posts_new (username, id, time) SELECT username, id, time FROM read_posts");
             database.execSQL("DROP TABLE read_posts");
             database.execSQL("ALTER TABLE read_posts_new RENAME TO read_posts");
         }
