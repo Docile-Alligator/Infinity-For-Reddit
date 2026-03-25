@@ -705,11 +705,18 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_fragment);
             MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_fragment);
 
+            hideItem.setVisible(true);
             mMenu.findItem(R.id.action_comment_view_post_detail_fragment).setVisible(true);
             mMenu.findItem(R.id.action_sort_view_post_detail_fragment).setVisible(true);
             mMenu.findItem(R.id.action_report_view_post_detail_fragment).setVisible(true);
             mMenu.findItem(R.id.action_crosspost_view_post_detail_fragment).setVisible(true);
             mMenu.findItem(R.id.action_add_to_post_filter_view_post_detail_fragment).setVisible(true);
+
+            if (mPost.isHidden()) {
+                Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, hideItem, mActivity.getString(R.string.action_unhide_post));
+            } else {
+                Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, hideItem, mActivity.getString(R.string.action_hide_post));
+            }
 
             if (!mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                 if (mPost.isSaved()) {
@@ -719,17 +726,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     saveItem.setVisible(true);
                     saveItem.setIcon(mUnsavedIcon);
                 }
-
-                if (mPost.isHidden()) {
-                    hideItem.setVisible(true);
-                    Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, hideItem, mActivity.getString(R.string.action_unhide_post));
-                } else {
-                    hideItem.setVisible(true);
-                    Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, hideItem, mActivity.getString(R.string.action_hide_post));
-                }
             } else {
                 saveItem.setVisible(false);
-                hideItem.setVisible(false);
                 mMenu.findItem(R.id.action_crosspost_view_post_detail_fragment).setVisible(false);
             }
 
@@ -1058,47 +1056,64 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             startActivity(crosspostIntent);
             return true;
         } else if (itemId == R.id.action_hide_view_post_detail_fragment) {
-            if (mPost != null && !mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                if (mPost.isHidden()) {
-                    Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, getString(R.string.action_hide_post));
-
-                    HidePost.unhidePost(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(), new HidePost.HidePostListener() {
-                        @Override
-                        public void success() {
-                            mPost.setHidden(false);
-                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_hide_post));
-                            showMessage(R.string.post_unhide_success);
-                            EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                        }
-
-                        @Override
-                        public void failed() {
-                            mPost.setHidden(true);
-                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unhide_post));
-                            showMessage(R.string.post_unhide_failed);
-                            EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                        }
-                    });
+            if (mPost != null) {
+                if (Account.ANONYMOUS_ACCOUNT.equals(mActivity.accountName)) {
+                    if (mPost.isHidden()) {
+                        ReadPostModification.deleteReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                mPost.getId(), ReadPostType.ANONYMOUS_HIDDEN_POSTS);
+                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_hide_post));
+                        showMessage(R.string.post_unhide_success);
+                    } else {
+                        ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                mPost.getId(), ReadPostType.ANONYMOUS_HIDDEN_POSTS,
+                                ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences));
+                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unhide_post));
+                        showMessage(R.string.post_hide_success);
+                    }
+                    mPost.setHidden(!mPost.isHidden());
+                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                 } else {
-                    Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, getString(R.string.action_unhide_post));
+                    if (mPost.isHidden()) {
+                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, getString(R.string.action_hide_post));
 
-                    HidePost.hidePost(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(), new HidePost.HidePostListener() {
-                        @Override
-                        public void success() {
-                            mPost.setHidden(true);
-                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unhide_post));
-                            showMessage(R.string.post_hide_success);
-                            EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                        }
+                        HidePost.unhidePost(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(), new HidePost.HidePostListener() {
+                            @Override
+                            public void success() {
+                                mPost.setHidden(false);
+                                Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_hide_post));
+                                showMessage(R.string.post_unhide_success);
+                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                            }
 
-                        @Override
-                        public void failed() {
-                            mPost.setHidden(false);
-                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_hide_post));
-                            showMessage(R.string.post_hide_failed);
-                            EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                        }
-                    });
+                            @Override
+                            public void failed() {
+                                mPost.setHidden(true);
+                                Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unhide_post));
+                                showMessage(R.string.post_unhide_failed);
+                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                            }
+                        });
+                    } else {
+                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, getString(R.string.action_unhide_post));
+
+                        HidePost.hidePost(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(), new HidePost.HidePostListener() {
+                            @Override
+                            public void success() {
+                                mPost.setHidden(true);
+                                Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unhide_post));
+                                showMessage(R.string.post_hide_success);
+                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                            }
+
+                            @Override
+                            public void failed() {
+                                mPost.setHidden(false);
+                                Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_hide_post));
+                                showMessage(R.string.post_hide_failed);
+                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                            }
+                        });
+                    }
                 }
             }
             return true;
