@@ -738,10 +738,12 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
                     return;
                 }
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
-                        accessToken, binding.postContentEditTextPostPollActivity, binding.coordinatorLayoutPostPollActivity, data.getData(), uploadedImages);
+                        accessToken, binding.postContentEditTextPostPollActivity,
+                        binding.coordinatorLayoutPostPollActivity, data.getData(), uploadedImages);
             } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
-                        accessToken, binding.postContentEditTextPostPollActivity, binding.coordinatorLayoutPostPollActivity, capturedImageUri, uploadedImages);
+                        accessToken, binding.postContentEditTextPostPollActivity,
+                        binding.coordinatorLayoutPostPollActivity, capturedImageUri, uploadedImages);
             } else if (requestCode == MARKDOWN_PREVIEW_REQUEST_CODE) {
                 submitPost(mMenu.findItem(R.id.action_send_post_poll_activity));
             }

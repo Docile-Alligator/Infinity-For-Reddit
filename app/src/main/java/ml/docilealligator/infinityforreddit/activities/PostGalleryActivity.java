@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -48,7 +47,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -517,18 +515,11 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
         isUploading = true;
         mExecutor.execute(() -> {
             try {
-                Bitmap resource = Glide.with(PostGalleryActivity.this).asBitmap().load(imageUri).submit().get();
-                String response = UploadImageUtils.uploadImage(mOauthRetrofit, mUploadMediaRetrofit, accessToken, resource, true, false);
+                String response = UploadImageUtils.uploadImage(mOauthRetrofit, mUploadMediaRetrofit, getContentResolver(),
+                        accessToken, imageUri, true, false);
                 String mediaId = new JSONObject(response).getJSONObject(JSONUtils.ASSET_KEY).getString(JSONUtils.ASSET_ID_KEY);
                 handler.post(() -> {
                     adapter.setImageAsUploaded(mediaId);
-                    isUploading = false;
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-                handler.post(() -> {
-                    adapter.removeFailedToUploadImage();
-                    Snackbar.make(binding.coordinatorLayoutPostGalleryActivity, R.string.get_image_bitmap_failed, Snackbar.LENGTH_LONG).show();
                     isUploading = false;
                 });
             } catch (XmlPullParserException | JSONException | IOException e) {

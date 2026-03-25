@@ -4,6 +4,7 @@ import android.os.SystemClock;
 import android.util.Base64;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -175,8 +176,8 @@ public class APIUtils {
     }
 
     // Concatenated subreddit name works too
-    public static int subredditAPICallLimit(String subredditName) {
-        return subredditName.toLowerCase().contains("stablediffusion") ? 55 : 100;
+    public static int subredditAPICallLimit(@Nullable String subredditName) {
+        return subredditName != null && subredditName.toLowerCase().contains("stablediffusion") ? 55 : 100;
     }
 
     // RedGifs token management

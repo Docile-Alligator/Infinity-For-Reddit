@@ -1,6 +1,8 @@
 package ml.docilealligator.infinityforreddit.post;
 
+import android.content.ContentResolver;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Handler;
 
 import androidx.annotation.NonNull;
@@ -17,8 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.subreddit.Flair;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.subreddit.Flair;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.UploadImageUtils;
@@ -41,11 +43,13 @@ public class SubmitPost {
     }
 
     public static void submitImagePost(Executor executor, Handler handler, Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
-                                       String accessToken, String subredditName, String title, String content,
-                                       Bitmap image, Flair flair, boolean isSpoiler, boolean isNSFW,
-                                       boolean receivePostReplyNotifications, SubmitPostListener submitPostListener) {
+                                       ContentResolver contentResolver, String accessToken, String subredditName,
+                                       String title, String content, Uri imageUri, Flair flair, boolean isSpoiler,
+                                       boolean isNSFW, boolean receivePostReplyNotifications,
+                                       SubmitPostListener submitPostListener) {
         try {
-            String imageUrlOrError = UploadImageUtils.uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, image);
+            String imageUrlOrError = UploadImageUtils.uploadImage(oauthRetrofit, uploadMediaRetrofit,
+                    contentResolver, accessToken, imageUri);
             if (imageUrlOrError != null && !imageUrlOrError.startsWith("Error: ")) {
                 submitPost(executor, handler, oauthRetrofit, accessToken,
                         subredditName, title, content, imageUrlOrError, flair, isSpoiler, isNSFW,
@@ -95,7 +99,7 @@ public class SubmitPost {
                         submitPostListener.submitFailed(null);
                         return;
                     }
-                    String imageUrlOrError = UploadImageUtils.uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, posterBitmap);
+                    String imageUrlOrError = UploadImageUtils.uploadVideoPosterImage(oauthRetrofit, uploadMediaRetrofit, accessToken, posterBitmap);
                     if (imageUrlOrError != null && !imageUrlOrError.startsWith("Error: ")) {
                         if (fileType.equals("gif")) {
                             submitPost(executor, handler, oauthRetrofit, accessToken,

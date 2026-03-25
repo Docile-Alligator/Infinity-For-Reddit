@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
@@ -35,7 +34,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.text.HtmlCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputLayout;
@@ -50,7 +48,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -85,6 +82,8 @@ public final class Utils {
             Pattern.compile("((?:\\[(?:(?!(?:(?<!\\\\)\\[)).)*?]\\()?https://preview.redd.it/\\w+.(?:jpg|png|jpeg)(?:(?:\\?+[-a-zA-Z0-9()@:%_+.~#?&/=]*)|))|((?:\\[(?:(?!(?:(?<!\\\\)\\[)).)*?]\\()?https://i.redd.it/\\w+.(?:jpg|png|jpeg|gif))"),
     };
 
+    private static final Pattern PROCESSING_IMG_PATTERN = Pattern.compile("\\*?Processing img (\\w+)\\.{3}\\*?");
+
     public static String modifyMarkdown(String markdown) {
         String regexed = REGEX_PATTERNS[0].matcher(markdown).replaceAll("[$0](https://www.reddit.com$0)");
         regexed = REGEX_PATTERNS[1].matcher(regexed).replaceAll("[$0](https://www.reddit.com/$0)");
@@ -97,6 +96,20 @@ public final class Utils {
         if (mediaMetadataMap == null) {
             return markdown;
         }
+
+        // Replace "Processing img <id>..." placeholders with the actual URL from media_metadata.
+        // The bare URL will then be wrapped by the existing preview.redd.it / i.redd.it logic below.
+        Matcher processingMatcher = PROCESSING_IMG_PATTERN.matcher(markdown);
+        StringBuffer sb = new StringBuffer();
+        while (processingMatcher.find()) {
+            String imgId = processingMatcher.group(1);
+            MediaMetadata mediaMetadata = mediaMetadataMap.get(imgId);
+            if (mediaMetadata != null && mediaMetadata.original != null) {
+                processingMatcher.appendReplacement(sb, Matcher.quoteReplacement(mediaMetadata.original.url));
+            }
+        }
+        processingMatcher.appendTail(sb);
+        markdown = sb.toString();
 
         StringBuilder markdownStringBuilder = new StringBuilder(markdown);
         Pattern previewReddItAndIReddItImagePattern = REGEX_PATTERNS[3];
@@ -354,6 +367,24 @@ public final class Utils {
         return false;
     }
 
+    public static boolean isConnectedToInternet(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                Network network = connectivityManager.getActiveNetwork();
+                if (network == null) {
+                    return false;
+                }
+                NetworkCapabilities networkCapabilities = connectivityManager.getNetworkCapabilities(network);
+                return networkCapabilities != null && networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+            } else {
+                NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+                return networkInfo != null && networkInfo.isConnected();
+            }
+        }
+        return false;
+    }
+
     public static void displaySortTypeInToolbar(SortType sortType, Toolbar toolbar) {
         if (sortType != null) {
             if (sortType.getTime() != null) {
@@ -401,8 +432,8 @@ public final class Utils {
         Handler handler = new Handler();
         executor.execute(() -> {
             try {
-                Bitmap bitmap = Glide.with(context).asBitmap().load(imageUri).submit().get();
-                String imageKeyOrError = UploadImageUtils.uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, bitmap, true);
+                String imageKeyOrError = UploadImageUtils.uploadImage(oauthRetrofit, uploadMediaRetrofit,
+                        context.getContentResolver(), accessToken, imageUri, true);
                 handler.post(() -> {
                     if (imageKeyOrError != null && !imageKeyOrError.startsWith("Error: ")) {
                         String fileName = Utils.getFileName(context, imageUri);
@@ -428,9 +459,6 @@ public final class Utils {
                         Toast.makeText(context, R.string.upload_image_failed, Toast.LENGTH_LONG).show();
                     }
                 });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-                handler.post(() -> Toast.makeText(context, R.string.get_image_bitmap_failed, Toast.LENGTH_LONG).show());
             } catch (XmlPullParserException | JSONException | IOException e) {
                 e.printStackTrace();
                 handler.post(() -> Toast.makeText(context, R.string.error_processing_image, Toast.LENGTH_LONG).show());
