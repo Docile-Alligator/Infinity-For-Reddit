@@ -48,10 +48,17 @@ Infinity for Reddit+ is available on Google Play and GitHub. There’s also a Pa
 
 </div>
 
+### 📱 Also available on iOS
+Infinity for Reddit is finally on iOS! Check it out here: [Infinity for Reddit](https://github.com/foxanastudio/Infinity-For-Reddit-iOS)
+
+<a href="https://apps.apple.com/us/app/infinity-for-reddit/id6759064642">
+  <img alt="Download on the App Store" height="80" src="fastlane/metadata/android/en-US/images/app_store_badge.svg" />
+</a>
+
 ## Donation
 <p>Infinity for Reddit++:</p>
 <a href="https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit.plus2">
-    <img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
+    <img alt="Get it on Google Play" height="100" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
 </a> 
 
 Patreon: https://www.patreon.com/docile_alligator
