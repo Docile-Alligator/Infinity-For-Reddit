@@ -57,6 +57,7 @@
     <string name="action_refresh">Refresh</string>
     <string name="action_add_comment">Send comment</string>
     <string name="action_save_post">Save post</string>
+    <string name="action_unsave_post">Unsave post</string>
     <string name="action_view_crosspost_parent">View crosspost parent</string>
     <string name="action_search">Search</string>
     <string name="action_start_lazy_mode">Start Lazy Mode</string>

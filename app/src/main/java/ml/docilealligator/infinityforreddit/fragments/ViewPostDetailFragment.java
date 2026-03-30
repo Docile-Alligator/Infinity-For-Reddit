@@ -705,6 +705,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_fragment);
             MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_fragment);
 
+            saveItem.setVisible(true);
             hideItem.setVisible(true);
             mMenu.findItem(R.id.action_comment_view_post_detail_fragment).setVisible(true);
             mMenu.findItem(R.id.action_sort_view_post_detail_fragment).setVisible(true);
@@ -718,16 +719,13 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, hideItem, mActivity.getString(R.string.action_hide_post));
             }
 
-            if (!mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                if (mPost.isSaved()) {
-                    saveItem.setVisible(true);
-                    saveItem.setIcon(mSavedIcon);
-                } else {
-                    saveItem.setVisible(true);
-                    saveItem.setIcon(mUnsavedIcon);
-                }
+            if (mPost.isSaved()) {
+                Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, saveItem, mActivity.getString(R.string.action_unsave_post));
             } else {
-                saveItem.setVisible(false);
+                Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, saveItem, mActivity.getString(R.string.action_save_post));
+            }
+
+            if (Account.ANONYMOUS_ACCOUNT.equals(mActivity.accountName)) {
                 mMenu.findItem(R.id.action_crosspost_view_post_detail_fragment).setVisible(false);
             }
 
@@ -992,55 +990,74 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             }
             return true;
         } else if (itemId == R.id.action_save_view_post_detail_fragment) {
-            if (mPost != null && !mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                if (mPost.isSaved()) {
-                    item.setIcon(mUnsavedIcon);
-                    SaveThing.unsaveThing(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(),
-                            new SaveThing.SaveThingListener() {
-                                @Override
-                                public void success() {
-                                    if (isAdded()) {
-                                        mPost.setSaved(false);
-                                        item.setIcon(mUnsavedIcon);
-                                        showMessage(R.string.post_unsaved_success);
-                                    }
-                                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                                }
-
-                                @Override
-                                public void failed() {
-                                    if (isAdded()) {
-                                        mPost.setSaved(true);
-                                        item.setIcon(mSavedIcon);
-                                        showMessage(R.string.post_unsaved_failed);
-                                    }
-                                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                                }
-                            });
+            if (mPost != null) {
+                if (Account.ANONYMOUS_ACCOUNT.equals(mActivity.accountName)) {
+                    if (mPost.isSaved()) {
+                        ReadPostModification.deleteReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                mPost.getId(), ReadPostType.ANONYMOUS_SAVED_POSTS);
+                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_save_post));
+                        showMessage(R.string.post_unsaved_success);
+                    } else {
+                        ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                mPost.getId(), ReadPostType.ANONYMOUS_SAVED_POSTS,
+                                ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences));
+                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unsave_post));
+                        showMessage(R.string.post_saved_success);
+                    }
+                    mPost.setSaved(!mPost.isSaved());
+                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                 } else {
-                    item.setIcon(mSavedIcon);
-                    SaveThing.saveThing(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(),
-                            new SaveThing.SaveThingListener() {
-                                @Override
-                                public void success() {
-                                    if (isAdded()) {
-                                        mPost.setSaved(true);
-                                        item.setIcon(mSavedIcon);
-                                        showMessage(R.string.post_saved_success);
-                                    }
-                                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                                }
+                    if (mPost.isSaved()) {
+                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_save_post));
 
-                                @Override
-                                public void failed() {
-                                    if (isAdded()) {
-                                        mPost.setSaved(false);
-                                        item.setIcon(mUnsavedIcon);
-                                        showMessage(R.string.post_saved_failed);
+                        SaveThing.unsaveThing(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(),
+                                new SaveThing.SaveThingListener() {
+                                    @Override
+                                    public void success() {
+                                        if (isAdded()) {
+                                            mPost.setSaved(false);
+                                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_save_post));
+                                            showMessage(R.string.post_unsaved_success);
+                                        }
+                                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                     }
-                                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                                }
-                            });
+
+                                    @Override
+                                    public void failed() {
+                                        if (isAdded()) {
+                                            mPost.setSaved(true);
+                                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unsave_post));
+                                            showMessage(R.string.post_unsaved_failed);
+                                        }
+                                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                    }
+                                });
+                    } else {
+                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unsave_post));
+
+                        SaveThing.saveThing(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(),
+                                new SaveThing.SaveThingListener() {
+                                    @Override
+                                    public void success() {
+                                        if (isAdded()) {
+                                            mPost.setSaved(true);
+                                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unsave_post));
+                                            showMessage(R.string.post_saved_success);
+                                        }
+                                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                    }
+
+                                    @Override
+                                    public void failed() {
+                                        if (isAdded()) {
+                                            mPost.setSaved(false);
+                                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_save_post));
+                                            showMessage(R.string.post_saved_failed);
+                                        }
+                                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                    }
+                                });
+                    }
                 }
             }
             return true;
