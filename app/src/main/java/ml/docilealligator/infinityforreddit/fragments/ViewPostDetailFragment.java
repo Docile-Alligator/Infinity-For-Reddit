@@ -612,9 +612,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mPostAdapter = new PostDetailRecyclerViewAdapter(mActivity,
                     this, mExecutor, mCustomThemeWrapper, mOauthRetrofit, mRetrofit,
                     mRedgifsRetrofit, mStreamableApiProvider, mRedditDataRoomDatabase, mGlide,
-                    mSeparatePostAndComments, mActivity.accessToken, mActivity.accountName, mPost, mLocale,
-                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
-                    mExoCreator, post -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
+                    mSeparatePostAndComments, mActivity.accessToken, mActivity.accountName, mPost,
+                    mLocale, mSharedPreferences, mCurrentAccountSharedPreferences,
+                    mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
+                    mPostHistorySharedPreferences, mExoCreator,
+                    post -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
             mCommentsAdapter = new CommentsRecyclerViewAdapter(mActivity,
                     this, mCustomThemeWrapper, mExecutor, mRetrofit, mOauthRetrofit,
                     mActivity.accessToken, mActivity.accountName, mPost, mLocale, mSingleCommentId,
@@ -1359,7 +1361,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                     mStreamableApiProvider, mRedditDataRoomDatabase, mGlide, mSeparatePostAndComments,
                                     mActivity.accessToken, mActivity.accountName, mPost, mLocale, mSharedPreferences,
                                     mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences,
-                                    mPostDetailsSharedPreferences, mExoCreator,
+                                    mPostDetailsSharedPreferences, mPostHistorySharedPreferences, mExoCreator,
                                     post1 -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
 
                             mCommentsAdapter = new CommentsRecyclerViewAdapter(mActivity,
