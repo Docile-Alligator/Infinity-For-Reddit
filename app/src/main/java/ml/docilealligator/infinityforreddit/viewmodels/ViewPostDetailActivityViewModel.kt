@@ -1,53 +1,46 @@
-package ml.docilealligator.infinityforreddit.viewmodels;
+package ml.docilealligator.infinityforreddit.viewmodels
 
-import android.os.Handler;
+import android.os.Handler
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.CreationExtras
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
+import ml.docilealligator.infinityforreddit.comment.Comment
+import ml.docilealligator.infinityforreddit.user.UserProfileImagesBatchLoader
+import retrofit2.Retrofit
+import java.util.concurrent.Executor
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
+class ViewPostDetailActivityViewModel(
+    executor: Executor?, handler: Handler?, redditDataRoomDatabase: RedditDataRoomDatabase?,
+    retrofit: Retrofit?
+) : ViewModel() {
+    private val mLoader: UserProfileImagesBatchLoader =
+        UserProfileImagesBatchLoader(executor, handler, redditDataRoomDatabase, retrofit)
 
-import java.util.List;
-import java.util.concurrent.Executor;
-
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.comment.Comment;
-import ml.docilealligator.infinityforreddit.user.UserProfileImagesBatchLoader;
-import retrofit2.Retrofit;
-
-public class ViewPostDetailActivityViewModel extends ViewModel {
-    private UserProfileImagesBatchLoader mLoader;
-
-    public ViewPostDetailActivityViewModel(Executor executor, Handler handler, RedditDataRoomDatabase redditDataRoomDatabase,
-                                           Retrofit retrofit) {
-        mLoader = new UserProfileImagesBatchLoader(executor, handler, redditDataRoomDatabase, retrofit);
+    fun loadAuthorImages(comments: MutableList<Comment?>, loadIconListener: LoadIconListener) {
+        mLoader.loadAuthorImages(comments, loadIconListener)
     }
 
-    public void loadAuthorImages(List<Comment> comments, @NonNull LoadIconListener loadIconListener) {
-        mLoader.loadAuthorImages(comments, loadIconListener);
+    interface LoadIconListener {
+        fun loadIconSuccess(authorFullName: String?, iconUrl: String?)
     }
 
-    public static class Factory extends ViewModelProvider.NewInstanceFactory {
-        private Executor mExecutor;
-        private Handler mHandler;
-        private RedditDataRoomDatabase mRedditDataRoomDatabase;
-        private Retrofit mRetrofit;
-
-        public Factory(Executor executor, Handler handler, RedditDataRoomDatabase redditDataRoomDatabase, Retrofit retrofit) {
-            this.mExecutor = executor;
-            this.mHandler = handler;
-            this.mRedditDataRoomDatabase = redditDataRoomDatabase;
-            this.mRetrofit = retrofit;
+    companion object {
+        fun provideFactory(executor: Executor?,
+                           handler: Handler?,
+                           redditDataRoomDatabase: RedditDataRoomDatabase?,
+                           retrofit: Retrofit?): ViewModelProvider.Factory {
+            return object: ViewModelProvider.Factory {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(
+                    modelClass: Class<T>,
+                    extras: CreationExtras
+                ): T {
+                    return ViewPostDetailActivityViewModel(
+                        executor, handler, redditDataRoomDatabase, retrofit
+                    ) as T
+                }
+            }
         }
-
-        @NonNull
-        @Override
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new ViewPostDetailActivityViewModel(mExecutor, mHandler, mRedditDataRoomDatabase,
-                    mRetrofit);
-        }
-    }
-
-    public interface LoadIconListener {
-        void loadIconSuccess(String authorFullName, String iconUrl);
     }
 }
