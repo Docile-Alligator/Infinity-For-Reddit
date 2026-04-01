@@ -226,8 +226,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private PostDetailRecyclerViewAdapter mPostAdapter;
     private CommentsRecyclerViewAdapter mCommentsAdapter;
     private RecyclerView.SmoothScroller mSmoothScroller;
-    private Drawable mSavedIcon;
-    private Drawable mUnsavedIcon;
     private ColorDrawable backgroundSwipeRight;
     private ColorDrawable backgroundSwipeLeft;
     private Drawable drawableSwipeRight;
@@ -263,9 +261,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         applyTheme();
 
         binding.postDetailRecyclerViewViewPostDetailFragment.addOnWindowFocusChangedListener(this::onWindowFocusChanged);
-
-        mSavedIcon = getMenuItemIcon(R.drawable.ic_bookmark_toolbar_24dp);
-        mUnsavedIcon = getMenuItemIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
 
         mCommentsRecyclerView = binding.commentsRecyclerViewViewPostDetailFragment;
         if (!((mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_LANDSCAPE_MODE, true)
@@ -616,7 +611,10 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     mLocale, mSharedPreferences, mCurrentAccountSharedPreferences,
                     mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
                     mPostHistorySharedPreferences, mExoCreator,
-                    post -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
+                    post -> {
+                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                        setupMenu();
+                    });
             mCommentsAdapter = new CommentsRecyclerViewAdapter(mActivity,
                     this, mCustomThemeWrapper, mExecutor, mRetrofit, mOauthRetrofit,
                     mActivity.accessToken, mActivity.accountName, mPost, mLocale, mSingleCommentId,
@@ -1008,6 +1006,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     }
                     mPost.setSaved(!mPost.isSaved());
                     EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                    mPostAdapter.updatePost(mPost);
                 } else {
                     if (mPost.isSaved()) {
                         Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_save_post));
@@ -1022,6 +1021,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                             showMessage(R.string.post_unsaved_success);
                                         }
                                         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                        mPostAdapter.updatePost(mPost);
                                     }
 
                                     @Override
@@ -1032,6 +1032,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                             showMessage(R.string.post_unsaved_failed);
                                         }
                                         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                        mPostAdapter.updatePost(mPost);
                                     }
                                 });
                     } else {
@@ -1047,6 +1048,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                             showMessage(R.string.post_saved_success);
                                         }
                                         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                        mPostAdapter.updatePost(mPost);
                                     }
 
                                     @Override
@@ -1057,6 +1059,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                             showMessage(R.string.post_saved_failed);
                                         }
                                         EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                        mPostAdapter.updatePost(mPost);
                                     }
                                 });
                     }
@@ -1362,7 +1365,10 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                     mActivity.accessToken, mActivity.accountName, mPost, mLocale, mSharedPreferences,
                                     mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences,
                                     mPostDetailsSharedPreferences, mPostHistorySharedPreferences, mExoCreator,
-                                    post1 -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
+                                    post1 -> {
+                                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                        setupMenu();
+                                    });
 
                             mCommentsAdapter = new CommentsRecyclerViewAdapter(mActivity,
                                     ViewPostDetailFragment.this, mCustomThemeWrapper, mExecutor,
@@ -2018,13 +2024,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mPost.setRemoved(event.post.isRemoved(), event.post.isSpam());
             mPost.setIsLocked(event.post.isLocked());
             mPost.setIsModerator(event.post.isModerator());
-            if (mMenu != null) {
-                if (event.post.isSaved()) {
-                    mMenu.findItem(R.id.action_save_view_post_detail_fragment).setIcon(mSavedIcon);
-                } else {
-                    mMenu.findItem(R.id.action_save_view_post_detail_fragment).setIcon(mUnsavedIcon);
-                }
-            }
+            setupMenu();
             if (mPostAdapter != null) {
                 mPostAdapter.updatePost(mPost);
             }

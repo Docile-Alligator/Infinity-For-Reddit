@@ -34,6 +34,7 @@ import ml.docilealligator.infinityforreddit.activities.ReportActivity;
 import ml.docilealligator.infinityforreddit.activities.SubmitCrosspostActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.databinding.FragmentPostOptionsBottomSheetBinding;
+import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostDetailFragment;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.post.HidePost;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -296,6 +297,7 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                     }
                     mPost.setHidden(!mPost.isHidden());
                     EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, getArguments().getInt(EXTRA_POST_LIST_POSITION, 0)));
+                    EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(mPost));
                     dismiss();
                 } else {
                     if (mPost.isHidden()) {
@@ -305,6 +307,7 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                                 mPost.setHidden(false);
                                 Toast.makeText(mBaseActivity, R.string.post_unhide_success, Toast.LENGTH_SHORT).show();
                                 EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, getArguments().getInt(EXTRA_POST_LIST_POSITION, 0)));
+                                EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(mPost));
                                 dismiss();
                             }
 
@@ -313,6 +316,7 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                                 mPost.setHidden(true);
                                 Toast.makeText(mBaseActivity, R.string.post_unhide_failed, Toast.LENGTH_SHORT).show();
                                 EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, getArguments().getInt(EXTRA_POST_LIST_POSITION, 0)));
+                                EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(mPost));
                                 dismiss();
                             }
                         });
@@ -323,6 +327,7 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                                 mPost.setHidden(true);
                                 Toast.makeText(mBaseActivity, R.string.post_hide_success, Toast.LENGTH_SHORT).show();
                                 EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, getArguments().getInt(EXTRA_POST_LIST_POSITION, 0)));
+                                EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(mPost));
                                 dismiss();
                             }
 
@@ -331,6 +336,7 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                                 mPost.setHidden(false);
                                 Toast.makeText(mBaseActivity, R.string.post_hide_failed, Toast.LENGTH_SHORT).show();
                                 EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, getArguments().getInt(EXTRA_POST_LIST_POSITION, 0)));
+                                EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(mPost));
                                 dismiss();
                             }
                         });
