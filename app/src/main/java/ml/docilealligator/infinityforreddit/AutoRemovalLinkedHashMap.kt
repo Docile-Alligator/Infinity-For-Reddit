@@ -1,0 +1,9 @@
+package ml.docilealligator.infinityforreddit
+
+class AutoRemovalLinkedHashMap<K, V>(
+    val maxSize: Int
+): LinkedHashMap<K, V>() {
+    override fun removeEldestEntry(eldest: Map.Entry<K?, V?>?): Boolean {
+        return size > maxSize
+    }
+}

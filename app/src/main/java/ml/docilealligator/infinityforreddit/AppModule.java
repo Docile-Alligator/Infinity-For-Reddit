@@ -233,4 +233,10 @@ abstract class AppModule {
     ) {
         return new UserProfileImagesBatchLoader(executor, new Handler(Looper.getMainLooper()), redditDataRoomDatabase, retrofit);
     }
+
+    @Provides
+    @Singleton
+    static PostDetailCommentsCacheManager providePostDetailCommentsCacheManager() {
+        return new PostDetailCommentsCacheManager();
+    }
 }
