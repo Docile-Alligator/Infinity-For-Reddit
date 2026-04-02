@@ -17,6 +17,8 @@ class ViewPostDetailActivityViewModel(
     executor: Executor?, handler: Handler?, redditDataRoomDatabase: RedditDataRoomDatabase?,
     retrofit: Retrofit?
 ) : ViewModel() {
+    var post: Post? = null
+
     private val _posts = MutableLiveData<List<Post>>()
     val posts: LiveData<List<Post>> = _posts
 

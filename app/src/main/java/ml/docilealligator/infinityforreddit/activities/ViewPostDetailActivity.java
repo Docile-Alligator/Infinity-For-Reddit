@@ -149,8 +149,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @State
     SortType.Time sortTime;
     @State
-    Post post;
-    @State
     @LoadingMorePostsStatus
     int mLoadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING;
     public ViewPostDetailActivityViewModel viewPostDetailActivityViewModel;
@@ -256,11 +254,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         mFragmentManager = getSupportFragmentManager();
 
-        if (savedInstanceState == null) {
-            post = getIntent().getParcelableExtra(EXTRA_POST_DATA);
-            mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
-        }
-
         binding.toolbarViewPostDetailActivity.setTitle("");
         setSupportActionBar(binding.toolbarViewPostDetailActivity);
         setToolbarGoToTop(binding.toolbarViewPostDetailActivity);
@@ -304,6 +297,11 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         ).get(ViewPostDetailActivityViewModel.class);
 
         viewPostDetailActivityViewModel.getPosts().observe(this, posts -> onPostsChanged());
+
+        if (savedInstanceState == null) {
+            viewPostDetailActivityViewModel.setPost(getIntent().getParcelableExtra(EXTRA_POST_DATA));
+            mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
+        }
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(this);
         binding.viewPager2ViewPostDetailActivity.setAdapter(mSectionsPagerAdapter);
@@ -676,7 +674,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                                     }
                                 });
                             } else {
-                                //posts = new ArrayList<>(postLinkedHashSet);
                                 viewPostDetailActivityViewModel.setPosts(new ArrayList<>(postLinkedHashSet));
                                 handler.post(() -> {
                                     if (changePage) {
@@ -760,7 +757,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                                     }
                                 });
                             } else {
-                                //posts = new ArrayList<>(postLinkedHashSet);
                                 viewPostDetailActivityViewModel.setPosts(new ArrayList<>(postLinkedHashSet));
                                 handler.post(() -> {
                                     if (changePage) {
@@ -968,8 +964,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             Bundle bundle = new Bundle();
             List<Post> posts = viewPostDetailActivityViewModel.getPosts().getValue();
             if (posts != null) {
-                if (mPostListPosition == position && post != null) {
-                    bundle.putParcelable(ViewPostDetailFragment.EXTRA_POST_DATA, post);
+                if (mPostListPosition == position && viewPostDetailActivityViewModel.getPost() != null) {
                     bundle.putInt(ViewPostDetailFragment.EXTRA_POST_LIST_POSITION, position);
                     bundle.putString(ViewPostDetailFragment.EXTRA_SINGLE_COMMENT_ID, getIntent().getStringExtra(EXTRA_SINGLE_COMMENT_ID));
                     bundle.putString(ViewPostDetailFragment.EXTRA_CONTEXT_NUMBER, getIntent().getStringExtra(EXTRA_CONTEXT_NUMBER));
@@ -982,14 +977,12 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                         morePostsInfoFragment.setArguments(moreBundle);
                         return morePostsInfoFragment;
                     }
-                    bundle.putParcelable(ViewPostDetailFragment.EXTRA_POST_DATA, posts.get(position));
                     bundle.putInt(ViewPostDetailFragment.EXTRA_POST_LIST_POSITION, position);
                 }
             } else {
-                if (post == null) {
+                if (viewPostDetailActivityViewModel.getPost() == null) {
                     bundle.putString(ViewPostDetailFragment.EXTRA_POST_ID, getIntent().getStringExtra(EXTRA_POST_ID));
                 } else {
-                    bundle.putParcelable(ViewPostDetailFragment.EXTRA_POST_DATA, post);
                     bundle.putInt(ViewPostDetailFragment.EXTRA_POST_LIST_POSITION, mPostListPosition);
                 }
                 bundle.putString(ViewPostDetailFragment.EXTRA_SINGLE_COMMENT_ID, getIntent().getStringExtra(EXTRA_SINGLE_COMMENT_ID));

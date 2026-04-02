@@ -132,7 +132,6 @@ import retrofit2.Retrofit;
 
 public class ViewPostDetailFragment extends Fragment implements FragmentCommunicator, PostModerationActionHandler, CommentModerationActionHandler {
 
-    public static final String EXTRA_POST_DATA = "EPD";
     public static final String EXTRA_POST_ID = "EPI";
     public static final String EXTRA_SINGLE_COMMENT_ID = "ESCI";
     public static final String EXTRA_CONTEXT_NUMBER = "ECN";
@@ -179,8 +178,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Inject
     Executor mExecutor;
     @State
-    Post mPost;
-    @State
     boolean isLoadingMoreChildren = false;
     @State
     boolean isRefreshing = false;
@@ -212,6 +209,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private RequestManager mGlide;
     private Locale mLocale;
     private Menu mMenu;
+    private Post mPost;
     private int postListPosition = -1;
     private String mSingleCommentId;
     private String mContextNumber;
@@ -597,7 +595,10 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         }
 
         if (mPost == null) {
-            mPost = getArguments().getParcelable(EXTRA_POST_DATA);
+            mPost = viewPostDetailActivityViewModel.getPost(postListPosition);
+            if (mPost == null) {
+                mPost = viewPostDetailActivityViewModel.getPost();
+            }
         }
 
         if (mPost == null) {
