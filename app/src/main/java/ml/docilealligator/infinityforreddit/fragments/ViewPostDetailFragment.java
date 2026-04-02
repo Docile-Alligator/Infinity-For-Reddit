@@ -239,6 +239,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private FragmentViewPostDetailBinding binding;
     private RecyclerView mCommentsRecyclerView;
     public ViewPostDetailFragmentViewModel viewPostDetailFragmentViewModel;
+    public ViewPostDetailActivityViewModel viewPostDetailActivityViewModel;
 
     public ViewPostDetailFragment() {
         // Required empty public constructor
@@ -571,6 +572,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 this,
                 ViewPostDetailFragmentViewModel.Companion.provideFactory(mOauthRetrofit, mActivity.accessToken, mActivity.accountName)
         ).get(ViewPostDetailFragmentViewModel.class);
+
+        viewPostDetailActivityViewModel = new ViewModelProvider(requireActivity())
+                .get(ViewPostDetailActivityViewModel.class);
 
         bindView();
 
