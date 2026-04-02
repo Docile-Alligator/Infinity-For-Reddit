@@ -79,6 +79,7 @@ import ml.docilealligator.infinityforreddit.readpost.ReadPostsListInterface;
 import ml.docilealligator.infinityforreddit.thing.SaveThing;
 import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.thing.SortTypeSelectionCallback;
+import ml.docilealligator.infinityforreddit.user.UserProfileImagesBatchLoader;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -122,6 +123,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
+    @Inject
+    UserProfileImagesBatchLoader mLoader;
     @PostType
     @State
     int postType;
@@ -291,9 +294,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         viewPostDetailActivityViewModel = new ViewModelProvider(
                 this,
-                ViewPostDetailActivityViewModel.Companion.provideFactory(
-                        mExecutor, mHandler, mRedditDataRoomDatabase, mRetrofit
-                )
+                ViewPostDetailActivityViewModel.Companion.provideFactory(mLoader)
         ).get(ViewPostDetailActivityViewModel.class);
 
         viewPostDetailActivityViewModel.getPosts().observe(this, posts -> onPostsChanged());
