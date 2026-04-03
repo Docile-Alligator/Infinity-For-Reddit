@@ -5,7 +5,7 @@ import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter
 import ml.docilealligator.infinityforreddit.post.Post
 
 class PostDetailCommentsCacheManager(
-    val cacheMap: LinkedHashMap<Post, PostDetailCommentsCache> = AutoRemovalLinkedHashMap<Post, PostDetailCommentsCache>(10)
+    val cacheMap: LinkedHashMap<String, PostDetailCommentsCache> = AutoRemovalLinkedHashMap<String, PostDetailCommentsCache>(10)
 ) {
     fun saveCache(
         post: Post,
@@ -15,7 +15,8 @@ class PostDetailCommentsCacheManager(
         scrollPosition: Int,
         hasMoreChildren: Boolean
     ) {
-        cacheMap[post] = PostDetailCommentsCache(
+        cacheMap[post.id] = PostDetailCommentsCache(
+            post,
             visibleComments,
             children,
             commentFilter,
@@ -25,10 +26,18 @@ class PostDetailCommentsCacheManager(
     }
 
     fun getCache(post: Post): PostDetailCommentsCache? {
-        return cacheMap[post]
+        return cacheMap[post.id]
+    }
+
+    fun getCache(postId: String): PostDetailCommentsCache? {
+        return cacheMap[postId]
     }
 
     fun removeCache(post: Post) {
-        cacheMap.remove(post);
+        cacheMap.remove(post.id);
+    }
+
+    fun removeCache(postId: String) {
+        cacheMap.remove(postId);
     }
 }
