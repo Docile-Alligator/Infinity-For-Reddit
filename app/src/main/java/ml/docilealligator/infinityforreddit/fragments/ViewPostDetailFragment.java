@@ -237,7 +237,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private float swipeActionThreshold;
     private AdjustableTouchSlopItemTouchHelper touchHelper;
     private boolean shouldSwipeBack;
-    private int scrollPosition;
+    private int commentScrollPosition;
     private FragmentViewPostDetailBinding binding;
     private RecyclerView mCommentsRecyclerView;
     public ViewPostDetailFragmentViewModel viewPostDetailFragmentViewModel;
@@ -308,8 +308,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mRespectSubredditRecommendedSortType = mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false);
             viewPostDetailFragmentId = System.currentTimeMillis();
         } else {
-            scrollPosition = savedInstanceState.getInt(SCROLL_POSITION_STATE);
-            restorePosition();
+            commentScrollPosition = savedInstanceState.getInt(SCROLL_POSITION_STATE);
+            restoreCommentScrollPosition();
         }
 
         mGlide = Glide.with(this);
@@ -629,14 +629,14 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 comments = cache.getVisibleComments();
                 children = cache.getChildren();
                 mCommentFilter = cache.getCommentFilter();
-                scrollPosition = cache.getScrollPosition();
+                commentScrollPosition = cache.getScrollPosition();
                 hasMoreChildren = cache.getHasMoreChildren();
                 commentFilterFetched = true;
 
                 postDetailCommentsCacheManager.removeCache(mPost);
 
                 mCommentsAdapter.addComments(comments, hasMoreChildren);
-                restorePosition();
+                restoreCommentScrollPosition();
             } else {
                 if (commentFilterFetched) {
                     fetchCommentsAfterCommentFilterAvailable();
@@ -674,37 +674,13 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         });
     }
 
-    private void restorePosition() {
+    private void restoreCommentScrollPosition() {
         // if the scrollPosition < 0 do nothing
-        if (scrollPosition >= 0) {
-            if (getResources().getBoolean(R.bool.isTablet)) {
-                boolean separatePortrait = mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_PORTRAIT_MODE, true);
-                boolean separateLandscape = mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_LANDSCAPE_MODE, true);
-                if (separatePortrait != separateLandscape) {
-                    if (mCommentsRecyclerView != null) {
-                        //restore the position for commentsadapter
-                        scrollPosition--;
-                        mCommentsRecyclerView.scrollToPosition(scrollPosition);
-                    } else {
-                        // restore the position for binding.postDetailRecyclerViewViewPostDetailFragment
-                        scrollPosition++;
-                        binding.postDetailRecyclerViewViewPostDetailFragment.scrollToPosition(scrollPosition);
-                    }
-                }
+        if (commentScrollPosition >= 0) {
+            if (mCommentsRecyclerView != null) {
+                mCommentsRecyclerView.scrollToPosition(commentScrollPosition);
             } else {
-                if (mSeparatePostAndComments) {
-                    if (mCommentsRecyclerView != null) {
-                        scrollPosition--;
-                        mCommentsRecyclerView.scrollToPosition(scrollPosition);
-                    }
-                } else {
-                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                        if (mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_LANDSCAPE_MODE, true)) {
-                            scrollPosition++;
-                            binding.postDetailRecyclerViewViewPostDetailFragment.scrollToPosition(scrollPosition);
-                        }
-                    }
-                }
+                binding.postDetailRecyclerViewViewPostDetailFragment.scrollToPosition(commentScrollPosition + 1);
             }
         }
     }
@@ -1318,14 +1294,14 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             return;
         }
 
-        updateScrollPosition();
+        updateCommentScrollPosition();
 
         postDetailCommentsCacheManager.saveCache(
                 mPost,
                 comments,
                 children,
                 mCommentFilter,
-                scrollPosition,
+                commentScrollPosition,
                 hasMoreChildren
         );
     }
@@ -1334,19 +1310,18 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         comments = mCommentsAdapter == null ? null : mCommentsAdapter.getVisibleComments();
-        updateScrollPosition();
-        outState.putInt(SCROLL_POSITION_STATE, scrollPosition);
+        updateCommentScrollPosition();
+        outState.putInt(SCROLL_POSITION_STATE, commentScrollPosition);
         Bridge.saveInstanceState(this, outState);
     }
 
-    private void updateScrollPosition() {
+    private void updateCommentScrollPosition() {
         if (mCommentsRecyclerView != null) {
             LinearLayoutManager myLayoutManager = (LinearLayoutManager) mCommentsRecyclerView.getLayoutManager();
-            scrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() : 0;
-
+            commentScrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() : 0;
         } else {
             LinearLayoutManager myLayoutManager = (LinearLayoutManager) binding.postDetailRecyclerViewViewPostDetailFragment.getLayoutManager();
-            scrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() : 0;
+            commentScrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() - 1 : 0;
         }
     }
 
