@@ -631,9 +631,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 mCommentFilter = cache.getCommentFilter();
                 scrollPosition = cache.getScrollPosition();
                 hasMoreChildren = cache.getHasMoreChildren();
-                isLoadingMoreChildren = cache.isLoadingMoreChildren();
-                isRefreshing = cache.isRefreshing();
-                loadMoreChildrenSuccess = cache.getLoadMoreChildrenSuccess();
                 commentFilterFetched = true;
 
                 postDetailCommentsCacheManager.removeCache(mPost);
@@ -1329,10 +1326,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 children,
                 mCommentFilter,
                 scrollPosition,
-                hasMoreChildren,
-                isLoadingMoreChildren,
-                isRefreshing,
-                loadMoreChildrenSuccess
+                hasMoreChildren
         );
     }
 

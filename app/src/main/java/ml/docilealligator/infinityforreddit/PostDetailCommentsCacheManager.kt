@@ -13,20 +13,14 @@ class PostDetailCommentsCacheManager(
         children: ArrayList<String>?,
         commentFilter: CommentFilter?,
         scrollPosition: Int,
-        hasMoreChildren: Boolean,
-        isLoadingMoreChildren: Boolean,
-        isRefreshing: Boolean,
-        loadMoreChildrenSuccess: Boolean
+        hasMoreChildren: Boolean
     ) {
         cacheMap[post] = PostDetailCommentsCache(
             visibleComments,
             children,
             commentFilter,
             scrollPosition,
-            hasMoreChildren,
-            isLoadingMoreChildren,
-            isRefreshing,
-            loadMoreChildrenSuccess
+            hasMoreChildren
         )
     }
 
