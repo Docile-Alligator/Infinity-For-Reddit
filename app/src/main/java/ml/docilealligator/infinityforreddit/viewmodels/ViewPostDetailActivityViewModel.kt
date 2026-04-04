@@ -8,7 +8,7 @@ import ml.docilealligator.infinityforreddit.post.Post
 import ml.docilealligator.infinityforreddit.user.UserProfileImagesBatchLoader
 
 class ViewPostDetailActivityViewModel(
-    val loader: UserProfileImagesBatchLoader
+    private val loader: UserProfileImagesBatchLoader
 ) : ViewModel() {
     var post: Post? = null
 

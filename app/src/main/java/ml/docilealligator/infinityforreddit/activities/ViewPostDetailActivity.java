@@ -125,6 +125,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     Executor mExecutor;
     @Inject
     UserProfileImagesBatchLoader mLoader;
+    @State
+    ArrayList<Post> posts;
     @PostType
     @State
     int postType;
@@ -151,6 +153,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     SortType.Type sortType;
     @State
     SortType.Time sortTime;
+    @State
+    Post post;
     @State
     @LoadingMorePostsStatus
     int mLoadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING;
@@ -298,8 +302,16 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         ).get(ViewPostDetailActivityViewModel.class);
 
         if (savedInstanceState == null) {
-            viewPostDetailActivityViewModel.setPost(getIntent().getParcelableExtra(EXTRA_POST_DATA));
+            this.post = getIntent().getParcelableExtra(EXTRA_POST_DATA);
+            viewPostDetailActivityViewModel.setPost(this.post);
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
+        } else {
+            if (viewPostDetailActivityViewModel.getPost() == null) {
+                viewPostDetailActivityViewModel.setPost(this.post);
+            }
+            if (viewPostDetailActivityViewModel.getPosts() == null) {
+                viewPostDetailActivityViewModel.setPosts(this.posts);
+            }
         }
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(this);
@@ -669,7 +681,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                                     }
                                 });
                             } else {
-                                viewPostDetailActivityViewModel.setPosts(new ArrayList<>(postLinkedHashSet));
+                                this.posts = new ArrayList<>(postLinkedHashSet);
+                                viewPostDetailActivityViewModel.setPosts(this.posts);
                                 handler.post(() -> {
                                     if (changePage) {
                                         binding.viewPager2ViewPostDetailActivity.setCurrentItem(currentPostsSize - 1, false);
@@ -752,7 +765,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                                     }
                                 });
                             } else {
-                                viewPostDetailActivityViewModel.setPosts(new ArrayList<>(postLinkedHashSet));
+                                this.posts = new ArrayList<>(postLinkedHashSet);
+                                viewPostDetailActivityViewModel.setPosts(this.posts);
                                 handler.post(() -> {
                                     if (changePage) {
                                         binding.viewPager2ViewPostDetailActivity.setCurrentItem(currentPostsSize - 1, false);
@@ -799,6 +813,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @Subscribe
     public void onProvidePostListToViewPostDetailActivityEvent(ProvidePostListToViewPostDetailActivityEvent event) {
         if (event.postFragmentId == mPostFragmentId && viewPostDetailActivityViewModel.getPosts() == null) {
+            this.posts = event.posts;
             viewPostDetailActivityViewModel.setPosts(event.posts);
             this.postType = event.postType;
             this.subredditName = event.subredditName;
