@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
@@ -14,15 +12,10 @@ class ViewPostDetailActivityViewModel(
 ) : ViewModel() {
     var post: Post? = null
 
-    private val _posts = MutableLiveData<List<Post>>()
-    val posts: LiveData<List<Post>> = _posts
-
-    fun setPosts(posts: List<Post>) {
-        _posts.postValue(posts);
-    }
+    var posts: List<Post>? = null
 
     fun getPost(index: Int): Post? {
-        return _posts.value?.getOrNull(index)
+        return posts?.getOrNull(index)
     }
 
     fun loadAuthorImages(comments: MutableList<Comment?>, loadIconListener: LoadIconListener) {

@@ -297,8 +297,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                 ViewPostDetailActivityViewModel.Companion.provideFactory(mLoader)
         ).get(ViewPostDetailActivityViewModel.class);
 
-        viewPostDetailActivityViewModel.getPosts().observe(this, posts -> onPostsChanged());
-
         if (savedInstanceState == null) {
             viewPostDetailActivityViewModel.setPost(getIntent().getParcelableExtra(EXTRA_POST_DATA));
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
@@ -307,15 +305,11 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         mSectionsPagerAdapter = new SectionsPagerAdapter(this);
         binding.viewPager2ViewPostDetailActivity.setAdapter(mSectionsPagerAdapter);
 
-        if (swipeBetweenPosts && viewPostDetailActivityViewModel.getPosts().getValue() == null && mPostFragmentId > 0) {
+        if (swipeBetweenPosts && viewPostDetailActivityViewModel.getPosts() == null && mPostFragmentId > 0) {
             EventBus.getDefault().post(new NeedForPostListFromPostFragmentEvent(mPostFragmentId));
         }
 
         checkNewAccountAndBindView(savedInstanceState);
-    }
-
-    private void onPostsChanged() {
-        mSectionsPagerAdapter.notifyDataSetChanged();
     }
 
     public void setTitle(String title) {
@@ -435,7 +429,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         binding.viewPager2ViewPostDetailActivity.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                List<Post> posts = viewPostDetailActivityViewModel.getPosts().getValue();
+                List<Post> posts = viewPostDetailActivityViewModel.getPosts();
                 if (posts != null && position > posts.size() - 5) {
                     fetchMorePosts(false);
                 }
@@ -589,7 +583,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             mExecutor.execute(() -> {
                 RedditAPI api = (accountName.equals(Account.ANONYMOUS_ACCOUNT) ? mRetrofit : mOauthRetrofit).create(RedditAPI.class);
                 Call<String> call;
-                List<Post> posts = viewPostDetailActivityViewModel.getPosts().getValue();
+                List<Post> posts = viewPostDetailActivityViewModel.getPosts();
                 String afterKey = posts == null || posts.isEmpty() ? null : posts.get(posts.size() - 1).getFullName();
                 switch (postType) {
                     case PostType.SUBREDDIT:
@@ -712,7 +706,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         } else {
             mExecutor.execute(() -> {
                 long lastItem = 0;
-                List<Post> posts = viewPostDetailActivityViewModel.getPosts().getValue();
+                List<Post> posts = viewPostDetailActivityViewModel.getPosts();
                 if (posts != null && !posts.isEmpty()) {
                     lastItem = mRedditDataRoomDatabase.readPostDao().getReadPost(posts.get(posts.size() - 1).getId()).getTime();
                 }
@@ -804,7 +798,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
     @Subscribe
     public void onProvidePostListToViewPostDetailActivityEvent(ProvidePostListToViewPostDetailActivityEvent event) {
-        if (event.postFragmentId == mPostFragmentId && viewPostDetailActivityViewModel.getPosts().getValue() == null) {
+        if (event.postFragmentId == mPostFragmentId && viewPostDetailActivityViewModel.getPosts() == null) {
             viewPostDetailActivityViewModel.setPosts(event.posts);
             this.postType = event.postType;
             this.subredditName = event.subredditName;
@@ -963,7 +957,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         public Fragment createFragment(int position) {
             ViewPostDetailFragment fragment = new ViewPostDetailFragment();
             Bundle bundle = new Bundle();
-            List<Post> posts = viewPostDetailActivityViewModel.getPosts().getValue();
+            List<Post> posts = viewPostDetailActivityViewModel.getPosts();
             if (posts != null) {
                 if (mPostListPosition == position && viewPostDetailActivityViewModel.getPost() != null) {
                     bundle.putInt(ViewPostDetailFragment.EXTRA_POST_LIST_POSITION, position);
@@ -996,7 +990,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         @Override
         public int getItemCount() {
-            List<Post> posts = viewPostDetailActivityViewModel.getPosts().getValue();
+            List<Post> posts = viewPostDetailActivityViewModel.getPosts();
             return posts == null ? 1 : posts.size() + 1;
         }
 
@@ -1014,7 +1008,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         @Nullable
         MorePostsInfoFragment getMorePostsInfoFragment() {
-            List<Post> posts = viewPostDetailActivityViewModel.getPosts().getValue();
+            List<Post> posts = viewPostDetailActivityViewModel.getPosts();
             if (posts == null || mFragmentManager == null) {
                 return null;
             }
