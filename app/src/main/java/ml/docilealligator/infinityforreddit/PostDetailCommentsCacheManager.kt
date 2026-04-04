@@ -25,19 +25,21 @@ class PostDetailCommentsCacheManager(
         )
     }
 
-    fun getCache(post: Post): PostDetailCommentsCache? {
-        return cacheMap[post.id]
+    fun getCache(post: Post?): PostDetailCommentsCache? {
+        return cacheMap[post?.id]
     }
 
-    fun getCache(postId: String): PostDetailCommentsCache? {
+    fun getCache(postId: String?): PostDetailCommentsCache? {
         return cacheMap[postId]
     }
 
-    fun removeCache(post: Post) {
-        cacheMap.remove(post.id);
+    fun removeCache(post: Post?) {
+        post?.let {
+            cacheMap.remove(it.id);
+        }
     }
 
-    fun removeCache(postId: String) {
+    fun removeCache(postId: String?) {
         cacheMap.remove(postId);
     }
 }
