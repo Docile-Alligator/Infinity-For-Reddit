@@ -1373,14 +1373,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             });
 
             upvoteButton.setOnClickListener(view -> {
-                if (mPost.isArchived()) {
-                    Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                    Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
-                    return;
+                if (!Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
+                    if (mPost.isArchived()) {
+                        Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
 
                 ColorStateList previousUpvoteButtonIconTint = upvoteButton.getIconTint();
@@ -1411,9 +1408,17 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     scoreTextView.setTextColor(mPostIconAndInfoColor);
                 }
 
-                if (!mHideTheNumberOfVotes) {
-                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                            mPost.getScore() + mPost.getVoteType()));
+                if (Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
+                    ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                            mPost.getId(), ReadPostType.ANONYMOUS_UPVOTED_POSTS,
+                            ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences));
+                    mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
+                    return;
+                } else {
+                    if (!mHideTheNumberOfVotes) {
+                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                mPost.getScore() + mPost.getVoteType()));
+                    }
                 }
 
                 VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingWithoutPositionListener() {
@@ -1465,14 +1470,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             });
 
             downvoteButton.setOnClickListener(view -> {
-                if (mPost.isArchived()) {
-                    Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                    Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
-                    return;
+                if (!Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
+                    if (mPost.isArchived()) {
+                        Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
 
                 ColorStateList previousUpvoteButtonIconTint = upvoteButton.getIconTint();
@@ -1503,9 +1505,17 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     scoreTextView.setTextColor(mPostIconAndInfoColor);
                 }
 
-                if (!mHideTheNumberOfVotes) {
-                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                            mPost.getScore() + mPost.getVoteType()));
+                if (Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
+                    ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                            mPost.getId(), ReadPostType.ANONYMOUS_DOWNVOTED_POSTS,
+                            ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences));
+                    mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
+                    return;
+                } else {
+                    if (!mHideTheNumberOfVotes) {
+                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                mPost.getScore() + mPost.getVoteType()));
+                    }
                 }
 
                 VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingWithoutPositionListener() {
