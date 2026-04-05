@@ -6,7 +6,6 @@ import android.app.job.JobScheduler;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Build;
@@ -18,7 +17,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +24,7 @@ import androidx.annotation.OptIn;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.PlaybackParameters;
 import androidx.media3.common.Player;
@@ -58,6 +57,7 @@ import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.viewmodels.ViewGalleryViewModel;
 import okhttp3.OkHttpClient;
 
 public class ViewRedditGalleryVideoFragment extends Fragment {
@@ -92,6 +92,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     @Inject
     SimpleCache mSimpleCache;
     private ViewRedditGalleryVideoFragmentBindingAdapter binding;
+    ViewGalleryViewModel viewGalleryViewModel;
 
     public ViewRedditGalleryVideoFragment() {
         // Required empty public constructor
@@ -117,22 +118,6 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         galleryVideo = getArguments().getParcelable(EXTRA_REDDIT_GALLERY_VIDEO);
         subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
         isNsfw = getArguments().getBoolean(EXTRA_IS_NSFW, false);
-
-        if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.VIDEO_PLAYER_IGNORE_NAV_BAR, false)) {
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || getResources().getBoolean(R.bool.isTablet)) {
-                //Set player controller bottom margin in order to display it above the navbar
-                int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-                LinearLayout controllerLinearLayout = binding.getRoot().findViewById(R.id.linear_layout_exo_playback_control_view);
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
-                params.bottomMargin = getResources().getDimensionPixelSize(resourceId);
-            } else {
-                //Set player controller right margin in order to display it above the navbar
-                int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-                LinearLayout controllerLinearLayout = binding.getRoot().findViewById(R.id.linear_layout_exo_playback_control_view);
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
-                params.rightMargin = getResources().getDimensionPixelSize(resourceId);
-            }
-        }
 
         binding.getPlayerView().setControllerVisibilityListener((PlayerView.ControllerVisibilityListener) visibility -> {
             switch (visibility) {
@@ -189,6 +174,20 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
                 changePlaybackSpeed();
             });
         }
+
+        viewGalleryViewModel = new ViewModelProvider(requireActivity()).get(ViewGalleryViewModel.class);
+        viewGalleryViewModel.getInsets().observe(getViewLifecycleOwner(), insets -> {
+            ViewGroup.LayoutParams lp = binding.getController().getLayoutParams();
+            if (lp instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) lp;
+
+                marginParams.bottomMargin = insets.bottom;
+                marginParams.setMarginStart(insets.left);
+                marginParams.setMarginEnd(insets.right);
+
+                binding.getController().setLayoutParams(marginParams);
+            }
+        });
 
         return binding.getRoot();
     }
@@ -295,17 +294,17 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
             isMute = savedInstanceState.getBoolean(IS_MUTE_STATE);
             if (isMute) {
                 player.setVolume(0f);
-                binding.getMuteButton().setImageResource(R.drawable.ic_mute_24dp);
+                binding.getMuteButton().setIconResource(R.drawable.ic_mute_24dp);
             } else {
                 player.setVolume(1f);
-                binding.getMuteButton().setImageResource(R.drawable.ic_unmute_24dp);
+                binding.getMuteButton().setIconResource(R.drawable.ic_unmute_24dp);
             }
         } else if (muteVideo) {
             isMute = true;
             player.setVolume(0f);
-            binding.getMuteButton().setImageResource(R.drawable.ic_mute_24dp);
+            binding.getMuteButton().setIconResource(R.drawable.ic_mute_24dp);
         } else {
-            binding.getMuteButton().setImageResource(R.drawable.ic_unmute_24dp);
+            binding.getMuteButton().setIconResource(R.drawable.ic_unmute_24dp);
         }
 
         MaterialButton playPauseButton = binding.getRoot().findViewById(R.id.exo_play_pause_button_exo_playback_control_view);
@@ -338,11 +337,11 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
                                 if (isMute) {
                                     isMute = false;
                                     player.setVolume(1f);
-                                    binding.getMuteButton().setImageResource(R.drawable.ic_unmute_24dp);
+                                    binding.getMuteButton().setIconResource(R.drawable.ic_unmute_24dp);
                                 } else {
                                     isMute = true;
                                     player.setVolume(0f);
-                                    binding.getMuteButton().setImageResource(R.drawable.ic_mute_24dp);
+                                    binding.getMuteButton().setIconResource(R.drawable.ic_mute_24dp);
                                 }
                             });
                             break;

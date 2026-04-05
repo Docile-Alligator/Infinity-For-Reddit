@@ -19,15 +19,21 @@ import android.os.Handler;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -53,12 +59,12 @@ import ml.docilealligator.infinityforreddit.font.FontFamily;
 import ml.docilealligator.infinityforreddit.font.FontStyle;
 import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
-import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryImageOrGifFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryVideoFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.viewmodels.ViewGalleryViewModel;
 
 public class ViewRedditGalleryActivity extends AppCompatActivity implements SetAsWallpaperCallback, CustomFontReceiver {
 
@@ -79,12 +85,19 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     private boolean useBottomAppBar;
     private boolean isActionBarHidden = false;
     private ActivityViewRedditGalleryBinding binding;
+    ViewGalleryViewModel viewGalleryViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            getWindow().setDecorFitsSystemWindows(false);
+        } else {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
 
         boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
         int systemThemeType = Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
@@ -152,6 +165,17 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
         } else {
             getSupportActionBar().hide();
         }
+
+        viewGalleryViewModel = new ViewModelProvider(this).get(ViewGalleryViewModel.class);
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
+            @NonNull
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                viewGalleryViewModel.setInsets(Utils.getInsets(insets, false, false));
+                return WindowInsetsCompat.CONSUMED;
+            }
+        });
 
         post = getIntent().getParcelableExtra(EXTRA_POST);
         if (post == null) {
@@ -325,7 +349,16 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
         @Override
         public Fragment getItem(int position) {
             Post.Gallery media = gallery.get(position);
-            if (media.mediaType == Post.Gallery.TYPE_VIDEO) {
+            ViewRedditGalleryVideoFragment fragment = new ViewRedditGalleryVideoFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(ViewRedditGalleryVideoFragment.EXTRA_REDDIT_GALLERY_VIDEO, media);
+            bundle.putString(ViewRedditGalleryVideoFragment.EXTRA_SUBREDDIT_NAME, subredditName);
+            bundle.putInt(ViewRedditGalleryVideoFragment.EXTRA_INDEX, position);
+            bundle.putInt(ViewRedditGalleryVideoFragment.EXTRA_MEDIA_COUNT, gallery.size());
+            bundle.putBoolean(ViewRedditGalleryVideoFragment.EXTRA_IS_NSFW, isNsfw);
+            fragment.setArguments(bundle);
+            return fragment;
+            /*if (media.mediaType == Post.Gallery.TYPE_VIDEO) {
                 ViewRedditGalleryVideoFragment fragment = new ViewRedditGalleryVideoFragment();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(ViewRedditGalleryVideoFragment.EXTRA_REDDIT_GALLERY_VIDEO, media);
@@ -345,7 +378,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
                 bundle.putBoolean(ViewRedditGalleryImageOrGifFragment.EXTRA_IS_NSFW, false);
                 fragment.setArguments(bundle);
                 return fragment;
-            }
+            }*/
         }
 
         @Override

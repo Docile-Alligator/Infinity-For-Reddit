@@ -31,6 +31,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -69,6 +70,7 @@ import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.viewmodels.ViewGalleryViewModel;
 
 public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
@@ -95,6 +97,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     private boolean isFallback = false;
     private Handler handler;
     private FragmentViewRedditGalleryImageOrGifBinding binding;
+    ViewGalleryViewModel viewGalleryViewModel;
 
     public ViewRedditGalleryImageOrGifFragment() {
         // Required empty public constructor
@@ -299,6 +302,20 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         } else {
             binding.captionLayoutViewRedditGalleryImageOrGifFragment.setVisibility(View.GONE);
         }
+
+        viewGalleryViewModel = new ViewModelProvider(requireActivity()).get(ViewGalleryViewModel.class);
+        viewGalleryViewModel.getInsets().observe(getViewLifecycleOwner(), insets -> {
+            ViewGroup.LayoutParams lp = binding.bottomNavigationViewRedditGalleryImageOrGifFragment.getLayoutParams();
+            if (lp instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) lp;
+
+                marginParams.bottomMargin = insets.bottom;
+                marginParams.setMarginStart(insets.left);
+                marginParams.setMarginEnd(insets.right);
+
+                binding.bottomNavigationViewRedditGalleryImageOrGifFragment.setLayoutParams(marginParams);
+            }
+        });
 
         return binding.getRoot();
     }
