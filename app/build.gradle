@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    compileSdk 35
+    compileSdk 36
     defaultConfig {
         applicationId "ml.docilealligator.infinityforreddit"
         minSdk 21
@@ -73,7 +73,7 @@ dependencies {
 /** AndroidX **/
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'androidx.biometric:biometric:1.2.0-alpha05'
-    implementation 'androidx.browser:browser:1.8.0'
+    implementation 'androidx.browser:browser:1.9.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

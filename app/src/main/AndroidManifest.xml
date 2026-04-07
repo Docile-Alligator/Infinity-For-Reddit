@@ -37,6 +37,11 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
         <activity
+            android:name=".activities.AppAuthLoginActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activities.CopyMultiRedditActivity"
             android:exported="false"
             android:parentActivityName=".activities.MainActivity"

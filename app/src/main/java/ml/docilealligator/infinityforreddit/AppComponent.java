@@ -8,6 +8,7 @@ import dagger.BindsInstance;
 import dagger.Component;
 import ml.docilealligator.infinityforreddit.activities.AccountPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.AccountSavedThingActivity;
+import ml.docilealligator.infinityforreddit.activities.AppAuthLoginActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentFilterPreferenceActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentFilterUsageListingActivity;
@@ -320,6 +321,8 @@ public interface AppComponent {
     void inject(ProxyPreferenceFragment proxyPreferenceFragment);
 
     void inject(CopyMultiRedditActivity copyMultiRedditActivity);
+
+    void inject(AppAuthLoginActivity appAuthLoginActivity);
 
     @Component.Factory
     interface Factory {

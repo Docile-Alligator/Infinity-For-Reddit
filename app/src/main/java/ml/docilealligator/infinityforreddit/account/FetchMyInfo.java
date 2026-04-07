@@ -21,10 +21,10 @@ import retrofit2.Retrofit;
 
 public class FetchMyInfo {
 
-    public static void fetchAccountInfo(final Executor executor, final Handler handler, final Retrofit retrofit,
+    public static void fetchAccountInfo(final Executor executor, final Handler handler, final Retrofit oauthRetrofit,
                                         final RedditDataRoomDatabase redditDataRoomDatabase,
                                         final String accessToken, final FetchMyInfoListener fetchMyInfoListener) {
-        retrofit.create(RedditAPI.class).getMyInfo(APIUtils.getOAuthHeader(accessToken)).enqueue(new Callback<>() {
+        oauthRetrofit.create(RedditAPI.class).getMyInfo(APIUtils.getOAuthHeader(accessToken)).enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {

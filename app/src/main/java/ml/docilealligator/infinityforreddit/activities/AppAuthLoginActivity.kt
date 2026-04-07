@@ -1,0 +1,225 @@
+package ml.docilealligator.infinityforreddit.activities
+
+import android.content.Intent
+import android.content.SharedPreferences
+import android.os.Build
+import android.os.Bundle
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
+import androidx.browser.auth.AuthTabIntent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import ml.docilealligator.infinityforreddit.Infinity
+import ml.docilealligator.infinityforreddit.R
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
+import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButton
+import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
+import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
+import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
+import ml.docilealligator.infinityforreddit.events.NewUserLoggedInEvent
+import ml.docilealligator.infinityforreddit.utils.APIUtils
+import ml.docilealligator.infinityforreddit.viewmodels.AppAuthLoginViewModel
+import ml.docilealligator.infinityforreddit.viewmodels.AppAuthLoginViewModel.Companion.provideFactory
+import org.greenrobot.eventbus.EventBus
+import retrofit2.Retrofit
+import java.util.concurrent.Executor
+import javax.inject.Inject
+import javax.inject.Named
+
+
+class AppAuthLoginActivity : BaseActivity() {
+    @Inject
+    @Named("no_oauth")
+    lateinit var mRetrofit: Retrofit
+    @Inject
+    @Named("oauth")
+    lateinit var mOauthRetrofit: Retrofit
+    @Inject
+    lateinit var mRedditDataRoomDatabase: RedditDataRoomDatabase
+    @Inject
+    @Named("default")
+    lateinit var mSharedPreferences: SharedPreferences
+    @Inject
+    @Named("post_layout")
+    lateinit var mPostLayoutSharedPreferences: SharedPreferences
+    @Inject
+    @Named("current_account")
+    lateinit var mCurrentAccountSharedPreferences: SharedPreferences
+    @Inject
+    lateinit var mCustomThemeWrapper: CustomThemeWrapper
+    @Inject
+    lateinit var mExecutor: Executor
+
+    lateinit var viewModel: AppAuthLoginViewModel
+
+    private val mLauncher: ActivityResultLauncher<Intent?> =
+        AuthTabIntent.registerActivityResultLauncher(this, this::handleAuthResult)
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        ((application) as Infinity).appComponent.inject(this)
+
+        super.onCreate(savedInstanceState)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (isImmersiveInterfaceRespectForcedEdgeToEdge()) {
+                enableEdgeToEdge()
+            }
+        }
+
+        viewModel = ViewModelProvider.create(
+            this,
+            provideFactory(mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mCurrentAccountSharedPreferences)
+        )[AppAuthLoginViewModel::class.java]
+
+        if (savedInstanceState == null) {
+            launchAuthTab()
+        }
+
+        val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
+        windowInsetsController.isAppearanceLightStatusBars = customThemeWrapper.isLightStatusBar
+
+        setContent {
+            AppTheme(customThemeWrapper.themeType) {
+                val context = LocalContext.current
+                val scrollBehavior = enterAlwaysScrollBehavior()
+                val accountFetched by viewModel.accountFetched.collectAsStateWithLifecycle()
+                val errorMessageId by viewModel.errorMessageId.collectAsStateWithLifecycle()
+
+                LaunchedEffect(accountFetched) {
+                    if (accountFetched) {
+                        EventBus.getDefault().post(NewUserLoggedInEvent())
+                        finish()
+                    }
+                }
+
+                Scaffold(
+                    topBar = {
+                        ThemedTopAppBar(
+                            titleStringResId = R.string.login_activity_label,
+                            isImmersiveInterfaceEnabled = isImmersiveInterfaceEnabled,
+                            scrollBehavior = scrollBehavior,
+                            windowInsetsController = windowInsetsController
+                        ) {
+                            finish()
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .nestedScroll(scrollBehavior.nestedScrollConnection)
+                        .imePadding(),
+                    contentWindowInsets = if (isImmersiveInterfaceEnabled) WindowInsets.safeDrawing else WindowInsets.navigationBars.only(WindowInsetsSides.Bottom)
+                ) { innerPadding ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color(LocalAppTheme.current.backgroundColor))
+                            .padding(innerPadding)
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        CustomFilledButton(R.string.login) {
+                            viewModel.clearError()
+                            launchAuthTab()
+                        }
+
+                        CustomFilledButton(R.string.login_using_chrome_custom_tab) {
+                            startActivity(Intent(context, LoginChromeCustomTabActivity::class.java))
+                            finish()
+                        }
+
+                        CustomFilledButton(R.string.login_using_webview) {
+                            startActivity(Intent(context, LoginActivity::class.java))
+                            finish()
+                        }
+
+                        errorMessageId?.let {
+                            PrimaryText(
+                                stringResource(R.string.login_failed_error),
+                                textAlign = TextAlign.Center
+                            )
+
+                            PrimaryText(
+                                it,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    override fun getDefaultSharedPreferences(): SharedPreferences {
+        return mSharedPreferences
+    }
+
+    override fun getCurrentAccountSharedPreferences(): SharedPreferences {
+        return mCurrentAccountSharedPreferences
+    }
+
+    override fun getCustomThemeWrapper(): CustomThemeWrapper {
+        return mCustomThemeWrapper
+    }
+
+    override fun applyCustomTheme() {
+
+    }
+
+    private fun launchAuthTab() {
+        val baseUri = APIUtils.OAUTH_URL.toUri()
+        val uriBuilder = baseUri.buildUpon()
+        uriBuilder.appendQueryParameter(APIUtils.CLIENT_ID_KEY, APIUtils.CLIENT_ID)
+        uriBuilder.appendQueryParameter(APIUtils.RESPONSE_TYPE_KEY, APIUtils.RESPONSE_TYPE)
+        uriBuilder.appendQueryParameter(APIUtils.STATE_KEY, APIUtils.STATE)
+        uriBuilder.appendQueryParameter(APIUtils.REDIRECT_URI_KEY, APIUtils.REDIRECT_URI)
+        uriBuilder.appendQueryParameter(APIUtils.DURATION_KEY, APIUtils.DURATION)
+        uriBuilder.appendQueryParameter(APIUtils.SCOPE_KEY, APIUtils.SCOPE)
+
+        val authTabIntent = AuthTabIntent.Builder().build()
+        authTabIntent.launch(mLauncher, uriBuilder.build(), "infinity")
+    }
+
+    private fun handleAuthResult(result: AuthTabIntent.AuthResult) {
+        result.resultCode
+        when (result.resultCode) {
+            AuthTabIntent.RESULT_OK -> result.resultUri?.let {
+                viewModel.setUpAccount(it)
+            }
+            AuthTabIntent.RESULT_CANCELED,
+            AuthTabIntent.RESULT_VERIFICATION_FAILED -> viewModel.setError(R.string.login_failed_auth_result_verification_failed)
+            AuthTabIntent.RESULT_VERIFICATION_TIMED_OUT -> viewModel.setError(R.string.login_failed_auth_result_verification_timed_out)
+            else -> viewModel.setError(R.string.login_failed_auth_result_unknown_error)
+        }
+    }
+}

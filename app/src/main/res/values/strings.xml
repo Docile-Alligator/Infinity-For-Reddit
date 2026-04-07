@@ -1111,6 +1111,15 @@
 
     <string name="login_activity_2fa_prompt">2-factor authentication: &lt;password&gt;:&lt;2FA code&gt;.\nExample: yourpass:123456\nGoogle login or having trouble login: click the bottom right button.</string>
     <string name="login_activity_internet_disconnected_error">No Internet Connection</string>
+    <string name="login">Log in</string>
+    <string name="login_using_chrome_custom_tab">Log in using a Chrome Custom Tab</string>
+    <string name="login_using_webview">Log in using a WebView (legacy)</string>
+    <string name="login_failed_error">Login failed. Error:</string>
+    <string name="login_failed_auth_result_verification_failed">Verification failed.</string>
+    <string name="login_failed_auth_result_verification_timed_out">Verification timed out.</string>
+    <string name="login_failed_auth_result_unknown_error">Unknown error.</string>
+    <string name="login_failed_result_url_error">No code found in the result URL</string>
+    <string name="login_failed_result_url_unknown_error">No code found in the result URL. No error provided.</string>
 
     <string name="block_user">Block User</string>
     <string name="block_user_success">Blocked</string>
@@ -1241,7 +1250,7 @@
     <string name="choose_a_user">Choose a user</string>
 
     <string name="open_login_page">Open login page</string>
-    <string name="custom_tab_not_available">Chrome custom tab not available. Is Chrome or Firefox installed?</string>
+    <string name="custom_tab_not_available">Chrome custom tab not available. Is Chrome installed?</string>
 
     <string name="vote">Vote</string>
 
