@@ -12,9 +12,11 @@ import androidx.browser.auth.AuthTabIntent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
@@ -179,19 +181,14 @@ class AppAuthLoginActivity : BaseActivity() {
                             )
                         }
 
-                        CustomFilledButton(R.string.login) {
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        CustomFilledButton(
+                            modifier = Modifier.padding(bottom = 16.dp),
+                            stringResId = R.string.login
+                        ) {
                             mViewModel.clearError()
                             launchAuthTab()
-                        }
-
-                        CustomFilledButton(R.string.login_using_chrome_custom_tab) {
-                            startActivity(Intent(context, LoginChromeCustomTabActivity::class.java))
-                            finish()
-                        }
-
-                        CustomFilledButton(R.string.login_using_webview) {
-                            startActivity(Intent(context, LoginActivity::class.java))
-                            finish()
                         }
 
                         errorMessageId?.let {
@@ -204,6 +201,18 @@ class AppAuthLoginActivity : BaseActivity() {
                                 it,
                                 textAlign = TextAlign.Center
                             )
+                        }
+
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        CustomFilledButton(stringResId = R.string.login_using_chrome_custom_tab) {
+                            startActivity(Intent(context, LoginChromeCustomTabActivity::class.java))
+                            finish()
+                        }
+
+                        CustomFilledButton(stringResId = R.string.login_using_webview) {
+                            startActivity(Intent(context, LoginActivity::class.java))
+                            finish()
                         }
                     }
                 }
@@ -237,7 +246,7 @@ class AppAuthLoginActivity : BaseActivity() {
         uriBuilder.appendQueryParameter(APIUtils.DURATION_KEY, APIUtils.DURATION)
         uriBuilder.appendQueryParameter(APIUtils.SCOPE_KEY, APIUtils.SCOPE)
 
-        val authTabIntent = AuthTabIntent.Builder().build()
+        val authTabIntent = AuthTabIntent.Builder().setEphemeralBrowsingEnabled(true).build()
         authTabIntent.launch(mLauncher, uriBuilder.build(), "infinity")
     }
 

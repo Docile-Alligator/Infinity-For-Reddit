@@ -150,6 +150,12 @@ public class LoginActivity extends BaseActivity {
 
         binding.webviewLoginActivity.getSettings().setJavaScriptEnabled(true);
 
+        String userAgent = binding.webviewLoginActivity.getSettings().getUserAgentString();
+        String chromeUserAgent = userAgent
+                .replace("; wv)", ")")
+                .replace("Version/4.0 ", "");
+        binding.webviewLoginActivity.getSettings().setUserAgentString(chromeUserAgent);
+
         Uri baseUri = Uri.parse(APIUtils.OAUTH_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
         uriBuilder.appendQueryParameter(APIUtils.CLIENT_ID_KEY, APIUtils.CLIENT_ID);
