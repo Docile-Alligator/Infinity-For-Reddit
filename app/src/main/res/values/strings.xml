@@ -1112,8 +1112,10 @@
     <string name="login_activity_2fa_prompt">2-factor authentication: &lt;password&gt;:&lt;2FA code&gt;.\nExample: yourpass:123456\nGoogle login or having trouble login: click the bottom right button.</string>
     <string name="login_activity_internet_disconnected_error">No Internet Connection</string>
     <string name="login">Log in</string>
-    <string name="login_using_chrome_custom_tab">Log in using a Chrome Custom Tab</string>
-    <string name="login_using_webview">Log in using a WebView (legacy)</string>
+    <string name="login_using_different_method">You can try a different login method if this one doesn’t work.</string>
+    <string name="login_using_chrome_custom_tab">Chrome Custom Tab</string>
+    <string name="login_using_webview">WebView (legacy)</string>
+    <string name="login_chrome_required">You must have Chrome browser installed.</string>
     <string name="login_failed_error">Login failed. Error:</string>
     <string name="login_failed_auth_result_verification_failed">Verification failed.</string>
     <string name="login_failed_auth_result_verification_timed_out">Verification timed out.</string>

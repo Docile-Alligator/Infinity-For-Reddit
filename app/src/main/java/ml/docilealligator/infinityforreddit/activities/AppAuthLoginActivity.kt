@@ -5,13 +5,16 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.text.util.Linkify
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
 import androidx.browser.auth.AuthTabIntent
+import androidx.browser.customtabs.CustomTabsClient
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -58,6 +61,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
 import ml.docilealligator.infinityforreddit.events.NewUserLoggedInEvent
 import ml.docilealligator.infinityforreddit.extensions.linkify
 import ml.docilealligator.infinityforreddit.utils.APIUtils
+import ml.docilealligator.infinityforreddit.utils.getChromeCustomTabPackageName
 import ml.docilealligator.infinityforreddit.viewmodels.AppAuthLoginViewModel
 import ml.docilealligator.infinityforreddit.viewmodels.AppAuthLoginViewModel.Companion.provideFactory
 import org.greenrobot.eventbus.EventBus
@@ -205,14 +209,26 @@ class AppAuthLoginActivity : BaseActivity() {
 
                         Spacer(modifier = Modifier.weight(1f))
 
-                        CustomFilledButton(stringResId = R.string.login_using_chrome_custom_tab) {
-                            startActivity(Intent(context, LoginChromeCustomTabActivity::class.java))
-                            finish()
-                        }
+                        PrimaryText(
+                            stringResource(R.string.login_using_different_method)
+                        )
 
-                        CustomFilledButton(stringResId = R.string.login_using_webview) {
-                            startActivity(Intent(context, LoginActivity::class.java))
-                            finish()
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                            CustomFilledButton(stringResId = R.string.login_using_chrome_custom_tab) {
+                                if (getChromeCustomTabPackageName(context) == null) {
+                                    Toast.makeText(context, R.string.login_chrome_required, Toast.LENGTH_SHORT).show()
+                                } else {
+                                    startActivity(Intent(context, LoginChromeCustomTabActivity::class.java))
+                                    finish()
+                                }
+                            }
+
+                            CustomFilledButton(stringResId = R.string.login_using_webview) {
+                                startActivity(Intent(context, LoginActivity::class.java))
+                                finish()
+                            }
                         }
                     }
                 }
@@ -237,17 +253,25 @@ class AppAuthLoginActivity : BaseActivity() {
     }
 
     private fun launchAuthTab() {
-        val baseUri = APIUtils.OAUTH_URL.toUri()
-        val uriBuilder = baseUri.buildUpon()
-        uriBuilder.appendQueryParameter(APIUtils.CLIENT_ID_KEY, APIUtils.CLIENT_ID)
-        uriBuilder.appendQueryParameter(APIUtils.RESPONSE_TYPE_KEY, APIUtils.RESPONSE_TYPE)
-        uriBuilder.appendQueryParameter(APIUtils.STATE_KEY, APIUtils.STATE)
-        uriBuilder.appendQueryParameter(APIUtils.REDIRECT_URI_KEY, APIUtils.REDIRECT_URI)
-        uriBuilder.appendQueryParameter(APIUtils.DURATION_KEY, APIUtils.DURATION)
-        uriBuilder.appendQueryParameter(APIUtils.SCOPE_KEY, APIUtils.SCOPE)
+        getChromeCustomTabPackageName(this)?.let {
+            if (!CustomTabsClient.isAuthTabSupported(this, it)) {
+                startActivity(Intent(this, LoginActivity::class.java))
+                finish()
+                return
+            }
 
-        val authTabIntent = AuthTabIntent.Builder().setEphemeralBrowsingEnabled(true).build()
-        authTabIntent.launch(mLauncher, uriBuilder.build(), "infinity")
+            val baseUri = APIUtils.OAUTH_URL.toUri()
+            val uriBuilder = baseUri.buildUpon()
+            uriBuilder.appendQueryParameter(APIUtils.CLIENT_ID_KEY, APIUtils.CLIENT_ID)
+            uriBuilder.appendQueryParameter(APIUtils.RESPONSE_TYPE_KEY, APIUtils.RESPONSE_TYPE)
+            uriBuilder.appendQueryParameter(APIUtils.STATE_KEY, APIUtils.STATE)
+            uriBuilder.appendQueryParameter(APIUtils.REDIRECT_URI_KEY, APIUtils.REDIRECT_URI)
+            uriBuilder.appendQueryParameter(APIUtils.DURATION_KEY, APIUtils.DURATION)
+            uriBuilder.appendQueryParameter(APIUtils.SCOPE_KEY, APIUtils.SCOPE)
+
+            val authTabIntent = AuthTabIntent.Builder().setEphemeralBrowsingEnabled(true).build()
+            authTabIntent.launch(mLauncher, uriBuilder.build(), "infinity")
+        }
     }
 
     private fun handleAuthResult(result: AuthTabIntent.AuthResult) {

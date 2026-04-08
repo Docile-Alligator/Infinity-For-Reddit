@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import static ml.docilealligator.infinityforreddit.utils.UtilsKt.getChromeCustomTabPackageName;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -82,7 +84,7 @@ public class LoginActivity extends BaseActivity {
     @Inject
     Executor mExecutor;
     private String authCode;
-    private boolean isAgreeToUserAgreement = false;
+    private boolean isAgreeToUserAgreement = true;
     private ActivityLoginBinding binding;
 
     @Override
@@ -172,9 +174,13 @@ public class LoginActivity extends BaseActivity {
         });
 
         binding.fabLoginActivity.setOnClickListener(view -> {
-            Intent intent = new Intent(this, LoginChromeCustomTabActivity.class);
-            startActivity(intent);
-            finish();
+            if (getChromeCustomTabPackageName(this) == null) {
+                Toast.makeText(this, R.string.login_chrome_required, Toast.LENGTH_SHORT).show();
+            } else {
+                Intent intent = new Intent(this, LoginChromeCustomTabActivity.class);
+                startActivity(intent);
+                finish();
+            }
         });
 
         CookieManager.getInstance().removeAllCookies(aBoolean -> {
