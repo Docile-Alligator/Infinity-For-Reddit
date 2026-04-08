@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.text.util.Linkify
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.ActivityResultLauncher
@@ -19,17 +20,23 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -41,11 +48,13 @@ import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomAlert
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButton
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
 import ml.docilealligator.infinityforreddit.events.NewUserLoggedInEvent
+import ml.docilealligator.infinityforreddit.extensions.linkify
 import ml.docilealligator.infinityforreddit.utils.APIUtils
 import ml.docilealligator.infinityforreddit.viewmodels.AppAuthLoginViewModel
 import ml.docilealligator.infinityforreddit.viewmodels.AppAuthLoginViewModel.Companion.provideFactory
@@ -54,7 +63,6 @@ import retrofit2.Retrofit
 import java.util.concurrent.Executor
 import javax.inject.Inject
 import javax.inject.Named
-
 
 class AppAuthLoginActivity : BaseActivity() {
     @Inject
@@ -79,7 +87,7 @@ class AppAuthLoginActivity : BaseActivity() {
     @Inject
     lateinit var mExecutor: Executor
 
-    lateinit var viewModel: AppAuthLoginViewModel
+    lateinit var mViewModel: AppAuthLoginViewModel
 
     private val mLauncher: ActivityResultLauncher<Intent?> =
         AuthTabIntent.registerActivityResultLauncher(this, this::handleAuthResult)
@@ -96,14 +104,10 @@ class AppAuthLoginActivity : BaseActivity() {
             }
         }
 
-        viewModel = ViewModelProvider.create(
+        mViewModel = ViewModelProvider.create(
             this,
             provideFactory(mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mCurrentAccountSharedPreferences)
         )[AppAuthLoginViewModel::class.java]
-
-        if (savedInstanceState == null) {
-            launchAuthTab()
-        }
 
         val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
         windowInsetsController.isAppearanceLightStatusBars = customThemeWrapper.isLightStatusBar
@@ -112,8 +116,9 @@ class AppAuthLoginActivity : BaseActivity() {
             AppTheme(customThemeWrapper.themeType) {
                 val context = LocalContext.current
                 val scrollBehavior = enterAlwaysScrollBehavior()
-                val accountFetched by viewModel.accountFetched.collectAsStateWithLifecycle()
-                val errorMessageId by viewModel.errorMessageId.collectAsStateWithLifecycle()
+                val accountFetched by mViewModel.accountFetched.collectAsStateWithLifecycle()
+                val errorMessageId by mViewModel.errorMessageId.collectAsStateWithLifecycle()
+                var isAgreeToUserAgreement by rememberSaveable { mutableStateOf(false) }
 
                 LaunchedEffect(accountFetched) {
                     if (accountFetched) {
@@ -144,12 +149,38 @@ class AppAuthLoginActivity : BaseActivity() {
                             .fillMaxSize()
                             .background(Color(LocalAppTheme.current.backgroundColor))
                             .padding(innerPadding)
-                            .padding(16.dp),
+                            .padding(16.dp)
+                            .verticalScroll(rememberScrollState()),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        if (!isAgreeToUserAgreement) {
+                            CustomAlert(
+                                title = stringResource(R.string.user_agreement_dialog_title),
+                                text = getString(
+                                    R.string.user_agreement_message,
+                                    "https://www.redditinc.com/policies/user-agreement",
+                                    "https://docile-alligator.github.io"
+                                ).linkify(Linkify.WEB_URLS, SpanStyle(Color(LocalAppTheme.current.linkColor))) {
+                                    startActivity(Intent(this@AppAuthLoginActivity, LinkResolverActivity::class.java).apply {
+                                        data = it
+                                    })
+                                },
+                                confirmText = getString(R.string.agree),
+                                dismissText = getString(R.string.do_not_agree),
+                                cancelable = false,
+                                onConfirm = {
+                                    isAgreeToUserAgreement = true
+                                    launchAuthTab()
+                                },
+                                onDismiss = {
+                                    finish()
+                                }
+                            )
+                        }
+
                         CustomFilledButton(R.string.login) {
-                            viewModel.clearError()
+                            mViewModel.clearError()
                             launchAuthTab()
                         }
 
@@ -214,12 +245,12 @@ class AppAuthLoginActivity : BaseActivity() {
         result.resultCode
         when (result.resultCode) {
             AuthTabIntent.RESULT_OK -> result.resultUri?.let {
-                viewModel.setUpAccount(it)
+                mViewModel.setUpAccount(it)
             }
             AuthTabIntent.RESULT_CANCELED,
-            AuthTabIntent.RESULT_VERIFICATION_FAILED -> viewModel.setError(R.string.login_failed_auth_result_verification_failed)
-            AuthTabIntent.RESULT_VERIFICATION_TIMED_OUT -> viewModel.setError(R.string.login_failed_auth_result_verification_timed_out)
-            else -> viewModel.setError(R.string.login_failed_auth_result_unknown_error)
+            AuthTabIntent.RESULT_VERIFICATION_FAILED -> mViewModel.setError(R.string.login_failed_auth_result_verification_failed)
+            AuthTabIntent.RESULT_VERIFICATION_TIMED_OUT -> mViewModel.setError(R.string.login_failed_auth_result_verification_timed_out)
+            else -> mViewModel.setError(R.string.login_failed_auth_result_unknown_error)
         }
     }
 }
