@@ -972,7 +972,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         } else if (stringId == R.string.settings) {
                             intent = new Intent(MainActivity.this, SettingsActivity.class);
                         } else if (stringId == R.string.add_account) {
-                            intent = new Intent(MainActivity.this, LoginActivity.class);
+                            intent = new Intent(MainActivity.this, AppAuthLoginActivity.class);
                         } else if (stringId == R.string.anonymous_account) {
                             AccountManagement.switchToAnonymousMode(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
                                     mExecutor, new Handler(), false, () -> {

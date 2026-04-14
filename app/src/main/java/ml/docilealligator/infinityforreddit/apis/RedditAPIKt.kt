@@ -21,4 +21,14 @@ interface RedditAPIKt {
         @HeaderMap headers: Map<String, String>,
         @FieldMap params: Map<String, String>
     ): String
+
+    @FormUrlEncoded
+    @POST("/api/v1/access_token")
+    suspend fun getAccessToken(
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): String
+
+    @GET("/api/v1/me?raw_json=1")
+    suspend fun getMyInfo(@HeaderMap headers: MutableMap<String, String>): String
 }

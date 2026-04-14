@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import static ml.docilealligator.infinityforreddit.utils.UtilsKt.getChromeCustomTabPackageName;
+
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -107,10 +109,10 @@ public class LoginChromeCustomTabActivity extends BaseActivity {
         setSupportActionBar(binding.toolbarLoginChromeCustomTabActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        openLoginPage();
+        checkAndOpenLoginPage();
 
         binding.openWebpageButtonLoginChromeCustomTabActivity.setOnClickListener(view -> {
-            openLoginPage();
+            checkAndOpenLoginPage();
         });
     }
 
@@ -235,34 +237,38 @@ public class LoginChromeCustomTabActivity extends BaseActivity {
         }
     }
 
-    private void openLoginPage() {
-        ArrayList<ResolveInfo> resolveInfos = getCustomTabsPackages(getPackageManager());
-        if (!resolveInfos.isEmpty()) {
-            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-            // add share action to menu list
-            builder.setShareState(CustomTabsIntent.SHARE_STATE_ON);
-            builder.setDefaultColorSchemeParams(
-                    new CustomTabColorSchemeParams.Builder()
-                            .setToolbarColor(mCustomThemeWrapper.getColorPrimary())
-                            .build());
-            CustomTabsIntent customTabsIntent = builder.build();
-            customTabsIntent.intent.setPackage(resolveInfos.get(0).activityInfo.packageName);
-            customTabsIntent.intent.putExtra("com.google.android.apps.chrome.EXTRA_OPEN_NEW_INCOGNITO_TAB", true);
-
-            try {
-                Uri.Builder uriBuilder = Uri.parse(APIUtils.OAUTH_URL).buildUpon();
-                uriBuilder.appendQueryParameter(APIUtils.CLIENT_ID_KEY, APIUtils.CLIENT_ID);
-                uriBuilder.appendQueryParameter(APIUtils.RESPONSE_TYPE_KEY, APIUtils.RESPONSE_TYPE);
-                uriBuilder.appendQueryParameter(APIUtils.STATE_KEY, APIUtils.STATE);
-                uriBuilder.appendQueryParameter(APIUtils.REDIRECT_URI_KEY, APIUtils.REDIRECT_URI);
-                uriBuilder.appendQueryParameter(APIUtils.DURATION_KEY, APIUtils.DURATION);
-                uriBuilder.appendQueryParameter(APIUtils.SCOPE_KEY, APIUtils.SCOPE);
-
-                customTabsIntent.launchUrl(this, uriBuilder.build());
-            } catch (ActivityNotFoundException e) {
-                Snackbar.make(binding.getRoot(), R.string.custom_tab_not_available, Snackbar.LENGTH_LONG).show();
-            }
+    private void checkAndOpenLoginPage() {
+        String packageName = getChromeCustomTabPackageName(this);
+        if (packageName == null) {
+            Toast.makeText(this, R.string.login_chrome_required, Toast.LENGTH_SHORT).show();
         } else {
+            openLoginPage(packageName);
+        }
+    }
+
+    private void openLoginPage(@NonNull String packageName) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        // add share action to menu list
+        builder.setShareState(CustomTabsIntent.SHARE_STATE_ON);
+        builder.setDefaultColorSchemeParams(
+                new CustomTabColorSchemeParams.Builder()
+                        .setToolbarColor(mCustomThemeWrapper.getColorPrimary())
+                        .build());
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.intent.setPackage(packageName);
+        customTabsIntent.intent.putExtra("com.google.android.apps.chrome.EXTRA_OPEN_NEW_INCOGNITO_TAB", true);
+
+        try {
+            Uri.Builder uriBuilder = Uri.parse(APIUtils.OAUTH_URL).buildUpon();
+            uriBuilder.appendQueryParameter(APIUtils.CLIENT_ID_KEY, APIUtils.CLIENT_ID);
+            uriBuilder.appendQueryParameter(APIUtils.RESPONSE_TYPE_KEY, APIUtils.RESPONSE_TYPE);
+            uriBuilder.appendQueryParameter(APIUtils.STATE_KEY, APIUtils.STATE);
+            uriBuilder.appendQueryParameter(APIUtils.REDIRECT_URI_KEY, APIUtils.REDIRECT_URI);
+            uriBuilder.appendQueryParameter(APIUtils.DURATION_KEY, APIUtils.DURATION);
+            uriBuilder.appendQueryParameter(APIUtils.SCOPE_KEY, APIUtils.SCOPE);
+
+            customTabsIntent.launchUrl(this, uriBuilder.build());
+        } catch (ActivityNotFoundException e) {
             Snackbar.make(binding.getRoot(), R.string.custom_tab_not_available, Snackbar.LENGTH_LONG).show();
         }
     }
