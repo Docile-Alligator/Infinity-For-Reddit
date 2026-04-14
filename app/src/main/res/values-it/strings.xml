@@ -978,7 +978,6 @@ Se hai dei temi con questi nomi devi cambiarli prima di attivare la Personalizza
     <string name="settings_more_tabs_show_multireddits_title">"Mostra Multireddit"</string>
     <string name="settings_collapse_reddit_section_title">"Comprimi la sezione Reddit"</string>
     <string name="settings_video_player_automatic_landscape_orientation">"Passa automaticamente all'orientamento orizzontale nel Player Video"</string>
-    <string name="settings_remember_muting_option_in_post_feed">"Ricorda l'opzione di disattivazione dell'audio nel feed dei post"</string>
     <string name="link_post_layout_auto">"Auto"</string>
     <string name="uploaded_images">"Immagini caricate"</string>
     <string name="select_image">"Seleziona un'immagine"</string>

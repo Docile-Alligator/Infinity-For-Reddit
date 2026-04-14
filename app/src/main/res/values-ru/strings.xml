@@ -1046,7 +1046,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_more_tabs_show_multireddits_title">"Показывать мультиреддиты"</string>
     <string name="settings_collapse_reddit_section_title">"Свернуть раздел Reddit"</string>
     <string name="settings_video_player_automatic_landscape_orientation">"Автоматически переключаться на альбомную ориентацию в видеопроигрывателе"</string>
-    <string name="settings_remember_muting_option_in_post_feed">"Запоминать отключение звука в ленте постов"</string>
     <string name="link_post_layout_auto">"Автовыбор"</string>
     <string name="uploaded_images">"Загруженные изображения"</string>
     <string name="select_image">"Выберите изображение"</string>

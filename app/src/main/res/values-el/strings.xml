@@ -974,7 +974,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_more_tabs_show_multireddits_title">"Εμφάνιση Multireddits"</string>
     <string name="settings_collapse_reddit_section_title">"Σύμπτυξη Τμήματος Reddit"</string>
     <string name="settings_video_player_automatic_landscape_orientation">"Αυτόματη εναλλαγή σε οριζόντιο προσανατολισμό στον Αναπαραγωγέα Βίντεο"</string>
-    <string name="settings_remember_muting_option_in_post_feed">"Να θυμάσαι την Επιλογή Σίγασης στη Ροή Αναρτήσεων"</string>
     <string name="link_post_layout_auto">"Αυτόματο"</string>
     <string name="uploaded_images">"Ανεβασμένες Εικόνες"</string>
     <string name="select_image">"Επιλέξτε μια Εικόνα"</string>

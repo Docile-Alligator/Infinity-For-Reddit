@@ -108,6 +108,7 @@ import ml.docilealligator.infinityforreddit.databinding.ItemPostDetailVideoAndGi
 import ml.docilealligator.infinityforreddit.databinding.ItemPostDetailVideoAutoplayBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostDetailVideoAutoplayLegacyControllerBinding;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
+import ml.docilealligator.infinityforreddit.managers.VideoMuteManager;
 import ml.docilealligator.infinityforreddit.markdown.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.markdown.EmoteCloseBracketInlineProcessor;
 import ml.docilealligator.infinityforreddit.markdown.EmotePlugin;
@@ -158,6 +159,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private final RedditDataRoomDatabase mRedditDataRoomDatabase;
     private final SharedPreferences mCurrentAccountSharedPreferences;
     private final SharedPreferences mPostHistorySharedPreferences;
+    private final VideoMuteManager mVideoMuteManager;
     private final RequestManager mGlide;
     private final SaveMemoryCenterInisdeDownsampleStrategy mSaveMemoryCenterInsideDownsampleStrategy;
     private final EmoteCloseBracketInlineProcessor mEmoteCloseBracketInlineProcessor;
@@ -240,6 +242,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                          Retrofit oauthRetrofit, Retrofit retrofit,
                                          Retrofit redgifsRetrofit, Provider<StreamableAPI> streamableApiProvider,
                                          RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
+                                         VideoMuteManager videoMuteManager,
                                          boolean separatePostAndComments, @Nullable String accessToken,
                                          @NonNull String accountName, Post post, Locale locale,
                                          SharedPreferences sharedPreferences,
@@ -257,6 +260,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mRedgifsRetrofit = redgifsRetrofit;
         mStreamableApiProvider = streamableApiProvider;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
+        mVideoMuteManager = videoMuteManager;
         mGlide = glide;
         mSaveMemoryCenterInsideDownsampleStrategy = new SaveMemoryCenterInisdeDownsampleStrategy(Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.POST_FEED_MAX_RESOLUTION, "5000000")));
         mCurrentAccountSharedPreferences = currentAccountSharedPreferences;
@@ -729,7 +733,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     ((PostDetailBaseVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio(1);
                 }
                 if (!((PostDetailBaseVideoAutoplayViewHolder) holder).isManuallyPaused) {
-                    ((PostDetailBaseVideoAutoplayViewHolder) holder).setVolume((mMuteAutoplayingVideos || (mPost.isNSFW() && mMuteNSFWVideo)) ? 0f : 1f);
+                    if (mVideoMuteManager.getRememberMuteOption()) {
+                        ((PostDetailBaseVideoAutoplayViewHolder) holder).setVolume(mVideoMuteManager.isMuted() ? 0f : 1f);
+                    } else {
+                        ((PostDetailBaseVideoAutoplayViewHolder) holder).setVolume((mMuteAutoplayingVideos || (mPost.isNSFW() && mMuteNSFWVideo)) ? 0f : 1f);
+                    }
                 }
 
                 /*if (mPost.isRedgifs() && !mPost.isLoadedStreamableVideoAlready()) {
@@ -1851,10 +1859,12 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         muteButton.setImageDrawable(AppCompatResources.getDrawable(mActivity, R.drawable.ic_mute_24dp));
                         helper.setVolume(0f);
                         volume = 0f;
+                        mVideoMuteManager.setMuted(true);
                     } else {
                         muteButton.setImageDrawable(AppCompatResources.getDrawable(mActivity, R.drawable.ic_unmute_24dp));
                         helper.setVolume(1f);
                         volume = 1f;
+                        mVideoMuteManager.setMuted(false);
                     }
                 }
             });

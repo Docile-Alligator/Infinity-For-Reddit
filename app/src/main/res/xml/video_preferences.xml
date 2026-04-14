@@ -81,7 +81,7 @@
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="remember_muting_option_in_post_feed"
-        app:title="@string/settings_remember_muting_option_in_post_feed" />
+        app:title="@string/settings_remember_mute" />
 
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="true"

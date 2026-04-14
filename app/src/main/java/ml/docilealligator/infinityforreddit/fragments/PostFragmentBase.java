@@ -98,6 +98,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeVoteButtonsPositionEven
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.events.ShowDividerInCompactLayoutPreferenceEvent;
 import ml.docilealligator.infinityforreddit.events.ShowThumbnailOnTheLeftInCompactLayoutEvent;
+import ml.docilealligator.infinityforreddit.managers.VideoMuteManager;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesLiveDataKt;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -121,6 +122,8 @@ public abstract class PostFragmentBase extends Fragment {
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     protected Executor mExecutor;
+    @Inject
+    protected VideoMuteManager mVideoMuteManager;
     protected BaseActivity mActivity;
     protected RequestManager mGlide;
     protected Window window;
@@ -129,8 +132,6 @@ public abstract class PostFragmentBase extends Fragment {
     protected StaggeredGridLayoutManager mStaggeredGridLayoutManager;
     protected boolean hasPost;
     protected long postFragmentId;
-    protected boolean rememberMutingOptionInPostFeed;
-    protected Boolean masterMutingOption;
     protected Handler lazyModeHandler;
     protected CountDownTimer resumeLazyModeCountDownTimer;
     protected RecyclerView.SmoothScroller smoothScroller;
@@ -162,8 +163,6 @@ public abstract class PostFragmentBase extends Fragment {
         EventBus.getDefault().register(this);
 
         window = mActivity.getWindow();
-
-        rememberMutingOptionInPostFeed = mSharedPreferences.getBoolean(SharedPreferencesUtils.REMEMBER_MUTING_OPTION_IN_POST_FEED, false);
 
         smoothScroller = new LinearSmoothScroller(mActivity) {
             @Override
@@ -508,13 +507,11 @@ public abstract class PostFragmentBase extends Fragment {
     public abstract void changePostLayout(int postLayout, boolean temporary);
 
     public final Boolean getMasterMutingOption() {
-        return masterMutingOption;
+        return mVideoMuteManager.isMuted();
     }
 
     public final void videoAutoplayChangeMutingOption(boolean isMute) {
-        if (rememberMutingOptionInPostFeed) {
-            masterMutingOption = isMute;
-        }
+        mVideoMuteManager.setMuted(isMute);
     }
 
     public boolean getIsNsfwSubreddit() {
@@ -724,6 +721,7 @@ public abstract class PostFragmentBase extends Fragment {
 
     @Subscribe
     public void onChangeMuteAutoplayingVideosEvent(ChangeMuteAutoplayingVideosEvent changeMuteAutoplayingVideosEvent) {
+        mVideoMuteManager.setMuted(changeMuteAutoplayingVideosEvent.muteAutoplayingVideos);
         if (getPostAdapter() != null) {
             getPostAdapter().setMuteAutoplayingVideos(changeMuteAutoplayingVideosEvent.muteAutoplayingVideos);
             refreshAdapter();
@@ -732,10 +730,7 @@ public abstract class PostFragmentBase extends Fragment {
 
     @Subscribe
     public void onChangeRememberMutingOptionInPostFeedEvent(ChangeRememberMutingOptionInPostFeedEvent event) {
-        rememberMutingOptionInPostFeed = event.rememberMutingOptionInPostFeedEvent;
-        if (!event.rememberMutingOptionInPostFeedEvent) {
-            masterMutingOption = null;
-        }
+        mVideoMuteManager.setRememberMuteOption(event.rememberMutingOptionInPostFeedEvent);
     }
 
     @Subscribe

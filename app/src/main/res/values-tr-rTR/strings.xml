@@ -1056,7 +1056,6 @@ Yoksa, Material You'yu etkinleştirmeden önce bunları yeniden adlandırın."</
     <string name="settings_more_tabs_show_multireddits_title">"Multiredditleri Göster"</string>
     <string name="settings_collapse_reddit_section_title">"Reddit Bölümünü Daralt"</string>
     <string name="settings_video_player_automatic_landscape_orientation">"Video Oynatırken Otomatik Olarak Yatay Ekrana Geç"</string>
-    <string name="settings_remember_muting_option_in_post_feed">"Gönderi Akışında Sessize Alma Seçeneğini Hatırla"</string>
     <string name="link_post_layout_auto">"Otomatik"</string>
     <string name="uploaded_images">"Foroğraf Yüklemesi"</string>
     <string name="select_image">"Bir Fotoğraf Seç"</string>

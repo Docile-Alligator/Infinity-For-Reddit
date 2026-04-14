@@ -1053,7 +1053,6 @@ Reddit 视频分辨率较低。
     <string name="settings_more_tabs_show_multireddits_title">"显示聚合版块"</string>
     <string name="settings_collapse_reddit_section_title">"折叠 Reddit 区域"</string>
     <string name="settings_video_player_automatic_landscape_orientation">"播放视频时自动切换到横屏"</string>
-    <string name="settings_remember_muting_option_in_post_feed">"在帖子列表中记住静音"</string>
     <string name="link_post_layout_auto">"自动"</string>
     <string name="uploaded_images">"已上传图片"</string>
     <string name="select_image">"选择一张图片"</string>

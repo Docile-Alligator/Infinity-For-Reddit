@@ -1035,7 +1035,6 @@ Caso contrário, altere o nome antes de ativar Material You"</string>
     <string name="settings_more_tabs_show_multireddits_title">"Mostrar MultiReddit"</string>
     <string name="settings_collapse_reddit_section_title">"Recolher Secção do Reddit"</string>
     <string name="settings_video_player_automatic_landscape_orientation">"Alterar para Orientação Paisagem automaticamente no Reprodutor de Vídeo"</string>
-    <string name="settings_remember_muting_option_in_post_feed">"Lembrar opção sem som no Feed de Publicações"</string>
     <string name="link_post_layout_auto">"Auto"</string>
     <string name="uploaded_images">"Imagens Enviadas"</string>
     <string name="select_image">"Selecionar Imagem"</string>

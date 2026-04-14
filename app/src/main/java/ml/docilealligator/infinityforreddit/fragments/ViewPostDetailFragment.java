@@ -104,6 +104,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeSpoilerBlurEvent;
 import ml.docilealligator.infinityforreddit.events.FlairSelectedEvent;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostDetailFragment;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
+import ml.docilealligator.infinityforreddit.managers.VideoMuteManager;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
 import ml.docilealligator.infinityforreddit.post.FetchPost;
 import ml.docilealligator.infinityforreddit.post.HidePost;
@@ -181,6 +182,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     Executor mExecutor;
     @Inject
     PostDetailCommentsCacheManager postDetailCommentsCacheManager;
+    @Inject
+    VideoMuteManager mVideoMuteManager;
     @State
     boolean isLoadingMoreChildren = false;
     @State
@@ -648,8 +651,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         mPostAdapter = new PostDetailRecyclerViewAdapter(mActivity,
                 this, mExecutor, mCustomThemeWrapper, mOauthRetrofit, mRetrofit,
                 mRedgifsRetrofit, mStreamableApiProvider, mRedditDataRoomDatabase, mGlide,
-                mSeparatePostAndComments, mActivity.accessToken, mActivity.accountName, mPost,
-                mLocale, mSharedPreferences, mCurrentAccountSharedPreferences,
+                mVideoMuteManager, mSeparatePostAndComments, mActivity.accessToken,
+                mActivity.accountName, mPost, mLocale, mSharedPreferences, mCurrentAccountSharedPreferences,
                 mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
                 mPostHistorySharedPreferences, mExoCreator,
                 post -> {

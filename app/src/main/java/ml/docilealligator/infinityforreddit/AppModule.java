@@ -26,6 +26,7 @@ import dagger.Module;
 import dagger.Provides;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LoopAvailableExoCreator;
+import ml.docilealligator.infinityforreddit.managers.VideoMuteManager;
 import ml.docilealligator.infinityforreddit.user.UserProfileImagesBatchLoader;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
@@ -238,5 +239,14 @@ abstract class AppModule {
     @Singleton
     static PostDetailCommentsCacheManager providePostDetailCommentsCacheManager() {
         return new PostDetailCommentsCacheManager();
+    }
+
+    @Provides
+    @Singleton
+    static VideoMuteManager provideVideoMuteManager(@Named("default") SharedPreferences sharedPreferences) {
+        return new VideoMuteManager(
+                sharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_AUTOPLAYING_VIDEOS, true),
+                sharedPreferences.getBoolean(SharedPreferencesUtils.REMEMBER_MUTING_OPTION_IN_POST_FEED, false)
+        );
     }
 }

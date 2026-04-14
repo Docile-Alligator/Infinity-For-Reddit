@@ -1084,7 +1084,6 @@ De lo contrario, cambia el nombre antes de habilitar Material You."</string>
     <string name="settings_more_tabs_show_multireddits_title">"Mostrar multireddits"</string>
     <string name="settings_collapse_reddit_section_title">"Contraer sección de Reddit"</string>
     <string name="settings_video_player_automatic_landscape_orientation">"Cambiar a orientación horizontal en el reproductor de video automáticamente"</string>
-    <string name="settings_remember_muting_option_in_post_feed">"Recordar opción de silenciar en el feed de publicaciones"</string>
     <string name="link_post_layout_auto">"Auto"</string>
     <string name="uploaded_images">"Imágenes subidas"</string>
     <string name="select_image">"Seleccionar una imagen"</string>

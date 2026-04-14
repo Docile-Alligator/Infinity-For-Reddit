@@ -1016,7 +1016,6 @@ Renomeie-os antes de ativar o Material You se você tiver."</string>
     <string name="settings_more_tabs_show_multireddits_title">"Exibir Multireddits"</string>
     <string name="settings_collapse_reddit_section_title">"Retrair seção do Reddit"</string>
     <string name="settings_video_player_automatic_landscape_orientation">"Mudar para a orientação paisagem automaticamente no reprodutor de vídeo"</string>
-    <string name="settings_remember_muting_option_in_post_feed">"Lembrar opção de silenciar no feed de postagens"</string>
     <string name="link_post_layout_auto">"Automático"</string>
     <string name="uploaded_images">"Imagens enviadas"</string>
     <string name="select_image">"Escolha uma Imagem"</string>

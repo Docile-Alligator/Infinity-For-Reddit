@@ -1036,7 +1036,6 @@ Pokud ano, přejmenujte je, než povolíte Material You."</string>
     <string name="settings_more_tabs_show_multireddits_title">"Zobrazit multireddity"</string>
     <string name="settings_collapse_reddit_section_title">"Sbalit sekci Redditu"</string>
     <string name="settings_video_player_automatic_landscape_orientation">"Automaticky přepnout na režim na šířku ve video přehrávači"</string>
-    <string name="settings_remember_muting_option_in_post_feed">"Zapamatovat stav ztlumení v příspěvcích"</string>
     <string name="link_post_layout_auto">"Automaticky"</string>
     <string name="uploaded_images">"Nahrané obrázky"</string>
     <string name="select_image">"Vybrat obrázek"</string>

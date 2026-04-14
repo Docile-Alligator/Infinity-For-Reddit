@@ -1081,7 +1081,6 @@ Benenne diese Themen sonst neu."</string>
     <string name="settings_more_tabs_show_multireddits_title">"Multireddits anzeigen"</string>
     <string name="settings_collapse_reddit_section_title">"Sektion für Reddit zusammenklappen"</string>
     <string name="settings_video_player_automatic_landscape_orientation">"Automatisch zum Querformat im Videospieler wechseln"</string>
-    <string name="settings_remember_muting_option_in_post_feed">"Stummschalt-Option im Beitragsfeed merken"</string>
     <string name="link_post_layout_auto">"Automatisch"</string>
     <string name="uploaded_images">"Hochgeladene Bilder"</string>
     <string name="select_image">"Ein Bild auswählen"</string>
