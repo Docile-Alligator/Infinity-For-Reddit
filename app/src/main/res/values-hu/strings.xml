@@ -850,7 +850,6 @@ Videó autómatikus lejátszása le van tiltva."</string>
     <string name="settings_only_disable_preview_in_video_and_gif_posts_title">"Előnézet tiltása csak videó és gif posztokban"</string>
     <string name="settings_enable_search_history_title">"Keresési előzmény engedélyezése"</string>
     <string name="settings_post_history_title">"Poszt előzmény"</string>
-    <string name="settings_mark_posts_as_read_title">"Poszt olvasottnak jelölése"</string>
     <string name="settings_mark_posts_as_read_after_voting_title">"Poszt olvasottnak jelölése szavazás után"</string>
     <string name="settings_mark_posts_as_read_on_scroll_title">"Poszt olvasottnak jelölése görgetésnél"</string>
     <string name="settings_hide_read_posts_automatically_title">"Olvasott posztok autómatikus elrejtése"</string>

@@ -43,7 +43,8 @@
     <string name="wiki_activity_label">Wiki</string>
     <string name="edit_profile_activity_label">Edit Profile</string>
     <string name="post_poll_activity_label">Poll Post</string>
-    <string name="history_activity_label">History</string>
+    <string name="history_activity_read_posts_label">Read Posts</string>
+    <string name="history_activity_subtitle">Stored on this device</string>
     <string name="subscription_activity_label">Subscription</string>
     <string name="comment_filter_preference_activity_label">Comment Filter</string>
     <string name="customize_comment_filter_activity_label">Customize Comment Filter</string>
@@ -56,6 +57,7 @@
     <string name="action_refresh">Refresh</string>
     <string name="action_add_comment">Send comment</string>
     <string name="action_save_post">Save post</string>
+    <string name="action_unsave_post">Unsave post</string>
     <string name="action_view_crosspost_parent">View crosspost parent</string>
     <string name="action_search">Search</string>
     <string name="action_start_lazy_mode">Start Lazy Mode</string>
@@ -577,9 +579,9 @@
     <string name="settings_language_title">Language</string>
     <string name="settings_enable_search_history_title">Enable Search History</string>
     <string name="settings_post_history_title">Post History</string>
-    <string name="settings_mark_posts_as_read_title">Mark Posts as Read</string>
-    <string name="settings_read_posts_limit_title">Limit Read Posts</string>
-    <string name="settings_read_posts_limit_hint">Set read posts limit</string>
+    <string name="settings_save_read_posts_title">Save Read Posts</string>
+    <string name="settings_limit_history_size_title">Limit History Size</string>
+    <string name="settings_limit_history_size_hint">History Limit</string>
     <string name="settings_read_posts_db_summary">Read Posts DB Table \nSize: %1$d(KB) \nCount: %2$d</string>
     <string name="settings_mark_posts_as_read_after_voting_title">Mark Posts as Read After Voting</string>
     <string name="settings_mark_posts_as_read_on_scroll_title">Mark Posts as Read on Scroll</string>

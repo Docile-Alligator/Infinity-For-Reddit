@@ -908,7 +908,6 @@ Automatisches Abspielen von Videos ist deaktiviert."</string>
     <string name="settings_only_disable_preview_in_video_and_gif_posts_title">"Vorschau nur bei Video- und GIF-Beiträgen deaktivieren"</string>
     <string name="settings_enable_search_history_title">"Suchverlauf aktivieren"</string>
     <string name="settings_post_history_title">"Beitragsverlauf aktivieren"</string>
-    <string name="settings_mark_posts_as_read_title">"Beiträge als gelesen markieren"</string>
     <string name="settings_mark_posts_as_read_after_voting_title">"Beiträge nach dem Abstimmen als gelesen markieren"</string>
     <string name="settings_mark_posts_as_read_on_scroll_title">"Beiträge beim Scrollen als gelesen markieren"</string>
     <string name="settings_hide_read_posts_automatically_title">"Gelesene Beiträge automatisch verstecken"</string>
@@ -1241,7 +1240,6 @@ Antippen zum Wiederholen."</string>
     <string name="comment_karma">"Kommentarkarma:"</string>
     <string name="awarder_karma">"Auszeichnungskarma:"</string>
     <string name="awardee_karma">"Ausgezeichnetenkarma:"</string>
-    <string name="history_activity_label">"Verlauf"</string>
     <string name="history">"Verlauf"</string>
     <string name="settings_easier_to_watch_in_full_screen_title">"Einfacher im Full Screen anzusehen"</string>
     <string name="clear_user_flair">"Flair entfernen"</string>

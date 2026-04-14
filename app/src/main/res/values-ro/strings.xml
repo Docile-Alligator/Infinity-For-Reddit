@@ -865,7 +865,6 @@ Redarea automată a videoclipurilor este dezactivată."</string>
     <string name="settings_only_disable_preview_in_video_and_gif_posts_title">"Dezactivează Previzualizarea doar pentru Postările Video și Gif"</string>
     <string name="settings_enable_search_history_title">"Activează Istoricul Căutărilor"</string>
     <string name="settings_post_history_title">"Istoric Postări"</string>
-    <string name="settings_mark_posts_as_read_title">"Marchează Postările ca fiind Citite"</string>
     <string name="settings_mark_posts_as_read_after_voting_title">"Marchează Postările ca fiind Citite după Votare"</string>
     <string name="settings_mark_posts_as_read_on_scroll_title">"Marchează Postările ca fiind Citite după Derulare"</string>
     <string name="settings_hide_read_posts_automatically_title">"Ascunde Automat Mesajele Citite"</string>
@@ -1186,7 +1185,6 @@ Apasă pentru a reîncerca."</string>
     <string name="comment_karma">"Karma de la Comentarii:"</string>
     <string name="awarder_karma">"Karma pentru Acordarea Premiilor:"</string>
     <string name="awardee_karma">"Karma pentru Primirea Premiilor:"</string>
-    <string name="history_activity_label">"Istoric"</string>
     <string name="history">"Istoric"</string>
     <string name="settings_easier_to_watch_in_full_screen_title">"Mai Ușor de Privit în Ecran Complet"</string>
     <string name="clear_user_flair">"Scoate Insigna"</string>

@@ -3,6 +3,8 @@ package ml.docilealligator.infinityforreddit;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.OptIn;
 import androidx.media3.common.util.UnstableApi;
@@ -24,6 +26,7 @@ import dagger.Module;
 import dagger.Provides;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LoopAvailableExoCreator;
+import ml.docilealligator.infinityforreddit.user.UserProfileImagesBatchLoader;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -32,6 +35,7 @@ import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
 import ml.docilealligator.infinityforreddit.videoautoplay.MediaSourceBuilder;
 import ml.docilealligator.infinityforreddit.videoautoplay.ToroExo;
 import okhttp3.OkHttpClient;
+import retrofit2.Retrofit;
 
 @Module
 abstract class AppModule {
@@ -218,5 +222,21 @@ abstract class AppModule {
     @Singleton
     static Executor provideExecutor() {
         return Executors.newFixedThreadPool(4);
+    }
+
+    @Provides
+    @Singleton
+    static UserProfileImagesBatchLoader provideUserProfileImagesBatchLoader(
+            Executor executor,
+            RedditDataRoomDatabase redditDataRoomDatabase,
+            @Named("no_oauth") Retrofit retrofit
+    ) {
+        return new UserProfileImagesBatchLoader(executor, new Handler(Looper.getMainLooper()), redditDataRoomDatabase, retrofit);
+    }
+
+    @Provides
+    @Singleton
+    static PostDetailCommentsCacheManager providePostDetailCommentsCacheManager() {
+        return new PostDetailCommentsCacheManager();
     }
 }

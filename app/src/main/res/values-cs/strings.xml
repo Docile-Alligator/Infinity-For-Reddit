@@ -873,7 +873,6 @@ Automatické přehrávání videí je zakázáno."</string>
     <string name="settings_only_disable_preview_in_video_and_gif_posts_title">"Zakázat pouze náhled ve video a GIF příspěvcích"</string>
     <string name="settings_enable_search_history_title">"Povolit historii vyhledávání"</string>
     <string name="settings_post_history_title">"Historie příspěvků"</string>
-    <string name="settings_mark_posts_as_read_title">"Označovat příspěvky jako přečtené"</string>
     <string name="settings_mark_posts_as_read_after_voting_title">"Označovat příspěvky jako přečtené po hlasování"</string>
     <string name="settings_mark_posts_as_read_on_scroll_title">"Označovat příspěvky jako přečtené po posunutí"</string>
     <string name="settings_hide_read_posts_automatically_title">"Automaticky skrývat přečtené příspěvky"</string>
@@ -1194,7 +1193,6 @@ Pokud ano, přejmenujte je, než povolíte Material You."</string>
     <string name="comment_karma">"Komentářová karma:"</string>
     <string name="awarder_karma">"Karma ocenění:"</string>
     <string name="awardee_karma">"Karma obdarování:"</string>
-    <string name="history_activity_label">"Historie"</string>
     <string name="history">"Historie"</string>
     <string name="settings_easier_to_watch_in_full_screen_title">"Jednodušší sledovat na celé obrazovce"</string>
     <string name="clear_user_flair">"Odstranit štítek"</string>

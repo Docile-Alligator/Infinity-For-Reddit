@@ -33,6 +33,7 @@ import android.view.MenuItem;
 import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -229,6 +230,12 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            getWindow().setDecorFitsSystemWindows(false);
+        } else {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
+
         boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
         int systemThemeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
         switch (systemThemeType) {
@@ -302,11 +309,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
         Resources resources = getResources();
 
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-
         useBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER, false);
         if (useBottomAppBar) {
             getSupportActionBar().hide();
@@ -349,20 +351,20 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         dataSavingModeDefaultResolution = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION, "360"));
         nonDataSavingModeDefaultResolution = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION_NO_DATA_SAVING, "0"));
 
-        if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.VIDEO_PLAYER_IGNORE_NAV_BAR, false)) {
-            LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
-            ViewCompat.setOnApplyWindowInsetsListener(controllerLinearLayout, new OnApplyWindowInsetsListener() {
-                @NonNull
-                @Override
-                public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
-                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
-                    params.bottomMargin = navigationBars.bottom;
-                    params.rightMargin = navigationBars.right;
-                    return WindowInsetsCompat.CONSUMED;
-                }
-            });
-        }
+        LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
+        ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
+            @NonNull
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                Insets allInsets = Utils.getInsets(insets, false, false);
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
+                params.bottomMargin = allInsets.bottom;
+                params.setMarginStart(allInsets.left);
+                params.setMarginEnd(allInsets.right);
+                controllerLinearLayout.setLayoutParams(params);
+                return WindowInsetsCompat.CONSUMED;
+            }
+        });
 
         binding.getRoot().setOnDragDismissedListener(dragDirection -> {
             player.stop();

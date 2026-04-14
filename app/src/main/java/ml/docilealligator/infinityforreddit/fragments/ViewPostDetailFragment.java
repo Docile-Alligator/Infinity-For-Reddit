@@ -71,6 +71,8 @@ import javax.inject.Provider;
 
 import ml.docilealligator.infinityforreddit.CommentModerationActionHandler;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.PostDetailCommentsCache;
+import ml.docilealligator.infinityforreddit.PostDetailCommentsCacheManager;
 import ml.docilealligator.infinityforreddit.PostModerationActionHandler;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
@@ -107,7 +109,8 @@ import ml.docilealligator.infinityforreddit.post.FetchPost;
 import ml.docilealligator.infinityforreddit.post.HidePost;
 import ml.docilealligator.infinityforreddit.post.ParsePost;
 import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostModification;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
 import ml.docilealligator.infinityforreddit.subreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.Flair;
@@ -131,7 +134,6 @@ import retrofit2.Retrofit;
 
 public class ViewPostDetailFragment extends Fragment implements FragmentCommunicator, PostModerationActionHandler, CommentModerationActionHandler {
 
-    public static final String EXTRA_POST_DATA = "EPD";
     public static final String EXTRA_POST_ID = "EPI";
     public static final String EXTRA_SINGLE_COMMENT_ID = "ESCI";
     public static final String EXTRA_CONTEXT_NUMBER = "ECN";
@@ -177,8 +179,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     ExoCreator mExoCreator;
     @Inject
     Executor mExecutor;
-    @State
-    Post mPost;
+    @Inject
+    PostDetailCommentsCacheManager postDetailCommentsCacheManager;
     @State
     boolean isLoadingMoreChildren = false;
     @State
@@ -211,6 +213,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private RequestManager mGlide;
     private Locale mLocale;
     private Menu mMenu;
+    private Post mPost;
     private int postListPosition = -1;
     private String mSingleCommentId;
     private String mContextNumber;
@@ -225,8 +228,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private PostDetailRecyclerViewAdapter mPostAdapter;
     private CommentsRecyclerViewAdapter mCommentsAdapter;
     private RecyclerView.SmoothScroller mSmoothScroller;
-    private Drawable mSavedIcon;
-    private Drawable mUnsavedIcon;
     private ColorDrawable backgroundSwipeRight;
     private ColorDrawable backgroundSwipeLeft;
     private Drawable drawableSwipeRight;
@@ -236,10 +237,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private float swipeActionThreshold;
     private AdjustableTouchSlopItemTouchHelper touchHelper;
     private boolean shouldSwipeBack;
-    private int scrollPosition;
+    private int commentScrollPosition;
     private FragmentViewPostDetailBinding binding;
     private RecyclerView mCommentsRecyclerView;
     public ViewPostDetailFragmentViewModel viewPostDetailFragmentViewModel;
+    public ViewPostDetailActivityViewModel viewPostDetailActivityViewModel;
 
     public ViewPostDetailFragment() {
         // Required empty public constructor
@@ -262,9 +264,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         applyTheme();
 
         binding.postDetailRecyclerViewViewPostDetailFragment.addOnWindowFocusChangedListener(this::onWindowFocusChanged);
-
-        mSavedIcon = getMenuItemIcon(R.drawable.ic_bookmark_toolbar_24dp);
-        mUnsavedIcon = getMenuItemIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
 
         mCommentsRecyclerView = binding.commentsRecyclerViewViewPostDetailFragment;
         if (!((mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_LANDSCAPE_MODE, true)
@@ -309,39 +308,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mRespectSubredditRecommendedSortType = mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false);
             viewPostDetailFragmentId = System.currentTimeMillis();
         } else {
-            scrollPosition = savedInstanceState.getInt(SCROLL_POSITION_STATE);
-            // if the scrollPosition < 0 do nothing
-            if (scrollPosition >= 0) {
-                if (getResources().getBoolean(R.bool.isTablet)) {
-                    boolean separatePortrait = mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_PORTRAIT_MODE, true);
-                    boolean separateLandscape = mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_LANDSCAPE_MODE, true);
-                    if (separatePortrait != separateLandscape) {
-                        if (mCommentsRecyclerView != null) {
-                            //restore the position for commentsadapter
-                            scrollPosition--;
-                            mCommentsRecyclerView.scrollToPosition(scrollPosition);
-                        } else {
-                            // restore the position for binding.postDetailRecyclerViewViewPostDetailFragment
-                            scrollPosition++;
-                            binding.postDetailRecyclerViewViewPostDetailFragment.scrollToPosition(scrollPosition);
-                        }
-                    }
-                } else {
-                    if (mSeparatePostAndComments) {
-                        if (mCommentsRecyclerView != null) {
-                            scrollPosition--;
-                            mCommentsRecyclerView.scrollToPosition(scrollPosition);
-                        }
-                    } else {
-                        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                            if (mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_LANDSCAPE_MODE, true)) {
-                                scrollPosition++;
-                                binding.postDetailRecyclerViewViewPostDetailFragment.scrollToPosition(scrollPosition);
-                            }
-                        }
-                    }
-                }
-            }
+            commentScrollPosition = savedInstanceState.getInt(SCROLL_POSITION_STATE);
+            restoreCommentScrollPosition();
         }
 
         mGlide = Glide.with(this);
@@ -576,12 +544,15 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 ViewPostDetailFragmentViewModel.Companion.provideFactory(mOauthRetrofit, mActivity.accessToken, mActivity.accountName)
         ).get(ViewPostDetailFragmentViewModel.class);
 
-        bindView();
+        viewPostDetailActivityViewModel = new ViewModelProvider(requireActivity())
+                .get(ViewPostDetailActivityViewModel.class);
+
+        bindView(savedInstanceState);
 
         return binding.getRoot();
     }
 
-    private void bindView() {
+    private void bindView(Bundle savedInstanceState) {
         if (!mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) && mMessageFullname != null) {
             ReadMessage.readMessage(mOauthRetrofit, mActivity.accessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
                 @Override
@@ -597,63 +568,51 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         }
 
         if (mPost == null) {
-            mPost = getArguments().getParcelable(EXTRA_POST_DATA);
+            mPost = viewPostDetailActivityViewModel.getPost(postListPosition);
+            if (mPost == null) {
+                mPost = viewPostDetailActivityViewModel.getPost();
+            }
         }
 
         if (mPost == null) {
-            fetchPostAndCommentsById(getArguments().getString(EXTRA_POST_ID));
+            String postId = getArguments().getString(EXTRA_POST_ID);
+            PostDetailCommentsCache cache = savedInstanceState == null && !isSingleCommentThreadMode
+                    ? postDetailCommentsCacheManager.getCache(postId) : null;
+            if (restoreCache(cache)) {
+                postDetailCommentsCacheManager.removeCache(postId);
+
+                if (!renderContent()) {
+                    return;
+                }
+
+                mCommentsAdapter.addComments(comments, hasMoreChildren);
+                restoreCommentScrollPosition();
+            } else {
+                fetchPostAndCommentsById(postId);
+            }
         } else {
-            if (showSensitiveWarning()) {
+            if (!renderContent()) {
                 return;
             }
-            setupMenu();
 
-            mPostAdapter = new PostDetailRecyclerViewAdapter(mActivity,
-                    this, mExecutor, mCustomThemeWrapper, mOauthRetrofit, mRetrofit,
-                    mRedgifsRetrofit, mStreamableApiProvider, mRedditDataRoomDatabase, mGlide,
-                    mSeparatePostAndComments, mActivity.accessToken, mActivity.accountName, mPost, mLocale,
-                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
-                    mExoCreator, post -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
-            mCommentsAdapter = new CommentsRecyclerViewAdapter(mActivity,
-                    this, mCustomThemeWrapper, mExecutor, mRetrofit, mOauthRetrofit,
-                    mActivity.accessToken, mActivity.accountName, mPost, mLocale, mSingleCommentId,
-                    isSingleCommentThreadMode, mSharedPreferences, mNsfwAndSpoilerSharedPreferences,
-                    new CommentsRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
-                        @Override
-                        public void retryFetchingComments() {
-                            fetchCommentsRespectRecommendedSort(false);
-                        }
+            PostDetailCommentsCache cache = savedInstanceState == null && !isSingleCommentThreadMode
+                    ? postDetailCommentsCacheManager.getCache(mPost) : null;
+            if (restoreCache(cache)) {
+                postDetailCommentsCacheManager.removeCache(mPost);
 
-                        @Override
-                        public void retryFetchingMoreComments() {
-                            isLoadingMoreChildren = false;
-                            loadMoreChildrenSuccess = true;
-
-                            fetchMoreComments();
-                        }
-
-                        @Override
-                        public SortType.Type getSortType() {
-                            return sortType;
-                        }
-                    });
-            if (mCommentsRecyclerView != null) {
-                binding.postDetailRecyclerViewViewPostDetailFragment.setAdapter(mPostAdapter);
-                mCommentsRecyclerView.setAdapter(mCommentsAdapter);
+                mCommentsAdapter.addComments(comments, hasMoreChildren);
+                restoreCommentScrollPosition();
             } else {
-                mConcatAdapter = new ConcatAdapter(mPostAdapter, mCommentsAdapter);
-                binding.postDetailRecyclerViewViewPostDetailFragment.setAdapter(mConcatAdapter);
-            }
-
-            if (commentFilterFetched) {
-                fetchCommentsAfterCommentFilterAvailable();
-            } else {
-                FetchCommentFilter.fetchCommentFilter(mExecutor, new Handler(Looper.getMainLooper()), mRedditDataRoomDatabase, mPost.getSubredditName(),
-                        commentFilter -> {
-                            mCommentFilter = commentFilter;
-                            commentFilterFetched = true;
-                            fetchCommentsAfterCommentFilterAvailable();
-                        });
+                if (commentFilterFetched) {
+                    fetchCommentsAfterCommentFilterAvailable();
+                } else {
+                    FetchCommentFilter.fetchCommentFilter(mExecutor, new Handler(Looper.getMainLooper()), mRedditDataRoomDatabase, mPost.getSubredditName(),
+                            commentFilter -> {
+                                mCommentFilter = commentFilter;
+                                commentFilterFetched = true;
+                                fetchCommentsAfterCommentFilterAvailable();
+                            });
+                }
             }
         }
 
@@ -680,6 +639,87 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         });
     }
 
+    private boolean renderContent() {
+        if (showSensitiveWarning()) {
+            return false;
+        }
+        setupMenu();
+
+        mPostAdapter = new PostDetailRecyclerViewAdapter(mActivity,
+                this, mExecutor, mCustomThemeWrapper, mOauthRetrofit, mRetrofit,
+                mRedgifsRetrofit, mStreamableApiProvider, mRedditDataRoomDatabase, mGlide,
+                mSeparatePostAndComments, mActivity.accessToken, mActivity.accountName, mPost,
+                mLocale, mSharedPreferences, mCurrentAccountSharedPreferences,
+                mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
+                mPostHistorySharedPreferences, mExoCreator,
+                post -> {
+                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                    setupMenu();
+                });
+        mCommentsAdapter = new CommentsRecyclerViewAdapter(mActivity,
+                this, mCustomThemeWrapper, mExecutor, mRetrofit, mOauthRetrofit,
+                mActivity.accessToken, mActivity.accountName, mPost, mLocale, mSingleCommentId,
+                isSingleCommentThreadMode, mSharedPreferences, mNsfwAndSpoilerSharedPreferences,
+                new CommentsRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
+                    @Override
+                    public void retryFetchingComments() {
+                        fetchCommentsRespectRecommendedSort(false);
+                    }
+
+                    @Override
+                    public void retryFetchingMoreComments() {
+                        isLoadingMoreChildren = false;
+                        loadMoreChildrenSuccess = true;
+
+                        fetchMoreComments();
+                    }
+
+                    @Override
+                    public SortType.Type getSortType() {
+                        return sortType;
+                    }
+                });
+        if (mCommentsRecyclerView != null) {
+            binding.postDetailRecyclerViewViewPostDetailFragment.setAdapter(mPostAdapter);
+            mCommentsRecyclerView.setAdapter(mCommentsAdapter);
+        } else {
+            mConcatAdapter = new ConcatAdapter(mPostAdapter, mCommentsAdapter);
+            binding.postDetailRecyclerViewViewPostDetailFragment.setAdapter(mConcatAdapter);
+        }
+
+        return true;
+    }
+
+    private boolean restoreCache(PostDetailCommentsCache cache) {
+        if (cache != null) {
+            if (mPost == null) {
+                mPost = cache.getPost();
+                viewPostDetailActivityViewModel.setPost(mPost);
+            }
+            comments = cache.getVisibleComments();
+            children = cache.getChildren();
+            mCommentFilter = cache.getCommentFilter();
+            commentScrollPosition = cache.getScrollPosition();
+            hasMoreChildren = cache.getHasMoreChildren();
+            commentFilterFetched = true;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private void restoreCommentScrollPosition() {
+        // if the scrollPosition < 0 do nothing
+        if (commentScrollPosition >= 0) {
+            if (mCommentsRecyclerView != null) {
+                mCommentsRecyclerView.scrollToPosition(commentScrollPosition);
+            } else {
+                binding.postDetailRecyclerViewViewPostDetailFragment.scrollToPosition(commentScrollPosition + 1);
+            }
+        }
+    }
+
     public void fetchCommentsAfterCommentFilterAvailable() {
         if (comments == null) {
             fetchCommentsRespectRecommendedSort(false);
@@ -704,31 +744,27 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_fragment);
             MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_fragment);
 
+            saveItem.setVisible(true);
+            hideItem.setVisible(true);
             mMenu.findItem(R.id.action_comment_view_post_detail_fragment).setVisible(true);
             mMenu.findItem(R.id.action_sort_view_post_detail_fragment).setVisible(true);
             mMenu.findItem(R.id.action_report_view_post_detail_fragment).setVisible(true);
             mMenu.findItem(R.id.action_crosspost_view_post_detail_fragment).setVisible(true);
             mMenu.findItem(R.id.action_add_to_post_filter_view_post_detail_fragment).setVisible(true);
 
-            if (!mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                if (mPost.isSaved()) {
-                    saveItem.setVisible(true);
-                    saveItem.setIcon(mSavedIcon);
-                } else {
-                    saveItem.setVisible(true);
-                    saveItem.setIcon(mUnsavedIcon);
-                }
-
-                if (mPost.isHidden()) {
-                    hideItem.setVisible(true);
-                    Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, hideItem, mActivity.getString(R.string.action_unhide_post));
-                } else {
-                    hideItem.setVisible(true);
-                    Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, hideItem, mActivity.getString(R.string.action_hide_post));
-                }
+            if (mPost.isHidden()) {
+                Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, hideItem, mActivity.getString(R.string.action_unhide_post));
             } else {
-                saveItem.setVisible(false);
-                hideItem.setVisible(false);
+                Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, hideItem, mActivity.getString(R.string.action_hide_post));
+            }
+
+            if (mPost.isSaved()) {
+                Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, saveItem, mActivity.getString(R.string.action_unsave_post));
+            } else {
+                Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, saveItem, mActivity.getString(R.string.action_save_post));
+            }
+
+            if (Account.ANONYMOUS_ACCOUNT.equals(mActivity.accountName)) {
                 mMenu.findItem(R.id.action_crosspost_view_post_detail_fragment).setVisible(false);
             }
 
@@ -993,55 +1029,79 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             }
             return true;
         } else if (itemId == R.id.action_save_view_post_detail_fragment) {
-            if (mPost != null && !mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                if (mPost.isSaved()) {
-                    item.setIcon(mUnsavedIcon);
-                    SaveThing.unsaveThing(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(),
-                            new SaveThing.SaveThingListener() {
-                                @Override
-                                public void success() {
-                                    if (isAdded()) {
-                                        mPost.setSaved(false);
-                                        item.setIcon(mUnsavedIcon);
-                                        showMessage(R.string.post_unsaved_success);
-                                    }
-                                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                                }
-
-                                @Override
-                                public void failed() {
-                                    if (isAdded()) {
-                                        mPost.setSaved(true);
-                                        item.setIcon(mSavedIcon);
-                                        showMessage(R.string.post_unsaved_failed);
-                                    }
-                                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                                }
-                            });
+            if (mPost != null) {
+                if (Account.ANONYMOUS_ACCOUNT.equals(mActivity.accountName)) {
+                    if (mPost.isSaved()) {
+                        ReadPostModification.deleteReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                mPost.getId(), ReadPostType.ANONYMOUS_SAVED_POSTS);
+                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_save_post));
+                        showMessage(R.string.post_unsaved_success);
+                    } else {
+                        ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                mPost.getId(), ReadPostType.ANONYMOUS_SAVED_POSTS,
+                                ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences));
+                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unsave_post));
+                        showMessage(R.string.post_saved_success);
+                    }
+                    mPost.setSaved(!mPost.isSaved());
+                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                    mPostAdapter.updatePost(mPost);
                 } else {
-                    item.setIcon(mSavedIcon);
-                    SaveThing.saveThing(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(),
-                            new SaveThing.SaveThingListener() {
-                                @Override
-                                public void success() {
-                                    if (isAdded()) {
-                                        mPost.setSaved(true);
-                                        item.setIcon(mSavedIcon);
-                                        showMessage(R.string.post_saved_success);
-                                    }
-                                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                                }
+                    if (mPost.isSaved()) {
+                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_save_post));
 
-                                @Override
-                                public void failed() {
-                                    if (isAdded()) {
-                                        mPost.setSaved(false);
-                                        item.setIcon(mUnsavedIcon);
-                                        showMessage(R.string.post_saved_failed);
+                        SaveThing.unsaveThing(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(),
+                                new SaveThing.SaveThingListener() {
+                                    @Override
+                                    public void success() {
+                                        if (isAdded()) {
+                                            mPost.setSaved(false);
+                                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_save_post));
+                                            showMessage(R.string.post_unsaved_success);
+                                        }
+                                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                        mPostAdapter.updatePost(mPost);
                                     }
-                                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                                }
-                            });
+
+                                    @Override
+                                    public void failed() {
+                                        if (isAdded()) {
+                                            mPost.setSaved(true);
+                                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unsave_post));
+                                            showMessage(R.string.post_unsaved_failed);
+                                        }
+                                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                        mPostAdapter.updatePost(mPost);
+                                    }
+                                });
+                    } else {
+                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unsave_post));
+
+                        SaveThing.saveThing(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(),
+                                new SaveThing.SaveThingListener() {
+                                    @Override
+                                    public void success() {
+                                        if (isAdded()) {
+                                            mPost.setSaved(true);
+                                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unsave_post));
+                                            showMessage(R.string.post_saved_success);
+                                        }
+                                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                        mPostAdapter.updatePost(mPost);
+                                    }
+
+                                    @Override
+                                    public void failed() {
+                                        if (isAdded()) {
+                                            mPost.setSaved(false);
+                                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_save_post));
+                                            showMessage(R.string.post_saved_failed);
+                                        }
+                                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                        mPostAdapter.updatePost(mPost);
+                                    }
+                                });
+                    }
                 }
             }
             return true;
@@ -1057,47 +1117,64 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             startActivity(crosspostIntent);
             return true;
         } else if (itemId == R.id.action_hide_view_post_detail_fragment) {
-            if (mPost != null && !mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                if (mPost.isHidden()) {
-                    Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, getString(R.string.action_hide_post));
-
-                    HidePost.unhidePost(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(), new HidePost.HidePostListener() {
-                        @Override
-                        public void success() {
-                            mPost.setHidden(false);
-                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_hide_post));
-                            showMessage(R.string.post_unhide_success);
-                            EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                        }
-
-                        @Override
-                        public void failed() {
-                            mPost.setHidden(true);
-                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unhide_post));
-                            showMessage(R.string.post_unhide_failed);
-                            EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                        }
-                    });
+            if (mPost != null) {
+                if (Account.ANONYMOUS_ACCOUNT.equals(mActivity.accountName)) {
+                    if (mPost.isHidden()) {
+                        ReadPostModification.deleteReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                mPost.getId(), ReadPostType.ANONYMOUS_HIDDEN_POSTS);
+                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_hide_post));
+                        showMessage(R.string.post_unhide_success);
+                    } else {
+                        ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                mPost.getId(), ReadPostType.ANONYMOUS_HIDDEN_POSTS,
+                                ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences));
+                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unhide_post));
+                        showMessage(R.string.post_hide_success);
+                    }
+                    mPost.setHidden(!mPost.isHidden());
+                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                 } else {
-                    Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, getString(R.string.action_unhide_post));
+                    if (mPost.isHidden()) {
+                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, getString(R.string.action_hide_post));
 
-                    HidePost.hidePost(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(), new HidePost.HidePostListener() {
-                        @Override
-                        public void success() {
-                            mPost.setHidden(true);
-                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unhide_post));
-                            showMessage(R.string.post_hide_success);
-                            EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                        }
+                        HidePost.unhidePost(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(), new HidePost.HidePostListener() {
+                            @Override
+                            public void success() {
+                                mPost.setHidden(false);
+                                Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_hide_post));
+                                showMessage(R.string.post_unhide_success);
+                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                            }
 
-                        @Override
-                        public void failed() {
-                            mPost.setHidden(false);
-                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_hide_post));
-                            showMessage(R.string.post_hide_failed);
-                            EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                        }
-                    });
+                            @Override
+                            public void failed() {
+                                mPost.setHidden(true);
+                                Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unhide_post));
+                                showMessage(R.string.post_unhide_failed);
+                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                            }
+                        });
+                    } else {
+                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, getString(R.string.action_unhide_post));
+
+                        HidePost.hidePost(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(), new HidePost.HidePostListener() {
+                            @Override
+                            public void success() {
+                                mPost.setHidden(true);
+                                Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unhide_post));
+                                showMessage(R.string.post_hide_success);
+                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                            }
+
+                            @Override
+                            public void failed() {
+                                mPost.setHidden(false);
+                                Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_hide_post));
+                                showMessage(R.string.post_hide_failed);
+                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                            }
+                        });
+                    }
                 }
             }
             return true;
@@ -1208,7 +1285,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mMarkPostsAsRead && mPost != null && !mPost.isRead()) {
             mPost.markAsRead();
             int readPostsLimit = ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences);
-            InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName, mPost.getId(), readPostsLimit);
+            ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName, mPost.getId(), ReadPostType.READ_POSTS, readPostsLimit);
             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
         }
     }
@@ -1237,19 +1314,54 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        if (mPost == null) {
+            return;
+        }
+
+        if (isSingleCommentThreadMode) {
+            return;
+        }
+
+        if (mCommentsAdapter == null) {
+            return;
+        }
+
+        ArrayList<Comment> comments = mCommentsAdapter.getVisibleComments();
+        if (comments == null) {
+            return;
+        }
+
+        updateCommentScrollPosition();
+
+        postDetailCommentsCacheManager.saveCache(
+                mPost,
+                comments,
+                children,
+                mCommentFilter,
+                commentScrollPosition,
+                hasMoreChildren
+        );
+    }
+
+    @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         comments = mCommentsAdapter == null ? null : mCommentsAdapter.getVisibleComments();
+        updateCommentScrollPosition();
+        outState.putInt(SCROLL_POSITION_STATE, commentScrollPosition);
+        Bridge.saveInstanceState(this, outState);
+    }
+
+    private void updateCommentScrollPosition() {
         if (mCommentsRecyclerView != null) {
             LinearLayoutManager myLayoutManager = (LinearLayoutManager) mCommentsRecyclerView.getLayoutManager();
-            scrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() : 0;
-            
+            commentScrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() : 0;
         } else {
             LinearLayoutManager myLayoutManager = (LinearLayoutManager) binding.postDetailRecyclerViewViewPostDetailFragment.getLayoutManager();
-            scrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() : 0;
+            commentScrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() - 1 : 0;
         }
-        outState.putInt(SCROLL_POSITION_STATE, scrollPosition);
-        Bridge.saveInstanceState(this, outState);
     }
 
     @Override
@@ -1312,54 +1424,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         public void onParsePostSuccess(Post post) {
                             mPost = post;
 
-                            if (showSensitiveWarning()) {
-                               return;
+                            if (!renderContent()) {
+                                return;
                             }
 
                             tryMarkingPostAsRead();
-
-                            setupMenu();
-
-                            mPostAdapter = new PostDetailRecyclerViewAdapter(mActivity,
-                                    ViewPostDetailFragment.this, mExecutor, mCustomThemeWrapper,
-                                    mOauthRetrofit, mRetrofit, mRedgifsRetrofit,
-                                    mStreamableApiProvider, mRedditDataRoomDatabase, mGlide, mSeparatePostAndComments,
-                                    mActivity.accessToken, mActivity.accountName, mPost, mLocale, mSharedPreferences,
-                                    mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences,
-                                    mPostDetailsSharedPreferences, mExoCreator,
-                                    post1 -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
-
-                            mCommentsAdapter = new CommentsRecyclerViewAdapter(mActivity,
-                                    ViewPostDetailFragment.this, mCustomThemeWrapper, mExecutor,
-                                    mRetrofit, mOauthRetrofit, mActivity.accessToken, mActivity.accountName, mPost, mLocale,
-                                    mSingleCommentId, isSingleCommentThreadMode, mSharedPreferences,
-                                    mNsfwAndSpoilerSharedPreferences,
-                                    new CommentsRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
-                                        @Override
-                                        public void retryFetchingComments() {
-                                            fetchCommentsRespectRecommendedSort(false);
-                                        }
-
-                                        @Override
-                                        public void retryFetchingMoreComments() {
-                                            isLoadingMoreChildren = false;
-                                            loadMoreChildrenSuccess = true;
-
-                                            fetchMoreComments();
-                                        }
-
-                                        @Override
-                                        public SortType.Type getSortType() {
-                                            return sortType;
-                                        }
-                                    });
-                            if (mCommentsRecyclerView != null) {
-                                binding.postDetailRecyclerViewViewPostDetailFragment.setAdapter(mPostAdapter);
-                                mCommentsRecyclerView.setAdapter(mCommentsAdapter);
-                            } else {
-                                mConcatAdapter = new ConcatAdapter(mPostAdapter, mCommentsAdapter);
-                                binding.postDetailRecyclerViewViewPostDetailFragment.setAdapter(mConcatAdapter);
-                            }
 
                             FetchCommentFilter.fetchCommentFilter(mExecutor, new Handler(Looper.getMainLooper()), mRedditDataRoomDatabase,
                                     mPost.getSubredditName(), new FetchCommentFilter.FetchCommentFilterListener() {
@@ -1983,13 +2052,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mPost.setRemoved(event.post.isRemoved(), event.post.isSpam());
             mPost.setIsLocked(event.post.isLocked());
             mPost.setIsModerator(event.post.isModerator());
-            if (mMenu != null) {
-                if (event.post.isSaved()) {
-                    mMenu.findItem(R.id.action_save_view_post_detail_fragment).setIcon(mSavedIcon);
-                } else {
-                    mMenu.findItem(R.id.action_save_view_post_detail_fragment).setIcon(mUnsavedIcon);
-                }
-            }
+            setupMenu();
             if (mPostAdapter != null) {
                 mPostAdapter.updatePost(mPost);
             }

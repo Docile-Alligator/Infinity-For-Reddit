@@ -11,7 +11,7 @@ import androidx.room.ForeignKey;
 
 import ml.docilealligator.infinityforreddit.account.Account;
 
-@Entity(tableName = "read_posts", primaryKeys = {"username", "id"},
+@Entity(tableName = "read_posts", primaryKeys = {"username", "id", "read_post_type"},
         foreignKeys = @ForeignKey(entity = Account.class, parentColumns = "username",
                 childColumns = "username", onDelete = ForeignKey.CASCADE))
 public class ReadPost implements Parcelable {
@@ -23,17 +23,22 @@ public class ReadPost implements Parcelable {
     private String id;
     @ColumnInfo(name = "time")
     private long time;
+    @ReadPostType
+    @ColumnInfo(name = "read_post_type")
+    private int readPostType;
 
-    public ReadPost(@NonNull String username, @NonNull String id) {
+    public ReadPost(@NonNull String username, @NonNull String id, @ReadPostType int readPostType) {
         this.username = username;
         this.id = id;
         this.time = System.currentTimeMillis();
+        this.readPostType = readPostType;
     }
 
     protected ReadPost(Parcel in) {
         username = in.readString();
         id = in.readString();
         time = in.readLong();
+        readPostType = in.readInt();
     }
 
     public static final Creator<ReadPost> CREATOR = new Creator<ReadPost>() {
@@ -74,6 +79,10 @@ public class ReadPost implements Parcelable {
         this.time = time;
     }
 
+    public int getReadPostType() {
+        return readPostType;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -84,6 +93,7 @@ public class ReadPost implements Parcelable {
         parcel.writeString(username);
         parcel.writeString(id);
         parcel.writeLong(time);
+        parcel.writeInt(readPostType);
     }
 
     @Override

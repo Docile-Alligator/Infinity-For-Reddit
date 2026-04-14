@@ -38,6 +38,7 @@ import ml.docilealligator.infinityforreddit.asynctasks.RestoreSettings;
 import ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceFragmentCompat;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostDao;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 /**
@@ -202,7 +203,7 @@ public class AdvancedPreferenceFragment extends CustomFontPreferenceFragmentComp
         if (deleteReadPostsPreference != null) {
             executor.execute(() -> {
                 ReadPostDao readPostDao = mRedditDataRoomDatabase.readPostDao();
-                int tableCount = readPostDao.getReadPostsCount(mActivity.accountName);
+                int tableCount = readPostDao.getReadPostsCount(mActivity.accountName, ReadPostType.READ_POSTS);
                 long tableEntrySize = readPostDao.getMaxReadPostEntrySize();
                 long tableSize = tableEntrySize * tableCount / 1024;
                 handler.post(() -> deleteReadPostsPreference.setSummary(getString(R.string.settings_read_posts_db_summary, tableSize, tableCount)));

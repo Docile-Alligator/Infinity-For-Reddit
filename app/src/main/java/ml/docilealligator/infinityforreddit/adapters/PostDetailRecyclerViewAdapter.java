@@ -117,7 +117,10 @@ import ml.docilealligator.infinityforreddit.markdown.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.post.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.post.PostPagingSource;
+import ml.docilealligator.infinityforreddit.post.PostType;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostModification;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
 import ml.docilealligator.infinityforreddit.thing.SaveThing;
 import ml.docilealligator.infinityforreddit.thing.StreamableVideo;
 import ml.docilealligator.infinityforreddit.thing.VoteThing;
@@ -154,6 +157,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private final Provider<StreamableAPI> mStreamableApiProvider;
     private final RedditDataRoomDatabase mRedditDataRoomDatabase;
     private final SharedPreferences mCurrentAccountSharedPreferences;
+    private final SharedPreferences mPostHistorySharedPreferences;
     private final RequestManager mGlide;
     private final SaveMemoryCenterInisdeDownsampleStrategy mSaveMemoryCenterInsideDownsampleStrategy;
     private final EmoteCloseBracketInlineProcessor mEmoteCloseBracketInlineProcessor;
@@ -242,6 +246,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                          SharedPreferences currentAccountSharedPreferences,
                                          SharedPreferences nsfwAndSpoilerSharedPreferences,
                                          SharedPreferences postDetailsSharedPreferences,
+                                         SharedPreferences postHistorySharedPreferences,
                                          ExoCreator exoCreator,
                                          PostDetailRecyclerViewAdapterCallback postDetailRecyclerViewAdapterCallback) {
         mActivity = activity;
@@ -312,6 +317,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mHideSubredditAndUserPrefix = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_SUBREDDIT_AND_USER_PREFIX, false);
         mHideTheNumberOfVotes = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_VOTES, false);
         mHideTheNumberOfComments = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_COMMENTS, false);
+
+        mPostHistorySharedPreferences = postHistorySharedPreferences;
 
         mPostDetailRecyclerViewAdapterCallback = postDetailRecyclerViewAdapterCallback;
         mScale = resources.getDisplayMetrics().density;
@@ -1317,7 +1324,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 typeTextView.setOnClickListener(view -> {
                     Intent intent = new Intent(mActivity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
-                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostType.SUBREDDIT);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE_FILTER, mPost.getPostType());
                     mActivity.startActivity(intent);
                 });
@@ -1329,7 +1336,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 flairTextView.setOnClickListener(view -> {
                     Intent intent = new Intent(mActivity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
-                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostType.SUBREDDIT);
                     intent.putExtra(FilteredPostsActivity.EXTRA_CONTAIN_FLAIR, mPost.getFlair());
                     mActivity.startActivity(intent);
                 });
@@ -1340,7 +1347,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             nSFWTextView.setOnClickListener(view -> {
                 Intent intent = new Intent(mActivity, FilteredPostsActivity.class);
                 intent.putExtra(FilteredPostsActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
-                intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
+                intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostType.SUBREDDIT);
                 intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE_FILTER, Post.NSFW_TYPE);
                 mActivity.startActivity(intent);
             });
@@ -1366,14 +1373,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             });
 
             upvoteButton.setOnClickListener(view -> {
-                if (mPost.isArchived()) {
-                    Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                    Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
-                    return;
+                if (!Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
+                    if (mPost.isArchived()) {
+                        Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
 
                 ColorStateList previousUpvoteButtonIconTint = upvoteButton.getIconTint();
@@ -1404,9 +1408,17 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     scoreTextView.setTextColor(mPostIconAndInfoColor);
                 }
 
-                if (!mHideTheNumberOfVotes) {
-                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                            mPost.getScore() + mPost.getVoteType()));
+                if (Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
+                    ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                            mPost.getId(), ReadPostType.ANONYMOUS_UPVOTED_POSTS,
+                            ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences));
+                    mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
+                    return;
+                } else {
+                    if (!mHideTheNumberOfVotes) {
+                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                mPost.getScore() + mPost.getVoteType()));
+                    }
                 }
 
                 VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingWithoutPositionListener() {
@@ -1458,14 +1470,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             });
 
             downvoteButton.setOnClickListener(view -> {
-                if (mPost.isArchived()) {
-                    Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                    Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
-                    return;
+                if (!Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
+                    if (mPost.isArchived()) {
+                        Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                 }
 
                 ColorStateList previousUpvoteButtonIconTint = upvoteButton.getIconTint();
@@ -1496,9 +1505,17 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     scoreTextView.setTextColor(mPostIconAndInfoColor);
                 }
 
-                if (!mHideTheNumberOfVotes) {
-                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                            mPost.getScore() + mPost.getVoteType()));
+                if (Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
+                    ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                            mPost.getId(), ReadPostType.ANONYMOUS_DOWNVOTED_POSTS,
+                            ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences));
+                    mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
+                    return;
+                } else {
+                    if (!mHideTheNumberOfVotes) {
+                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                mPost.getScore() + mPost.getVoteType()));
+                    }
                 }
 
                 VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingWithoutPositionListener() {
@@ -1577,51 +1594,63 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             }
 
             this.saveButton.setOnClickListener(view -> {
-                if (mAccountName.equals(Account.ANONYMOUS_ACCOUNT)) {
-                    Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
                 if (mPost.isSaved()) {
                     this.saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
-                    SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
-                            new SaveThing.SaveThingListener() {
-                                @Override
-                                public void success() {
-                                    mPost.setSaved(false);
-                                    PostDetailBaseViewHolder.this.saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
-                                    Toast.makeText(mActivity, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
-                                    mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
-                                }
+                    if (Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
+                        ReadPostModification.deleteReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                mPost.getId(), ReadPostType.ANONYMOUS_SAVED_POSTS);
+                        mPost.setSaved(false);
+                        Toast.makeText(mActivity, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
+                        mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
+                    } else {
+                        SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
+                                new SaveThing.SaveThingListener() {
+                                    @Override
+                                    public void success() {
+                                        mPost.setSaved(false);
+                                        PostDetailBaseViewHolder.this.saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                        Toast.makeText(mActivity, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
+                                        mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
+                                    }
 
-                                @Override
-                                public void failed() {
-                                    mPost.setSaved(true);
-                                    PostDetailBaseViewHolder.this.saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
-                                    Toast.makeText(mActivity, R.string.post_unsaved_failed, Toast.LENGTH_SHORT).show();
-                                    mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
-                                }
-                            });
+                                    @Override
+                                    public void failed() {
+                                        mPost.setSaved(true);
+                                        PostDetailBaseViewHolder.this.saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
+                                        Toast.makeText(mActivity, R.string.post_unsaved_failed, Toast.LENGTH_SHORT).show();
+                                        mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
+                                    }
+                                });
+                    }
                 } else {
                     this.saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
-                    SaveThing.saveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
-                            new SaveThing.SaveThingListener() {
-                                @Override
-                                public void success() {
-                                    mPost.setSaved(true);
-                                    PostDetailBaseViewHolder.this.saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
-                                    Toast.makeText(mActivity, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
-                                    mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
-                                }
+                    if (Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
+                        ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                mPost.getId(), ReadPostType.ANONYMOUS_SAVED_POSTS,
+                                ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences));
+                        mPost.setSaved(true);
+                        Toast.makeText(mActivity, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
+                        mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
+                    } else {
+                        SaveThing.saveThing(mOauthRetrofit, mAccessToken, mPost.getFullName(),
+                                new SaveThing.SaveThingListener() {
+                                    @Override
+                                    public void success() {
+                                        mPost.setSaved(true);
+                                        PostDetailBaseViewHolder.this.saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
+                                        Toast.makeText(mActivity, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
+                                        mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
+                                    }
 
-                                @Override
-                                public void failed() {
-                                    mPost.setSaved(false);
-                                    PostDetailBaseViewHolder.this.saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
-                                    Toast.makeText(mActivity, R.string.post_saved_failed, Toast.LENGTH_SHORT).show();
-                                    mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
-                                }
-                            });
+                                    @Override
+                                    public void failed() {
+                                        mPost.setSaved(false);
+                                        PostDetailBaseViewHolder.this.saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                        Toast.makeText(mActivity, R.string.post_saved_failed, Toast.LENGTH_SHORT).show();
+                                        mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
+                                    }
+                                });
+                    }
                 }
             });
 

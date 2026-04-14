@@ -20,7 +20,7 @@
         android:id="@+id/action_save_view_post_detail_fragment"
         android:orderInCategory="3"
         android:title="@string/action_save_post"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         android:visible="false" />
 
     <item

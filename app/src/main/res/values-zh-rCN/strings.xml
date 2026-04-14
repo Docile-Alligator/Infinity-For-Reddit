@@ -894,7 +894,6 @@ Reddit 视频分辨率较低。
     <string name="settings_only_disable_preview_in_video_and_gif_posts_title">"仅禁用视频和动图帖子预览"</string>
     <string name="settings_enable_search_history_title">"启用搜索历史"</string>
     <string name="settings_post_history_title">"帖子历史"</string>
-    <string name="settings_mark_posts_as_read_title">"标记帖子为已读"</string>
     <string name="settings_mark_posts_as_read_after_voting_title">"投票后标记帖子为已读"</string>
     <string name="settings_mark_posts_as_read_on_scroll_title">"滚动后标记帖子为已读"</string>
     <string name="settings_hide_read_posts_automatically_title">"自动隐藏已读帖子"</string>
@@ -1209,7 +1208,6 @@ Reddit 视频分辨率较低。
     <string name="comment_karma">"评论声望："</string>
     <string name="awarder_karma">"颁奖者声望："</string>
     <string name="awardee_karma">"获奖者声望："</string>
-    <string name="history_activity_label">"历史"</string>
     <string name="history">"历史"</string>
     <string name="settings_easier_to_watch_in_full_screen_title">"全屏时更容易观看"</string>
     <string name="clear_user_flair">"清除头衔"</string>
