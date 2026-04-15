@@ -9,6 +9,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -76,6 +77,10 @@ public class PostFilter implements Parcelable {
     public boolean containVideoType = true;
     @ColumnInfo(name = "contain_gallery_type")
     public boolean containGalleryType = true;
+    @Ignore
+    public ArrayList<String> postTitleExcludesRegexes = new ArrayList<>();
+    @Ignore
+    public ArrayList<String> postTitleContainsRegexes = new ArrayList<>();
 
     public PostFilter() {
 
@@ -110,6 +115,10 @@ public class PostFilter implements Parcelable {
         containGifType = in.readByte() != 0;
         containVideoType = in.readByte() != 0;
         containGalleryType = in.readByte() != 0;
+        postTitleExcludesRegexes = new ArrayList<>();
+        in.readStringList(postTitleExcludesRegexes);
+        postTitleContainsRegexes = new ArrayList<>();
+        in.readStringList(postTitleContainsRegexes);
     }
 
     public static final Creator<PostFilter> CREATOR = new Creator<PostFilter>() {
@@ -173,24 +182,47 @@ public class PostFilter implements Parcelable {
         if (!postFilter.containGalleryType && post.getPostType() == Post.GALLERY_TYPE) {
             return false;
         }
-        if (postFilter.postTitleExcludesRegex != null && !postFilter.postTitleExcludesRegex.equals("")) {
-            try {
-                Pattern pattern = Pattern.compile(postFilter.postTitleExcludesRegex);
-                Matcher matcher = pattern.matcher(post.getTitle());
-                if (matcher.find()) {
-                    return false;
-                }
-            } catch (PatternSyntaxException ignore) {}
+        if (postFilter.postTitleExcludesRegexes.isEmpty()
+                && postFilter.postTitleExcludesRegex != null
+                && !postFilter.postTitleExcludesRegex.isEmpty()
+        ) {
+            postFilter.postTitleExcludesRegexes.add(postFilter.postTitleExcludesRegex);
         }
-        if (postFilter.postTitleContainsRegex != null && !postFilter.postTitleContainsRegex.equals("")) {
-            try {
-                Pattern pattern = Pattern.compile(postFilter.postTitleContainsRegex);
-                Matcher matcher = pattern.matcher(post.getTitle());
-                if (!matcher.find()) {
-                    return false;
+        if (!postFilter.postTitleExcludesRegexes.isEmpty()) {
+            for (String regex : postFilter.postTitleExcludesRegexes) {
+                try {
+                    Pattern pattern = Pattern.compile(regex);
+                    Matcher matcher = pattern.matcher(post.getTitle());
+                    if (matcher.find()) {
+                        return false;
+                    }
+                } catch (PatternSyntaxException e) {
+                    e.printStackTrace();
                 }
-            } catch (PatternSyntaxException e) {
-                e.printStackTrace();
+            }
+        }
+        if (postFilter.postTitleContainsRegexes.isEmpty()
+                && postFilter.postTitleContainsRegex != null
+                && !postFilter.postTitleContainsRegex.isEmpty()
+        ) {
+            postFilter.postTitleContainsRegexes.add(postFilter.postTitleContainsRegex);
+        }
+        if (!postFilter.postTitleContainsRegexes.isEmpty()) {
+            boolean matched = false;
+            for (String regex : postFilter.postTitleContainsRegexes) {
+                try {
+                    Pattern pattern = Pattern.compile(regex);
+                    Matcher matcher = pattern.matcher(post.getTitle());
+                    if (matcher.find()) {
+                        matched = true;
+                        break;
+                    }
+                } catch (PatternSyntaxException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (!matched) {
+                return false;
             }
         }
         if (postFilter.postTitleExcludesStrings != null && !postFilter.postTitleExcludesStrings.equals("")) {
@@ -329,11 +361,13 @@ public class PostFilter implements Parcelable {
             postFilter.onlyNSFW = p.onlyNSFW ? p.onlyNSFW : postFilter.onlyNSFW;
             postFilter.onlySpoiler = p.onlySpoiler ? p.onlySpoiler : postFilter.onlySpoiler;
 
-            if (p.postTitleExcludesRegex != null && !p.postTitleExcludesRegex.equals("")) {
+            if (p.postTitleExcludesRegex != null && !p.postTitleExcludesRegex.isEmpty()) {
+                postFilter.postTitleExcludesRegexes.add(p.postTitleExcludesRegex);
                 postFilter.postTitleExcludesRegex = p.postTitleExcludesRegex;
             }
 
-            if (p.postTitleContainsRegex != null && !p.postTitleContainsRegex.equals("")) {
+            if (p.postTitleContainsRegex != null && !p.postTitleContainsRegex.isEmpty()) {
+                postFilter.postTitleContainsRegexes.add(p.postTitleContainsRegex);
                 postFilter.postTitleContainsRegex = p.postTitleContainsRegex;
             }
 
@@ -443,5 +477,7 @@ public class PostFilter implements Parcelable {
         parcel.writeByte((byte) (containGifType ? 1 : 0));
         parcel.writeByte((byte) (containVideoType ? 1 : 0));
         parcel.writeByte((byte) (containGalleryType ? 1 : 0));
+        parcel.writeStringList(postTitleExcludesRegexes);
+        parcel.writeStringList(postTitleContainsRegexes);
     }
 }
