@@ -47,20 +47,20 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class RestoreSettings {
     public static void restoreSettings(Context context, Executor executor, Handler handler,
-                                ContentResolver contentResolver, Uri zipFileUri,
-                                RedditDataRoomDatabase redditDataRoomDatabase,
-                                SharedPreferences defaultSharedPreferences,
-                                SharedPreferences lightThemeSharedPreferences,
-                                SharedPreferences darkThemeSharedPreferences,
-                                SharedPreferences amoledThemeSharedPreferences,
-                                SharedPreferences sortTypeSharedPreferences,
-                                SharedPreferences postLayoutSharedPreferences,
-                                SharedPreferences postFeedScrolledPositionSharedPreferences,
-                                SharedPreferences mainActivityTabsSharedPreferences,
-                                SharedPreferences nsfwAndSpoilerSharedPreferencs,
-                                SharedPreferences bottomAppBarSharedPreferences,
-                                SharedPreferences postHistorySharedPreferences,
-                                RestoreSettingsListener restoreSettingsListener) {
+                                       ContentResolver contentResolver, Uri zipFileUri,
+                                       RedditDataRoomDatabase redditDataRoomDatabase,
+                                       SharedPreferences defaultSharedPreferences,
+                                       SharedPreferences lightThemeSharedPreferences,
+                                       SharedPreferences darkThemeSharedPreferences,
+                                       SharedPreferences amoledThemeSharedPreferences,
+                                       SharedPreferences sortTypeSharedPreferences,
+                                       SharedPreferences postLayoutSharedPreferences,
+                                       SharedPreferences postFeedScrolledPositionSharedPreferences,
+                                       SharedPreferences mainActivityTabsSharedPreferences,
+                                       SharedPreferences nsfwAndSpoilerSharedPreferencs,
+                                       SharedPreferences bottomAppBarSharedPreferences,
+                                       SharedPreferences postHistorySharedPreferences,
+                                       RestoreSettingsListener restoreSettingsListener) {
         executor.execute(() -> {
             try {
                 InputStream zipFileInputStream = contentResolver.openInputStream(zipFileUri);
@@ -80,7 +80,6 @@ public class RestoreSettings {
                 }
                 new File(cachePath).mkdir();
                 try (FileOutputStream zipCacheOutputStream = new FileOutputStream(new File(cachePath + "restore.zip"))) {
-
                     byte[] fileReader = new byte[1024];
 
                     while (true) {
@@ -196,11 +195,11 @@ public class RestoreSettings {
                             handler.post(() -> restoreSettingsListener.failed(context.getString(R.string.restore_settings_partially_failed)));
                         }
                     }
-                    } catch (IOException e) {
-                    e.printStackTrace();
-
-                    handler.post(() -> restoreSettingsListener.failed(context.getString(R.string.restore_settings_partially_failed)));
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
+
+                handler.post(() -> restoreSettingsListener.failed(context.getString(R.string.restore_settings_partially_failed)));
             }
         });
     }
