@@ -79,127 +79,128 @@ public class RestoreSettings {
                     FileUtils.deleteDirectory(new File(cachePath));
                 }
                 new File(cachePath).mkdir();
-                FileOutputStream zipCacheOutputStream = new FileOutputStream(new File(cachePath + "restore.zip"));
+                try (FileOutputStream zipCacheOutputStream = new FileOutputStream(new File(cachePath + "restore.zip"))) {
 
-                byte[] fileReader = new byte[1024];
+                    byte[] fileReader = new byte[1024];
 
-                while (true) {
-                    int read = zipFileInputStream.read(fileReader);
+                    while (true) {
+                        int read = zipFileInputStream.read(fileReader);
 
-                    if (read == -1) {
-                        break;
+                        if (read == -1) {
+                            break;
+                        }
+
+                        zipCacheOutputStream.write(fileReader, 0, read);
                     }
 
-                    zipCacheOutputStream.write(fileReader, 0, read);
-                }
-
-                new ZipFile(cachePath + "restore.zip", "123321".toCharArray()).extractAll(cachePath);
-                new File(cachePath + "restore.zip").delete();
-                File[] files = new File(cachePath).listFiles();
-                if (files == null || files.length <= 0) {
-                    handler.post(() -> restoreSettingsListener.failed(context.getString(R.string.restore_settings_failed_file_corrupted)));
-                } else {
-                    File restoreFilesDir = files[0];
-                    File[] restoreFiles = restoreFilesDir.listFiles();
-                    boolean result = true;
-                    if (restoreFiles != null) {
-                        for (File f : restoreFiles) {
-                            if (f.isFile()) {
-                                if (f.getName().startsWith(SharedPreferencesUtils.DEFAULT_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(defaultSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(CustomThemeSharedPreferencesUtils.LIGHT_THEME_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(lightThemeSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(CustomThemeSharedPreferencesUtils.DARK_THEME_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(darkThemeSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(CustomThemeSharedPreferencesUtils.AMOLED_THEME_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(amoledThemeSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(SharedPreferencesUtils.SORT_TYPE_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(sortTypeSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(SharedPreferencesUtils.POST_LAYOUT_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(postLayoutSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(postFeedScrolledPositionSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(SharedPreferencesUtils.MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(mainActivityTabsSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(SharedPreferencesUtils.NSFW_AND_SPOILER_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(nsfwAndSpoilerSharedPreferencs, f.toString());
-                                } else if (f.getName().startsWith(SharedPreferencesUtils.BOTTOM_APP_BAR_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(bottomAppBarSharedPreferences, f.toString());
-                                } else if (f.getName().startsWith(SharedPreferencesUtils.POST_HISTORY_SHARED_PREFERENCES_FILE)) {
-                                    result = result & importSharedPreferencsFromFile(postHistorySharedPreferences, f.toString());
-                                }
-                            } else if (f.isDirectory() && f.getName().equals("database")) {
-                                if (!redditDataRoomDatabase.accountDao().isAnonymousAccountInserted()) {
-                                    redditDataRoomDatabase.accountDao().insert(Account.getAnonymousAccount());
-                                }
-
-                                File anonymousSubscribedSubredditsFile = new File(f.getAbsolutePath() + "/anonymous_subscribed_subreddits.json");
-                                File anonymousSubscribedUsersFile = new File(f.getAbsolutePath() + "/anonymous_subscribed_users.json");
-                                File anonymousMultiredditsFile = new File(f.getAbsolutePath() + "/anonymous_multireddits.json");
-                                File anonymousMultiredditSubredditsFile = new File(f.getAbsolutePath() + "/anonymous_multireddit_subreddits.json");
-                                File customThemesFile = new File(f.getAbsolutePath() + "/custom_themes.json");
-                                File postFiltersFile = new File(f.getAbsolutePath() + "/post_filters.json");
-                                File postFilterUsageFile = new File(f.getAbsolutePath() + "/post_filter_usage.json");
-                                File commentFiltersFile = new File(f.getAbsolutePath() + "/comment_filters.json");
-                                File commentFilterUsageFile = new File(f.getAbsolutePath() + "/comment_filter_usage.json");
-
-                                if (anonymousSubscribedSubredditsFile.exists()) {
-                                    List<SubscribedSubredditData> anonymousSubscribedSubreddits = getListFromFile(anonymousSubscribedSubredditsFile, new TypeToken<List<SubscribedSubredditData>>() {}.getType());
-                                    redditDataRoomDatabase.subscribedSubredditDao().insertAll(anonymousSubscribedSubreddits);
-                                }
-                                if (anonymousSubscribedUsersFile.exists()) {
-                                    List<SubscribedUserData> anonymousSubscribedUsers = getListFromFile(anonymousSubscribedUsersFile, new TypeToken<List<SubscribedUserData>>() {}.getType());
-                                    redditDataRoomDatabase.subscribedUserDao().insertAll(anonymousSubscribedUsers);
-                                }
-                                if (anonymousMultiredditsFile.exists()) {
-                                    List<MultiReddit> anonymousMultireddits = getListFromFile(anonymousMultiredditsFile, new TypeToken<List<MultiReddit>>() {}.getType());
-                                    redditDataRoomDatabase.multiRedditDao().insertAll(anonymousMultireddits);
-
-                                    if (anonymousMultiredditSubredditsFile.exists()) {
-                                        List<AnonymousMultiredditSubreddit> anonymousMultiredditSubreddits = getListFromFile(anonymousMultiredditSubredditsFile, new TypeToken<List<AnonymousMultiredditSubreddit>>() {}.getType());
-                                        redditDataRoomDatabase.anonymousMultiredditSubredditDao().insertAll(anonymousMultiredditSubreddits);
+                    new ZipFile(cachePath + "restore.zip", "123321".toCharArray()).extractAll(cachePath);
+                    new File(cachePath + "restore.zip").delete();
+                    File[] files = new File(cachePath).listFiles();
+                    if (files == null || files.length <= 0) {
+                        handler.post(() -> restoreSettingsListener.failed(context.getString(R.string.restore_settings_failed_file_corrupted)));
+                    } else {
+                        File restoreFilesDir = files[0];
+                        File[] restoreFiles = restoreFilesDir.listFiles();
+                        boolean result = true;
+                        if (restoreFiles != null) {
+                            for (File f : restoreFiles) {
+                                if (f.isFile()) {
+                                    if (f.getName().startsWith(SharedPreferencesUtils.DEFAULT_PREFERENCES_FILE)) {
+                                        result = result & importSharedPreferencsFromFile(defaultSharedPreferences, f.toString());
+                                    } else if (f.getName().startsWith(CustomThemeSharedPreferencesUtils.LIGHT_THEME_SHARED_PREFERENCES_FILE)) {
+                                        result = result & importSharedPreferencsFromFile(lightThemeSharedPreferences, f.toString());
+                                    } else if (f.getName().startsWith(CustomThemeSharedPreferencesUtils.DARK_THEME_SHARED_PREFERENCES_FILE)) {
+                                        result = result & importSharedPreferencsFromFile(darkThemeSharedPreferences, f.toString());
+                                    } else if (f.getName().startsWith(CustomThemeSharedPreferencesUtils.AMOLED_THEME_SHARED_PREFERENCES_FILE)) {
+                                        result = result & importSharedPreferencsFromFile(amoledThemeSharedPreferences, f.toString());
+                                    } else if (f.getName().startsWith(SharedPreferencesUtils.SORT_TYPE_SHARED_PREFERENCES_FILE)) {
+                                        result = result & importSharedPreferencsFromFile(sortTypeSharedPreferences, f.toString());
+                                    } else if (f.getName().startsWith(SharedPreferencesUtils.POST_LAYOUT_SHARED_PREFERENCES_FILE)) {
+                                        result = result & importSharedPreferencsFromFile(postLayoutSharedPreferences, f.toString());
+                                    } else if (f.getName().startsWith(SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_SHARED_PREFERENCES_FILE)) {
+                                        result = result & importSharedPreferencsFromFile(postFeedScrolledPositionSharedPreferences, f.toString());
+                                    } else if (f.getName().startsWith(SharedPreferencesUtils.MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE)) {
+                                        result = result & importSharedPreferencsFromFile(mainActivityTabsSharedPreferences, f.toString());
+                                    } else if (f.getName().startsWith(SharedPreferencesUtils.NSFW_AND_SPOILER_SHARED_PREFERENCES_FILE)) {
+                                        result = result & importSharedPreferencsFromFile(nsfwAndSpoilerSharedPreferencs, f.toString());
+                                    } else if (f.getName().startsWith(SharedPreferencesUtils.BOTTOM_APP_BAR_SHARED_PREFERENCES_FILE)) {
+                                        result = result & importSharedPreferencsFromFile(bottomAppBarSharedPreferences, f.toString());
+                                    } else if (f.getName().startsWith(SharedPreferencesUtils.POST_HISTORY_SHARED_PREFERENCES_FILE)) {
+                                        result = result & importSharedPreferencsFromFile(postHistorySharedPreferences, f.toString());
                                     }
-                                }
-                                if (customThemesFile.exists()) {
-                                    List<CustomTheme> customThemes = getListFromFile(customThemesFile, new TypeToken<List<CustomTheme>>() {}.getType());
-                                    redditDataRoomDatabase.customThemeDao().insertAll(customThemes);
-                                }
-                                if (postFiltersFile.exists()) {
-                                    List<PostFilter> postFilters = getListFromFile(postFiltersFile, new TypeToken<List<PostFilter>>() {}.getType());
-                                    redditDataRoomDatabase.postFilterDao().insertAll(postFilters);
-
-                                    if (postFilterUsageFile.exists()) {
-                                        List<PostFilterUsage> postFilterUsage = getListFromFile(postFilterUsageFile, new TypeToken<List<PostFilterUsage>>() {}.getType());
-                                        redditDataRoomDatabase.postFilterUsageDao().insertAll(postFilterUsage);
+                                } else if (f.isDirectory() && f.getName().equals("database")) {
+                                    if (!redditDataRoomDatabase.accountDao().isAnonymousAccountInserted()) {
+                                        redditDataRoomDatabase.accountDao().insert(Account.getAnonymousAccount());
                                     }
-                                }
-                                if (commentFiltersFile.exists()) {
-                                    List<CommentFilter> commentFilters = getListFromFile(commentFiltersFile, new TypeToken<List<CommentFilter>>() {}.getType());
-                                    redditDataRoomDatabase.commentFilterDao().insertAll(commentFilters);
 
-                                    if (commentFilterUsageFile.exists()) {
-                                        List<CommentFilterUsage> commentFilterUsage = getListFromFile(commentFilterUsageFile, new TypeToken<List<CommentFilterUsage>>() {}.getType());
-                                        redditDataRoomDatabase.commentFilterUsageDao().insertAll(commentFilterUsage);
+                                    File anonymousSubscribedSubredditsFile = new File(f.getAbsolutePath() + "/anonymous_subscribed_subreddits.json");
+                                    File anonymousSubscribedUsersFile = new File(f.getAbsolutePath() + "/anonymous_subscribed_users.json");
+                                    File anonymousMultiredditsFile = new File(f.getAbsolutePath() + "/anonymous_multireddits.json");
+                                    File anonymousMultiredditSubredditsFile = new File(f.getAbsolutePath() + "/anonymous_multireddit_subreddits.json");
+                                    File customThemesFile = new File(f.getAbsolutePath() + "/custom_themes.json");
+                                    File postFiltersFile = new File(f.getAbsolutePath() + "/post_filters.json");
+                                    File postFilterUsageFile = new File(f.getAbsolutePath() + "/post_filter_usage.json");
+                                    File commentFiltersFile = new File(f.getAbsolutePath() + "/comment_filters.json");
+                                    File commentFilterUsageFile = new File(f.getAbsolutePath() + "/comment_filter_usage.json");
+
+                                    if (anonymousSubscribedSubredditsFile.exists()) {
+                                        List<SubscribedSubredditData> anonymousSubscribedSubreddits = getListFromFile(anonymousSubscribedSubredditsFile, new TypeToken<List<SubscribedSubredditData>>() {}.getType());
+                                        redditDataRoomDatabase.subscribedSubredditDao().insertAll(anonymousSubscribedSubreddits);
+                                    }
+                                    if (anonymousSubscribedUsersFile.exists()) {
+                                        List<SubscribedUserData> anonymousSubscribedUsers = getListFromFile(anonymousSubscribedUsersFile, new TypeToken<List<SubscribedUserData>>() {}.getType());
+                                        redditDataRoomDatabase.subscribedUserDao().insertAll(anonymousSubscribedUsers);
+                                    }
+                                    if (anonymousMultiredditsFile.exists()) {
+                                        List<MultiReddit> anonymousMultireddits = getListFromFile(anonymousMultiredditsFile, new TypeToken<List<MultiReddit>>() {}.getType());
+                                        redditDataRoomDatabase.multiRedditDao().insertAll(anonymousMultireddits);
+
+                                        if (anonymousMultiredditSubredditsFile.exists()) {
+                                            List<AnonymousMultiredditSubreddit> anonymousMultiredditSubreddits = getListFromFile(anonymousMultiredditSubredditsFile, new TypeToken<List<AnonymousMultiredditSubreddit>>() {}.getType());
+                                            redditDataRoomDatabase.anonymousMultiredditSubredditDao().insertAll(anonymousMultiredditSubreddits);
+                                        }
+                                    }
+                                    if (customThemesFile.exists()) {
+                                        List<CustomTheme> customThemes = getListFromFile(customThemesFile, new TypeToken<List<CustomTheme>>() {}.getType());
+                                        redditDataRoomDatabase.customThemeDao().insertAll(customThemes);
+                                    }
+                                    if (postFiltersFile.exists()) {
+                                        List<PostFilter> postFilters = getListFromFile(postFiltersFile, new TypeToken<List<PostFilter>>() {}.getType());
+                                        redditDataRoomDatabase.postFilterDao().insertAll(postFilters);
+
+                                        if (postFilterUsageFile.exists()) {
+                                            List<PostFilterUsage> postFilterUsage = getListFromFile(postFilterUsageFile, new TypeToken<List<PostFilterUsage>>() {}.getType());
+                                            redditDataRoomDatabase.postFilterUsageDao().insertAll(postFilterUsage);
+                                        }
+                                    }
+                                    if (commentFiltersFile.exists()) {
+                                        List<CommentFilter> commentFilters = getListFromFile(commentFiltersFile, new TypeToken<List<CommentFilter>>() {}.getType());
+                                        redditDataRoomDatabase.commentFilterDao().insertAll(commentFilters);
+
+                                        if (commentFilterUsageFile.exists()) {
+                                            List<CommentFilterUsage> commentFilterUsage = getListFromFile(commentFilterUsageFile, new TypeToken<List<CommentFilterUsage>>() {}.getType());
+                                            redditDataRoomDatabase.commentFilterUsageDao().insertAll(commentFilterUsage);
+                                        }
                                     }
                                 }
                             }
+                        } else {
+                            handler.post(() -> restoreSettingsListener.failed(context.getString(R.string.restore_settings_failed_file_corrupted)));
                         }
-                    } else {
-                        handler.post(() -> restoreSettingsListener.failed(context.getString(R.string.restore_settings_failed_file_corrupted)));
-                    }
 
-                    FileUtils.deleteDirectory(new File(cachePath));
+                        FileUtils.deleteDirectory(new File(cachePath));
 
-                    if (result) {
-                        handler.post(restoreSettingsListener::success);
-                    } else {
-                        handler.post(() -> restoreSettingsListener.failed(context.getString(R.string.restore_settings_partially_failed)));
+                        if (result) {
+                            handler.post(restoreSettingsListener::success);
+                        } else {
+                            handler.post(() -> restoreSettingsListener.failed(context.getString(R.string.restore_settings_partially_failed)));
+                        }
                     }
+                    } catch (IOException e) {
+                    e.printStackTrace();
+
+                    handler.post(() -> restoreSettingsListener.failed(context.getString(R.string.restore_settings_partially_failed)));
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-
-                handler.post(() -> restoreSettingsListener.failed(context.getString(R.string.restore_settings_partially_failed)));
             }
         });
     }
