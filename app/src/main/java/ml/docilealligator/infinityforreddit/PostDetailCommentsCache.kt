@@ -8,8 +8,6 @@ class PostDetailCommentsCache(
     val post: Post,
     val visibleComments: ArrayList<Comment>,
     val children: ArrayList<String>?,
-    val commentFilter: CommentFilter?,
-    val scrollPosition: Int,
-    val hasMoreChildren: Boolean
+    val scrollPosition: Int
     ) {
 }

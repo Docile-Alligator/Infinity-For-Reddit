@@ -19,6 +19,7 @@ import ml.docilealligator.infinityforreddit.comment.CommentDraft;
 import ml.docilealligator.infinityforreddit.comment.CommentDraftDao;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterDao;
+import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterDaoKt;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterUsage;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterUsageDao;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
@@ -101,6 +102,8 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     public abstract AnonymousMultiredditSubredditDaoKt anonymousMultiredditSubredditDaoKt();
 
     public abstract CommentFilterDao commentFilterDao();
+
+    public abstract CommentFilterDaoKt commentFilterDaoKt();
 
     public abstract CommentFilterUsageDao commentFilterUsageDao();
 

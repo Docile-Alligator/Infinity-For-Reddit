@@ -66,7 +66,7 @@ import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragme
 import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.MorePostsInfoFragment;
-import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
+import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragmentNew;
 import ml.docilealligator.infinityforreddit.post.LoadingMorePostsStatus;
 import ml.docilealligator.infinityforreddit.post.ParsePost;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -346,7 +346,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
     public void scrollToNextParentComment() {
         if (mSectionsPagerAdapter != null) {
-            ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+            ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
             if (fragment != null) {
                 fragment.scrollToNextParentComment();
             }
@@ -355,7 +355,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
     public boolean scrollToPreviousParentComment() {
         if (mSectionsPagerAdapter != null) {
-            ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+            ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
             if (fragment != null) {
                 fragment.scrollToPreviousParentComment();
                 return true;
@@ -367,7 +367,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
     public void scrollToParentComment(int position, int currentDepth) {
         if (mSectionsPagerAdapter != null) {
-            ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+            ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
             if (fragment != null) {
                 fragment.scrollToParentComment(position, currentDepth);
             }
@@ -451,21 +451,21 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         binding.searchPanelMaterialCardViewViewPostDetailActivity.setOnClickListener(null);
         
         binding.nextResultImageViewViewPostDetailActivity.setOnClickListener(view -> {
-            ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+            ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
             if (fragment != null) {
                 searchComment(fragment, true);
             }
         });
 
         binding.previousResultImageViewViewPostDetailActivity.setOnClickListener(view -> {
-            ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+            ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
             if (fragment != null) {
                 searchComment(fragment, false);
             }
         });
 
         binding.closeSearchPanelImageViewViewPostDetailActivity.setOnClickListener(view -> {
-            ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+            ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
             if (fragment != null) {
                 fragment.resetSearchCommentIndex();
             }
@@ -480,7 +480,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
     private void editComment(Comment comment, int position) {
         if (mSectionsPagerAdapter != null) {
-            ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+            ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
             if (fragment != null) {
                 fragment.editComment(comment, position);
             }
@@ -489,7 +489,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
     private void editComment(String commentContentMarkdown, int position) {
         if (mSectionsPagerAdapter != null) {
-            ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+            ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
             if (fragment != null) {
                 fragment.editComment(commentContentMarkdown, position);
             }
@@ -498,7 +498,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
     public void deleteComment(String fullName, int position) {
         if (mSectionsPagerAdapter != null) {
-            ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+            ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
             if (fragment != null) {
                 fragment.deleteComment(fullName, position);
             }
@@ -507,7 +507,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
     public void toggleReplyNotifications(Comment comment, int position) {
         if (mSectionsPagerAdapter != null) {
-            ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+            ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
             if (fragment != null) {
                 fragment.toggleReplyNotifications(comment, position);
             }
@@ -520,7 +520,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             SaveThing.unsaveThing(mOauthRetrofit, accessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
                 @Override
                 public void success() {
-                    ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+                    ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
                     if (fragment != null) {
                         fragment.saveComment(position, false);
                     }
@@ -529,7 +529,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
                 @Override
                 public void failed() {
-                    ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+                    ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
                     if (fragment != null) {
                         fragment.saveComment(position, true);
                     }
@@ -541,7 +541,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             SaveThing.saveThing(mOauthRetrofit, accessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
                 @Override
                 public void success() {
-                    ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+                    ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
                     if (fragment != null) {
                         fragment.saveComment(position, true);
                     }
@@ -550,7 +550,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
                 @Override
                 public void failed() {
-                    ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+                    ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
                     if (fragment != null) {
                         fragment.saveComment(position, false);
                     }
@@ -571,7 +571,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         }
     }
 
-    public void searchComment(ViewPostDetailFragment fragment, boolean searchNextComment) {
+    public void searchComment(ViewPostDetailFragmentNew fragment, boolean searchNextComment) {
         if (!binding.searchTextInputEditTextViewPostDetailActivity.getText().toString().isEmpty()) {
             fragment.searchComment(binding.searchTextInputEditTextViewPostDetailActivity.getText().toString(), searchNextComment);
         }
@@ -877,7 +877,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         } else if (requestCode == CommentActivity.WRITE_COMMENT_REQUEST_CODE) {
             if (data != null && resultCode == Activity.RESULT_OK) {
                 if (data.hasExtra(RETURN_EXTRA_COMMENT_DATA_KEY)) {
-                    ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+                    ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
                     if (fragment != null) {
                         Comment comment = data.getParcelableExtra(RETURN_EXTRA_COMMENT_DATA_KEY);
                         if (comment != null && comment.getDepth() == 0) {
@@ -928,7 +928,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
     @Override
     public void sortTypeSelected(SortType sortType) {
-        ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+        ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
         if (fragment != null) {
             fragment.changeSortType(sortType);
             binding.toolbarViewPostDetailActivity.setTitle(sortType.getType().fullName);
@@ -937,7 +937,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
     @Override
     public void onLongPress() {
-        ViewPostDetailFragment fragment = mSectionsPagerAdapter.getCurrentFragment();
+        ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
         if (fragment != null) {
             fragment.goToTop();
         }
@@ -970,15 +970,15 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            ViewPostDetailFragment fragment = new ViewPostDetailFragment();
+            ViewPostDetailFragmentNew fragment = new ViewPostDetailFragmentNew();
             Bundle bundle = new Bundle();
             List<Post> posts = viewPostDetailActivityViewModel.getPosts();
             if (posts != null) {
                 if (mPostListPosition == position && viewPostDetailActivityViewModel.getPost() != null) {
-                    bundle.putInt(ViewPostDetailFragment.EXTRA_POST_LIST_POSITION, position);
-                    bundle.putString(ViewPostDetailFragment.EXTRA_SINGLE_COMMENT_ID, getIntent().getStringExtra(EXTRA_SINGLE_COMMENT_ID));
-                    bundle.putString(ViewPostDetailFragment.EXTRA_CONTEXT_NUMBER, getIntent().getStringExtra(EXTRA_CONTEXT_NUMBER));
-                    bundle.putString(ViewPostDetailFragment.EXTRA_MESSAGE_FULLNAME, getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME));
+                    bundle.putInt(ViewPostDetailFragmentNew.EXTRA_POST_LIST_POSITION, position);
+                    bundle.putString(ViewPostDetailFragmentNew.EXTRA_SINGLE_COMMENT_ID, getIntent().getStringExtra(EXTRA_SINGLE_COMMENT_ID));
+                    bundle.putString(ViewPostDetailFragmentNew.EXTRA_CONTEXT_NUMBER, getIntent().getStringExtra(EXTRA_CONTEXT_NUMBER));
+                    bundle.putString(ViewPostDetailFragmentNew.EXTRA_MESSAGE_FULLNAME, getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME));
                 } else {
                     if (position >= posts.size()) {
                         MorePostsInfoFragment morePostsInfoFragment = new MorePostsInfoFragment();
@@ -987,17 +987,17 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                         morePostsInfoFragment.setArguments(moreBundle);
                         return morePostsInfoFragment;
                     }
-                    bundle.putInt(ViewPostDetailFragment.EXTRA_POST_LIST_POSITION, position);
+                    bundle.putInt(ViewPostDetailFragmentNew.EXTRA_POST_LIST_POSITION, position);
                 }
             } else {
                 if (viewPostDetailActivityViewModel.getPost() == null) {
-                    bundle.putString(ViewPostDetailFragment.EXTRA_POST_ID, getIntent().getStringExtra(EXTRA_POST_ID));
+                    bundle.putString(ViewPostDetailFragmentNew.EXTRA_POST_ID, getIntent().getStringExtra(EXTRA_POST_ID));
                 } else {
-                    bundle.putInt(ViewPostDetailFragment.EXTRA_POST_LIST_POSITION, mPostListPosition);
+                    bundle.putInt(ViewPostDetailFragmentNew.EXTRA_POST_LIST_POSITION, mPostListPosition);
                 }
-                bundle.putString(ViewPostDetailFragment.EXTRA_SINGLE_COMMENT_ID, getIntent().getStringExtra(EXTRA_SINGLE_COMMENT_ID));
-                bundle.putString(ViewPostDetailFragment.EXTRA_CONTEXT_NUMBER, getIntent().getStringExtra(EXTRA_CONTEXT_NUMBER));
-                bundle.putString(ViewPostDetailFragment.EXTRA_MESSAGE_FULLNAME, getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME));
+                bundle.putString(ViewPostDetailFragmentNew.EXTRA_SINGLE_COMMENT_ID, getIntent().getStringExtra(EXTRA_SINGLE_COMMENT_ID));
+                bundle.putString(ViewPostDetailFragmentNew.EXTRA_CONTEXT_NUMBER, getIntent().getStringExtra(EXTRA_CONTEXT_NUMBER));
+                bundle.putString(ViewPostDetailFragmentNew.EXTRA_MESSAGE_FULLNAME, getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME));
             }
             fragment.setArguments(bundle);
             return fragment;
@@ -1010,13 +1010,13 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         }
 
         @Nullable
-        ViewPostDetailFragment getCurrentFragment() {
+        ViewPostDetailFragmentNew getCurrentFragment() {
             if (mFragmentManager == null) {
                 return null;
             }
             Fragment fragment = mFragmentManager.findFragmentByTag("f" + binding.viewPager2ViewPostDetailActivity.getCurrentItem());
-            if (fragment instanceof ViewPostDetailFragment) {
-                return (ViewPostDetailFragment) fragment;
+            if (fragment instanceof ViewPostDetailFragmentNew) {
+                return (ViewPostDetailFragmentNew) fragment;
             }
             return null;
         }

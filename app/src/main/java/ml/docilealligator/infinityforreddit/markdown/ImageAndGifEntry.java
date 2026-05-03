@@ -201,6 +201,10 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
         this.dataSavingMode = dataSavingMode;
     }
 
+    public void setBlurImage(boolean blurImage) {
+        this.blurImage = blurImage;
+    }
+
     public class Holder extends MarkwonAdapter.Holder {
         MarkdownImageAndGifBlockBinding binding;
         RequestListener<Drawable> requestListener;
