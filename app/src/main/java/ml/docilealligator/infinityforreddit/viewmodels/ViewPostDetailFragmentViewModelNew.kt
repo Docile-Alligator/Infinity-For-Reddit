@@ -1597,35 +1597,29 @@ class ViewPostDetailFragmentViewModelNew(
     }
 
     fun removeComment(comment: Comment, position: Int, isSpam: Boolean) {
-        val params: MutableMap<String, String> = HashMap()
-        params[APIUtils.ID_KEY] = comment.fullName
-        params[APIUtils.SPAM_KEY] = isSpam.toString()
-        oauthRetrofit.create(RedditAPI::class.java)
-            .removeThing(APIUtils.getOAuthHeader(accessToken), params)
-            .enqueue(object : Callback<String?> {
-                override fun onResponse(call: Call<String?>, response: Response<String?>) {
-                    if (response.isSuccessful) {
-                        comment.isApproved = false
-                        comment.approvedBy = null
-                        comment.approvedAtUTC = 0
-                        comment.setRemoved(true, isSpam)
-                        commentModerationEventLiveData.postValue(
-                            if (isSpam) CommentModerationEvent.MarkedAsSpam(
-                                comment,
-                                position
-                            ) else CommentModerationEvent.Removed(comment, position)
-                        )
-                    } else {
-                        commentModerationEventLiveData.postValue(
-                            if (isSpam) CommentModerationEvent.MarkAsSpamFailed(
-                                comment,
-                                position
-                            ) else CommentModerationEvent.RemoveFailed(comment, position)
-                        )
-                    }
-                }
+        viewModelScope.launch {
+            val params: MutableMap<String, String> = HashMap()
+            params[APIUtils.ID_KEY] = comment.fullName
+            params[APIUtils.SPAM_KEY] = isSpam.toString()
+            try {
+                val response = oauthRetrofit.create(RedditAPIKt::class.java)
+                    .removeThing(APIUtils.getOAuthHeader(accessToken), params)
 
-                override fun onFailure(call: Call<String?>, throwable: Throwable) {
+                if (response.isSuccessful) {
+                    comment.isApproved = false
+                    comment.approvedBy = null
+                    comment.approvedAtUTC = 0
+                    comment.setRemoved(true, isSpam)
+
+                    updateModdedStatus(comment, position)
+
+                    commentModerationEventLiveData.postValue(
+                        if (isSpam) CommentModerationEvent.MarkedAsSpam(
+                            comment,
+                            position
+                        ) else CommentModerationEvent.Removed(comment, position)
+                    )
+                } else {
                     commentModerationEventLiveData.postValue(
                         if (isSpam) CommentModerationEvent.MarkAsSpamFailed(
                             comment,
@@ -1633,7 +1627,16 @@ class ViewPostDetailFragmentViewModelNew(
                         ) else CommentModerationEvent.RemoveFailed(comment, position)
                     )
                 }
-            })
+            } catch (e: Exception) {
+                e.printStackTrace()
+                commentModerationEventLiveData.postValue(
+                    if (isSpam) CommentModerationEvent.MarkAsSpamFailed(
+                        comment,
+                        position
+                    ) else CommentModerationEvent.RemoveFailed(comment, position)
+                )
+            }
+        }
     }
 
     fun toggleLock(comment: Comment, position: Int) {
