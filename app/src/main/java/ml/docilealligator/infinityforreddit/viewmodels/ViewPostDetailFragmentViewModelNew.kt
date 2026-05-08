@@ -1640,17 +1640,21 @@ class ViewPostDetailFragmentViewModelNew(
     }
 
     fun toggleLock(comment: Comment, position: Int) {
-        val params: MutableMap<String, String> = HashMap()
-        params[APIUtils.ID_KEY] = comment.fullName
-        val call: Call<String> = if (comment.isLocked) oauthRetrofit.create(
-            RedditAPI::class.java
-        ).unLockThing(APIUtils.getOAuthHeader(accessToken), params) else oauthRetrofit.create(
-            RedditAPI::class.java
-        ).lockThing(APIUtils.getOAuthHeader(accessToken), params)
-        call.enqueue(object : Callback<String?> {
-            override fun onResponse(call: Call<String?>, response: Response<String?>) {
+        viewModelScope.launch {
+            val params: MutableMap<String, String> = HashMap()
+            params[APIUtils.ID_KEY] = comment.fullName
+            try {
+                val response = if (comment.isLocked) oauthRetrofit.create(
+                    RedditAPIKt::class.java
+                ).unLockThing(APIUtils.getOAuthHeader(accessToken), params) else oauthRetrofit.create(
+                    RedditAPIKt::class.java
+                ).lockThing(APIUtils.getOAuthHeader(accessToken), params)
+
                 if (response.isSuccessful) {
                     comment.isLocked = !comment.isLocked
+
+                    updateModdedStatus(comment, position)
+
                     commentModerationEventLiveData.postValue(
                         if (comment.isLocked) CommentModerationEvent.Locked(
                             comment,
@@ -1665,9 +1669,8 @@ class ViewPostDetailFragmentViewModelNew(
                         ) else CommentModerationEvent.LockFailed(comment, position)
                     )
                 }
-            }
-
-            override fun onFailure(call: Call<String?>, throwable: Throwable) {
+            } catch (e: Exception) {
+                e.printStackTrace()
                 commentModerationEventLiveData.postValue(
                     if (comment.isLocked) CommentModerationEvent.UnlockFailed(
                         comment,
@@ -1675,7 +1678,7 @@ class ViewPostDetailFragmentViewModelNew(
                     ) else CommentModerationEvent.LockFailed(comment, position)
                 )
             }
-        })
+        }
     }
 
     fun updateModdedStatus(comment: Comment, position: Int) {

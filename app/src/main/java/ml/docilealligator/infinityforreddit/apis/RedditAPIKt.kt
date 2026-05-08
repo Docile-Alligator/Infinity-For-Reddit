@@ -126,7 +126,7 @@ interface RedditAPIKt {
 
     @FormUrlEncoded
     @POST("/api/unlock")
-    fun unLockThing(
+    suspend fun unLockThing(
         @HeaderMap headers: Map<String, String>,
         @FieldMap params: Map<String, String>
     ): Response<String>
