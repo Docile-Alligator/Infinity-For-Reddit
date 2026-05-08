@@ -1570,27 +1570,30 @@ class ViewPostDetailFragmentViewModelNew(
     }
 
     fun approveComment(comment: Comment, position: Int) {
-        val params: MutableMap<String, String> = HashMap()
-        params[APIUtils.ID_KEY] = comment.fullName
-        oauthRetrofit.create(RedditAPI::class.java)
-            .approveThing(APIUtils.getOAuthHeader(accessToken), params)
-            .enqueue(object : Callback<String?> {
-                override fun onResponse(call: Call<String?>, response: Response<String?>) {
-                    if (response.isSuccessful) {
-                        comment.isApproved = true
-                        comment.approvedBy = accountName
-                        comment.approvedAtUTC = System.currentTimeMillis()
-                        comment.setRemoved(false, false)
-                        commentModerationEventLiveData.postValue(CommentModerationEvent.Approved(comment, position))
-                    } else {
-                        commentModerationEventLiveData.postValue(CommentModerationEvent.ApproveFailed(comment, position))
-                    }
-                }
+        viewModelScope.launch {
+            val params: MutableMap<String, String> = HashMap()
+            params[APIUtils.ID_KEY] = comment.fullName
+            try {
+                val response = oauthRetrofit.create(RedditAPIKt::class.java)
+                    .approveThing(APIUtils.getOAuthHeader(accessToken), params)
 
-                override fun onFailure(call: Call<String?>, throwable: Throwable) {
+                if (response.isSuccessful) {
+                    comment.isApproved = true
+                    comment.approvedBy = accountName
+                    comment.approvedAtUTC = System.currentTimeMillis()
+                    comment.setRemoved(false, false)
+
+                    updateModdedStatus(comment, position)
+
+                    commentModerationEventLiveData.postValue(CommentModerationEvent.Approved(comment, position))
+                } else {
                     commentModerationEventLiveData.postValue(CommentModerationEvent.ApproveFailed(comment, position))
                 }
-            })
+            } catch (e: Exception) {
+                e.printStackTrace()
+                commentModerationEventLiveData.postValue(CommentModerationEvent.ApproveFailed(comment, position))
+            }
+        }
     }
 
     fun removeComment(comment: Comment, position: Int, isSpam: Boolean) {

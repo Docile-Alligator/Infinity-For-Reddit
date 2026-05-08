@@ -34,12 +34,12 @@ interface RedditAPIKt {
     ): String
 
     @GET("/api/v1/me?raw_json=1")
-    suspend fun getMyInfo(@HeaderMap headers: MutableMap<String, String>): String
+    suspend fun getMyInfo(@HeaderMap headers: Map<String, String>): String
 
     @GET("comments/{id}.json?raw_json=1")
     fun getPostOauth(
         @Path("id") id: String,
-        @HeaderMap headers: MutableMap<String, String>
+        @HeaderMap headers: Map<String, String>
     ): Response<String>
 
     @GET("comments/{id}.json?raw_json=1")
@@ -93,6 +93,48 @@ interface RedditAPIKt {
     @GET("r/{subredditName}/about.json?raw_json=1")
     suspend fun getSubredditDataOauth(
         @Path("subredditName") subredditName: String,
-        @HeaderMap headers: MutableMap<String, String>
+        @HeaderMap headers: Map<String, String>
+    ): Response<String>
+
+    @FormUrlEncoded
+    @POST("/api/approve")
+    suspend fun approveThing(
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): Response<String>
+
+    @FormUrlEncoded
+    @POST("/api/remove")
+    suspend fun removeThing(
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): Response<String>
+
+    @FormUrlEncoded
+    @POST("/api/set_subreddit_sticky")
+    suspend fun toggleStickyPost(
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): Response<String>
+
+    @FormUrlEncoded
+    @POST("/api/lock")
+    suspend fun lockThing(
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): Response<String>
+
+    @FormUrlEncoded
+    @POST("/api/unlock")
+    fun unLockThing(
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): Response<String>
+
+    @FormUrlEncoded
+    @POST("/api/distinguish")
+    suspend fun toggleDistinguishedThing(
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
     ): Response<String>
 }
