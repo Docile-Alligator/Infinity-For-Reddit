@@ -1302,35 +1302,29 @@ class ViewPostDetailFragmentViewModelNew(
     }
 
     fun removePost(post: Post, position: Int, isSpam: Boolean) {
-        val params: MutableMap<String, String> = HashMap()
-        params[APIUtils.ID_KEY] = post.fullName
-        params[APIUtils.SPAM_KEY] = isSpam.toString()
-        oauthRetrofit.create(RedditAPI::class.java)
-            .removeThing(APIUtils.getOAuthHeader(accessToken), params)
-            .enqueue(object : Callback<String?> {
-                override fun onResponse(call: Call<String?>, response: Response<String?>) {
-                    if (response.isSuccessful) {
-                        post.isApproved = false
-                        post.approvedBy = null
-                        post.approvedAtUTC = 0
-                        post.setRemoved(true, isSpam)
-                        postModerationEventLiveData.postValue(
-                            if (isSpam) MarkedAsSpam(
-                                post,
-                                position
-                            ) else PostModerationEvent.Removed(post, position)
-                        )
-                    } else {
-                        postModerationEventLiveData.postValue(
-                            if (isSpam) MarkAsSpamFailed(
-                                post,
-                                position
-                            ) else RemoveFailed(post, position)
-                        )
-                    }
-                }
+        viewModelScope.launch {
+            val params: MutableMap<String, String> = HashMap()
+            params[APIUtils.ID_KEY] = post.fullName
+            params[APIUtils.SPAM_KEY] = isSpam.toString()
+            try {
+                val response = oauthRetrofit.create(RedditAPIKt::class.java)
+                    .removeThing(APIUtils.getOAuthHeader(accessToken), params)
 
-                override fun onFailure(call: Call<String?>, throwable: Throwable) {
+                if (response.isSuccessful) {
+                    post.isApproved = false
+                    post.approvedBy = null
+                    post.approvedAtUTC = 0
+                    post.setRemoved(true, isSpam)
+
+                    setPost(post)
+
+                    postModerationEventLiveData.postValue(
+                        if (isSpam) MarkedAsSpam(
+                            post,
+                            position
+                        ) else PostModerationEvent.Removed(post, position)
+                    )
+                } else {
                     postModerationEventLiveData.postValue(
                         if (isSpam) MarkAsSpamFailed(
                             post,
@@ -1338,7 +1332,17 @@ class ViewPostDetailFragmentViewModelNew(
                         ) else RemoveFailed(post, position)
                     )
                 }
-            })
+            } catch (e: Exception) {
+                e.printStackTrace()
+
+                postModerationEventLiveData.postValue(
+                    if (isSpam) MarkAsSpamFailed(
+                        post,
+                        position
+                    ) else RemoveFailed(post, position)
+                )
+            }
+        }
     }
 
     fun toggleSticky(post: Post, position: Int) {
