@@ -695,7 +695,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         });
 
         viewPostDetailFragmentViewModel.getPostModerationEventLiveData().observe(getViewLifecycleOwner(), moderationEvent -> {
-            viewPostDetailFragmentViewModel.setPost(moderationEvent.getPost());
+            ///viewPostDetailFragmentViewModel.setPost(moderationEvent.getPost());
             EventBus.getDefault().post(new PostUpdateEventToPostList(moderationEvent.getPost(), moderationEvent.getPosition()));
             Toast.makeText(mActivity, moderationEvent.getToastMessageResId(), Toast.LENGTH_SHORT).show();
         });

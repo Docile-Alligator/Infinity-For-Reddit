@@ -1274,27 +1274,31 @@ class ViewPostDetailFragmentViewModelNew(
     }
 
     fun approvePost(post: Post, position: Int) {
-        val params: MutableMap<String, String> = HashMap()
-        params[APIUtils.ID_KEY] = post.fullName
-        oauthRetrofit.create(RedditAPI::class.java)
-            .approveThing(APIUtils.getOAuthHeader(accessToken), params)
-            .enqueue(object : Callback<String?> {
-                override fun onResponse(call: Call<String?>, response: Response<String?>) {
-                    if (response.isSuccessful) {
-                        post.isApproved = true
-                        post.approvedBy = accountName
-                        post.approvedAtUTC = System.currentTimeMillis()
-                        post.setRemoved(false, false)
-                        postModerationEventLiveData.postValue(Approved(post, position))
-                    } else {
-                        postModerationEventLiveData.postValue(ApproveFailed(post, position))
-                    }
-                }
+        viewModelScope.launch {
+            val params: MutableMap<String, String> = HashMap()
+            params[APIUtils.ID_KEY] = post.fullName
+            try {
+                val response = oauthRetrofit.create(RedditAPIKt::class.java)
+                    .approveThing(APIUtils.getOAuthHeader(accessToken), params)
 
-                override fun onFailure(call: Call<String?>, throwable: Throwable) {
+                if (response.isSuccessful) {
+                    post.isApproved = true
+                    post.approvedBy = accountName
+                    post.approvedAtUTC = System.currentTimeMillis()
+                    post.setRemoved(false, false)
+
+                    setPost(post)
+
+                    postModerationEventLiveData.postValue(Approved(post, position))
+                } else {
                     postModerationEventLiveData.postValue(ApproveFailed(post, position))
                 }
-            })
+            } catch (e: Exception) {
+                e.printStackTrace()
+
+                postModerationEventLiveData.postValue(ApproveFailed(post, position))
+            }
+        }
     }
 
     fun removePost(post: Post, position: Int, isSpam: Boolean) {
