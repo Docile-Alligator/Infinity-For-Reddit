@@ -151,4 +151,18 @@ interface RedditAPIKt {
         @HeaderMap headers: Map<String, String>,
         @FieldMap params: Map<String, String>
     ): Response<String>
+
+    @FormUrlEncoded
+    @POST("/api/spoiler")
+    suspend fun markSpoiler(
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): Response<String>
+
+    @FormUrlEncoded
+    @POST("/api/unspoiler")
+    suspend fun unmarkSpoiler(
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): Response<String>
 }

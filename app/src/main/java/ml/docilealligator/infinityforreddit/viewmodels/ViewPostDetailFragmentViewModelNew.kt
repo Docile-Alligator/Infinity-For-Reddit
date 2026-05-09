@@ -1471,20 +1471,24 @@ class ViewPostDetailFragmentViewModelNew(
     }
 
     fun toggleSpoiler(post: Post, position: Int) {
-        val params: MutableMap<String, String> = HashMap()
-        params[APIUtils.ID_KEY] = post.fullName
-        val call: Call<String> = if (post.isSpoiler) oauthRetrofit.create(
-            RedditAPI::class.java
-        ).unmarkSpoiler(
-            APIUtils.getOAuthHeader(accessToken),
-            params
-        ) else oauthRetrofit.create(
-            RedditAPI::class.java
-        ).markSpoiler(APIUtils.getOAuthHeader(accessToken), params)
-        call.enqueue(object : Callback<String?> {
-            override fun onResponse(call: Call<String?>, response: Response<String?>) {
+        viewModelScope.launch {
+            val params: MutableMap<String, String> = HashMap()
+            params[APIUtils.ID_KEY] = post.fullName
+            try {
+                val response = if (post.isSpoiler) oauthRetrofit.create(
+                    RedditAPIKt::class.java
+                ).unmarkSpoiler(
+                    APIUtils.getOAuthHeader(accessToken),
+                    params
+                ) else oauthRetrofit.create(
+                    RedditAPIKt::class.java
+                ).markSpoiler(APIUtils.getOAuthHeader(accessToken), params)
+
                 if (response.isSuccessful) {
                     post.isSpoiler = !post.isSpoiler
+
+                    setPost(post)
+
                     postModerationEventLiveData.postValue(
                         if (post.isSpoiler) MarkedSpoiler(
                             post,
@@ -1499,9 +1503,8 @@ class ViewPostDetailFragmentViewModelNew(
                         ) else MarkSpoilerFailed(post, position)
                     )
                 }
-            }
-
-            override fun onFailure(call: Call<String?>, throwable: Throwable) {
+            } catch (e: Exception) {
+                e.printStackTrace()
                 postModerationEventLiveData.postValue(
                     if (post.isSpoiler) UnmarkSpoilerFailed(
                         post,
@@ -1509,7 +1512,7 @@ class ViewPostDetailFragmentViewModelNew(
                     ) else MarkSpoilerFailed(post, position)
                 )
             }
-        })
+        }
     }
 
     fun toggleMod(post: Post, position: Int) {
