@@ -663,28 +663,6 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
         resetCommentSearchIndex();
     }
 
-    /*public int getNextParentCommentPosition(int currentPosition) {
-        if (!getCurrentList().isEmpty()) {
-            for (int i = currentPosition + 1; i < getCurrentList().size(); i++) {
-                if (getCurrentList().get(i).getDepth() == 0) {
-                    return i;
-                }
-            }
-        }
-        return -1;
-    }*/
-
-    public int getPreviousParentCommentPosition(int currentPosition) {
-        if (!getCurrentList().isEmpty()) {
-            for (int i = currentPosition - 1; i >= 0; i--) {
-                if (getCurrentList().get(i).getDepth() == 0) {
-                    return i;
-                }
-            }
-        }
-        return -1;
-    }
-
     public int getParentCommentPosition(int currentPosition, int currentDepth) {
         if (!getCurrentList().isEmpty()) {
             for (int i = currentPosition - 1; i >= 0; i--) {

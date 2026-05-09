@@ -15,3 +15,16 @@ fun ConcatAdapter.getAbsolutePosition(childAdapter: RecyclerView.Adapter<*>, loc
 
     return -1
 }
+
+fun ConcatAdapter.getLocalPosition(childAdapter: RecyclerView.Adapter<*>, absolutePosition: Int): Int {
+    try {
+        val pair = getWrappedAdapterAndPosition(absolutePosition)
+        if (childAdapter == pair.first) {
+            return pair.second
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+
+    return -1
+}

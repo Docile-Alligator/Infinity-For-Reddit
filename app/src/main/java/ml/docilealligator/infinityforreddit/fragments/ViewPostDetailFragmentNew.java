@@ -1436,34 +1436,59 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     public void scrollToNextParentComment() {
         RecyclerView recyclerView = mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView;
         LinearLayoutManagerBugFixed layoutManager = ((LinearLayoutManagerBugFixed) recyclerView.getLayoutManager());
-        if (mCommentsAdapter != null && layoutManager != null) {
-            int currentPosition = layoutManager.findFirstVisibleItemPosition();
-            int nextParentPosition = viewPostDetailFragmentViewModel.getNextParentCommentPosition(currentPosition);
-            if (nextParentPosition < 0) {
-                return;
-            }
-            int absoluteParentPosition = ConcatAdapterKt.getAbsolutePosition(mConcatAdapter, mCommentsAdapter, nextParentPosition);
-            if (absoluteParentPosition >= 0) {
-                mSmoothScroller.setTargetPosition(absoluteParentPosition);
-                mIsSmoothScrolling = true;
-                recyclerView.getLayoutManager().startSmoothScroll(mSmoothScroller);
-            }
+        if (mCommentsAdapter == null || layoutManager == null) {
+            return;
         }
+
+        int currentPosition = ConcatAdapterKt.getLocalPosition(
+                mConcatAdapter, mCommentsAdapter, layoutManager.findFirstVisibleItemPosition()
+        );
+        if (currentPosition < 0) {
+            currentPosition = 0;
+        }
+
+        int nextParentPosition = viewPostDetailFragmentViewModel.getNextParentCommentPosition(currentPosition);
+        if (nextParentPosition < 0) {
+            return;
+        }
+
+        int absoluteParentPosition = ConcatAdapterKt.getAbsolutePosition(mConcatAdapter, mCommentsAdapter, nextParentPosition);
+        if (absoluteParentPosition < 0) {
+            return;
+        }
+
+        mSmoothScroller.setTargetPosition(absoluteParentPosition);
+        mIsSmoothScrolling = true;
+        recyclerView.getLayoutManager().startSmoothScroll(mSmoothScroller);
     }
 
     public void scrollToPreviousParentComment() {
-        RecyclerView chooseYourView = mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView;
-        if (mCommentsAdapter != null && chooseYourView != null) {
-            int currentPosition = ((LinearLayoutManagerBugFixed) chooseYourView.getLayoutManager()).findFirstVisibleItemPosition();
-            //int previousParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(mCommentsRecyclerView == null ? currentPosition - 1 : currentPosition);
-            int previousParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(mCommentsRecyclerView == null && mSingleCommentId == null ? currentPosition - 1 : currentPosition);
-            if (previousParentPosition < 0) {
-                return;
-            }
-            mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null && mSingleCommentId == null ? previousParentPosition + 1 : previousParentPosition);
-            mIsSmoothScrolling = true;
-            chooseYourView.getLayoutManager().startSmoothScroll(mSmoothScroller);
+        RecyclerView recyclerView = mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView;
+        LinearLayoutManagerBugFixed layoutManager = ((LinearLayoutManagerBugFixed) recyclerView.getLayoutManager());
+        if (mCommentsAdapter == null || layoutManager == null) {
+            return;
         }
+
+        int currentPosition = ConcatAdapterKt.getLocalPosition(
+                mConcatAdapter, mCommentsAdapter, layoutManager.findFirstVisibleItemPosition()
+        );
+        if (currentPosition < 0) {
+            currentPosition = 0;
+        }
+
+        int previousParentPosition = viewPostDetailFragmentViewModel.getPreviousParentCommentPosition(currentPosition);
+        if (previousParentPosition < 0) {
+            return;
+        }
+
+        int absoluteParentPosition = ConcatAdapterKt.getAbsolutePosition(mConcatAdapter, mCommentsAdapter, previousParentPosition);
+        if (absoluteParentPosition < 0) {
+            return;
+        }
+
+        mSmoothScroller.setTargetPosition(absoluteParentPosition);
+        mIsSmoothScrolling = true;
+        recyclerView.getLayoutManager().startSmoothScroll(mSmoothScroller);
     }
 
     public void scrollToParentComment(int position, int currentDepth) {
