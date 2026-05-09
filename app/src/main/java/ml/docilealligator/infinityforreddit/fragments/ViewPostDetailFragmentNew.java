@@ -102,6 +102,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeSpoilerBlurEvent;
 import ml.docilealligator.infinityforreddit.events.FlairSelectedEvent;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostDetailFragment;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
+import ml.docilealligator.infinityforreddit.extensions.ConcatAdapterKt;
 import ml.docilealligator.infinityforreddit.managers.VideoMuteManager;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
 import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent;
@@ -1433,17 +1434,20 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     }
 
     public void scrollToNextParentComment() {
-        RecyclerView chooseYourView = mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView;
-        if (mCommentsAdapter != null && chooseYourView != null) {
-            int currentPosition = ((LinearLayoutManagerBugFixed) chooseYourView.getLayoutManager()).findFirstVisibleItemPosition();
-            //int nextParentPosition = mCommentsAdapter.getNextParentCommentPosition(mCommentsRecyclerView == null ? currentPosition - 1 : currentPosition);
-            int nextParentPosition = mCommentsAdapter.getNextParentCommentPosition(mCommentsRecyclerView == null && mSingleCommentId == null ? currentPosition - 1 : currentPosition);
+        RecyclerView recyclerView = mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView;
+        LinearLayoutManagerBugFixed layoutManager = ((LinearLayoutManagerBugFixed) recyclerView.getLayoutManager());
+        if (mCommentsAdapter != null && layoutManager != null) {
+            int currentPosition = layoutManager.findFirstVisibleItemPosition();
+            int nextParentPosition = viewPostDetailFragmentViewModel.getNextParentCommentPosition(currentPosition);
             if (nextParentPosition < 0) {
                 return;
             }
-            mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null && mSingleCommentId == null ? nextParentPosition + 1 : nextParentPosition);
-            mIsSmoothScrolling = true;
-            chooseYourView.getLayoutManager().startSmoothScroll(mSmoothScroller);
+            int absoluteParentPosition = ConcatAdapterKt.getAbsolutePosition(mConcatAdapter, mCommentsAdapter, nextParentPosition);
+            if (absoluteParentPosition >= 0) {
+                mSmoothScroller.setTargetPosition(absoluteParentPosition);
+                mIsSmoothScrolling = true;
+                recyclerView.getLayoutManager().startSmoothScroll(mSmoothScroller);
+            }
         }
     }
 

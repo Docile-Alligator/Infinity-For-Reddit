@@ -19,7 +19,6 @@ import ml.docilealligator.infinityforreddit.PostDetailCommentsCache
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.SingleLiveEvent
 import ml.docilealligator.infinityforreddit.account.Account
-import ml.docilealligator.infinityforreddit.apis.RedditAPI
 import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
 import ml.docilealligator.infinityforreddit.comment.Comment
 import ml.docilealligator.infinityforreddit.comment.ParseComment
@@ -64,8 +63,6 @@ import okio.IOException
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 
@@ -1270,6 +1267,20 @@ class ViewPostDetailFragmentViewModelNew(
                 )
             }
         }
+    }
+
+    fun getNextParentCommentPosition(currentPosition: Int): Int {
+        _dataState.value.comments?.let {
+            if (!it.isEmpty()) {
+                for (i in currentPosition + 1..<it.size) {
+                    if (it[i].depth == 0) {
+                        return i
+                    }
+                }
+            }
+        }
+
+        return -1
     }
 
     fun approvePost(post: Post, position: Int) {
