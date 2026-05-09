@@ -1192,7 +1192,13 @@ class ViewPostDetailFragmentViewModelNew(
                 updatedComments.add(finalParentPosition + 1, comment)
             }
 
+            val updatedPost = _dataState.value.post?.let { post ->
+                Post(post).apply {
+                    nComments += 1
+                }
+            }
             _dataState.value = _dataState.value.copy(
+                post = updatedPost,
                 comments = updatedComments
             )
         }

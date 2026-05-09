@@ -823,11 +823,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
 
     public void addChildComment(Comment comment, String parentFullname, int parentPosition) {
         viewPostDetailFragmentViewModel.addChildComment(comment, parentFullname, parentPosition);
-
-        if (mPostAdapter != null) {
-            mPostAdapter.addOneComment();
-        }
-        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
     }
 
     public void editComment(Comment comment, int position) {
