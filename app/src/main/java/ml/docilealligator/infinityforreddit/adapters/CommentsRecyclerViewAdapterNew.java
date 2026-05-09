@@ -663,15 +663,6 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
         resetCommentSearchIndex();
     }
 
-    public void toggleReplyNotifications(String fullName, int position) {
-        if (position >= 0 && position < getCurrentList().size()) {
-            if (getCurrentList().get(position).getFullName().equals(fullName)) {
-                getCurrentList().get(position).toggleSendReplies();
-            }
-        }
-        //TODO The comment's position may change
-    }
-
     public int getNextParentCommentPosition(int currentPosition) {
         if (!getCurrentList().isEmpty()) {
             for (int i = currentPosition + 1; i < getCurrentList().size(); i++) {

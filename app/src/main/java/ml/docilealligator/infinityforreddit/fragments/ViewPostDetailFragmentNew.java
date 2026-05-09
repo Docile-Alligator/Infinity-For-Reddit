@@ -16,8 +16,6 @@ import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -113,7 +111,6 @@ import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
 import ml.docilealligator.infinityforreddit.subreddit.Flair;
 import ml.docilealligator.infinityforreddit.thing.DeleteThing;
-import ml.docilealligator.infinityforreddit.thing.ReplyNotificationsToggle;
 import ml.docilealligator.infinityforreddit.thing.SaveThing;
 import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -1581,21 +1578,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     }
 
     public void toggleReplyNotifications(Comment comment, int position) {
-        ReplyNotificationsToggle.toggleEnableNotification(new Handler(Looper.getMainLooper()), mOauthRetrofit,
-                mActivity.accessToken, comment, new ReplyNotificationsToggle.SendNotificationListener() {
-                    @Override
-                    public void onSuccess() {
-                        Toast.makeText(mActivity,
-                                comment.isSendReplies() ? R.string.reply_notifications_disabled : R.string.reply_notifications_enabled,
-                                Toast.LENGTH_SHORT).show();
-                        mCommentsAdapter.toggleReplyNotifications(comment.getFullName(), position);
-                    }
-
-                    @Override
-                    public void onError() {
-                        Toast.makeText(mActivity, R.string.toggle_reply_notifications_failed, Toast.LENGTH_SHORT).show();
-                    }
-                });
+        viewPostDetailFragmentViewModel.toggleNotification(comment, position);
     }
 
     public void changeToNormalThreadMode() {

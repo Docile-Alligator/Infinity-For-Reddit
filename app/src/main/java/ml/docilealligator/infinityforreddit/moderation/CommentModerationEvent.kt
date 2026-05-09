@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.moderation
 
 import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.comment.Comment
+import ml.docilealligator.infinityforreddit.post.Post
 
 sealed class CommentModerationEvent(open val comment: Comment, open val position: Int, val toastMessageResId: Int) {
     data class Approved(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.approved)
@@ -18,4 +19,10 @@ sealed class CommentModerationEvent(open val comment: Comment, open val position
 
     data class Unlocked(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.unlocked)
     data class UnlockFailed(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.unlock_failed)
+
+    data class SetReceiveNotification(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.reply_notifications_enabled)
+    data class SetReceiveNotificationFailed(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.toggle_reply_notifications_failed)
+
+    data class UnsetReceiveNotification(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.reply_notifications_disabled)
+    data class UnsetReceiveNotificationFailed(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.toggle_reply_notifications_failed)
 }

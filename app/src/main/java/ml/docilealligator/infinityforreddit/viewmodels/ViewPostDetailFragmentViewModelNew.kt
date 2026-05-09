@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.viewmodels
 
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.annotation.Nullable
 import androidx.core.content.edit
 import androidx.lifecycle.LiveData
@@ -1660,6 +1659,46 @@ class ViewPostDetailFragmentViewModelNew(
                         comment,
                         position
                     ) else CommentModerationEvent.RemoveFailed(comment, position)
+                )
+            }
+        }
+    }
+
+    fun toggleNotification(comment: Comment, position: Int) {
+        viewModelScope.launch {
+            val params: MutableMap<String, String> = mutableMapOf()
+            params[APIUtils.ID_KEY] = comment.fullName
+            params[APIUtils.STATE_KEY] = (!comment.isSendReplies).toString()
+            try {
+                val response = oauthRetrofit.create(RedditAPIKt::class.java)
+                    .toggleRepliesNotification(APIUtils.getOAuthHeader(accessToken), params)
+
+                if (response.isSuccessful) {
+                    comment.toggleSendReplies()
+
+                    updateModdedStatus(comment, position)
+
+                    commentModerationEventLiveData.postValue(
+                        if (comment.isSendReplies) CommentModerationEvent.SetReceiveNotification(
+                            comment,
+                            position
+                        ) else CommentModerationEvent.UnsetReceiveNotification(comment, position)
+                    )
+                } else {
+                    commentModerationEventLiveData.postValue(
+                        if (comment.isLocked) CommentModerationEvent.UnsetReceiveNotificationFailed(
+                            comment,
+                            position
+                        ) else CommentModerationEvent.SetReceiveNotificationFailed(comment, position)
+                    )
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                commentModerationEventLiveData.postValue(
+                    if (comment.isLocked) CommentModerationEvent.UnsetReceiveNotificationFailed(
+                        comment,
+                        position
+                    ) else CommentModerationEvent.SetReceiveNotificationFailed(comment, position)
                 )
             }
         }
