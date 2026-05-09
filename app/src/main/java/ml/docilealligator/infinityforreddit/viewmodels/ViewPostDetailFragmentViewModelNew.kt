@@ -65,6 +65,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.Retrofit
+import java.util.Locale
 
 @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class ViewPostDetailFragmentViewModelNew(
@@ -1303,6 +1304,32 @@ class ViewPostDetailFragmentViewModelNew(
                 for (i in currentPosition - 1 downTo 0) {
                     if (it[i].depth == currentDepth - 1) {
                         return i
+                    }
+                }
+            }
+        }
+
+        return -1
+    }
+
+    fun getNextSearchedPosition(query: String, currentSearchedPosition: Int, searchNextComment: Boolean): Int {
+        _dataState.value.comments?.let {
+            if (!it.isEmpty()) {
+                if (searchNextComment) {
+                    for (i in currentSearchedPosition + 1..<it.size) {
+                        if (it[i].commentRawText?.lowercase(Locale.getDefault())
+                                ?.contains(query.lowercase(Locale.getDefault())) == true
+                        ) {
+                            return i
+                        }
+                    }
+                } else {
+                    for (i in currentSearchedPosition - 1 downTo 0) {
+                        if (it[i].commentRawText?.lowercase(Locale.getDefault())
+                                ?.contains(query.lowercase(Locale.getDefault())) == true
+                        ) {
+                            return i
+                        }
                     }
                 }
             }

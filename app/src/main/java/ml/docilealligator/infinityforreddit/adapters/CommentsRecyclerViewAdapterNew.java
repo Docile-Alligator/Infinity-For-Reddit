@@ -142,7 +142,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
     private final int mFullyCollapsedCommentBackgroundColor;
     private final int[] verticalBlockColors;
 
-    private int mSearchCommentIndex = -1;
+    private int mSearchedPosition = -1;
 
     private boolean canStartActivity = true;
 
@@ -526,7 +526,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
                     ((CommentBaseViewHolder) holder).saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
                 }
 
-                if (position == mSearchCommentIndex) {
+                if (position == mSearchedPosition) {
                     holder.itemView.setBackgroundColor(Color.parseColor("#03A9F4"));
                 }
 
@@ -643,24 +643,12 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
         this.canStartActivity = canStartActivity;
     }
 
-    private int getParentPosition(int position) {
-        if (position >= 0 && position < getCurrentList().size()) {
-            int childDepth = getCurrentList().get(position).getDepth();
-            for (int i = position; i >= 0; i--) {
-                if (getCurrentList().get(i).getDepth() < childDepth) {
-                    return i;
-                }
-            }
-        }
-        return -1;
-    }
-
     public ArrayList<Comment> getVisibleComments() {
         return new ArrayList<>(getCurrentList());
     }
 
     public void initiallyLoading() {
-        resetCommentSearchIndex();
+        resetSearchedPosition();
     }
 
     public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction, int swipeLeftAction, int swipeRightAction) {
@@ -688,16 +676,17 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
         }
     }
 
-    public int getSearchCommentIndex() {
-        return mSearchCommentIndex;
+    public int getSearchedPosition() {
+        return mSearchedPosition;
     }
 
-    public void highlightSearchResult(int searchCommentIndex) {
-        mSearchCommentIndex = searchCommentIndex;
+    public void highlightSearchResult(int searchedPosition) {
+        mSearchedPosition = searchedPosition;
+        notifyItemChanged(searchedPosition);
     }
 
-    public void resetCommentSearchIndex() {
-        mSearchCommentIndex = -1;
+    public void resetSearchedPosition() {
+        mSearchedPosition = -1;
     }
 
     @Override

@@ -916,44 +916,30 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
 
     public void searchComment(String query, boolean searchNextComment) {
         if (mCommentsAdapter != null) {
-            ArrayList<Comment> visibleComments = mCommentsAdapter.getVisibleComments();
-            int currentSearchIndex = mCommentsAdapter.getSearchCommentIndex();
-            if (currentSearchIndex >= 0) {
-                mCommentsAdapter.notifyItemChanged(currentSearchIndex);
+            int currentSearchIndex = mCommentsAdapter.getSearchedPosition();
+            int searchedPosition = viewPostDetailFragmentViewModel.getNextSearchedPosition(
+                    query, currentSearchIndex, searchNextComment
+            );
+            if (searchedPosition < 0) {
+                return;
             }
-            if (visibleComments != null) {
-                if (searchNextComment) {
-                    for (int i = currentSearchIndex + 1; i < visibleComments.size(); i++) {
-                        if (visibleComments.get(i).getCommentRawText() != null &&
-                                visibleComments.get(i).getCommentRawText().toLowerCase().contains(query.toLowerCase())) {
-                            if (mCommentsAdapter != null) {
-                                mCommentsAdapter.highlightSearchResult(i);
-                                mCommentsAdapter.notifyItemChanged(i);
-                                if (mCommentsRecyclerView == null) {
-                                    binding.postDetailRecyclerViewViewPostDetailFragment.scrollToPosition(i + 1);
-                                } else {
-                                    mCommentsRecyclerView.scrollToPosition(i);
-                                }
-                            }
-                            return;
-                        }
-                    }
+
+            int absoluteSearchedPosition = ConcatAdapterKt.getAbsolutePosition(mConcatAdapter, mCommentsAdapter, searchedPosition);
+            if (absoluteSearchedPosition < 0) {
+                return;
+            }
+
+            if (mCommentsAdapter != null) {
+                if (currentSearchIndex >= 0) {
+                    mCommentsAdapter.notifyItemChanged(currentSearchIndex);
+                }
+
+                mCommentsAdapter.highlightSearchResult(searchedPosition);
+
+                if (mCommentsRecyclerView == null) {
+                    binding.postDetailRecyclerViewViewPostDetailFragment.scrollToPosition(absoluteSearchedPosition);
                 } else {
-                    for (int i = currentSearchIndex - 1; i >= 0; i--) {
-                        if (visibleComments.get(i).getCommentRawText() != null &&
-                                visibleComments.get(i).getCommentRawText().toLowerCase().contains(query.toLowerCase())) {
-                            if (mCommentsAdapter != null) {
-                                mCommentsAdapter.highlightSearchResult(i);
-                                mCommentsAdapter.notifyItemChanged(i);
-                                if (mCommentsRecyclerView == null) {
-                                    binding.postDetailRecyclerViewViewPostDetailFragment.scrollToPosition(i + 1);
-                                } else {
-                                    mCommentsRecyclerView.scrollToPosition(i);
-                                }
-                            }
-                            return;
-                        }
-                    }
+                    mCommentsRecyclerView.scrollToPosition(absoluteSearchedPosition);
                 }
             }
         }
@@ -961,7 +947,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
 
     public void resetSearchCommentIndex() {
         if (mCommentsAdapter != null) {
-            mCommentsAdapter.resetCommentSearchIndex();
+            mCommentsAdapter.resetSearchedPosition();
         }
     }
 
@@ -984,7 +970,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         int itemId = item.getItemId();
         if (itemId == R.id.action_search_view_post_detail_fragment) {
             if (mActivity.toggleSearchPanelVisibility() && mCommentsAdapter != null) {
-                mCommentsAdapter.resetCommentSearchIndex();
+                mCommentsAdapter.resetSearchedPosition();
             }
         } else if (itemId == R.id.action_refresh_view_post_detail_fragment) {
             viewPostDetailFragmentViewModel.refresh(true, true);
@@ -1290,9 +1276,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     @Override
     public void onPause() {
         super.onPause();
-        if (binding.postDetailRecyclerViewViewPostDetailFragment != null) {
-            binding.postDetailRecyclerViewViewPostDetailFragment.onWindowVisibilityChanged(View.GONE);
-        }
+        binding.postDetailRecyclerViewViewPostDetailFragment.onWindowVisibilityChanged(View.GONE);
     }
 
     @Override
