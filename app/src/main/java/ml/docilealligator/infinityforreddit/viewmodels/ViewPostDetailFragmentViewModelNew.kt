@@ -1387,17 +1387,21 @@ class ViewPostDetailFragmentViewModelNew(
     }
 
     fun toggleLock(post: Post, position: Int) {
-        val params: MutableMap<String, String> = HashMap()
-        params[APIUtils.ID_KEY] = post.fullName
-        val call: Call<String> = if (post.isLocked) oauthRetrofit.create(
-            RedditAPI::class.java
-        ).unLockThing(APIUtils.getOAuthHeader(accessToken), params) else oauthRetrofit.create(
-            RedditAPI::class.java
-        ).lockThing(APIUtils.getOAuthHeader(accessToken), params)
-        call.enqueue(object : Callback<String?> {
-            override fun onResponse(call: Call<String?>, response: Response<String?>) {
+        viewModelScope.launch {
+            val params: MutableMap<String, String> = HashMap()
+            params[APIUtils.ID_KEY] = post.fullName
+            try {
+                val response = if (post.isLocked) oauthRetrofit.create(
+                    RedditAPIKt::class.java
+                ).unLockThing(APIUtils.getOAuthHeader(accessToken), params) else oauthRetrofit.create(
+                    RedditAPIKt::class.java
+                ).lockThing(APIUtils.getOAuthHeader(accessToken), params)
+
                 if (response.isSuccessful) {
                     post.setIsLocked(!post.isLocked)
+
+                    setPost(post)
+
                     postModerationEventLiveData.postValue(
                         if (post.isLocked) Locked(
                             post,
@@ -1412,9 +1416,7 @@ class ViewPostDetailFragmentViewModelNew(
                         ) else LockFailed(post, position)
                     )
                 }
-            }
-
-            override fun onFailure(call: Call<String?>, throwable: Throwable) {
+            } catch (e: Exception) {
                 postModerationEventLiveData.postValue(
                     if (post.isLocked) UnlockFailed(
                         post,
@@ -1422,7 +1424,7 @@ class ViewPostDetailFragmentViewModelNew(
                     ) else LockFailed(post, position)
                 )
             }
-        })
+        }
     }
 
     fun toggleNSFW(post: Post, position: Int) {
