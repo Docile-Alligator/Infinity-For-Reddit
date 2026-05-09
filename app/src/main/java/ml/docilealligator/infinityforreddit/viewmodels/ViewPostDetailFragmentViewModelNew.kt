@@ -1556,32 +1556,26 @@ class ViewPostDetailFragmentViewModelNew(
     }
 
     fun toggleNotification(post: Post, position: Int) {
-        val params: MutableMap<String, String> = HashMap()
-        params[APIUtils.ID_KEY] = post.fullName
-        params[APIUtils.STATE_KEY] = (!post.isSendReplies).toString()
-        oauthRetrofit.create(RedditAPI::class.java)
-            .toggleRepliesNotification(APIUtils.getOAuthHeader(accessToken), params)
-            .enqueue(object : Callback<String?> {
-                override fun onResponse(call: Call<String?>, response: Response<String?>) {
-                    if (response.isSuccessful) {
-                        post.isSendReplies = !post.isSendReplies
-                        postModerationEventLiveData.postValue(
-                            if (post.isSendReplies) PostModerationEvent.SetReceiveNotification(
-                                post,
-                                position
-                            ) else PostModerationEvent.UnsetReceiveNotification(post, position)
-                        )
-                    } else {
-                        postModerationEventLiveData.postValue(
-                            if (post.isSendReplies) PostModerationEvent.UnsetReceiveNotificationFailed(
-                                post,
-                                position
-                            ) else PostModerationEvent.SetReceiveNotificationFailed(post, position)
-                        )
-                    }
-                }
+        viewModelScope.launch {
+            val params: MutableMap<String, String> = HashMap()
+            params[APIUtils.ID_KEY] = post.fullName
+            params[APIUtils.STATE_KEY] = (!post.isSendReplies).toString()
+            try {
+                val response = oauthRetrofit.create(RedditAPIKt::class.java)
+                    .toggleRepliesNotification(APIUtils.getOAuthHeader(accessToken), params)
 
-                override fun onFailure(call: Call<String?>, throwable: Throwable) {
+                if (response.isSuccessful) {
+                    post.isSendReplies = !post.isSendReplies
+
+                    setPost(post)
+
+                    postModerationEventLiveData.postValue(
+                        if (post.isSendReplies) PostModerationEvent.SetReceiveNotification(
+                            post,
+                            position
+                        ) else PostModerationEvent.UnsetReceiveNotification(post, position)
+                    )
+                } else {
                     postModerationEventLiveData.postValue(
                         if (post.isSendReplies) PostModerationEvent.UnsetReceiveNotificationFailed(
                             post,
@@ -1589,7 +1583,16 @@ class ViewPostDetailFragmentViewModelNew(
                         ) else PostModerationEvent.SetReceiveNotificationFailed(post, position)
                     )
                 }
-            })
+            } catch (e: Exception) {
+                e.printStackTrace()
+                postModerationEventLiveData.postValue(
+                    if (post.isSendReplies) PostModerationEvent.UnsetReceiveNotificationFailed(
+                        post,
+                        position
+                    ) else PostModerationEvent.SetReceiveNotificationFailed(post, position)
+                )
+            }
+        }
     }
 
     fun approveComment(comment: Comment, position: Int) {
