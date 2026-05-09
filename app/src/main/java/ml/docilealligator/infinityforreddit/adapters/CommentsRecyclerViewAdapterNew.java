@@ -663,17 +663,6 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
         resetCommentSearchIndex();
     }
 
-    public int getParentCommentPosition(int currentPosition, int currentDepth) {
-        if (!getCurrentList().isEmpty()) {
-            for (int i = currentPosition - 1; i >= 0; i--) {
-                if (getCurrentList().get(i).getDepth() == currentDepth - 1) {
-                    return i;
-                }
-            }
-        }
-        return -1;
-    }
-
     public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction, int swipeLeftAction, int swipeRightAction) {
         if (viewHolder instanceof CommentBaseViewHolder) {
             if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.START) {

@@ -1492,17 +1492,25 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     }
 
     public void scrollToParentComment(int position, int currentDepth) {
-        RecyclerView chooseYourView = mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView;
-        if (mCommentsAdapter != null && chooseYourView != null) {
-            int viewPosition = mCommentsRecyclerView == null ? (mSingleCommentId == null ? position + 1 : position + 2) : (mSingleCommentId == null ? position : position + 1);
-            int previousParentPosition = mCommentsAdapter.getParentCommentPosition(viewPosition, currentDepth);
-            if (previousParentPosition < 0) {
-                return;
-            }
-            mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null && mSingleCommentId == null ? previousParentPosition + 1 : previousParentPosition);
-            mIsSmoothScrolling = true;
-            chooseYourView.getLayoutManager().startSmoothScroll(mSmoothScroller);
+        RecyclerView recyclerView = mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView;
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if (mCommentsAdapter == null || layoutManager == null) {
+            return;
         }
+
+        int parentPosition = viewPostDetailFragmentViewModel.getParentCommentPosition(position, currentDepth);
+        if (parentPosition < 0) {
+            return;
+        }
+
+        int absoluteParentPosition = ConcatAdapterKt.getAbsolutePosition(mConcatAdapter, mCommentsAdapter, parentPosition);
+        if (absoluteParentPosition < 0) {
+            return;
+        }
+
+        mSmoothScroller.setTargetPosition(absoluteParentPosition);
+        mIsSmoothScrolling = true;
+        layoutManager.startSmoothScroll(mSmoothScroller);
     }
 
     public void delayTransition() {

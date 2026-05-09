@@ -1297,6 +1297,20 @@ class ViewPostDetailFragmentViewModelNew(
         return -1
     }
 
+    fun getParentCommentPosition(currentPosition: Int, currentDepth: Int): Int {
+        _dataState.value.comments?.let {
+            if (!it.isEmpty()) {
+                for (i in currentPosition - 1 downTo 0) {
+                    if (it[i].depth == currentDepth - 1) {
+                        return i
+                    }
+                }
+            }
+        }
+
+        return -1
+    }
+
     fun approvePost(post: Post, position: Int) {
         viewModelScope.launch {
             val params: MutableMap<String, String> = HashMap()
