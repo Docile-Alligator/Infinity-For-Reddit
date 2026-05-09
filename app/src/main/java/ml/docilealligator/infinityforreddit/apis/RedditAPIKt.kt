@@ -137,4 +137,18 @@ interface RedditAPIKt {
         @HeaderMap headers: Map<String, String>,
         @FieldMap params: Map<String, String>
     ): Response<String>
+
+    @FormUrlEncoded
+    @POST("/api/marknsfw")
+    suspend fun markNSFW(
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): Response<String>
+
+    @FormUrlEncoded
+    @POST("/api/unmarknsfw")
+    suspend fun unmarkNSFW(
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): Response<String>
 }

@@ -1417,6 +1417,7 @@ class ViewPostDetailFragmentViewModelNew(
                     )
                 }
             } catch (e: Exception) {
+                e.printStackTrace()
                 postModerationEventLiveData.postValue(
                     if (post.isLocked) UnlockFailed(
                         post,
@@ -1428,17 +1429,21 @@ class ViewPostDetailFragmentViewModelNew(
     }
 
     fun toggleNSFW(post: Post, position: Int) {
-        val params: MutableMap<String, String> = HashMap()
-        params[APIUtils.ID_KEY] = post.fullName
-        val call: Call<String> = if (post.isNSFW) oauthRetrofit.create(
-            RedditAPI::class.java
-        ).unmarkNSFW(APIUtils.getOAuthHeader(accessToken), params) else oauthRetrofit.create(
-            RedditAPI::class.java
-        ).markNSFW(APIUtils.getOAuthHeader(accessToken), params)
-        call.enqueue(object : Callback<String?> {
-            override fun onResponse(call: Call<String?>, response: Response<String?>) {
+        viewModelScope.launch {
+            val params: MutableMap<String, String> = HashMap()
+            params[APIUtils.ID_KEY] = post.fullName
+            try {
+                val response = if (post.isNSFW) oauthRetrofit.create(
+                    RedditAPIKt::class.java
+                ).unmarkNSFW(APIUtils.getOAuthHeader(accessToken), params) else oauthRetrofit.create(
+                    RedditAPIKt::class.java
+                ).markNSFW(APIUtils.getOAuthHeader(accessToken), params)
+
                 if (response.isSuccessful) {
                     post.isNSFW = !post.isNSFW
+
+                    setPost(post)
+
                     postModerationEventLiveData.postValue(
                         if (post.isNSFW) MarkedNSFW(
                             post,
@@ -1453,9 +1458,8 @@ class ViewPostDetailFragmentViewModelNew(
                         ) else MarkNSFWFailed(post, position)
                     )
                 }
-            }
-
-            override fun onFailure(call: Call<String?>, throwable: Throwable) {
+            } catch (e: Exception) {
+                e.printStackTrace()
                 postModerationEventLiveData.postValue(
                     if (post.isNSFW) UnmarkNSFWFailed(
                         post,
@@ -1463,7 +1467,7 @@ class ViewPostDetailFragmentViewModelNew(
                     ) else MarkNSFWFailed(post, position)
                 )
             }
-        })
+        }
     }
 
     fun toggleSpoiler(post: Post, position: Int) {
