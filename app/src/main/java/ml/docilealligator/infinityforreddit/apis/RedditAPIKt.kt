@@ -172,4 +172,12 @@ interface RedditAPIKt {
         @HeaderMap headers: Map<String, String>,
         @FieldMap params: Map<String, String>
     ): Response<String>
+
+    @FormUrlEncoded
+    @POST("{subredditNamePrefixed}/api/selectflair")
+    suspend fun selectFlair(
+        @Path("subredditNamePrefixed") subredditName: String,
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): Response<String>
 }

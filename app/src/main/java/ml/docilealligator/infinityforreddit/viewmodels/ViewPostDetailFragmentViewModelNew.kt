@@ -28,6 +28,8 @@ import ml.docilealligator.infinityforreddit.moderation.CommentModerationEvent
 import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent
 import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.ApproveFailed
 import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.Approved
+import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.ChangedFlair
+import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.ChangeFlairFailed
 import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.DistinguishAsModFailed
 import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.DistinguishedAsMod
 import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.LockFailed
@@ -53,6 +55,7 @@ import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.Unset
 import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.UnsetStickyPostFailed
 import ml.docilealligator.infinityforreddit.post.ParsePost
 import ml.docilealligator.infinityforreddit.post.Post
+import ml.docilealligator.infinityforreddit.subreddit.Flair
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData
 import ml.docilealligator.infinityforreddit.thing.SortType
@@ -1588,6 +1591,49 @@ class ViewPostDetailFragmentViewModelNew(
                             post,
                             position
                         ) else UnmarkSpoilerFailed(post, position)
+                    )
+                }
+            }
+        }
+    }
+
+    fun changeFlair(flair: Flair, position: Int) {
+        viewModelScope.launch {
+            _dataState.value.post?.let { post ->
+                val params: MutableMap<String, String> = mutableMapOf()
+                params[APIUtils.API_TYPE_KEY] = APIUtils.API_TYPE_JSON
+                params[APIUtils.FLAIR_TEMPLATE_ID_KEY] = flair.id
+                params[APIUtils.LINK_KEY] = post.fullName
+                params[APIUtils.TEXT_KEY] = flair.text
+
+                try {
+                    val response = oauthRetrofit.create(RedditAPIKt::class.java).selectFlair(
+                        post.subredditNamePrefixed,
+                        APIUtils.getOAuthHeader(accessToken), params
+                    )
+                    if (response.isSuccessful) {
+                        refresh(fetchPost = true, fetchComments = false)
+                        postModerationEventLiveData.postValue(
+                            ChangedFlair(
+                                post,
+                                position
+                            )
+                        )
+                    } else {
+                        postModerationEventLiveData.postValue(
+                            ChangeFlairFailed(
+                                post,
+                                position
+                            )
+                        )
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    postModerationEventLiveData.postValue(
+                        ChangeFlairFailed(
+                            post,
+                            position
+                        )
                     )
                 }
             }

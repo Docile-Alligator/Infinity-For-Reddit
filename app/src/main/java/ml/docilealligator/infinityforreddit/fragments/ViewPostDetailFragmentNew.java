@@ -28,7 +28,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
@@ -57,10 +56,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -87,7 +84,6 @@ import ml.docilealligator.infinityforreddit.adapters.CommentsRecyclerViewAdapter
 import ml.docilealligator.infinityforreddit.adapters.CommentsRecyclerViewAdapterNew;
 import ml.docilealligator.infinityforreddit.adapters.CommentsStatusRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.adapters.PostDetailRecyclerViewAdapterNew;
-import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostCommentSortTypeBottomSheetFragment;
@@ -105,7 +101,6 @@ import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.extensions.ConcatAdapterKt;
 import ml.docilealligator.infinityforreddit.managers.VideoMuteManager;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent;
 import ml.docilealligator.infinityforreddit.post.HidePost;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostModification;
@@ -115,7 +110,6 @@ import ml.docilealligator.infinityforreddit.subreddit.Flair;
 import ml.docilealligator.infinityforreddit.thing.DeleteThing;
 import ml.docilealligator.infinityforreddit.thing.SaveThing;
 import ml.docilealligator.infinityforreddit.thing.SortType;
-import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
@@ -123,9 +117,6 @@ import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
 import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
 import ml.docilealligator.infinityforreddit.viewmodels.ViewPostDetailActivityViewModel;
 import ml.docilealligator.infinityforreddit.viewmodels.ViewPostDetailFragmentViewModelNew;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommunicator, PostModerationActionHandler, CommentModerationActionHandler {
@@ -694,18 +685,11 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         });
 
         viewPostDetailFragmentViewModel.getPostModerationEventLiveData().observe(getViewLifecycleOwner(), moderationEvent -> {
-            Toast.makeText(mActivity, moderationEvent.getToastMessageResId(), Toast.LENGTH_SHORT).show();
-
-            if (moderationEvent instanceof PostModerationEvent.MarkedNSFW
-                    || moderationEvent instanceof PostModerationEvent.UnmarkedNSFW
-                    || moderationEvent instanceof PostModerationEvent.MarkedSpoiler
-                    || moderationEvent instanceof PostModerationEvent.UnmarkedSpoiler) {
-                viewPostDetailFragmentViewModel.refresh(true, false);
-            }
+            showMessage(moderationEvent.getToastMessageResId());
         });
 
         viewPostDetailFragmentViewModel.getCommentModerationEventLiveData().observe(getViewLifecycleOwner(), moderationEvent -> {
-            Toast.makeText(mActivity, moderationEvent.getToastMessageResId(), Toast.LENGTH_SHORT).show();
+            showMessage(moderationEvent.getToastMessageResId());
         });
     }
 
@@ -836,15 +820,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         }
     }
 
-    private Drawable getMenuItemIcon(int drawableId) {
-        Drawable icon = AppCompatResources.getDrawable(mActivity, drawableId);
-        if (icon != null) {
-            icon.setTint(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
-        }
-
-        return icon;
-    }
-
     public void addComment(Comment comment) {
         viewPostDetailFragmentViewModel.addComment(comment);
 
@@ -872,29 +847,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     }
 
     public void changeFlair(Flair flair) {
-        Map<String, String> params = new HashMap<>();
-        params.put(APIUtils.API_TYPE_KEY, APIUtils.API_TYPE_JSON);
-        params.put(APIUtils.FLAIR_TEMPLATE_ID_KEY, flair.getId());
-        params.put(APIUtils.LINK_KEY, mPost.getFullName());
-        params.put(APIUtils.TEXT_KEY, flair.getText());
-
-        mOauthRetrofit.create(RedditAPI.class).selectFlair(mPost.getSubredditNamePrefixed(),
-                APIUtils.getOAuthHeader(mActivity.accessToken), params).enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful()) {
-                    viewPostDetailFragmentViewModel.refresh(true, false);
-                    showMessage(R.string.update_flair_success);
-                } else {
-                    showMessage(R.string.update_flair_failed);
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                showMessage(R.string.update_flair_failed);
-            }
-        });
+        viewPostDetailFragmentViewModel.changeFlair(flair, postListPosition);
     }
 
     public void changeSortType(SortType sortType) {
