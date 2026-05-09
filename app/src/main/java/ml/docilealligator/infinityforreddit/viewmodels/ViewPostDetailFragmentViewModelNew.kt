@@ -1346,33 +1346,27 @@ class ViewPostDetailFragmentViewModelNew(
     }
 
     fun toggleSticky(post: Post, position: Int) {
-        val params: MutableMap<String, String> = HashMap()
-        params[APIUtils.ID_KEY] = post.fullName
-        params[APIUtils.STATE_KEY] = (!post.isStickied).toString()
-        params[APIUtils.API_TYPE_KEY] = APIUtils.API_TYPE_JSON
-        oauthRetrofit.create(RedditAPI::class.java)
-            .toggleStickyPost(APIUtils.getOAuthHeader(accessToken), params)
-            .enqueue(object : Callback<String?> {
-                override fun onResponse(call: Call<String?>, response: Response<String?>) {
-                    if (response.isSuccessful) {
-                        post.setIsStickied(!post.isStickied)
-                        postModerationEventLiveData.postValue(
-                            if (post.isStickied) SetStickyPost(
-                                post,
-                                position
-                            ) else UnsetStickyPost(post, position)
-                        )
-                    } else {
-                        postModerationEventLiveData.postValue(
-                            if (post.isStickied) UnsetStickyPostFailed(
-                                post,
-                                position
-                            ) else SetStickyPostFailed(post, position)
-                        )
-                    }
-                }
+        viewModelScope.launch {
+            val params: MutableMap<String, String> = HashMap()
+            params[APIUtils.ID_KEY] = post.fullName
+            params[APIUtils.STATE_KEY] = (!post.isStickied).toString()
+            params[APIUtils.API_TYPE_KEY] = APIUtils.API_TYPE_JSON
+            try {
+                val response = oauthRetrofit.create(RedditAPIKt::class.java)
+                    .toggleStickyPost(APIUtils.getOAuthHeader(accessToken), params)
 
-                override fun onFailure(call: Call<String?>, throwable: Throwable) {
+                if (response.isSuccessful) {
+                    post.setIsStickied(!post.isStickied)
+
+                    setPost(post)
+
+                    postModerationEventLiveData.postValue(
+                        if (post.isStickied) SetStickyPost(
+                            post,
+                            position
+                        ) else UnsetStickyPost(post, position)
+                    )
+                } else {
                     postModerationEventLiveData.postValue(
                         if (post.isStickied) UnsetStickyPostFailed(
                             post,
@@ -1380,7 +1374,16 @@ class ViewPostDetailFragmentViewModelNew(
                         ) else SetStickyPostFailed(post, position)
                     )
                 }
-            })
+            } catch (e: Exception) {
+                e.printStackTrace()
+                postModerationEventLiveData.postValue(
+                    if (post.isStickied) UnsetStickyPostFailed(
+                        post,
+                        position
+                    ) else SetStickyPostFailed(post, position)
+                )
+            }
+        }
     }
 
     fun toggleLock(post: Post, position: Int) {
