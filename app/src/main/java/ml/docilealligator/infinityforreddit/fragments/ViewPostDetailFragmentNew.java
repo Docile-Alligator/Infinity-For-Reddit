@@ -658,9 +658,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
             }
         } else {
             viewPostDetailFragmentViewModel.setPost(mPost);
-            if (mPostAdapter != null) {
-                mPostAdapter.updatePost(mPost);
-            }
             if (!renderContent()) {
                 return;
             }
@@ -822,11 +819,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
 
     public void addComment(Comment comment) {
         viewPostDetailFragmentViewModel.addComment(comment);
-
-        if (mPostAdapter != null) {
-            mPostAdapter.addOneComment();
-        }
-        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
     }
 
     public void addChildComment(Comment comment, String parentFullname, int parentPosition) {

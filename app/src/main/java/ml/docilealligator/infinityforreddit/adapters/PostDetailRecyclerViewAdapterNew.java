@@ -1027,11 +1027,8 @@ public class PostDetailRecyclerViewAdapterNew extends RecyclerView.Adapter<Recyc
     }
 
     public void updatePost(@NonNull Post post) {
-        if (mPost == post) {
-            return;
-        }
         mPost = post;
-        notifyItemChanged(0);
+        notifyDataSetChanged();
         mImageAndGifEntry.setBlurImage(
                 (post.isNSFW() && mNeedBlurNsfw
                         && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()))

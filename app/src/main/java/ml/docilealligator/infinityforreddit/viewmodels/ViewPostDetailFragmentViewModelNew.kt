@@ -1135,15 +1135,27 @@ class ViewPostDetailFragmentViewModelNew(
 
     fun addComment(comment: Comment) {
         _dataState.value.comments?.let {
+            val updatedPost = _dataState.value.post?.let { post ->
+                Post(post).apply {
+                    nComments += 1
+                }
+            }
             val updatedComments = ArrayList(it)
             updatedComments.add(0, comment)
             _dataState.value = _dataState.value.copy(
+                post = updatedPost,
                 comments = updatedComments
             )
         } ?: run {
+            val updatedPost = _dataState.value.post?.let { post ->
+                Post(post).apply {
+                    nComments += 1
+                }
+            }
             val updatedComments = ArrayList<Comment>()
             updatedComments.add(comment)
             _dataState.value = _dataState.value.copy(
+                post = updatedPost,
                 comments = updatedComments
             )
         }
