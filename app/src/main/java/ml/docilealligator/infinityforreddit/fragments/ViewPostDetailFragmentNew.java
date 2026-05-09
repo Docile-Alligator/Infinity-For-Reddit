@@ -104,6 +104,7 @@ import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostDetailFr
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.managers.VideoMuteManager;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
+import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent;
 import ml.docilealligator.infinityforreddit.post.HidePost;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostModification;
@@ -692,13 +693,17 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         });
 
         viewPostDetailFragmentViewModel.getPostModerationEventLiveData().observe(getViewLifecycleOwner(), moderationEvent -> {
-            ///viewPostDetailFragmentViewModel.setPost(moderationEvent.getPost());
-            EventBus.getDefault().post(new PostUpdateEventToPostList(moderationEvent.getPost(), moderationEvent.getPosition()));
             Toast.makeText(mActivity, moderationEvent.getToastMessageResId(), Toast.LENGTH_SHORT).show();
+
+            if (moderationEvent instanceof PostModerationEvent.MarkedNSFW
+                    || moderationEvent instanceof PostModerationEvent.UnmarkedNSFW
+                    || moderationEvent instanceof PostModerationEvent.MarkedSpoiler
+                    || moderationEvent instanceof PostModerationEvent.UnmarkedSpoiler) {
+                viewPostDetailFragmentViewModel.refresh(true, false);
+            }
         });
 
         viewPostDetailFragmentViewModel.getCommentModerationEventLiveData().observe(getViewLifecycleOwner(), moderationEvent -> {
-            //viewPostDetailFragmentViewModel.updateModdedStatus(moderationEvent.getComment(), moderationEvent.getPosition());
             Toast.makeText(mActivity, moderationEvent.getToastMessageResId(), Toast.LENGTH_SHORT).show();
         });
     }
@@ -1194,18 +1199,10 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                     .show();
             return true;
         } else if (itemId == R.id.action_nsfw_view_post_detail_fragment) {
-            if (mPost.isNSFW()) {
-                unmarkNSFW();
-            } else {
-                markNSFW();
-            }
+            viewPostDetailFragmentViewModel.toggleNSFW(postListPosition);
             return true;
         } else if (itemId == R.id.action_spoiler_view_post_detail_fragment) {
-            if (mPost.isSpoiler()) {
-                unmarkSpoiler();
-            } else {
-                markSpoiler();
-            }
+            viewPostDetailFragmentViewModel.toggleSpoiler(postListPosition);
             return true;
         } else if (itemId == R.id.action_edit_flair_view_post_detail_fragment) {
             FlairBottomSheetFragment flairBottomSheetFragment = new FlairBottomSheetFragment();
@@ -1402,158 +1399,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         }
 
         return false;
-    }
-
-    private void markNSFW() {
-        if (mMenu != null) {
-            mMenu.findItem(R.id.action_nsfw_view_post_detail_fragment).setTitle(R.string.action_unmark_nsfw);
-        }
-
-        Map<String, String> params = new HashMap<>();
-        params.put(APIUtils.ID_KEY, mPost.getFullName());
-        mOauthRetrofit.create(RedditAPI.class).markNSFW(APIUtils.getOAuthHeader(mActivity.accessToken), params)
-                .enqueue(new Callback<>() {
-                    @Override
-                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                        if (response.isSuccessful()) {
-                            if (mMenu != null) {
-                                mMenu.findItem(R.id.action_nsfw_view_post_detail_fragment).setTitle(R.string.action_unmark_nsfw);
-                            }
-
-                            viewPostDetailFragmentViewModel.refresh(true, false);
-                            showMessage(R.string.mark_nsfw_success);
-                        } else {
-                            if (mMenu != null) {
-                                mMenu.findItem(R.id.action_nsfw_view_post_detail_fragment).setTitle(R.string.action_mark_nsfw);
-                            }
-
-                            showMessage(R.string.mark_nsfw_failed);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                        if (mMenu != null) {
-                            mMenu.findItem(R.id.action_nsfw_view_post_detail_fragment).setTitle(R.string.action_mark_nsfw);
-                        }
-
-                        showMessage(R.string.mark_nsfw_failed);
-                    }
-                });
-    }
-
-    private void unmarkNSFW() {
-        if (mMenu != null) {
-            mMenu.findItem(R.id.action_nsfw_view_post_detail_fragment).setTitle(R.string.action_mark_nsfw);
-        }
-
-        Map<String, String> params = new HashMap<>();
-        params.put(APIUtils.ID_KEY, mPost.getFullName());
-        mOauthRetrofit.create(RedditAPI.class).unmarkNSFW(APIUtils.getOAuthHeader(mActivity.accessToken), params)
-                .enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                        if (response.isSuccessful()) {
-                            if (mMenu != null) {
-                                mMenu.findItem(R.id.action_nsfw_view_post_detail_fragment).setTitle(R.string.action_mark_nsfw);
-                            }
-
-                            viewPostDetailFragmentViewModel.refresh(true, false);
-                            showMessage(R.string.unmark_nsfw_success);
-                        } else {
-                            if (mMenu != null) {
-                                mMenu.findItem(R.id.action_nsfw_view_post_detail_fragment).setTitle(R.string.action_unmark_nsfw);
-                            }
-
-                            showMessage(R.string.unmark_nsfw_failed);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                        if (mMenu != null) {
-                            mMenu.findItem(R.id.action_nsfw_view_post_detail_fragment).setTitle(R.string.action_unmark_nsfw);
-                        }
-
-                        showMessage(R.string.unmark_nsfw_failed);
-                    }
-                });
-    }
-
-    private void markSpoiler() {
-        if (mMenu != null) {
-            mMenu.findItem(R.id.action_spoiler_view_post_detail_fragment).setTitle(R.string.action_unmark_spoiler);
-        }
-
-        Map<String, String> params = new HashMap<>();
-        params.put(APIUtils.ID_KEY, mPost.getFullName());
-        mOauthRetrofit.create(RedditAPI.class).markSpoiler(APIUtils.getOAuthHeader(mActivity.accessToken), params)
-                .enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                        if (response.isSuccessful()) {
-                            if (mMenu != null) {
-                                mMenu.findItem(R.id.action_spoiler_view_post_detail_fragment).setTitle(R.string.action_unmark_spoiler);
-                            }
-
-                            viewPostDetailFragmentViewModel.refresh(true, false);
-                            showMessage(R.string.mark_spoiler_success);
-                        } else {
-                            if (mMenu != null) {
-                                mMenu.findItem(R.id.action_spoiler_view_post_detail_fragment).setTitle(R.string.action_mark_spoiler);
-                            }
-
-                            showMessage(R.string.mark_spoiler_failed);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                        if (mMenu != null) {
-                            mMenu.findItem(R.id.action_spoiler_view_post_detail_fragment).setTitle(R.string.action_mark_spoiler);
-                        }
-
-                        showMessage(R.string.mark_spoiler_failed);
-                    }
-                });
-    }
-
-    private void unmarkSpoiler() {
-        if (mMenu != null) {
-            mMenu.findItem(R.id.action_spoiler_view_post_detail_fragment).setTitle(R.string.action_mark_spoiler);
-        }
-
-        Map<String, String> params = new HashMap<>();
-        params.put(APIUtils.ID_KEY, mPost.getFullName());
-        mOauthRetrofit.create(RedditAPI.class).unmarkSpoiler(APIUtils.getOAuthHeader(mActivity.accessToken), params)
-                .enqueue(new Callback<String>() {
-                    @Override
-                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                        if (response.isSuccessful()) {
-                            if (mMenu != null) {
-                                mMenu.findItem(R.id.action_spoiler_view_post_detail_fragment).setTitle(R.string.action_mark_spoiler);
-                            }
-
-                            viewPostDetailFragmentViewModel.refresh(true, false);
-                            showMessage(R.string.unmark_spoiler_success);
-                        } else {
-                            if (mMenu != null) {
-                                mMenu.findItem(R.id.action_spoiler_view_post_detail_fragment).setTitle(R.string.action_unmark_spoiler);
-                            }
-
-                            showMessage(R.string.unmark_spoiler_failed);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                        if (mMenu != null) {
-                            mMenu.findItem(R.id.action_spoiler_view_post_detail_fragment).setTitle(R.string.action_unmark_spoiler);
-                        }
-
-                        showMessage(R.string.unmark_spoiler_failed);
-                    }
-                });
     }
 
     public void deleteComment(String fullName, int position) {
@@ -1790,12 +1635,12 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
 
     @Override
     public void toggleNSFW(@NonNull Post post, int position) {
-        viewPostDetailFragmentViewModel.toggleNSFW(post, position);
+        viewPostDetailFragmentViewModel.toggleNSFW(position);
     }
 
     @Override
     public void toggleSpoiler(@NonNull Post post, int position) {
-        viewPostDetailFragmentViewModel.toggleSpoiler(post, position);
+        viewPostDetailFragmentViewModel.toggleSpoiler(position);
     }
 
     @Override

@@ -1427,89 +1427,95 @@ class ViewPostDetailFragmentViewModelNew(
         }
     }
 
-    fun toggleNSFW(post: Post, position: Int) {
+    fun toggleNSFW(position: Int) {
         viewModelScope.launch {
-            val params: MutableMap<String, String> = HashMap()
-            params[APIUtils.ID_KEY] = post.fullName
-            try {
-                val response = if (post.isNSFW) oauthRetrofit.create(
-                    RedditAPIKt::class.java
-                ).unmarkNSFW(APIUtils.getOAuthHeader(accessToken), params) else oauthRetrofit.create(
-                    RedditAPIKt::class.java
-                ).markNSFW(APIUtils.getOAuthHeader(accessToken), params)
+            _dataState.value.post?.let { post ->
+                val params: MutableMap<String, String> = HashMap()
+                params[APIUtils.ID_KEY] = post.fullName
+                try {
+                    val response = if (post.isNSFW) oauthRetrofit.create(
+                        RedditAPIKt::class.java
+                    ).unmarkNSFW(APIUtils.getOAuthHeader(accessToken), params) else oauthRetrofit.create(
+                        RedditAPIKt::class.java
+                    ).markNSFW(APIUtils.getOAuthHeader(accessToken), params)
 
-                if (response.isSuccessful) {
-                    post.isNSFW = !post.isNSFW
+                    if (response.isSuccessful) {
+                        val newPost = Post(post)
+                        newPost.isNSFW = !post.isNSFW
 
-                    setPost(post)
+                        setPost(newPost)
 
+                        postModerationEventLiveData.postValue(
+                            if (post.isNSFW) UnmarkedNSFW(
+                                post,
+                                position
+                            ) else MarkedNSFW(post, position)
+                        )
+                    } else {
+                        postModerationEventLiveData.postValue(
+                            if (post.isNSFW) MarkNSFWFailed(
+                                post,
+                                position
+                            ) else UnmarkNSFWFailed(post, position)
+                        )
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                     postModerationEventLiveData.postValue(
-                        if (post.isNSFW) MarkedNSFW(
+                        if (post.isNSFW) MarkNSFWFailed(
                             post,
                             position
-                        ) else UnmarkedNSFW(post, position)
-                    )
-                } else {
-                    postModerationEventLiveData.postValue(
-                        if (post.isNSFW) UnmarkNSFWFailed(
-                            post,
-                            position
-                        ) else MarkNSFWFailed(post, position)
+                        ) else UnmarkNSFWFailed(post, position)
                     )
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                postModerationEventLiveData.postValue(
-                    if (post.isNSFW) UnmarkNSFWFailed(
-                        post,
-                        position
-                    ) else MarkNSFWFailed(post, position)
-                )
             }
         }
     }
 
-    fun toggleSpoiler(post: Post, position: Int) {
+    fun toggleSpoiler(position: Int) {
         viewModelScope.launch {
-            val params: MutableMap<String, String> = HashMap()
-            params[APIUtils.ID_KEY] = post.fullName
-            try {
-                val response = if (post.isSpoiler) oauthRetrofit.create(
-                    RedditAPIKt::class.java
-                ).unmarkSpoiler(
-                    APIUtils.getOAuthHeader(accessToken),
-                    params
-                ) else oauthRetrofit.create(
-                    RedditAPIKt::class.java
-                ).markSpoiler(APIUtils.getOAuthHeader(accessToken), params)
+            _dataState.value.post?.let { post ->
+                val params: MutableMap<String, String> = HashMap()
+                params[APIUtils.ID_KEY] = post.fullName
+                try {
+                    val response = if (post.isSpoiler) oauthRetrofit.create(
+                        RedditAPIKt::class.java
+                    ).unmarkSpoiler(
+                        APIUtils.getOAuthHeader(accessToken),
+                        params
+                    ) else oauthRetrofit.create(
+                        RedditAPIKt::class.java
+                    ).markSpoiler(APIUtils.getOAuthHeader(accessToken), params)
 
-                if (response.isSuccessful) {
-                    post.isSpoiler = !post.isSpoiler
+                    if (response.isSuccessful) {
+                        val newPost = Post(post)
+                        newPost.isSpoiler = !post.isSpoiler
 
-                    setPost(post)
+                        setPost(newPost)
 
+                        postModerationEventLiveData.postValue(
+                            if (post.isSpoiler) UnmarkedSpoiler(
+                                post,
+                                position
+                            ) else MarkedSpoiler(post, position)
+                        )
+                    } else {
+                        postModerationEventLiveData.postValue(
+                            if (post.isSpoiler) MarkSpoilerFailed(
+                                post,
+                                position
+                            ) else UnmarkSpoilerFailed(post, position)
+                        )
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                     postModerationEventLiveData.postValue(
-                        if (post.isSpoiler) MarkedSpoiler(
+                        if (post.isSpoiler) MarkSpoilerFailed(
                             post,
                             position
-                        ) else UnmarkedSpoiler(post, position)
-                    )
-                } else {
-                    postModerationEventLiveData.postValue(
-                        if (post.isSpoiler) UnmarkSpoilerFailed(
-                            post,
-                            position
-                        ) else MarkSpoilerFailed(post, position)
+                        ) else UnmarkSpoilerFailed(post, position)
                     )
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                postModerationEventLiveData.postValue(
-                    if (post.isSpoiler) UnmarkSpoilerFailed(
-                        post,
-                        position
-                    ) else MarkSpoilerFailed(post, position)
-                )
             }
         }
     }
