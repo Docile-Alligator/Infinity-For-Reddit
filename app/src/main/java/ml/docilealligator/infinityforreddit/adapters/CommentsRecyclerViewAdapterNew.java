@@ -648,7 +648,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
     }
 
     public void initiallyLoading() {
-        resetSearchedPosition();
+        resetSearchedPosition(false);
     }
 
     public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction, int swipeLeftAction, int swipeRightAction) {
@@ -685,7 +685,10 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
         notifyItemChanged(searchedPosition);
     }
 
-    public void resetSearchedPosition() {
+    public void resetSearchedPosition(boolean notifyOldSearchedPosition) {
+        if (notifyOldSearchedPosition) {
+            notifyItemChanged(mSearchedPosition);
+        }
         mSearchedPosition = -1;
     }
 

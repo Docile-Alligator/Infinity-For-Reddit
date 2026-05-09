@@ -945,9 +945,13 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         }
     }
 
-    public void resetSearchCommentIndex() {
+    public void resetSearchedPosition() {
         if (mCommentsAdapter != null) {
-            mCommentsAdapter.resetSearchedPosition();
+            mCommentsAdapter.resetSearchedPosition(
+                    viewPostDetailFragmentViewModel.checkIfNotifyOldSearchedPositionNeeded(
+                            mCommentsAdapter.getSearchedPosition()
+                    )
+            );
         }
     }
 
@@ -970,7 +974,11 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         int itemId = item.getItemId();
         if (itemId == R.id.action_search_view_post_detail_fragment) {
             if (mActivity.toggleSearchPanelVisibility() && mCommentsAdapter != null) {
-                mCommentsAdapter.resetSearchedPosition();
+                mCommentsAdapter.resetSearchedPosition(
+                        viewPostDetailFragmentViewModel.checkIfNotifyOldSearchedPositionNeeded(
+                                mCommentsAdapter.getSearchedPosition()
+                        )
+                );
             }
         } else if (itemId == R.id.action_refresh_view_post_detail_fragment) {
             viewPostDetailFragmentViewModel.refresh(true, true);
@@ -1267,9 +1275,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         if (mCommentsAdapter != null) {
             mCommentsAdapter.setCanStartActivity(true);
         }
-        if (binding.postDetailRecyclerViewViewPostDetailFragment != null) {
-            binding.postDetailRecyclerViewViewPostDetailFragment.onWindowVisibilityChanged(View.VISIBLE);
-        }
+        binding.postDetailRecyclerViewViewPostDetailFragment.onWindowVisibilityChanged(View.VISIBLE);
         tryMarkingPostAsRead();
     }
 

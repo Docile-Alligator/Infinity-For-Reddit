@@ -467,7 +467,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         binding.closeSearchPanelImageViewViewPostDetailActivity.setOnClickListener(view -> {
             ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
             if (fragment != null) {
-                fragment.resetSearchCommentIndex();
+                fragment.resetSearchedPosition();
             }
 
             binding.searchPanelMaterialCardViewViewPostDetailActivity.setVisibility(View.GONE);

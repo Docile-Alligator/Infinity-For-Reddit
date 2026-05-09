@@ -1338,6 +1338,14 @@ class ViewPostDetailFragmentViewModelNew(
         return -1
     }
 
+    fun checkIfNotifyOldSearchedPositionNeeded(searchedPosition: Int): Boolean {
+        _dataState.value.comments?.let {
+            return searchedPosition in it.indices
+        }
+
+        return false
+    }
+
     fun approvePost(post: Post, position: Int) {
         viewModelScope.launch {
             val params: MutableMap<String, String> = HashMap()
