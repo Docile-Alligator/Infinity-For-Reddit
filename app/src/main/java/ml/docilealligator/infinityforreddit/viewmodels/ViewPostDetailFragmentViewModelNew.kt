@@ -1516,32 +1516,26 @@ class ViewPostDetailFragmentViewModelNew(
     }
 
     fun toggleMod(post: Post, position: Int) {
-        val params: MutableMap<String, String> = HashMap()
-        params[APIUtils.ID_KEY] = post.fullName
-        params[APIUtils.HOW_KEY] = if (post.isModerator) APIUtils.HOW_NO else APIUtils.HOW_YES
-        oauthRetrofit.create(RedditAPI::class.java)
-            .toggleDistinguishedThing(APIUtils.getOAuthHeader(accessToken), params)
-            .enqueue(object : Callback<String?> {
-                override fun onResponse(call: Call<String?>, response: Response<String?>) {
-                    if (response.isSuccessful) {
-                        post.setIsModerator(!post.isModerator)
-                        postModerationEventLiveData.postValue(
-                            if (post.isModerator) DistinguishedAsMod(
-                                post,
-                                position
-                            ) else UndistinguishedAsMod(post, position)
-                        )
-                    } else {
-                        postModerationEventLiveData.postValue(
-                            if (post.isModerator) UndistinguishAsModFailed(
-                                post,
-                                position
-                            ) else DistinguishAsModFailed(post, position)
-                        )
-                    }
-                }
+        viewModelScope.launch {
+            val params: MutableMap<String, String> = HashMap()
+            params[APIUtils.ID_KEY] = post.fullName
+            params[APIUtils.HOW_KEY] = if (post.isModerator) APIUtils.HOW_NO else APIUtils.HOW_YES
+            try {
+                val response = oauthRetrofit.create(RedditAPIKt::class.java)
+                    .toggleDistinguishedThing(APIUtils.getOAuthHeader(accessToken), params)
 
-                override fun onFailure(call: Call<String?>, throwable: Throwable) {
+                if (response.isSuccessful) {
+                    post.setIsModerator(!post.isModerator)
+
+                    setPost(post)
+
+                    postModerationEventLiveData.postValue(
+                        if (post.isModerator) DistinguishedAsMod(
+                            post,
+                            position
+                        ) else UndistinguishedAsMod(post, position)
+                    )
+                } else {
                     postModerationEventLiveData.postValue(
                         if (post.isModerator) UndistinguishAsModFailed(
                             post,
@@ -1549,7 +1543,16 @@ class ViewPostDetailFragmentViewModelNew(
                         ) else DistinguishAsModFailed(post, position)
                     )
                 }
-            })
+            } catch (e: Exception) {
+                e.printStackTrace()
+                postModerationEventLiveData.postValue(
+                    if (post.isModerator) UndistinguishAsModFailed(
+                        post,
+                        position
+                    ) else DistinguishAsModFailed(post, position)
+                )
+            }
+        }
     }
 
     fun toggleNotification(post: Post, position: Int) {
