@@ -28,6 +28,8 @@ import ml.docilealligator.infinityforreddit.moderation.CommentModerationEvent
 import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent
 import ml.docilealligator.infinityforreddit.post.ParsePost
 import ml.docilealligator.infinityforreddit.post.Post
+import ml.docilealligator.infinityforreddit.post.hidePost
+import ml.docilealligator.infinityforreddit.post.unhidePost
 import ml.docilealligator.infinityforreddit.readpost.ReadPostType
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils
 import ml.docilealligator.infinityforreddit.readpost.deleteReadPost
@@ -1231,7 +1233,7 @@ class ViewPostDetailFragmentViewModelNew(
         }
     }
 
-    fun savePost(position: Int) {
+    fun toggleSavePost(position: Int) {
         viewModelScope.launch {
             _dataState.value.post?.let { post ->
                 if (Account.ANONYMOUS_ACCOUNT == accountName) {
@@ -1242,6 +1244,13 @@ class ViewPostDetailFragmentViewModelNew(
                             post.id,
                             ReadPostType.ANONYMOUS_SAVED_POSTS
                         )
+
+                        postModerationEventLiveData.postValue(
+                            PostModerationEvent.Unsaved(
+                                post,
+                                position
+                            )
+                        )
                     } else {
                         insertReadPost(
                             redditDataRoomDatabase,
@@ -1251,6 +1260,13 @@ class ViewPostDetailFragmentViewModelNew(
                             ReadPostsUtils.GetReadPostsLimit(
                                 accountName,
                                 postHistorySharedPreferences
+                            )
+                        )
+
+                        postModerationEventLiveData.postValue(
+                            PostModerationEvent.Saved(
+                                post,
+                                position
                             )
                         )
                     }
@@ -1289,7 +1305,7 @@ class ViewPostDetailFragmentViewModelNew(
                         } else {
                             if (saveThing(
                                     oauthRetrofit, accessToken, post.fullName
-                                )) {
+                            )) {
                                 _dataState.value = _dataState.value.copy(
                                     post = Post(post).apply {
                                         isSaved = !isSaved
@@ -1305,6 +1321,106 @@ class ViewPostDetailFragmentViewModelNew(
                             } else {
                                 postModerationEventLiveData.postValue(
                                     PostModerationEvent.SaveFailed(
+                                        post,
+                                        position
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun toggleHidePost(position: Int) {
+        viewModelScope.launch {
+            _dataState.value.post?.let { post ->
+                if (Account.ANONYMOUS_ACCOUNT == accountName) {
+                    if (post.isHidden) {
+                        deleteReadPost(
+                            redditDataRoomDatabase,
+                            accountName,
+                            post.id,
+                            ReadPostType.ANONYMOUS_HIDDEN_POSTS
+                        )
+
+                        postModerationEventLiveData.postValue(
+                            PostModerationEvent.Unhid(
+                                post,
+                                position
+                            )
+                        )
+                    } else {
+                        insertReadPost(
+                            redditDataRoomDatabase,
+                            accountName,
+                            post.id,
+                            ReadPostType.ANONYMOUS_HIDDEN_POSTS,
+                            ReadPostsUtils.GetReadPostsLimit(
+                                accountName,
+                                postHistorySharedPreferences
+                            )
+                        )
+
+                        postModerationEventLiveData.postValue(
+                            PostModerationEvent.Hid(
+                                post,
+                                position
+                            )
+                        )
+                    }
+
+                    _dataState.value = _dataState.value.copy(
+                        post = Post(post).apply {
+                            isSaved = !isSaved
+                        }
+                    )
+                } else {
+                    accessToken?.let { accessToken ->
+                        if (post.isHidden) {
+                            if (unhidePost(
+                                    oauthRetrofit, accessToken, post.fullName
+                            )) {
+                                _dataState.value = _dataState.value.copy(
+                                    post = Post(post).apply {
+                                        isHidden = !isHidden
+                                    }
+                                )
+
+                                postModerationEventLiveData.postValue(
+                                    PostModerationEvent.Unhid(
+                                        post,
+                                        position
+                                    )
+                                )
+                            } else {
+                                postModerationEventLiveData.postValue(
+                                    PostModerationEvent.UnhideFailed(
+                                        post,
+                                        position
+                                    )
+                                )
+                            }
+                        } else {
+                            if (hidePost(
+                                    oauthRetrofit, accessToken, post.fullName
+                            )) {
+                                _dataState.value = _dataState.value.copy(
+                                    post = Post(post).apply {
+                                        isHidden = !isHidden
+                                    }
+                                )
+
+                                postModerationEventLiveData.postValue(
+                                    PostModerationEvent.Hid(
+                                        post,
+                                        position
+                                    )
+                                )
+                            } else {
+                                postModerationEventLiveData.postValue(
+                                    PostModerationEvent.HideFailed(
                                         post,
                                         position
                                     )

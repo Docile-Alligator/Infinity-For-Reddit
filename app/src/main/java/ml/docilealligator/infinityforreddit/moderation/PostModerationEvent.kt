@@ -57,4 +57,10 @@ sealed class PostModerationEvent(open val post: Post, open val position: Int, va
 
     data class Unsaved(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.post_unsaved_success)
     data class UnsaveFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.post_unsaved_failed)
+
+    data class Hid(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.post_hide_success)
+    data class HideFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.post_hide_failed)
+
+    data class Unhid(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.post_unhide_success)
+    data class UnhideFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.post_unhide_failed)
 }
