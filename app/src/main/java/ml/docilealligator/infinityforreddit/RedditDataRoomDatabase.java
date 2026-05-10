@@ -37,6 +37,7 @@ import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsageDao;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostDao;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostDaoKt;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQuery;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQueryDao;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditDao;
@@ -92,6 +93,8 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     public abstract RecentSearchQueryDao recentSearchQueryDao();
 
     public abstract ReadPostDao readPostDao();
+
+    public abstract ReadPostDaoKt readPostDaoKt();
 
     public abstract PostFilterDao postFilterDao();
 

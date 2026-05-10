@@ -772,12 +772,16 @@ public class Post implements Parcelable {
         if (!(obj instanceof Post)) {
             return false;
         }
-        return ((Post) obj).id.equals(id) && nsfw == ((Post) obj).isNSFW() && spoiler == ((Post) obj).isSpoiler();
+        return ((Post) obj).id.equals(id)
+                && nsfw == ((Post) obj).isNSFW()
+                && spoiler == ((Post) obj).isSpoiler()
+                && isRead == ((Post) obj).isRead()
+                && saved == ((Post) obj).isSaved();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nsfw, spoiler);
+        return Objects.hash(id, nsfw, spoiler, isRead, saved);
     }
 
     public static class Gallery implements Parcelable {

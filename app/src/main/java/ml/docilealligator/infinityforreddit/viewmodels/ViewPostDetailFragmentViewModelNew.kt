@@ -26,39 +26,18 @@ import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterUsage
 import ml.docilealligator.infinityforreddit.moderation.CommentModerationEvent
 import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.ApproveFailed
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.Approved
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.ChangedFlair
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.ChangeFlairFailed
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.DistinguishAsModFailed
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.DistinguishedAsMod
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.LockFailed
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.Locked
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.MarkAsSpamFailed
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.MarkNSFWFailed
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.MarkSpoilerFailed
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.MarkedAsSpam
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.MarkedNSFW
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.MarkedSpoiler
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.RemoveFailed
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.SetStickyPost
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.SetStickyPostFailed
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.UndistinguishAsModFailed
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.UndistinguishedAsMod
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.UnlockFailed
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.Unlocked
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.UnmarkNSFWFailed
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.UnmarkSpoilerFailed
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.UnmarkedNSFW
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.UnmarkedSpoiler
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.UnsetStickyPost
-import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent.UnsetStickyPostFailed
 import ml.docilealligator.infinityforreddit.post.ParsePost
 import ml.docilealligator.infinityforreddit.post.Post
+import ml.docilealligator.infinityforreddit.readpost.ReadPostType
+import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils
+import ml.docilealligator.infinityforreddit.readpost.deleteReadPost
+import ml.docilealligator.infinityforreddit.readpost.insertReadPost
 import ml.docilealligator.infinityforreddit.subreddit.Flair
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData
 import ml.docilealligator.infinityforreddit.thing.SortType
+import ml.docilealligator.infinityforreddit.thing.saveThing
+import ml.docilealligator.infinityforreddit.thing.unsaveThing
 import ml.docilealligator.infinityforreddit.utils.APIUtils
 import ml.docilealligator.infinityforreddit.utils.JSONUtils
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils
@@ -82,7 +61,9 @@ class ViewPostDetailFragmentViewModelNew(
     private var commentId: String?,
     private val sortType: SortType.Type?,
     private val sortTypeSharedPreferences: SharedPreferences,
+    private val postHistorySharedPreferences: SharedPreferences,
     var respectSubredditRecommendedSortType: Boolean,
+    private val markPostsAsRead: Boolean,
     private val expandChildren: Boolean,
     private val contextNumber: String
 ) : ViewModel() {
@@ -1220,6 +1201,122 @@ class ViewPostDetailFragmentViewModelNew(
         )
     }
 
+    fun tryMarkingPostAsRead() {
+        if (markPostsAsRead) {
+            viewModelScope.launch {
+                _dataState.value.post?.let {
+                    if (!it.isRead) {
+                        val updatedPost = Post(it).apply {
+                            markAsRead()
+                        }
+
+                        val readPostsLimit = ReadPostsUtils.GetReadPostsLimit(
+                            accountName,
+                            postHistorySharedPreferences
+                        )
+                        insertReadPost(
+                            redditDataRoomDatabase,
+                            accountName,
+                            it.id,
+                            ReadPostType.READ_POSTS,
+                            readPostsLimit
+                        )
+
+                        _dataState.value = _dataState.value.copy(
+                            post = updatedPost
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun savePost(position: Int) {
+        viewModelScope.launch {
+            _dataState.value.post?.let { post ->
+                if (Account.ANONYMOUS_ACCOUNT == accountName) {
+                    if (post.isSaved) {
+                        deleteReadPost(
+                            redditDataRoomDatabase,
+                            accountName,
+                            post.id,
+                            ReadPostType.ANONYMOUS_SAVED_POSTS
+                        )
+                    } else {
+                        insertReadPost(
+                            redditDataRoomDatabase,
+                            accountName,
+                            post.id,
+                            ReadPostType.ANONYMOUS_SAVED_POSTS,
+                            ReadPostsUtils.GetReadPostsLimit(
+                                accountName,
+                                postHistorySharedPreferences
+                            )
+                        )
+                    }
+
+                    _dataState.value = _dataState.value.copy(
+                        post = Post(post).apply {
+                            isSaved = !isSaved
+                        }
+                    )
+                } else {
+                    accessToken?.let { accessToken ->
+                        if (post.isSaved) {
+                            if (unsaveThing(
+                                oauthRetrofit, accessToken, post.fullName
+                            )) {
+                                _dataState.value = _dataState.value.copy(
+                                    post = Post(post).apply {
+                                        isSaved = !isSaved
+                                    }
+                                )
+
+                                postModerationEventLiveData.postValue(
+                                    PostModerationEvent.Unsaved(
+                                        post,
+                                        position
+                                    )
+                                )
+                            } else {
+                                postModerationEventLiveData.postValue(
+                                    PostModerationEvent.UnsaveFailed(
+                                        post,
+                                        position
+                                    )
+                                )
+                            }
+                        } else {
+                            if (saveThing(
+                                    oauthRetrofit, accessToken, post.fullName
+                                )) {
+                                _dataState.value = _dataState.value.copy(
+                                    post = Post(post).apply {
+                                        isSaved = !isSaved
+                                    }
+                                )
+
+                                postModerationEventLiveData.postValue(
+                                    PostModerationEvent.Saved(
+                                        post,
+                                        position
+                                    )
+                                )
+                            } else {
+                                postModerationEventLiveData.postValue(
+                                    PostModerationEvent.SaveFailed(
+                                        post,
+                                        position
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     fun editComment(comment: Comment, position: Int) {
         _dataState.value.comments?.let {
             val updatedComments = ArrayList(it)
@@ -1383,14 +1480,14 @@ class ViewPostDetailFragmentViewModelNew(
 
                     setPost(post)
 
-                    postModerationEventLiveData.postValue(Approved(post, position))
+                    postModerationEventLiveData.postValue(PostModerationEvent.Approved(post, position))
                 } else {
-                    postModerationEventLiveData.postValue(ApproveFailed(post, position))
+                    postModerationEventLiveData.postValue(PostModerationEvent.ApproveFailed(post, position))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
 
-                postModerationEventLiveData.postValue(ApproveFailed(post, position))
+                postModerationEventLiveData.postValue(PostModerationEvent.ApproveFailed(post, position))
             }
         }
     }
@@ -1413,27 +1510,27 @@ class ViewPostDetailFragmentViewModelNew(
                     setPost(post)
 
                     postModerationEventLiveData.postValue(
-                        if (isSpam) MarkedAsSpam(
+                        if (isSpam) PostModerationEvent.MarkedAsSpam(
                             post,
                             position
                         ) else PostModerationEvent.Removed(post, position)
                     )
                 } else {
                     postModerationEventLiveData.postValue(
-                        if (isSpam) MarkAsSpamFailed(
+                        if (isSpam) PostModerationEvent.MarkAsSpamFailed(
                             post,
                             position
-                        ) else RemoveFailed(post, position)
+                        ) else PostModerationEvent.RemoveFailed(post, position)
                     )
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
 
                 postModerationEventLiveData.postValue(
-                    if (isSpam) MarkAsSpamFailed(
+                    if (isSpam) PostModerationEvent.MarkAsSpamFailed(
                         post,
                         position
-                    ) else RemoveFailed(post, position)
+                    ) else PostModerationEvent.RemoveFailed(post, position)
                 )
             }
         }
@@ -1455,26 +1552,26 @@ class ViewPostDetailFragmentViewModelNew(
                     setPost(post)
 
                     postModerationEventLiveData.postValue(
-                        if (post.isStickied) SetStickyPost(
+                        if (post.isStickied) PostModerationEvent.SetStickyPost(
                             post,
                             position
-                        ) else UnsetStickyPost(post, position)
+                        ) else PostModerationEvent.UnsetStickyPost(post, position)
                     )
                 } else {
                     postModerationEventLiveData.postValue(
-                        if (post.isStickied) UnsetStickyPostFailed(
+                        if (post.isStickied) PostModerationEvent.UnsetStickyPostFailed(
                             post,
                             position
-                        ) else SetStickyPostFailed(post, position)
+                        ) else PostModerationEvent.SetStickyPostFailed(post, position)
                     )
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 postModerationEventLiveData.postValue(
-                    if (post.isStickied) UnsetStickyPostFailed(
+                    if (post.isStickied) PostModerationEvent.UnsetStickyPostFailed(
                         post,
                         position
-                    ) else SetStickyPostFailed(post, position)
+                    ) else PostModerationEvent.SetStickyPostFailed(post, position)
                 )
             }
         }
@@ -1497,26 +1594,26 @@ class ViewPostDetailFragmentViewModelNew(
                     setPost(post)
 
                     postModerationEventLiveData.postValue(
-                        if (post.isLocked) Locked(
+                        if (post.isLocked) PostModerationEvent.Locked(
                             post,
                             position
-                        ) else Unlocked(post, position)
+                        ) else PostModerationEvent.Unlocked(post, position)
                     )
                 } else {
                     postModerationEventLiveData.postValue(
-                        if (post.isLocked) UnlockFailed(
+                        if (post.isLocked) PostModerationEvent.UnlockFailed(
                             post,
                             position
-                        ) else LockFailed(post, position)
+                        ) else PostModerationEvent.LockFailed(post, position)
                     )
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 postModerationEventLiveData.postValue(
-                    if (post.isLocked) UnlockFailed(
+                    if (post.isLocked) PostModerationEvent.UnlockFailed(
                         post,
                         position
-                    ) else LockFailed(post, position)
+                    ) else PostModerationEvent.LockFailed(post, position)
                 )
             }
         }
@@ -1541,26 +1638,26 @@ class ViewPostDetailFragmentViewModelNew(
                         setPost(newPost)
 
                         postModerationEventLiveData.postValue(
-                            if (post.isNSFW) UnmarkedNSFW(
+                            if (post.isNSFW) PostModerationEvent.UnmarkedNSFW(
                                 post,
                                 position
-                            ) else MarkedNSFW(post, position)
+                            ) else PostModerationEvent.MarkedNSFW(post, position)
                         )
                     } else {
                         postModerationEventLiveData.postValue(
-                            if (post.isNSFW) MarkNSFWFailed(
+                            if (post.isNSFW) PostModerationEvent.MarkNSFWFailed(
                                 post,
                                 position
-                            ) else UnmarkNSFWFailed(post, position)
+                            ) else PostModerationEvent.UnmarkNSFWFailed(post, position)
                         )
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                     postModerationEventLiveData.postValue(
-                        if (post.isNSFW) MarkNSFWFailed(
+                        if (post.isNSFW) PostModerationEvent.MarkNSFWFailed(
                             post,
                             position
-                        ) else UnmarkNSFWFailed(post, position)
+                        ) else PostModerationEvent.UnmarkNSFWFailed(post, position)
                     )
                 }
             }
@@ -1589,26 +1686,26 @@ class ViewPostDetailFragmentViewModelNew(
                         setPost(newPost)
 
                         postModerationEventLiveData.postValue(
-                            if (post.isSpoiler) UnmarkedSpoiler(
+                            if (post.isSpoiler) PostModerationEvent.UnmarkedSpoiler(
                                 post,
                                 position
-                            ) else MarkedSpoiler(post, position)
+                            ) else PostModerationEvent.MarkedSpoiler(post, position)
                         )
                     } else {
                         postModerationEventLiveData.postValue(
-                            if (post.isSpoiler) MarkSpoilerFailed(
+                            if (post.isSpoiler) PostModerationEvent.MarkSpoilerFailed(
                                 post,
                                 position
-                            ) else UnmarkSpoilerFailed(post, position)
+                            ) else PostModerationEvent.UnmarkSpoilerFailed(post, position)
                         )
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                     postModerationEventLiveData.postValue(
-                        if (post.isSpoiler) MarkSpoilerFailed(
+                        if (post.isSpoiler) PostModerationEvent.MarkSpoilerFailed(
                             post,
                             position
-                        ) else UnmarkSpoilerFailed(post, position)
+                        ) else PostModerationEvent.UnmarkSpoilerFailed(post, position)
                     )
                 }
             }
@@ -1632,14 +1729,14 @@ class ViewPostDetailFragmentViewModelNew(
                     if (response.isSuccessful) {
                         refresh(fetchPost = true, fetchComments = false)
                         postModerationEventLiveData.postValue(
-                            ChangedFlair(
+                            PostModerationEvent.ChangedFlair(
                                 post,
                                 position
                             )
                         )
                     } else {
                         postModerationEventLiveData.postValue(
-                            ChangeFlairFailed(
+                            PostModerationEvent.ChangeFlairFailed(
                                 post,
                                 position
                             )
@@ -1648,7 +1745,7 @@ class ViewPostDetailFragmentViewModelNew(
                 } catch (e: Exception) {
                     e.printStackTrace()
                     postModerationEventLiveData.postValue(
-                        ChangeFlairFailed(
+                        PostModerationEvent.ChangeFlairFailed(
                             post,
                             position
                         )
@@ -1673,26 +1770,26 @@ class ViewPostDetailFragmentViewModelNew(
                     setPost(post)
 
                     postModerationEventLiveData.postValue(
-                        if (post.isModerator) DistinguishedAsMod(
+                        if (post.isModerator) PostModerationEvent.DistinguishedAsMod(
                             post,
                             position
-                        ) else UndistinguishedAsMod(post, position)
+                        ) else PostModerationEvent.UndistinguishedAsMod(post, position)
                     )
                 } else {
                     postModerationEventLiveData.postValue(
-                        if (post.isModerator) UndistinguishAsModFailed(
+                        if (post.isModerator) PostModerationEvent.UndistinguishAsModFailed(
                             post,
                             position
-                        ) else DistinguishAsModFailed(post, position)
+                        ) else PostModerationEvent.DistinguishAsModFailed(post, position)
                     )
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 postModerationEventLiveData.postValue(
-                    if (post.isModerator) UndistinguishAsModFailed(
+                    if (post.isModerator) PostModerationEvent.UndistinguishAsModFailed(
                         post,
                         position
-                    ) else DistinguishAsModFailed(post, position)
+                    ) else PostModerationEvent.DistinguishAsModFailed(post, position)
                 )
             }
         }
@@ -1936,7 +2033,9 @@ class ViewPostDetailFragmentViewModelNew(
                            accessToken: String?, accountName: String?,
                            post: Post?, postId: String?, commentId: String?,
                            sortTypeSharedPreferences: SharedPreferences,
+                           postHistorySharedPreferences: SharedPreferences,
                            respectSubredditRecommendedSortType: Boolean,
+                           markPostsAsRead: Boolean,
                            expandChildren: Boolean, contextNumber: String) : ViewModelProvider.Factory {
             return object: ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
@@ -1947,8 +2046,8 @@ class ViewPostDetailFragmentViewModelNew(
                     return ViewPostDetailFragmentViewModelNew(
                         retrofit, oauthRetrofit, redditDataRoomDatabase, accessToken, accountName,
                         post, postId, commentId, null, sortTypeSharedPreferences,
-                        respectSubredditRecommendedSortType,
-                        expandChildren, contextNumber
+                        postHistorySharedPreferences, respectSubredditRecommendedSortType,
+                        markPostsAsRead, expandChildren, contextNumber
                     ) as T
                 }
             }

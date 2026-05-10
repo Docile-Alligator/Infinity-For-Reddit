@@ -101,6 +101,7 @@ import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.extensions.ConcatAdapterKt;
 import ml.docilealligator.infinityforreddit.managers.VideoMuteManager;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
+import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent;
 import ml.docilealligator.infinityforreddit.post.HidePost;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostModification;
@@ -108,7 +109,6 @@ import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsUtils;
 import ml.docilealligator.infinityforreddit.subreddit.Flair;
 import ml.docilealligator.infinityforreddit.thing.DeleteThing;
-import ml.docilealligator.infinityforreddit.thing.SaveThing;
 import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -200,7 +200,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     private boolean mLockFab;
     private boolean mSwipeUpToHideFab;
     private boolean mSeparatePostAndComments = false;
-    private boolean mMarkPostsAsRead;
     private ConcatAdapter mConcatAdapter;
     private PostDetailRecyclerViewAdapterNew mPostAdapter;
     private CommentsStatusRecyclerViewAdapter mCommentsStatusAdapter;
@@ -278,7 +277,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
 
         mLockFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
         mSwipeUpToHideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
-        mMarkPostsAsRead = mPostHistorySharedPreferences.getBoolean(mActivity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false);
         if (savedInstanceState == null) {
             viewPostDetailFragmentId = System.currentTimeMillis();
         } else {
@@ -473,8 +471,9 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                 ViewPostDetailFragmentViewModelNew.Companion.provideFactory(
                         mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mActivity.accessToken,
                         mActivity.accountName, mPost, postId, mSingleCommentId,
-                        mSortTypeSharedPreferences,
+                        mSortTypeSharedPreferences, mPostHistorySharedPreferences,
                         mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false),
+                        mPostHistorySharedPreferences.getBoolean(mActivity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false),
                         !mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_TOP_LEVEL_COMMENTS_FIRST, false),
                         getArguments().getString(EXTRA_CONTEXT_NUMBER, "8")
                 )
@@ -683,6 +682,14 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
 
         viewPostDetailFragmentViewModel.getPostModerationEventLiveData().observe(getViewLifecycleOwner(), moderationEvent -> {
             showMessage(moderationEvent.getToastMessageResId());
+
+            if (moderationEvent instanceof PostModerationEvent.Saved
+                    || moderationEvent instanceof PostModerationEvent.SaveFailed
+                    || moderationEvent instanceof PostModerationEvent.Unsaved
+                    || moderationEvent instanceof PostModerationEvent.UnsaveFailed
+            ) {
+                setupMenu();
+            }
         });
 
         viewPostDetailFragmentViewModel.getCommentModerationEventLiveData().observe(getViewLifecycleOwner(), moderationEvent -> {
@@ -952,81 +959,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
             }
             return true;
         } else if (itemId == R.id.action_save_view_post_detail_fragment) {
-            if (mPost != null) {
-                if (Account.ANONYMOUS_ACCOUNT.equals(mActivity.accountName)) {
-                    if (mPost.isSaved()) {
-                        ReadPostModification.deleteReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
-                                mPost.getId(), ReadPostType.ANONYMOUS_SAVED_POSTS);
-                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_save_post));
-                        showMessage(R.string.post_unsaved_success);
-                    } else {
-                        ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
-                                mPost.getId(), ReadPostType.ANONYMOUS_SAVED_POSTS,
-                                ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences));
-                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unsave_post));
-                        showMessage(R.string.post_saved_success);
-                    }
-                    mPost.setSaved(!mPost.isSaved());
-                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                    viewPostDetailFragmentViewModel.setPost(mPost);
-                } else {
-                    if (mPost.isSaved()) {
-                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_save_post));
-
-                        SaveThing.unsaveThing(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(),
-                                new SaveThing.SaveThingListener() {
-                                    @Override
-                                    public void success() {
-                                        if (isAdded()) {
-                                            mPost.setSaved(false);
-                                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_save_post));
-                                            showMessage(R.string.post_unsaved_success);
-                                        }
-                                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                                        viewPostDetailFragmentViewModel.setPost(mPost);
-                                    }
-
-                                    @Override
-                                    public void failed() {
-                                        if (isAdded()) {
-                                            mPost.setSaved(true);
-                                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unsave_post));
-                                            showMessage(R.string.post_unsaved_failed);
-                                        }
-                                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                                        viewPostDetailFragmentViewModel.setPost(mPost);
-                                    }
-                                });
-                    } else {
-                        Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unsave_post));
-
-                        SaveThing.saveThing(mOauthRetrofit, mActivity.accessToken, mPost.getFullName(),
-                                new SaveThing.SaveThingListener() {
-                                    @Override
-                                    public void success() {
-                                        if (isAdded()) {
-                                            mPost.setSaved(true);
-                                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_unsave_post));
-                                            showMessage(R.string.post_saved_success);
-                                        }
-                                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                                        viewPostDetailFragmentViewModel.setPost(mPost);
-                                    }
-
-                                    @Override
-                                    public void failed() {
-                                        if (isAdded()) {
-                                            mPost.setSaved(false);
-                                            Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, item, mActivity.getString(R.string.action_save_post));
-                                            showMessage(R.string.post_saved_failed);
-                                        }
-                                        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                                        viewPostDetailFragmentViewModel.setPost(mPost);
-                                    }
-                                });
-                    }
-                }
-            }
+            viewPostDetailFragmentViewModel.savePost(postListPosition);
             return true;
         } else if (itemId == R.id.action_sort_view_post_detail_fragment) {
             if (mPost != null) {
@@ -1198,12 +1131,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     }
 
     private void tryMarkingPostAsRead() {
-        if (mMarkPostsAsRead && mPost != null && !mPost.isRead()) {
-            mPost.markAsRead();
-            int readPostsLimit = ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences);
-            ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName, mPost.getId(), ReadPostType.READ_POSTS, readPostsLimit);
-            EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-        }
+        viewPostDetailFragmentViewModel.tryMarkingPostAsRead();
     }
 
     @Override

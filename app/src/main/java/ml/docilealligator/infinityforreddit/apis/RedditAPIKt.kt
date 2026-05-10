@@ -180,4 +180,18 @@ interface RedditAPIKt {
         @HeaderMap headers: Map<String, String>,
         @FieldMap params: Map<String, String>
     ): Response<String>
+
+    @FormUrlEncoded
+    @POST("/api/save")
+    suspend fun save(
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): Response<String>
+
+    @FormUrlEncoded
+    @POST("/api/unsave")
+    suspend fun unsave(
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): Response<String>
 }

@@ -1073,13 +1073,6 @@ public class PostDetailRecyclerViewAdapterNew extends RecyclerView.Adapter<Recyc
         }
     }
 
-    public void addOneComment() {
-        if (mPost != null) {
-            mPost.setNComments(mPost.getNComments() + 1);
-            notifyItemChanged(0);
-        }
-    }
-
     private void openMedia(Post post) {
         openMedia(post, 0);
     }
