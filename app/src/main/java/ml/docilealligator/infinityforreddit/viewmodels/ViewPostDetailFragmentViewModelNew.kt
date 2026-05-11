@@ -793,7 +793,7 @@ class ViewPostDetailFragmentViewModelNew(
 
     fun refresh(fetchPost: Boolean, fetchComments: Boolean) {
         viewModelScope.launch {
-            if (_uiState.value.isRefreshing) {
+            if (!_uiState.value.isRefreshing) {
                 _uiState.value = _uiState.value.copy(
                     isRefreshing = true
                 )
@@ -816,9 +816,9 @@ class ViewPostDetailFragmentViewModelNew(
                                 val post = withContext(Dispatchers.Default) {
                                     ParsePost.parsePostSync(response.body())
                                 }
-                                post?.let {
+                                post?.let { post ->
                                     _dataState.value = _dataState.value.copy(
-                                        post = it
+                                        post = post
                                     )
 
                                     if (fetchComments) {

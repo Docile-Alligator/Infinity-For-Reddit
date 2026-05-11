@@ -37,13 +37,13 @@ interface RedditAPIKt {
     suspend fun getMyInfo(@HeaderMap headers: Map<String, String>): String
 
     @GET("comments/{id}.json?raw_json=1")
-    fun getPostOauth(
+    suspend fun getPostOauth(
         @Path("id") id: String,
         @HeaderMap headers: Map<String, String>
     ): Response<String>
 
     @GET("comments/{id}.json?raw_json=1")
-    fun getPost(@Path("id") id: String): Response<String>
+    suspend fun getPost(@Path("id") id: String): Response<String>
 
     @GET("/comments/{id}/placeholder/{singleCommentId}.json?raw_json=1")
     suspend fun getPostAndCommentsSingleThreadByIdOauth(
