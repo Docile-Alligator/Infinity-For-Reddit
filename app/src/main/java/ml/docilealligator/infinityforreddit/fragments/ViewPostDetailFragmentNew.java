@@ -523,7 +523,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         );
 
         viewPostDetailFragmentViewModel.getUiState().observe(getViewLifecycleOwner(), uiState -> {
-            mCommentsStatusAdapter.setSingleCommentThreadMode(uiState.isSingleCommentThreadMode());
+            mCommentsStatusAdapter.setSingleCommentThreadMode(uiState.getSingleCommentId() != null && !uiState.getSingleCommentId().isEmpty());
             mCommentsStatusAdapter.setInitiallyLoading(uiState.isInitialLoading());
             mCommentsStatusAdapter.setInitiallyLoadingFailed(uiState.isInitialLoadingFailed());
             mCommentsStatusAdapter.notifyDataSetChanged();
@@ -1198,8 +1198,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
 
     public void changeToNormalThreadMode() {
         mSingleCommentId = null;
-        viewPostDetailFragmentViewModel.setRespectSubredditRecommendedSortType(mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false));
-        viewPostDetailFragmentViewModel.refresh(false, true);
+        viewPostDetailFragmentViewModel.clearSingleCommentId(mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false));
     }
 
     public void scrollToNextParentComment() {

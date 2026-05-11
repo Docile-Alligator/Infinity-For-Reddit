@@ -61,11 +61,11 @@ class ViewPostDetailFragmentViewModelNew(
     private val accountName: String?,
     private var post: Post?,
     private var postId: String?,
-    private var commentId: String?,
+    private var singleCommentId: String?,
     private val sortType: SortType.Type?,
     private val sortTypeSharedPreferences: SharedPreferences,
     private val postHistorySharedPreferences: SharedPreferences,
-    var respectSubredditRecommendedSortType: Boolean,
+    private var respectSubredditRecommendedSortType: Boolean,
     private val markPostsAsRead: Boolean,
     private val expandChildren: Boolean,
     private val contextNumber: String
@@ -79,7 +79,6 @@ class ViewPostDetailFragmentViewModelNew(
         val isRefreshing: Boolean,
         val isLoadingMoreChildren: Boolean,
         val loadMoreChildrenSuccess: Boolean,
-        val isSingleCommentThreadMode: Boolean,
         val shouldShowErrorView: Boolean,
         val singleCommentId: String?
     )
@@ -116,9 +115,8 @@ class ViewPostDetailFragmentViewModelNew(
             isRefreshing = false,
             isLoadingMoreChildren = false,
             loadMoreChildrenSuccess = true,
-            isSingleCommentThreadMode = false,
             shouldShowErrorView = false,
-            singleCommentId = null
+            singleCommentId = singleCommentId
         )
     )
     val uiState: LiveData<UiState> = _uiState.asLiveData()
@@ -281,7 +279,7 @@ class ViewPostDetailFragmentViewModelNew(
         val response: Response<String>
         try {
             if (accountName == Account.ANONYMOUS_ACCOUNT) {
-                response = commentId?.let { commentId ->
+                response = _uiState.value.singleCommentId?.let { commentId ->
                     api.getPostAndCommentsSingleThreadById(
                         derivedPostId,
                         commentId,
@@ -290,7 +288,7 @@ class ViewPostDetailFragmentViewModelNew(
                     )
                 } ?: api.getPostAndCommentsById(derivedPostId, sortType)
             } else {
-                response = commentId?.let { commentId ->
+                response = _uiState.value.singleCommentId?.let { commentId ->
                     api.getPostAndCommentsSingleThreadByIdOauth(
                         derivedPostId, commentId, sortType, contextNumber,
                         APIUtils.getOAuthHeader(accessToken)
@@ -361,7 +359,7 @@ class ViewPostDetailFragmentViewModelNew(
                     val response: Response<String>
                     if (accountName == Account.ANONYMOUS_ACCOUNT) {
                         response = _uiState.value.singleCommentId?.let { singleCommentId ->
-                            if (_uiState.value.isSingleCommentThreadMode) {
+                            if (!_uiState.value.singleCommentId.isNullOrEmpty()) {
                                 retrofit.create(RedditAPIKt::class.java)
                                     .getPostAndCommentsSingleThreadById(
                                         postId, singleCommentId, getSortType(), contextNumber
@@ -380,7 +378,7 @@ class ViewPostDetailFragmentViewModelNew(
                         }
                     } else {
                         response = _uiState.value.singleCommentId?.let { singleCommentId ->
-                            if (_uiState.value.isSingleCommentThreadMode) {
+                            if (!_uiState.value.singleCommentId.isNullOrEmpty()) {
                                 oauthRetrofit.create(RedditAPIKt::class.java)
                                     .getPostAndCommentsSingleThreadByIdOauth(
                                         postId,
@@ -799,6 +797,11 @@ class ViewPostDetailFragmentViewModelNew(
                 )
 
                 if (!fetchPost && fetchComments) {
+                    _dataState.value = _dataState.value.copy(
+                        comments = null,
+                        children = null
+                    )
+
                     fetchCommentsRespectRecommendedSortSync(true)
                 }
 
@@ -817,13 +820,19 @@ class ViewPostDetailFragmentViewModelNew(
                                     ParsePost.parsePostSync(response.body())
                                 }
                                 post?.let { post ->
-                                    _dataState.value = _dataState.value.copy(
-                                        post = post
-                                    )
-
                                     if (fetchComments) {
+                                        _dataState.value = _dataState.value.copy(
+                                            post = post,
+                                            comments = null,
+                                            children = null
+                                        )
+
                                         fetchCommentsRespectRecommendedSortSync(true)
                                     } else {
+                                        _dataState.value = _dataState.value.copy(
+                                            post = post
+                                        )
+
                                         _uiState.value = _uiState.value.copy(
                                             isRefreshing = false
                                         )
@@ -1046,6 +1055,14 @@ class ViewPostDetailFragmentViewModelNew(
 
     fun getSortType(): SortType.Type {
         return _uiState.value.sortType ?: updateSortType(loadSortType())
+    }
+
+    fun clearSingleCommentId(respectSubredditRecommendedSortType: Boolean) {
+        this.respectSubredditRecommendedSortType = respectSubredditRecommendedSortType
+        _uiState.value = _uiState.value.copy(
+            singleCommentId = null
+        )
+        refresh(fetchPost = false, fetchComments = true)
     }
 
     fun expandComment(position: Int) {
