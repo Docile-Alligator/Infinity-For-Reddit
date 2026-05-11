@@ -208,4 +208,11 @@ interface RedditAPIKt {
         @HeaderMap headers: Map<String, String>,
         @FieldMap params: Map<String, String>
     ): Response<String>
+
+    @FormUrlEncoded
+    @POST("api/del")
+    suspend fun delete(
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): Response<String>
 }

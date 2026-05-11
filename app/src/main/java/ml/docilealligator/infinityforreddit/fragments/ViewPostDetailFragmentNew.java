@@ -1197,18 +1197,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                 .setTitle(R.string.delete_this_comment)
                 .setMessage(R.string.are_you_sure)
                 .setPositiveButton(R.string.delete, (dialogInterface, i)
-                        -> DeleteThing.delete(mOauthRetrofit, fullName, mActivity.accessToken, new DeleteThing.DeleteThingListener() {
-                    @Override
-                    public void deleteSuccess() {
-                        Toast.makeText(mActivity, R.string.delete_post_success, Toast.LENGTH_SHORT).show();
-                        viewPostDetailFragmentViewModel.deleteComment(position);
-                    }
-
-                    @Override
-                    public void deleteFailed() {
-                        Toast.makeText(mActivity, R.string.delete_post_failed, Toast.LENGTH_SHORT).show();
-                    }
-                }))
+                        -> viewPostDetailFragmentViewModel.deleteComment(fullName, position))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }

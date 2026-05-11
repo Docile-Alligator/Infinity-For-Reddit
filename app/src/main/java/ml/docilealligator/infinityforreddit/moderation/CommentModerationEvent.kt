@@ -25,4 +25,7 @@ sealed class CommentModerationEvent(open val comment: Comment, open val position
 
     data class UnsetReceiveNotification(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.reply_notifications_disabled)
     data class UnsetReceiveNotificationFailed(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.toggle_reply_notifications_failed)
+
+    data class Deleted(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.delete_post_success)
+    data class DeleteFailed(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.delete_post_failed)
 }

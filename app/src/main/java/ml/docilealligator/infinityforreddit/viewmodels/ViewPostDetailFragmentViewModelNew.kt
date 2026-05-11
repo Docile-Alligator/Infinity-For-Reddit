@@ -38,6 +38,7 @@ import ml.docilealligator.infinityforreddit.subreddit.Flair
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData
 import ml.docilealligator.infinityforreddit.thing.SortType
+import ml.docilealligator.infinityforreddit.thing.deleteThing
 import ml.docilealligator.infinityforreddit.thing.saveThing
 import ml.docilealligator.infinityforreddit.thing.unsaveThing
 import ml.docilealligator.infinityforreddit.utils.APIUtils
@@ -1483,23 +1484,71 @@ class ViewPostDetailFragmentViewModelNew(
         }
     }
 
-    fun deleteComment(position: Int) {
-        _dataState.value.comments?.let {
-            if (position >= 0 && position < it.size) {
-                val updatedComments = ArrayList(it)
-                if (it[position].hasReply()) {
-                    val updatedComment = Comment(it[position])
-                    updatedComment.author = "[deleted]"
-                    updatedComment.commentMarkdown = "[deleted]"
+    fun deleteComment(fullName: String, position: Int) {
+        viewModelScope.launch {
+            _dataState.value.comments?.let {
+                if (position in it.indices && accessToken != null) {
+                    var correctPosition = position
+                    val comment = if (it[position].fullName == fullName) it[position] else {
+                        correctPosition = findCommentPosition(fullName, position)
+                        if (correctPosition in it.indices) {
+                            it[correctPosition]
+                        } else {
+                            null
+                        }
+                    }
+                    comment?.let { comment ->
+                        if (deleteThing(oauthRetrofit, comment.fullName, accessToken)) {
+                            val updatedComments = ArrayList(it)
+                            if (comment.hasReply()) {
+                                val updatedComment = Comment(comment)
+                                updatedComment.author = "[deleted]"
+                                updatedComment.commentMarkdown = "[deleted]"
 
-                    updatedComments[position] = updatedComment
+                                updatedComments[correctPosition] = updatedComment
+                            } else {
+                                updatedComments.removeAt(correctPosition)
+                            }
+
+                            _dataState.value = _dataState.value.copy(
+                                comments = updatedComments
+                            )
+
+                            commentModerationEventLiveData.postValue(
+                                CommentModerationEvent.Deleted(
+                                    comment, correctPosition
+                                )
+                            )
+                        } else {
+                            commentModerationEventLiveData.postValue(
+                                CommentModerationEvent.DeleteFailed(
+                                    comment, correctPosition
+                                )
+                            )
+                        }
+                    } ?: run {
+                        // TODO CommentModerationEvent.DeleteFailed
+                        /*commentModerationEventLiveData.postValue(
+                            CommentModerationEvent.DeleteFailed(
+                                null, position
+                            )
+                        )*/
+                    }
                 } else {
-                    updatedComments.removeAt(position)
+                    // TODO CommentModerationEvent.DeleteFailed
+                    /*commentModerationEventLiveData.postValue(
+                        CommentModerationEvent.DeleteFailed(
+                            null, position
+                        )
+                    )*/
                 }
-
-                _dataState.value = _dataState.value.copy(
-                    comments = updatedComments
-                )
+            } ?: run {
+                // TODO CommentModerationEvent.DeleteFailed
+                /*commentModerationEventLiveData.postValue(
+                    CommentModerationEvent.DeleteFailed(
+                        null, position
+                    )
+                )*/
             }
         }
     }
