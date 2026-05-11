@@ -773,16 +773,29 @@ public class Post implements Parcelable {
             return false;
         }
         return ((Post) obj).id.equals(id)
-                && nsfw == ((Post) obj).isNSFW()
-                && spoiler == ((Post) obj).isSpoiler()
-                && isRead == ((Post) obj).isRead()
-                && saved == ((Post) obj).isSaved()
-                && hidden == ((Post) obj).isHidden();
+                && nsfw == ((Post) obj).nsfw
+                && spoiler == ((Post) obj).spoiler
+                && isRead == ((Post) obj).isRead
+                && saved == ((Post) obj).saved
+                && hidden == ((Post) obj).hidden
+                && voteType == ((Post) obj).voteType
+                && stickied == ((Post) obj).stickied
+                && approved == ((Post) obj).approved
+                && approvedAtUTC == ((Post) obj).approvedAtUTC
+                && Objects.equals(approvedBy, ((Post) obj).approvedBy)
+                && removed == ((Post) obj).removed
+                && spam == ((Post) obj).spam
+                && locked == ((Post) obj).locked
+                && Objects.equals(distinguished, ((Post) obj).distinguished);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nsfw, spoiler, isRead, saved, hidden);
+        return Objects.hash(
+                id, nsfw, spoiler, isRead, saved, hidden, voteType,
+                stickied, approved, approvedAtUTC, approvedBy, removed,
+                spam, locked, distinguished
+        );
     }
 
     public static class Gallery implements Parcelable {

@@ -103,7 +103,6 @@ import ml.docilealligator.infinityforreddit.managers.VideoMuteManager;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
 import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent;
 import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.subreddit.Flair;
 import ml.docilealligator.infinityforreddit.thing.DeleteThing;
 import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -836,10 +835,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         viewPostDetailFragmentViewModel.editComment(commentContentMarkdown, position);
     }
 
-    public void changeFlair(Flair flair) {
-        viewPostDetailFragmentViewModel.changeFlair(flair, postListPosition);
-    }
-
     public void changeSortType(SortType sortType) {
         viewPostDetailFragmentViewModel.updateSortType(sortType.getType());
     }
@@ -1326,19 +1321,9 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     @Subscribe
     public void onPostUpdateEvent(PostUpdateEventToPostDetailFragment event) {
         if (mPost.getId().equals(event.post.getId())) {
-            mPost.setVoteType(event.post.getVoteType());
-            mPost.setSaved(event.post.isSaved());
-            mPost.setNSFW(event.post.isNSFW());
-            mPost.setSpoiler(event.post.isSpoiler());
-            mPost.setIsStickied(event.post.isStickied());
-            mPost.setApproved(event.post.isApproved());
-            mPost.setApprovedAtUTC(event.post.getApprovedAtUTC());
-            mPost.setApprovedBy(event.post.getApprovedBy());
-            mPost.setRemoved(event.post.isRemoved(), event.post.isSpam());
-            mPost.setIsLocked(event.post.isLocked());
-            mPost.setIsModerator(event.post.isModerator());
-            setupMenu();
-            viewPostDetailFragmentViewModel.setPost(mPost);
+            Post updatedPost = new Post(event.post);
+
+            viewPostDetailFragmentViewModel.setPost(updatedPost);
         }
     }
 
@@ -1419,7 +1404,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     @Subscribe
     public void onFlairSelectedEvent(FlairSelectedEvent event) {
         if (event.viewPostDetailFragmentId == viewPostDetailFragmentId) {
-            changeFlair(event.flair);
+            viewPostDetailFragmentViewModel.changeFlair(event.flair, postListPosition);
         }
     }
 
