@@ -188,7 +188,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     @Nullable
     private String postId;
     private int postListPosition = -1;
-    private String mSingleCommentId;
     private boolean showToast = false;
     private boolean mIsSmoothScrolling = false;
     private boolean mLockFab;
@@ -450,7 +449,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
             }
         };
 
-        mSingleCommentId = getArguments().getString(EXTRA_SINGLE_COMMENT_ID);
+        String singleCommentId = getArguments().getString(EXTRA_SINGLE_COMMENT_ID);
 
         if (savedInstanceState == null) {
             mMessageFullname = getArguments().getString(EXTRA_MESSAGE_FULLNAME);
@@ -464,7 +463,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                 this,
                 ViewPostDetailFragmentViewModelNew.Companion.provideFactory(
                         mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mActivity.accessToken,
-                        mActivity.accountName, mPost, postId, mSingleCommentId,
+                        mActivity.accountName, mPost, postId, singleCommentId,
                         mSortTypeSharedPreferences, mPostHistorySharedPreferences,
                         mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false),
                         mPostHistorySharedPreferences.getBoolean(mActivity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false),
@@ -496,7 +495,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
 
         mCommentsAdapter = new CommentsRecyclerViewAdapterNew(mActivity,
                 this, mCustomThemeWrapper, mOauthRetrofit,
-                mActivity.accessToken, mActivity.accountName, mPost, mLocale, mSingleCommentId,
+                mActivity.accessToken, mActivity.accountName, mPost, mLocale, singleCommentId,
                 mSharedPreferences, mNsfwAndSpoilerSharedPreferences,
                 new CommentsRecyclerViewAdapterNew.CommentRecyclerViewAdapterCallback() {
                     @Override
@@ -636,7 +635,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         if (mPost == null) {
             postId = getArguments().getString(EXTRA_POST_ID);
             viewPostDetailFragmentViewModel.setPostId(postId);
-            PostDetailCommentsCache cache = savedInstanceState == null && mSingleCommentId == null
+            PostDetailCommentsCache cache = savedInstanceState == null && viewPostDetailFragmentViewModel.getSingleCommentId() == null
                     ? postDetailCommentsCacheManager.getCache(postId) : null;
             if (restoreCache(cache)) {
                 postDetailCommentsCacheManager.removeCache(postId);
@@ -655,7 +654,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                 return;
             }
 
-            PostDetailCommentsCache cache = savedInstanceState == null && mSingleCommentId == null
+            PostDetailCommentsCache cache = savedInstanceState == null && viewPostDetailFragmentViewModel.getSingleCommentId() == null
                     ? postDetailCommentsCacheManager.getCache(mPost) : null;
             if (restoreCache(cache)) {
                 postDetailCommentsCacheManager.removeCache(mPost);
@@ -1082,7 +1081,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
             return;
         }
 
-        if (mSingleCommentId != null) {
+        if (viewPostDetailFragmentViewModel.getSingleCommentId() != null) {
             return;
         }
 
@@ -1197,7 +1196,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     }
 
     public void changeToNormalThreadMode() {
-        mSingleCommentId = null;
         viewPostDetailFragmentViewModel.clearSingleCommentId(mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false));
     }
 

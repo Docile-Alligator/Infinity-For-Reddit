@@ -150,6 +150,10 @@ class ViewPostDetailFragmentViewModelNew(
         this.postId = postId
     }
 
+    fun getSingleCommentId(): String? {
+        return _uiState.value.singleCommentId
+    }
+
     fun fetchCommentsRespectRecommendedSort(
         changeRefreshState: Boolean
     ) {
