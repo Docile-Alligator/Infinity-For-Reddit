@@ -1434,6 +1434,35 @@ class ViewPostDetailFragmentViewModelNew(
         }
     }
 
+    fun deletePost(position: Int) {
+        viewModelScope.launch {
+            _dataState.value.post?.let {
+                if (accessToken != null) {
+                    if (deleteThing(oauthRetrofit, it.fullName, accessToken)) {
+                        postModerationEventLiveData.postValue(
+                            PostModerationEvent.Deleted(
+                                it, position
+                            )
+                        )
+                    } else {
+                        postModerationEventLiveData.postValue(
+                            PostModerationEvent.DeleteFailed(
+                                it, position
+                            )
+                        )
+                    }
+                }
+            } ?: run {
+                // TODO PostModerationEvent.DeleteFailed
+                /*postModerationEventLiveData.postValue(
+                    PostModerationEvent.DeleteFailed(
+                        it, position
+                    )
+                )*/
+            }
+        }
+    }
+
     fun editComment(comment: Comment, position: Int) {
         _dataState.value.comments?.let {
             val updatedComments = ArrayList(it)

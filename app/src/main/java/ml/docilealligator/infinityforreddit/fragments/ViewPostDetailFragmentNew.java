@@ -103,7 +103,6 @@ import ml.docilealligator.infinityforreddit.managers.VideoMuteManager;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
 import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent;
 import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.thing.DeleteThing;
 import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -684,6 +683,8 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                     || moderationEvent instanceof PostModerationEvent.Unhid
             ) {
                 setupMenu();
+            } else if (moderationEvent instanceof PostModerationEvent.Deleted) {
+                mActivity.finish();
             }
         });
 
@@ -983,18 +984,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                     .setTitle(R.string.delete_this_post)
                     .setMessage(R.string.are_you_sure)
                     .setPositiveButton(R.string.delete, (dialogInterface, i)
-                            -> DeleteThing.delete(mOauthRetrofit, mPost.getFullName(), mActivity.accessToken, new DeleteThing.DeleteThingListener() {
-                        @Override
-                        public void deleteSuccess() {
-                            Toast.makeText(mActivity, R.string.delete_post_success, Toast.LENGTH_SHORT).show();
-                            mActivity.finish();
-                        }
-
-                        @Override
-                        public void deleteFailed() {
-                            showMessage(R.string.delete_post_failed);
-                        }
-                    }))
+                            -> viewPostDetailFragmentViewModel.deletePost(postListPosition))
                     .setNegativeButton(R.string.cancel, null)
                     .show();
             return true;

@@ -63,4 +63,7 @@ sealed class PostModerationEvent(open val post: Post, open val position: Int, va
 
     data class Unhid(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.post_unhide_success)
     data class UnhideFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.post_unhide_failed)
+
+    data class Deleted(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.delete_post_success)
+    data class DeleteFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.delete_post_failed)
 }
