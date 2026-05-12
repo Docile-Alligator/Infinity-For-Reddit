@@ -1309,9 +1309,9 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
             mPostAdapter.setBlurNsfwAndDoNotBlurNsfwInNsfwSubreddits(event.needBlurNSFW, event.doNotBlurNsfwInNsfwSubreddits);
         }
         if (mCommentsRecyclerView != null) {
-            refreshAdapter(binding.postDetailRecyclerViewViewPostDetailFragment, mConcatAdapter);
+            refreshAdapter(binding.postDetailRecyclerViewViewPostDetailFragment);
         } else {
-            refreshAdapter(binding.postDetailRecyclerViewViewPostDetailFragment, mPostAdapter);
+            refreshAdapter(binding.postDetailRecyclerViewViewPostDetailFragment);
         }
     }
 
@@ -1321,19 +1321,20 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
             mPostAdapter.setBlurSpoiler(event.needBlurSpoiler);
         }
         if (mCommentsRecyclerView != null) {
-            refreshAdapter(binding.postDetailRecyclerViewViewPostDetailFragment, mConcatAdapter);
+            refreshAdapter(binding.postDetailRecyclerViewViewPostDetailFragment);
         } else {
-            refreshAdapter(binding.postDetailRecyclerViewViewPostDetailFragment, mPostAdapter);
+            refreshAdapter(binding.postDetailRecyclerViewViewPostDetailFragment);
         }
     }
 
-    private void refreshAdapter(RecyclerView recyclerView, RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
+    private void refreshAdapter(RecyclerView recyclerView) {
         int previousPosition = -1;
         if (recyclerView.getLayoutManager() != null) {
             previousPosition = ((LinearLayoutManagerBugFixed) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
         }
 
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        RecyclerView.Adapter<?> adapter = recyclerView.getAdapter();
         recyclerView.setAdapter(null);
         recyclerView.setLayoutManager(null);
         recyclerView.setAdapter(adapter);
@@ -1367,12 +1368,12 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
 
         if (stateChanged) {
             if (mCommentsRecyclerView == null) {
-                refreshAdapter(binding.postDetailRecyclerViewViewPostDetailFragment, mConcatAdapter);
+                refreshAdapter(binding.postDetailRecyclerViewViewPostDetailFragment);
             } else {
                 if (mPostAdapter != null) {
-                    refreshAdapter(binding.postDetailRecyclerViewViewPostDetailFragment, mPostAdapter);
+                    refreshAdapter(binding.postDetailRecyclerViewViewPostDetailFragment);
                 }
-                refreshAdapter(mCommentsRecyclerView, mCommentsAdapter);
+                refreshAdapter(mCommentsRecyclerView);
             }
         }
     }
