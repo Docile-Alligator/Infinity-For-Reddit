@@ -703,7 +703,8 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                 binding.postDetailRecyclerViewViewPostDetailFragment.setAdapter(mPostAdapter);
             }
             if (mCommentsRecyclerView.getAdapter() == null) {
-                mCommentsRecyclerView.setAdapter(mCommentsAdapter);
+                mConcatAdapter = new ConcatAdapter(mCommentsStatusAdapter, mCommentsAdapter, mCommentsFooterAdapter);
+                mCommentsRecyclerView.setAdapter(mConcatAdapter);
             }
         } else {
             mConcatAdapter = new ConcatAdapter(mPostAdapter, mCommentsStatusAdapter, mCommentsAdapter, mCommentsFooterAdapter);
