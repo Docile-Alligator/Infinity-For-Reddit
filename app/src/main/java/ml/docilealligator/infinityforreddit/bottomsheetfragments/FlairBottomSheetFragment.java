@@ -128,6 +128,12 @@ public class FlairBottomSheetFragment extends LandscapeExpandedRoundedBottomShee
         mActivity = (BaseActivity) context;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
     public interface FlairSelectionCallback {
         void flairSelected(Flair flair);
     }
