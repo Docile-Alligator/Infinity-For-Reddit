@@ -182,7 +182,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     long viewPostDetailFragmentId;
     private ViewPostDetailActivity mActivity;
     private RequestManager mGlide;
-    private Locale mLocale;
     private Menu mMenu;
     private Post mPost;
     @Nullable
@@ -208,7 +207,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     private float swipeActionThreshold;
     private AdjustableTouchSlopItemTouchHelper touchHelper;
     private boolean shouldSwipeBack;
-    private int commentScrollPosition;
+    private int commentScrollPosition = -1;
     private ViewPostDetailFragmentViewModelNew.UiState currentUiState;
     private FragmentViewPostDetailBinding binding;
     private RecyclerView mCommentsRecyclerView;
@@ -278,7 +277,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         }
 
         mGlide = Glide.with(this);
-        mLocale = getResources().getConfiguration().locale;
+        Locale locale = getResources().getConfiguration().locale;
 
         (mCommentsRecyclerView == null ? binding.postDetailRecyclerViewViewPostDetailFragment : mCommentsRecyclerView).addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -459,11 +458,23 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
             postListPosition = getArguments().getInt(EXTRA_POST_LIST_POSITION, -1);
         }
 
+        postId = getArguments().getString(EXTRA_POST_ID);
+
+        viewPostDetailActivityViewModel = new ViewModelProvider(requireActivity())
+                .get(ViewPostDetailActivityViewModel.class);
+
+        if (mPost == null) {
+            mPost = viewPostDetailActivityViewModel.getPost(postListPosition);
+            if (mPost == null) {
+                mPost = viewPostDetailActivityViewModel.getPost();
+            }
+        }
+
         viewPostDetailFragmentViewModel = new ViewModelProvider(
                 this,
                 ViewPostDetailFragmentViewModelNew.Companion.provideFactory(
                         mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mActivity.accessToken,
-                        mActivity.accountName, mPost, postId, singleCommentId,
+                        mActivity.accountName, mPost, postId, singleCommentId, comments, children,
                         mSortTypeSharedPreferences, mPostHistorySharedPreferences,
                         mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false),
                         mPostHistorySharedPreferences.getBoolean(mActivity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false),
@@ -476,7 +487,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                 this, mExecutor, mCustomThemeWrapper, mOauthRetrofit, mRetrofit,
                 mRedgifsRetrofit, mStreamableApiProvider, mRedditDataRoomDatabase, mGlide,
                 mVideoMuteManager, mSeparatePostAndComments, mActivity.accessToken,
-                mActivity.accountName, mPost, mLocale, mSharedPreferences, mCurrentAccountSharedPreferences,
+                mActivity.accountName, mPost, locale, mSharedPreferences, mCurrentAccountSharedPreferences,
                 mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
                 mPostHistorySharedPreferences, mExoCreator,
                 post -> {
@@ -495,7 +506,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
 
         mCommentsAdapter = new CommentsRecyclerViewAdapterNew(mActivity,
                 this, mCustomThemeWrapper, mOauthRetrofit,
-                mActivity.accessToken, mActivity.accountName, mPost, mLocale, singleCommentId,
+                mActivity.accessToken, mActivity.accountName, mPost, locale, singleCommentId,
                 mSharedPreferences, mNsfwAndSpoilerSharedPreferences,
                 new CommentsRecyclerViewAdapterNew.CommentRecyclerViewAdapterCallback() {
                     @Override
@@ -569,7 +580,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                     if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_SORT_TYPE, true)) {
                         mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.name()).apply();
                     }
-                    viewPostDetailFragmentViewModel.fetchCommentsRespectRecommendedSort(sortType, false);
                 }
             }
 
@@ -602,9 +612,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
             mCommentsFooterAdapter.notifyDataSetChanged();
         });
 
-        viewPostDetailActivityViewModel = new ViewModelProvider(requireActivity())
-                .get(ViewPostDetailActivityViewModel.class);
-
         bindView(savedInstanceState);
 
         return binding.getRoot();
@@ -626,15 +633,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         }
 
         if (mPost == null) {
-            mPost = viewPostDetailActivityViewModel.getPost(postListPosition);
-            if (mPost == null) {
-                mPost = viewPostDetailActivityViewModel.getPost();
-            }
-        }
-
-        if (mPost == null) {
-            postId = getArguments().getString(EXTRA_POST_ID);
-            viewPostDetailFragmentViewModel.setPostId(postId);
             PostDetailCommentsCache cache = savedInstanceState == null && viewPostDetailFragmentViewModel.getSingleCommentId() == null
                     ? postDetailCommentsCacheManager.getCache(postId) : null;
             if (restoreCache(cache)) {
@@ -649,7 +647,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                 viewPostDetailFragmentViewModel.fetchPostAndCommentsById(postId);
             }
         } else {
-            viewPostDetailFragmentViewModel.setPost(mPost);
             if (!renderContent()) {
                 return;
             }
@@ -716,15 +713,13 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         return true;
     }
 
-    private boolean restoreCache(PostDetailCommentsCache cache) {
+    private boolean restoreCache(@Nullable PostDetailCommentsCache cache) {
         if (cache != null) {
             viewPostDetailFragmentViewModel.restoreCache(cache);
             if (viewPostDetailFragmentViewModel.getPost() == null) {
                 viewPostDetailFragmentViewModel.setPost(cache.getPost());
                 viewPostDetailActivityViewModel.setPost(cache.getPost());
             }
-            comments = cache.getVisibleComments();
-            children = cache.getChildren();
             commentScrollPosition = cache.getScrollPosition();
 
             return true;
@@ -741,6 +736,8 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
             } else {
                 binding.postDetailRecyclerViewViewPostDetailFragment.scrollToPosition(commentScrollPosition + 1);
             }
+
+            commentScrollPosition = -1;
         }
     }
 
@@ -838,6 +835,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
 
     public void changeSortType(SortType sortType) {
         viewPostDetailFragmentViewModel.updateSortType(sortType.getType());
+        viewPostDetailFragmentViewModel.fetchCommentsRespectRecommendedSort(sortType.getType(), false);
     }
 
     public void goToTop() {

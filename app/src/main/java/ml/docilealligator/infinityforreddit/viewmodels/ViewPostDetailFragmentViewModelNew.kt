@@ -62,6 +62,8 @@ class ViewPostDetailFragmentViewModelNew(
     private var post: Post?,
     private var postId: String?,
     private var singleCommentId: String?,
+    comments: ArrayList<Comment>?,
+    children: ArrayList<String>?,
     private val sortType: SortType.Type?,
     private val sortTypeSharedPreferences: SharedPreferences,
     private val postHistorySharedPreferences: SharedPreferences,
@@ -122,7 +124,7 @@ class ViewPostDetailFragmentViewModelNew(
     val uiState: LiveData<UiState> = _uiState.asLiveData()
 
     private val _dataState: MutableStateFlow<DataState> = MutableStateFlow(DataState(
-        post, null, null
+        post, comments, children
     ))
     val dataState: LiveData<DataState> = _dataState.asLiveData()
 
@@ -2247,6 +2249,7 @@ class ViewPostDetailFragmentViewModelNew(
                            redditDataRoomDatabase: RedditDataRoomDatabase,
                            accessToken: String?, accountName: String?,
                            post: Post?, postId: String?, commentId: String?,
+                           comments: ArrayList<Comment>?, children: ArrayList<String>?,
                            sortTypeSharedPreferences: SharedPreferences,
                            postHistorySharedPreferences: SharedPreferences,
                            respectSubredditRecommendedSortType: Boolean,
@@ -2260,7 +2263,8 @@ class ViewPostDetailFragmentViewModelNew(
                 ): T {
                     return ViewPostDetailFragmentViewModelNew(
                         retrofit, oauthRetrofit, redditDataRoomDatabase, accessToken, accountName,
-                        post, postId, commentId, null, sortTypeSharedPreferences,
+                        post, postId, commentId, comments, children,
+                        null, sortTypeSharedPreferences,
                         postHistorySharedPreferences, respectSubredditRecommendedSortType,
                         markPostsAsRead, expandChildren, contextNumber
                     ) as T
