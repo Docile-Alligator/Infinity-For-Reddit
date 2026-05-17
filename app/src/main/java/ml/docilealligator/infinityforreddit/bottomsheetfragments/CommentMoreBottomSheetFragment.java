@@ -252,4 +252,10 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
         super.onAttach(context);
         activity = (BaseActivity) context;
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }

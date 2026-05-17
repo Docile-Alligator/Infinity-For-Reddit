@@ -369,4 +369,10 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
         super.onAttach(context);
         mBaseActivity = (BaseActivity) context;
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
 }
