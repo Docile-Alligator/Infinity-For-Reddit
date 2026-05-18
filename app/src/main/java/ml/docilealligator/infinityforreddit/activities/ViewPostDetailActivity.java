@@ -302,8 +302,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         ).get(ViewPostDetailActivityViewModel.class);
 
         if (savedInstanceState == null) {
-            this.post = getIntent().getParcelableExtra(EXTRA_POST_DATA);
-            viewPostDetailActivityViewModel.setPost(this.post);
+            viewPostDetailActivityViewModel.setPost(getIntent().getParcelableExtra(EXTRA_POST_DATA));
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
         } else {
             if (viewPostDetailActivityViewModel.getPost() == null) {
@@ -681,8 +680,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                                     }
                                 });
                             } else {
-                                this.posts = new ArrayList<>(postLinkedHashSet);
-                                viewPostDetailActivityViewModel.setPosts(this.posts);
+                                viewPostDetailActivityViewModel.setPosts(new ArrayList<>(postLinkedHashSet));
                                 handler.post(() -> {
                                     if (changePage) {
                                         binding.viewPager2ViewPostDetailActivity.setCurrentItem(currentPostsSize - 1, false);
@@ -765,8 +763,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                                     }
                                 });
                             } else {
-                                this.posts = new ArrayList<>(postLinkedHashSet);
-                                viewPostDetailActivityViewModel.setPosts(this.posts);
+                                viewPostDetailActivityViewModel.setPosts(new ArrayList<>(postLinkedHashSet));
                                 handler.post(() -> {
                                     if (changePage) {
                                         binding.viewPager2ViewPostDetailActivity.setCurrentItem(currentPostsSize - 1, false);
@@ -813,7 +810,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @Subscribe
     public void onProvidePostListToViewPostDetailActivityEvent(ProvidePostListToViewPostDetailActivityEvent event) {
         if (event.postFragmentId == mPostFragmentId && viewPostDetailActivityViewModel.getPosts() == null) {
-            this.posts = event.posts;
             viewPostDetailActivityViewModel.setPosts(event.posts);
             this.postType = event.postType;
             this.subredditName = event.subredditName;
@@ -900,6 +896,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        this.post = viewPostDetailActivityViewModel.getPost();
+        this.posts = viewPostDetailActivityViewModel.getPosts();
         Bridge.saveInstanceState(this, outState);
     }
 

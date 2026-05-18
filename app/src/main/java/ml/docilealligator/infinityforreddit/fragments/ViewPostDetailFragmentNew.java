@@ -1077,7 +1077,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
             return;
         }
 
-        ArrayList<Comment> comments = mCommentsAdapter.getVisibleComments();
+        comments = mCommentsAdapter.getVisibleComments();
         if (comments == null) {
             return;
         }
@@ -1097,7 +1097,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         sortType = viewPostDetailFragmentViewModel.getSortType();
-        comments = mCommentsAdapter == null ? null : mCommentsAdapter.getVisibleComments();
         updateCommentScrollPosition();
         outState.putInt(SCROLL_POSITION_STATE, commentScrollPosition);
         Bridge.saveInstanceState(this, outState);

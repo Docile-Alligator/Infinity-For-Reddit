@@ -12,7 +12,7 @@ class ViewPostDetailActivityViewModel(
 ) : ViewModel() {
     var post: Post? = null
 
-    var posts: List<Post>? = null
+    var posts: ArrayList<Post>? = null
 
     fun getPost(index: Int): Post? {
         return posts?.getOrNull(index)
