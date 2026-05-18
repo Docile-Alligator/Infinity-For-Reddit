@@ -64,7 +64,7 @@ class ViewPostDetailFragmentViewModelNew(
     private var singleCommentId: String?,
     comments: ArrayList<Comment>?,
     children: ArrayList<String>?,
-    private val sortType: SortType.Type?,
+    sortType: SortType.Type?,
     private val sortTypeSharedPreferences: SharedPreferences,
     private val postHistorySharedPreferences: SharedPreferences,
     private var respectSubredditRecommendedSortType: Boolean,
@@ -266,7 +266,8 @@ class ViewPostDetailFragmentViewModelNew(
         _uiState.value = _uiState.value.copy(
             isInitialLoading = true,
             isInitialLoadingFailed = false,
-            isFetchingComments = true
+            isFetchingComments = true,
+            shouldShowErrorView = false
         )
 
         val derivedPostId = derivedPostId
@@ -359,7 +360,8 @@ class ViewPostDetailFragmentViewModelNew(
                     _uiState.value = _uiState.value.copy(
                         isInitialLoading = true,
                         isInitialLoadingFailed = false,
-                        isFetchingComments = true
+                        isFetchingComments = true,
+                        shouldShowErrorView = false
                     )
 
                     val response: Response<String>
@@ -799,7 +801,8 @@ class ViewPostDetailFragmentViewModelNew(
         viewModelScope.launch {
             if (!_uiState.value.isRefreshing) {
                 _uiState.value = _uiState.value.copy(
-                    isRefreshing = true
+                    isRefreshing = true,
+                    shouldShowErrorView = false
                 )
 
                 if (!fetchPost && fetchComments) {
@@ -2250,7 +2253,7 @@ class ViewPostDetailFragmentViewModelNew(
                            accessToken: String?, accountName: String?,
                            post: Post?, postId: String?, commentId: String?,
                            comments: ArrayList<Comment>?, children: ArrayList<String>?,
-                           sortTypeSharedPreferences: SharedPreferences,
+                           sortType: SortType.Type?, sortTypeSharedPreferences: SharedPreferences,
                            postHistorySharedPreferences: SharedPreferences,
                            respectSubredditRecommendedSortType: Boolean,
                            markPostsAsRead: Boolean,
@@ -2264,7 +2267,7 @@ class ViewPostDetailFragmentViewModelNew(
                     return ViewPostDetailFragmentViewModelNew(
                         retrofit, oauthRetrofit, redditDataRoomDatabase, accessToken, accountName,
                         post, postId, commentId, comments, children,
-                        null, sortTypeSharedPreferences,
+                        sortType, sortTypeSharedPreferences,
                         postHistorySharedPreferences, respectSubredditRecommendedSortType,
                         markPostsAsRead, expandChildren, contextNumber
                     ) as T

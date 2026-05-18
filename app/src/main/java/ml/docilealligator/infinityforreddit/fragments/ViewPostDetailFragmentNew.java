@@ -176,8 +176,8 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     boolean isFetchingComments = false;*/
     @State
     String mMessageFullname;
-    /*@State
-    SortType.Type sortType;*/
+    @State
+    SortType.Type sortType;
     @State
     long viewPostDetailFragmentId;
     private ViewPostDetailActivity mActivity;
@@ -208,7 +208,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     private AdjustableTouchSlopItemTouchHelper touchHelper;
     private boolean shouldSwipeBack;
     private int commentScrollPosition = -1;
-    private ViewPostDetailFragmentViewModelNew.UiState currentUiState;
     private FragmentViewPostDetailBinding binding;
     private RecyclerView mCommentsRecyclerView;
     public ViewPostDetailFragmentViewModelNew viewPostDetailFragmentViewModel;
@@ -273,7 +272,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
             viewPostDetailFragmentId = System.currentTimeMillis();
         } else {
             commentScrollPosition = savedInstanceState.getInt(SCROLL_POSITION_STATE);
-            restoreCommentScrollPosition();
         }
 
         mGlide = Glide.with(this);
@@ -475,7 +473,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                 ViewPostDetailFragmentViewModelNew.Companion.provideFactory(
                         mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mActivity.accessToken,
                         mActivity.accountName, mPost, postId, singleCommentId, comments, children,
-                        mSortTypeSharedPreferences, mPostHistorySharedPreferences,
+                        sortType, mSortTypeSharedPreferences, mPostHistorySharedPreferences,
                         mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false),
                         mPostHistorySharedPreferences.getBoolean(mActivity.accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false),
                         !mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_TOP_LEVEL_COMMENTS_FIRST, false),
@@ -570,20 +568,16 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                 }
             }
 
-            if (currentUiState == null || currentUiState.getSortType() != uiState.getSortType()) {
+            if (uiState.getSortType() != null) {
                 SortType.Type sortType = uiState.getSortType();
-                if (sortType != null) {
-                    mActivity.setTitle(sortType.fullName);
-                    binding.fetchPostInfoLinearLayoutViewPostDetailFragment.setVisibility(View.GONE);
-                    mGlide.clear(binding.fetchPostInfoImageViewViewPostDetailFragment);
+                mActivity.setTitle(sortType.fullName);
+                binding.fetchPostInfoLinearLayoutViewPostDetailFragment.setVisibility(View.GONE);
+                mGlide.clear(binding.fetchPostInfoImageViewViewPostDetailFragment);
 
-                    if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_SORT_TYPE, true)) {
-                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.name()).apply();
-                    }
+                if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_SORT_TYPE, true)) {
+                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.name()).apply();
                 }
             }
-
-            currentUiState = uiState;
         });
 
         viewPostDetailFragmentViewModel.getDataState().observe(getViewLifecycleOwner(), dataState -> {
@@ -600,10 +594,8 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                 binding.swipeRefreshLayoutViewPostDetailFragment.setRefreshing(false);
             }
 
-            // From fetchcomments
-            ViewPostDetailFragmentNew.this.children = dataState.getChildren();
-
             comments = dataState.getComments();
+            children = dataState.getChildren();
             mCommentsAdapter.submitList(comments);
             mCommentsStatusAdapter.setEmptyComments(comments == null || comments.isEmpty());
             mCommentsStatusAdapter.notifyDataSetChanged();
@@ -660,6 +652,8 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
             } else {
                 if (comments == null) {
                     viewPostDetailFragmentViewModel.fetchCommentsRespectRecommendedSort(false);
+                } else {
+                    restoreCommentScrollPosition();
                 }
             }
         }
@@ -732,9 +726,11 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         // if the scrollPosition < 0 do nothing
         if (commentScrollPosition >= 0) {
             if (mCommentsRecyclerView != null) {
-                mCommentsRecyclerView.scrollToPosition(commentScrollPosition);
+                mCommentsRecyclerView.scrollToPosition(
+                        ConcatAdapterKt.getAbsolutePosition(mConcatAdapter, mCommentsAdapter, commentScrollPosition));
             } else {
-                binding.postDetailRecyclerViewViewPostDetailFragment.scrollToPosition(commentScrollPosition + 1);
+                binding.postDetailRecyclerViewViewPostDetailFragment.scrollToPosition(
+                        ConcatAdapterKt.getAbsolutePosition(mConcatAdapter, mCommentsAdapter, commentScrollPosition));
             }
 
             commentScrollPosition = -1;
@@ -1106,6 +1102,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        sortType = viewPostDetailFragmentViewModel.getSortType();
         comments = mCommentsAdapter == null ? null : mCommentsAdapter.getVisibleComments();
         updateCommentScrollPosition();
         outState.putInt(SCROLL_POSITION_STATE, commentScrollPosition);
@@ -1113,13 +1110,13 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     }
 
     private void updateCommentScrollPosition() {
+        LinearLayoutManager layoutManager;
         if (mCommentsRecyclerView != null) {
-            LinearLayoutManager myLayoutManager = (LinearLayoutManager) mCommentsRecyclerView.getLayoutManager();
-            commentScrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() : 0;
+            layoutManager = (LinearLayoutManager) mCommentsRecyclerView.getLayoutManager();
         } else {
-            LinearLayoutManager myLayoutManager = (LinearLayoutManager) binding.postDetailRecyclerViewViewPostDetailFragment.getLayoutManager();
-            commentScrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() - 1 : 0;
+            layoutManager = (LinearLayoutManager) binding.postDetailRecyclerViewViewPostDetailFragment.getLayoutManager();
         }
+        commentScrollPosition = layoutManager != null ? ConcatAdapterKt.getLocalPosition(mConcatAdapter, mCommentsAdapter, layoutManager.findFirstVisibleItemPosition()) : 0;
     }
 
     @Override
