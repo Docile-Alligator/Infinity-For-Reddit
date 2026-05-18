@@ -1343,6 +1343,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 comments,
                 children,
                 //mCommentFilter,
+                sortType,
                 commentScrollPosition
                 //hasMoreChildren
         );

@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit
 import ml.docilealligator.infinityforreddit.comment.Comment
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter
 import ml.docilealligator.infinityforreddit.post.Post
+import ml.docilealligator.infinityforreddit.thing.SortType
 
 class PostDetailCommentsCacheManager(
     val cacheMap: LinkedHashMap<String, PostDetailCommentsCache> = AutoRemovalLinkedHashMap<String, PostDetailCommentsCache>(10)
@@ -11,12 +12,14 @@ class PostDetailCommentsCacheManager(
         post: Post,
         visibleComments: ArrayList<Comment>,
         children: ArrayList<String>?,
+        sortType: SortType.Type,
         scrollPosition: Int
     ) {
         cacheMap[post.id] = PostDetailCommentsCache(
             post,
             visibleComments,
             children,
+            sortType,
             scrollPosition
         )
     }

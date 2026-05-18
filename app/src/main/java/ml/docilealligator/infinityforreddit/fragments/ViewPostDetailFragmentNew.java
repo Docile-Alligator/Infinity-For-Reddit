@@ -168,12 +168,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     ArrayList<Comment> comments;
     @State
     ArrayList<String> children;
-    /*@State
-    boolean loadMoreChildrenSuccess = true;
-    @State
-    boolean hasMoreChildren;
-    @State
-    boolean isFetchingComments = false;*/
     @State
     String mMessageFullname;
     @State
@@ -205,7 +199,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     private int swipeLeftAction;
     private int swipeRightAction;
     private float swipeActionThreshold;
-    private AdjustableTouchSlopItemTouchHelper touchHelper;
     private boolean shouldSwipeBack;
     private int commentScrollPosition = -1;
     private FragmentViewPostDetailBinding binding;
@@ -329,7 +322,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         swipeRightAction = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_RIGHT_ACTION, "1"));
         swipeLeftAction = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_LEFT_ACTION, "0"));
         initializeSwipeActionDrawable();
-        touchHelper = new AdjustableTouchSlopItemTouchHelper(new AdjustableTouchSlopItemTouchHelper.Callback() {
+        AdjustableTouchSlopItemTouchHelper touchHelper = new AdjustableTouchSlopItemTouchHelper(new AdjustableTouchSlopItemTouchHelper.Callback() {
             boolean exceedThreshold = false;
 
             @Override
@@ -1095,6 +1088,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                 mPost,
                 comments,
                 children,
+                viewPostDetailFragmentViewModel.getSortType(),
                 commentScrollPosition
         );
     }

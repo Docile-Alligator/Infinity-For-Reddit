@@ -1228,6 +1228,10 @@ class ViewPostDetailFragmentViewModelNew(
             comments = cache.visibleComments,
             children = cache.children
         )
+
+        _uiState.value = _uiState.value.copy(
+            sortType = cache.sortType
+        )
     }
 
     fun tryMarkingPostAsRead() {
