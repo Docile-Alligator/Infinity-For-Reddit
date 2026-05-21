@@ -524,14 +524,15 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         );
 
         viewPostDetailFragmentViewModel.getUiState().observe(getViewLifecycleOwner(), uiState -> {
+            RecyclerView recyclerView = mCommentsRecyclerView != null ? mCommentsRecyclerView : binding.postDetailRecyclerViewViewPostDetailFragment;
             mCommentsStatusAdapter.setSingleCommentThreadMode(uiState.getSingleCommentId() != null && !uiState.getSingleCommentId().isEmpty());
             mCommentsStatusAdapter.setInitiallyLoading(uiState.isInitialLoading());
             mCommentsStatusAdapter.setInitiallyLoadingFailed(uiState.isInitialLoadingFailed());
-            mCommentsStatusAdapter.notifyDataSetChanged();
+            recyclerView.post(() -> mCommentsStatusAdapter.notifyDataSetChanged());
 
             mCommentsFooterAdapter.setLoadingMoreChildren(uiState.isLoadingMoreChildren());
             mCommentsFooterAdapter.setLoadMoreChildrenSuccess(uiState.getLoadMoreChildrenSuccess());
-            mCommentsFooterAdapter.notifyDataSetChanged();
+            recyclerView.post(() -> mCommentsFooterAdapter.notifyDataSetChanged());
 
             if (uiState.isInitialLoading()) {
                 binding.fetchPostInfoLinearLayoutViewPostDetailFragment.setVisibility(View.GONE);
