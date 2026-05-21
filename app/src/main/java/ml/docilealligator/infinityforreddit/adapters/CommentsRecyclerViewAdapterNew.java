@@ -101,7 +101,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
     private final Locale mLocale;
     private final RequestManager mGlide;
     private final RecyclerView.RecycledViewPool recycledViewPool;
-    private String mSingleCommentId;
+    private final String mSingleCommentId;
     private final boolean mVoteButtonsOnTheRight;
     private final boolean mShowElapsedTime;
     private final String mTimeFormatPattern;
@@ -157,8 +157,6 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
                 @Override
                 public boolean areContentsTheSame(
                         @NonNull Comment oldComment, @NonNull Comment newComment) {
-                    // NOTE: if you use equals, your object must properly override Object#equals()
-                    // Incorrectly returning false here will result in too many animations.
                     return Objects.equals(oldComment.getCommentMarkdown(), newComment.getCommentMarkdown())
                             && Objects.equals(oldComment.getApprovedBy(), newComment.getApprovedBy())
                             && Objects.equals(oldComment.getMoreChildrenIds(), newComment.getMoreChildrenIds())

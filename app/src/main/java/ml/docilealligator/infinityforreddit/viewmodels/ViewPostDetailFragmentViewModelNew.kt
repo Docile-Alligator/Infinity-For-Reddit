@@ -412,14 +412,6 @@ class ViewPostDetailFragmentViewModelNew(
                     if (response.isSuccessful) {
                         val post = parsePost(response.body())
                         post?.let { post ->
-                            /*mPost = post
-
-                            if (!renderContent()) {
-                                return
-                            }
-
-                            tryMarkingPostAsRead()*/
-
                             _dataState.value = _dataState.value.copy(
                                 post = post
                             )

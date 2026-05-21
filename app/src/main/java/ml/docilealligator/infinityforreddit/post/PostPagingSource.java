@@ -12,20 +12,22 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsListInterface;
 import ml.docilealligator.infinityforreddit.thing.SortType;
-import ml.docilealligator.infinityforreddit.account.Account;
-import ml.docilealligator.infinityforreddit.apis.RedditAPI;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.HttpException;
@@ -64,7 +66,8 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     private final ReadPostsListInterface readPostsList;
     private String userWhere;
     private String multiRedditPath;
-    private final LinkedHashSet<Post> postLinkedHashSet;
+    private final List<Post> posts;
+    private final Set<String> existingPostIds = new HashSet<>();
     private String previousLastItem;
 
     PostPagingSource(Executor executor, Retrofit retrofit, RedditDataRoomDatabase redditDataRoomDatabase,
@@ -82,7 +85,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         this.sortType = sortType == null ? new SortType(SortType.Type.BEST) : sortType;
         this.postFilter = postFilter;
         this.readPostsList = readPostsList;
-        postLinkedHashSet = new LinkedHashSet<>();
+        posts = new ArrayList<>();
     }
 
     // PostPagingSource.TYPE_SUBREDDIT || PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE || PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT:
@@ -114,7 +117,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         }
         this.postFilter = postFilter;
         this.readPostsList = readPostsList;
-        postLinkedHashSet = new LinkedHashSet<>();
+        posts = new ArrayList<>();
     }
 
     // PostPagingSource.TYPE_MULTI_REDDIT
@@ -144,7 +147,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         }
         this.postFilter = postFilter;
         this.readPostsList = readPostsList;
-        postLinkedHashSet = new LinkedHashSet<>();
+        posts = new ArrayList<>();
     }
 
     PostPagingSource(Executor executor, Retrofit retrofit, RedditDataRoomDatabase redditDataRoomDatabase,
@@ -165,7 +168,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         this.postFilter = postFilter;
         userWhere = where;
         this.readPostsList = readPostsList;
-        postLinkedHashSet = new LinkedHashSet<>();
+        posts = new ArrayList<>();
     }
 
     PostPagingSource(Executor executor, Retrofit retrofit, RedditDataRoomDatabase redditDataRoomDatabase,
@@ -186,8 +189,8 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         this.postType = postType;
         this.sortType = sortType == null ? new SortType(SortType.Type.RELEVANCE) : sortType;
         this.postFilter = postFilter;
-        postLinkedHashSet = new LinkedHashSet<>();
         this.readPostsList = readPostsList;
+        posts = new ArrayList<>();
     }
 
     @Nullable
@@ -224,7 +227,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
             if (newPosts == null) {
                 return new LoadResult.Error<>(new Exception("Error parsing posts"));
             } else {
-                int currentPostsSize = postLinkedHashSet.size();
+                int currentPostsSize = posts.size();
                 if (lastItem != null && lastItem.equals(previousLastItem)) {
                     lastItem = null;
                 }
@@ -234,11 +237,19 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
                     setMetadataToAnonymousPosts(newPosts);
                 }
 
-                postLinkedHashSet.addAll(newPosts);
-                if (currentPostsSize == postLinkedHashSet.size()) {
+                for (Post p : newPosts) {
+                    if (existingPostIds.contains(p.getId())) {
+                        continue;
+                    }
+
+                    existingPostIds.add(p.getId());
+                    posts.add(p);
+                }
+
+                if (currentPostsSize == posts.size()) {
                     return new LoadResult.Page<>(new ArrayList<>(), null, lastItem);
                 } else {
-                    return new LoadResult.Page<>(new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, postLinkedHashSet.size()), null, lastItem);
+                    return new LoadResult.Page<>(posts.subList(currentPostsSize, posts.size()), null, lastItem);
                 }
             }
         } else {
