@@ -13,7 +13,6 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.account.Account
 import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
 import ml.docilealligator.infinityforreddit.comment.Comment
-import ml.docilealligator.infinityforreddit.fragments.MorePostsInfoFragment
 import ml.docilealligator.infinityforreddit.post.LoadingMorePostsStatus
 import ml.docilealligator.infinityforreddit.post.ParsePost
 import ml.docilealligator.infinityforreddit.post.Post
@@ -31,7 +30,6 @@ import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.Retrofit
-import java.io.IOException
 
 class ViewPostDetailActivityViewModel(
     private val retrofit: Retrofit,
@@ -61,7 +59,9 @@ class ViewPostDetailActivityViewModel(
     }
 
     fun fetchMorePosts(
-        accessToken: String, accountName: String, changePage: Boolean,
+        accessToken: String?,
+        accountName: String,
+        changePage: Boolean,
         postType: Int,
         subredditName: String?,
         concatenatedSubredditNames: String?,
@@ -70,12 +70,19 @@ class ViewPostDetailActivityViewModel(
         multiPath: String?,
         query: String?,
         sortType: SortType.Type,
-        sortTime: SortType.Time,
-        postFilter: PostFilter,
+        sortTime: SortType.Time?,
+        postFilter: PostFilter?,
         @ReadPostType readPostType: Int,
-        readPostsList: ReadPostsListInterface
+        readPostsList: ReadPostsListInterface?
     ) {
         viewModelScope.launch {
+            if (_loadMorePostsState.value.status == LoadingMorePostsStatus.LOADING
+                || _loadMorePostsState.value.status == LoadingMorePostsStatus.NO_MORE_POSTS) {
+                return@launch
+            }
+
+            _loadMorePostsState.value = LoadMorePostsState(LoadingMorePostsStatus.LOADING)
+
             if (postType != PostType.READ_POSTS) {
                 try {
                     val api: RedditAPIKt =
@@ -168,32 +175,16 @@ class ViewPostDetailActivityViewModel(
 
                     if (response?.isSuccessful == true) {
                         val newPosts = withContext(Dispatchers.Default) {
-                            ParsePost.parsePostsSync(response.body(), -1, postFilter, readPostsList)
+                            parsePostsSync(response.body(), -1, postFilter, readPostsList)
                         }
                         if (newPosts == null) {
                             _loadMorePostsState.value = LoadMorePostsState(LoadingMorePostsStatus.NO_MORE_POSTS)
-                            /*handler.post(Runnable {
-                                mLoadingMorePostsStatus = LoadingMorePostsStatus.NO_MORE_POSTS
-                                val fragment: MorePostsInfoFragment? =
-                                    mSectionsPagerAdapter.getMorePostsInfoFragment()
-                                if (fragment != null) {
-                                    fragment.setStatus(LoadingMorePostsStatus.NO_MORE_POSTS)
-                                }
-                            })*/
                         } else {
                             val postLinkedHashSet = LinkedHashSet<Post?>(posts)
                             val currentPostsSize = postLinkedHashSet.size
                             postLinkedHashSet.addAll(newPosts)
                             if (currentPostsSize == postLinkedHashSet.size) {
                                 _loadMorePostsState.value = LoadMorePostsState(LoadingMorePostsStatus.NO_MORE_POSTS)
-                                /*handler.post(Runnable {
-                                    mLoadingMorePostsStatus = LoadingMorePostsStatus.NO_MORE_POSTS
-                                    val fragment: MorePostsInfoFragment? =
-                                        mSectionsPagerAdapter.getMorePostsInfoFragment()
-                                    if (fragment != null) {
-                                        fragment.setStatus(LoadingMorePostsStatus.NO_MORE_POSTS)
-                                    }
-                                })*/
                             } else {
                                 posts = java.util.ArrayList<Post>(postLinkedHashSet)
                                 _loadMorePostsState.value = LoadMorePostsState(
@@ -201,55 +192,15 @@ class ViewPostDetailActivityViewModel(
                                     postLinkedHashSet.size - currentPostsSize,
                                     changePage
                                 )
-                                /*handler.post(Runnable {
-                                    if (changePage) {
-                                        binding.viewPager2ViewPostDetailActivity.setCurrentItem(
-                                            currentPostsSize - 1,
-                                            false
-                                        )
-                                    }
-                                    mSectionsPagerAdapter.notifyItemRangeInserted(
-                                        currentPostsSize,
-                                        postLinkedHashSet.size - currentPostsSize
-                                    )
-                                    mLoadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING
-                                    val fragment: MorePostsInfoFragment? =
-                                        mSectionsPagerAdapter.getMorePostsInfoFragment()
-                                    if (fragment != null) {
-                                        fragment.setStatus(LoadingMorePostsStatus.NOT_LOADING)
-                                    }
-                                })*/
                             }
                         }
                     } else {
                         _loadMorePostsState.value = LoadMorePostsState(LoadingMorePostsStatus.FAILED)
-                        /*handler.post(Runnable {
-                            mLoadingMorePostsStatus = LoadingMorePostsStatus.FAILED
-                            val fragment: MorePostsInfoFragment? =
-                                mSectionsPagerAdapter.getMorePostsInfoFragment()
-                            if (fragment != null) {
-                                fragment.setStatus(LoadingMorePostsStatus.FAILED)
-                            }
-                        })*/
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                     _loadMorePostsState.value = LoadMorePostsState(LoadingMorePostsStatus.FAILED)
                 }
-                /*try {
-                    val response = response.execute()
-
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                    handler.post(Runnable {
-                        mLoadingMorePostsStatus = LoadingMorePostsStatus.FAILED
-                        val fragment: MorePostsInfoFragment? =
-                            mSectionsPagerAdapter.getMorePostsInfoFragment()
-                        if (fragment != null) {
-                            fragment.setStatus(LoadingMorePostsStatus.FAILED)
-                        }
-                    })
-                }*/
             } else {
                 val lastItem: Long = posts?.let {
                     if (!it.isEmpty()) {
@@ -279,56 +230,24 @@ class ViewPostDetailActivityViewModel(
 
                     if (response.isSuccessful) {
                         val responseString = response.body()
-                        val newPosts = ParsePost.parsePostsSync(
-                            responseString,
-                            -1,
-                            postFilter,
-                            NullReadPostsList.getInstance()
-                        )
-                        if (newPosts == null || newPosts.isEmpty()) {
-                            /*handler.post(Runnable {
-                                mLoadingMorePostsStatus = LoadingMorePostsStatus.NO_MORE_POSTS
-                                val fragment: MorePostsInfoFragment? =
-                                    mSectionsPagerAdapter.getMorePostsInfoFragment()
-                                if (fragment != null) {
-                                    fragment.setStatus(LoadingMorePostsStatus.NO_MORE_POSTS)
-                                }
-                            })*/
+                        val newPosts = withContext(Dispatchers.Default) {
+                            parsePostsSync(
+                                responseString,
+                                -1,
+                                postFilter,
+                                NullReadPostsList.getInstance()
+                            )
+                        }
+                        if (newPosts.isNullOrEmpty()) {
                             _loadMorePostsState.value = LoadMorePostsState(LoadingMorePostsStatus.NO_MORE_POSTS)
                         } else {
                             val postLinkedHashSet = LinkedHashSet<Post?>(posts)
                             val currentPostsSize = postLinkedHashSet.size
                             postLinkedHashSet.addAll(newPosts)
                             if (currentPostsSize == postLinkedHashSet.size) {
-                                /*handler.post(Runnable {
-                                    mLoadingMorePostsStatus = LoadingMorePostsStatus.NO_MORE_POSTS
-                                    val fragment: MorePostsInfoFragment? =
-                                        mSectionsPagerAdapter.getMorePostsInfoFragment()
-                                    if (fragment != null) {
-                                        fragment.setStatus(LoadingMorePostsStatus.NO_MORE_POSTS)
-                                    }
-                                })*/
                                 _loadMorePostsState.value = LoadMorePostsState(LoadingMorePostsStatus.NO_MORE_POSTS)
                             } else {
                                 posts = java.util.ArrayList<Post>(postLinkedHashSet)
-                                /*handler.post(Runnable {
-                                    if (changePage) {
-                                        binding.viewPager2ViewPostDetailActivity.setCurrentItem(
-                                            currentPostsSize - 1,
-                                            false
-                                        )
-                                    }
-                                    mSectionsPagerAdapter.notifyItemRangeInserted(
-                                        currentPostsSize,
-                                        postLinkedHashSet.size - currentPostsSize
-                                    )
-                                    mLoadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING
-                                    val fragment: MorePostsInfoFragment? =
-                                        mSectionsPagerAdapter.getMorePostsInfoFragment()
-                                    if (fragment != null) {
-                                        fragment.setStatus(LoadingMorePostsStatus.NOT_LOADING)
-                                    }
-                                })*/
                                 _loadMorePostsState.value = LoadMorePostsState(
                                     LoadingMorePostsStatus.LOADED,
                                     postLinkedHashSet.size - currentPostsSize,
@@ -337,54 +256,25 @@ class ViewPostDetailActivityViewModel(
                             }
                         }
                     } else {
-                        /*handler.post(Runnable {
-                            mLoadingMorePostsStatus = LoadingMorePostsStatus.FAILED
-                            val fragment: MorePostsInfoFragment? =
-                                mSectionsPagerAdapter.getMorePostsInfoFragment()
-                            if (fragment != null) {
-                                fragment.setStatus(LoadingMorePostsStatus.FAILED)
-                            }
-                        })*/
                         _loadMorePostsState.value = LoadMorePostsState(LoadingMorePostsStatus.FAILED)
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    /*handler.post(Runnable {
-                        mLoadingMorePostsStatus = LoadingMorePostsStatus.FAILED
-                        val fragment: MorePostsInfoFragment? =
-                            mSectionsPagerAdapter.getMorePostsInfoFragment()
-                        if (fragment != null) {
-                            fragment.setStatus(LoadingMorePostsStatus.FAILED)
-                        }
-                    })*/
                     _loadMorePostsState.value = LoadMorePostsState(LoadingMorePostsStatus.FAILED)
                 }
             }
         }
-        /*if (mLoadingMorePostsStatus == LoadingMorePostsStatus.LOADING || mLoadingMorePostsStatus == LoadingMorePostsStatus.NO_MORE_POSTS) {
-            return
-        }
-
-        mLoadingMorePostsStatus = LoadingMorePostsStatus.LOADING
-
-        val morePostsFragment: MorePostsInfoFragment? =
-            mSectionsPagerAdapter.getMorePostsInfoFragment()
-        if (morePostsFragment != null) {
-            morePostsFragment.setStatus(LoadingMorePostsStatus.LOADING)
-        }
-
-        val handler = Handler(Looper.getMainLooper())*/
     }
 
     fun parsePostsSync(
-        response: String,
+        response: String?,
         nPosts: Int,
         postFilter: PostFilter?,
         readPostsList: ReadPostsListInterface?
     ): java.util.LinkedHashSet<Post>? {
         val newPosts = java.util.LinkedHashSet<Post>()
         try {
-            val jsonResponse = JSONObject(response)
+            val jsonResponse = JSONObject(response ?: "")
             val allPostsData =
                 jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY)
 
