@@ -7,6 +7,7 @@ import retrofit2.http.Field
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.HeaderMap
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -214,5 +215,99 @@ interface RedditAPIKt {
     suspend fun delete(
         @HeaderMap headers: Map<String, String>,
         @FieldMap params: Map<String, String>
+    ): Response<String>
+
+    @GET("{sortType}?raw_json=1&limit=100")
+    suspend fun getBestPosts(
+        @Path("sortType") sortType: SortType.Type, @Query("t") sortTime: SortType.Time?,
+        @Query("after") lastItem: String?, @HeaderMap headers: Map<String, String>
+    ): Response<String>
+
+    @GET("r/{subredditName}/{sortType}.json?raw_json=1&always_show_media=1")
+    suspend fun getSubredditBestPostsOauth(
+        @Path("subredditName") subredditName: String, @Path("sortType") sortType: SortType.Type,
+        @Query("t") sortTime: SortType.Time?, @Query("after") lastItem: String?,
+        @Query("limit") limit: Int,
+        @HeaderMap headers: Map<String, String>
+    ): Response<String>
+
+    @GET("r/{subredditName}/{sortType}.json?raw_json=1&always_show_media=1")
+    suspend fun getSubredditBestPosts(
+        @Path("subredditName") subredditName: String, @Path("sortType") sortType: SortType.Type,
+        @Query("t") sortTime: SortType.Time?, @Query("after") lastItem: String?,
+        @Query("limit") limit: Int
+    ): Response<String>
+
+    @GET("r/{subredditName}/{sortType}.json?raw_json=1&always_show_media=1")
+    suspend fun getAnonymousFrontPageOrMultiredditPosts(
+        @Path("subredditName") subredditName: String,
+        @Path("sortType") sortType: SortType.Type,
+        @Query("t") sortTime: SortType.Time?,
+        @Query("after") lastItem: String?,
+        @Query("limit") limit: Int,
+        @Header("User-Agent") userAgent: String?
+    ): Response<String>
+
+    @GET("user/{username}/{where}.json?&type=links&raw_json=1&limit=100")
+    suspend fun getUserPostsOauth(
+        @Path("username") username: String, @Path("where") where: String,
+        @Query("after") lastItem: String?, @Query("sort") sortType: SortType.Type?,
+        @Query("t") sortTime: SortType.Time?, @HeaderMap headers: Map<String, String>
+    ): Response<String>
+
+    @GET("user/{username}/submitted.json?raw_json=1&limit=100")
+    suspend fun getUserPosts(
+        @Path("username") username: String, @Query("after") lastItem: String?,
+        @Query("sort") sortType: SortType.Type?, @Query("t") sortTime: SortType.Time?
+    ): Response<String>
+
+    @GET("search.json?include_over_18=1&raw_json=1&limit=100&type=link")
+    suspend fun searchPostsOauth(
+        @Query("q") query: String?, @Query("after") after: String?,
+        @Query("sort") sort: SortType.Type?, @Query("t") sortTime: SortType.Time?,
+        @HeaderMap headers: Map<String, String>
+    ): Response<String>
+
+    @GET("search.json?include_over_18=1&raw_json=1&limit=100&type=link")
+    suspend fun searchPosts(
+        @Query("q") query: String?, @Query("after") after: String?,
+        @Query("sort") sort: SortType.Type?, @Query("t") sortTime: SortType.Time?
+    ): Response<String>
+
+    @GET("r/{subredditName}/search.json?include_over_18=1&raw_json=1&limit=100&type=link&restrict_sr=true")
+    suspend fun searchPostsInSpecificSubredditOauth(
+        @Path("subredditName") subredditName: String,
+        @Query("q") query: String?, @Query("sort") sort: SortType.Type?,
+        @Query("t") sortTime: SortType.Time?, @Query("after") after: String?,
+        @HeaderMap headers: Map<String, String>
+    ): Response<String>
+
+    @GET("r/{subredditName}/search.json?include_over_18=1&raw_json=1&limit=100&type=link&restrict_sr=true")
+    suspend fun searchPostsInSpecificSubreddit(
+        @Path("subredditName") subredditName: String,
+        @Query("q") query: String?, @Query("sort") sort: SortType.Type?,
+        @Query("t") sortTime: SortType.Time?, @Query("after") after: String?
+    ): Response<String>
+
+    @GET("{multipath}?raw_json=1&limit=100")
+    suspend fun getMultiRedditPosts(
+        @Path(value = "multipath", encoded = true) multiPath: String,
+        @Query("after") after: String?, @Query("t") sortTime: SortType.Time?
+    ): Response<String>
+
+    @GET("{multipath}.json?raw_json=1&limit=100")
+    suspend fun getMultiRedditPostsOauth(
+        @Path(value = "multipath", encoded = true) multiPath: String,
+        @Query("after") after: String?, @Query("t") sortTime: SortType.Time?,
+        @HeaderMap headers: Map<String, String>
+    ): Response<String>
+
+    @GET("/api/info.json?raw_json=1")
+    suspend fun getInfo(@Query("id") id: String): Response<String>
+
+    @GET("/api/info.json?raw_json=1")
+    suspend fun getInfoOauth(
+        @Query("id") id: String,
+        @HeaderMap headers: Map<String, String>
     ): Response<String>
 }
