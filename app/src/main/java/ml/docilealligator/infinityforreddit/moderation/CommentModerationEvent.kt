@@ -4,7 +4,7 @@ import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.comment.Comment
 import ml.docilealligator.infinityforreddit.post.Post
 
-sealed class CommentModerationEvent(open val comment: Comment, open val position: Int, val toastMessageResId: Int) {
+sealed class CommentModerationEvent(open val comment: Comment?, open val position: Int, val toastMessageResId: Int) {
     data class Approved(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.approved)
     data class ApproveFailed(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.approve_failed)
 
@@ -27,5 +27,5 @@ sealed class CommentModerationEvent(open val comment: Comment, open val position
     data class UnsetReceiveNotificationFailed(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.toggle_reply_notifications_failed)
 
     data class Deleted(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.delete_post_success)
-    data class DeleteFailed(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.delete_post_failed)
+    data class DeleteFailed(override val comment: Comment?, override val position: Int) : CommentModerationEvent(comment, position, R.string.delete_post_failed)
 }

@@ -1484,11 +1484,11 @@ class ViewPostDetailFragmentViewModelNew(
                 }
             } ?: run {
                 // TODO PostModerationEvent.DeleteFailed
-                /*postModerationEventLiveData.postValue(
+                postModerationEventLiveData.postValue(
                     PostModerationEvent.DeleteFailed(
-                        it, position
+                        null, position
                     )
-                )*/
+                )
             }
         }
     }
@@ -1586,28 +1586,25 @@ class ViewPostDetailFragmentViewModelNew(
                             )
                         }
                     } ?: run {
-                        // TODO CommentModerationEvent.DeleteFailed
-                        /*commentModerationEventLiveData.postValue(
+                        commentModerationEventLiveData.postValue(
                             CommentModerationEvent.DeleteFailed(
                                 null, position
                             )
-                        )*/
+                        )
                     }
                 } else {
-                    // TODO CommentModerationEvent.DeleteFailed
-                    /*commentModerationEventLiveData.postValue(
+                    commentModerationEventLiveData.postValue(
                         CommentModerationEvent.DeleteFailed(
                             null, position
                         )
-                    )*/
+                    )
                 }
             } ?: run {
-                // TODO CommentModerationEvent.DeleteFailed
-                /*commentModerationEventLiveData.postValue(
+                commentModerationEventLiveData.postValue(
                     CommentModerationEvent.DeleteFailed(
                         null, position
                     )
-                )*/
+                )
             }
         }
     }

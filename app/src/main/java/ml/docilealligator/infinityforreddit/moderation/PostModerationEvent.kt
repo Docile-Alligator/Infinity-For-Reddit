@@ -3,7 +3,7 @@ package ml.docilealligator.infinityforreddit.moderation
 import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.post.Post
 
-sealed class PostModerationEvent(open val post: Post, open val position: Int, val toastMessageResId: Int) {
+sealed class PostModerationEvent(open val post: Post?, open val position: Int, val toastMessageResId: Int) {
     data class Approved(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.approved)
     data class ApproveFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.approve_failed)
 
@@ -65,5 +65,5 @@ sealed class PostModerationEvent(open val post: Post, open val position: Int, va
     data class UnhideFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.post_unhide_failed)
 
     data class Deleted(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.delete_post_success)
-    data class DeleteFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.delete_post_failed)
+    data class DeleteFailed(override val post: Post?, override val position: Int) : PostModerationEvent(post, position, R.string.delete_post_failed)
 }
