@@ -174,26 +174,7 @@ class ViewPostDetailActivityViewModel(
                     }
 
                     if (response?.isSuccessful == true) {
-                        val newPosts = withContext(Dispatchers.Default) {
-                            parsePostsSync(response.body(), -1, postFilter, readPostsList)
-                        }
-                        if (newPosts == null) {
-                            _loadMorePostsState.value = LoadMorePostsState(LoadingMorePostsStatus.NO_MORE_POSTS)
-                        } else {
-                            val postLinkedHashSet = LinkedHashSet<Post?>(posts)
-                            val currentPostsSize = postLinkedHashSet.size
-                            postLinkedHashSet.addAll(newPosts)
-                            if (currentPostsSize == postLinkedHashSet.size) {
-                                _loadMorePostsState.value = LoadMorePostsState(LoadingMorePostsStatus.NO_MORE_POSTS)
-                            } else {
-                                posts = java.util.ArrayList<Post>(postLinkedHashSet)
-                                _loadMorePostsState.value = LoadMorePostsState(
-                                    LoadingMorePostsStatus.LOADED,
-                                    postLinkedHashSet.size - currentPostsSize,
-                                    changePage
-                                )
-                            }
-                        }
+                        finalizePosts(response, postFilter, readPostsList, changePage)
                     } else {
                         _loadMorePostsState.value = LoadMorePostsState(LoadingMorePostsStatus.FAILED)
                     }
@@ -229,32 +210,7 @@ class ViewPostDetailActivityViewModel(
                     }
 
                     if (response.isSuccessful) {
-                        val responseString = response.body()
-                        val newPosts = withContext(Dispatchers.Default) {
-                            parsePostsSync(
-                                responseString,
-                                -1,
-                                postFilter,
-                                NullReadPostsList.getInstance()
-                            )
-                        }
-                        if (newPosts.isNullOrEmpty()) {
-                            _loadMorePostsState.value = LoadMorePostsState(LoadingMorePostsStatus.NO_MORE_POSTS)
-                        } else {
-                            val postLinkedHashSet = LinkedHashSet<Post?>(posts)
-                            val currentPostsSize = postLinkedHashSet.size
-                            postLinkedHashSet.addAll(newPosts)
-                            if (currentPostsSize == postLinkedHashSet.size) {
-                                _loadMorePostsState.value = LoadMorePostsState(LoadingMorePostsStatus.NO_MORE_POSTS)
-                            } else {
-                                posts = java.util.ArrayList<Post>(postLinkedHashSet)
-                                _loadMorePostsState.value = LoadMorePostsState(
-                                    LoadingMorePostsStatus.LOADED,
-                                    postLinkedHashSet.size - currentPostsSize,
-                                    changePage
-                                )
-                            }
-                        }
+                        finalizePosts(response, postFilter, readPostsList, changePage)
                     } else {
                         _loadMorePostsState.value = LoadMorePostsState(LoadingMorePostsStatus.FAILED)
                     }
@@ -266,23 +222,20 @@ class ViewPostDetailActivityViewModel(
         }
     }
 
-    fun parsePostsSync(
+    private fun parsePostsSync(
         response: String?,
-        nPosts: Int,
         postFilter: PostFilter?,
         readPostsList: ReadPostsListInterface?
-    ): java.util.LinkedHashSet<Post>? {
-        val newPosts = java.util.LinkedHashSet<Post>()
+    ): ArrayList<Post>? {
+        val newPosts = ArrayList<Post>()
         try {
             val jsonResponse = JSONObject(response ?: "")
             val allPostsData =
                 jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY)
 
-            //Posts listing
-            val numberOfPosts =
-                if (nPosts < 0 || nPosts > allPostsData.length()) allPostsData.length() else nPosts
+            val numberOfPosts = allPostsData.length()
 
-            val newPostsIds = java.util.ArrayList<String?>()
+            val newPostsIds = java.util.ArrayList<String>()
             for (i in 0..<numberOfPosts) {
                 try {
                     if (allPostsData.getJSONObject(i).getString(JSONUtils.KIND_KEY) != "t3") {
@@ -292,7 +245,7 @@ class ViewPostDetailActivityViewModel(
                     val post = ParsePost.parseBasicData(data)
                     if (PostFilter.isPostAllowed(post, postFilter)) {
                         newPosts.add(post)
-                        newPostsIds.add(post.getId())
+                        newPostsIds.add(post.id)
                     }
                 } catch (e: JSONException) {
                     e.printStackTrace()
@@ -312,6 +265,49 @@ class ViewPostDetailActivityViewModel(
         } catch (e: JSONException) {
             e.printStackTrace()
             return null
+        }
+    }
+
+    private suspend fun finalizePosts(
+        response: Response<String>,
+        postFilter: PostFilter?,
+        readPostsList: ReadPostsListInterface?,
+        changePage: Boolean
+    ) {
+        val newPosts = withContext(Dispatchers.Default) {
+            parsePostsSync(response.body(), postFilter, readPostsList)
+        }
+        if (newPosts == null) {
+            _loadMorePostsState.value = LoadMorePostsState(LoadingMorePostsStatus.NO_MORE_POSTS)
+        } else {
+            posts?.let { posts ->
+                val currentPostsSize = posts.size
+                val existingPostIds = mutableSetOf<String>()
+                for (p in newPosts) {
+                    if (existingPostIds.contains(p.id)) {
+                        continue
+                    }
+
+                    existingPostIds.add(p.id)
+                    posts.add(p)
+                }
+                if (currentPostsSize == posts.size) {
+                    _loadMorePostsState.value = LoadMorePostsState(LoadingMorePostsStatus.NO_MORE_POSTS)
+                } else {
+                    _loadMorePostsState.value = LoadMorePostsState(
+                        LoadingMorePostsStatus.LOADED,
+                        posts.size - currentPostsSize,
+                        changePage
+                    )
+                }
+            } ?: run {
+                posts = newPosts
+                _loadMorePostsState.value = LoadMorePostsState(
+                    LoadingMorePostsStatus.LOADED,
+                    posts?.size ?: 0,
+                    changePage
+                )
+            }
         }
     }
 
