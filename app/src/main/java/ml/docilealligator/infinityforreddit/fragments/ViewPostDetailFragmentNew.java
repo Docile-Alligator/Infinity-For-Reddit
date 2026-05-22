@@ -523,6 +523,12 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         }
         );
 
+        if (mCommentsRecyclerView != null) {
+            mConcatAdapter = new ConcatAdapter(mCommentsStatusAdapter, mCommentsAdapter, mCommentsFooterAdapter);
+        } else {
+            mConcatAdapter = new ConcatAdapter(mPostAdapter, mCommentsStatusAdapter, mCommentsAdapter, mCommentsFooterAdapter);
+        }
+
         viewPostDetailFragmentViewModel.getUiState().observe(getViewLifecycleOwner(), uiState -> {
             RecyclerView recyclerView = mCommentsRecyclerView != null ? mCommentsRecyclerView : binding.postDetailRecyclerViewViewPostDetailFragment;
             mCommentsStatusAdapter.setSingleCommentThreadMode(uiState.getSingleCommentId() != null && !uiState.getSingleCommentId().isEmpty());
@@ -688,11 +694,9 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                 binding.postDetailRecyclerViewViewPostDetailFragment.setAdapter(mPostAdapter);
             }
             if (mCommentsRecyclerView.getAdapter() == null) {
-                mConcatAdapter = new ConcatAdapter(mCommentsStatusAdapter, mCommentsAdapter, mCommentsFooterAdapter);
                 mCommentsRecyclerView.setAdapter(mConcatAdapter);
             }
         } else {
-            mConcatAdapter = new ConcatAdapter(mPostAdapter, mCommentsStatusAdapter, mCommentsAdapter, mCommentsFooterAdapter);
             if (binding.postDetailRecyclerViewViewPostDetailFragment.getAdapter() == null) {
                 binding.postDetailRecyclerViewViewPostDetailFragment.setAdapter(mConcatAdapter);
             }
@@ -1103,10 +1107,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     }
 
     private void updateCommentScrollPosition() {
-        if (mConcatAdapter == null) {
-            return;
-        }
-
         LinearLayoutManager layoutManager;
         if (mCommentsRecyclerView != null) {
             layoutManager = (LinearLayoutManager) mCommentsRecyclerView.getLayoutManager();
