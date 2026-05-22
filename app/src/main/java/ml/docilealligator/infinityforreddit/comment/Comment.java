@@ -3,6 +3,8 @@ package ml.docilealligator.infinityforreddit.comment;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -132,8 +134,51 @@ public class Comment implements Parcelable {
         loadMoreChildrenFailed = false;
     }
 
-    public Comment(String parentFullName) {
-
+    // Copy constructor
+    public Comment(@NonNull Comment commentToBeCopied) {
+        this.id = commentToBeCopied.id;
+        this.fullName = commentToBeCopied.fullName;
+        this.author = commentToBeCopied.author;
+        this.authorFullName = commentToBeCopied.authorFullName;
+        this.authorFlair = commentToBeCopied.authorFlair;
+        this.authorFlairHTML = commentToBeCopied.authorFlairHTML;
+        this.authorIconUrl = commentToBeCopied.authorIconUrl;
+        this.linkAuthor = commentToBeCopied.linkAuthor;
+        this.commentTimeMillis = commentToBeCopied.commentTimeMillis;
+        this.commentMarkdown = commentToBeCopied.commentMarkdown;
+        this.commentRawText = commentToBeCopied.commentRawText;
+        this.linkId = commentToBeCopied.linkId;
+        this.subredditName = commentToBeCopied.subredditName;
+        this.parentId = commentToBeCopied.parentId;
+        this.score = commentToBeCopied.score;
+        this.voteType = commentToBeCopied.voteType;
+        this.isSubmitter = commentToBeCopied.isSubmitter;
+        this.distinguished = commentToBeCopied.distinguished;
+        this.permalink = commentToBeCopied.permalink;
+        this.depth = commentToBeCopied.depth;
+        this.childCount = commentToBeCopied.childCount;
+        this.collapsed = commentToBeCopied.collapsed;
+        this.hasReply = commentToBeCopied.hasReply;
+        this.scoreHidden = commentToBeCopied.scoreHidden;
+        this.saved = commentToBeCopied.saved;
+        this.sendReplies = commentToBeCopied.sendReplies;
+        this.locked = commentToBeCopied.locked;
+        this.canModComment = commentToBeCopied.canModComment;
+        this.approved = commentToBeCopied.approved;
+        this.approvedAtUTC = commentToBeCopied.approvedAtUTC;
+        this.approvedBy = commentToBeCopied.approvedBy;
+        this.removed = commentToBeCopied.removed;
+        this.spam = commentToBeCopied.spam;
+        this.isExpanded = commentToBeCopied.isExpanded;
+        this.hasExpandedBefore = commentToBeCopied.hasExpandedBefore;
+        this.isFilteredOut = commentToBeCopied.isFilteredOut;
+        this.children = commentToBeCopied.children;
+        this.moreChildrenIds = commentToBeCopied.moreChildrenIds;
+        this.editedTimeMillis = commentToBeCopied.editedTimeMillis;
+        this.mediaMetadataMap = commentToBeCopied.mediaMetadataMap;
+        this.placeholderType = commentToBeCopied.placeholderType;
+        this.isLoadingMoreChildren = commentToBeCopied.isLoadingMoreChildren;
+        this.loadMoreChildrenFailed = commentToBeCopied.loadMoreChildrenFailed;
     }
 
     protected Comment(Parcel in) {

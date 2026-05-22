@@ -10,15 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.thing.SortType;
-import ml.docilealligator.infinityforreddit.thing.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.databinding.FragmentPostCommentSortTypeBottomSheetBinding;
+import ml.docilealligator.infinityforreddit.thing.SortType;
+import ml.docilealligator.infinityforreddit.thing.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 /**
@@ -34,7 +35,7 @@ public class PostCommentSortTypeBottomSheetFragment extends LandscapeExpandedRou
         // Required empty public constructor
     }
 
-    public static PostCommentSortTypeBottomSheetFragment getNewInstance(SortType.Type currentSortType) {
+    public static PostCommentSortTypeBottomSheetFragment getNewInstance(@Nullable SortType.Type currentSortType) {
         PostCommentSortTypeBottomSheetFragment fragment = new PostCommentSortTypeBottomSheetFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(EXTRA_CURRENT_SORT_TYPE, currentSortType);

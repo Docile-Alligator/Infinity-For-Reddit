@@ -100,7 +100,7 @@ public class ParseSubredditData {
     }
 
     @Nullable
-    private static SubredditData parseSubredditDataSync(JSONObject subredditDataJsonObject, boolean nsfw) throws JSONException {
+    public static SubredditData parseSubredditDataSync(JSONObject subredditDataJsonObject, boolean nsfw) throws JSONException {
         boolean isNSFW = !subredditDataJsonObject.isNull(JSONUtils.OVER18_KEY) && subredditDataJsonObject.getBoolean(JSONUtils.OVER18_KEY);
         if (!nsfw && isNSFW) {
             return null;

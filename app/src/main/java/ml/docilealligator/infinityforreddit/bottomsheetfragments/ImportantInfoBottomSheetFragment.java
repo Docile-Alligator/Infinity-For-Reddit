@@ -1,6 +1,9 @@
 package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,51 +11,63 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.MainActivity;
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import ml.docilealligator.infinityforreddit.BuildConfig;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.databinding.FragmentImportantInfoBottomSheetBinding;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class ImportantInfoBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
-    private MainActivity mainActivity;
+    @Inject
+    @Named("internal")
+    SharedPreferences mInternalSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
+
+    private BaseActivity mBaseActivity;
 
     public ImportantInfoBottomSheetFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        ((Infinity) mBaseActivity.getApplication()).getAppComponent().inject(this);
+        
         FragmentImportantInfoBottomSheetBinding binding = FragmentImportantInfoBottomSheetBinding.inflate(inflater, container, false);
 
-        if (mainActivity != null && mainActivity.typeface != null) {
-            Utils.setFontToAllTextViews(binding.getRoot(), mainActivity.typeface);
+        if (mBaseActivity != null && mBaseActivity.typeface != null) {
+            Utils.setFontToAllTextViews(binding.getRoot(), mBaseActivity.typeface);
         }
 
         binding.getRoot().setNestedScrollingEnabled(true);
 
-        /*SpannableString message = new SpannableString(getString(R.string.reddit_api_info, "https://www.reddit.com/r/reddit/comments/145bram/addressing_the_community_about_changes_to_our_api", "https://www.reddit.com/r/Infinity_For_Reddit/comments/147bhsg/the_future_of_infinity"));
-        Linkify.addLinks(message, Linkify.WEB_URLS);
-        binding.messageTextViewRedditApiInfoBottomSheetFragment.setText(message);
-        binding.messageTextViewRedditApiInfoBottomSheetFragment.setMovementMethod(BetterLinkMovementMethod.newInstance().setOnLinkClickListener((textView, url) -> {
-            Intent intent = new Intent(mainActivity, LinkResolverActivity.class);
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
-            return true;
-        }));*/
-        binding.messageTextViewRedditApiInfoBottomSheetFragment.setLinkTextColor(getResources().getColor(R.color.colorAccent));
+        binding.titleTextViewImportantInfoBottomSheetFragment.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        binding.descriptionTextViewImportantInfoBottomSheetFragment.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        binding.joinSubredditTextViewImportantInfoBottomSheetFragment.setTextColor(mCustomThemeWrapper.getLinkColor());
+        binding.continueButtonImportantInfoBottomSheetFragment.setTextColor(mCustomThemeWrapper.getButtonTextColor());
+        binding.continueButtonImportantInfoBottomSheetFragment.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme()));
 
-        binding.doNotShowThisAgainTextView.setOnClickListener(view -> {
-            binding.doNotShowThisAgainCheckBox.toggle();
+        binding.joinSubredditTextViewImportantInfoBottomSheetFragment.setOnClickListener(view -> {
+            Intent intent = new Intent(mBaseActivity, ViewSubredditDetailActivity.class);
+            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, "Infinity_For_Reddit");
+            mBaseActivity.startActivity(intent);
+
+            mInternalSharedPreferences.edit().putInt(SharedPreferencesUtils.CURRENT_VERSION, BuildConfig.VERSION_CODE).apply();
+            dismiss();
         });
 
-        binding.continueButtonRedditApiInfoBottomSheetFragment.setOnClickListener(view -> {
-            if (binding.doNotShowThisAgainCheckBox.isChecked()) {
-                mainActivity.doNotShowRedditAPIInfoAgain();
-            }
+        binding.continueButtonImportantInfoBottomSheetFragment.setOnClickListener(view -> {
+            mInternalSharedPreferences.edit().putInt(SharedPreferencesUtils.CURRENT_VERSION, BuildConfig.VERSION_CODE).apply();
             dismiss();
         });
 
@@ -62,6 +77,6 @@ public class ImportantInfoBottomSheetFragment extends LandscapeExpandedRoundedBo
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mainActivity = (MainActivity) context;
+        mBaseActivity = (BaseActivity) context;
     }
 }

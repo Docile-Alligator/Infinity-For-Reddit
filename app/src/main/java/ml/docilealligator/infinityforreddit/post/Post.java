@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Objects;
 
 import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -172,6 +173,64 @@ public class Post implements Parcelable {
         this.distinguished = distinguished;
         this.suggestedSort = suggestedSort;
         isRead = false;
+    }
+
+    public Post(@NonNull Post postToBeCopied) {
+        this.id = postToBeCopied.id;
+        this.fullName = postToBeCopied.fullName;
+        this.subredditName = postToBeCopied.subredditName;
+        this.subredditNamePrefixed = postToBeCopied.subredditNamePrefixed;
+        this.subredditIconUrl = postToBeCopied.subredditIconUrl;
+        this.author = postToBeCopied.author;
+        this.authorNamePrefixed = postToBeCopied.authorNamePrefixed;
+        this.authorIconUrl = postToBeCopied.authorIconUrl;
+        this.authorFlair = postToBeCopied.authorFlair;
+        this.authorFlairHTML = postToBeCopied.authorFlairHTML;
+        this.title = postToBeCopied.title;
+        this.selfText = postToBeCopied.selfText;
+        this.selfTextPlain = postToBeCopied.selfTextPlain;
+        this.selfTextPlainTrimmed = postToBeCopied.selfTextPlainTrimmed;
+        this.url = postToBeCopied.url;
+        this.videoUrl = postToBeCopied.videoUrl;
+        this.videoDownloadUrl = postToBeCopied.videoDownloadUrl;
+        this.videoFallBackDirectUrl = postToBeCopied.videoFallBackDirectUrl;
+        this.redgifsId = postToBeCopied.redgifsId;
+        this.streamableShortCode = postToBeCopied.streamableShortCode;
+        this.isImgur = postToBeCopied.isImgur;
+        this.isRedgifs = postToBeCopied.isRedgifs;
+        this.isStreamable = postToBeCopied.isStreamable;
+        this.loadedStreamableVideoAlready = postToBeCopied.loadedStreamableVideoAlready;
+        this.permalink = postToBeCopied.permalink;
+        this.flair = postToBeCopied.flair;
+        this.postTimeMillis = postToBeCopied.postTimeMillis;
+        this.score = postToBeCopied.score;
+        this.postType = postToBeCopied.postType;
+        this.voteType = postToBeCopied.voteType;
+        this.nComments = postToBeCopied.nComments;
+        this.upvoteRatio = postToBeCopied.upvoteRatio;
+        this.hidden = postToBeCopied.hidden;
+        this.spoiler = postToBeCopied.spoiler;
+        this.nsfw = postToBeCopied.nsfw;
+        this.stickied = postToBeCopied.stickied;
+        this.archived = postToBeCopied.archived;
+        this.locked = postToBeCopied.locked;
+        this.saved = postToBeCopied.saved;
+        this.sendReplies = postToBeCopied.sendReplies;
+        this.isCrosspost = postToBeCopied.isCrosspost;
+        this.isRead = postToBeCopied.isRead;
+        this.crosspostParentId = postToBeCopied.crosspostParentId;
+        this.distinguished = postToBeCopied.distinguished;
+        this.suggestedSort = postToBeCopied.suggestedSort;
+        this.mp4Variant = postToBeCopied.mp4Variant;
+        this.previews = postToBeCopied.previews;
+        this.mediaMetadataMap = postToBeCopied.mediaMetadataMap;
+        this.gallery = postToBeCopied.gallery;
+        this.canModPost = postToBeCopied.canModPost;
+        this.approved = postToBeCopied.approved;
+        this.approvedAtUTC = postToBeCopied.approvedAtUTC;
+        this.approvedBy = postToBeCopied.approvedBy;
+        this.removed = postToBeCopied.removed;
+        this.spam = postToBeCopied.spam;
     }
 
     protected Post(Parcel in) {
@@ -713,12 +772,30 @@ public class Post implements Parcelable {
         if (!(obj instanceof Post)) {
             return false;
         }
-        return ((Post) obj).id.equals(id);
+        return ((Post) obj).id.equals(id)
+                && nsfw == ((Post) obj).nsfw
+                && spoiler == ((Post) obj).spoiler
+                && isRead == ((Post) obj).isRead
+                && saved == ((Post) obj).saved
+                && hidden == ((Post) obj).hidden
+                && voteType == ((Post) obj).voteType
+                && stickied == ((Post) obj).stickied
+                && approved == ((Post) obj).approved
+                && approvedAtUTC == ((Post) obj).approvedAtUTC
+                && Objects.equals(approvedBy, ((Post) obj).approvedBy)
+                && removed == ((Post) obj).removed
+                && spam == ((Post) obj).spam
+                && locked == ((Post) obj).locked
+                && Objects.equals(distinguished, ((Post) obj).distinguished);
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return Objects.hash(
+                id, nsfw, spoiler, isRead, saved, hidden, voteType,
+                stickied, approved, approvedAtUTC, approvedBy, removed,
+                spam, locked, distinguished
+        );
     }
 
     public static class Gallery implements Parcelable {

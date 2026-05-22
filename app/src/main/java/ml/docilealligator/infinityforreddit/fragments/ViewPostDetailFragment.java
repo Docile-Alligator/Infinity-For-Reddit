@@ -701,9 +701,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             }
             comments = cache.getVisibleComments();
             children = cache.getChildren();
-            mCommentFilter = cache.getCommentFilter();
+            //mCommentFilter = cache.getCommentFilter();
             commentScrollPosition = cache.getScrollPosition();
-            hasMoreChildren = cache.getHasMoreChildren();
+            //hasMoreChildren = cache.getHasMoreChildren();
             commentFilterFetched = true;
 
             return true;
@@ -1342,9 +1342,10 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 mPost,
                 comments,
                 children,
-                mCommentFilter,
-                commentScrollPosition,
-                hasMoreChildren
+                //mCommentFilter,
+                sortType,
+                commentScrollPosition
+                //hasMoreChildren
         );
     }
 

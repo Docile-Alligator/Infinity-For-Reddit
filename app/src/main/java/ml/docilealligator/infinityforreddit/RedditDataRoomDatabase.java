@@ -19,6 +19,7 @@ import ml.docilealligator.infinityforreddit.comment.CommentDraft;
 import ml.docilealligator.infinityforreddit.comment.CommentDraftDao;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterDao;
+import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterDaoKt;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterUsage;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterUsageDao;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
@@ -36,6 +37,7 @@ import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsageDao;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostDao;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostDaoKt;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQuery;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQueryDao;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditDao;
@@ -92,6 +94,8 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
 
     public abstract ReadPostDao readPostDao();
 
+    public abstract ReadPostDaoKt readPostDaoKt();
+
     public abstract PostFilterDao postFilterDao();
 
     public abstract PostFilterUsageDao postFilterUsageDao();
@@ -101,6 +105,8 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     public abstract AnonymousMultiredditSubredditDaoKt anonymousMultiredditSubredditDaoKt();
 
     public abstract CommentFilterDao commentFilterDao();
+
+    public abstract CommentFilterDaoKt commentFilterDaoKt();
 
     public abstract CommentFilterUsageDao commentFilterUsageDao();
 

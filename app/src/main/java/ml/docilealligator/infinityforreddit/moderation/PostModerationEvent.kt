@@ -3,7 +3,7 @@ package ml.docilealligator.infinityforreddit.moderation
 import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.post.Post
 
-sealed class PostModerationEvent(open val post: Post, open val position: Int, val toastMessageResId: Int) {
+sealed class PostModerationEvent(open val post: Post?, open val position: Int, val toastMessageResId: Int) {
     data class Approved(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.approved)
     data class ApproveFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.approve_failed)
 
@@ -48,4 +48,22 @@ sealed class PostModerationEvent(open val post: Post, open val position: Int, va
 
     data class UnsetReceiveNotification(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.reply_notifications_disabled)
     data class UnsetReceiveNotificationFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.toggle_reply_notifications_failed)
+
+    data class ChangedFlair(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.update_flair_success)
+    data class ChangeFlairFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.update_flair_failed)
+
+    data class Saved(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.post_saved_success)
+    data class SaveFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.post_saved_failed)
+
+    data class Unsaved(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.post_unsaved_success)
+    data class UnsaveFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.post_unsaved_failed)
+
+    data class Hid(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.post_hide_success)
+    data class HideFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.post_hide_failed)
+
+    data class Unhid(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.post_unhide_success)
+    data class UnhideFailed(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.post_unhide_failed)
+
+    data class Deleted(override val post: Post, override val position: Int) : PostModerationEvent(post, position, R.string.delete_post_success)
+    data class DeleteFailed(override val post: Post?, override val position: Int) : PostModerationEvent(post, position, R.string.delete_post_failed)
 }
