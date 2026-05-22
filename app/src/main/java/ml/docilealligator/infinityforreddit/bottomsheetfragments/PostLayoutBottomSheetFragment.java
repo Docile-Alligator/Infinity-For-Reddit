@@ -71,6 +71,12 @@ public class PostLayoutBottomSheetFragment extends LandscapeExpandedRoundedBotto
         this.activity = (BaseActivity) context;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
     public interface PostLayoutSelectionCallback {
         void postLayoutSelected(int postLayout);
     }
