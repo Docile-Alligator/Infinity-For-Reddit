@@ -1098,12 +1098,15 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         sortType = viewPostDetailFragmentViewModel.getSortType();
-        updateCommentScrollPosition();
         outState.putInt(SCROLL_POSITION_STATE, commentScrollPosition);
         Bridge.saveInstanceState(this, outState);
     }
 
     private void updateCommentScrollPosition() {
+        if (mConcatAdapter == null) {
+            return;
+        }
+
         LinearLayoutManager layoutManager;
         if (mCommentsRecyclerView != null) {
             layoutManager = (LinearLayoutManager) mCommentsRecyclerView.getLayoutManager();
