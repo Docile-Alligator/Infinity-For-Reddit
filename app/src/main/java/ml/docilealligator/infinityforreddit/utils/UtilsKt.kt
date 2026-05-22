@@ -6,6 +6,6 @@ import androidx.browser.customtabs.CustomTabsClient
 
 fun getChromeCustomTabPackageName(context: Context): String? {
     return CustomTabsClient.getPackageName(
-        context, listOf("com.android.chrome", "com.chrome.beta", "com.chrome.dev", "com.chrome.canary"), true
+        context, listOf("com.android.chrome", "com.chrome.beta", "com.chrome.dev", "com.chrome.canary", "org.mozilla.focus"), true
     )
 }
