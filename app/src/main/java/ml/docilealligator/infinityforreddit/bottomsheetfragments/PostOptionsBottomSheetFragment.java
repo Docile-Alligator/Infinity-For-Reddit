@@ -59,7 +59,6 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
 
     private BaseActivity mBaseActivity;
     private Post mPost;
-    private FragmentPostOptionsBottomSheetBinding binding;
 
     @Inject
     @Named("oauth")
@@ -117,7 +116,7 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                              Bundle savedInstanceState) {
         ((Infinity) mBaseActivity.getApplication()).getAppComponent().inject(this);
         // Inflate the layout for this fragment
-        binding = FragmentPostOptionsBottomSheetBinding.inflate(inflater, container, false);
+        FragmentPostOptionsBottomSheetBinding binding = FragmentPostOptionsBottomSheetBinding.inflate(inflater, container, false);
 
         if (mPost != null) {
             switch (mPost.getPostType()) {
@@ -368,11 +367,5 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mBaseActivity = (BaseActivity) context;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 }

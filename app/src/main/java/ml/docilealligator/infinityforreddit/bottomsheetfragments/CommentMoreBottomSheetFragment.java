@@ -46,7 +46,6 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
     public static final String EXTRA_SHOW_REPLY_AND_SAVE_OPTION = "ESSARO";
     public static final String EXTRA_IS_NSFW = "EIN";
 
-    private FragmentCommentMoreBottomSheetBinding binding;
     private BaseActivity activity;
 
     public CommentMoreBottomSheetFragment() {
@@ -56,7 +55,7 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentCommentMoreBottomSheetBinding.inflate(inflater, container, false);
+        FragmentCommentMoreBottomSheetBinding binding = FragmentCommentMoreBottomSheetBinding.inflate(inflater, container, false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
@@ -251,11 +250,5 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         activity = (BaseActivity) context;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 }
