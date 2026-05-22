@@ -104,6 +104,7 @@ import ml.docilealligator.infinityforreddit.settings.MainPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.MiscellaneousPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.NotificationPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.NsfwAndSpoilerFragment;
+import ml.docilealligator.infinityforreddit.settings.PostDetailsPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.PostHistoryFragment;
 import ml.docilealligator.infinityforreddit.settings.ProxyPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.SecurityPreferenceFragment;
@@ -325,6 +326,8 @@ public interface AppComponent {
     void inject(CopyMultiRedditActivity copyMultiRedditActivity);
 
     void inject(AppAuthLoginActivity appAuthLoginActivity);
+
+    void inject(PostDetailsPreferenceFragment postDetailsPreferenceFragment);
 
     void inject(ViewPostDetailFragmentNew viewPostDetailFragmentNew);
 

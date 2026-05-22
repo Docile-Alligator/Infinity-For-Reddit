@@ -511,7 +511,9 @@ public abstract class PostFragmentBase extends Fragment {
     }
 
     public final void videoAutoplayChangeMutingOption(boolean isMute) {
-        mVideoMuteManager.setMuted(isMute);
+        if (mVideoMuteManager.getRememberMuteOption()) {
+            mVideoMuteManager.setMuted(isMute);
+        }
     }
 
     public boolean getIsNsfwSubreddit() {

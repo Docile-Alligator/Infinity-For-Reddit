@@ -56,4 +56,9 @@
         app:title="@string/settings_embedded_media_type_title"
         app:useSimpleSummaryProvider="true" />
 
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontEditTextPreference
+        app:defaultValue="10"
+        app:key="comment_thread_continuity_capacity"
+        app:title="@string/settings_comment_thread_continuity_capacity_title" />
+
 </PreferenceScreen>

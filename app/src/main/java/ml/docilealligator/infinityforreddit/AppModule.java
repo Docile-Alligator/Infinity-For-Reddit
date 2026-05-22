@@ -237,8 +237,13 @@ abstract class AppModule {
 
     @Provides
     @Singleton
-    static PostDetailCommentsCacheManager providePostDetailCommentsCacheManager() {
-        return new PostDetailCommentsCacheManager();
+    static PostDetailCommentsCacheManager providePostDetailCommentsCacheManager(@Named("post_details") SharedPreferences postDetailsSharedPreferences) {
+        try {
+            int capacity = Integer.parseInt(postDetailsSharedPreferences.getString(SharedPreferencesUtils.COMMENT_THREAD_CONTINUITY_CAPACITY, "10"));
+            return new PostDetailCommentsCacheManager(new AutoRemovalLinkedHashMap<>(capacity));
+        } catch (NumberFormatException ignore) {
+            return new PostDetailCommentsCacheManager(new AutoRemovalLinkedHashMap<>(10));
+        }
     }
 
     @Provides

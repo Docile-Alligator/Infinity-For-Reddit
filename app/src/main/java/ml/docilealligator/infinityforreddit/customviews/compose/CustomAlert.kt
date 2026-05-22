@@ -28,6 +28,7 @@ fun CustomAlert(
 ) {
     AlertDialog(
         modifier = modifier,
+        containerColor = Color(LocalAppTheme.current.backgroundColor),
         icon = iconDrawableRes?.let {
             @Composable {
                 Icon(painterResource(it), contentDescription = "Example Icon")
@@ -88,6 +89,7 @@ fun CustomAlert(
 ) {
     AlertDialog(
         modifier = modifier,
+        containerColor = Color(LocalAppTheme.current.backgroundColor),
         icon = iconDrawableRes?.let {
             @Composable {
                 Icon(painterResource(it), contentDescription = "Example Icon")
