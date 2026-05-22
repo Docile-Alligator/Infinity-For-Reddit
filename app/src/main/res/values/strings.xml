@@ -1179,6 +1179,7 @@
 
     <string name="only_sensitive_content">Only Sensitive Content</string>
     <string name="only_spoiler">Only Spoiler</string>
+    <string name="hide_spoilers">Hide Spoilers</string>
     <string name="title_excludes_strings_hint">Title: excludes keywords (key1,key2)</string>
     <string name="title_contains_strings_hint">Title: contains keywords (key1,key2)</string>
     <string name="title_excludes_regex_hint">Title: excludes regex</string>
