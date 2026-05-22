@@ -237,6 +237,7 @@ public class SharedPreferencesUtils {
     public static final String SWIPE_RIGHT_TO_GO_BACK_SENSITIVITY = "swipe_right_to_go_back_sensitivity";
     public static final String SWIPE_ACTION_SENSITIVITY_IN_COMMENTS = "swipe_action_sensitivity_in_comments";
     public static final String NAVIGATION_DRAWER_SWIPE_AREA = "navigation_drawer_swipe_area";
+    public static final String CURRENT_VERSION = "current_version";
 
     public static String getPostDetailFabPortraitX(@Nullable Display display) {
         if (display == null) {

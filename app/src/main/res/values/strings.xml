@@ -1491,6 +1491,9 @@
         open the navigation drawer and click your account header and select \"Add an account\" to login to Reddit using the same account again.
         Otherwise, Infinity may not load posts at all. Sorry for the inconvenience.</string>
     <string name="i_understand">I understand</string>
+    <string name="important_info_post_comments_rework_title">Important Beta Information</string>
+    <string name="important_info_post_comments_rework_description">You are currently using the beta version of the new release.\n\nThis beta includes major under-the-hood changes to the post comments section as part of a large code cleanup and rewrite. The functionality should remain mostly the same, but because many internal systems have changed, bugs and unexpected issues are to be expected during this stage.\n\nThis release is focused primarily on stabilizing the new foundation before additional features are gradually introduced in future beta updates.\n\nThank you for testing the beta and for your patience.</string>
+    <string name="important_info_post_comments_rework_join_subreddit">Click here to join r/Infinity_For_Reddit</string>
 
     <string name="add_to_comment_filter">Add to Comment Filter</string>
     <string name="cannot_edit_post_with_images">Editing posts with images is not allowed.</string>
