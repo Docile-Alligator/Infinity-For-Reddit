@@ -509,7 +509,7 @@ public class PostViewModel extends ViewModel {
                         postHistorySharedPreferences, name, query, postType, sortType, postFilter, readPostsList);
             } else if (postType == PostType.ANONYMOUS_FRONT_PAGE || postType == PostType.ANONYMOUS_MULTIREDDIT) {
                 return (T) new PostViewModel(executor, retrofit, redditDataRoomDatabase, null,
-                        null, sharedPreferences, null,
+                        Account.ANONYMOUS_ACCOUNT, sharedPreferences, null,
                         null, name, postType, sortType, postFilter, readPostsList);
             } else {
                 return (T) new PostViewModel(executor, retrofit, redditDataRoomDatabase, accessToken,

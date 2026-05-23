@@ -41,7 +41,7 @@ public interface ReadPostDao {
     @Query("DELETE FROM read_posts")
     void deleteAllReadPosts();
 
-    @Query("SELECT id FROM read_posts WHERE id IN (:ids) AND username = :username")
+    @Query("SELECT id FROM read_posts WHERE id IN (:ids) AND username = :username AND read_post_type = 0")
     List<String> getReadPostsIdsByIds(List<String> ids, String username);
 
     default int getMaxReadPostEntrySize() { // in bytes
