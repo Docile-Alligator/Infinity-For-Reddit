@@ -2127,6 +2127,9 @@ public class PostDetailRecyclerViewAdapterNew extends RecyclerView.Adapter<Recyc
                             for (int i = 0; i < trackGroups.size(); i++) {
                                 String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
                                 if (mimeType != null && mimeType.contains("audio")) {
+                                    if (mVideoMuteManager.getMasterMutingOption() != null) {
+                                        volume = mVideoMuteManager.getMasterMutingOption() ? 0f : 1f;
+                                    }
                                     helper.setVolume(volume);
                                     muteButton.setVisibility(View.VISIBLE);
                                     if (volume != 0f) {

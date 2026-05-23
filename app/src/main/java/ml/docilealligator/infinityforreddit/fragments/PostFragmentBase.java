@@ -506,8 +506,9 @@ public abstract class PostFragmentBase extends Fragment {
 
     public abstract void changePostLayout(int postLayout, boolean temporary);
 
+    @Nullable
     public final Boolean getMasterMutingOption() {
-        return mVideoMuteManager.isMuted();
+        return mVideoMuteManager.getMasterMutingOption();
     }
 
     public final void videoAutoplayChangeMutingOption(boolean isMute) {
