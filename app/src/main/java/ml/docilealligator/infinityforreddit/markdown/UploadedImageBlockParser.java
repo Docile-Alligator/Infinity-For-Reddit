@@ -36,7 +36,7 @@ public class UploadedImageBlockParser extends AbstractBlockParser {
     }
 
     public static class Factory extends AbstractBlockParserFactory {
-        private final Pattern pattern =  Pattern.compile("!\\[.*]\\(\\w+\\)");
+        private final Pattern pattern =  Pattern.compile("!\\[(.*)]\\((\\w+)\\)");
         @Nullable
         private Map<String, UploadedImage> uploadedImageMap;
 
@@ -49,17 +49,12 @@ public class UploadedImageBlockParser extends AbstractBlockParser {
             String line = state.getLine().toString();
             Matcher matcher = pattern.matcher(line);
             if (matcher.find()) {
-                int startIndex = line.lastIndexOf('(');
-                if (startIndex > 0) {
-                    int endIndex = line.indexOf(')', startIndex);
-                    String id = line.substring(startIndex + 1, endIndex);
-                    UploadedImage uploadedImage = uploadedImageMap.get(id);
-                    if (uploadedImage != null) {
-                        //![caption](id)
-                        String caption = line.substring(matcher.start() + 2, startIndex - 1);
-                        uploadedImage.setCaption(caption);
-                        return BlockStart.of(new UploadedImageBlockParser(uploadedImage));
-                    }
+                String id = matcher.group(2);
+                UploadedImage uploadedImage = uploadedImageMap.get(id);
+                if (uploadedImage != null) {
+                    String caption = matcher.group(1);
+                    uploadedImage.setCaption(caption);
+                    return BlockStart.of(new UploadedImageBlockParser(uploadedImage));
                 }
             }
             return BlockStart.none();
