@@ -35,13 +35,11 @@ public class ImageAndGifBlockParser extends AbstractBlockParser {
     }
 
     public static class Factory extends AbstractBlockParserFactory {
-        private final Pattern redditPreviewPattern =  Pattern.compile("!\\[.*]\\(https://preview.redd.it/\\w+.(jpg|png|jpeg)((\\?+[-a-zA-Z0-9()@:%_+.~#?&/=]*)|)\\)");
-        private final Pattern iRedditPattern = Pattern.compile("!\\[.*]\\(https://i.redd.it/\\w+.(jpg|png|jpeg|gif)\\)");
-        private final Pattern gifPattern = Pattern.compile("!\\[gif]\\(giphy\\|\\w+(\\|downsized)?\\)");
+        private final Pattern redditPreviewPattern =  Pattern.compile("!\\[.*]\\(https://preview.redd.it/(\\w+).(jpg|png|jpeg)((\\?+[-a-zA-Z0-9()@:%_+.~#?&/=]*)|)\\)");;
+        private final Pattern iRedditPattern = Pattern.compile("!\\[.*]\\(https://i.redd.it/(\\w+).(jpg|png|jpeg|gif)\\)");
+        private final Pattern gifPattern = Pattern.compile("!\\[gif]\\((giphy\\|\\w+(\\|downsized)?)\\)");
         @Nullable
         private Map<String, MediaMetadata> mediaMetadataMap;
-        private final int previewReddItLength = "https://preview.redd.it/".length();
-        private final int iReddItLength = "https://i.redd.it/".length();
 
         @Override
         public BlockStart tryStart(ParserState state, MatchedBlockParser matchedBlockParser) {
@@ -51,37 +49,25 @@ public class ImageAndGifBlockParser extends AbstractBlockParser {
 
             String line = state.getLine().toString();
             Matcher matcher = redditPreviewPattern.matcher(line);
-            if (matcher.find()) {
-                if (matcher.end() == line.length()) {
-                    int endIndex = line.indexOf('.', previewReddItLength);
-                    if (endIndex > 0) {
-                        int urlStartIndex = line.lastIndexOf("https://preview.redd.it/", matcher.end());
-                        String id = line.substring(previewReddItLength + urlStartIndex,
-                                line.indexOf(".", previewReddItLength + urlStartIndex));
-                        return mediaMetadataMap.containsKey(id) ? BlockStart.of(new ImageAndGifBlockParser(mediaMetadataMap.get(id))) : BlockStart.none();
-                    }
+            if (matcher.find() && matcher.end() == line.length()) {
+                String id = matcher.group(1);
+                if (id != null) {
+                    return mediaMetadataMap.containsKey(id) ? BlockStart.of(new ImageAndGifBlockParser(mediaMetadataMap.get(id))) : BlockStart.none();
                 }
             }
 
             matcher = iRedditPattern.matcher(line);
-            if (matcher.find()) {
-                if (matcher.end() == line.length()) {
-                    int endIndex = line.indexOf('.', iReddItLength);
-                    if (endIndex > 0) {
-                        int urlStartIndex = line.lastIndexOf("https://i.redd.it/", matcher.end());
-                        String id = line.substring(iReddItLength + urlStartIndex,
-                                line.indexOf(".", iReddItLength + urlStartIndex));
-                        return mediaMetadataMap.containsKey(id) ? BlockStart.of(new ImageAndGifBlockParser(mediaMetadataMap.get(id))) : BlockStart.none();
-                    }
+            if (matcher.find() && matcher.end() == line.length()) {
+                String id = matcher.group(1);
+                if (id != null) {
+                    return mediaMetadataMap.containsKey(id) ? BlockStart.of(new ImageAndGifBlockParser(mediaMetadataMap.get(id))) : BlockStart.none();
                 }
             }
 
             matcher = gifPattern.matcher(line);
-            if (matcher.find()) {
-                if (matcher.end() == line.length()) {
-                    String id = line.substring("![gif](".length(), line.length() - 1);
-                    return mediaMetadataMap.containsKey(id) ? BlockStart.of(new ImageAndGifBlockParser(mediaMetadataMap.get(id))) : BlockStart.none();
-                }
+            if (matcher.find() && matcher.end() == line.length()) {
+                String id = matcher.group(1);
+                return mediaMetadataMap.containsKey(id) ? BlockStart.of(new ImageAndGifBlockParser(mediaMetadataMap.get(id))) : BlockStart.none();
             }
             return BlockStart.none();
         }
