@@ -11,7 +11,7 @@
         android:id="@+id/frame_layout_markdown_video_block"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000000">
+        android:background="@drawable/video_entry_rounded_background">
 
         <!--<androidx.media3.ui.PlayerView
             android:id="@+id/player_view_markdown_video_block"
@@ -34,11 +34,10 @@
             android:visibility="gone" />-->
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_margin="16dp"
             android:layout_gravity="center"
-            android:background="@drawable/play_button_round_background"
             android:src="@drawable/ic_play_arrow_24dp" />
 
     </FrameLayout>
