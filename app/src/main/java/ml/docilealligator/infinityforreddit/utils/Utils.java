@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -79,8 +80,8 @@ public final class Utils {
             //Matches preview.redd.it and i.redd.it media
             //For i.redd.it media, it only matches [caption](image-link. Notice there is no ) at the end.
             //i.redd.it: (\\[(?:(?!((?<!\\\\)\\[)).)*?]\\()?https://i.redd.it/\\w+.(jpg|png|jpeg|gif)"
-            Pattern.compile("((?:\\[(.*?)]\\()?(https://preview.redd.it/(\\w+).(?:jpg|png|jpeg)(?:\\?+[-a-zA-Z0-9()@:%_+.~#?&/=]*|))\\)?)|((?:\\[(.*?)]\\()?(https://i.redd.it/(\\w+).(?:jpg|png|jpeg|gif)))"),
-            Pattern.compile("(?:\\[(.*?)]\\()?(https://reddit\\.com/link/([^/]+)/video/([^/]+)/player)\\)?")
+            Pattern.compile("((?:\\[(.*?)]\\()?(https://preview.redd.it/(\\w+).(?:jpg|png|jpeg)(?:\\?+[-a-zA-Z0-9()@:%_+.~#?&/=]*|)))|((?:\\[(.*?)]\\()?(https://i.redd.it/(\\w+).(?:jpg|png|jpeg|gif)))"),
+            Pattern.compile("(?:\\[(.*?)]\\()?(https://reddit\\.com/link/([^/]+)/video/([^/]+)/player)")
     };
 
     private static final Pattern PROCESSING_IMG_PATTERN = Pattern.compile("\\*?Processing img (\\w+)\\.{3}\\*?");
@@ -93,9 +94,43 @@ public final class Utils {
         return regexed;
     }
 
-    public static String parseRedditImagesBlock(String markdown, @Nullable Map<String, MediaMetadata> mediaMetadataMap) {
+    public static ParseRedditMediaBlockResult parseRedditImagesBlock(String markdown, @Nullable Map<String, MediaMetadata> mediaMetadataMap) {
         if (mediaMetadataMap == null) {
-            return markdown;
+            StringBuilder markdownStringBuilder = new StringBuilder(markdown);
+            int start = 0;
+            while (true) {
+                Matcher videoMatcher = REGEX_PATTERNS[4].matcher(markdownStringBuilder);
+
+                if (videoMatcher.find(start)) {
+                    String id = videoMatcher.group(4);
+                    String linkId = videoMatcher.group(3);
+                    String caption = videoMatcher.group(1);
+
+                    if (mediaMetadataMap == null) {
+                        mediaMetadataMap = new HashMap<>();
+                    }
+
+                    MediaMetadata.MediaItem item = new MediaMetadata.MediaItem(0, 0, "https://v.redd.it/link/" + linkId + "/asset/" + id + "/HLSPlaylist.m3u8", null);
+                    MediaMetadata mediaMetadata = new MediaMetadata(id, "Video", item, item);
+                    mediaMetadataMap.put(id, mediaMetadata);
+
+                    mediaMetadata.caption = caption;
+
+                    if (markdownStringBuilder.charAt(videoMatcher.start()) == '[') {
+                        //Has caption
+                        markdownStringBuilder.insert(videoMatcher.start(), '!');
+                        start = videoMatcher.end() + 1;
+                    } else {
+                        String replacingText = "![](" + videoMatcher.group(2) + ")";
+                        markdownStringBuilder.replace(videoMatcher.start(), videoMatcher.end(), replacingText);
+                        start = replacingText.length() + videoMatcher.start();
+                    }
+                } else {
+                    break;
+                }
+            }
+
+            return new ParseRedditMediaBlockResult(markdownStringBuilder.toString(), mediaMetadataMap);
         }
 
         // Replace "Processing img <id>..." placeholders with the actual URL from media_metadata.
@@ -131,7 +166,7 @@ public final class Utils {
 
                     mediaMetadata.caption = caption;
 
-                    if (caption != null) {
+                    if (markdownStringBuilder.charAt(previewReddItAndIReddItImageMatcher.start()) == '[') {
                         //Has caption
                         markdownStringBuilder.insert(previewReddItAndIReddItImageMatcher.start(), '!');
                         start = previewReddItAndIReddItImageMatcher.end() + 1;
@@ -178,15 +213,31 @@ public final class Utils {
 
                 mediaMetadata.caption = caption;
 
-                String replacingText = "![" + (caption == null ? "" : caption) + "](" + id + ")";
-                markdownStringBuilder.replace(videoMatcher.start(), videoMatcher.end(), replacingText);
-                start = replacingText.length() + videoMatcher.start();
+                if (markdownStringBuilder.charAt(videoMatcher.start()) == '[') {
+                    //Has caption
+                    markdownStringBuilder.insert(videoMatcher.start(), '!');
+                    start = videoMatcher.end() + 1;
+                } else {
+                    String replacingText = "![](" + videoMatcher.group(2) + ")";
+                    markdownStringBuilder.replace(videoMatcher.start(), videoMatcher.end(), replacingText);
+                    start = replacingText.length() + videoMatcher.start();
+                }
             } else {
                 break;
             }
         }
 
-        return markdownStringBuilder.toString();
+        return new ParseRedditMediaBlockResult(markdownStringBuilder.toString(), mediaMetadataMap);
+    }
+
+    public final static class ParseRedditMediaBlockResult {
+        public String parsedMarkdown;
+        public Map<String, MediaMetadata> mediaMetadataMap;
+
+        public ParseRedditMediaBlockResult(String parsedMarkdown, Map<String, MediaMetadata> mediaMetadataMap) {
+            this.parsedMarkdown = parsedMarkdown;
+            this.mediaMetadataMap = mediaMetadataMap;
+        }
     }
 
     public static String trimTrailingWhitespace(String source) {

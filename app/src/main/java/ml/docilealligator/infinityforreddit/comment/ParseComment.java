@@ -292,9 +292,11 @@ public class ParseComment {
         Map<String, MediaMetadata> mediaMetadataMap = JSONUtils.parseMediaMetadata(singleCommentData);
         String commentMarkdown = "";
         if (!singleCommentData.isNull(JSONUtils.BODY_KEY)) {
-            commentMarkdown = Utils.parseRedditImagesBlock(
+            Utils.ParseRedditMediaBlockResult result = Utils.parseRedditImagesBlock(
                     Utils.modifyMarkdown(
                     Utils.trimTrailingWhitespace(singleCommentData.getString(JSONUtils.BODY_KEY))), mediaMetadataMap);
+            commentMarkdown = result.parsedMarkdown;
+            mediaMetadataMap = result.mediaMetadataMap;
         }
         String commentRawText = Utils.trimTrailingWhitespace(
                 Html.fromHtml(singleCommentData.getString(JSONUtils.BODY_HTML_KEY))).toString();

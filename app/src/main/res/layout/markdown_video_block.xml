@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <FrameLayout
+        android:id="@+id/frame_layout_markdown_video_block"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000">
+
+        <!--<androidx.media3.ui.PlayerView
+            android:id="@+id/player_view_markdown_video_block"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            app:show_timeout="1500"
+            app:auto_show="false"
+            app:controller_layout_id="@layout/exo_autoplay_playback_control_view"
+            app:animation_enabled="false" />-->
+
+        <!--<ImageView
+            android:id="@+id/error_loading_video_image_view_markdown_video_block"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_gravity="center"
+            android:background="@drawable/play_button_round_background"
+            android:src="@drawable/ic_error_white_36dp"
+            android:visibility="gone" />-->
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_gravity="center"
+            android:background="@drawable/play_button_round_background"
+            android:src="@drawable/ic_play_arrow_24dp" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/caption_text_view_markdown_video_block"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="?attr/font_family"
+        android:gravity="center"
+        android:textSize="?attr/font_default"
+        android:visibility="gone" />
+
+</LinearLayout>

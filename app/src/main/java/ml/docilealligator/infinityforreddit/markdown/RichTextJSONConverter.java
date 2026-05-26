@@ -47,6 +47,12 @@ import java.util.Stack;
 
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonReducer;
+import ml.docilealligator.infinityforreddit.markdown.giphygif.GiphyGifBlock;
+import ml.docilealligator.infinityforreddit.markdown.giphygif.GiphyGifPlugin;
+import ml.docilealligator.infinityforreddit.markdown.spoiler.SpoilerNode;
+import ml.docilealligator.infinityforreddit.markdown.superscript.Superscript;
+import ml.docilealligator.infinityforreddit.markdown.uploadedimage.UploadedImageBlock;
+import ml.docilealligator.infinityforreddit.markdown.uploadedimage.UploadedImagePlugin;
 import ml.docilealligator.infinityforreddit.thing.GiphyGif;
 import ml.docilealligator.infinityforreddit.thing.UploadedImage;
 
