@@ -31,6 +31,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+@OptIn(markerClass = UnstableApi.class)
 public class VideoLinkFetcher {
     public static void fetchVideoLink(Executor executor, Handler handler, Retrofit retrofit, Retrofit vReddItRetrofit,
                                       Retrofit redgifsRetrofit, Provider<StreamableAPI> streamableApiProvider,
