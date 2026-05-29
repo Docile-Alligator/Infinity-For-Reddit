@@ -153,6 +153,13 @@ abstract class AppModule {
     }
 
     @Provides
+    @Named("cookies")
+    @Singleton
+    static SharedPreferences provideCookieSharedPreferences(Application application) {
+        return application.getSharedPreferences(SharedPreferencesUtils.COOKIE_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+    }
+
+    @Provides
     @Named("proxy")
     @Singleton
     static SharedPreferences provideProxySharedPreferences(Application application) {
@@ -254,4 +261,13 @@ abstract class AppModule {
                 sharedPreferences.getBoolean(SharedPreferencesUtils.REMEMBER_MUTING_OPTION_IN_POST_FEED, false)
         );
     }
+
+    /*@Provides
+    @Singleton
+    static CookieManager provideCookieManager(
+            @Named("cookies") SharedPreferences cookieSharedPreferences,
+            @Named("base") OkHttpClient httpClient
+    ) {
+        return new CookieManager(cookieSharedPreferences, httpClient);
+    }*/
 }
