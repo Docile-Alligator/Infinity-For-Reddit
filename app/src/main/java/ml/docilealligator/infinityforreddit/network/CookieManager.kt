@@ -45,7 +45,7 @@ class AppCookieJar(
 
             val refreshRequest = Request.Builder()
                 .url("https://reddit.com/best")
-                .header("User-Agent", APIUtils.ANONYMOUS_USER_AGENT)
+                .header("User-Agent", APIUtils.USER_AGENT)
                 .get()
                 .build()
 
