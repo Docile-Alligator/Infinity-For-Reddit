@@ -17,9 +17,7 @@ import dagger.Provides;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.network.AccessTokenAuthenticator;
 import ml.docilealligator.infinityforreddit.network.AnonymousAccessTokenInterceptor;
-import ml.docilealligator.infinityforreddit.network.AppCookieJar;
 import ml.docilealligator.infinityforreddit.network.RedgifsAccessTokenAuthenticator;
-import ml.docilealligator.infinityforreddit.network.RefreshCookieInterceptor;
 import ml.docilealligator.infinityforreddit.network.ServerAccessTokenAuthenticator;
 import ml.docilealligator.infinityforreddit.network.SortTypeConverterFactory;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -117,14 +115,11 @@ abstract class NetworkModule {
     static OkHttpClient provideCookieOkHttpClient(@Named("base") OkHttpClient httpClient,
                                             @Named("base") Retrofit retrofit,
                                             RedditDataRoomDatabase redditDataRoomDatabase,
-                                            AppCookieJar appCookieJar,
                                             ConnectionPool connectionPool) {
         AnonymousAccessTokenInterceptor anonymousAccessTokenInterceptor
                 = new AnonymousAccessTokenInterceptor(retrofit, redditDataRoomDatabase);
 
         return httpClient.newBuilder()
-                .cookieJar(appCookieJar)
-                .addInterceptor(new RefreshCookieInterceptor(appCookieJar))
                 .addInterceptor(anonymousAccessTokenInterceptor)
                 .connectionPool(connectionPool)
                 .build();
@@ -314,13 +309,5 @@ abstract class NetworkModule {
     @Singleton
     static StreamableAPI provideStreamableApi(@Named("streamable") Retrofit streamableRetrofit) {
         return streamableRetrofit.create(StreamableAPI.class);
-    }
-
-    @Provides
-    @Singleton
-    static AppCookieJar provideAppCookieJar(
-            @Named("cookies") SharedPreferences cookieSharedPreferences,
-            @Named("base") OkHttpClient httpClient) {
-        return new AppCookieJar(cookieSharedPreferences, httpClient);
     }
 }
