@@ -31,7 +31,7 @@ class AnonymousAccessTokenInterceptor(
             .build()
 
         val response = chain.proceed(authenticatedRequest)
-        if (response.code == 403 || response.code == 401) {
+        if (response.code == 401 || response.code == 403) {
             response.close()
 
             val expiredAccessToken = response.request.header("Authorization")?.replace("bearer ", "")
