@@ -16,9 +16,9 @@ import dagger.Module;
 import dagger.Provides;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.network.AccessTokenAuthenticator;
+import ml.docilealligator.infinityforreddit.network.AnonymousAccessTokenInterceptor;
 import ml.docilealligator.infinityforreddit.network.AppCookieJar;
 import ml.docilealligator.infinityforreddit.network.RedgifsAccessTokenAuthenticator;
-import ml.docilealligator.infinityforreddit.network.RefreshCookieInterceptor;
 import ml.docilealligator.infinityforreddit.network.ServerAccessTokenAuthenticator;
 import ml.docilealligator.infinityforreddit.network.SortTypeConverterFactory;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -114,11 +114,17 @@ abstract class NetworkModule {
     @Named("anonymous")
     @Singleton
     static OkHttpClient provideCookieOkHttpClient(@Named("base") OkHttpClient httpClient,
+                                            @Named("base") Retrofit retrofit,
+                                            RedditDataRoomDatabase redditDataRoomDatabase,
                                             AppCookieJar appCookieJar,
                                             ConnectionPool connectionPool) {
+        AnonymousAccessTokenInterceptor anonymousAccessTokenInterceptor
+                = new AnonymousAccessTokenInterceptor(retrofit, redditDataRoomDatabase);
+
         return httpClient.newBuilder()
-                .cookieJar(appCookieJar)
-                .addInterceptor(new RefreshCookieInterceptor(appCookieJar))
+                /*.cookieJar(appCookieJar)
+                .addInterceptor(new RefreshCookieInterceptor(appCookieJar))*/
+                .addInterceptor(anonymousAccessTokenInterceptor)
                 .connectionPool(connectionPool)
                 .build();
     }

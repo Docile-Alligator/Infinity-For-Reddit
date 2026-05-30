@@ -298,7 +298,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         viewPostDetailActivityViewModel = new ViewModelProvider(
                 this,
-                ViewPostDetailActivityViewModel.Companion.provideFactory(mLoader)
+                ViewPostDetailActivityViewModel.Companion.provideFactory(accessToken, mLoader)
         ).get(ViewPostDetailActivityViewModel.class);
 
         if (savedInstanceState == null) {

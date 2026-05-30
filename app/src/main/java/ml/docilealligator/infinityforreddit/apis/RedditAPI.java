@@ -440,6 +440,9 @@ public interface RedditAPI {
     Call<String> toggleRepliesNotification(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
     @GET("/api/user_data_by_account_ids.json")
+    Call<String> loadPartialUserDataOauth(@Query("ids") String commaSeparatedUserFullNames, @HeaderMap Map<String, String> headers);
+
+    @GET("/api/user_data_by_account_ids.json")
     Call<String> loadPartialUserData(@Query("ids") String commaSeparatedUserFullNames);
 
     @FormUrlEncoded

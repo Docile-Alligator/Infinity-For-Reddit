@@ -8,6 +8,7 @@ import ml.docilealligator.infinityforreddit.post.Post
 import ml.docilealligator.infinityforreddit.user.UserProfileImagesBatchLoader
 
 class ViewPostDetailActivityViewModel(
+    private val accessToken: String?,
     private val loader: UserProfileImagesBatchLoader
 ) : ViewModel() {
     var post: Post? = null
@@ -19,7 +20,7 @@ class ViewPostDetailActivityViewModel(
     }
 
     fun loadAuthorImages(comments: MutableList<Comment?>, loadIconListener: LoadIconListener) {
-        loader.loadAuthorImages(comments, loadIconListener)
+        loader.loadAuthorImages(accessToken, comments, loadIconListener)
     }
 
     interface LoadIconListener {
@@ -27,14 +28,14 @@ class ViewPostDetailActivityViewModel(
     }
 
     companion object {
-        fun provideFactory(loader: UserProfileImagesBatchLoader): ViewModelProvider.Factory {
+        fun provideFactory(accessToken: String?, loader: UserProfileImagesBatchLoader): ViewModelProvider.Factory {
             return object: ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(
                     modelClass: Class<T>,
                     extras: CreationExtras
                 ): T {
-                    return ViewPostDetailActivityViewModel(loader) as T
+                    return ViewPostDetailActivityViewModel(accessToken, loader) as T
                 }
             }
         }
