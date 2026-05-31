@@ -1258,6 +1258,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     private void loadUserData() {
+        if (Account.ANONYMOUS_ACCOUNT.equals(accountName)) {
+            return;
+        }
+
         if (!mFetchUserInfoSuccess) {
             FetchUserData.fetchUserData(mExecutor, mHandler, mRedditDataRoomDatabase, mOauthRetrofit, null,
                     accessToken, accountName, new FetchUserData.FetchUserDataListener() {
