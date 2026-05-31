@@ -164,7 +164,7 @@ public class ParseComment {
         });
     }
 
-    private static void parseCommentRecursion(JSONArray comments, ArrayList<Comment> newCommentData,
+    public static void parseCommentRecursion(JSONArray comments, ArrayList<Comment> newCommentData,
                                               ArrayList<String> moreChildrenIds, int depth,
                                               CommentFilter commentFilter) throws JSONException {
         int actualCommentLength;
@@ -233,7 +233,7 @@ public class ParseComment {
         return comment.getChildren().size() + count;
     }
 
-    private static void expandChildren(ArrayList<Comment> comments, ArrayList<Comment> visibleComments,
+    public static void expandChildren(ArrayList<Comment> comments, ArrayList<Comment> visibleComments,
                                        boolean setExpanded) {
         for (Comment c : comments) {
             visibleComments.add(c);
@@ -292,9 +292,11 @@ public class ParseComment {
         Map<String, MediaMetadata> mediaMetadataMap = JSONUtils.parseMediaMetadata(singleCommentData);
         String commentMarkdown = "";
         if (!singleCommentData.isNull(JSONUtils.BODY_KEY)) {
-            commentMarkdown = Utils.parseRedditImagesBlock(
+            Utils.ParseRedditMediaBlockResult result = Utils.parseRedditImagesBlock(
                     Utils.modifyMarkdown(
                     Utils.trimTrailingWhitespace(singleCommentData.getString(JSONUtils.BODY_KEY))), mediaMetadataMap);
+            commentMarkdown = result.parsedMarkdown;
+            mediaMetadataMap = result.mediaMetadataMap;
         }
         String commentRawText = Utils.trimTrailingWhitespace(
                 Html.fromHtml(singleCommentData.getString(JSONUtils.BODY_HTML_KEY))).toString();
@@ -366,7 +368,7 @@ public class ParseComment {
     }
 
     @Nullable
-    private static Comment findCommentByFullName(@NonNull List<Comment> comments, @NonNull String fullName) {
+    public static Comment findCommentByFullName(@NonNull List<Comment> comments, @NonNull String fullName) {
         for (Comment comment: comments) {
             if (comment.getFullName().equals(fullName) &&
                     comment.getPlaceholderType() == Comment.NOT_PLACEHOLDER) {
@@ -382,7 +384,7 @@ public class ParseComment {
         return null;
     }
 
-    private static void updateChildrenCount(@NonNull List<Comment> comments) {
+    public static void updateChildrenCount(@NonNull List<Comment> comments) {
         for (Comment comment: comments) {
             comment.setChildCount(getChildCount(comment));
             if (comment.getChildren() != null) {

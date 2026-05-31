@@ -15,6 +15,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
+import ml.docilealligator.infinityforreddit.apis.StreamableAPIKt;
 import ml.docilealligator.infinityforreddit.network.AccessTokenAuthenticator;
 import ml.docilealligator.infinityforreddit.network.AnonymousAccessTokenInterceptor;
 import ml.docilealligator.infinityforreddit.network.RedgifsAccessTokenAuthenticator;
@@ -309,5 +310,11 @@ abstract class NetworkModule {
     @Singleton
     static StreamableAPI provideStreamableApi(@Named("streamable") Retrofit streamableRetrofit) {
         return streamableRetrofit.create(StreamableAPI.class);
+    }
+
+    @Provides
+    @Singleton
+    static StreamableAPIKt provideStreamableApiKt(@Named("streamable") Retrofit streamableRetrofit) {
+        return streamableRetrofit.create(StreamableAPIKt.class);
     }
 }

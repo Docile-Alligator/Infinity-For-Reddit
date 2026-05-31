@@ -1276,7 +1276,11 @@
     <string name="do_not_show_this_again">Don\'t show this again</string>
     <string name="continue_suicide_prevention_activity">Continue</string>
 
-    <string name="error_fetching_v_redd_it_video_cannot_get_redirect_url">Error fetching v.redd.it video: Cannot get the redirect url</string>
+    <string name="error_fetching_video">Error fetching video</string>
+    <string name="error_fetching_video_invalid_type">Error fetching video: Invalid type</string>
+    <string name="error_fetching_v_redd_it_video_invalid_url">Error fetching v.redd.it video: Invalid url</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_redirect_url">Error fetching v.redd.it video: Cannot get the redirected url</string>
+    <string name="error_fetching_v_redd_it_video_cannot_parse_redirect_url">Error fetching v.redd.it video: Cannot parse the redirected url</string>
     <string name="error_fetching_v_redd_it_video_cannot_get_post">Error fetching v.redd.it video: Cannot get the post</string>
     <string name="error_fetching_v_redd_it_video_cannot_get_post_id">Error fetching v.redd.it video: Cannot get the post id</string>
     <string name="error_fetching_v_redd_it_video_cannot_get_video_url">Error fetching v.redd.it video: Cannot get the video url</string>
@@ -1493,6 +1497,9 @@
         open the navigation drawer and click your account header and select \"Add an account\" to login to Reddit using the same account again.
         Otherwise, Infinity may not load posts at all. Sorry for the inconvenience.</string>
     <string name="i_understand">I understand</string>
+    <string name="important_info_post_comments_rework_title">Important Beta Information</string>
+    <string name="important_info_post_comments_rework_description">You are currently using the beta version of the new release.\n\nThis beta includes major under-the-hood changes to the post comments section as part of a large code cleanup and rewrite. The functionality should remain mostly the same, but because many internal systems have changed, bugs and unexpected issues are to be expected during this stage.\n\nThis release is focused primarily on stabilizing the new foundation before additional features are gradually introduced in future beta updates.\n\nThank you for testing the beta and for your patience.</string>
+    <string name="important_info_post_comments_rework_join_subreddit">Click here to join r/Infinity_For_Reddit</string>
 
     <string name="add_to_comment_filter">Add to Comment Filter</string>
     <string name="cannot_edit_post_with_images">Editing posts with images is not allowed.</string>

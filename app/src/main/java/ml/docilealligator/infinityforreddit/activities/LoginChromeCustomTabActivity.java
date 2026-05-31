@@ -5,8 +5,6 @@ import static ml.docilealligator.infinityforreddit.utils.UtilsKt.getChromeCustom
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,7 +14,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.browser.customtabs.CustomTabsService;
 import androidx.core.graphics.Insets;
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
@@ -28,9 +25,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
@@ -109,7 +104,12 @@ public class LoginChromeCustomTabActivity extends BaseActivity {
         setSupportActionBar(binding.toolbarLoginChromeCustomTabActivity);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        checkAndOpenLoginPage();
+        Intent intent = getIntent();
+        if (intent != null && intent.getData() != null) {
+            handleRedirectUri(intent.getData());
+        } else {
+            checkAndOpenLoginPage();
+        }
 
         binding.openWebpageButtonLoginChromeCustomTabActivity.setOnClickListener(view -> {
             checkAndOpenLoginPage();
@@ -117,7 +117,7 @@ public class LoginChromeCustomTabActivity extends BaseActivity {
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    protected void onNewIntent(@NonNull Intent intent) {
         super.onNewIntent(intent);
 
         Uri uri = intent.getData();
@@ -126,6 +126,72 @@ public class LoginChromeCustomTabActivity extends BaseActivity {
             return;
         }
 
+        handleRedirectUri(uri);
+    }
+
+    @Override
+    public SharedPreferences getDefaultSharedPreferences() {
+        return mSharedPreferences;
+    }
+
+    @Override
+    public SharedPreferences getCurrentAccountSharedPreferences() {
+        return mCurrentAccountSharedPreferences;
+    }
+
+    @Override
+    public CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutLoginChromeCustomTabActivity, null, binding.toolbarLoginChromeCustomTabActivity);
+        binding.openWebpageButtonLoginChromeCustomTabActivity.setTextColor(mCustomThemeWrapper.getButtonTextColor());
+        binding.openWebpageButtonLoginChromeCustomTabActivity.setBackgroundColor(mCustomThemeWrapper.getColorPrimaryLightTheme());
+        if (typeface != null) {
+            binding.openWebpageButtonLoginChromeCustomTabActivity.setTypeface(typeface);
+        }
+    }
+
+    private void checkAndOpenLoginPage() {
+        String packageName = getChromeCustomTabPackageName(this);
+        if (packageName == null) {
+            Toast.makeText(this, R.string.login_chrome_required, Toast.LENGTH_SHORT).show();
+        } else {
+            openLoginPage(packageName);
+        }
+    }
+
+    private void openLoginPage(@NonNull String packageName) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        // add share action to menu list
+        builder.setShareState(CustomTabsIntent.SHARE_STATE_ON);
+        builder.setDefaultColorSchemeParams(
+                new CustomTabColorSchemeParams.Builder()
+                        .setToolbarColor(mCustomThemeWrapper.getColorPrimary())
+                        .build());
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.intent.setPackage(packageName);
+        customTabsIntent.intent.putExtra("com.google.android.apps.chrome.EXTRA_OPEN_NEW_INCOGNITO_TAB", true);
+
+        try {
+            Uri.Builder uriBuilder = Uri.parse(APIUtils.OAUTH_URL).buildUpon();
+            uriBuilder.appendQueryParameter(APIUtils.CLIENT_ID_KEY, APIUtils.CLIENT_ID);
+            uriBuilder.appendQueryParameter(APIUtils.RESPONSE_TYPE_KEY, APIUtils.RESPONSE_TYPE);
+            uriBuilder.appendQueryParameter(APIUtils.STATE_KEY, APIUtils.STATE);
+            uriBuilder.appendQueryParameter(APIUtils.REDIRECT_URI_KEY, APIUtils.REDIRECT_URI);
+            uriBuilder.appendQueryParameter(APIUtils.DURATION_KEY, APIUtils.DURATION);
+            uriBuilder.appendQueryParameter(APIUtils.SCOPE_KEY, APIUtils.SCOPE);
+
+            customTabsIntent.launchUrl(this, uriBuilder.build());
+        } catch (ActivityNotFoundException e) {
+            Snackbar.make(binding.getRoot(), R.string.custom_tab_not_available, Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    private void handleRedirectUri(@NonNull Uri uri) {
         binding.openWebpageButtonLoginChromeCustomTabActivity.setVisibility(View.GONE);
 
         String authCode = uri.getQueryParameter("code");
@@ -209,89 +275,5 @@ public class LoginChromeCustomTabActivity extends BaseActivity {
             Toast.makeText(this, R.string.access_denied, Toast.LENGTH_SHORT).show();
             finish();
         }
-    }
-
-    @Override
-    public SharedPreferences getDefaultSharedPreferences() {
-        return mSharedPreferences;
-    }
-
-    @Override
-    public SharedPreferences getCurrentAccountSharedPreferences() {
-        return mCurrentAccountSharedPreferences;
-    }
-
-    @Override
-    public CustomThemeWrapper getCustomThemeWrapper() {
-        return mCustomThemeWrapper;
-    }
-
-    @Override
-    protected void applyCustomTheme() {
-        binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutLoginChromeCustomTabActivity, null, binding.toolbarLoginChromeCustomTabActivity);
-        binding.openWebpageButtonLoginChromeCustomTabActivity.setTextColor(mCustomThemeWrapper.getButtonTextColor());
-        binding.openWebpageButtonLoginChromeCustomTabActivity.setBackgroundColor(mCustomThemeWrapper.getColorPrimaryLightTheme());
-        if (typeface != null) {
-            binding.openWebpageButtonLoginChromeCustomTabActivity.setTypeface(typeface);
-        }
-    }
-
-    private void checkAndOpenLoginPage() {
-        String packageName = getChromeCustomTabPackageName(this);
-        if (packageName == null) {
-            Toast.makeText(this, R.string.login_chrome_required, Toast.LENGTH_SHORT).show();
-        } else {
-            openLoginPage(packageName);
-        }
-    }
-
-    private void openLoginPage(@NonNull String packageName) {
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        // add share action to menu list
-        builder.setShareState(CustomTabsIntent.SHARE_STATE_ON);
-        builder.setDefaultColorSchemeParams(
-                new CustomTabColorSchemeParams.Builder()
-                        .setToolbarColor(mCustomThemeWrapper.getColorPrimary())
-                        .build());
-        CustomTabsIntent customTabsIntent = builder.build();
-        customTabsIntent.intent.setPackage(packageName);
-        customTabsIntent.intent.putExtra("com.google.android.apps.chrome.EXTRA_OPEN_NEW_INCOGNITO_TAB", true);
-
-        try {
-            Uri.Builder uriBuilder = Uri.parse(APIUtils.OAUTH_URL).buildUpon();
-            uriBuilder.appendQueryParameter(APIUtils.CLIENT_ID_KEY, APIUtils.CLIENT_ID);
-            uriBuilder.appendQueryParameter(APIUtils.RESPONSE_TYPE_KEY, APIUtils.RESPONSE_TYPE);
-            uriBuilder.appendQueryParameter(APIUtils.STATE_KEY, APIUtils.STATE);
-            uriBuilder.appendQueryParameter(APIUtils.REDIRECT_URI_KEY, APIUtils.REDIRECT_URI);
-            uriBuilder.appendQueryParameter(APIUtils.DURATION_KEY, APIUtils.DURATION);
-            uriBuilder.appendQueryParameter(APIUtils.SCOPE_KEY, APIUtils.SCOPE);
-
-            customTabsIntent.launchUrl(this, uriBuilder.build());
-        } catch (ActivityNotFoundException e) {
-            Snackbar.make(binding.getRoot(), R.string.custom_tab_not_available, Snackbar.LENGTH_LONG).show();
-        }
-    }
-
-    private ArrayList<ResolveInfo> getCustomTabsPackages(PackageManager pm) {
-        // Get default VIEW intent handler.
-        Intent activityIntent = new Intent()
-                .setAction(Intent.ACTION_VIEW)
-                .addCategory(Intent.CATEGORY_BROWSABLE)
-                .setData(Uri.fromParts("http", "", null));
-
-        // Get all apps that can handle VIEW intents.
-        List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, 0);
-        ArrayList<ResolveInfo> packagesSupportingCustomTabs = new ArrayList<>();
-        for (ResolveInfo info : resolvedActivityList) {
-            Intent serviceIntent = new Intent();
-            serviceIntent.setAction(CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION);
-            serviceIntent.setPackage(info.activityInfo.packageName);
-            // Check if this package also resolves the Custom Tabs service.
-            if (pm.resolveService(serviceIntent, 0) != null) {
-                packagesSupportingCustomTabs.add(info);
-            }
-        }
-        return packagesSupportingCustomTabs;
     }
 }

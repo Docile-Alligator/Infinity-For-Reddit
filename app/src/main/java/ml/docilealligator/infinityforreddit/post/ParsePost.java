@@ -359,7 +359,17 @@ public class ParsePost {
                         if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                             post.setSelfText("");
                         } else {
-                            post.setSelfText(Utils.parseRedditImagesBlock(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))), mediaMetadataMap));
+                            Utils.ParseRedditMediaBlockResult result =
+                                    Utils.parseRedditImagesBlock(
+                                            Utils.modifyMarkdown(
+                                                    Utils.trimTrailingWhitespace(
+                                                            data.getString(JSONUtils.SELFTEXT_KEY)
+                                                    )
+                                            ),
+                                            mediaMetadataMap
+                                    );
+                            post.setSelfText(result.parsedMarkdown);
+                            mediaMetadataMap = result.mediaMetadataMap;
                         }
 
                         String authority = uri.getAuthority();
@@ -577,7 +587,17 @@ public class ParsePost {
                             if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                                 post.setSelfText("");
                             } else {
-                                post.setSelfText(Utils.parseRedditImagesBlock(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))), mediaMetadataMap));
+                                Utils.ParseRedditMediaBlockResult result =
+                                        Utils.parseRedditImagesBlock(
+                                                Utils.modifyMarkdown(
+                                                        Utils.trimTrailingWhitespace(
+                                                                data.getString(JSONUtils.SELFTEXT_KEY)
+                                                        )
+                                                ),
+                                                mediaMetadataMap
+                                        );
+                                post.setSelfText(result.parsedMarkdown);
+                                mediaMetadataMap = result.mediaMetadataMap;
                             }
 
                             post.setPreviews(previews);
@@ -659,7 +679,17 @@ public class ParsePost {
                     if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                         post.setSelfText("");
                     } else {
-                        post.setSelfText(Utils.parseRedditImagesBlock(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))), mediaMetadataMap));
+                        Utils.ParseRedditMediaBlockResult result =
+                                Utils.parseRedditImagesBlock(
+                                        Utils.modifyMarkdown(
+                                                Utils.trimTrailingWhitespace(
+                                                        data.getString(JSONUtils.SELFTEXT_KEY)
+                                                )
+                                        ),
+                                        mediaMetadataMap
+                                );
+                        post.setSelfText(result.parsedMarkdown);
+                        mediaMetadataMap = result.mediaMetadataMap;
                     }
 
                     String authority = uri.getAuthority();
@@ -826,7 +856,16 @@ public class ParsePost {
             if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                 post.setSelfText("");
             } else {
-                String selfText = Utils.parseRedditImagesBlock(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))), mediaMetadataMap);
+                Utils.ParseRedditMediaBlockResult result = Utils.parseRedditImagesBlock(
+                        Utils.modifyMarkdown(
+                                Utils.trimTrailingWhitespace(
+                                        data.getString(JSONUtils.SELFTEXT_KEY)
+                                )
+                        ),
+                        mediaMetadataMap
+                );
+                String selfText = result.parsedMarkdown;
+                mediaMetadataMap = result.mediaMetadataMap;
                 post.setSelfText(selfText);
                 if (data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                     post.setSelfTextPlainTrimmed("");
