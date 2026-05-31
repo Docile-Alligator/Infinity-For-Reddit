@@ -143,7 +143,8 @@ public class UserProfileImagesBatchLoader {
             synchronized (mCommentQueueLock) {
                 for (int i = 0; i < BATCH_SIZE && !mCommentQueue.isEmpty(); i++) {
                     Comment comment = mCommentQueue.poll();
-                    if (comment == null) {
+                    if (comment == null || comment.getAuthorFullName() == null || comment.getAuthorFullName().isEmpty()) {
+                        i--;
                         continue;
                     }
 
