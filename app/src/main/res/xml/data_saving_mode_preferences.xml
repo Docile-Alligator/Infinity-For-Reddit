@@ -17,6 +17,11 @@
 
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
         app:defaultValue="false"
+        app:key="override_video_autoplay_in_data_saving_mode"
+        android:title="@string/settings_override_video_autoplay_in_data_saving_mode_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
+        app:defaultValue="false"
         app:key="disable_image_preview"
         android:title="@string/settings_disable_image_preview_title" />
 
