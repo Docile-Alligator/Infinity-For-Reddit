@@ -35,6 +35,7 @@ class ViewPostDetailActivityViewModel(
     private val retrofit: Retrofit,
     private val oauthRetrofit: Retrofit,
     private val redditDataRoomDatabase: RedditDataRoomDatabase,
+    private val accessToken: String?,
     private val loader: UserProfileImagesBatchLoader
 ) : ViewModel() {
     var post: Post? = null
@@ -55,7 +56,7 @@ class ViewPostDetailActivityViewModel(
     }
 
     fun loadAuthorImages(comments: MutableList<Comment?>, loadIconListener: LoadIconListener) {
-        loader.loadAuthorImages(comments, loadIconListener)
+        loader.loadAuthorImages(accessToken, comments, loadIconListener)
     }
 
     fun fetchMorePosts(
@@ -320,6 +321,7 @@ class ViewPostDetailActivityViewModel(
             retrofit: Retrofit,
             oauthRetrofit: Retrofit,
             redditDataRoomDatabase: RedditDataRoomDatabase,
+            accessToken: String?,
             loader: UserProfileImagesBatchLoader
         ): ViewModelProvider.Factory {
             return object: ViewModelProvider.Factory {
@@ -328,7 +330,7 @@ class ViewPostDetailActivityViewModel(
                     modelClass: Class<T>,
                     extras: CreationExtras
                 ): T {
-                    return ViewPostDetailActivityViewModel(retrofit, oauthRetrofit, redditDataRoomDatabase, loader) as T
+                    return ViewPostDetailActivityViewModel(retrofit, oauthRetrofit, redditDataRoomDatabase, accessToken, loader) as T
                 }
             }
         }

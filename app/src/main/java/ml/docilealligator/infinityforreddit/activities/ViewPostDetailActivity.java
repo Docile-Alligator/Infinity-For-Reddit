@@ -285,7 +285,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         viewPostDetailActivityViewModel = new ViewModelProvider(
                 this,
                 ViewPostDetailActivityViewModel.Companion.provideFactory(
-                        mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mLoader
+                        mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, accessToken, mLoader
                 )
         ).get(ViewPostDetailActivityViewModel.class);
 

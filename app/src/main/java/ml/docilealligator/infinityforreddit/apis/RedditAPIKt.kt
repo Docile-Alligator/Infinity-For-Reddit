@@ -34,6 +34,13 @@ interface RedditAPIKt {
         @FieldMap params: Map<String, String>
     ): String
 
+    @FormUrlEncoded
+    @POST("/api/v1/access_token")
+    fun getAnonymousAccessToken(
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): Call<String>
+
     @GET("/api/v1/me?raw_json=1")
     suspend fun getMyInfo(@HeaderMap headers: Map<String, String>): String
 

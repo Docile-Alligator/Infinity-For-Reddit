@@ -153,6 +153,13 @@ abstract class AppModule {
     }
 
     @Provides
+    @Named("cookies")
+    @Singleton
+    static SharedPreferences provideCookieSharedPreferences(Application application) {
+        return application.getSharedPreferences(SharedPreferencesUtils.COOKIE_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+    }
+
+    @Provides
     @Named("proxy")
     @Singleton
     static SharedPreferences provideProxySharedPreferences(Application application) {
@@ -230,9 +237,11 @@ abstract class AppModule {
     static UserProfileImagesBatchLoader provideUserProfileImagesBatchLoader(
             Executor executor,
             RedditDataRoomDatabase redditDataRoomDatabase,
-            @Named("no_oauth") Retrofit retrofit
+            @Named("no_oauth") Retrofit retrofit,
+            @Named("oauth") Retrofit oauthRetrofit
     ) {
-        return new UserProfileImagesBatchLoader(executor, new Handler(Looper.getMainLooper()), redditDataRoomDatabase, retrofit);
+        return new UserProfileImagesBatchLoader(executor, new Handler(Looper.getMainLooper()),
+                redditDataRoomDatabase, retrofit, oauthRetrofit);
     }
 
     @Provides
