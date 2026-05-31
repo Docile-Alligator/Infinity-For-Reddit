@@ -124,7 +124,7 @@ public class UserProfileImagesBatchLoader {
                         if (userData != null) {
                             String iconImageUrl = userData.getIconUrl();
                             synchronized (mImageMapLock) {
-                                mAuthorFullNameToImageMap.put(authorFullName, iconImageUrl);
+                                mAuthorFullNameToImageMap.put(authorFullName, iconImageUrl == null ? "" : iconImageUrl);
                             }
                             mHandler.post(() -> loadIconListener.loadIconSuccess(authorFullName, iconImageUrl));
                             synchronized (mListenerMapLock) {
@@ -252,7 +252,7 @@ public class UserProfileImagesBatchLoader {
                 if (!loadSuccessful) {
                     synchronized (mImageMapLock) {
                         if (!mAuthorFullNameToImageMap.containsKey(s)) {
-                            mAuthorFullNameToImageMap.put(s, null);
+                            mAuthorFullNameToImageMap.put(s, "");
                         }
                     }
                 }
