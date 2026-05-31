@@ -263,13 +263,4 @@ abstract class AppModule {
                 sharedPreferences.getBoolean(SharedPreferencesUtils.REMEMBER_MUTING_OPTION_IN_POST_FEED, false)
         );
     }
-
-    /*@Provides
-    @Singleton
-    static CookieManager provideCookieManager(
-            @Named("cookies") SharedPreferences cookieSharedPreferences,
-            @Named("base") OkHttpClient httpClient
-    ) {
-        return new CookieManager(cookieSharedPreferences, httpClient);
-    }*/
 }
