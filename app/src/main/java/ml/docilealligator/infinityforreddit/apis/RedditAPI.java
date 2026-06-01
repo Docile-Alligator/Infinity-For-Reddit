@@ -83,12 +83,12 @@ public interface RedditAPI {
     @GET("/api/info.json?raw_json=1")
     Call<String> getInfoOauth(@Query("id") String id, @HeaderMap Map<String, String> headers);
 
-    @GET("subreddits/search.json?raw_json=1")
+    @GET("subreddits/search.json?raw_json=1&limit=100")
     Call<String> searchSubreddits(@Query("q") String subredditName, @Query("after") String after,
                                   @Query("sort") SortType.Type sort, @Query("include_over_18") int nsfw,
                                   @HeaderMap Map<String, String> headers);
 
-    @GET("search.json?raw_json=1&type=user")
+    @GET("search.json?raw_json=1&type=user&limit=100")
     Call<String> searchUsers(@Query("q") String profileName, @Query("after") String after,
                              @Query("sort") SortType.Type sort, @Query("include_over_18") int nsfw);
 
