@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.comment.Comment;
+import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.viewmodels.ViewPostDetailActivityViewModel;
@@ -64,9 +65,27 @@ public class UserProfileImagesBatchLoader {
         mLoadingUserFullNames = new HashSet<>();
     }
 
-    public void loadAuthorImages(@Nullable String accessToken, List<Comment> comments,
+    public void loadAuthorImagesInPosts(@Nullable String accessToken, List<Post> posts,
                                  @NonNull ViewPostDetailActivityViewModel.LoadIconListener loadIconListener) {
-        String authorFullName = comments.get(0).getAuthorFullName();
+        loadAuthorImages(
+                accessToken,
+                posts.stream().map(Post::getAuthorFullname).collect(Collectors.toList()),
+                loadIconListener
+        );
+    }
+
+    public void loadAuthorImagesInComments(@Nullable String accessToken, List<Comment> comments,
+                                 @NonNull ViewPostDetailActivityViewModel.LoadIconListener loadIconListener) {
+        loadAuthorImages(
+                accessToken,
+                comments.stream().map(Comment::getAuthorFullName).collect(Collectors.toList()),
+                loadIconListener
+        );
+    }
+
+    private void loadAuthorImages(@Nullable String accessToken, List<String> userFullnames,
+                                 @NonNull ViewPostDetailActivityViewModel.LoadIconListener loadIconListener) {
+        String authorFullName = userFullnames.get(0);
         synchronized (mImageMapLock) {
             if (mUserFullNameToImageMap.containsKey(authorFullName)) {
                 loadIconListener.loadIconSuccess(authorFullName, mUserFullNameToImageMap.get(authorFullName));
@@ -79,11 +98,11 @@ public class UserProfileImagesBatchLoader {
         }
 
         synchronized (mUserFullnameQueueLock) {
-            mUserFullnameQueue.addAll(comments.stream().map(Comment::getAuthorFullName).collect(Collectors.toList()));
+            mUserFullnameQueue.addAll(userFullnames);
         }
 
         synchronized (mCallingUserFullnamesLock) {
-            mCallingUserFullnames.add(comments.get(0).getAuthorFullName());
+            mCallingUserFullnames.add(authorFullName);
         }
 
         if (!mIsLoadingBatch) {
