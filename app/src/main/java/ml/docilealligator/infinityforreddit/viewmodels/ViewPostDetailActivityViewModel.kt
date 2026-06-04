@@ -55,7 +55,7 @@ class ViewPostDetailActivityViewModel(
         return posts?.getOrNull(index)
     }
 
-    fun loadAuthorImages(comments: MutableList<Comment?>, loadIconListener: LoadIconListener) {
+    fun loadAuthorImages(comments: MutableList<Comment?>, loadIconListener: UserProfileImagesBatchLoader.LoadIconListener) {
         loader.loadAuthorImagesInComments(accessToken, comments, loadIconListener)
     }
 
@@ -310,10 +310,6 @@ class ViewPostDetailActivityViewModel(
                 )
             }
         }
-    }
-
-    interface LoadIconListener {
-        fun loadIconSuccess(authorFullName: String?, iconUrl: String?)
     }
 
     companion object {

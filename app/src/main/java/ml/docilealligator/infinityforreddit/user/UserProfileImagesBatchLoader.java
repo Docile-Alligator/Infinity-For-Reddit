@@ -27,7 +27,6 @@ import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
-import ml.docilealligator.infinityforreddit.viewmodels.ViewPostDetailActivityViewModel;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
@@ -41,7 +40,7 @@ public class UserProfileImagesBatchLoader {
     private final Retrofit mOauthRetrofit;
     private final Map<String, String> mUserFullNameToImageMap;
     private final Queue<String> mUserFullnameQueue;
-    private final Map<String, ViewPostDetailActivityViewModel.LoadIconListener> mUserFullNameToListenerMap;
+    private final Map<String, LoadIconListener> mUserFullNameToListenerMap;
     private final List<String> mCallingUserFullnames;
     private final Set<String> mLoadingUserFullNames;
     private final Object mImageMapLock = new Object();
@@ -66,7 +65,7 @@ public class UserProfileImagesBatchLoader {
     }
 
     public void loadAuthorImagesInPosts(@Nullable String accessToken, List<Post> posts,
-                                 @NonNull ViewPostDetailActivityViewModel.LoadIconListener loadIconListener) {
+                                 @NonNull LoadIconListener loadIconListener) {
         loadAuthorImages(
                 accessToken,
                 posts.stream().map(Post::getAuthorFullname).collect(Collectors.toList()),
@@ -75,7 +74,7 @@ public class UserProfileImagesBatchLoader {
     }
 
     public void loadAuthorImagesInComments(@Nullable String accessToken, List<Comment> comments,
-                                 @NonNull ViewPostDetailActivityViewModel.LoadIconListener loadIconListener) {
+                                 @NonNull LoadIconListener loadIconListener) {
         loadAuthorImages(
                 accessToken,
                 comments.stream().map(Comment::getAuthorFullName).collect(Collectors.toList()),
@@ -84,7 +83,7 @@ public class UserProfileImagesBatchLoader {
     }
 
     private void loadAuthorImages(@Nullable String accessToken, List<String> userFullnames,
-                                 @NonNull ViewPostDetailActivityViewModel.LoadIconListener loadIconListener) {
+                                 @NonNull LoadIconListener loadIconListener) {
         String authorFullName = userFullnames.get(0);
         synchronized (mImageMapLock) {
             if (mUserFullNameToImageMap.containsKey(authorFullName)) {
@@ -124,7 +123,7 @@ public class UserProfileImagesBatchLoader {
                 Iterator<String> iterator = mCallingUserFullnames.iterator();
                 while (iterator.hasNext()) {
                     String userFullname = iterator.next();
-                    ViewPostDetailActivityViewModel.LoadIconListener loadIconListener;
+                    LoadIconListener loadIconListener;
                     synchronized (mListenerMapLock) {
                         loadIconListener = mUserFullNameToListenerMap.get(userFullname);
                     }
@@ -177,7 +176,7 @@ public class UserProfileImagesBatchLoader {
                             mLoadingUserFullNames.add(userFullname);
                         }
                     } else if (i == 0) {
-                        ViewPostDetailActivityViewModel.LoadIconListener loadIconListener;
+                        LoadIconListener loadIconListener;
                         synchronized (mListenerMapLock) {
                             loadIconListener = mUserFullNameToListenerMap.get(userFullname);
                         }
@@ -252,7 +251,7 @@ public class UserProfileImagesBatchLoader {
     private void callListenerAndLoadNextBatch(String accessToken, boolean loadSuccessful) {
         synchronized (mLoadingSetLock) {
             for (String s : mLoadingUserFullNames) {
-                ViewPostDetailActivityViewModel.LoadIconListener loadIconListener;
+                LoadIconListener loadIconListener;
                 synchronized (mListenerMapLock) {
                     loadIconListener = mUserFullNameToListenerMap.get(s);
                 }
@@ -282,5 +281,9 @@ public class UserProfileImagesBatchLoader {
 
         mIsLoadingBatch = false;
         loadNextBatch(accessToken);
+    }
+
+    public interface LoadIconListener {
+        void loadIconSuccess(String subredditOrUserName, String iconUrl);
     }
 }

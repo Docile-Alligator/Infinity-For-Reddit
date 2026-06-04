@@ -45,6 +45,7 @@ import androidx.media3.ui.DefaultTimeBar;
 import androidx.media3.ui.PlayerView;
 import androidx.media3.ui.TimeBar;
 import androidx.media3.ui.TrackSelectionDialogBuilder;
+import androidx.paging.ItemSnapshotList;
 import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -675,7 +676,29 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             if (mDisplaySubredditName) {
                 if (post.getAuthorNamePrefixed().equals(post.getSubredditNamePrefixed())) {
                     if (post.getAuthorIconUrl() == null) {
-                        mFragment.loadIcon(post.getAuthor(), false, (subredditOrUserName, iconUrl) -> {
+                        ItemSnapshotList<Post> snapshot = snapshot();
+                        mFragment.loadUserIcon(snapshot.subList(holder.getBindingAdapterPosition(),
+                                Math.min(holder.getBindingAdapterPosition() + 100, snapshot.size())),
+                                (subredditOrUserName, iconUrl) -> {
+                                    if (mActivity != null && getItemCount() > 0 && post.getAuthor().equals(subredditOrUserName)) {
+                                        if (iconUrl == null || iconUrl.isEmpty()) {
+                                            mGlide.load(R.drawable.subreddit_default_icon)
+                                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                                    .into(((PostViewHolder) holder).iconGifImageView);
+                                        } else {
+                                            mGlide.load(iconUrl)
+                                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                                    .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                                                    .into(((PostViewHolder) holder).iconGifImageView);
+                                        }
+
+                                        if (holder.getBindingAdapterPosition() >= 0) {
+                                            post.setAuthorIconUrl(iconUrl);
+                                        }
+                                    }
+                                });
+                        /*mFragment.loadIcon(post.getAuthor(), false, (subredditOrUserName, iconUrl) -> {
                             if (mActivity != null && getItemCount() > 0 && post.getAuthor().equals(subredditOrUserName)) {
                                 if (iconUrl == null || iconUrl.isEmpty()) {
                                     mGlide.load(R.drawable.subreddit_default_icon)
@@ -693,7 +716,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                     post.setAuthorIconUrl(iconUrl);
                                 }
                             }
-                        });
+                        });*/
                     } else if (!post.getAuthorIconUrl().isEmpty()) {
                         mGlide.load(post.getAuthorIconUrl())
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -741,7 +764,29 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             } else {
                 if (post.getAuthorIconUrl() == null) {
                     String authorName = post.isAuthorDeleted() ? post.getSubredditName() : post.getAuthor();
-                    mFragment.loadIcon(authorName, post.isAuthorDeleted(), (subredditOrUserName, iconUrl) -> {
+                    ItemSnapshotList<Post> snapshot = snapshot();
+                    mFragment.loadUserIcon(snapshot.subList(holder.getBindingAdapterPosition(),
+                                    Math.min(holder.getBindingAdapterPosition() + 100, snapshot.size())),
+                            (subredditOrUserName, iconUrl) -> {
+                                if (mActivity != null && getItemCount() > 0) {
+                                    if (iconUrl == null || iconUrl.isEmpty() && authorName.equals(subredditOrUserName)) {
+                                        mGlide.load(R.drawable.subreddit_default_icon)
+                                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                                .into(((PostViewHolder) holder).iconGifImageView);
+                                    } else {
+                                        mGlide.load(iconUrl)
+                                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                                .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                                                .into(((PostViewHolder) holder).iconGifImageView);
+                                    }
+
+                                    if (holder.getBindingAdapterPosition() >= 0) {
+                                        post.setAuthorIconUrl(iconUrl);
+                                    }
+                                }
+                            });
+                    /*mFragment.loadIcon(authorName, post.isAuthorDeleted(), (subredditOrUserName, iconUrl) -> {
                         if (mActivity != null && getItemCount() > 0) {
                             if (iconUrl == null || iconUrl.isEmpty() && authorName.equals(subredditOrUserName)) {
                                 mGlide.load(R.drawable.subreddit_default_icon)
@@ -759,7 +804,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 post.setAuthorIconUrl(iconUrl);
                             }
                         }
-                    });
+                    });*/
                 } else if (!post.getAuthorIconUrl().isEmpty()) {
                     mGlide.load(post.getAuthorIconUrl())
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
