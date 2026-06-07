@@ -1417,9 +1417,14 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 }
 
                 if (Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
-                    ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
-                            mPost.getId(), ReadPostType.ANONYMOUS_UPVOTED_POSTS,
-                            ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences));
+                    if (previousVoteType == 1) {
+                        ReadPostModification.deleteReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                mPost.getId(), ReadPostType.ANONYMOUS_UPVOTED_POSTS);
+                    } else {
+                        ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                mPost.getId(), ReadPostType.ANONYMOUS_UPVOTED_POSTS,
+                                ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences));
+                    }
                     mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
                     return;
                 } else {
@@ -1514,9 +1519,14 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 }
 
                 if (Account.ANONYMOUS_ACCOUNT.equals(mAccountName)) {
-                    ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
-                            mPost.getId(), ReadPostType.ANONYMOUS_DOWNVOTED_POSTS,
-                            ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences));
+                    if (previousVoteType == -1) {
+                        ReadPostModification.deleteReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                mPost.getId(), ReadPostType.ANONYMOUS_DOWNVOTED_POSTS);
+                    } else {
+                        ReadPostModification.insertReadPost(mRedditDataRoomDatabase, mExecutor, mActivity.accountName,
+                                mPost.getId(), ReadPostType.ANONYMOUS_DOWNVOTED_POSTS,
+                                ReadPostsUtils.GetReadPostsLimit(mActivity.accountName, mPostHistorySharedPreferences));
+                    }
                     mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
                     return;
                 } else {
