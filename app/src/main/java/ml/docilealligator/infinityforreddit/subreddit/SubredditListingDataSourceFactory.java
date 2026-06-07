@@ -16,6 +16,7 @@ public class SubredditListingDataSourceFactory extends DataSource.Factory {
     private final Executor executor;
     private final Handler handler;
     private final Retrofit retrofit;
+    private final Retrofit oauthRetrofit;
     private final String query;
     private SortType sortType;
     @Nullable
@@ -27,11 +28,13 @@ public class SubredditListingDataSourceFactory extends DataSource.Factory {
     private SubredditListingDataSource subredditListingDataSource;
     private final MutableLiveData<SubredditListingDataSource> subredditListingDataSourceMutableLiveData;
 
-    SubredditListingDataSourceFactory(Executor executor, Handler handler, Retrofit retrofit, String query, SortType sortType,
+    SubredditListingDataSourceFactory(Executor executor, Handler handler, Retrofit retrofit, Retrofit oauthRetrofit,
+                                      String query, SortType sortType,
                                       @Nullable String accessToken, @NonNull String accountName, boolean nsfw) {
         this.executor = executor;
         this.handler = handler;
         this.retrofit = retrofit;
+        this.oauthRetrofit = oauthRetrofit;
         this.query = query;
         this.sortType = sortType;
         this.accessToken = accessToken;
@@ -43,8 +46,8 @@ public class SubredditListingDataSourceFactory extends DataSource.Factory {
     @NonNull
     @Override
     public DataSource create() {
-        subredditListingDataSource = new SubredditListingDataSource(executor, handler, retrofit, query, sortType,
-                accessToken, accountName, nsfw);
+        subredditListingDataSource = new SubredditListingDataSource(executor, handler, retrofit,
+                oauthRetrofit, query, sortType, accessToken, accountName, nsfw);
         subredditListingDataSourceMutableLiveData.postValue(subredditListingDataSource);
         return subredditListingDataSource;
     }

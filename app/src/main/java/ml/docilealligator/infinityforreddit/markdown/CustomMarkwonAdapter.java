@@ -26,6 +26,8 @@ import io.noties.markwon.recycler.SimpleEntry;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
+import ml.docilealligator.infinityforreddit.markdown.imageandgif.ImageAndGifBlock;
+import ml.docilealligator.infinityforreddit.markdown.imageandgif.ImageAndGifEntry;
 
 public class CustomMarkwonAdapter extends MarkwonAdapter {
     private BaseActivity activity;

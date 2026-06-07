@@ -1260,6 +1260,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     private void loadUserData() {
+        if (Account.ANONYMOUS_ACCOUNT.equals(accountName)) {
+            return;
+        }
+
         if (!mFetchUserInfoSuccess) {
             FetchUserData.fetchUserData(mExecutor, mHandler, mRedditDataRoomDatabase, mOauthRetrofit, null,
                     accessToken, accountName, new FetchUserData.FetchUserDataListener() {
@@ -1637,6 +1641,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if (Account.ANONYMOUS_ACCOUNT.equals(accountName)) {
+                    return;
+                }
+
                 String currentQuery = editable.toString().trim();
                 if (!currentQuery.isEmpty()) {
                     autoCompleteRunnable = () -> {

@@ -46,6 +46,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
@@ -100,6 +101,7 @@ import ml.docilealligator.infinityforreddit.events.ShowDividerInCompactLayoutPre
 import ml.docilealligator.infinityforreddit.events.ShowThumbnailOnTheLeftInCompactLayoutEvent;
 import ml.docilealligator.infinityforreddit.managers.VideoMuteManager;
 import ml.docilealligator.infinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.user.UserProfileImagesBatchLoader;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesLiveDataKt;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -533,7 +535,7 @@ public abstract class PostFragmentBase extends Fragment {
         return false;
     }
 
-    public final void loadIcon(String subredditOrUserName, boolean isSubreddit, LoadIconListener loadIconListener) {
+    public final void loadIcon(String subredditOrUserName, boolean isSubreddit, UserProfileImagesBatchLoader.LoadIconListener loadIconListener) {
         if (subredditOrUserIcons.containsKey(subredditOrUserName)) {
             loadIconListener.loadIconSuccess(subredditOrUserName, subredditOrUserIcons.get(subredditOrUserName));
         } else {
@@ -553,6 +555,8 @@ public abstract class PostFragmentBase extends Fragment {
             }
         }
     }
+
+    public abstract void loadUserIcon(List<Post> posts, UserProfileImagesBatchLoader.LoadIconListener loadIconListener);
 
     protected abstract boolean scrollPostsByCount(int count);
 
@@ -1024,9 +1028,5 @@ public abstract class PostFragmentBase extends Fragment {
                 }
             }
         }
-    }
-
-    public interface LoadIconListener {
-        void loadIconSuccess(String subredditOrUserName, String iconUrl);
     }
 }

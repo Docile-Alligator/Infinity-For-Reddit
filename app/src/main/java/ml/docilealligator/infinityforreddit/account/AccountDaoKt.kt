@@ -27,4 +27,10 @@ interface AccountDaoKt {
         karma: Int,
         isMod: Boolean
     )
+
+    @Query("SELECT access_token FROM accounts WHERE username = '-'")
+    fun getAnonymousAccessToken(): String?
+
+    @Query("UPDATE accounts SET access_token = :accessToken WHERE username = '-'")
+    fun setAnonymousAccessToken(accessToken: String?)
 }
