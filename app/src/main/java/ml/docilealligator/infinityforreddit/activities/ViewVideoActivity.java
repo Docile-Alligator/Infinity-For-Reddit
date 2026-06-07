@@ -22,7 +22,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -50,7 +49,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.media3.common.C;
 import androidx.media3.common.MediaItem;
@@ -91,6 +89,7 @@ import javax.inject.Provider;
 import app.futured.hauler.DragDirection;
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.LiveDataState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPIKt;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBottomSheetFragment;
@@ -683,7 +682,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
             @Override
             public void onPlayerError(@NonNull PlaybackException error) {
-                viewVideoViewModel.loadFallbackVideo(player.getCurrentMediaItem(), savedInstanceState);
+                viewVideoViewModel.loadFallbackVideo(player.getCurrentMediaItem());
             }
         });
 
@@ -843,26 +842,42 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             }
         });
 
-        viewVideoViewModel.getVideoUriLiveData().observe(this, new Observer<Uri>() {
-            @Override
-            public void onChanged(Uri uri) {
-                if (uri == null) {
-                    binding.getLoadingIndicator().setVisibility(View.VISIBLE);
+        viewVideoViewModel.getVideoUriLiveData().observe(this, uri -> {
+            if (uri == null) {
+                binding.getLoadingIndicator().setVisibility(View.VISIBLE);
 
-                    viewVideoViewModel.loadVideoLink(mRetrofit, mVReddItRetrofit, mRedgifsRetrofit,
-                            mStreamableApiProvider, mCurrentAccountSharedPreferences);
+                viewVideoViewModel.loadVideoLink(mRetrofit, mVReddItRetrofit, mRedgifsRetrofit,
+                        mStreamableApiProvider, mCurrentAccountSharedPreferences);
+            } else {
+                binding.getLoadingIndicator().setVisibility(View.GONE);
+                if (viewVideoViewModel.getVideoType() == VIDEO_TYPE_NORMAL || viewVideoViewModel.getVideoType() == VIDEO_TYPE_MARKDOWN_PARSED) {
+                    // Prepare the player with the source.
+                    player.prepare();
+                    player.setMediaSource(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(uri)));
+                    preparePlayer(savedInstanceState);
                 } else {
-                    binding.getLoadingIndicator().setVisibility(View.GONE);
-                    if (viewVideoViewModel.getVideoType() == VIDEO_TYPE_NORMAL || viewVideoViewModel.getVideoType() == VIDEO_TYPE_MARKDOWN_PARSED) {
-                        // Prepare the player with the source.
-                        player.prepare();
-                        player.setMediaSource(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(uri)));
-                        preparePlayer(savedInstanceState);
-                    } else {
-                        // Prepare the player with the source.
-                        player.prepare();
-                        player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(uri)));
-                        preparePlayer(savedInstanceState);
+                    // Prepare the player with the source.
+                    player.prepare();
+                    player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(uri)));
+                    preparePlayer(savedInstanceState);
+                }
+            }
+        });
+
+        viewVideoViewModel.getErrorResId().observe(this, resIdLiveDataState -> {
+            if (resIdLiveDataState instanceof LiveDataState.Value) {
+                binding.getLoadingIndicator().setVisibility(View.GONE);
+                if (viewVideoViewModel.getVideoType() == VIDEO_TYPE_V_REDD_IT) {
+                    Integer resId = ((LiveDataState.Value<Integer>) resIdLiveDataState).getData();
+                    if (resId != null) {
+                        Toast.makeText(this, resId, Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    if (!viewVideoViewModel.loadFallbackVideo(player.getCurrentMediaItem())) {
+                        Integer resId = ((LiveDataState.Value<Integer>) resIdLiveDataState).getData();
+                        if (resId != null) {
+                            Toast.makeText(this, resId, Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
             }

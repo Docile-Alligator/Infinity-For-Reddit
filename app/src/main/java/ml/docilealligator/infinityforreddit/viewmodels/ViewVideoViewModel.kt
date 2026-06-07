@@ -14,6 +14,7 @@ import androidx.media3.common.util.UnstableApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.AppResult
+import ml.docilealligator.infinityforreddit.LiveDataState
 import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.VReddItReturnType
 import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity
@@ -53,7 +54,7 @@ class ViewVideoViewModel(
     private val _videoUri = MutableStateFlow(videoUri)
     val videoUriLiveData = _videoUri.asLiveData()
 
-    private val _errorResId = MutableStateFlow<Int?>(null)
+    private val _errorResId = MutableStateFlow<LiveDataState<Int?>>(LiveDataState.Uninitialized)
     val errorResId = _errorResId.asLiveData()
 
     val fileName: String
@@ -89,6 +90,7 @@ class ViewVideoViewModel(
         streamableApiProvider: Provider<StreamableAPIKt>,
         currentAccountSharedPreferences: SharedPreferences,
     ) {
+        //https://www.redgifs.com/watch/mortifiedunhealthyptarmigan
         viewModelScope.launch {
             val result = fetchVideoLink(
                 retrofit, vReddItRetrofit, redgifsRetrofit, streamableApiProvider,
@@ -155,22 +157,26 @@ class ViewVideoViewModel(
                     }
                 }
 
-                is AppResult.Error<*> -> {
-                    _errorResId.value = result.error as? Int ?: R.string.error_fetching_video
+                is AppResult.Error -> {
+                    _errorResId.value = LiveDataState.Value(result.error as? Int ?: R.string.error_fetching_video)
                 }
             }
         }
     }
 
-    fun loadFallbackVideo(mediaItem: MediaItem?, savedInstanceState: Bundle?) {
+    fun loadFallbackVideo(mediaItem: MediaItem?): Boolean {
         videoFallbackDirectUrl?.let { videoFallbackDirectUrl ->
             if (mediaItem == null || (mediaItem.localConfiguration != null && videoFallbackDirectUrl != mediaItem.localConfiguration?.uri?.toString())
             ) {
                 videoType = ViewVideoActivity.VIDEO_TYPE_DIRECT
                 videoDownloadUrl = videoFallbackDirectUrl
                 _videoUri.value = videoFallbackDirectUrl.toUri()
+
+                return true;
             }
         }
+
+        return false;
     }
 
     companion object {
