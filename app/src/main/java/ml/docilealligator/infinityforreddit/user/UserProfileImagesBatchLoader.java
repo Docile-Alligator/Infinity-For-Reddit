@@ -138,17 +138,19 @@ public class UserProfileImagesBatchLoader {
                             }
                         }
 
-                        UserData userData = mRedditDataRoomDatabase.userDao().getUserData(userFullname.substring(3));
-                        if (userData != null) {
-                            String iconImageUrl = userData.getIconUrl();
-                            synchronized (mImageMapLock) {
-                                mUserFullNameToImageMap.put(userFullname, iconImageUrl == null ? "" : iconImageUrl);
+                        if (userFullname.length() > 3) {
+                            UserData userData = mRedditDataRoomDatabase.userDao().getUserData(userFullname.substring(3));
+                            if (userData != null) {
+                                String iconImageUrl = userData.getIconUrl();
+                                synchronized (mImageMapLock) {
+                                    mUserFullNameToImageMap.put(userFullname, iconImageUrl == null ? "" : iconImageUrl);
+                                }
+                                mHandler.post(() -> loadIconListener.loadIconSuccess(userFullname, iconImageUrl));
+                                synchronized (mListenerMapLock) {
+                                    mUserFullNameToListenerMap.remove(userFullname);
+                                }
+                                iterator.remove();
                             }
-                            mHandler.post(() -> loadIconListener.loadIconSuccess(userFullname, iconImageUrl));
-                            synchronized (mListenerMapLock) {
-                                mUserFullNameToListenerMap.remove(userFullname);
-                            }
-                            iterator.remove();
                         }
                     } else {
                         iterator.remove();
@@ -234,7 +236,7 @@ public class UserProfileImagesBatchLoader {
             synchronized (mLoadingSetLock) {
                 for (String s : mLoadingUserFullNames) {
                     try {
-                        String imageUrl = jsonResponse.getJSONObject(s).getString(JSONUtils.PROFILE_IMG_KEY).replaceAll("&amp;","&");
+                        String imageUrl = jsonResponse.getJSONObject(s).getString(JSONUtils.PROFILE_IMG_KEY).replace("&amp;","&");
                         synchronized (mImageMapLock) {
                             mUserFullNameToImageMap.put(s, imageUrl);
                         }
@@ -284,6 +286,6 @@ public class UserProfileImagesBatchLoader {
     }
 
     public interface LoadIconListener {
-        void loadIconSuccess(String subredditOrUserName, String iconUrl);
+        void loadIconSuccess(String subredditOrUserName, @Nullable String iconUrl);
     }
 }
