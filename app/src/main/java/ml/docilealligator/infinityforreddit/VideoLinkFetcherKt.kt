@@ -270,9 +270,8 @@ private suspend fun parseRedgifsVideoLinks(
             if (mp4.contains("-silent")) {
                 mp4 = mp4.substring(0, mp4.indexOf("-silent")) + ".mp4"
             }
-            val mp4Name = mp4
 
-            AppResult.Success(Pair(mp4Name, mp4Name))
+            AppResult.Success(Pair(mp4, mp4))
         } catch (e: JSONException) {
             e.printStackTrace()
             AppResult.Error(null)

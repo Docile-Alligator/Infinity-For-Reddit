@@ -42,8 +42,8 @@ class ViewVideoViewModel(
     private val vReddItUrl: String?,
     private var streamableShortCode: String?,
     var isDataSavingMode: Boolean = false,
-    var dataSavingModeDefaultResolution: Int = 0,
-    var nonDataSavingModeDefaultResolution: Int = 0,
+    val dataSavingModeDefaultResolution: Int = 0,
+    val nonDataSavingModeDefaultResolution: Int = 0,
     var playbackSpeed: Int
 ) : ViewModel() {
     var wasPlaying: Boolean = false
@@ -90,7 +90,6 @@ class ViewVideoViewModel(
         streamableApiProvider: Provider<StreamableAPIKt>,
         currentAccountSharedPreferences: SharedPreferences,
     ) {
-        //https://www.redgifs.com/watch/mortifiedunhealthyptarmigan
         viewModelScope.launch {
             val result = fetchVideoLink(
                 retrofit, vReddItRetrofit, redgifsRetrofit, streamableApiProvider,
@@ -99,12 +98,11 @@ class ViewVideoViewModel(
             )
 
             when (result) {
-                is AppResult.Success<*> -> {
+                is AppResult.Success -> {
                     when (val data = result.data) {
                         is StreamableVideo -> {
                             videoDownloadUrl = data.mp4?.url ?: data.mp4Mobile?.url
                             _videoUri.value = videoDownloadUrl?.toUri()
-                            //title =
                         }
 
                         is Pair<*, *> -> {
@@ -117,37 +115,28 @@ class ViewVideoViewModel(
                             redgifsId = data.newRedgifsId
                             streamableShortCode = data.newStreamableShortCode
                             videoFallbackDirectUrl = data.post.videoFallBackDirectUrl
-                            // post =
+                            post = data.post
 
                             val optionalResult = data.optionalResult
                             optionalResult?.let {
                                 when (it) {
-                                    is AppResult.Success<*> -> {
+                                    is AppResult.Success -> {
                                         when (val optionalData = it.data) {
                                             is StreamableVideo -> {
                                                 videoDownloadUrl = optionalData.mp4?.url ?: optionalData.mp4Mobile?.url
                                                 _videoUri.value = videoDownloadUrl?.toUri()
-                                                //title =
                                             }
 
                                             is Pair<*, *> -> {
-                                                if (redgifsId == null) {
-                                                    // Imgur
-                                                } else {
-                                                    // Redgifs
-                                                    _videoUri.value = (optionalData.first as? String)?.toUri()
-                                                    videoDownloadUrl = optionalData.first as? String
-                                                }
+                                                // Redgifs or Imgur
+                                                _videoUri.value = (optionalData.first as? String)?.toUri()
+                                                videoDownloadUrl = optionalData.second as? String
                                             }
                                         }
                                     }
 
-                                    is AppResult.Error<*> -> {
-                                        (it.error as? Int?)?.let {
-
-                                        } ?: run {
-
-                                        }
+                                    is AppResult.Error -> {
+                                        _errorResId.value = LiveDataState.Value(it.error as? Int ?: R.string.error_fetching_video)
                                     }
                                 }
                             } ?: run {
