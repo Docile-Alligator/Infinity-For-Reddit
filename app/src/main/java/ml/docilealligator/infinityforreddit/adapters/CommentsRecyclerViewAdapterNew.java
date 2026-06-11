@@ -49,6 +49,7 @@ import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewImageOrGifActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CommentMoreBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.comment.Comment;
@@ -280,7 +281,22 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
         mVideoEntry = new VideoEntry(activity, Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.EMBEDDED_MEDIA_TYPE, "15")), new VideoEntry.OnItemClickListener() {
             @Override
             public void onItemClick(@org.jetbrains.annotations.Nullable MediaMetadata mediaMetadata) {
+                if (canStartActivity) {
+                    canStartActivity = false;
+                    if (mediaMetadata == null) {
+                        return;
+                    }
 
+                    Intent intent = new Intent(activity, ViewVideoActivity.class);
+                    intent.setData(Uri.parse(mediaMetadata.original.url));
+                    intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_MARKDOWN_PARSED);
+                    intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, MediaMetadata.getDownloadUrlForMarkdownParsedVideo(mediaMetadata.original.url));
+                    if (post != null) {
+                        intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, post.getSubredditName());
+                    }
+                    intent.putExtra(ViewVideoActivity.EXTRA_ID, mediaMetadata.id);
+                    activity.startActivity(intent);
+                }
             }
         });
         recycledViewPool = new RecyclerView.RecycledViewPool();
