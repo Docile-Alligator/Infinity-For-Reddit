@@ -63,6 +63,7 @@ import ml.docilealligator.infinityforreddit.markdown.imageandgif.ImageAndGifEntr
 import ml.docilealligator.infinityforreddit.markdown.imageandgif.ImageAndGifPlugin;
 import ml.docilealligator.infinityforreddit.markdown.video.VideoEntry;
 import ml.docilealligator.infinityforreddit.markdown.video.VideoPlugin;
+import ml.docilealligator.infinityforreddit.thing.MediaMetadata;
 import ml.docilealligator.infinityforreddit.thing.SaveThing;
 import ml.docilealligator.infinityforreddit.thing.VoteThing;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -238,7 +239,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         Intent intent = new Intent(activity, ViewVideoActivity.class);
                         intent.setData(Uri.parse(mediaMetadata.original.url));
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_MARKDOWN_PARSED);
-                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mediaMetadata.original.url);
+                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, MediaMetadata.getDownloadUrlForMarkdownParsedVideo(mediaMetadata.original.url));
                         activity.startActivity(intent);
                     }
                 });

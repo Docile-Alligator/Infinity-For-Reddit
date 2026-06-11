@@ -1081,6 +1081,7 @@
     <string name="downloading_reddit_video_muxing">Muxing Video and Audio</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">Saving Video</string>
     <string name="downloading_reddit_video_finished">Downloaded</string>
+    <string name="downloading_reddit_video_failed_invalid_video_url">Download failed: invalid video url </string>
     <string name="downloading_reddit_video_failed_cannot_get_cache_directory">Download failed: cannot access cache directory </string>
     <string name="downloading_reddit_video_failed_cannot_download_video">Download failed: cannot download video</string>
     <string name="downloading_reddit_video_failed_cannot_save_video">Download failed: cannot save video to cache directory</string>

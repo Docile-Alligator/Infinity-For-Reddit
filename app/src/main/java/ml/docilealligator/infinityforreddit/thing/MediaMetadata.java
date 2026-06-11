@@ -7,6 +7,8 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.List;
+
 public class MediaMetadata implements Parcelable {
     public String id;
     //E.g. Image
@@ -118,5 +120,21 @@ public class MediaMetadata implements Parcelable {
             dest.writeString(url);
             dest.writeString(mp4Url);
         }
+    }
+
+    @Nullable
+    public static String getDownloadUrlForMarkdownParsedVideo(String hlsUrl) {
+        Uri uri = Uri.parse(hlsUrl);
+        List<String> pathSegments = uri.getPathSegments();
+        if (pathSegments.isEmpty()) {
+            return null;
+        }
+
+        Uri.Builder builder = uri.buildUpon().path(null);
+        for (int i = 0; i < pathSegments.size() - 1; i++) {
+            builder.appendPath(pathSegments.get(i));
+        }
+        builder.appendPath("CMAF_480.mp4");
+        return builder.build().toString();
     }
 }
