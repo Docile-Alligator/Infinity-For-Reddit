@@ -134,7 +134,7 @@ public class MediaMetadata implements Parcelable {
         for (int i = 0; i < pathSegments.size() - 1; i++) {
             builder.appendPath(pathSegments.get(i));
         }
-        builder.appendPath("CMAF_480.mp4");
+        builder.appendPath("CMAF_1080.mp4");
         return builder.build().toString();
     }
 }

@@ -39,7 +39,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executor;
 
@@ -91,7 +90,7 @@ public class DownloadRedditVideoService extends JobService {
     @Inject
     Executor executor;
     private NotificationManagerCompat notificationManager;
-    private final String[] possibleVideoUrlSuffices = new String[]{"/CMAF_360.mp4"};
+    private final String[] possibleVideoUrlSuffices = new String[]{"/CMAF_720.mp4", "/CMAF_480.mp4", "/CMAF_360.mp4"};
     private final String[] possibleAudioUrlSuffices = new String[]{"/CMAF_AUDIO_128.mp4", "/CMAF_AUDIO_64.mp4", "/DASH_AUDIO_128.mp4", "/DASH_audio.mp4", "/DASH_audio", "/audio.mp4", "/audio"};
 
     public DownloadRedditVideoService() {
