@@ -325,22 +325,36 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 deepLinkError(uri);
                             }
                         } else if (authority.contains("imgur.com")) {
-                            if (path.matches(IMGUR_GALLERY_PATTERN)) {
-                                Intent intent = new Intent(this, ViewImgurMediaActivity.class);
-                                intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_GALLERY);
-                                intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, segments.get(1));
-                                startActivity(intent);
-                            } else if (path.matches(IMGUR_ALBUM_PATTERN)) {
-                                Intent intent = new Intent(this, ViewImgurMediaActivity.class);
-                                intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_ALBUM);
-                                intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, segments.get(1));
-                                startActivity(intent);
-                            } else if (path.matches(IMGUR_IMAGE_PATTERN)) {
+                            if (segments.size() == 1) {
                                 Intent intent = new Intent(this, ViewImgurMediaActivity.class);
                                 intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_IMAGE);
-                                intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, path.substring(1));
+                                intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, getImgurId(segments.get(0)));
                                 startActivity(intent);
-                            } else if (path.endsWith("gifv") || path.endsWith("mp4")) {
+
+                                finish();
+                                return;
+                            } else if (segments.size() == 2) {
+                                if (segments.get(0).equalsIgnoreCase("gallery")) {
+                                    Intent intent = new Intent(this, ViewImgurMediaActivity.class);
+                                    intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_GALLERY);
+                                    intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, getImgurId(segments.get(1)));
+                                    startActivity(intent);
+
+                                    finish();
+                                    return;
+                                } else if (segments.get(0).equalsIgnoreCase("album")
+                                        || segments.get(0).equalsIgnoreCase("a")) {
+                                    Intent intent = new Intent(this, ViewImgurMediaActivity.class);
+                                    intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_ALBUM);
+                                    intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, getImgurId(segments.get(1)));
+                                    startActivity(intent);
+
+                                    finish();
+                                    return;
+                                }
+                            }
+
+                            if (path.endsWith("gifv") || path.endsWith("mp4")) {
                                 String url = uri.toString();
                                 if (path.endsWith("gifv")) {
                                     url = url.substring(0, url.length() - 5) + ".mp4";
@@ -381,6 +395,15 @@ public class LinkResolverActivity extends AppCompatActivity {
 
         }
         finish();
+    }
+
+    private String getImgurId(String pathSegment) {
+        int dashIndex = pathSegment.lastIndexOf('-');
+        if (dashIndex < 0 || dashIndex >= pathSegment.length() - 1) {
+            return pathSegment;
+        }
+
+        return pathSegment.substring(dashIndex + 1);
     }
 
     private void deepLinkError(Uri uri) {
