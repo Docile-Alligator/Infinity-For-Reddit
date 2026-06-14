@@ -1379,6 +1379,11 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         }
     }
 
+    @Subscribe
+    public void onPostUpdateEvent(PostUpdateEventToPostList event) {
+        viewPostDetailFragmentViewModel.setPost(event.post);
+    }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);

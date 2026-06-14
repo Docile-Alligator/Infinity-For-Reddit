@@ -412,9 +412,7 @@ class ViewPostDetailFragmentViewModelNew(
                     if (response.isSuccessful) {
                         val post = parsePost(response.body())
                         post?.let { post ->
-                            _dataState.value = _dataState.value.copy(
-                                post = post
-                            )
+                            setPost(post)
 
                             commentFilter = fetchCommentFilter(post.subredditName)
 
@@ -830,9 +828,7 @@ class ViewPostDetailFragmentViewModelNew(
 
                                         fetchCommentsRespectRecommendedSortSync(true)
                                     } else {
-                                        _dataState.value = _dataState.value.copy(
-                                            post = post
-                                        )
+                                        setPost(post)
 
                                         _uiState.value = _uiState.value.copy(
                                             isRefreshing = false
@@ -1247,9 +1243,7 @@ class ViewPostDetailFragmentViewModelNew(
                             readPostsLimit
                         )
 
-                        _dataState.value = _dataState.value.copy(
-                            post = updatedPost
-                        )
+                        setPost(updatedPost)
                     }
                 }
             }
@@ -1294,22 +1288,18 @@ class ViewPostDetailFragmentViewModelNew(
                         )
                     }
 
-                    _dataState.value = _dataState.value.copy(
-                        post = Post(post).apply {
-                            isSaved = !isSaved
-                        }
-                    )
+                    setPost(Post(post).apply {
+                        isSaved = !isSaved
+                    })
                 } else {
                     accessToken?.let { accessToken ->
                         if (post.isSaved) {
                             if (unsaveThing(
                                 oauthRetrofit, accessToken, post.fullName
                             )) {
-                                _dataState.value = _dataState.value.copy(
-                                    post = Post(post).apply {
-                                        isSaved = !isSaved
-                                    }
-                                )
+                                setPost(Post(post).apply {
+                                    isSaved = !isSaved
+                                })
 
                                 postModerationEventLiveData.postValue(
                                     PostModerationEvent.Unsaved(
@@ -1329,11 +1319,9 @@ class ViewPostDetailFragmentViewModelNew(
                             if (saveThing(
                                     oauthRetrofit, accessToken, post.fullName
                             )) {
-                                _dataState.value = _dataState.value.copy(
-                                    post = Post(post).apply {
-                                        isSaved = !isSaved
-                                    }
-                                )
+                                setPost(Post(post).apply {
+                                    isSaved = !isSaved
+                                })
 
                                 postModerationEventLiveData.postValue(
                                     PostModerationEvent.Saved(
@@ -1394,22 +1382,18 @@ class ViewPostDetailFragmentViewModelNew(
                         )
                     }
 
-                    _dataState.value = _dataState.value.copy(
-                        post = Post(post).apply {
-                            isSaved = !isSaved
-                        }
-                    )
+                    setPost(Post(post).apply {
+                        isSaved = !isSaved
+                    })
                 } else {
                     accessToken?.let { accessToken ->
                         if (post.isHidden) {
                             if (unhidePost(
                                     oauthRetrofit, accessToken, post.fullName
                             )) {
-                                _dataState.value = _dataState.value.copy(
-                                    post = Post(post).apply {
-                                        isHidden = !isHidden
-                                    }
-                                )
+                                setPost(Post(post).apply {
+                                    isHidden = !isHidden
+                                })
 
                                 postModerationEventLiveData.postValue(
                                     PostModerationEvent.Unhid(
@@ -1429,11 +1413,9 @@ class ViewPostDetailFragmentViewModelNew(
                             if (hidePost(
                                     oauthRetrofit, accessToken, post.fullName
                             )) {
-                                _dataState.value = _dataState.value.copy(
-                                    post = Post(post).apply {
-                                        isHidden = !isHidden
-                                    }
-                                )
+                                setPost(Post(post).apply {
+                                    isHidden = !isHidden
+                                })
 
                                 postModerationEventLiveData.postValue(
                                     PostModerationEvent.Hid(

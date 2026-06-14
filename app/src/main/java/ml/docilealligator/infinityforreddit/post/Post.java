@@ -796,7 +796,8 @@ public class Post implements Parcelable {
                 && removed == ((Post) obj).removed
                 && spam == ((Post) obj).spam
                 && locked == ((Post) obj).locked
-                && Objects.equals(distinguished, ((Post) obj).distinguished);
+                && Objects.equals(distinguished, ((Post) obj).distinguished)
+                && Objects.equals(selfText, ((Post) obj).selfText);
     }
 
     @Override

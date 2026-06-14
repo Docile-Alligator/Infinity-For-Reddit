@@ -936,7 +936,9 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
     }
 
     private void bindPostViewModel() {
-        mPostViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> mAdapter.submitData(getViewLifecycleOwner().getLifecycle(), posts));
+        mPostViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> {
+            mAdapter.submitData(getViewLifecycleOwner().getLifecycle(), posts);
+        });
 
         mPostViewModel.moderationEventLiveData.observe(getViewLifecycleOwner(), moderationEvent -> {
             EventBus.getDefault().post(new PostUpdateEventToPostList(moderationEvent.getPost(), moderationEvent.getPosition()));
