@@ -10,8 +10,6 @@ import androidx.annotation.OptIn;
 import androidx.annotation.WorkerThread;
 import androidx.media3.common.util.UnstableApi;
 
-import org.apache.commons.io.FilenameUtils;
-
 import java.util.List;
 import java.util.concurrent.Executor;
 
@@ -21,6 +19,7 @@ import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.apis.VReddIt;
+import ml.docilealligator.infinityforreddit.extensions.StringKt;
 import ml.docilealligator.infinityforreddit.post.FetchPost;
 import ml.docilealligator.infinityforreddit.post.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -106,7 +105,7 @@ public class VideoLinkFetcher {
                                             FetchStreamableVideo.fetchStreamableVideo(executor, handler, streamableApiProvider, shortCode, fetchVideoLinkListener);
                                         } else if (post.isImgur()) {
                                             String videoDownloadUrl = post.getVideoDownloadUrl();
-                                            String videoFileName = "Imgur-" + FilenameUtils.getName(videoDownloadUrl);
+                                            String videoFileName = "Imgur-" + StringKt.getFileNameFromUrlString(videoDownloadUrl);
                                             fetchVideoLinkListener.onFetchImgurVideoLinkSuccess(post.getVideoUrl(), post.getVideoDownloadUrl(), videoFileName);
                                         } else {
                                             if (post.getVideoUrl() != null) {

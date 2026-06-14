@@ -19,6 +19,7 @@ import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.VReddItReturnType
 import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity
 import ml.docilealligator.infinityforreddit.apis.StreamableAPIKt
+import ml.docilealligator.infinityforreddit.extensions.getFileNameFromUrlString
 import ml.docilealligator.infinityforreddit.fetchVideoLink
 import ml.docilealligator.infinityforreddit.post.Post
 import ml.docilealligator.infinityforreddit.thing.StreamableVideo
@@ -66,15 +67,15 @@ class ViewVideoViewModel(
             } else {
                 post?.let {
                     if (it.isImgur) {
-                        "Imgur-" + FilenameUtils.getName(videoDownloadUrl);
+                        "Imgur-" + (videoDownloadUrl?.getFileNameFromUrlString() ?: (getRandomString() + ".mp4"));
                     } else {
                         if (videoType == ViewVideoActivity.VIDEO_TYPE_DIRECT) {
-                            FilenameUtils.getName(videoDownloadUrl) ?: (getRandomString() + ".mp4")
+                            videoDownloadUrl?.getFileNameFromUrlString() ?: (getRandomString() + ".mp4")
                         } else {
                             it.subredditName + "-" + it.id + ".mp4";
                         }
                     }
-                } ?: FilenameUtils.getName(videoDownloadUrl) ?: (getRandomString() + ".mp4")
+                } ?: videoDownloadUrl?.getFileNameFromUrlString() ?: (getRandomString() + ".mp4")
             }
         }
 

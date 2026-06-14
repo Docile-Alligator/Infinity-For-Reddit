@@ -51,6 +51,7 @@ import ml.docilealligator.infinityforreddit.apis.DownloadFile;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.broadcastreceivers.DownloadedMediaDeleteActionBroadcastReceiver;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.extensions.StringKt;
 import ml.docilealligator.infinityforreddit.post.ImgurMedia;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -154,7 +155,7 @@ public class DownloadMediaService extends JobService {
                 extras.putString(EXTRA_FILE_NAME, "Redgifs-" + redgifsId + ".mp4");
             } else if (post.isImgur()) {
                 extras.putString(EXTRA_URL, post.getVideoUrl());
-                extras.putString(EXTRA_FILE_NAME, "Imgur-" + FilenameUtils.getName(post.getVideoUrl()));
+                extras.putString(EXTRA_FILE_NAME, "Imgur-" + StringKt.getFileNameFromUrlString(post.getVideoUrl()));
             }
 
             extras.putInt(EXTRA_MEDIA_TYPE, EXTRA_MEDIA_TYPE_VIDEO);

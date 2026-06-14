@@ -31,3 +31,7 @@ fun String.linkify(mask: Int, linkStyle: SpanStyle, onUrlClick: (Uri) -> Unit) =
         )
     }
 }
+
+fun String.getFileNameFromUrlString(): String? {
+    return toUri().lastPathSegment
+}

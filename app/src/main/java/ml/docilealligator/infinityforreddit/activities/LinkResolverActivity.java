@@ -126,7 +126,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                 if (path.endsWith(".jpg") || path.endsWith(".png") || path.endsWith(".jpeg")) {
                     Intent intent = new Intent(this, ViewImageOrGifActivity.class);
                     String url = uri.toString();
-                    String fileName = FilenameUtils.getName(path);
+                    String fileName = uri.getLastPathSegment();
                     intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, url);
                     intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, fileName);
                     intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, fileName);
@@ -134,7 +134,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                 } else if (path.endsWith(".gif")) {
                     Intent intent = new Intent(this, ViewImageOrGifActivity.class);
                     String url = uri.toString();
-                    String fileName = FilenameUtils.getName(path);
+                    String fileName = uri.getLastPathSegment();
                     intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, url);
                     intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, fileName);
                     intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, fileName);
