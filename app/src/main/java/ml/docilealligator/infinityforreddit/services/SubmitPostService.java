@@ -388,10 +388,16 @@ public class SubmitPostService extends JobService {
                 return;
             }
             String cacheFilePath;
+            // The last path segment of a MediaStore document URI can contain characters
+            // (e.g. ':' in "video:57226") that are illegal on FAT/exFAT filesystems used by
+            // SD cards. Sanitize it so the cache file can actually be created.
+            String lastPathSegment = mediaUri.getLastPathSegment();
+            String fileName = lastPathSegment == null
+                    ? "video" : lastPathSegment.replaceAll("[^a-zA-Z0-9._-]", "_");
             if (type != null && type.contains("gif")) {
-                cacheFilePath = cacheDir + "/" + mediaUri.getLastPathSegment() + ".gif";
+                cacheFilePath = cacheDir + "/" + fileName + ".gif";
             } else {
-                cacheFilePath = cacheDir + "/" + mediaUri.getLastPathSegment() + ".mp4";
+                cacheFilePath = cacheDir + "/" + fileName + ".mp4";
             }
 
             copyFileToCache(in, cacheFilePath);

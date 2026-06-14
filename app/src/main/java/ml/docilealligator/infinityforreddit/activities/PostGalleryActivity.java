@@ -138,7 +138,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     private boolean isSpoiler = false;
     private boolean isNSFW = false;
     private Resources resources;
-    private Menu mMemu;
+    private Menu mMenu;
     private RequestManager mGlide;
     private FlairBottomSheetFragment flairSelectionBottomSheetFragment;
     private Snackbar mPostingSnackbar;
@@ -570,10 +570,10 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.post_gallery_activity, menu);
         applyMenuItemTheme(menu);
-        mMemu = menu;
+        mMenu = menu;
         if (isPosting) {
-            mMemu.findItem(R.id.action_send_post_gallery_activity).setEnabled(false);
-            mMemu.findItem(R.id.action_send_post_gallery_activity).getIcon().setAlpha(130);
+            mMenu.findItem(R.id.action_send_post_gallery_activity).setEnabled(false);
+            mMenu.findItem(R.id.action_send_post_gallery_activity).getIcon().setAlpha(130);
         }
         return true;
     }
@@ -768,8 +768,8 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
             startActivity(intent);
             finish();
         } else {
-            mMemu.findItem(R.id.action_send_post_gallery_activity).setEnabled(true);
-            mMemu.findItem(R.id.action_send_post_gallery_activity).getIcon().setAlpha(255);
+            mMenu.findItem(R.id.action_send_post_gallery_activity).setEnabled(true);
+            mMenu.findItem(R.id.action_send_post_gallery_activity).getIcon().setAlpha(255);
             if (submitGalleryPostEvent.errorMessage == null || submitGalleryPostEvent.errorMessage.isEmpty()) {
                 Snackbar.make(binding.coordinatorLayoutPostGalleryActivity, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
             } else {
