@@ -278,7 +278,10 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
                     new Handler(), PostFilterUsage.HISTORY_TYPE, PostFilterUsage.HISTORY_TYPE_USAGE_READ_POSTS, (postFilter) -> {
                         if (mActivity != null && !mActivity.isFinishing() && !mActivity.isDestroyed() && !isDetached()) {
                             this.postFilter = postFilter;
-                            postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(mActivity.accountName + SharedPreferencesUtils.NSFW_BASE, false);
+                            postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false)
+                                    && mNsfwAndSpoilerSharedPreferences.getBoolean(
+                                            (mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT) ? "" : mActivity.accountName) + SharedPreferencesUtils.NSFW_BASE, false
+                            );
                             initializeAndBindPostViewModel();
                         }
                     });
