@@ -183,8 +183,8 @@ public abstract class PostFragmentBase extends Fragment {
                         if (mLinearLayoutManager != null) {
                             setCurrentPosition(mLinearLayoutManager.findFirstVisibleItemPosition());
                         } else {
-                            int[] into = new int[2];
-                            setCurrentPosition(mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[1]);
+                            int[] into = new int[mStaggeredGridLayoutManager.getSpanCount()];
+                            setCurrentPosition(mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[into.length - 1]);
                         }
                     }
 
