@@ -18,7 +18,6 @@ import ml.docilealligator.infinityforreddit.post.ParsePost
 import ml.docilealligator.infinityforreddit.post.Post
 import ml.docilealligator.infinityforreddit.post.PostType
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter
-import ml.docilealligator.infinityforreddit.readpost.NullReadPostsList
 import ml.docilealligator.infinityforreddit.readpost.ReadPost
 import ml.docilealligator.infinityforreddit.readpost.ReadPostType
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsListInterface
@@ -53,6 +52,36 @@ class ViewPostDetailActivityViewModel(
 
     fun getPost(index: Int): Post? {
         return posts?.getOrNull(index)
+    }
+
+    fun updatePostFromEvent(post: Post, postListPosition: Int) {
+        posts?.let {
+            if (postListPosition in it.indices && it[postListPosition].id == post.id) {
+                post.title = post.title
+                post.selfText = post.selfText
+                post.selfTextPlain = post.selfTextPlain
+                post.selfTextPlainTrimmed = post.selfTextPlainTrimmed
+                post.mediaMetadataMap = post.mediaMetadataMap
+                post.voteType = post.voteType
+                post.score = post.score
+                post.nComments = post.nComments
+                post.isNSFW = post.isNSFW
+                post.isHidden = post.isHidden
+                post.isSpoiler = post.isSpoiler
+                post.flair = post.flair
+                post.isSaved = post.isSaved
+                post.setIsStickied(post.isStickied)
+                post.isApproved = post.isApproved
+                post.approvedAtUTC = post.approvedAtUTC
+                post.approvedBy = post.approvedBy
+                post.setRemoved(post.isRemoved, post.isSpam)
+                post.setIsLocked(post.isLocked)
+                post.setIsModerator(post.isModerator)
+                if (post.isRead) {
+                    post.markAsRead()
+                }
+            }
+        }
     }
 
     fun loadAuthorImages(comments: MutableList<Comment?>, loadIconListener: UserProfileImagesBatchLoader.LoadIconListener) {

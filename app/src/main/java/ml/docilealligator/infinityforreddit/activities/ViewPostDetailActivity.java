@@ -602,6 +602,10 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         );
     }
 
+    public void updatePostFromEvent(Post post, int postListPosition) {
+
+    }
+
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         if (!getClass().getName().equals(event.excludeActivityClassName)) {

@@ -144,6 +144,17 @@ class ViewPostDetailFragmentViewModelNew(
         )
     }
 
+    fun updatePostFromEvent(post: Post): Boolean {
+        if (_dataState.value.post?.id == post.id) {
+            _dataState.value = _dataState.value.copy(
+                post = post
+            )
+            return true
+        }
+
+        return false
+    }
+
     fun getPost(): Post? {
         return _dataState.value.post
     }

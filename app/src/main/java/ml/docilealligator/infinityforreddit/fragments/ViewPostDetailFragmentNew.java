@@ -1381,7 +1381,9 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
 
     @Subscribe
     public void onPostUpdateEvent(PostUpdateEventToPostList event) {
-        viewPostDetailFragmentViewModel.setPost(event.post);
+        if (viewPostDetailFragmentViewModel.updatePostFromEvent(event.post)) {
+            mActivity.updatePostFromEvent(event.post, postListPosition);
+        }
     }
 
     @Override
