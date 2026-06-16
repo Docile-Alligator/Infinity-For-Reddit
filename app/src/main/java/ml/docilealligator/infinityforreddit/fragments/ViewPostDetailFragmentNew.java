@@ -737,7 +737,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     }
 
     private void setupMenu() {
-        if (mMenu != null) {
+        if (mMenu != null && mPost != null) {
             MenuItem saveItem = mMenu.findItem(R.id.action_save_view_post_detail_fragment);
             MenuItem hideItem = mMenu.findItem(R.id.action_hide_view_post_detail_fragment);
 
