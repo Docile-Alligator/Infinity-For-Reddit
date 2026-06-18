@@ -653,15 +653,16 @@ public class DownloadRedditVideoService extends JobService {
                             randomNotificationIdOffset, null);
                     break;
             }
+            jobFinished(parameters, false);
         } else {
             MediaScannerConnection.scanFile(
                     this, new String[]{destinationFileUri.toString()}, null,
                     (path, uri) -> {
                         updateNotification(builder, R.string.downloading_reddit_video_finished, -1, randomNotificationIdOffset, destinationFileUri);
+                        jobFinished(parameters, false);
                     }
             );
         }
-        jobFinished(parameters, false);
     }
 
     private Notification createNotification(NotificationCompat.Builder builder, String fileName) {

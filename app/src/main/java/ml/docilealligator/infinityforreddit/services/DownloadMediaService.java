@@ -860,6 +860,8 @@ public class DownloadMediaService extends JobService {
                                 -1, randomNotificationIdOffset, null, null);
                         break;
                 }
+
+                jobFinished(parameters, false);
             }
         } else {
             MediaScannerConnection.scanFile(
@@ -868,13 +870,11 @@ public class DownloadMediaService extends JobService {
                         if (!multipleDownloads) {
                             updateNotification(builder, mediaType, R.string.downloading_media_finished, -1,
                                     randomNotificationIdOffset, destinationFileUri, mimeType);
+
+                            jobFinished(parameters, false);
                         }
                     }
             );
-        }
-
-        if (!multipleDownloads) {
-            jobFinished(parameters, false);
         }
     }
 }
