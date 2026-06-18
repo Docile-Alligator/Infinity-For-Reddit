@@ -80,7 +80,6 @@ import ml.docilealligator.infinityforreddit.activities.ReportActivity;
 import ml.docilealligator.infinityforreddit.activities.SubmitCrosspostActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.adapters.CommentsFooterRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.adapters.CommentsRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.adapters.CommentsRecyclerViewAdapterNew;
 import ml.docilealligator.infinityforreddit.adapters.CommentsStatusRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.adapters.PostDetailRecyclerViewAdapterNew;
@@ -328,7 +327,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
 
             @Override
             public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-                if (!(viewHolder instanceof CommentsRecyclerViewAdapter.CommentBaseViewHolder)) {
+                if (!(viewHolder instanceof CommentsRecyclerViewAdapterNew.CommentBaseViewHolder)) {
                     return makeMovementFlags(0, 0);
                 }
                 int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
