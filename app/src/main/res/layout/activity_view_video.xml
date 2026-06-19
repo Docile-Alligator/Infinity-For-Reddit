@@ -1,42 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<app.futured.hauler.HaulerView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout_view_video_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
     android:keepScreenOn="true"
-    app:dragUpEnabled="true"
     tools:application="ml.docilealligator.infinityforreddit.activities.ViewVideoActivity">
 
-    <app.futured.hauler.LockableNestedScrollView
-        android:id="@+id/lockable_nested_scroll_view_view_video_activity"
+    <app.futured.hauler.HaulerView
+        android:id="@+id/hauler_view_view_video_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        app:dragUpEnabled="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/coordinator_layout_view_video_activity"
+        <app.futured.hauler.LockableNestedScrollView
+            android:id="@+id/lockable_nested_scroll_view_view_video_activity"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <androidx.media3.ui.PlayerView
-                android:id="@+id/player_view_view_video_activity"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:animateLayoutChanges="true"
-                app:controller_layout_id="@layout/exo_playback_control_view"
-                app:animation_enabled="false" />
+                android:layout_height="match_parent">
 
-            <com.google.android.material.loadingindicator.LoadingIndicator
-                android:id="@+id/progress_bar_view_video_activity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" />
+                <androidx.media3.ui.PlayerView
+                    android:id="@+id/player_view_view_video_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:animateLayoutChanges="true"
+                    app:animation_enabled="false"
+                    app:controller_layout_id="@layout/exo_playback_control_view" />
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                <com.google.android.material.loadingindicator.LoadingIndicator
+                    android:id="@+id/progress_bar_view_video_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
 
-    </app.futured.hauler.LockableNestedScrollView>
+                <com.google.android.material.appbar.AppBarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/AppTheme.AppBarOverlay"
+                    android:background="#00000000"
+                    android:animateLayoutChanges="true">
 
-</app.futured.hauler.HaulerView>
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar_view_video_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="?attr/actionBarSize"
+                        app:navigationIcon="?attr/homeAsUpIndicator"
+                        app:popupTheme="@style/AppTheme.PopupOverlay"
+                        android:background="#00000000" />
+
+                </com.google.android.material.appbar.AppBarLayout>
+
+            </FrameLayout>
+
+        </app.futured.hauler.LockableNestedScrollView>
+
+    </app.futured.hauler.HaulerView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

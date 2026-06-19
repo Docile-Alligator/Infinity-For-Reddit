@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
@@ -60,12 +61,16 @@ public class ViewVideoActivityBindingAdapter {
         playbackSpeedButton = binding.getRoot().findViewById(R.id.playback_speed_image_view_exo_playback_control_view);
     }
 
-    public HaulerView getRoot() {
-        return binding == null ? zoomableBinding.getRoot() : binding.getRoot();
+    public HaulerView getHaulerView() {
+        return binding == null ? zoomableBinding.haulerViewViewVideoActivity : binding.haulerViewViewVideoActivity;
     }
 
-    public CoordinatorLayout getCoordinatorLayout() {
+    public CoordinatorLayout getRoot() {
         return binding == null ? zoomableBinding.coordinatorLayoutViewVideoActivity : binding.coordinatorLayoutViewVideoActivity;
+    }
+
+    public Toolbar getToolbar() {
+        return binding == null ? zoomableBinding.toolbarViewVideoActivity : binding.toolbarViewVideoActivity;
     }
 
     public LoadingIndicator getLoadingIndicator() {

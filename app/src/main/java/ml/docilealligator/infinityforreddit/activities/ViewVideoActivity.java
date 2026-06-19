@@ -17,9 +17,9 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Build;
@@ -38,7 +38,6 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.OptIn;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -151,6 +150,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     private DataSource.Factory dataSourceFactory;
 
     private Integer originalOrientation;
+    private boolean useBottomToolbar;
     private ViewVideoActivityBindingAdapter binding;
 
     public ViewVideoViewModel viewVideoViewModel;
@@ -278,8 +278,9 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
         Resources resources = getResources();
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER, false)) {
-            getSupportActionBar().hide();
+        useBottomToolbar = mSharedPreferences.getBoolean(SharedPreferencesUtils.USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER, false);
+        if (useBottomToolbar) {
+            binding.getToolbar().setVisibility(View.GONE);
             binding.getBottomAppBar().setVisibility(View.VISIBLE);
             binding.getBackButton().setOnClickListener(view -> {
                 finish();
@@ -303,11 +304,15 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 changePlaybackSpeed();
             });
         } else {
-            ActionBar actionBar = getSupportActionBar();
-            Drawable upArrow = resources.getDrawable(R.drawable.ic_arrow_back_white_24dp);
-            actionBar.setHomeAsUpIndicator(upArrow);
-            actionBar.setBackgroundDrawable(new ColorDrawable(resources.getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
+            if (binding.getToolbar() != null) {
+                setSupportActionBar(binding.getToolbar());
+                /*binding.getToolbar().set
+                Drawable upArrow = resources.getDrawable(R.drawable.ic_arrow_back_white_24dp);
+                actionBar.setHomeAsUpIndicator(upArrow);
+                actionBar.setBackgroundDrawable(new ColorDrawable(resources.getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));*/
+            }
         }
+
 
         LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
         ViewCompat.setOnApplyWindowInsetsListener(binding.getRoot(), new OnApplyWindowInsetsListener() {
@@ -315,6 +320,12 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             @Override
             public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
                 Insets allInsets = Utils.getInsets(insets, false, false);
+                if (binding.getToolbar() != null) {
+                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.getToolbar().getLayoutParams();
+                    params.topMargin = allInsets.top;
+                    binding.getToolbar().setLayoutParams(params);
+                }
+
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
                 params.bottomMargin = allInsets.bottom;
                 params.setMarginStart(allInsets.left);
@@ -357,7 +368,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 )
         ).get(ViewVideoViewModel.class);
 
-        binding.getRoot().setOnDragDismissedListener(dragDirection -> {
+        binding.getHaulerView().setOnDragDismissedListener(dragDirection -> {
             player.stop();
             int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
             finish();
@@ -365,7 +376,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         });
 
 
-        /*isNSFW = intent.getBooleanExtra(EXTRA_IS_NSFW, false);*/
         if (savedInstanceState == null) {
             if (mSharedPreferences.getBoolean(SharedPreferencesUtils.VIDEO_PLAYER_AUTOMATIC_LANDSCAPE_ORIENTATION, false)) {
                 originalOrientation = resources.getConfiguration().orientation;
@@ -410,6 +420,10 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             playerControlView.addVisibilityListener(visibility -> {
                 switch (visibility) {
                     case View.GONE:
+                        if (!useBottomToolbar) {
+                            binding.getToolbar().setVisibility(View.GONE);
+                        }
+
                         getWindow().getDecorView().setSystemUiVisibility(
                                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -419,6 +433,10 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
                         break;
                     case View.VISIBLE:
+                        if (!useBottomToolbar) {
+                            binding.getToolbar().setVisibility(View.VISIBLE);
+                        }
+
                         getWindow().getDecorView().setSystemUiVisibility(
                                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -449,10 +467,10 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 @Override
                 public void onUpdate(@NonNull ZoomEngine zoomEngine, @NonNull Matrix matrix) {
                     if (zoomEngine.getZoom() < 1.00001) {
-                        binding.getRoot().setDragEnabled(true);
+                        binding.getHaulerView().setDragEnabled(true);
                         binding.getNestedScrollView().setScrollEnabled(true);
                     } else {
-                        binding.getRoot().setDragEnabled(false);
+                        binding.getHaulerView().setDragEnabled(false);
                         binding.getNestedScrollView().setScrollEnabled(false);
                     }
                 }
@@ -475,6 +493,10 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             videoPlayerView.setControllerVisibilityListener((PlayerView.ControllerVisibilityListener) visibility -> {
                 switch (visibility) {
                     case View.GONE:
+                        if (!useBottomToolbar) {
+                            binding.getToolbar().setVisibility(View.GONE);
+                        }
+
                         getWindow().getDecorView().setSystemUiVisibility(
                                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -484,6 +506,10 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                                         | View.SYSTEM_UI_FLAG_IMMERSIVE);
                         break;
                     case View.VISIBLE:
+                        if (!useBottomToolbar) {
+                            binding.getToolbar().setVisibility(View.VISIBLE);
+                        }
+
                         getWindow().getDecorView().setSystemUiVisibility(
                                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -691,6 +717,12 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     }
 
     private void applyCustomTheme() {
+        if (binding.getToolbar().getNavigationIcon() != null) {
+            binding.getToolbar().getNavigationIcon().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.SRC_IN);
+        }
+        if (binding.getToolbar().getOverflowIcon() != null) {
+            binding.getToolbar().getOverflowIcon().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.SRC_IN);
+        }
         binding.getPlayPauseButton().setBackgroundColor(mCustomThemeWrapper.getColorAccent());
         binding.getPlayPauseButton().setIconTint(ColorStateList.valueOf(mCustomThemeWrapper.getFABIconColor()));
     }
