@@ -304,13 +304,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 changePlaybackSpeed();
             });
         } else {
-            if (binding.getToolbar() != null) {
-                setSupportActionBar(binding.getToolbar());
-                /*binding.getToolbar().set
-                Drawable upArrow = resources.getDrawable(R.drawable.ic_arrow_back_white_24dp);
-                actionBar.setHomeAsUpIndicator(upArrow);
-                actionBar.setBackgroundDrawable(new ColorDrawable(resources.getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));*/
-            }
+            setSupportActionBar(binding.getToolbar());
         }
 
 
@@ -320,11 +314,10 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             @Override
             public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
                 Insets allInsets = Utils.getInsets(insets, false, false);
-                if (binding.getToolbar() != null) {
-                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.getToolbar().getLayoutParams();
-                    params.topMargin = allInsets.top;
-                    binding.getToolbar().setLayoutParams(params);
-                }
+
+                ViewGroup.MarginLayoutParams toolbarParams = (ViewGroup.MarginLayoutParams) binding.getToolbar().getLayoutParams();
+                toolbarParams.topMargin = allInsets.top;
+                binding.getToolbar().setLayoutParams(toolbarParams);
 
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
                 params.bottomMargin = allInsets.bottom;

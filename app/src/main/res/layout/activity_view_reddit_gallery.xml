@@ -1,22 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<app.futured.hauler.HaulerView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout_view_video_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:dragUpEnabled="true"
-    tools:context=".activities.ViewRedditGalleryActivity">
+    android:background="#000000"
+    android:keepScreenOn="true"
+    tools:application=".activities.ViewRedditGalleryActivity">
 
-    <androidx.core.widget.NestedScrollView
+    <app.futured.hauler.HaulerView
+        android:id="@+id/hauler_view_view_reddit_gallery_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        app:dragUpEnabled="true">
 
-        <ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed
-            android:id="@+id/view_pager_view_reddit_gallery_activity"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-    </androidx.core.widget.NestedScrollView>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-</app.futured.hauler.HaulerView>
+                <ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed
+                    android:id="@+id/view_pager_view_reddit_gallery_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <com.google.android.material.appbar.AppBarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/AppTheme.AppBarOverlay"
+                    android:background="#00000000"
+                    android:animateLayoutChanges="true">
+
+                    <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar_view_reddit_gallery_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="?attr/actionBarSize"
+                        app:navigationIcon="?attr/homeAsUpIndicator"
+                        app:popupTheme="@style/AppTheme.PopupOverlay"
+                        android:background="#00000000" />
+
+                </com.google.android.material.appbar.AppBarLayout>
+
+            </FrameLayout>
+
+
+        </androidx.core.widget.NestedScrollView>
+
+    </app.futured.hauler.HaulerView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
