@@ -166,11 +166,6 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
             }
 
             setSupportActionBar(binding.toolbarViewRedditGalleryActivity);
-
-            /*ActionBar actionBar = getSupportActionBar();
-            Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
-            actionBar.setHomeAsUpIndicator(upArrow);
-            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));*/
             setTitle(" ");
         } else {
             binding.toolbarViewRedditGalleryActivity.setVisibility(View.GONE);

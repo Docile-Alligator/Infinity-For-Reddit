@@ -49,7 +49,6 @@
 
             </FrameLayout>
 
-
         </androidx.core.widget.NestedScrollView>
 
     </app.futured.hauler.HaulerView>

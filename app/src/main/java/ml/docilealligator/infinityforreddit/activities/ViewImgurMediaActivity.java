@@ -4,9 +4,8 @@ import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,14 +14,15 @@ import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
 import androidx.core.view.OnApplyWindowInsetsListener;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -83,6 +83,7 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ArrayList<ImgurMedia> mImages;
     private boolean useBottomAppBar;
+    private boolean isActionBarHidden = false;
     @Inject
     @Named("imgur")
     Retrofit imgurRetrofit;
@@ -135,13 +136,17 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
         useBottomAppBar = sharedPreferences.getBoolean(SharedPreferencesUtils.USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER, false);
 
         if (!useBottomAppBar) {
-            ActionBar actionBar = getSupportActionBar();
-            Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
-            actionBar.setHomeAsUpIndicator(upArrow);
-            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
+            if (binding.toolbarViewImgurMediaActivity.getNavigationIcon() != null) {
+                binding.toolbarViewImgurMediaActivity.getNavigationIcon().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.SRC_IN);
+            }
+            if (binding.toolbarViewImgurMediaActivity.getOverflowIcon() != null) {
+                binding.toolbarViewImgurMediaActivity.getOverflowIcon().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.SRC_IN);
+            }
+
+            setSupportActionBar(binding.toolbarViewImgurMediaActivity);
             setTitle(" ");
         } else {
-            getSupportActionBar().hide();
+            binding.toolbarViewImgurMediaActivity.setVisibility(View.GONE);
         }
 
         viewGalleryViewModel = new ViewModelProvider(this).get(ViewGalleryViewModel.class);
@@ -150,7 +155,12 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
             @NonNull
             @Override
             public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                viewGalleryViewModel.setInsets(Utils.getInsets(insets, false, false));
+                Insets allInsets = Utils.getInsets(insets, false, false);
+                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) binding.toolbarViewImgurMediaActivity.getLayoutParams();
+                params.topMargin = allInsets.top;
+                binding.toolbarViewImgurMediaActivity.setLayoutParams(params);
+
+                viewGalleryViewModel.setInsets(allInsets);
                 return WindowInsetsCompat.CONSUMED;
             }
         });
@@ -166,13 +176,13 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
         }
 
         if (sharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_VERTICALLY_TO_GO_BACK_FROM_MEDIA, true)) {
-            binding.getRoot().setOnDragDismissedListener(dragDirection -> {
+            binding.haulerViewViewImgurMediaActivity.setOnDragDismissedListener(dragDirection -> {
                 int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
                 finish();
                 overridePendingTransition(0, slide);
             });
         } else {
-            binding.getRoot().setDragEnabled(false);
+            binding.haulerViewViewImgurMediaActivity.setDragEnabled(false);
         }
 
         if (mImages == null) {
@@ -468,6 +478,17 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     @Override
     public void setCustomFont(Typeface typeface, Typeface titleTypeface, Typeface contentTypeface) {
         this.typeface = typeface;
+    }
+
+    public boolean isActionBarHidden() {
+        return isActionBarHidden;
+    }
+
+    public void setActionBarHidden(boolean isActionBarHidden) {
+        this.isActionBarHidden = isActionBarHidden;
+        if (!useBottomAppBar) {
+            binding.toolbarViewImgurMediaActivity.setVisibility(isActionBarHidden ? View.GONE : View.VISIBLE);
+        }
     }
 
     private class SectionsPagerAdapter extends FragmentStatePagerAdapter {
