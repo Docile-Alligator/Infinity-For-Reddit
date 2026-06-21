@@ -90,15 +90,23 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
         holder.binding.errorTextViewItemGalleryImageInPostFeed.setVisibility(View.GONE);
         holder.binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.VISIBLE);
 
-        holder.binding.imageViewItemGalleryImageInPostFeed.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                v.removeOnLayoutChangeListener(this);
-                v.post(() -> {
+        if (holder.onLayoutChangeListener != null) {
+            holder.binding.imageViewItemGalleryImageInPostFeed.removeOnLayoutChangeListener(holder.onLayoutChangeListener);
+            holder.onLayoutChangeListener = null;
+        }
+        if (holder.binding.imageViewItemGalleryImageInPostFeed.getHeight() > 0 && holder.binding.imageViewItemGalleryImageInPostFeed.getWidth() > 0) {
+            loadImage(holder);
+        } else {
+            holder.onLayoutChangeListener = new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    v.removeOnLayoutChangeListener(this);
+                    holder.onLayoutChangeListener = null;
                     loadImage(holder);
-                });
-            }
-        });
+                }
+            };
+            holder.binding.imageViewItemGalleryImageInPostFeed.addOnLayoutChangeListener(holder.onLayoutChangeListener);
+        }
 
         if (showCaption) {
             loadCaptionPreview(holder);
@@ -117,6 +125,10 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
         holder.binding.captionTextViewItemGalleryImageInPostFeed.setText("");
         holder.binding.captionUrlTextViewItemGalleryImageInPostFeed.setText("");
         holder.binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.GONE);
+        if (holder.onLayoutChangeListener != null) {
+            holder.binding.imageViewItemGalleryImageInPostFeed.removeOnLayoutChangeListener(holder.onLayoutChangeListener);
+            holder.onLayoutChangeListener = null;
+        }
         glide.clear(holder.binding.imageViewItemGalleryImageInPostFeed);
     }
 
@@ -198,6 +210,7 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
     class ImageViewHolder extends RecyclerView.ViewHolder {
 
         ItemGalleryImageInPostFeedBinding binding;
+        View.OnLayoutChangeListener onLayoutChangeListener;
 
         public ImageViewHolder(ItemGalleryImageInPostFeedBinding binding) {
             super(binding.getRoot());
