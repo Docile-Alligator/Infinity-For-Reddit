@@ -133,10 +133,10 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         this.accountName = accountName;
         this.sharedPreferences = sharedPreferences;
         this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
-        if (path.endsWith("/")) {
+        if (path != null && path.endsWith("/")) {
             multiRedditPath = path.substring(0, path.length() - 1);
         } else {
-            multiRedditPath = path;
+            multiRedditPath = path == null ? "" : path;
         }
         this.query = query;
         this.postType = postType;
