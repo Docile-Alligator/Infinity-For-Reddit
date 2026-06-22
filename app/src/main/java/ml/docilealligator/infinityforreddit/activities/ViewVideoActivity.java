@@ -621,7 +621,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                                         trackSelector.buildUponParameters()
                                                 .setOverrideForType(new TrackSelectionOverride(
                                                                 trackGroup.getMediaTrackGroup(),
-                                                                1
+                                                                trackGroup.getMediaTrackGroup().length > 1 ? 1 : 0
                                                         )
                                                 )
                                 );
