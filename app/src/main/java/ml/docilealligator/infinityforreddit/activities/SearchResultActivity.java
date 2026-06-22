@@ -467,7 +467,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == android.R.id.home) {
-            onBackPressed();
+            getOnBackPressedDispatcher().onBackPressed();
             return true;
         } else if (itemId == R.id.action_sort_search_result_activity) {
             displaySortTypeBottomSheetFragment();
