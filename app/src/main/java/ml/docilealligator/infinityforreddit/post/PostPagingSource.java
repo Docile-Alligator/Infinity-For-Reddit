@@ -249,7 +249,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
                 if (currentPostsSize == posts.size()) {
                     return new LoadResult.Page<>(new ArrayList<>(), null, lastItem);
                 } else {
-                    return new LoadResult.Page<>(posts.subList(currentPostsSize, posts.size()), null, lastItem);
+                    return new LoadResult.Page<>(new ArrayList<>(posts.subList(currentPostsSize, posts.size())), null, lastItem);
                 }
             }
         } else {
