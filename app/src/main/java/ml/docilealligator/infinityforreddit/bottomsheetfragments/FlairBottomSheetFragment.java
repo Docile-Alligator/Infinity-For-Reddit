@@ -94,6 +94,10 @@ public class FlairBottomSheetFragment extends LandscapeExpandedRoundedBottomShee
                 mSubredditName, new FetchFlairs.FetchFlairsInSubredditListener() {
                     @Override
                     public void fetchSuccessful(List<Flair> flairs) {
+                        if (binding == null) {
+                            return;
+                        }
+
                         binding.progressBarFlairBottomSheetFragment.setVisibility(View.GONE);
                         if (flairs == null || flairs.isEmpty()) {
                             binding.errorTextViewFlairBottomSheetFragment.setVisibility(View.VISIBLE);
@@ -106,6 +110,10 @@ public class FlairBottomSheetFragment extends LandscapeExpandedRoundedBottomShee
 
                     @Override
                     public void fetchFailed() {
+                        if (binding == null) {
+                            return;
+                        }
+
                         binding.progressBarFlairBottomSheetFragment.setVisibility(View.GONE);
                         binding.errorTextViewFlairBottomSheetFragment.setVisibility(View.VISIBLE);
                         binding.errorTextViewFlairBottomSheetFragment.setText(R.string.error_loading_flairs);
