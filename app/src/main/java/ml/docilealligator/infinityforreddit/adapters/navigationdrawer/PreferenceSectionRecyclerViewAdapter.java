@@ -21,7 +21,7 @@ public class PreferenceSectionRecyclerViewAdapter extends RecyclerView.Adapter<R
 
     private static final int VIEW_TYPE_MENU_GROUP_TITLE = 1;
     private static final int VIEW_TYPE_MENU_ITEM = 2;
-    private static final int PREFERENCES_SECTION_ITEMS = 2;
+    private static final int PREFERENCES_SECTION_ITEMS = 3;
 
     private final BaseActivity baseActivity;
     private final Resources resources;
@@ -83,10 +83,13 @@ public class PreferenceSectionRecyclerViewAdapter extends RecyclerView.Adapter<R
         } else if (holder instanceof MenuItemViewHolder) {
             int stringId = 0;
             int drawableId = 0;
-            boolean setOnClickListener = true;
 
             switch (position) {
                 case 1:
+                    stringId = R.string.reminders;
+                    drawableId = R.drawable.ic_reminder;
+                    break;
+                case 2:
                     if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                         stringId = R.string.dark_theme;
                         drawableId = R.drawable.ic_dark_theme_24dp;
@@ -95,7 +98,7 @@ public class PreferenceSectionRecyclerViewAdapter extends RecyclerView.Adapter<R
                         drawableId = R.drawable.ic_light_theme_24dp;
                     }
                     break;
-                case 2:
+                case 3:
                     stringId = R.string.settings;
                     drawableId = R.drawable.ic_settings_day_night_24dp;
             }
@@ -103,10 +106,8 @@ public class PreferenceSectionRecyclerViewAdapter extends RecyclerView.Adapter<R
             if (stringId != 0) {
                 ((MenuItemViewHolder) holder).binding.textViewItemNavDrawerMenuItem.setText(stringId);
                 ((MenuItemViewHolder) holder).binding.imageViewItemNavDrawerMenuItem.setImageDrawable(ContextCompat.getDrawable(baseActivity, drawableId));
-                if (setOnClickListener) {
-                    int finalStringId = stringId;
-                    holder.itemView.setOnClickListener(view -> itemClickListener.onMenuClick(finalStringId));
-                }
+                int finalStringId = stringId;
+                holder.itemView.setOnClickListener(view -> itemClickListener.onMenuClick(finalStringId));
             }
         }
     }

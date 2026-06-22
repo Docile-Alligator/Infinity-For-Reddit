@@ -41,6 +41,7 @@ import ml.docilealligator.infinityforreddit.activities.PostLinkActivity;
 import ml.docilealligator.infinityforreddit.activities.PostPollActivity;
 import ml.docilealligator.infinityforreddit.activities.PostTextActivity;
 import ml.docilealligator.infinityforreddit.activities.PostVideoActivity;
+import ml.docilealligator.infinityforreddit.activities.ReminderListingActivity;
 import ml.docilealligator.infinityforreddit.activities.ReportActivity;
 import ml.docilealligator.infinityforreddit.activities.RulesActivity;
 import ml.docilealligator.infinityforreddit.activities.SearchActivity;
@@ -332,6 +333,8 @@ public interface AppComponent {
     void inject(ViewPostDetailFragmentNew viewPostDetailFragmentNew);
 
     void inject(ImportantInfoBottomSheetFragment importantInfoBottomSheetFragment);
+
+    void inject(ReminderListingActivity reminderListingActivity);
 
     @Component.Factory
     interface Factory {
