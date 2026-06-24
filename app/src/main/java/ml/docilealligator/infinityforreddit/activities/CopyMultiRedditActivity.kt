@@ -134,7 +134,7 @@ class CopyMultiRedditActivity : BaseActivity() {
         windowInsetsController.isAppearanceLightStatusBars = customThemeWrapper.isLightStatusBar
 
         setContent {
-            AppTheme(customThemeWrapper.themeType) {
+            AppTheme(customThemeWrapper.themeType, mSharedPreferences) {
                 val context = LocalContext.current
                 val scrollBehavior = enterAlwaysScrollBehavior()
                 val multiRedditState by copyMultiRedditActivityViewModel.multiRedditState.collectAsStateWithLifecycle()

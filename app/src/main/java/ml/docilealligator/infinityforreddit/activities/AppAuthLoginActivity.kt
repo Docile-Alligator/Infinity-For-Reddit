@@ -90,8 +90,6 @@ class AppAuthLoginActivity : BaseActivity() {
     lateinit var mCurrentAccountSharedPreferences: SharedPreferences
     @Inject
     lateinit var mCustomThemeWrapper: CustomThemeWrapper
-    @Inject
-    lateinit var mExecutor: Executor
 
     lateinit var mViewModel: AppAuthLoginViewModel
 
@@ -119,7 +117,7 @@ class AppAuthLoginActivity : BaseActivity() {
         windowInsetsController.isAppearanceLightStatusBars = customThemeWrapper.isLightStatusBar
 
         setContent {
-            AppTheme(customThemeWrapper.themeType) {
+            AppTheme(customThemeWrapper.themeType, mSharedPreferences) {
                 val context = LocalContext.current
                 val scrollBehavior = enterAlwaysScrollBehavior()
                 val accountFetched by mViewModel.accountFetched.collectAsStateWithLifecycle()

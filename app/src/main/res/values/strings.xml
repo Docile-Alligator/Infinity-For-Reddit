@@ -237,6 +237,7 @@
     <string name="subreddits">Subreddits</string>
     <string name="users">Users</string>
     <string name="multi_reddits">MultiReddits</string>
+    <string name="post">Post</string>
     <string name="posts">Posts</string>
     <string name="comments">Comments</string>
     <string name="about">About</string>
@@ -741,6 +742,19 @@
     <string name="elapsed_time_months_ago">%1$d Months</string>
     <string name="elapsed_time_a_year_ago">1 Year</string>
     <string name="elapsed_time_years_ago">%1$d Years</string>
+
+    <string name="remaining_time_passed">In the past</string>
+    <string name="remaining_time_less_than_1_minute">Less than 1 minute</string>
+    <string name="remaining_time_1_minute">1 Minute</string>
+    <string name="remaining_time_in_minutes">%1$d Minutes</string>
+    <string name="remaining_time_1_hour">1 Hour</string>
+    <string name="remaining_time_in_hours">%1$d Hours</string>
+    <string name="remaining_time_1_day">1 Day</string>
+    <string name="remaining_time_in_days">%1$d Days</string>
+    <string name="remaining_time_1_month">1 Month</string>
+    <string name="remaining_time_in_months">%1$d Months</string>
+    <string name="remaining_time_1_year">1 Year</string>
+    <string name="remaining_time_in_years">%1$d Years</string>
 
     <string name="error_getting_multi_reddit_data">Error getting multireddit data</string>
     <string name="error_loading_multi_reddit_list">Cannot sync multireddits</string>
