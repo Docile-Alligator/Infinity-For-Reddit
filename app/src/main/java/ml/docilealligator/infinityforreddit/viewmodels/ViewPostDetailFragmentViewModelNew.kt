@@ -77,7 +77,6 @@ class ViewPostDetailFragmentViewModelNew(
         val isInitialLoading: Boolean,
         val isInitialLoadingFailed: Boolean,
         val fetchPostFailed: Boolean,
-        val isFetchingComments: Boolean,
         val isRefreshing: Boolean,
         val isLoadingMoreChildren: Boolean,
         val loadMoreChildrenSuccess: Boolean,
@@ -113,7 +112,6 @@ class ViewPostDetailFragmentViewModelNew(
             isInitialLoading = false,
             isInitialLoadingFailed = false,
             fetchPostFailed = false,
-            isFetchingComments = false,
             isRefreshing = false,
             isLoadingMoreChildren = false,
             loadMoreChildrenSuccess = true,
@@ -277,7 +275,7 @@ class ViewPostDetailFragmentViewModelNew(
         _uiState.value = _uiState.value.copy(
             isInitialLoading = true,
             isInitialLoadingFailed = false,
-            isFetchingComments = true,
+            fetchPostFailed = false,
             shouldShowErrorView = false
         )
 
@@ -286,7 +284,6 @@ class ViewPostDetailFragmentViewModelNew(
             _uiState.value = _uiState.value.copy(
                 isInitialLoading = false,
                 isInitialLoadingFailed = true,
-                isFetchingComments = false,
                 isRefreshing = if (changeRefreshState) false else _uiState.value.isRefreshing
             )
             return
@@ -326,7 +323,6 @@ class ViewPostDetailFragmentViewModelNew(
                         _uiState.value = _uiState.value.copy(
                             isInitialLoading = false,
                             isInitialLoadingFailed = false,
-                            isFetchingComments = false,
                             isRefreshing = if (changeRefreshState) false else _uiState.value.isRefreshing
                         )
                         _dataState.value = _dataState.value.copy(
@@ -338,7 +334,6 @@ class ViewPostDetailFragmentViewModelNew(
                         _uiState.value = _uiState.value.copy(
                             isInitialLoading = false,
                             isInitialLoadingFailed = true,
-                            isFetchingComments = false,
                             isRefreshing = if (changeRefreshState) false else _uiState.value.isRefreshing
                         )
                     }
@@ -347,7 +342,6 @@ class ViewPostDetailFragmentViewModelNew(
                 _uiState.value = _uiState.value.copy(
                     isInitialLoading = false,
                     isInitialLoadingFailed = true,
-                    isFetchingComments = false,
                     isRefreshing = if (changeRefreshState) false else _uiState.value.isRefreshing
                 )
             }
@@ -356,7 +350,6 @@ class ViewPostDetailFragmentViewModelNew(
             _uiState.value = _uiState.value.copy(
                 isInitialLoading = false,
                 isInitialLoadingFailed = true,
-                isFetchingComments = false,
                 isRefreshing = if (changeRefreshState) false else _uiState.value.isRefreshing
             )
         }
@@ -371,7 +364,7 @@ class ViewPostDetailFragmentViewModelNew(
                     _uiState.value = _uiState.value.copy(
                         isInitialLoading = true,
                         isInitialLoadingFailed = false,
-                        isFetchingComments = true,
+                        fetchPostFailed = false,
                         shouldShowErrorView = false
                     )
 
@@ -439,8 +432,7 @@ class ViewPostDetailFragmentViewModelNew(
                                         )
                                         _uiState.value = _uiState.value.copy(
                                             isInitialLoading = false,
-                                            isInitialLoadingFailed = false,
-                                            isFetchingComments = false
+                                            isInitialLoadingFailed = false
                                         )
                                     }
                                     is AppResult.Error<*> -> {
@@ -453,22 +445,30 @@ class ViewPostDetailFragmentViewModelNew(
                             }
                         } ?: run {
                             _uiState.value = _uiState.value.copy(
+                                isInitialLoading = false,
+                                isInitialLoadingFailed = true,
                                 shouldShowErrorView = true
                             )
                         }
                     } else {
                         _uiState.value = _uiState.value.copy(
+                            isInitialLoading = false,
+                            isInitialLoadingFailed = true,
                             shouldShowErrorView = true
                         )
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                     _uiState.value = _uiState.value.copy(
+                        isInitialLoading = false,
+                        isInitialLoadingFailed = true,
                         shouldShowErrorView = true
                     )
                 }
             } ?: run {
                 _uiState.value = _uiState.value.copy(
+                    isInitialLoading = false,
+                    isInitialLoadingFailed = true,
                     shouldShowErrorView = true
                 )
             }
@@ -477,7 +477,7 @@ class ViewPostDetailFragmentViewModelNew(
 
     fun fetchMoreComments() {
         viewModelScope.launch {
-            if (_uiState.value.isFetchingComments || _uiState.value.isLoadingMoreChildren || !_uiState.value.loadMoreChildrenSuccess) {
+            if (_uiState.value.isInitialLoading || _uiState.value.isLoadingMoreChildren || !_uiState.value.loadMoreChildrenSuccess) {
                 return@launch
             }
 
@@ -803,6 +803,7 @@ class ViewPostDetailFragmentViewModelNew(
             if (!_uiState.value.isRefreshing) {
                 _uiState.value = _uiState.value.copy(
                     isRefreshing = true,
+                    fetchPostFailed = false,
                     shouldShowErrorView = false
                 )
 

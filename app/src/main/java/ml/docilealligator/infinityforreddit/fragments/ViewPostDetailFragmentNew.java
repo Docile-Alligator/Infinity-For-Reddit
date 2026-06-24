@@ -532,24 +532,25 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         viewPostDetailFragmentViewModel.getUiState().observe(getViewLifecycleOwner(), uiState -> {
             RecyclerView recyclerView = mCommentsRecyclerView != null ? mCommentsRecyclerView : binding.postDetailRecyclerViewViewPostDetailFragment;
             mCommentsStatusAdapter.setSingleCommentThreadMode(uiState.getSingleCommentId() != null && !uiState.getSingleCommentId().isEmpty());
-            mCommentsStatusAdapter.setInitiallyLoading(uiState.isInitialLoading());
-            mCommentsStatusAdapter.setInitiallyLoadingFailed(uiState.isInitialLoadingFailed());
+            mCommentsStatusAdapter.setInitialLoading(uiState.isInitialLoading());
+            mCommentsStatusAdapter.setInitialLoadingFailed(uiState.isInitialLoadingFailed());
             recyclerView.post(() -> mCommentsStatusAdapter.notifyDataSetChanged());
 
             mCommentsFooterAdapter.setLoadingMoreChildren(uiState.isLoadingMoreChildren());
             mCommentsFooterAdapter.setLoadMoreChildrenSuccess(uiState.getLoadMoreChildrenSuccess());
             recyclerView.post(() -> mCommentsFooterAdapter.notifyDataSetChanged());
 
+            binding.swipeRefreshLayoutViewPostDetailFragment.setRefreshing((mPost == null && uiState.isInitialLoading()) || uiState.isRefreshing());
+
             if (uiState.isInitialLoading()) {
                 binding.fetchPostInfoLinearLayoutViewPostDetailFragment.setVisibility(View.GONE);
-                binding.swipeRefreshLayoutViewPostDetailFragment.setRefreshing(true);
                 mGlide.clear(binding.fetchPostInfoImageViewViewPostDetailFragment);
-            } else {
-                binding.swipeRefreshLayoutViewPostDetailFragment.setRefreshing(false);
 
+                mCommentsAdapter.initiallyLoading();
+            } else {
                 if (uiState.getShouldShowErrorView()) {
                     showErrorView(viewPostDetailFragmentViewModel.getDerivedPostId());
-                } else {
+                } else if (!uiState.isInitialLoadingFailed()) {
                     if (!renderContent()) {
                         return;
                     }
@@ -562,17 +563,9 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                 showMessage(R.string.refresh_post_failed);
             }
 
-            if (uiState.isFetchingComments()) {
-                if (mCommentsAdapter != null) {
-                    mCommentsAdapter.initiallyLoading();
-                }
-            }
-
             if (uiState.getSortType() != null) {
                 SortType.Type sortType = uiState.getSortType();
                 mActivity.setTitle(sortType.fullName);
-                binding.fetchPostInfoLinearLayoutViewPostDetailFragment.setVisibility(View.GONE);
-                mGlide.clear(binding.fetchPostInfoImageViewViewPostDetailFragment);
 
                 if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_SORT_TYPE, true)) {
                     mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.name()).apply();
@@ -591,7 +584,6 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                 }
                 EventBus.getDefault().post(new PostUpdateEventToPostList(dataState.getPost(), postListPosition));
                 setupMenu();
-                binding.swipeRefreshLayoutViewPostDetailFragment.setRefreshing(false);
             }
 
             comments = dataState.getComments();
@@ -663,6 +655,8 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
             VolumeInfo volumeInfo = new VolumeInfo(true, 0f);
             return new PlaybackInfo(INDEX_UNSET, TIME_UNSET, volumeInfo);
         });
+
+        binding.fetchPostInfoLinearLayoutViewPostDetailFragment.setOnClickListener(view -> viewPostDetailFragmentViewModel.fetchPostAndCommentsById(postId));
 
         viewPostDetailFragmentViewModel.getPostModerationEventLiveData().observe(getViewLifecycleOwner(), moderationEvent -> {
             showMessage(moderationEvent.getToastMessageResId());
@@ -1140,9 +1134,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     }
 
     private void showErrorView(String postId) {
-        binding.swipeRefreshLayoutViewPostDetailFragment.setRefreshing(false);
         binding.fetchPostInfoLinearLayoutViewPostDetailFragment.setVisibility(View.VISIBLE);
-        binding.fetchPostInfoLinearLayoutViewPostDetailFragment.setOnClickListener(view -> viewPostDetailFragmentViewModel.fetchPostAndCommentsById(postId));
         binding.fetchPostInfoTextViewViewPostDetailFragment.setText(R.string.load_post_error);
         mGlide.load(R.drawable.error_image).into(binding.fetchPostInfoImageViewViewPostDetailFragment);
     }
