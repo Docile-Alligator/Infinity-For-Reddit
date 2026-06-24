@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.activities
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -151,12 +153,34 @@ class ReminderListingActivity : BaseActivity() {
                                 Spacer(Modifier.height(16.dp))
                             }
                             items(it) { reminder ->
-                                PostReminder(
-                                    Modifier
-                                        .padding(horizontal = 16.dp)
-                                        .padding(bottom = 16.dp),
-                                    reminder
-                                )
+                                if (reminder.commentId.isEmpty()) {
+                                    PostReminder(
+                                        Modifier
+                                            .padding(horizontal = 16.dp)
+                                            .padding(bottom = 16.dp),
+                                        reminder
+                                    ) {
+                                        startActivity(
+                                            Intent(context, ViewPostDetailActivity::class.java).apply {
+                                                putExtra(ViewPostDetailActivity.EXTRA_POST_ID, reminder.postId)
+                                            }
+                                        )
+                                    }
+                                } else {
+                                    CommentReminder(
+                                        Modifier
+                                            .padding(horizontal = 16.dp)
+                                            .padding(bottom = 16.dp),
+                                        reminder
+                                    ) {
+                                        startActivity(
+                                            Intent(context, ViewPostDetailActivity::class.java).apply {
+                                                putExtra(ViewPostDetailActivity.EXTRA_POST_ID, reminder.postId)
+                                                putExtra(ViewPostDetailActivity.EXTRA_SINGLE_COMMENT_ID, reminder.commentId)
+                                            }
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
@@ -166,7 +190,7 @@ class ReminderListingActivity : BaseActivity() {
     }
 
     @Composable
-    private fun PostReminder(modifier: Modifier, reminder: Reminder) {
+    private fun PostReminder(modifier: Modifier, reminder: Reminder, onClick: () -> Unit) {
         val context = LocalContext.current
         val remainingText by remember {
             mutableStateOf(getRemainingTimeText(context, reminder.reminderTime))
@@ -176,6 +200,9 @@ class ReminderListingActivity : BaseActivity() {
             modifier = modifier
                 .fillMaxSize(1f)
                 .clip(RoundedCornerShape(16.dp))
+                .clickable {
+                    onClick()
+                }
                 .background(Color(LocalAppTheme.current.filledCardViewBackgroundColor))
                 .padding(16.dp)
         ) {
@@ -185,6 +212,39 @@ class ReminderListingActivity : BaseActivity() {
                     .padding(bottom = 8.dp)
             ) {
                 PrimaryText(R.string.post)
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                PrimaryText(remainingText)
+            }
+
+            SecondaryText(reminder.content, fontSize = LocalTypography.current.titleFontSize.default)
+        }
+    }
+
+    @Composable
+    private fun CommentReminder(modifier: Modifier, reminder: Reminder, onClick: () -> Unit) {
+        val context = LocalContext.current
+        val remainingText by remember {
+            mutableStateOf(getRemainingTimeText(context, reminder.reminderTime))
+        }
+
+        Column(
+            modifier = modifier
+                .fillMaxSize(1f)
+                .clip(RoundedCornerShape(16.dp))
+                .clickable {
+                    onClick()
+                }
+                .background(Color(LocalAppTheme.current.filledCardViewBackgroundColor))
+                .padding(16.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize(1f)
+                    .padding(bottom = 8.dp)
+            ) {
+                PrimaryText(R.string.comment)
 
                 Spacer(modifier = Modifier.weight(1f))
 
