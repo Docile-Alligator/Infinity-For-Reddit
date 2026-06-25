@@ -10,19 +10,23 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.reminder.Reminder
+import ml.docilealligator.infinityforreddit.reminder.ReminderManager
 import retrofit2.Retrofit
 
 class RemindersViewModel(
     private val retrofit: Retrofit,
     private val oauthRetrofit: Retrofit,
     private val mRedditDataRoomDatabase: RedditDataRoomDatabase,
+    private val reminderManager: ReminderManager,
     private val mCurrentAccountSharedPreferences: SharedPreferences
 ) : ViewModel() {
     private val _reminders = MutableStateFlow<List<Reminder>?>(null)
     val reminders = _reminders.asStateFlow()
 
     suspend fun initializeReminders() {
-        _reminders.value = mRedditDataRoomDatabase.reminderDao().getAllReminders()
+        reminderManager.getAllRemindersFlow().collect {
+            _reminders.value = it
+        }
     }
 
     companion object {
@@ -30,6 +34,7 @@ class RemindersViewModel(
             retrofit: Retrofit,
             oauthRetrofit: Retrofit,
             redditRoomDatabase: RedditDataRoomDatabase,
+            reminderManager: ReminderManager,
             currentAccountSharedPreferences: SharedPreferences
         ) : ViewModelProvider.Factory {
             return object: ViewModelProvider.Factory {
@@ -42,6 +47,7 @@ class RemindersViewModel(
                         retrofit,
                         oauthRetrofit,
                         redditRoomDatabase,
+                        reminderManager,
                         currentAccountSharedPreferences
                     ) as T
                 }

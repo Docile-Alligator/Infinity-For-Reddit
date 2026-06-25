@@ -54,6 +54,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.SecondaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
 import ml.docilealligator.infinityforreddit.font.FontStyle
 import ml.docilealligator.infinityforreddit.reminder.Reminder
+import ml.docilealligator.infinityforreddit.reminder.ReminderManager
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils
 import ml.docilealligator.infinityforreddit.utils.Utils
 import ml.docilealligator.infinityforreddit.viewmodels.RemindersViewModel
@@ -84,7 +85,7 @@ class ReminderListingActivity : BaseActivity() {
     @Inject
     lateinit var mCustomThemeWrapper: CustomThemeWrapper
     @Inject
-    lateinit var mExecutor: Executor
+    lateinit var mReminderManager: ReminderManager
 
     lateinit var mViewModel: RemindersViewModel
 
@@ -102,7 +103,8 @@ class ReminderListingActivity : BaseActivity() {
 
         mViewModel = ViewModelProvider.create(
             this,
-            provideFactory(mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase, mCurrentAccountSharedPreferences)
+            provideFactory(mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase,
+                mReminderManager, mCurrentAccountSharedPreferences)
         )[RemindersViewModel::class.java]
 
         val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)

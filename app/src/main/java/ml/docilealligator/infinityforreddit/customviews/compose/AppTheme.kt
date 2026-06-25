@@ -3,7 +3,10 @@ package ml.docilealligator.infinityforreddit.customviews.compose
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -12,6 +15,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -79,23 +84,23 @@ fun AppTheme(themeType: Int, sharedPreferences: SharedPreferences, content: @Com
         mutableStateOf(getTypography(context, sharedPreferences))
     }
 
-    val currentThemeFlow = when(themeType) {
-        CustomThemeSharedPreferencesUtils.LIGHT -> localCustomThemeRepository.currentLightCustomThemeFlow
-        CustomThemeSharedPreferencesUtils.DARK -> localCustomThemeRepository.currentDarkCustomThemeFlow
-        CustomThemeSharedPreferencesUtils.AMOLED -> localCustomThemeRepository.currentAmoledCustomThemeFlow
-        else -> localCustomThemeRepository.currentLightCustomThemeFlow
-    }.onEach {
-        themeLoaded = true
+    val currentThemeFlow = remember {
+        when(themeType) {
+            CustomThemeSharedPreferencesUtils.LIGHT -> localCustomThemeRepository.currentLightCustomThemeFlow
+            CustomThemeSharedPreferencesUtils.DARK -> localCustomThemeRepository.currentDarkCustomThemeFlow
+            CustomThemeSharedPreferencesUtils.AMOLED -> localCustomThemeRepository.currentAmoledCustomThemeFlow
+            else -> localCustomThemeRepository.currentLightCustomThemeFlow
+        }.onEach {
+            themeLoaded = true
+        }
     }
 
-    val customTheme by currentThemeFlow.collectAsState(initial = null)
+    val customTheme by currentThemeFlow.collectAsState(null)
 
     if (themeLoaded) {
-        CompositionLocalProvider(LocalTypography provides typography) {
-            CompositionLocalProvider(LocalAppTheme provides (customTheme ?: getDefaultTheme(context, themeType))) {
-                MaterialTheme {
-                    content()
-                }
+        CompositionLocalProvider(LocalAppTheme provides (customTheme ?: getDefaultTheme(context, themeType)), LocalTypography provides typography) {
+            MaterialTheme {
+                content()
             }
         }
     }

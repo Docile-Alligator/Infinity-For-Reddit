@@ -1,8 +1,10 @@
 package ml.docilealligator.infinityforreddit.reminder
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import kotlinx.parcelize.Parcelize
 import ml.docilealligator.infinityforreddit.account.Account
 
 @Entity(
@@ -13,6 +15,7 @@ import ml.docilealligator.infinityforreddit.account.Account
         childColumns = arrayOf("username"), onDelete = ForeignKey.SET_NULL
     )]
 )
+@Parcelize
 data class Reminder(
     @ColumnInfo(name = "username")
     val accountName: String?,
@@ -25,4 +28,4 @@ data class Reminder(
     val createdAt: Long,
     @ColumnInfo(name = "reminder_time")
     val reminderTime: Long
-)
+) : Parcelable

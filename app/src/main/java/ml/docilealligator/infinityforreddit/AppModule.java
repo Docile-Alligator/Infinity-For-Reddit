@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.app.AlarmManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -27,6 +28,7 @@ import dagger.Provides;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LoopAvailableExoCreator;
 import ml.docilealligator.infinityforreddit.managers.VideoMuteManager;
+import ml.docilealligator.infinityforreddit.reminder.ReminderManager;
 import ml.docilealligator.infinityforreddit.user.UserProfileImagesBatchLoader;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
@@ -262,5 +264,13 @@ abstract class AppModule {
                 sharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_AUTOPLAYING_VIDEOS, true),
                 sharedPreferences.getBoolean(SharedPreferencesUtils.REMEMBER_MUTING_OPTION_IN_POST_FEED, false)
         );
+    }
+
+    @Provides
+    @Singleton
+    static ReminderManager provideReminderManager(
+            Application application, RedditDataRoomDatabase redditDataRoomDatabase
+    ) {
+        return new ReminderManager(application, redditDataRoomDatabase, (AlarmManager) application.getSystemService(Context.ALARM_SERVICE));
     }
 }
