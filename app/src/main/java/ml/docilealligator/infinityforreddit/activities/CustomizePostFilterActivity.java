@@ -171,6 +171,22 @@ public class CustomizePostFilterActivity extends BaseActivity {
             binding.onlySpoilerSwitchCustomizePostFilterActivity.performClick();
         });
 
+        binding.onlySpoilerSwitchCustomizePostFilterActivity.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                binding.hideSpoilersSwitchCustomizePostFilterActivity.setChecked(false);
+            }
+        });
+
+        binding.hideSpoilersLinearLayoutCustomizePostFilterActivity.setOnClickListener(view -> {
+            binding.hideSpoilersSwitchCustomizePostFilterActivity.performClick();
+        });
+
+        binding.hideSpoilersSwitchCustomizePostFilterActivity.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                binding.onlySpoilerSwitchCustomizePostFilterActivity.setChecked(false);
+            }
+        });
+
         binding.excludeAddSubredditsImageViewCustomizePostFilterActivity.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubredditMultiselectionActivity.class);
             startActivityForResult(intent, ADD_EXCLUDE_SUBREDDITS_REQUEST_CODE);
@@ -221,6 +237,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
         binding.postTypeGallerySwitchCustomizePostFilterActivity.setChecked(postFilter.containGalleryType);
         binding.onlyNsfwSwitchCustomizePostFilterActivity.setChecked(postFilter.onlyNSFW);
         binding.onlySpoilerSwitchCustomizePostFilterActivity.setChecked(postFilter.onlySpoiler);
+        binding.hideSpoilersSwitchCustomizePostFilterActivity.setChecked(postFilter.hideSpoilers);
         binding.titleExcludesStringsTextInputEditTextCustomizePostFilterActivity.setText(postFilter.postTitleExcludesStrings);
         binding.titleContainsStringsTextInputEditTextCustomizePostFilterActivity.setText(postFilter.postTitleContainsStrings);
         binding.titleExcludesRegexTextInputEditTextCustomizePostFilterActivity.setText(postFilter.postTitleExcludesRegex);
@@ -350,6 +367,8 @@ public class CustomizePostFilterActivity extends BaseActivity {
         binding.onlyNsfwTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
         binding.onlySpoilerTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_spoiler_black_24dp, primaryIconColor), null, null, null);
         binding.onlySpoilerTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
+        binding.hideSpoilersTextViewCustomizePostFilterActivity.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(this, R.drawable.ic_unmark_spoiler_24dp, primaryIconColor), null, null, null);
+        binding.hideSpoilersTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
 
         binding.titleStringsCardViewCustomizePostFilterActivity.setCardBackgroundColor(filledCardViewBackgroundColor);
         binding.titleExcludeStringsExplanationTextViewCustomizePostFilterActivity.setTextColor(primaryTextColor);
@@ -656,6 +675,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
         postFilter.containGalleryType = binding.postTypeGallerySwitchCustomizePostFilterActivity.isChecked();
         postFilter.onlyNSFW = binding.onlyNsfwSwitchCustomizePostFilterActivity.isChecked();
         postFilter.onlySpoiler = binding.onlySpoilerSwitchCustomizePostFilterActivity.isChecked();
+        postFilter.hideSpoilers = binding.hideSpoilersSwitchCustomizePostFilterActivity.isChecked();
     }
 
     @Override
