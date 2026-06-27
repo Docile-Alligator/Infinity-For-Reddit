@@ -6,17 +6,19 @@ import android.app.PendingIntent
 import android.content.Intent
 import kotlinx.coroutines.flow.Flow
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
-import kotlin.jvm.java
 
 class ReminderManager(
     private val applicationContext: Application,
     private val redditRoomDatabase: RedditDataRoomDatabase,
     private val alarmManager: AlarmManager
 ) {
-    fun setReminder(reminder: Reminder) {
+    suspend fun setReminder(reminder: Reminder) {
+        redditRoomDatabase.reminderDao().insert(reminder)
+
         val alarmIntent = Intent(applicationContext,
             ReminderAlarmReceiver::class.java).let { intent ->
-            PendingIntent.getBroadcast(applicationContext, 0, intent, 0)
+            PendingIntent.getBroadcast(applicationContext, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
 
         alarmManager.set(

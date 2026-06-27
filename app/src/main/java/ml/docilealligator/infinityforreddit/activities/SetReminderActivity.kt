@@ -5,13 +5,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,12 +29,14 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -45,12 +47,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import ml.docilealligator.infinityforreddit.AppResult
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
@@ -138,6 +142,7 @@ class SetReminderActivity: BaseActivity() {
         mViewModel = ViewModelProvider.create(
             this,
             provideFactory(
+                accountName,
                 intent.getParcelableExtra(EXTRA_POST),
                 intent.getStringExtra(EXTRA_POST_ID),
                 intent.getParcelableExtra(EXTRA_COMMENT),
@@ -161,8 +166,8 @@ class SetReminderActivity: BaseActivity() {
                 val context = LocalContext.current
                 val scrollBehavior = enterAlwaysScrollBehavior()
 
-                val commentContent = remember {
-                    mViewModel.comment?.commentRawText?.substring(200)
+                val content = remember {
+                    mViewModel.content
                 }
 
                 var showDatePicker by remember { mutableStateOf(false) }
@@ -180,6 +185,11 @@ class SetReminderActivity: BaseActivity() {
                     mutableStateOf("")
                 }
 
+                val setReminderResult by mViewModel.setReminderResult.collectAsStateWithLifecycle()
+
+                val snackbarHostState = remember { SnackbarHostState() }
+                var snackbarMessage: String? by remember { mutableStateOf(null) }
+
                 LaunchedEffect(timePickerState.hour, timePickerState.minute, datePickerState.selectedDateMillis) {
                     datePickerState.selectedDateMillis?.let {
                         reminderTimeMillis = getDateAndTimeMillis(it, timePickerState.hour, timePickerState.minute)
@@ -191,6 +201,26 @@ class SetReminderActivity: BaseActivity() {
                     }
                 }
 
+                LaunchedEffect(snackbarMessage) {
+                    snackbarMessage?.let {
+                        snackbarHostState.showSnackbar(it)
+                    }
+                }
+
+                LaunchedEffect(setReminderResult) {
+                    setReminderResult?.let {
+                        when (it) {
+                            is AppResult.Success<*> -> {
+                                Toast.makeText(context, R.string.reminder_set, Toast.LENGTH_SHORT).show()
+                                finish()
+                            }
+                            is AppResult.Error<*> -> {
+                                snackbarMessage = getString(it.error as Int)
+                            }
+                        }
+                    }
+                }
+
                 Scaffold(
                     topBar = {
                         ThemedTopAppBar(
@@ -199,7 +229,15 @@ class SetReminderActivity: BaseActivity() {
                             windowInsetsController = windowInsetsController,
                             actions = {
                                 IconButton(onClick = {
-
+                                    if (reminderTimeMillis == 0L || reminderTimeString.isEmpty()) {
+                                        snackbarMessage = getString(R.string.please_set_reminder_time)
+                                        return@IconButton
+                                    }
+                                    if (reminderTimeMillis < System.currentTimeMillis()) {
+                                        snackbarMessage = getString(R.string.reminder_time_must_be_in_future)
+                                        return@IconButton
+                                    }
+                                    mViewModel.setReminder(reminderTimeMillis)
                                 }) {
                                     Icon(
                                         imageVector = ImageVector.vectorResource(R.drawable.ic_check_circle_toolbar_24dp),
@@ -216,6 +254,9 @@ class SetReminderActivity: BaseActivity() {
                         .fillMaxSize()
                         .nestedScroll(scrollBehavior.nestedScrollConnection)
                         .imePadding(),
+                    snackbarHost = {
+                        SnackbarHost(hostState = snackbarHostState)
+                    },
                     contentWindowInsets = if (isImmersiveInterfaceEnabled) WindowInsets.safeDrawing else WindowInsets.navigationBars.only(WindowInsetsSides.Bottom)
                 ) { innerPadding ->
                     Column(
@@ -224,14 +265,9 @@ class SetReminderActivity: BaseActivity() {
                             .background(Color(LocalAppTheme.current.backgroundColor))
                             .padding(innerPadding),
                     ) {
-                        if (commentContent != null) {
+                        if (content.isNotEmpty()) {
                             PrimaryText(
-                                commentContent,
-                                modifier = Modifier.padding(16.dp)
-                            )
-                        } else if (mViewModel.post != null) {
-                            PrimaryText(
-                                mViewModel.post!!.title,
+                                content,
                                 modifier = Modifier.padding(16.dp)
                             )
                         }

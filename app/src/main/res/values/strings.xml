@@ -1655,4 +1655,8 @@
     <string name="set_date">Set Date</string>
     <string name="set_time">Set Time</string>
     <string name="you_will_receive_reminder_notification">You\'ll receive a reminder notification on the date and time you set:</string>
+    <string name="please_set_reminder_time">Please set a reminder time</string>
+    <string name="reminder_time_must_be_in_future">The reminder time must be in the future.</string>
+    <string name="invalid_reminder_post_id">Invalid post id</string>
+    <string name="reminder_set">Reminder set</string>
 </resources>
