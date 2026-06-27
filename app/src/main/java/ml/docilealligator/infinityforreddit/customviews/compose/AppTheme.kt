@@ -98,7 +98,10 @@ fun AppTheme(themeType: Int, sharedPreferences: SharedPreferences, content: @Com
     val customTheme by currentThemeFlow.collectAsState(null)
 
     if (themeLoaded) {
-        CompositionLocalProvider(LocalAppTheme provides (customTheme ?: getDefaultTheme(context, themeType)), LocalTypography provides typography) {
+        CompositionLocalProvider(
+            LocalAppTheme provides (customTheme ?: getDefaultTheme(context, themeType)),
+            LocalTypography provides typography
+        ) {
             MaterialTheme {
                 content()
             }

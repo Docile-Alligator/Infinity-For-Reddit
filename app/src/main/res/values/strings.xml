@@ -1650,4 +1650,9 @@
     <string name="comment_spam_status">This comment is removed as spam</string>
 
     <string name="copying_multi_reddit">Copying</string>
+
+    <string name="set_reminder">Set Reminder</string>
+    <string name="set_date">Set Date</string>
+    <string name="set_time">Set Time</string>
+    <string name="you_will_receive_reminder_notification">You\'ll receive a reminder notification on the date and time you set:</string>
 </resources>

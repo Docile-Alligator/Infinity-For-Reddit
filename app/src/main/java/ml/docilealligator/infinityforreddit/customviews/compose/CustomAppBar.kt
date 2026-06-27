@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.customviews.compose
 
+import android.R.attr.fontFamily
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,7 +24,7 @@ fun ThemedTopAppBar(
     modifier: Modifier = Modifier,
     titleStringResId: Int,
     isImmersiveInterfaceEnabled: Boolean,
-    scrollBehavior: TopAppBarScrollBehavior,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
     windowInsetsController: WindowInsetsControllerCompat,
     actions: @Composable RowScope.() -> Unit = {},
     onBack: () -> Unit
@@ -33,10 +34,10 @@ fun ThemedTopAppBar(
     val appBarColor = lerp(
         start = Color(customTheme.colorPrimary),
         stop = Color.Transparent,
-        fraction = scrollBehavior.state.collapsedFraction
+        fraction = scrollBehavior?.state?.collapsedFraction ?: 0f
     )
 
-    if (isImmersiveInterfaceEnabled) {
+    if (isImmersiveInterfaceEnabled && scrollBehavior != null) {
         LaunchedEffect(scrollBehavior.state.collapsedFraction) {
             if (customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface) {
                 windowInsetsController.isAppearanceLightStatusBars = if (scrollBehavior.state.collapsedFraction > 0.5f) !customTheme.isLightStatusBar else customTheme.isLightStatusBar
@@ -52,7 +53,10 @@ fun ThemedTopAppBar(
             titleContentColor = Color(LocalAppTheme.current.toolbarPrimaryTextAndIconColor),
         ),
         title = {
-            Text(stringResource(titleStringResId))
+            Text(
+                stringResource(titleStringResId),
+                fontFamily = LocalTypography.current.fontFamily
+            )
         },
         navigationIcon = {
             IconButton(onClick = onBack) {

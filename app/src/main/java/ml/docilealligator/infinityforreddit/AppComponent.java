@@ -51,6 +51,7 @@ import ml.docilealligator.infinityforreddit.activities.SearchUsersResultActivity
 import ml.docilealligator.infinityforreddit.activities.SelectUserFlairActivity;
 import ml.docilealligator.infinityforreddit.activities.SelectedSubredditsAndUsersActivity;
 import ml.docilealligator.infinityforreddit.activities.SendPrivateMessageActivity;
+import ml.docilealligator.infinityforreddit.activities.SetReminderActivity;
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.activities.SubmitCrosspostActivity;
 import ml.docilealligator.infinityforreddit.activities.SubredditMultiselectionActivity;
@@ -335,6 +336,8 @@ public interface AppComponent {
     void inject(ImportantInfoBottomSheetFragment importantInfoBottomSheetFragment);
 
     void inject(ReminderListingActivity reminderListingActivity);
+
+    void inject(SetReminderActivity setReminderActivity);
 
     @Component.Factory
     interface Factory {

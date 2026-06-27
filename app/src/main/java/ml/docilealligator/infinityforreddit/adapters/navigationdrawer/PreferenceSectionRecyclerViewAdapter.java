@@ -87,7 +87,7 @@ public class PreferenceSectionRecyclerViewAdapter extends RecyclerView.Adapter<R
             switch (position) {
                 case 1:
                     stringId = R.string.reminders;
-                    drawableId = R.drawable.ic_reminder;
+                    drawableId = R.drawable.ic_reminder_day_night_24dp;
                     break;
                 case 2:
                     if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
