@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -52,15 +51,12 @@ import ml.docilealligator.infinityforreddit.customviews.compose.LocalTypography
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SecondaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
-import ml.docilealligator.infinityforreddit.font.FontStyle
 import ml.docilealligator.infinityforreddit.reminder.Reminder
 import ml.docilealligator.infinityforreddit.reminder.ReminderManager
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils
 import ml.docilealligator.infinityforreddit.utils.Utils
 import ml.docilealligator.infinityforreddit.viewmodels.RemindersViewModel
 import ml.docilealligator.infinityforreddit.viewmodels.RemindersViewModel.Companion.provideFactory
 import retrofit2.Retrofit
-import java.util.concurrent.Executor
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -117,13 +113,6 @@ class ReminderListingActivity : BaseActivity() {
                 val reminders by mViewModel.reminders.collectAsStateWithLifecycle()
 
                 LaunchedEffect(Unit) {
-                    /*mRedditDataRoomDatabase.reminderDao().insert(
-                        Reminder(
-                            accountName, "post id", "comment id", "content", System.currentTimeMillis(),
-                            System.currentTimeMillis() + Utils.DAY_MILLIS
-                        )
-                    )*/
-
                     mViewModel.initializeReminders()
                 }
 
@@ -194,7 +183,7 @@ class ReminderListingActivity : BaseActivity() {
     @Composable
     private fun PostReminder(modifier: Modifier, reminder: Reminder, onClick: () -> Unit) {
         val context = LocalContext.current
-        val remainingText by remember {
+        val remainingTimeText by remember {
             mutableStateOf(getRemainingTimeText(context, reminder.reminderTime))
         }
 
@@ -217,7 +206,7 @@ class ReminderListingActivity : BaseActivity() {
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                PrimaryText(remainingText)
+                PrimaryText(remainingTimeText)
             }
 
             SecondaryText(reminder.content, fontSize = LocalTypography.current.titleFontSize.default)
@@ -227,7 +216,7 @@ class ReminderListingActivity : BaseActivity() {
     @Composable
     private fun CommentReminder(modifier: Modifier, reminder: Reminder, onClick: () -> Unit) {
         val context = LocalContext.current
-        val remainingText by remember {
+        val remainingTimeText by remember {
             mutableStateOf(getRemainingTimeText(context, reminder.reminderTime))
         }
 
@@ -250,7 +239,7 @@ class ReminderListingActivity : BaseActivity() {
 
                 Spacer(modifier = Modifier.weight(1f))
 
-                PrimaryText(remainingText)
+                PrimaryText(remainingTimeText)
             }
 
             SecondaryText(reminder.content, fontSize = LocalTypography.current.titleFontSize.default)
@@ -258,7 +247,7 @@ class ReminderListingActivity : BaseActivity() {
     }
 
     fun getRemainingTimeText(context: Context, time: Long): String {
-        val diff = System.currentTimeMillis() - time
+        val diff = time - System.currentTimeMillis()
 
         if (diff <= 0) return "Expired"
 
