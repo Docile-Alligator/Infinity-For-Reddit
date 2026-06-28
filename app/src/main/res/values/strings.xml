@@ -1659,4 +1659,5 @@
     <string name="reminder_time_must_be_in_future">The reminder time must be in the future.</string>
     <string name="invalid_reminder_post_id">Invalid post id</string>
     <string name="reminder_set">Reminder set</string>
+    <string name="reminder">Reminder</string>
 </resources>

@@ -482,6 +482,7 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <receiver android:name=".broadcastreceivers.DownloadedMediaDeleteActionBroadcastReceiver" />
+        <receiver android:name=".broadcastreceivers.ReminderAlarmReceiver" />
     </application>
 
 </manifest>

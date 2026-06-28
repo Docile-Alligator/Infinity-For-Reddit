@@ -29,11 +29,13 @@ public class NotificationUtils {
     public static final int DOWNLOAD_GIF_NOTIFICATION_ID = 50000;
     public static final int MATERIAL_YOU_NOTIFICATION_ID = 60000;
     public static final int EDIT_PROFILE_SERVICE_NOTIFICATION_ID = 70000;
+    public static final int REMINDER_NOTIFICATION_ID = 80000;
 
     private static final int SUMMARY_BASE_ID_UNREAD_MESSAGE = 0;
     private static final int NOTIFICATION_BASE_ID_UNREAD_MESSAGE = 1;
 
     private static final String GROUP_USER_BASE = "ml.docilealligator.infinityforreddit.";
+    public static final String GROUP_REMINDER = "ml.docilealligator.infinityforreddit.reminder@group";
 
     public static NotificationCompat.Builder buildNotification(NotificationManagerCompat notificationManager,
                                                                Context context, String title, String content,

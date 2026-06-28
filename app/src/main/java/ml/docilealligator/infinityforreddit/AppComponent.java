@@ -90,6 +90,7 @@ import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragmentNew;
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryImageOrGifFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryVideoFragment;
+import ml.docilealligator.infinityforreddit.broadcastreceivers.ReminderAlarmReceiver;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.services.DownloadRedditVideoService;
 import ml.docilealligator.infinityforreddit.services.EditProfileService;
@@ -338,6 +339,8 @@ public interface AppComponent {
     void inject(ReminderListingActivity reminderListingActivity);
 
     void inject(SetReminderActivity setReminderActivity);
+
+    void inject(ReminderAlarmReceiver reminderAlarmReceiver);
 
     @Component.Factory
     interface Factory {
