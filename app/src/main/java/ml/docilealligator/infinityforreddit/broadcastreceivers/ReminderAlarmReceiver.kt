@@ -45,7 +45,7 @@ class ReminderAlarmReceiver: BroadcastReceiver() {
             intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, it.postId)
             intent.putExtra(ViewPostDetailActivity.EXTRA_SINGLE_COMMENT_ID, it.commentId)
             val pendingIntent =
-                PendingIntent.getActivity(context, 100, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+                PendingIntent.getActivity(context, it.createdAt.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
             builder.setContentIntent(pendingIntent)
 
             try {
