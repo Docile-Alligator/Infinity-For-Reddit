@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.customviews.compose
 
+import android.R.attr.lineHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
@@ -20,7 +21,8 @@ fun PrimaryText(
     modifier: Modifier = Modifier,
     fontFamily: FontFamily? = LocalTypography.current.fontFamily,
     fontSize: TextUnit = LocalTypography.current.fontSize.default,
-    textAlign: TextAlign? = null
+    textAlign: TextAlign? = null,
+    lineHeight: TextUnit = TextUnit.Unspecified
 ) {
     Text(
         stringResource(stringResourceId),
@@ -28,7 +30,8 @@ fun PrimaryText(
         color = Color(LocalAppTheme.current.primaryTextColor),
         fontFamily = fontFamily,
         fontSize = fontSize,
-        textAlign = textAlign
+        textAlign = textAlign,
+        lineHeight = lineHeight
     )
 }
 

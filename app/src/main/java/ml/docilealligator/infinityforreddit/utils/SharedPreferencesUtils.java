@@ -239,6 +239,7 @@ public class SharedPreferencesUtils {
     public static final String NAVIGATION_DRAWER_SWIPE_AREA = "navigation_drawer_swipe_area";
     public static final String COMMENT_THREAD_CONTINUITY_CAPACITY = "comment_thread_continuity_capacity";
     public static final String CURRENT_VERSION = "current_version";
+    public static final String ONBOARDING_FINISHED = "onboarding_finished";
 
     public static String getPostDetailFabPortraitX(@Nullable Display display) {
         if (display == null) {

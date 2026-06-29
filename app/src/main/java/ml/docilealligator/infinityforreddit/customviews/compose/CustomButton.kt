@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.TextUnit
 @Composable
 fun CustomFilledButton(modifier: Modifier = Modifier, text: String, onclick: () -> Unit) {
     Button(
+        modifier = modifier,
         colors = ButtonDefaults.buttonColors().copy(
             containerColor = Color(LocalAppTheme.current.colorPrimaryLightTheme),
             contentColor = Color(LocalAppTheme.current.buttonTextColor)
