@@ -15,6 +15,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.reminder.Reminder
+import ml.docilealligator.infinityforreddit.reminder.ReminderManager
 import ml.docilealligator.infinityforreddit.utils.NotificationUtils
 import java.util.Random
 import javax.inject.Inject
@@ -32,7 +33,7 @@ class ReminderAlarmReceiver: BroadcastReceiver() {
         val reminder: Reminder? = intent.getParcelableExtra(EXTRA_REMINDER)
         reminder?.let {
             (context.applicationContext as Infinity).appComponent.inject(this)
-            val notificationManager = NotificationUtils.getNotificationManager(context)
+            /*val notificationManager = NotificationUtils.getNotificationManager(context)
             val builder = NotificationUtils.buildNotification(
                 notificationManager,
                 context, context.getString(R.string.reminder), it.content, context.getString(if (it.commentId.isNotEmpty()) R.string.comment else R.string.post),
@@ -54,7 +55,9 @@ class ReminderAlarmReceiver: BroadcastReceiver() {
                 )
             } catch (e: SecurityException) {
                 e.printStackTrace()
-            }
+            }*/
+
+            ReminderManager.sendNotification(context, mCustomThemeWrapper, it)
 
             doAsync(GlobalScope) {
                 try {

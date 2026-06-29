@@ -269,8 +269,13 @@ abstract class AppModule {
     @Provides
     @Singleton
     static ReminderManager provideReminderManager(
-            Application application, RedditDataRoomDatabase redditDataRoomDatabase
+            Application application, RedditDataRoomDatabase redditDataRoomDatabase, CustomThemeWrapper customThemeWrapper
     ) {
-        return new ReminderManager(application, redditDataRoomDatabase, (AlarmManager) application.getSystemService(Context.ALARM_SERVICE));
+        return new ReminderManager(
+                application,
+                redditDataRoomDatabase,
+                (AlarmManager) application.getSystemService(Context.ALARM_SERVICE),
+                customThemeWrapper
+        );
     }
 }
