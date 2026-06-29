@@ -33,6 +33,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -44,6 +50,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowInsetsControllerCompat
+import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
@@ -105,6 +112,16 @@ class OnboardingActivity: BaseActivity() {
                 val pagerState = rememberPagerState(pageCount = {
                     4
                 })
+                var continueButtonText by remember { mutableStateOf(context.getString(R.string.take_a_quick_tour)) }
+                val coroutineScope = rememberCoroutineScope()
+
+                LaunchedEffect(pagerState.currentPage) {
+                    continueButtonText = if (pagerState.currentPage == 0) {
+                        context.getString(R.string.take_a_quick_tour)
+                    } else {
+                        context.getString(R.string.next)
+                    }
+                }
 
                 Scaffold(
                     modifier = Modifier
@@ -150,9 +167,13 @@ class OnboardingActivity: BaseActivity() {
                                     )
                                     .padding(horizontal = 32.dp)
                                     .padding(bottom = 32.dp),
-                                stringResId = R.string.take_a_quick_tour
+                                continueButtonText
                             ) {
-
+                                if (pagerState.currentPage < pagerState.pageCount - 1) {
+                                    coroutineScope.launch {
+                                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                    }
+                                }
                             }
                         }
                     }
