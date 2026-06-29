@@ -1,13 +1,10 @@
 package ml.docilealligator.infinityforreddit.viewmodels
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.AppResult
@@ -16,6 +13,7 @@ import ml.docilealligator.infinityforreddit.comment.Comment
 import ml.docilealligator.infinityforreddit.post.Post
 import ml.docilealligator.infinityforreddit.reminder.Reminder
 import ml.docilealligator.infinityforreddit.reminder.ReminderManager
+import kotlin.math.min
 
 class SetReminderViewModel(
     val accountName: String,
@@ -28,7 +26,9 @@ class SetReminderViewModel(
     val setReminderResult = _setReminderResult.asStateFlow()
 
     val content: String
-        get() = comment?.commentRawText?.substring(200) ?: post?.title ?: ""
+        get() = comment?.commentRawText?.let {
+            it.substring(0, min(it.length, 200))
+        } ?: post?.title ?: ""
 
     fun setReminder(
         reminderTime: Long
