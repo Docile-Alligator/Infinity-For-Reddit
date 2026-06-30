@@ -1668,4 +1668,9 @@
     <string name="take_a_quick_tour">Take a quick tour</string>
     <string name="next">Next</string>
     <string name="get_started">Get started</string>
+    <string name="by_continuing_1">"By continuing, you agree to the "</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="by_continuing_2">" and "</string>
+    <string name="reddit_user_agreement">Reddit User Agreement</string>
+    <string name="by_continuing_3">.\nInfinity is an independent client for Reddit. Not affiliated or endorsed by Reddit.</string>
 </resources>

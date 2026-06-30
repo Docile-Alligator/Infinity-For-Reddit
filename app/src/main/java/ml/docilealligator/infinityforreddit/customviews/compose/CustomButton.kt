@@ -13,7 +13,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.TextUnit
 
 @Composable
-fun CustomFilledButton(modifier: Modifier = Modifier, text: String, onclick: () -> Unit) {
+fun CustomFilledButton(
+    modifier: Modifier = Modifier,
+    text: String,
+    fontFamily: FontFamily? = LocalTypography.current.fontFamily,
+    fontSize: TextUnit = LocalTypography.current.fontSize.default,
+    onclick: () -> Unit
+) {
     Button(
         modifier = modifier,
         colors = ButtonDefaults.buttonColors().copy(
@@ -22,12 +28,22 @@ fun CustomFilledButton(modifier: Modifier = Modifier, text: String, onclick: () 
         ),
         onClick = onclick
     ) {
-        Text(text)
+        Text(
+            text,
+            fontFamily = fontFamily,
+            fontSize = fontSize
+        )
     }
 }
 
 @Composable
-fun CustomFilledButton(modifier: Modifier = Modifier, @StringRes stringResId: Int, onclick: () -> Unit) {
+fun CustomFilledButton(
+    modifier: Modifier = Modifier,
+    @StringRes stringResId: Int,
+    fontFamily: FontFamily? = LocalTypography.current.fontFamily,
+    fontSize: TextUnit = LocalTypography.current.fontSize.default,
+    onclick: () -> Unit
+) {
     Button(
         modifier = modifier,
         colors = ButtonDefaults.buttonColors().copy(
@@ -36,7 +52,11 @@ fun CustomFilledButton(modifier: Modifier = Modifier, @StringRes stringResId: In
         ),
         onClick = onclick
     ) {
-        Text(stringResource(stringResId))
+        Text(
+            stringResource(stringResId),
+            fontFamily = fontFamily,
+            fontSize = fontSize
+        )
     }
 }
 

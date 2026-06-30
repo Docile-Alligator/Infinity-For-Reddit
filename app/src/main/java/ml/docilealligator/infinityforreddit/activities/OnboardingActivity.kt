@@ -31,6 +31,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,12 +42,19 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowInsetsControllerCompat
@@ -57,6 +65,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButton
+import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalTypography
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
 import retrofit2.Retrofit
@@ -157,7 +166,7 @@ class OnboardingActivity: BaseActivity() {
                                 }
                             }
 
-                            CustomFilledButton(
+                            Column(
                                 modifier = Modifier
                                     .fillMaxWidth(1f)
                                     .padding(
@@ -166,14 +175,51 @@ class OnboardingActivity: BaseActivity() {
                                         end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
                                     )
                                     .padding(horizontal = 32.dp)
-                                    .padding(bottom = 32.dp),
-                                continueButtonText
+                                    .padding(bottom = 32.dp)
                             ) {
-                                if (pagerState.currentPage < pagerState.pageCount - 1) {
-                                    coroutineScope.launch {
-                                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                CustomFilledButton(
+                                    modifier = Modifier
+                                        .fillMaxWidth(1f),
+                                    text = continueButtonText
+                                ) {
+                                    if (pagerState.currentPage < pagerState.pageCount - 1) {
+                                        coroutineScope.launch {
+                                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                        }
                                     }
                                 }
+
+                                Spacer(Modifier.height(16.dp))
+
+                                Text(
+                                    text = buildAnnotatedString {
+                                        append(getString(R.string.by_continuing_1))
+
+                                        withLink(
+                                            LinkAnnotation.Url(
+                                                "https://docile-alligator.github.io/",
+                                                TextLinkStyles(style = SpanStyle(color = Color(LocalAppTheme.current.linkColor)))
+                                            )
+                                        ) {
+                                            append(getString(R.string.privacy_policy))
+                                        }
+
+                                        append(getString(R.string.by_continuing_2))
+
+                                        withLink(
+                                            LinkAnnotation.Url(
+                                                "https://redditinc.com/policies/user-agreement",
+                                                TextLinkStyles(style = SpanStyle(color = Color(LocalAppTheme.current.linkColor)))
+                                            )
+                                        ) {
+                                            append(getString(R.string.reddit_user_agreement))
+                                        }
+
+                                        append(getString(R.string.by_continuing_3))
+                                    },
+                                    fontFamily = LocalTypography.current.fontFamily,
+                                    fontSize = 12.sp
+                                )
                             }
                         }
                     }
