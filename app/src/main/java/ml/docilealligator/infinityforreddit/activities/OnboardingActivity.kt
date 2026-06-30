@@ -40,6 +40,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -93,6 +94,8 @@ class OnboardingActivity: BaseActivity() {
     @Inject
     lateinit var mCustomThemeWrapper: CustomThemeWrapper
 
+    private lateinit var onboardingPageData: Array<OnboardingPageData>
+
     companion object {
         fun startOnboardingActivity(context: Context) {
             context.startActivity(Intent(context, OnboardingActivity::class.java))
@@ -113,6 +116,29 @@ class OnboardingActivity: BaseActivity() {
 
         val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
         windowInsetsController.isAppearanceLightStatusBars = customThemeWrapper.isLightStatusBar
+
+        onboardingPageData = arrayOf(
+            OnboardingPageData(
+                getString(R.string.filter_what_you_see),
+                getString(R.string.filter_what_you_see_description),
+                R.drawable.onboarding_icon,
+            ),
+            OnboardingPageData(
+                getString(R.string.post_like_a_pro),
+                getString(R.string.post_like_a_pro_description),
+                R.drawable.onboarding_icon,
+            ),
+            OnboardingPageData(
+                getString(R.string.make_it_yours),
+                getString(R.string.make_it_yours_description),
+                R.drawable.onboarding_icon,
+            ),
+            OnboardingPageData(
+                getString(R.string.private_browsing),
+                getString(R.string.private_browsing_description),
+                R.drawable.onboarding_icon,
+            )
+        )
 
         setContent {
             AppTheme(customThemeWrapper.themeType, mSharedPreferences) {
@@ -158,9 +184,14 @@ class OnboardingActivity: BaseActivity() {
                                     modifier = Modifier
                                         .wrapContentHeight()
                                         .padding(innerPadding)
-                                        .padding(32.dp)
+                                        .padding(32.dp),
+                                    horizontalAlignment = if (page == 0) Alignment.Start else Alignment.CenterHorizontally
                                 ) {
-                                    WelcomePage()
+                                    if (page == 0) {
+                                        WelcomePage()
+                                    } else {
+                                        OnboardingPage(page)
+                                    }
 
                                     Spacer(modifier = Modifier.height(36.dp))
                                 }
@@ -254,6 +285,32 @@ class OnboardingActivity: BaseActivity() {
         )
     }
 
+    @Composable
+    fun ColumnScope.OnboardingPage(page: Int) {
+        Image(
+            painterResource(R.drawable.onboarding_icon),
+            contentDescription = stringResource(R.string.content_description_infinity_icon),
+            modifier = Modifier
+                .width(100.dp)
+                .clip(CircleShape)
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        PrimaryText(
+            onboardingPageData[page - 1].title,
+            fontSize = 36.sp,
+            lineHeight = 36.sp
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        PrimaryText(
+            onboardingPageData[page - 1].subtitle,
+            fontSize = LocalTypography.current.fontSize.size18
+        )
+    }
+
     override fun getDefaultSharedPreferences(): SharedPreferences {
         return mSharedPreferences
     }
@@ -269,4 +326,10 @@ class OnboardingActivity: BaseActivity() {
     override fun applyCustomTheme() {
 
     }
+
+    private class OnboardingPageData(
+        val title: String,
+        val subtitle: String,
+        val drawableResId: Int
+    )
 }

@@ -1673,4 +1673,12 @@
     <string name="by_continuing_2">" and "</string>
     <string name="reddit_user_agreement">Reddit User Agreement</string>
     <string name="by_continuing_3">.\nInfinity is an independent client for Reddit. Not affiliated or endorsed by Reddit.</string>
+    <string name="filter_what_you_see">Filter What You See</string>
+    <string name="filter_what_you_see_description">Advanced rules for a perfectly clean feed</string>
+    <string name="post_like_a_pro">Post Like a Pro</string>
+    <string name="post_like_a_pro_description">Every post type supported\nPlus GIFs in comments</string>
+    <string name="make_it_yours">Make it Yours</string>
+    <string name="make_it_yours_description">Customize every color, button, and gesture</string>
+    <string name="private_browsing">Private Browsing</string>
+    <string name="private_browsing_description">Browse Anonymously\nLogin Anytime</string>
 </resources>
