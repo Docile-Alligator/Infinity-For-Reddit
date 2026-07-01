@@ -11,6 +11,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -25,6 +26,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,7 +38,6 @@ import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -47,7 +48,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -61,6 +61,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.comment.Comment
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomNeutralTextButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomPositiveTextButton
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
@@ -127,7 +128,12 @@ class SetReminderActivity: BaseActivity() {
         }
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    private class ReminderPredefinedTime(
+        val textOnButton: String,
+        val timeInMillis: Long
+    )
+
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         ((application) as Infinity).appComponent.inject(this)
 
@@ -153,12 +159,39 @@ class SetReminderActivity: BaseActivity() {
         val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
         windowInsetsController.isAppearanceLightStatusBars = customThemeWrapper.isLightStatusBar
 
-        val currentTime = Calendar.getInstance()
+        val calendar = Calendar.getInstance()
         val formatter = DateTimeFormatter.ofPattern(
             mSharedPreferences.getString(
                 SharedPreferencesUtils.TIME_FORMAT_KEY,
                 SharedPreferencesUtils.TIME_FORMAT_DEFAULT_VALUE
             ), Locale.getDefault()
+        )
+
+        val reminderPresetTimes = listOf(
+            ReminderPredefinedTime(
+                getString(R.string.in_6_hours),
+                6 * 60 * 60 * 1000
+            ),
+            ReminderPredefinedTime(
+                getString(R.string.in_1_day),
+                24 * 60 * 60 * 1000
+            ),
+            ReminderPredefinedTime(
+                getString(R.string.in_2_days),
+                48 * 60 * 60 * 1000
+            ),
+            ReminderPredefinedTime(
+                getString(R.string.in_3_days),
+                72 * 60 * 60 * 1000
+            ),
+            ReminderPredefinedTime(
+                getString(R.string.in_1_week),
+                7 * 24 * 60 * 60 * 1000
+            ),
+            ReminderPredefinedTime(
+                getString(R.string.in_2_weeks),
+                14 * 24 * 60 * 60 * 1000
+            )
         )
 
         setContent {
@@ -170,20 +203,23 @@ class SetReminderActivity: BaseActivity() {
                     mViewModel.content
                 }
 
-                var showDatePicker by remember { mutableStateOf(false) }
-                var showTimePicker by remember { mutableStateOf(false) }
-                val datePickerState = rememberDatePickerState()
-                val timePickerState = rememberTimePickerState(
-                    initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
-                    initialMinute = currentTime.get(Calendar.MINUTE),
-                    is24Hour = true,
-                )
                 var reminderTimeMillis: Long by remember {
-                    mutableLongStateOf(0)
+                    mutableLongStateOf(System.currentTimeMillis() + 60 * 60 * 24 * 1000)
                 }
                 var reminderTimeString: String by remember {
                     mutableStateOf("")
                 }
+
+                var showDatePicker by remember { mutableStateOf(false) }
+                var showTimePicker by remember { mutableStateOf(false) }
+                val datePickerState = rememberDatePickerState(
+                    initialSelectedDateMillis = reminderTimeMillis
+                )
+                val timePickerState = rememberTimePickerState(
+                    initialHour = calendar.get(Calendar.HOUR_OF_DAY),
+                    initialMinute = calendar.get(Calendar.MINUTE),
+                    is24Hour = true,
+                )
 
                 val setReminderResult by mViewModel.setReminderResult.collectAsStateWithLifecycle()
 
@@ -276,6 +312,45 @@ class SetReminderActivity: BaseActivity() {
                             color = Color(LocalAppTheme.current.dividerColor)
                         )
 
+                        PrimaryText(
+                            R.string.choose_a_predefined_reminder_time,
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .padding(top = 16.dp, bottom = 8.dp),
+                            fontSize = LocalTypography.current.fontSize.size16
+                        )
+
+                        FlowRow(
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
+                                .padding(top = 8.dp, bottom = 16.dp),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            reminderPresetTimes.forEachIndexed { _, reminderPresetTime ->
+                                CustomFilledButton(text = reminderPresetTime.textOnButton) {
+                                    val reminderTime = reminderPresetTime.timeInMillis + System.currentTimeMillis()
+                                    datePickerState.selectedDateMillis = reminderTime + ZonedDateTime.now().offset.totalSeconds * 1000
+                                    calendar.timeInMillis = reminderTime
+                                    timePickerState.hour = calendar.get(Calendar.HOUR_OF_DAY)
+                                    timePickerState.minute = calendar.get(Calendar.MINUTE)
+                                }
+                            }
+                        }
+
+                        HorizontalDivider(
+                            color = Color(LocalAppTheme.current.dividerColor)
+                        )
+
+                        PrimaryText(
+                            R.string.or_set_a_custom_reminder_time,
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .padding(top = 16.dp),
+                            fontSize = LocalTypography.current.fontSize.size16
+                        )
+
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth(1f)
@@ -296,11 +371,15 @@ class SetReminderActivity: BaseActivity() {
                         }
 
                         if (!reminderTimeString.isEmpty()) {
+                            HorizontalDivider(
+                                color = Color(LocalAppTheme.current.dividerColor)
+                            )
+
                             PrimaryText(
                                 R.string.you_will_receive_reminder_notification,
                                 modifier = Modifier
                                     .padding(horizontal = 16.dp)
-                                    .padding(bottom = 8.dp)
+                                    .padding(top = 16.dp, bottom = 8.dp)
                             )
 
                             Row(

@@ -1654,6 +1654,14 @@
     <string name="copying_multi_reddit">Copying</string>
 
     <string name="set_reminder">Set Reminder</string>
+    <string name="choose_a_predefined_reminder_time">Choose a predefined reminder time:</string>
+    <string name="in_6_hours">In 6 hours</string>
+    <string name="in_1_day">In 1 day</string>
+    <string name="in_2_days">In 2 days</string>
+    <string name="in_3_days">In 3 days</string>
+    <string name="in_1_week">In 1 week</string>
+    <string name="in_2_weeks">In 2 weeks</string>
+    <string name="or_set_a_custom_reminder_time">Or, set a custom reminder time:</string>
     <string name="set_date">Set Date</string>
     <string name="set_time">Set Time</string>
     <string name="you_will_receive_reminder_notification">You\'ll receive a reminder notification on the date and time you set:</string>
