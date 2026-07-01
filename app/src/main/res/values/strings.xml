@@ -1674,11 +1674,18 @@
     <string name="reddit_user_agreement">Reddit User Agreement</string>
     <string name="by_continuing_3">.\nInfinity is an independent client for Reddit. Not affiliated or endorsed by Reddit.</string>
     <string name="filter_what_you_see">Filter What You See</string>
-    <string name="filter_what_you_see_description">Advanced rules for a perfectly clean feed</string>
+    <string name="filter_what_you_see_description">Advanced rules for a clean feed</string>
+    <string name="content_description_filter_what_you_see">Screenshot of filter what you see</string>
     <string name="post_like_a_pro">Post Like a Pro</string>
     <string name="post_like_a_pro_description">Every post type supported\nPlus GIFs in comments</string>
+    <string name="content_description_post_like_a_pro">Screenshot of post like a pro</string>
     <string name="make_it_yours">Make it Yours</string>
     <string name="make_it_yours_description">Customize every color, button, and gesture</string>
+    <string name="content_description_make_it_yours">Screenshot of make it yours</string>
     <string name="private_browsing">Private Browsing</string>
     <string name="private_browsing_description">Browse Anonymously\nLogin Anytime</string>
+    <string name="content_description_private_browsing">Screenshot of private browsing</string>
+    <string name="more_features">And There\'s More!</string>
+    <string name="more_features_description">Discover even more tools and features waiting for you inside the app</string>
+    <string name="content_description_more_features">Screenshot of more features</string>
 </resources>

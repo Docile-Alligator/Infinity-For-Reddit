@@ -43,7 +43,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
@@ -55,9 +54,11 @@ import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.edit
 import androidx.core.view.WindowInsetsControllerCompat
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.Infinity
@@ -69,6 +70,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButt
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalTypography
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils
 import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Named
@@ -91,6 +93,9 @@ class OnboardingActivity: BaseActivity() {
     @Inject
     @Named("current_account")
     lateinit var mCurrentAccountSharedPreferences: SharedPreferences
+    @Inject
+    @Named("internal")
+    lateinit var mInternalSharedPreferences: SharedPreferences
     @Inject
     lateinit var mCustomThemeWrapper: CustomThemeWrapper
 
@@ -121,22 +126,32 @@ class OnboardingActivity: BaseActivity() {
             OnboardingPageData(
                 getString(R.string.filter_what_you_see),
                 getString(R.string.filter_what_you_see_description),
-                R.drawable.onboarding_icon,
+                R.drawable.onboarding_filter_what_you_see,
+                getString(R.string.content_description_filter_what_you_see)
             ),
             OnboardingPageData(
                 getString(R.string.post_like_a_pro),
                 getString(R.string.post_like_a_pro_description),
-                R.drawable.onboarding_icon,
+                R.drawable.onboarding_post_like_a_pro,
+                getString(R.string.content_description_post_like_a_pro)
             ),
             OnboardingPageData(
                 getString(R.string.make_it_yours),
                 getString(R.string.make_it_yours_description),
-                R.drawable.onboarding_icon,
+                R.drawable.onboarding_make_it_yours,
+                getString(R.string.content_description_make_it_yours)
             ),
             OnboardingPageData(
                 getString(R.string.private_browsing),
                 getString(R.string.private_browsing_description),
-                R.drawable.onboarding_icon,
+                R.drawable.onboarding_private_browsing,
+                getString(R.string.content_description_private_browsing)
+            ),
+            OnboardingPageData(
+                getString(R.string.more_features),
+                getString(R.string.more_features_description),
+                R.drawable.onboarding_more_features,
+                getString(R.string.content_description_more_features)
             )
         )
 
@@ -145,7 +160,7 @@ class OnboardingActivity: BaseActivity() {
                 val context = LocalContext.current
                 val scrollBehavior = enterAlwaysScrollBehavior()
                 val pagerState = rememberPagerState(pageCount = {
-                    4
+                    onboardingPageData.size + 1
                 })
                 var continueButtonText by remember { mutableStateOf(context.getString(R.string.take_a_quick_tour)) }
                 val coroutineScope = rememberCoroutineScope()
@@ -153,6 +168,8 @@ class OnboardingActivity: BaseActivity() {
                 LaunchedEffect(pagerState.currentPage) {
                     continueButtonText = if (pagerState.currentPage == 0) {
                         context.getString(R.string.take_a_quick_tour)
+                    } else if (pagerState.currentPage == onboardingPageData.size) {
+                        context.getString(R.string.get_started)
                     } else {
                         context.getString(R.string.next)
                     }
@@ -182,8 +199,17 @@ class OnboardingActivity: BaseActivity() {
                             ) { page ->
                                 Column(
                                     modifier = Modifier
+                                        .fillMaxWidth()
                                         .wrapContentHeight()
-                                        .padding(innerPadding)
+                                        .padding(
+                                            top = innerPadding.calculateTopPadding(),
+                                            start = innerPadding.calculateStartPadding(
+                                                LocalLayoutDirection.current
+                                            ),
+                                            end = innerPadding.calculateEndPadding(
+                                                LocalLayoutDirection.current
+                                            )
+                                        )
                                         .padding(32.dp),
                                     horizontalAlignment = if (page == 0) Alignment.Start else Alignment.CenterHorizontally
                                 ) {
@@ -192,8 +218,6 @@ class OnboardingActivity: BaseActivity() {
                                     } else {
                                         OnboardingPage(page)
                                     }
-
-                                    Spacer(modifier = Modifier.height(36.dp))
                                 }
                             }
 
@@ -202,7 +226,9 @@ class OnboardingActivity: BaseActivity() {
                                     .fillMaxWidth(1f)
                                     .padding(
                                         bottom = innerPadding.calculateBottomPadding(),
-                                        start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+                                        start = innerPadding.calculateStartPadding(
+                                            LocalLayoutDirection.current
+                                        ),
                                         end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
                                     )
                                     .padding(horizontal = 32.dp)
@@ -217,6 +243,12 @@ class OnboardingActivity: BaseActivity() {
                                         coroutineScope.launch {
                                             pagerState.animateScrollToPage(pagerState.currentPage + 1)
                                         }
+                                    } else {
+                                        mInternalSharedPreferences.edit {
+                                            putBoolean(SharedPreferencesUtils.ONBOARDING_FINISHED, true)
+                                        }
+                                        startActivity(Intent(context, MainActivity::class.java))
+                                        finish()
                                     }
                                 }
 
@@ -288,26 +320,27 @@ class OnboardingActivity: BaseActivity() {
     @Composable
     fun ColumnScope.OnboardingPage(page: Int) {
         Image(
-            painterResource(R.drawable.onboarding_icon),
-            contentDescription = stringResource(R.string.content_description_infinity_icon),
+            painterResource(onboardingPageData[page - 1].drawableResId),
+            contentDescription = onboardingPageData[page - 1].contentDescription,
             modifier = Modifier
-                .width(100.dp)
-                .clip(CircleShape)
+                .weight(1f)
         )
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(36.dp))
 
         PrimaryText(
             onboardingPageData[page - 1].title,
             fontSize = 36.sp,
-            lineHeight = 36.sp
+            lineHeight = 36.sp,
+            textAlign = TextAlign.Center
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
         PrimaryText(
             onboardingPageData[page - 1].subtitle,
-            fontSize = LocalTypography.current.fontSize.size18
+            fontSize = LocalTypography.current.fontSize.size18,
+            textAlign = TextAlign.Center
         )
     }
 
@@ -330,6 +363,7 @@ class OnboardingActivity: BaseActivity() {
     private class OnboardingPageData(
         val title: String,
         val subtitle: String,
-        val drawableResId: Int
+        val drawableResId: Int,
+        val contentDescription: String
     )
 }
