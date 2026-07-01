@@ -193,6 +193,17 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         posts = new ArrayList<>();
     }
 
+    public static class PostPagingSourceError extends Exception {
+        public final int code;
+        public final String message;
+
+        PostPagingSourceError(int code, String message) {
+            super(message);
+            this.code = code;
+            this.message = message;
+        }
+    }
+
     @Nullable
     @Override
     public String getRefreshKey(@NonNull PagingState<String, Post> pagingState) {
@@ -225,7 +236,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
             LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, readPostsList);
             String lastItem = ParsePost.getLastItem(responseString);
             if (newPosts == null) {
-                return new LoadResult.Error<>(new Exception("Error parsing posts"));
+                return new LoadResult.Error<>(new PostPagingSourceError(response.code(), "Error parsing posts"));
             } else {
                 int currentPostsSize = posts.size();
                 if (lastItem != null && lastItem.equals(previousLastItem)) {
@@ -253,7 +264,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
                 }
             }
         } else {
-            return new LoadResult.Error<>(new Exception("Error getting response"));
+            return new LoadResult.Error<>(new PostPagingSourceError(response.code(), "Error getting response"));
         }
     }
 

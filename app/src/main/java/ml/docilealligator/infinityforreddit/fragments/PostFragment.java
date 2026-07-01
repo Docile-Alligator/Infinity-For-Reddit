@@ -72,6 +72,7 @@ import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostDetailFr
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
 import ml.docilealligator.infinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.post.PostType;
 import ml.docilealligator.infinityforreddit.post.PostViewModel;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
@@ -959,7 +960,16 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
                 }
             } else if (refreshLoadState instanceof LoadState.Error) {
                 binding.fetchPostInfoLinearLayoutPostFragment.setOnClickListener(view -> refresh());
-                showErrorView(R.string.load_posts_error);
+                Throwable e = ((LoadState.Error) refreshLoadState).getError();
+                if (e instanceof PostPagingSource.PostPagingSourceError) {
+                    if (((PostPagingSource.PostPagingSourceError) e).code == 403 && Account.ANONYMOUS_ACCOUNT.equals(mActivity.accountName)) {
+                        showErrorView(R.string.load_posts_error_anonymous_403);
+                    } else {
+                        showErrorView(R.string.load_posts_error);
+                    }
+                } else {
+                    showErrorView(R.string.load_posts_error);
+                }
             }
             if (!(refreshLoadState instanceof LoadState.Loading) && appendLoadState instanceof LoadState.NotLoading) {
                 if (appendLoadState.getEndOfPaginationReached() && mAdapter.getItemCount() < 1) {

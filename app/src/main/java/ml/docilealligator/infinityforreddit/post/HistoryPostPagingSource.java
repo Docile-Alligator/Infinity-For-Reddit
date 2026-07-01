@@ -92,7 +92,7 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
                 String responseString = response.body();
                 LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, NullReadPostsList.getInstance());
                 if (newPosts == null) {
-                    return new LoadResult.Error<>(new Exception("Error parsing posts"));
+                    return new LoadResult.Error<>(new PostPagingSource.PostPagingSourceError(response.code(), "Error parsing posts"));
                 } else {
                     if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
                         setMetadataToAnonymousPosts(newPosts);
@@ -104,11 +104,11 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
                     return new LoadResult.Page<>(new ArrayList<>(newPosts), null, Long.toString(lastItem));
                 }
             } else {
-                return new LoadResult.Error<>(new Exception("Response failed"));
+                return new LoadResult.Error<>(new PostPagingSource.PostPagingSourceError(response.code(), "Error getting response"));
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return new LoadResult.Error<>(new Exception("Response failed"));
+            return new LoadResult.Error<>(new PostPagingSource.PostPagingSourceError(0, "Error getting response"));
         }
     }
 
