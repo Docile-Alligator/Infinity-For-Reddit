@@ -124,6 +124,7 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
 
             binding.setReminderCommentMoreBottomSheetFragment.setOnClickListener(view -> {
                 SetReminderActivity.Companion.startReminderActivity(activity, comment.getLinkId(), comment);
+                dismiss();
             });
         }
 

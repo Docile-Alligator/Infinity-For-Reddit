@@ -1668,6 +1668,8 @@
     <string name="please_set_reminder_time">Please set a reminder time</string>
     <string name="reminder_time_must_be_in_future">The reminder time must be in the future.</string>
     <string name="invalid_reminder_post_id">Invalid post id</string>
+    <string name="note">Note:</string>
+    <string name="reminder_reliability_notice">Reminders may not be delivered if you force stop the app or if the app is updated and not opened afterward. Simply opening the app again will restore reminder functionality.</string>
     <string name="reminder_set">Reminder set</string>
     <string name="reminder">Reminder</string>
 

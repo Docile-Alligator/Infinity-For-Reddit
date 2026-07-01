@@ -22,6 +22,7 @@ fun PrimaryText(
     fontFamily: FontFamily? = LocalTypography.current.fontFamily,
     fontSize: TextUnit = LocalTypography.current.fontSize.default,
     textAlign: TextAlign? = null,
+    fontWeight: FontWeight? = null,
     lineHeight: TextUnit = TextUnit.Unspecified
 ) {
     Text(
@@ -31,6 +32,7 @@ fun PrimaryText(
         fontFamily = fontFamily,
         fontSize = fontSize,
         textAlign = textAlign,
+        fontWeight = fontWeight,
         lineHeight = lineHeight
     )
 }

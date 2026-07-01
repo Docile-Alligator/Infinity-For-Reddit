@@ -255,6 +255,7 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
 
                 binding.setReminderTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {
                     SetReminderActivity.Companion.startReminderActivity(mBaseActivity, mPost, null);
+                    dismiss();
                 });
 
                 binding.reportTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {

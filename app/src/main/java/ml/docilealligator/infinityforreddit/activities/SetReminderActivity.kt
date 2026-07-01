@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,8 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -50,6 +53,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
@@ -67,6 +71,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.CustomPositiveTe
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalTypography
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
+import ml.docilealligator.infinityforreddit.customviews.compose.SecondaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
 import ml.docilealligator.infinityforreddit.post.Post
 import ml.docilealligator.infinityforreddit.reminder.ReminderManager
@@ -197,7 +202,6 @@ class SetReminderActivity: BaseActivity() {
         setContent {
             AppTheme(customThemeWrapper.themeType, mSharedPreferences) {
                 val context = LocalContext.current
-                val scrollBehavior = enterAlwaysScrollBehavior()
 
                 val content = remember {
                     mViewModel.content
@@ -288,7 +292,6 @@ class SetReminderActivity: BaseActivity() {
                     },
                     modifier = Modifier
                         .fillMaxSize()
-                        .nestedScroll(scrollBehavior.nestedScrollConnection)
                         .imePadding(),
                     snackbarHost = {
                         SnackbarHost(hostState = snackbarHostState)
@@ -299,7 +302,8 @@ class SetReminderActivity: BaseActivity() {
                         modifier = Modifier
                             .fillMaxSize()
                             .background(Color(LocalAppTheme.current.backgroundColor))
-                            .padding(innerPadding),
+                            .padding(innerPadding)
+                            .verticalScroll(rememberScrollState()),
                     ) {
                         if (content.isNotEmpty()) {
                             PrimaryText(
@@ -396,6 +400,23 @@ class SetReminderActivity: BaseActivity() {
                                 )
                             }
                         }
+
+                        Spacer(Modifier.weight(1f))
+
+                        PrimaryText(
+                            R.string.note,
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp),
+                            fontSize = LocalTypography.current.fontSize.size16,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        SecondaryText(
+                            R.string.reminder_reliability_notice,
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp),
+                            textAlign = TextAlign.Justify
+                        )
 
                         if (showDatePicker) {
                             DatePickerDialog(
