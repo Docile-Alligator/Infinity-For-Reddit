@@ -68,7 +68,7 @@ public class UserProfileImagesBatchLoader {
                                  @NonNull LoadIconListener loadIconListener) {
         loadAuthorImages(
                 accessToken,
-                posts.stream().map(Post::getAuthorFullname).collect(Collectors.toList()),
+                posts.stream().map(Post::getAuthorFullname).filter(authorFullName -> authorFullName != null && !authorFullName.isEmpty()).collect(Collectors.toList()),
                 loadIconListener
         );
     }
@@ -77,7 +77,7 @@ public class UserProfileImagesBatchLoader {
                                  @NonNull LoadIconListener loadIconListener) {
         loadAuthorImages(
                 accessToken,
-                comments.stream().map(Comment::getAuthorFullName).collect(Collectors.toList()),
+                comments.stream().map(Comment::getAuthorFullName).filter(authorFullName -> authorFullName != null && !authorFullName.isEmpty()).collect(Collectors.toList()),
                 loadIconListener
         );
     }

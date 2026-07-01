@@ -336,6 +336,7 @@ public class Post implements Parcelable {
         return author;
     }
 
+    // Will be empty if the post is deleted
     public String getAuthorFullname() {
         return authorFullname;
     }

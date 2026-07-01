@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -675,7 +676,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
             if (mDisplaySubredditName) {
                 if (post.getAuthorNamePrefixed().equals(post.getSubredditNamePrefixed())) {
-                    if (post.getAuthorIconUrl() == null) {
+                    if (post.getAuthorIconUrl() == null && post.getAuthorFullname() != null && !post.getAuthorFullname().isEmpty()) {
                         ItemSnapshotList<Post> snapshot = snapshot();
                         mFragment.loadUserIcon(snapshot.subList(holder.getBindingAdapterPosition(),
                                 Math.min(holder.getBindingAdapterPosition() + 100, snapshot.size())),
@@ -717,15 +718,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 }
                             }
                         });*/
-                    } else if (!post.getAuthorIconUrl().isEmpty()) {
+                    } else {
                         mGlide.load(post.getAuthorIconUrl())
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                 .error(mGlide.load(R.drawable.subreddit_default_icon)
                                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                                .into(((PostViewHolder) holder).iconGifImageView);
-                    } else {
-                        mGlide.load(R.drawable.subreddit_default_icon)
-                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                 .into(((PostViewHolder) holder).iconGifImageView);
                     }
                 } else {
@@ -749,21 +746,17 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 }
                             }
                         });
-                    } else if (!post.getSubredditIconUrl().isEmpty()) {
+                    } else {
                         mGlide.load(post.getSubredditIconUrl())
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                 .error(mGlide.load(R.drawable.subreddit_default_icon)
                                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                 .into(((PostViewHolder) holder).iconGifImageView);
-                    } else {
-                        mGlide.load(R.drawable.subreddit_default_icon)
-                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                .into(((PostViewHolder) holder).iconGifImageView);
                     }
                 }
             } else {
-                if (post.getAuthorIconUrl() == null) {
-                    String authorName = post.isAuthorDeleted() ? post.getSubredditName() : post.getAuthor();
+                if (post.getAuthorIconUrl() == null && post.getAuthorFullname() != null && !post.getAuthorFullname().isEmpty()) {
+                    String authorName = post.getAuthor();
                     ItemSnapshotList<Post> snapshot = snapshot();
                     mFragment.loadUserIcon(snapshot.subList(holder.getBindingAdapterPosition(),
                                     Math.min(holder.getBindingAdapterPosition() + 100, snapshot.size())),
@@ -805,15 +798,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             }
                         }
                     });*/
-                } else if (!post.getAuthorIconUrl().isEmpty()) {
+                } else {
                     mGlide.load(post.getAuthorIconUrl())
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                             .error(mGlide.load(R.drawable.subreddit_default_icon)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                            .into(((PostViewHolder) holder).iconGifImageView);
-                } else {
-                    mGlide.load(R.drawable.subreddit_default_icon)
-                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                             .into(((PostViewHolder) holder).iconGifImageView);
                 }
             }

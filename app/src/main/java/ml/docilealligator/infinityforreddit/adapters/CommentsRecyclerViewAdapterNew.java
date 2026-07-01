@@ -424,7 +424,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
                 }
 
                 if (mShowAuthorAvatar) {
-                    if (comment.getAuthorIconUrl() == null) {
+                    if (comment.getAuthorIconUrl() == null && comment.getAuthorFullName() != null && !comment.getAuthorFullName().isEmpty()) {
                         if (position >= 0) {
                             List<Comment> commentBatch = getCurrentList().subList(position, Math.min(getCurrentList().size(), UserProfileImagesBatchLoader.BATCH_SIZE + position));
                             mFragment.loadIcon(commentBatch, (authorFullName, iconUrl) -> {
@@ -576,7 +576,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
                 ((CommentFullyCollapsedViewHolder) holder).binding.userNameTextViewItemCommentFullyCollapsed.setText(authorWithPrefix);
 
                 if (mShowAuthorAvatar) {
-                    if (comment.getAuthorIconUrl() == null) {
+                    if (comment.getAuthorIconUrl() == null && comment.getAuthorFullName() != null && !comment.getAuthorFullName().isEmpty()) {
                         if (position >= 0) {
                             List<Comment> commentBatch = getCurrentList().subList(position, Math.min(getCurrentList().size(), UserProfileImagesBatchLoader.BATCH_SIZE + position));
                             mFragment.loadIcon(commentBatch, (authorFullName, iconUrl) -> {

@@ -166,7 +166,7 @@ public class ParsePost {
             e.printStackTrace();
         }
         String author = data.getString(JSONUtils.AUTHOR_KEY);
-        String authorFullname = data.getString(JSONUtils.AUTHOR_FULLNAME_KEY);
+        String authorFullname = data.has(JSONUtils.AUTHOR_FULLNAME_KEY) ? data.getString(JSONUtils.AUTHOR_FULLNAME_KEY) : "";
         StringBuilder authorFlairHTMLBuilder = new StringBuilder();
         if (data.has(JSONUtils.AUTHOR_FLAIR_RICHTEXT_KEY)) {
             JSONArray flairArray = data.getJSONArray(JSONUtils.AUTHOR_FLAIR_RICHTEXT_KEY);
