@@ -486,7 +486,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     });
                 }
 
-                if (userData.isCanBeFollowed()) {
+                if (userData.isCanBeFollowed() || Account.ANONYMOUS_ACCOUNT.equals(accountName)) {
                     binding.subscribeUserChipViewUserDetailActivity.setVisibility(View.VISIBLE);
                     binding.subscribeUserChipViewUserDetailActivity.setOnClickListener(view -> {
                         if (subscriptionReady) {
