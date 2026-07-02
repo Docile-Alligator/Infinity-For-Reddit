@@ -18,7 +18,9 @@ class AnonymousAccessTokenInterceptor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
         val path = originalRequest.url.encodedPath
-        if (path.contains("/api/v1/access_token") || path.contains("/api/v1/authorize")) {
+        if (path.contains("/api/v1/access_token")
+            || path.contains("/api/v1/authorize")
+            || !originalRequest.url.host.equals("www.reddit.com")) {
             return chain.proceed(originalRequest)
         }
 
