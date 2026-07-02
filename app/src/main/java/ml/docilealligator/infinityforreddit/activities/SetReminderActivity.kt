@@ -264,7 +264,7 @@ class SetReminderActivity: BaseActivity() {
                 Scaffold(
                     topBar = {
                         ThemedTopAppBar(
-                            titleStringResId = R.string.reminders,
+                            titleStringResId = R.string.set_reminder,
                             isImmersiveInterfaceEnabled = isImmersiveInterfaceEnabled,
                             windowInsetsController = windowInsetsController,
                             actions = {

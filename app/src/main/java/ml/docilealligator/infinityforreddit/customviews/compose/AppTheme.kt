@@ -2,11 +2,10 @@ package ml.docilealligator.infinityforreddit.customviews.compose
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -106,6 +105,8 @@ fun AppTheme(themeType: Int, sharedPreferences: SharedPreferences, content: @Com
                 content()
             }
         }
+    } else {
+        Box(modifier = Modifier.fillMaxSize().background(Color.White.copy(alpha = 0.05f)))
     }
 }
 
