@@ -441,8 +441,12 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             ZoomSurfaceView zoomSurfaceView = findViewById(R.id.zoom_surface_view_view_video_activity);
             player.addListener(new Player.Listener() {
                 @Override
-                public void onVideoSizeChanged(VideoSize videoSize) {
-                    zoomSurfaceView.setContentSize(videoSize.width, videoSize.height);
+                public void onVideoSizeChanged(@NonNull VideoSize videoSize) {
+                    try {
+                        zoomSurfaceView.setContentSize(videoSize.width, videoSize.height);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
             zoomSurfaceView.addCallback(new ZoomSurfaceView.Callback() {
