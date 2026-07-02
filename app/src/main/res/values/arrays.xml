@@ -255,6 +255,7 @@
         <item>23-1-2020 11:45 PM</item>
         <item>2020-1-23 23:45</item>
         <item>2020-1-23 11:45 PM</item>
+        <item>2020-01-23 23:45</item>
         <item>1.23.2020 23:45</item>
         <item>1.23.2020 11:45 PM</item>
         <item>23.1.2020 23:45</item>
@@ -280,6 +281,7 @@
         <item>d-M-yyyy hh:mm a</item>
         <item>yyyy-M-d HH:mm</item>
         <item>yyyy-M-d hh:mm a</item>
+        <item>yyyy-MM-dd HH:mm</item>
         <item>M.d.yyyy HH:mm</item>
         <item>M.d.yyyy hh:mm a</item>
         <item>d.M.yyyy HH:mm</item>
