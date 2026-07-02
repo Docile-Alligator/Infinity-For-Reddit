@@ -28,6 +28,7 @@ public class ShareDataResolverActivity extends AppCompatActivity {
                         //It's a link
                         Intent intent = new Intent(this, PostLinkActivity.class);
                         intent.putExtra(PostLinkActivity.EXTRA_LINK, text);
+                        intent.putExtra(PostLinkActivity.EXTRA_TITLE, receivedIntent.getStringExtra(Intent.EXTRA_TITLE));
                         startActivity(intent);
                     } else {
                         Intent intent = new Intent(this, PostTextActivity.class);

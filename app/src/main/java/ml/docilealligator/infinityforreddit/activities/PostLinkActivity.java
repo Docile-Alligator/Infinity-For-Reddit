@@ -69,6 +69,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
 
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
     static final String EXTRA_LINK = "EL";
+    static final String EXTRA_TITLE = "ET";
 
     private static final String SELECTED_ACCOUNT_STATE = "SAS";
     private static final String SUBREDDIT_NAME_STATE = "SNS";
@@ -256,8 +257,12 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
             }
 
             String link = getIntent().getStringExtra(EXTRA_LINK);
+            String title = getIntent().getStringExtra(EXTRA_TITLE);
             if (link != null) {
                 binding.postLinkEditTextPostLinkActivity.setText(link);
+            }
+            if (title != null) {
+                binding.postTitleEditTextPostLinkActivity.setText(title);
             }
         }
 
