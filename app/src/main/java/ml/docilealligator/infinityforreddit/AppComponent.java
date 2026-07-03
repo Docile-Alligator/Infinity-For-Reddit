@@ -73,6 +73,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.AccountChooserB
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.ImportantInfoBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostOptionsBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.broadcastreceivers.BootCompletedBroadcastReceiver;
 import ml.docilealligator.infinityforreddit.fragments.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.CustomThemeListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.FollowedUsersListingFragment;
@@ -344,6 +345,8 @@ public interface AppComponent {
     void inject(ReminderAlarmReceiver reminderAlarmReceiver);
 
     void inject(OnboardingActivity onboardingActivity);
+
+    void inject(BootCompletedBroadcastReceiver bootCompletedBroadcastReceiver);
 
     @Component.Factory
     interface Factory {

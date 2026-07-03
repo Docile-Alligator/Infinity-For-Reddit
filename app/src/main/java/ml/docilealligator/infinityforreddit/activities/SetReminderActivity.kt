@@ -37,7 +37,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TimePicker
-import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.LaunchedEffect
@@ -49,7 +48,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -217,7 +215,7 @@ class SetReminderActivity: BaseActivity() {
                 var showDatePicker by remember { mutableStateOf(false) }
                 var showTimePicker by remember { mutableStateOf(false) }
                 val datePickerState = rememberDatePickerState(
-                    initialSelectedDateMillis = reminderTimeMillis
+                    initialSelectedDateMillis = reminderTimeMillis + ZonedDateTime.now().offset.totalSeconds * 1000
                 )
                 val timePickerState = rememberTimePickerState(
                     initialHour = calendar.get(Calendar.HOUR_OF_DAY),

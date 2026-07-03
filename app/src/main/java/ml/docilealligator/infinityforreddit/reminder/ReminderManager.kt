@@ -48,17 +48,21 @@ class ReminderManager(
 
     fun checkAndSetAllAlarms() {
         MainScope().launch {
-            for (reminder in redditRoomDatabase.reminderDao().getAllReminders()) {
-                if (PendingIntent.getBroadcast(applicationContext, reminder.createdAt.toInt(), Intent(
-                        applicationContext,
-                        ReminderAlarmReceiver::class.java
-                    ), PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE) == null) {
-                    if (System.currentTimeMillis() >= reminder.reminderTime) {
-                        sendNotification(applicationContext, customThemeWrapper, reminder)
-                        redditRoomDatabase.reminderDao().deleteReminder(reminder)
-                    } else {
-                        setAlarm(reminder)
-                    }
+            checkAndSetAllAlarmsSync()
+        }
+    }
+
+    suspend fun checkAndSetAllAlarmsSync() {
+        for (reminder in redditRoomDatabase.reminderDao().getAllReminders()) {
+            if (PendingIntent.getBroadcast(applicationContext, reminder.createdAt.toInt(), Intent(
+                    applicationContext,
+                    ReminderAlarmReceiver::class.java
+                ), PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE) == null) {
+                if (System.currentTimeMillis() >= reminder.reminderTime) {
+                    sendNotification(applicationContext, customThemeWrapper, reminder)
+                    redditRoomDatabase.reminderDao().deleteReminder(reminder)
+                } else {
+                    setAlarm(reminder)
                 }
             }
         }

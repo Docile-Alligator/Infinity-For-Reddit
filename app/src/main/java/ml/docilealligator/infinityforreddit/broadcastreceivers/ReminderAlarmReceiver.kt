@@ -33,29 +33,6 @@ class ReminderAlarmReceiver: BroadcastReceiver() {
         val reminder: Reminder? = intent.getParcelableExtra(EXTRA_REMINDER)
         reminder?.let {
             (context.applicationContext as Infinity).appComponent.inject(this)
-            /*val notificationManager = NotificationUtils.getNotificationManager(context)
-            val builder = NotificationUtils.buildNotification(
-                notificationManager,
-                context, context.getString(R.string.reminder), it.content, context.getString(if (it.commentId.isNotEmpty()) R.string.comment else R.string.post),
-                NotificationUtils.CHANNEL_ID_NEW_MESSAGES,
-                NotificationUtils.CHANNEL_NEW_MESSAGES,
-                NotificationUtils.GROUP_REMINDER, mCustomThemeWrapper.colorPrimaryLightTheme
-            )
-
-            val intent = Intent(context, ViewPostDetailActivity::class.java)
-            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, it.postId)
-            intent.putExtra(ViewPostDetailActivity.EXTRA_SINGLE_COMMENT_ID, it.commentId)
-            val pendingIntent =
-                PendingIntent.getActivity(context, it.createdAt.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-            builder.setContentIntent(pendingIntent)
-
-            try {
-                notificationManager.notify(
-                    NotificationUtils.REMINDER_NOTIFICATION_ID + Random().nextInt(10000), builder.build()
-                )
-            } catch (e: SecurityException) {
-                e.printStackTrace()
-            }*/
 
             ReminderManager.sendNotification(context, mCustomThemeWrapper, it)
 
