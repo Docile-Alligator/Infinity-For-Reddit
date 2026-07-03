@@ -148,6 +148,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     @UnstableApi
     private DefaultTrackSelector trackSelector;
     private DataSource.Factory dataSourceFactory;
+    private Player.Listener playerListener;
 
     private Integer originalOrientation;
     private boolean useBottomToolbar;
@@ -523,7 +524,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             Util.handlePlayPauseButtonAction(player);
         });
 
-        player.addListener(new Player.Listener() {
+        playerListener = new Player.Listener() {
             @Override
             public void onEvents(@NonNull Player player, @NonNull Player.Events events) {
                 if (events.containsAny(
@@ -656,7 +657,17 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             public void onPlayerError(@NonNull PlaybackException error) {
                 viewVideoViewModel.loadFallbackVideo(player.getCurrentMediaItem());
             }
-        });
+
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                if (isPlaying) {
+                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                } else {
+                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                }
+            }
+        };
+        player.addListener(playerListener);
 
         // Produces DataSource instances through which media data is loaded.
         dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
@@ -778,6 +789,9 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+        if (playerListener != null) {
+            player.removeListener(playerListener);
+        }
         player.seekToDefaultPosition();
         player.stop();
         player.release();
