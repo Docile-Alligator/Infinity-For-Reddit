@@ -49,9 +49,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
@@ -410,9 +414,55 @@ class SetReminderActivity: BaseActivity() {
                         )
 
                         SecondaryText(
-                            R.string.reminder_reliability_notice,
+                            text = buildAnnotatedString {
+                                withStyle(
+                                    SpanStyle(
+                                        color = Color(LocalAppTheme.current.primaryTextColor),
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                ) {
+                                    append(stringResource(R.string.reminder_reliability_notice_app_update_force_stop_title))
+                                }
+
+                                append(stringResource(R.string.reminder_reliability_notice_app_update_force_stop_description))
+                            },
                             modifier = Modifier
                                 .padding(horizontal = 16.dp),
+                            textAlign = TextAlign.Justify
+                        )
+                        SecondaryText(
+                            text = buildAnnotatedString {
+                                withStyle(
+                                    SpanStyle(
+                                        color = Color(LocalAppTheme.current.primaryTextColor),
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                ) {
+                                    append(stringResource(R.string.reminder_reliability_notice_battery_title))
+                                }
+
+                                append(stringResource(R.string.reminder_reliability_notice_battery_description))
+                            },
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp),
+                            textAlign = TextAlign.Justify
+                        )
+                        SecondaryText(
+                            text = buildAnnotatedString {
+                                withStyle(
+                                    SpanStyle(
+                                        color = Color(LocalAppTheme.current.primaryTextColor),
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                ) {
+                                    append(stringResource(R.string.reminder_reliability_notice_device_settings_title))
+                                }
+
+                                append(stringResource(R.string.reminder_reliability_notice_device_settings_description))
+                            },
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .padding(bottom = 16.dp),
                             textAlign = TextAlign.Justify
                         )
 

@@ -1669,7 +1669,12 @@
     <string name="reminder_time_must_be_in_future">The reminder time must be in the future.</string>
     <string name="invalid_reminder_post_id">Invalid post id</string>
     <string name="note">Note:</string>
-    <string name="reminder_reliability_notice">Reminders may not be delivered if you force stop the app or if the app is updated and not opened afterward. Simply opening the app again will restore reminder functionality.</string>
+    <string name="reminder_reliability_notice_app_update_force_stop_title">"App Updates \u0026 Force Stops: "</string>
+    <string name="reminder_reliability_notice_app_update_force_stop_description">If you force-close the app or it updates, reminders will pause. Simply open the app once to reactivate them.</string>
+    <string name="reminder_reliability_notice_battery_title">"Battery \u0026 Timing: "</string>
+    <string name="reminder_reliability_notice_battery_description">To save battery, your phone may slightly delay reminders rather than triggering them at the exact time.</string>
+    <string name="reminder_reliability_notice_device_settings_title">"Device Settings: "</string>
+    <string name="reminder_reliability_notice_device_settings_description">Some phones (like Xiaomi, Oppo, or Vivo) require you to turn on "Auto-start" or "Background App Launch" in your phone\'s system settings. Otherwise, reminders will stop working if your phone restarts.</string>
     <string name="reminder_set">Reminder set</string>
     <string name="reminder">Reminder</string>
 

@@ -256,7 +256,7 @@ class OnboardingActivity: BaseActivity() {
 
                                 Text(
                                     text = buildAnnotatedString {
-                                        append(getString(R.string.by_continuing_1))
+                                        append(stringResource(R.string.by_continuing_1))
 
                                         withLink(
                                             LinkAnnotation.Url(
@@ -264,10 +264,10 @@ class OnboardingActivity: BaseActivity() {
                                                 TextLinkStyles(style = SpanStyle(color = Color(LocalAppTheme.current.linkColor)))
                                             )
                                         ) {
-                                            append(getString(R.string.privacy_policy))
+                                            append(stringResource(R.string.privacy_policy))
                                         }
 
-                                        append(getString(R.string.by_continuing_2))
+                                        append(stringResource(R.string.by_continuing_2))
 
                                         withLink(
                                             LinkAnnotation.Url(
@@ -275,10 +275,10 @@ class OnboardingActivity: BaseActivity() {
                                                 TextLinkStyles(style = SpanStyle(color = Color(LocalAppTheme.current.linkColor)))
                                             )
                                         ) {
-                                            append(getString(R.string.reddit_user_agreement))
+                                            append(stringResource(R.string.reddit_user_agreement))
                                         }
 
-                                        append(getString(R.string.by_continuing_3))
+                                        append(stringResource(R.string.by_continuing_3))
                                     },
                                     fontFamily = LocalTypography.current.fontFamily,
                                     fontSize = 12.sp
