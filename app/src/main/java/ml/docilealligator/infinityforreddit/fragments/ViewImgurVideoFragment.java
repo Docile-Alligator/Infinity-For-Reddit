@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -78,6 +79,7 @@ public class ViewImgurVideoFragment extends Fragment {
     private boolean isMute = false;
     private boolean isDownloading = false;
     private int playbackSpeed = 100;
+    private Player.Listener playerListener;
     @Inject
     @Named("media3")
     OkHttpClient mOkHttpClient;
@@ -312,7 +314,7 @@ public class ViewImgurVideoFragment extends Fragment {
             Util.handlePlayPauseButtonAction(player);
         });
 
-        player.addListener(new Player.Listener() {
+        playerListener = new Player.Listener() {
             @Override
             public void onEvents(@NonNull Player player, @NonNull Player.Events events) {
                 if (events.containsAny(
@@ -349,7 +351,17 @@ public class ViewImgurVideoFragment extends Fragment {
                     binding.getMuteButton().setVisibility(View.GONE);
                 }
             }
-        });
+
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                if (isPlaying) {
+                    activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                } else {
+                    activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                }
+            }
+        };
+        player.addListener(playerListener);
     }
 
     @Override
@@ -378,6 +390,9 @@ public class ViewImgurVideoFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (playerListener != null) {
+            player.removeListener(playerListener);
+        }
         player.seekToDefaultPosition();
         player.stop();
         player.release();
