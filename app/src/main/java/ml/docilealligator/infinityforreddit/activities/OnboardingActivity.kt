@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.activities
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -10,29 +11,32 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -54,12 +58,15 @@ import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.window.core.layout.WindowSizeClass
+import androidx.window.core.layout.WindowWidthSizeClass
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
@@ -70,6 +77,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButt
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalTypography
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
+import ml.docilealligator.infinityforreddit.customviews.compose.SecondaryText
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils
 import retrofit2.Retrofit
 import javax.inject.Inject
@@ -120,7 +128,8 @@ class OnboardingActivity: BaseActivity() {
         }
 
         val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
-        windowInsetsController.isAppearanceLightStatusBars = customThemeWrapper.isLightStatusBar
+        windowInsetsController.isAppearanceLightStatusBars =
+            (getResources().configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO
 
         onboardingPageData = arrayOf(
             OnboardingPageData(
@@ -164,14 +173,19 @@ class OnboardingActivity: BaseActivity() {
                 })
                 var continueButtonText by remember { mutableStateOf(context.getString(R.string.take_a_quick_tour)) }
                 val coroutineScope = rememberCoroutineScope()
+                val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 
                 LaunchedEffect(pagerState.currentPage) {
-                    continueButtonText = if (pagerState.currentPage == 0) {
-                        context.getString(R.string.take_a_quick_tour)
-                    } else if (pagerState.currentPage == onboardingPageData.size) {
-                        context.getString(R.string.get_started)
-                    } else {
-                        context.getString(R.string.next)
+                    continueButtonText = when (pagerState.currentPage) {
+                        0 -> {
+                            context.getString(R.string.take_a_quick_tour)
+                        }
+                        onboardingPageData.size -> {
+                            context.getString(R.string.get_started)
+                        }
+                        else -> {
+                            context.getString(R.string.next)
+                        }
                     }
                 }
 
@@ -197,7 +211,7 @@ class OnboardingActivity: BaseActivity() {
                                     .wrapContentHeight()
                                     .weight(1f)
                             ) { page ->
-                                Column(
+                                Box(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .wrapContentHeight()
@@ -211,12 +225,11 @@ class OnboardingActivity: BaseActivity() {
                                             )
                                         )
                                         .padding(32.dp),
-                                    horizontalAlignment = if (page == 0) Alignment.Start else Alignment.CenterHorizontally
                                 ) {
                                     if (page == 0) {
-                                        WelcomePage()
+                                        WelcomePage(windowSizeClass)
                                     } else {
-                                        OnboardingPage(page)
+                                        OnboardingPage(page, windowSizeClass)
                                     }
                                 }
                             }
@@ -254,7 +267,7 @@ class OnboardingActivity: BaseActivity() {
 
                                 Spacer(Modifier.height(16.dp))
 
-                                Text(
+                                SecondaryText(
                                     text = buildAnnotatedString {
                                         append(stringResource(R.string.by_continuing_1))
 
@@ -292,56 +305,110 @@ class OnboardingActivity: BaseActivity() {
     }
 
     @Composable
-    fun ColumnScope.WelcomePage() {
-        Image(
-            painterResource(R.drawable.onboarding_icon),
-            contentDescription = stringResource(R.string.content_description_infinity_icon),
-            modifier = Modifier
-                .width(100.dp)
-                .clip(CircleShape)
-        )
+    fun WelcomePage(windowSizeClass: WindowSizeClass) {
+        Column(
+            horizontalAlignment = Alignment.Start
+        ) {
+            Image(
+                painterResource(R.drawable.onboarding_icon),
+                contentDescription = stringResource(R.string.content_description_infinity_icon),
+                modifier = Modifier
+                    .width(100.dp)
+                    .clip(CircleShape)
+            )
 
-        Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(1f))
 
-        PrimaryText(
-            R.string.welcome_to_infinity_onboarding,
-            fontSize = 36.sp,
-            lineHeight = 36.sp
-        )
+            PrimaryText(
+                R.string.welcome_to_infinity_onboarding,
+                fontSize = 36.sp,
+                lineHeight = 36.sp
+            )
 
-        Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
-        PrimaryText(
-            R.string.infinitely_better_experience,
-            fontSize = LocalTypography.current.fontSize.size18
-        )
+            PrimaryText(
+                R.string.infinitely_better_experience,
+                fontSize = LocalTypography.current.fontSize.size18
+            )
+        }
     }
 
     @Composable
-    fun ColumnScope.OnboardingPage(page: Int) {
-        Image(
-            painterResource(onboardingPageData[page - 1].drawableResId),
-            contentDescription = onboardingPageData[page - 1].contentDescription,
-            modifier = Modifier
-                .weight(1f)
-        )
+    fun OnboardingPage(page: Int, windowSizeClass: WindowSizeClass) {
+        if (windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.COMPACT) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painterResource(onboardingPageData[page - 1].drawableResId),
+                    contentDescription = onboardingPageData[page - 1].contentDescription,
+                    modifier = Modifier
+                        .heightIn(max = 700.dp)
+                        .widthIn(max = 500.dp)
+                        .fillMaxSize(0.7f)
+                        .weight(1f)
+                )
 
-        Spacer(modifier = Modifier.height(36.dp))
+                Spacer(modifier = Modifier.width(36.dp))
 
-        PrimaryText(
-            onboardingPageData[page - 1].title,
-            fontSize = 36.sp,
-            lineHeight = 36.sp,
-            textAlign = TextAlign.Center
-        )
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Spacer(Modifier.weight(1f))
 
-        Spacer(modifier = Modifier.height(12.dp))
+                    PrimaryText(
+                        onboardingPageData[page - 1].title,
+                        fontSize = 36.sp,
+                        lineHeight = 36.sp,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Bold
+                    )
 
-        PrimaryText(
-            onboardingPageData[page - 1].subtitle,
-            fontSize = LocalTypography.current.fontSize.size18,
-            textAlign = TextAlign.Center
-        )
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    PrimaryText(
+                        onboardingPageData[page - 1].subtitle,
+                        fontSize = LocalTypography.current.fontSize.size18,
+                        textAlign = TextAlign.Center
+                    )
+
+                    Spacer(Modifier.weight(1f))
+                }
+            }
+        } else {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painterResource(onboardingPageData[page - 1].drawableResId),
+                    contentDescription = onboardingPageData[page - 1].contentDescription,
+                    modifier = Modifier
+                        .weight(1f)
+                )
+
+                Spacer(modifier = Modifier.height(36.dp))
+
+                PrimaryText(
+                    onboardingPageData[page - 1].title,
+                    fontSize = 36.sp,
+                    lineHeight = 36.sp,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                PrimaryText(
+                    onboardingPageData[page - 1].subtitle,
+                    fontSize = LocalTypography.current.fontSize.size18,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
     }
 
     override fun getDefaultSharedPreferences(): SharedPreferences {

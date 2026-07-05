@@ -54,7 +54,8 @@ fun PrimaryText(
         fontFamily = fontFamily,
         fontSize = fontSize,
         textAlign = textAlign,
-        fontWeight = fontWeight
+        fontWeight = fontWeight,
+        lineHeight = lineHeight
     )
 }
 
