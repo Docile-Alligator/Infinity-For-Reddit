@@ -50,7 +50,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -202,7 +201,7 @@ class OnboardingActivity: BaseActivity() {
                 }
 
                 val alphaAnimation = remember { Animatable(0f) }
-                val yAnimation = remember { Animatable(20f) }
+                val yAnimation = remember { Animatable(40f) }
 
                 LaunchedEffect(Unit) {
                     launch {
@@ -373,7 +372,9 @@ class OnboardingActivity: BaseActivity() {
                 windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.EXPANDED
 
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.Start
         ) {
             Spacer(modifier = Modifier.height(verticalPadding))
@@ -518,7 +519,9 @@ class OnboardingActivity: BaseActivity() {
             }
         } else {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(vertical = verticalPadding),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = verticalPadding),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
