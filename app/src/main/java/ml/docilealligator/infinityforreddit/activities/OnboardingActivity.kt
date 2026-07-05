@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -35,7 +34,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,7 +46,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -61,10 +58,12 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withLink
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import kotlinx.coroutines.launch
@@ -165,24 +164,26 @@ class OnboardingActivity: BaseActivity() {
         )
 
         setContent {
-            AppTheme(customThemeWrapper.themeType, mSharedPreferences) {
+            AppTheme(mCustomThemeWrapper.themeType, mSharedPreferences) {
                 val context = LocalContext.current
-                val scrollBehavior = enterAlwaysScrollBehavior()
                 val pagerState = rememberPagerState(pageCount = {
                     onboardingPageData.size + 1
                 })
                 var continueButtonText by remember { mutableStateOf(context.getString(R.string.take_a_quick_tour)) }
                 val coroutineScope = rememberCoroutineScope()
                 val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+                val isCompactHeight = windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT
 
                 LaunchedEffect(pagerState.currentPage) {
                     continueButtonText = when (pagerState.currentPage) {
                         0 -> {
                             context.getString(R.string.take_a_quick_tour)
                         }
+
                         onboardingPageData.size -> {
                             context.getString(R.string.get_started)
                         }
+
                         else -> {
                             context.getString(R.string.next)
                         }
@@ -191,15 +192,15 @@ class OnboardingActivity: BaseActivity() {
 
                 Scaffold(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .nestedScroll(scrollBehavior.nestedScrollConnection)
-                        .imePadding(),
-                    contentWindowInsets = if (isImmersiveInterfaceEnabled) WindowInsets.safeDrawing else WindowInsets.navigationBars.only(WindowInsetsSides.Bottom)
+                        .fillMaxSize(),
+                    contentWindowInsets = if (isImmersiveInterfaceEnabled) WindowInsets.safeDrawing else WindowInsets.navigationBars.only(
+                        WindowInsetsSides.Bottom
+                    )
                 ) { innerPadding ->
-                    Box(modifier = Modifier.fillMaxSize(1f)) {
+                    Box(modifier = Modifier.fillMaxSize()) {
                         Image(
                             painterResource(R.drawable.onboarding_background),
-                            modifier = Modifier.fillMaxSize(1f),
+                            modifier = Modifier.fillMaxSize(),
                             contentScale = ContentScale.Crop,
                             contentDescription = stringResource(R.string.content_description_background)
                         )
@@ -224,7 +225,10 @@ class OnboardingActivity: BaseActivity() {
                                                 LocalLayoutDirection.current
                                             )
                                         )
-                                        .padding(32.dp),
+                                        .padding(
+                                            vertical = if (isCompactHeight) 16.dp else 32.dp,
+                                            horizontal = 32.dp
+                                        ),
                                 ) {
                                     if (page == 0) {
                                         WelcomePage(windowSizeClass)
@@ -236,7 +240,7 @@ class OnboardingActivity: BaseActivity() {
 
                             Column(
                                 modifier = Modifier
-                                    .fillMaxWidth(1f)
+                                    .fillMaxWidth()
                                     .padding(
                                         bottom = innerPadding.calculateBottomPadding(),
                                         start = innerPadding.calculateStartPadding(
@@ -245,11 +249,11 @@ class OnboardingActivity: BaseActivity() {
                                         end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
                                     )
                                     .padding(horizontal = 32.dp)
-                                    .padding(bottom = 32.dp)
+                                    .padding(bottom = if (isCompactHeight) 16.dp else 32.dp)
                             ) {
                                 CustomFilledButton(
                                     modifier = Modifier
-                                        .fillMaxWidth(1f),
+                                        .fillMaxWidth(),
                                     text = continueButtonText
                                 ) {
                                     if (pagerState.currentPage < pagerState.pageCount - 1) {
@@ -258,14 +262,17 @@ class OnboardingActivity: BaseActivity() {
                                         }
                                     } else {
                                         mInternalSharedPreferences.edit {
-                                            putBoolean(SharedPreferencesUtils.ONBOARDING_FINISHED, true)
+                                            putBoolean(
+                                                SharedPreferencesUtils.ONBOARDING_FINISHED,
+                                                true
+                                            )
                                         }
                                         startActivity(Intent(context, MainActivity::class.java))
                                         finish()
                                     }
                                 }
 
-                                Spacer(Modifier.height(16.dp))
+                                Spacer(Modifier.height(if (isCompactHeight) 8.dp else 16.dp))
 
                                 SecondaryText(
                                     text = buildAnnotatedString {
@@ -274,7 +281,13 @@ class OnboardingActivity: BaseActivity() {
                                         withLink(
                                             LinkAnnotation.Url(
                                                 "https://docile-alligator.github.io/",
-                                                TextLinkStyles(style = SpanStyle(color = Color(LocalAppTheme.current.linkColor)))
+                                                TextLinkStyles(
+                                                    style = SpanStyle(
+                                                        color = Color(
+                                                            LocalAppTheme.current.linkColor
+                                                        )
+                                                    )
+                                                )
                                             )
                                         ) {
                                             append(stringResource(R.string.privacy_policy))
@@ -285,7 +298,13 @@ class OnboardingActivity: BaseActivity() {
                                         withLink(
                                             LinkAnnotation.Url(
                                                 "https://redditinc.com/policies/user-agreement",
-                                                TextLinkStyles(style = SpanStyle(color = Color(LocalAppTheme.current.linkColor)))
+                                                TextLinkStyles(
+                                                    style = SpanStyle(
+                                                        color = Color(
+                                                            LocalAppTheme.current.linkColor
+                                                        )
+                                                    )
+                                                )
                                             )
                                         ) {
                                             append(stringResource(R.string.reddit_user_agreement))
@@ -294,7 +313,8 @@ class OnboardingActivity: BaseActivity() {
                                         append(stringResource(R.string.by_continuing_3))
                                     },
                                     fontFamily = LocalTypography.current.fontFamily,
-                                    fontSize = 12.sp
+                                    fontSize = 12.sp,
+                                    lineHeight = if (isCompactHeight) 12.sp else TextUnit.Unspecified
                                 )
                             }
                         }
@@ -313,19 +333,30 @@ class OnboardingActivity: BaseActivity() {
                 painterResource(R.drawable.onboarding_icon),
                 contentDescription = stringResource(R.string.content_description_infinity_icon),
                 modifier = Modifier
-                    .width(100.dp)
+                    .width(
+                        if (
+                            !(windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT ||
+                                    windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT)
+                        ) 200.dp else if (windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT) 100.dp else 100.dp
+                    )
                     .clip(CircleShape)
             )
 
             Spacer(modifier = Modifier.weight(1f))
 
-            PrimaryText(
-                R.string.welcome_to_infinity_onboarding,
-                fontSize = 36.sp,
-                lineHeight = 36.sp
+            SecondaryText(
+                R.string.onboarding_welcome_to,
+                fontSize = 22.sp
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            PrimaryText(
+                R.string.onboarding_infinity_for_reddit,
+                fontSize = 36.sp,
+                lineHeight = 36.sp,
+                fontWeight = FontWeight.Bold
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             PrimaryText(
                 R.string.infinitely_better_experience,
@@ -343,10 +374,11 @@ class OnboardingActivity: BaseActivity() {
                 Image(
                     painterResource(onboardingPageData[page - 1].drawableResId),
                     contentDescription = onboardingPageData[page - 1].contentDescription,
-                    modifier = Modifier
+                    modifier = if (windowSizeClass.windowHeightSizeClass != WindowHeightSizeClass.COMPACT) Modifier
                         .heightIn(max = 700.dp)
                         .widthIn(max = 500.dp)
                         .fillMaxSize(0.7f)
+                        .weight(1f) else Modifier
                         .weight(1f)
                 )
 

@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.customviews.compose
 
+import android.R.attr.fontWeight
+import android.R.attr.lineHeight
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -65,7 +67,9 @@ fun SecondaryText(
     modifier: Modifier = Modifier,
     fontFamily: FontFamily? = LocalTypography.current.fontFamily,
     fontSize: TextUnit = LocalTypography.current.fontSize.default,
-    textAlign: TextAlign? = null
+    textAlign: TextAlign? = null,
+    fontWeight: FontWeight? = null,
+    lineHeight: TextUnit = TextUnit.Unspecified
 ) {
     Text(
         stringResource(stringResourceId),
@@ -73,7 +77,9 @@ fun SecondaryText(
         color = Color(LocalAppTheme.current.secondaryTextColor),
         fontFamily = fontFamily,
         fontSize = fontSize,
-        textAlign = textAlign
+        textAlign = textAlign,
+        fontWeight = fontWeight,
+        lineHeight = lineHeight
     )
 }
 
@@ -83,7 +89,9 @@ fun SecondaryText(
     modifier: Modifier = Modifier,
     fontFamily: FontFamily? = LocalTypography.current.fontFamily,
     fontSize: TextUnit = LocalTypography.current.fontSize.default,
-    textAlign: TextAlign? = null
+    textAlign: TextAlign? = null,
+    fontWeight: FontWeight? = null,
+    lineHeight: TextUnit = TextUnit.Unspecified
 ) {
     Text(
         text,
@@ -91,7 +99,9 @@ fun SecondaryText(
         color = Color(LocalAppTheme.current.secondaryTextColor),
         fontFamily = fontFamily,
         fontSize = fontSize,
-        textAlign = textAlign
+        textAlign = textAlign,
+        fontWeight = fontWeight,
+        lineHeight = lineHeight
     )
 }
 
@@ -101,7 +111,9 @@ fun SecondaryText(
     modifier: Modifier = Modifier,
     fontFamily: FontFamily? = LocalTypography.current.fontFamily,
     fontSize: TextUnit = LocalTypography.current.fontSize.default,
-    textAlign: TextAlign? = null
+    textAlign: TextAlign? = null,
+    fontWeight: FontWeight? = null,
+    lineHeight: TextUnit = TextUnit.Unspecified
 ) {
     Text(
         text,
@@ -110,6 +122,8 @@ fun SecondaryText(
         fontFamily = fontFamily,
         fontSize = fontSize,
         textAlign = textAlign,
+        fontWeight = fontWeight,
+        lineHeight = lineHeight,
         style = if (textAlign == TextAlign.Justify) LocalTextStyle.current.copy(
             hyphens = Hyphens.Auto,
             lineBreak = LineBreak.Paragraph.copy(

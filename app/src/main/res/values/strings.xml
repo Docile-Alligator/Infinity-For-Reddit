@@ -1678,7 +1678,8 @@
     <string name="reminder_set">Reminder set</string>
     <string name="reminder">Reminder</string>
 
-    <string name="welcome_to_infinity_onboarding">Welcome to Infinity for Reddit!</string>
+    <string name="onboarding_welcome_to">Welcome to</string>
+    <string name="onboarding_infinity_for_reddit">Infinity for Reddit</string>
     <string name="content_description_infinity_icon">Icon of Infinity for Reddit</string>
     <string name="content_description_background">Background</string>
     <string name="infinitely_better_experience">The infinitely better Reddit experience</string>
