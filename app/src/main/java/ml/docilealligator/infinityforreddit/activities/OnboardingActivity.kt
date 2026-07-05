@@ -31,7 +31,9 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
@@ -58,6 +60,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withLink
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -226,14 +229,13 @@ class OnboardingActivity: BaseActivity() {
                                             )
                                         )
                                         .padding(
-                                            vertical = if (isCompactHeight) 16.dp else 32.dp,
                                             horizontal = 32.dp
                                         ),
                                 ) {
                                     if (page == 0) {
-                                        WelcomePage(windowSizeClass)
+                                        WelcomePage(if (isCompactHeight) 16.dp else 32.dp, windowSizeClass)
                                     } else {
-                                        OnboardingPage(page, windowSizeClass)
+                                        OnboardingPage(page, if (isCompactHeight) 16.dp else 32.dp, windowSizeClass)
                                     }
                                 }
                             }
@@ -325,10 +327,13 @@ class OnboardingActivity: BaseActivity() {
     }
 
     @Composable
-    fun WelcomePage(windowSizeClass: WindowSizeClass) {
+    fun WelcomePage(verticalPadding: Dp, windowSizeClass: WindowSizeClass) {
         Column(
+            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.Start
         ) {
+            Spacer(modifier = Modifier.height(verticalPadding))
+
             Image(
                 painterResource(R.drawable.onboarding_icon),
                 contentDescription = stringResource(R.string.content_description_infinity_icon),
@@ -337,10 +342,12 @@ class OnboardingActivity: BaseActivity() {
                         if (
                             !(windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT ||
                                     windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT)
-                        ) 200.dp else if (windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT) 100.dp else 100.dp
+                        ) 200.dp else if (windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT) 70.dp else 100.dp
                     )
                     .clip(CircleShape)
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -362,13 +369,16 @@ class OnboardingActivity: BaseActivity() {
                 R.string.infinitely_better_experience,
                 fontSize = LocalTypography.current.fontSize.size18
             )
+
+            Spacer(modifier = Modifier.height(verticalPadding))
         }
     }
 
     @Composable
-    fun OnboardingPage(page: Int, windowSizeClass: WindowSizeClass) {
+    fun OnboardingPage(page: Int, verticalPadding: Dp, windowSizeClass: WindowSizeClass) {
         if (windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.COMPACT) {
             Row(
+                modifier = Modifier.padding(vertical = verticalPadding),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -413,7 +423,7 @@ class OnboardingActivity: BaseActivity() {
             }
         } else {
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(vertical = verticalPadding),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
