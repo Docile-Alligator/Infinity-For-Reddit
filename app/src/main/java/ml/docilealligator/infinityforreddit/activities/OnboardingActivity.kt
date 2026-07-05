@@ -8,6 +8,9 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -46,8 +50,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -61,6 +67,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -84,6 +91,7 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils
 import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Named
+import kotlin.math.roundToInt
 
 class OnboardingActivity: BaseActivity() {
     @Inject
@@ -193,6 +201,19 @@ class OnboardingActivity: BaseActivity() {
                     }
                 }
 
+                val alphaAnimation = remember { Animatable(0f) }
+                val yAnimation = remember { Animatable(20f) }
+
+                LaunchedEffect(Unit) {
+                    launch {
+                        alphaAnimation.animateTo(1f, animationSpec = spring(stiffness = Spring.StiffnessLow))
+                    }
+
+                    launch {
+                        yAnimation.animateTo(0f, animationSpec = spring(stiffness = Spring.StiffnessLow))
+                    }
+                }
+
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize(),
@@ -233,9 +254,18 @@ class OnboardingActivity: BaseActivity() {
                                         ),
                                 ) {
                                     if (page == 0) {
-                                        WelcomePage(if (isCompactHeight) 16.dp else 32.dp, windowSizeClass)
+                                        WelcomePage(
+                                            if (isCompactHeight) 16.dp else 32.dp,
+                                            windowSizeClass,
+                                            IntOffset(x = 0, y = yAnimation.value.roundToInt()),
+                                            alphaAnimation.value
+                                        )
                                     } else {
-                                        OnboardingPage(page, if (isCompactHeight) 16.dp else 32.dp, windowSizeClass)
+                                        OnboardingPage(
+                                            page,
+                                            if (isCompactHeight) 16.dp else 32.dp,
+                                            windowSizeClass
+                                        )
                                     }
                                 }
                             }
@@ -255,7 +285,13 @@ class OnboardingActivity: BaseActivity() {
                             ) {
                                 CustomFilledButton(
                                     modifier = Modifier
-                                        .fillMaxWidth(),
+                                        .fillMaxWidth()
+                                        .offset {
+                                            IntOffset(x = 0, y = yAnimation.value.roundToInt())
+                                        }
+                                        .graphicsLayer {
+                                            alpha = alphaAnimation.value
+                                        },
                                     text = continueButtonText
                                 ) {
                                     if (pagerState.currentPage < pagerState.pageCount - 1) {
@@ -314,6 +350,11 @@ class OnboardingActivity: BaseActivity() {
 
                                         append(stringResource(R.string.by_continuing_3))
                                     },
+                                    modifier = Modifier
+                                        .offset(y = yAnimation.value.dp)
+                                        .graphicsLayer {
+                                            alpha = alphaAnimation.value
+                                        },
                                     fontFamily = LocalTypography.current.fontFamily,
                                     fontSize = 12.sp,
                                     lineHeight = if (isCompactHeight) 12.sp else TextUnit.Unspecified
@@ -327,7 +368,7 @@ class OnboardingActivity: BaseActivity() {
     }
 
     @Composable
-    fun WelcomePage(verticalPadding: Dp, windowSizeClass: WindowSizeClass) {
+    fun WelcomePage(verticalPadding: Dp, windowSizeClass: WindowSizeClass, offset: IntOffset, alphaValue: Float) {
         val isTablet = windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED &&
                 windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.EXPANDED
 
@@ -347,6 +388,12 @@ class OnboardingActivity: BaseActivity() {
                                     windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT)
                         ) 200.dp else if (windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT) 70.dp else 100.dp
                     )
+                    .offset {
+                        offset
+                    }
+                    .graphicsLayer {
+                        alpha = alphaValue
+                    }
                     .clip(CircleShape)
             )
 
@@ -366,6 +413,13 @@ class OnboardingActivity: BaseActivity() {
                 ) {
                     SecondaryText(
                         R.string.onboarding_welcome_to,
+                        modifier = Modifier
+                            .offset {
+                                offset
+                            }
+                            .graphicsLayer {
+                                alpha = alphaValue
+                            },
                         fontSize = if (isTablet) 30.sp else 22.sp
                     )
 
@@ -375,6 +429,13 @@ class OnboardingActivity: BaseActivity() {
 
                     PrimaryText(
                         R.string.onboarding_infinity_for_reddit,
+                        modifier = Modifier
+                            .offset {
+                                offset
+                            }
+                            .graphicsLayer {
+                                alpha = alphaValue
+                            },
                         fontSize = if (isTablet) 48.sp else 36.sp,
                         lineHeight = if (isTablet) 48.sp else 36.sp,
                         fontWeight = FontWeight.Bold
@@ -384,6 +445,13 @@ class OnboardingActivity: BaseActivity() {
 
                     PrimaryText(
                         R.string.infinitely_better_experience,
+                        modifier = Modifier
+                            .offset {
+                                offset
+                            }
+                            .graphicsLayer {
+                                alpha = alphaValue
+                            },
                         fontSize = if (isTablet) 28.sp else 18.sp
                     )
                 }
