@@ -328,6 +328,9 @@ class OnboardingActivity: BaseActivity() {
 
     @Composable
     fun WelcomePage(verticalPadding: Dp, windowSizeClass: WindowSizeClass) {
+        val isTablet = windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED &&
+                windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.EXPANDED
+
         Column(
             modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.Start
@@ -351,24 +354,48 @@ class OnboardingActivity: BaseActivity() {
 
             Spacer(modifier = Modifier.weight(1f))
 
-            SecondaryText(
-                R.string.onboarding_welcome_to,
-                fontSize = 22.sp
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                if (isTablet) {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
 
-            PrimaryText(
-                R.string.onboarding_infinity_for_reddit,
-                fontSize = 36.sp,
-                lineHeight = 36.sp,
-                fontWeight = FontWeight.Bold
-            )
+                Column(
+                    horizontalAlignment = if (isTablet) Alignment.CenterHorizontally else Alignment.Start
+                ) {
+                    SecondaryText(
+                        R.string.onboarding_welcome_to,
+                        fontSize = if (isTablet) 30.sp else 22.sp
+                    )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                    if (isTablet) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
 
-            PrimaryText(
-                R.string.infinitely_better_experience,
-                fontSize = LocalTypography.current.fontSize.size18
-            )
+                    PrimaryText(
+                        R.string.onboarding_infinity_for_reddit,
+                        fontSize = if (isTablet) 48.sp else 36.sp,
+                        lineHeight = if (isTablet) 48.sp else 36.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    PrimaryText(
+                        R.string.infinitely_better_experience,
+                        fontSize = if (isTablet) 28.sp else 18.sp
+                    )
+                }
+
+                if (isTablet) {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
+
+            if (isTablet) {
+                Spacer(modifier = Modifier.weight(1f))
+            }
 
             Spacer(modifier = Modifier.height(verticalPadding))
         }
