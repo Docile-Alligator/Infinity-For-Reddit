@@ -1516,7 +1516,7 @@
         New Features:
         \nReminders: Set a reminder for a post or comment and get notified to check back later
         \nOnboarding screen: An introduction for new users
-        \n\nBug Fixes
+        \n\nBug Fixes:
         \nFixed swipe actions in comments
         \nFixed gallery images failing to load
         \nFixed incorrect posts appearing when swiping between posts
