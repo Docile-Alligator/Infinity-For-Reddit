@@ -1510,13 +1510,24 @@
     <string name="restore_subscription_purchase_details">Already paid for the subscription?</string>
     <string name="restore_subscription_purchase">Restore subscription purchase</string>
 
-    <string name="important_info_title">Please re-login your account</string>
-    <string name="important_info">Infinity for Reddit with subscription uses a new API key from Reddit and you have to re-login to continue using the app.\n\nJust
-        open the navigation drawer and click your account header and select \"Add an account\" to login to Reddit using the same account again.
-        Otherwise, Infinity may not load posts at all. Sorry for the inconvenience.</string>
     <string name="i_understand">I understand</string>
-    <string name="important_info_post_comments_rework_title">Important Beta Information</string>
-    <string name="important_info_post_comments_rework_description">You are currently using the beta version of the new release.\n\nThis beta includes major under-the-hood changes to the post comments section as part of a large code cleanup and rewrite. The functionality should remain mostly the same, but because many internal systems have changed, bugs and unexpected issues are to be expected during this stage.\n\nThis release is focused primarily on stabilizing the new foundation before additional features are gradually introduced in future beta updates.\n\nThank you for testing the beta and for your patience.</string>
+    <string name="important_info_post_comments_rework_title">Important Beta Information (v8.3.0-beta3)</string>
+    <string name="important_info_post_comments_rework_description">
+        New Features:
+        \nReminders: Set a reminder for a post or comment and get notified to check back later
+        \nOnboarding screen: An introduction for new users
+        \n\nBug Fixes
+        \nFixed swipe actions in comments
+        \nFixed gallery images failing to load
+        \nFixed incorrect posts appearing when swiping between posts
+        \nFixed deleted posts failing to load
+        \nFixed title suggestions not working when submitting link posts
+        \nFixed unable to unfollow deleted users in anonymous mode
+        \nFixed app crashes when refreshing posts
+        \n\nYou are currently using the beta version of the new release.
+        \n\nThis beta includes major under-the-hood changes to the post comments section as part of a large code cleanup and rewrite.
+        The functionality should remain mostly the same, but because many internal systems have changed, bugs and unexpected issues are to be expected during this stage.
+        \n\nThank you for testing the beta and for your patience.</string>
     <string name="important_info_post_comments_rework_join_subreddit">Click here to join r/Infinity_For_Reddit</string>
 
     <string name="add_to_comment_filter">Add to Comment Filter</string>
