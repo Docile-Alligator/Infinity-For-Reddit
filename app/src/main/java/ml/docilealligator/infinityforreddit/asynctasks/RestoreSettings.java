@@ -32,6 +32,7 @@ import java.util.concurrent.Executor;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.comment.CommentDraft;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterUsage;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
@@ -39,6 +40,8 @@ import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubr
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
+import ml.docilealligator.infinityforreddit.readpost.ReadPost;
+import ml.docilealligator.infinityforreddit.reminder.Reminder;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
@@ -141,6 +144,9 @@ public class RestoreSettings {
                                     File postFilterUsageFile = new File(f.getAbsolutePath() + "/post_filter_usage.json");
                                     File commentFiltersFile = new File(f.getAbsolutePath() + "/comment_filters.json");
                                     File commentFilterUsageFile = new File(f.getAbsolutePath() + "/comment_filter_usage.json");
+                                    File commentDraftsFile = new File(f.getAbsolutePath() + "/comment_drafts.json");
+                                    File readPostsFile = new File(f.getAbsolutePath() + "/read_posts.json");
+                                    File remindersFile = new File(f.getAbsolutePath() + "/reminders.json");
 
                                     if (anonymousSubscribedSubredditsFile.exists()) {
                                         List<SubscribedSubredditData> anonymousSubscribedSubreddits = getListFromFile(anonymousSubscribedSubredditsFile, new TypeToken<List<SubscribedSubredditData>>() {}.getType());
@@ -179,6 +185,24 @@ public class RestoreSettings {
                                         if (commentFilterUsageFile.exists()) {
                                             List<CommentFilterUsage> commentFilterUsage = getListFromFile(commentFilterUsageFile, new TypeToken<List<CommentFilterUsage>>() {}.getType());
                                             redditDataRoomDatabase.commentFilterUsageDao().insertAll(commentFilterUsage);
+                                        }
+                                    }
+                                    if (commentDraftsFile.exists()) {
+                                        List<CommentDraft> commentDrafts = getListFromFile(commentDraftsFile, new TypeToken<List<CommentDraft>>() {}.getType());
+                                        if (commentDrafts != null) {
+                                            redditDataRoomDatabase.commentDraftDao().insertAll(commentDrafts);
+                                        }
+                                    }
+                                    if (readPostsFile.exists()) {
+                                        List<ReadPost> readPosts = getListFromFile(readPostsFile, new TypeToken<List<ReadPost>>() {}.getType());
+                                        if (readPosts != null) {
+                                            redditDataRoomDatabase.readPostDao().insertAll(readPosts);
+                                        }
+                                    }
+                                    if (remindersFile.exists()) {
+                                        List<Reminder> reminders = getListFromFile(remindersFile, new TypeToken<List<Reminder>>() {}.getType());
+                                        if (reminders != null) {
+                                            redditDataRoomDatabase.reminderDao().insertAll(reminders);
                                         }
                                     }
                                 }

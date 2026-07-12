@@ -32,6 +32,7 @@ import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.comment.CommentDraft;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilter;
 import ml.docilealligator.infinityforreddit.commentfilter.CommentFilterUsage;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
@@ -39,6 +40,8 @@ import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubr
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
+import ml.docilealligator.infinityforreddit.readpost.ReadPost;
+import ml.docilealligator.infinityforreddit.reminder.Reminder;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
@@ -141,6 +144,18 @@ public class BackupSettings {
             String commentFilterUsageJson = new Gson().toJson(commentFilterUsage);
             boolean res19 = saveDatabaseTableToFile(commentFilterUsageJson, databaseDirFile.getAbsolutePath(), "/comment_filter_usage.json");
 
+            List<CommentDraft> commentDrafts = redditDataRoomDatabase.commentDraftDao().getCommentDraftsForBackup();
+            String commentDraftsJson = new Gson().toJson(commentDrafts);
+            boolean res20 = saveDatabaseTableToFile(commentDraftsJson, databaseDirFile.getAbsolutePath(), "/comment_drafts.json");
+
+            List<ReadPost> readPosts = redditDataRoomDatabase.readPostDao().getAllReadPostsForBackup();
+            String readPostsJson = new Gson().toJson(readPosts);
+            boolean res21 = saveDatabaseTableToFile(readPostsJson, databaseDirFile.getAbsolutePath(), "/read_posts.json");
+
+            List<Reminder> reminders = redditDataRoomDatabase.reminderDao().getAllRemindersForBackup();
+            String remindersJson = new Gson().toJson(reminders);
+            boolean res22 = saveDatabaseTableToFile(remindersJson, databaseDirFile.getAbsolutePath(), "/reminders.json");
+
             boolean zipRes = zipAndMoveToDestinationDir(context, cacheDir, contentResolver, destinationDirUri);
 
             try {
@@ -152,7 +167,7 @@ public class BackupSettings {
             handler.post(() -> {
                 boolean finalResult = res && res1 && res2 && res3 && res4 && res5 && res6 && res7 && res8
                         && res9 && res10 && res11 && res12 && res13 && res14 && res15 && res16 && res17
-                        && res18 && res19 && zipRes;
+                        && res18 && res19 && res20 && res21 && res22 && zipRes;
                 if (finalResult) {
                     backupSettingsListener.success();
                 } else {
