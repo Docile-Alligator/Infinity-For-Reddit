@@ -348,6 +348,10 @@ public interface AppComponent {
 
     void inject(BootCompletedBroadcastReceiver bootCompletedBroadcastReceiver);
 
+    void inject(TikTokScrollActivity tiktokScrollActivity);
+
+    void inject(TikTokPostFragment tiktokPostFragment);
+
     @Component.Factory
     interface Factory {
         AppComponent create(@BindsInstance Application application);

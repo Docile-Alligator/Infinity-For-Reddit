@@ -377,6 +377,11 @@
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
+            android:name=".activities.TikTokScrollActivity"
+            android:label="@string/tiktok_scroll_activity_label"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activities.PostVideoActivity"
             android:label="@string/post_video_activity_label"
             android:parentActivityName=".activities.MainActivity"

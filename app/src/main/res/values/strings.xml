@@ -1717,4 +1717,6 @@
     <string name="more_features">And There\'s More!</string>
     <string name="more_features_description">Discover even more tools and features waiting for you inside the app</string>
     <string name="content_description_more_features">Screenshot of more features</string>
+    <string name="action_tiktok_scroll">TikTok Scroll</string>
+    <string name="tiktok_scroll_activity_label">TikTok Scroll</string>
 </resources>
