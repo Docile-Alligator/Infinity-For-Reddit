@@ -175,7 +175,7 @@ public final class Utils {
                         markdownStringBuilder.replace(previewReddItAndIReddItImageMatcher.start(), previewReddItAndIReddItImageMatcher.end(), replacingText);
                         start = replacingText.length() + previewReddItAndIReddItImageMatcher.start();
                     }
-                } else if (previewReddItAndIReddItImageMatcher.group(2) != null) {
+                } else if (previewReddItAndIReddItImageMatcher.group(5) != null) {
                     String id = previewReddItAndIReddItImageMatcher.group(8);
                     String caption = previewReddItAndIReddItImageMatcher.group(6);
 
