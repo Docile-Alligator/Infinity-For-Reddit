@@ -9,6 +9,7 @@ import androidx.paging.PagingState;
 
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.RedditError;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
@@ -30,6 +32,7 @@ import ml.docilealligator.infinityforreddit.readpost.ReadPostsListInterface;
 import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import okhttp3.ResponseBody;
 import retrofit2.HttpException;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -264,7 +267,16 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
                 }
             }
         } else {
-            return new LoadResult.Error<>(new PostPagingSourceError(response.code(), "Error getting response"));
+            //{"reason": "banned", "message": "Not Found", "error": 404}
+            try (ResponseBody errorBody = response.errorBody()) {
+                if (errorBody != null) {
+                    RedditError redditError = new Gson().fromJson(errorBody.string(), RedditError.class);
+                    return new LoadResult.Error<>(new PostPagingSourceError(response.code(), redditError.getReason()));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return new LoadResult.Error<>(new PostPagingSourceError(response.code(), null));
         }
     }
 

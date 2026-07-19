@@ -592,6 +592,8 @@ public abstract class PostFragmentBase extends Fragment {
 
     protected abstract void showErrorView(int stringResId);
 
+    protected abstract void showErrorView(String errorMessage);
+
     @NonNull
     protected abstract SwipeRefreshLayout getSwipeRefreshLayout();
 

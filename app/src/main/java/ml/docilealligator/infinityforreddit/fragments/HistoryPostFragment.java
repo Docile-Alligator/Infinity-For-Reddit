@@ -364,6 +364,8 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
                 if (e instanceof PostPagingSource.PostPagingSourceError) {
                     if (((PostPagingSource.PostPagingSourceError) e).code == 403 && Account.ANONYMOUS_ACCOUNT.equals(mActivity.accountName)) {
                         showErrorView(R.string.load_posts_error_anonymous_403);
+                    }  else if (((PostPagingSource.PostPagingSourceError) e).message != null) {
+                        showErrorView(getString(R.string.load_posts_error_with_reason, ((PostPagingSource.PostPagingSourceError) e).message));
                     } else {
                         showErrorView(R.string.load_posts_error);
                     }
@@ -462,6 +464,16 @@ public class HistoryPostFragment extends PostFragmentBase implements FragmentCom
             binding.swipeRefreshLayoutHistoryPostFragment.setRefreshing(false);
             binding.fetchPostInfoLinearLayoutHistoryPostFragment.setVisibility(View.VISIBLE);
             binding.fetchPostInfoTextViewHistoryPostFragment.setText(stringResId);
+            mGlide.load(R.drawable.error_image).into(binding.fetchPostInfoImageViewHistoryPostFragment);
+        }
+    }
+
+    @Override
+    protected void showErrorView(String errorMessage) {
+        if (mActivity != null && isAdded()) {
+            binding.swipeRefreshLayoutHistoryPostFragment.setRefreshing(false);
+            binding.fetchPostInfoLinearLayoutHistoryPostFragment.setVisibility(View.VISIBLE);
+            binding.fetchPostInfoTextViewHistoryPostFragment.setText(errorMessage);
             mGlide.load(R.drawable.error_image).into(binding.fetchPostInfoImageViewHistoryPostFragment);
         }
     }

@@ -120,6 +120,7 @@
     <string name="load_posts_error">Error loading posts.\nTap to retry.</string>
     <string name="load_posts_error_anonymous_403">Due to platform limitations, content cannot be loaded right now.
         \n\nYou can try again shortly or subscribe for a more consistent experience.</string>
+    <string name="load_posts_error_with_reason">Error loading posts. Reason: %1$s.\nTap to retry.</string>
     <string name="load_more_posts_error">Error loading posts.</string>
     <string name="load_post_error">Error loading this post.\nTap to retry.</string>
     <string name="search_subreddits_error">Error searching subreddits.\nTap to retry.</string>
