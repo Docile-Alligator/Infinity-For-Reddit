@@ -59,6 +59,7 @@ import ml.docilealligator.infinityforreddit.activities.CustomizePostFilterActivi
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.adapters.Paging3LoadingStateAdapter;
+import ml.docilealligator.infinityforreddit.activities.TikTokScrollActivity;
 import ml.docilealligator.infinityforreddit.adapters.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
@@ -1016,6 +1017,26 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
                 stopLazyMode();
             } else {
                 startLazyMode();
+            }
+            return true;
+        } else if (item.getItemId() == R.id.action_tiktok_scroll_post_fragment) {
+            if (mAdapter != null && mAdapter.getItemCount() > 0) {
+                ArrayList<Post> posts = new ArrayList<>();
+                for (int i = 0; i < mAdapter.getItemCount(); i++) {
+                    Post post = mAdapter.getItemByPosition(i);
+                    if (post != null) {
+                        posts.add(post);
+                    }
+                }
+                if (!posts.isEmpty()) {
+                    Intent intent = new Intent(mActivity, TikTokScrollActivity.class);
+                    intent.putParcelableArrayListExtra(TikTokScrollActivity.EXTRA_POSTS, posts);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(mActivity, R.string.no_posts_available, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(mActivity, R.string.no_posts_available, Toast.LENGTH_SHORT).show();
             }
             return true;
         } else if (item.getItemId() == R.id.action_filter_posts_post_fragment) {
