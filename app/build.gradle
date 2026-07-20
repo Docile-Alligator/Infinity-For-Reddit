@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId "ml.docilealligator.infinityforreddit"
         minSdk 21
-        targetSdk 35
+        targetSdk 36
         versionCode 224
         versionName "8.3.0-beta3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
