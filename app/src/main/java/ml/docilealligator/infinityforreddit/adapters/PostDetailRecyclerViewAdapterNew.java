@@ -476,7 +476,7 @@ public class PostDetailRecyclerViewAdapterNew extends RecyclerView.Adapter<Recyc
                         intent.setData(Uri.parse(mediaMetadata.original.url));
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_MARKDOWN_PARSED);
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, MediaMetadata.getDownloadUrlForMarkdownParsedVideo(mediaMetadata.original.url));
-                        intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, post.getSubredditName());
+                        intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, post == null ? "Unknown" : post.getSubredditName());
                         intent.putExtra(ViewVideoActivity.EXTRA_ID, mediaMetadata.id);
                         activity.startActivity(intent);
                     }

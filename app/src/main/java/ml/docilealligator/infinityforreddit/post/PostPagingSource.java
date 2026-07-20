@@ -311,7 +311,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         if (loadParams.getKey() == null) {
             boolean savePostFeedScrolledPosition = sortType != null && sortType.getType() == SortType.Type.BEST && sharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION, false);
             if (savePostFeedScrolledPosition) {
-                String accountNameForCache = accountName.equals(Account.ANONYMOUS_ACCOUNT) ? SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_ANONYMOUS : accountName;
+                String accountNameForCache = Account.ANONYMOUS_ACCOUNT.equals(accountName) ? SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_ANONYMOUS : accountName;
                 afterKey = postFeedScrolledPositionSharedPreferences.getString(accountNameForCache + SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_FRONT_PAGE_BASE, null);
             } else {
                 afterKey = null;
@@ -334,7 +334,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
 
     private ListenableFuture<LoadResult<String, Post>> loadSubredditPosts(@NonNull LoadParams<String> loadParams, RedditAPI api) {
         ListenableFuture<Response<String>> subredditPost;
-        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+        if (Account.ANONYMOUS_ACCOUNT.equals(accountName)) {
             subredditPost = api.getSubredditBestPostsListenableFuture(subredditOrUserName, sortType.getType(),
                     sortType.getTime(), loadParams.getKey(), APIUtils.subredditAPICallLimit(subredditOrUserName));
         } else {
@@ -355,7 +355,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
 
     private ListenableFuture<LoadResult<String, Post>> loadUserPosts(@NonNull LoadParams<String> loadParams, RedditAPI api) {
         ListenableFuture<Response<String>> userPosts;
-        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+        if (Account.ANONYMOUS_ACCOUNT.equals(accountName)) {
             userPosts = api.getUserPostsListenableFuture(subredditOrUserName, loadParams.getKey(), sortType.getType(),
                     sortType.getTime());
         } else {
@@ -376,7 +376,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     private ListenableFuture<LoadResult<String, Post>> loadSearchPosts(@NonNull LoadParams<String> loadParams, RedditAPI api) {
         ListenableFuture<Response<String>> searchPosts;
         if (subredditOrUserName == null) {
-            if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            if (Account.ANONYMOUS_ACCOUNT.equals(accountName)) {
                 searchPosts = api.searchPostsListenableFuture(query, loadParams.getKey(), sortType.getType(), sortType.getTime(),
                         trendingSource);
             } else {
@@ -384,7 +384,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
                         sortType.getTime(), trendingSource, APIUtils.getOAuthHeader(accessToken));
             }
         } else {
-            if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+            if (Account.ANONYMOUS_ACCOUNT.equals(accountName)) {
                 searchPosts = api.searchPostsInSpecificSubredditListenableFuture(subredditOrUserName, query,
                         sortType.getType(), sortType.getTime(), loadParams.getKey());
             } else {
@@ -406,7 +406,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
 
     private ListenableFuture<LoadResult<String, Post>> loadMultiRedditPosts(@NonNull LoadParams<String> loadParams, RedditAPI api) {
         ListenableFuture<Response<String>> multiRedditPosts;
-        if (accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
+        if (Account.ANONYMOUS_ACCOUNT.equals(accountName)) {
             if (query != null && !query.isEmpty()) {
                 multiRedditPosts = api.searchMultiRedditPostsListenableFuture(multiRedditPath, query, loadParams.getKey(),
                         sortType.getType(), sortType.getTime());
