@@ -26,9 +26,13 @@ public class ShareDataResolverActivity extends AppCompatActivity {
                 if (text != null) {
                     if (Patterns.WEB_URL.matcher(text).matches()) {
                         //It's a link
+                        String title = receivedIntent.getStringExtra(Intent.EXTRA_TITLE);
+                        if (title == null) {
+                            title = receivedIntent.getStringExtra(Intent.EXTRA_SUBJECT);
+                        }
                         Intent intent = new Intent(this, PostLinkActivity.class);
                         intent.putExtra(PostLinkActivity.EXTRA_LINK, text);
-                        intent.putExtra(PostLinkActivity.EXTRA_TITLE, receivedIntent.getStringExtra(Intent.EXTRA_TITLE));
+                        intent.putExtra(PostLinkActivity.EXTRA_TITLE, title);
                         startActivity(intent);
                     } else {
                         Intent intent = new Intent(this, PostTextActivity.class);
