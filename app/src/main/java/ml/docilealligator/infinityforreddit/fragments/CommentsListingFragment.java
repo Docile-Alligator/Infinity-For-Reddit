@@ -109,6 +109,8 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     private AdjustableTouchSlopItemTouchHelper touchHelper;
     private boolean shouldSwipeBack;
     private FragmentCommentsListingBinding binding;
+    private View.OnLayoutChangeListener onLayoutChangeListener;
+    private int recyclerViewWidth;
 
     public CommentsListingFragment() {
         // Required empty public constructor
@@ -302,6 +304,22 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
                 });
             }
 
+            onLayoutChangeListener = (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+                int width = right - left;
+                if (recyclerViewWidth == width) {
+                    return;
+                }
+                recyclerViewWidth = width;
+                v.post(() -> {
+                    int widthInDp = Utils.convertPxToDp(width, mActivity);
+                    if (mAdapter != null) {
+                        mAdapter.provideItemWidth(widthInDp);
+                        refreshAdapter(binding.recyclerViewCommentsListingFragment, mAdapter);
+                    }
+                });
+            };
+            binding.recyclerViewCommentsListingFragment.addOnLayoutChangeListener(onLayoutChangeListener);
+
             CommentViewModel.Factory factory;
 
             if (mActivity.accountName.equals(Account.ANONYMOUS_ACCOUNT)) {
@@ -363,6 +381,10 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
+        if (onLayoutChangeListener != null) {
+            binding.recyclerViewCommentsListingFragment.removeOnLayoutChangeListener(onLayoutChangeListener);
+            onLayoutChangeListener = null;
+        }
         super.onDestroy();
     }
 

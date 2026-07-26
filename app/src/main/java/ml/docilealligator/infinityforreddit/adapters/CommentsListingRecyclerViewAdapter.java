@@ -121,6 +121,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private boolean canStartActivity = true;
     private NetworkState networkState;
     private final RetryLoadingMoreCallback mRetryLoadingMoreCallback;
+    private int itemWidth;
 
     public CommentsListingRecyclerViewAdapter(BaseActivity activity, CommentsListingFragment fragment,
                                               Retrofit oauthRetrofit,
@@ -316,6 +317,16 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 } else {
                     ((CommentBaseViewHolder) holder).saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
                 }
+
+                if (itemWidth > 350) {
+                    if (((CommentBaseViewHolder) holder).saveButton != null) {
+                        ((CommentBaseViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    if (((CommentBaseViewHolder) holder).saveButton != null) {
+                        ((CommentBaseViewHolder) holder).saveButton.setVisibility(View.GONE);
+                    }
+                }
             }
         }
     }
@@ -432,6 +443,10 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     public void setDataSavingMode(boolean dataSavingMode) {
         mEmotePlugin.setDataSavingMode(dataSavingMode);
         mImageAndGifEntry.setDataSavingMode(dataSavingMode);
+    }
+
+    public void provideItemWidth(int width) {
+        itemWidth = width;
     }
 
     public interface RetryLoadingMoreCallback {
@@ -554,7 +569,6 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             downvoteButton.setIconTint(ColorStateList.valueOf(mCommentIconAndInfoColor));
             moreButton.setIconTint(ColorStateList.valueOf(mCommentIconAndInfoColor));
             saveButton.setIconTint(ColorStateList.valueOf(mCommentIconAndInfoColor));
-            replyButton.setIconTint(ColorStateList.valueOf(mCommentIconAndInfoColor));
             commentDivider.setBackgroundColor(mDividerColor);
 
             authorTextView.setOnClickListener(view -> {

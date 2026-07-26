@@ -1153,6 +1153,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
             } else {
                 binding.postDetailRecyclerViewViewPostDetailFragment.removeOnLayoutChangeListener(onLayoutChangeListener);
             }
+            onLayoutChangeListener = null;
         }
         super.onDestroyView();
     }
