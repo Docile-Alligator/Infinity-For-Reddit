@@ -74,7 +74,8 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
             return binding.getRoot();
         }
         boolean editAndDeleteAvailable = bundle.getBoolean(EXTRA_EDIT_AND_DELETE_AVAILABLE, false);
-        boolean showReplyAndSaveOption = bundle.getBoolean(EXTRA_SHOW_REPLY_AND_SAVE_OPTION, false);
+        //boolean showReplyAndSaveOption = bundle.getBoolean(EXTRA_SHOW_REPLY_AND_SAVE_OPTION, false);
+        boolean showReplyAndSaveOption = true;
 
         if (!activity.accountName.equals(Account.ANONYMOUS_ACCOUNT) && !"".equals(activity.accessToken)) {
             if (editAndDeleteAvailable) {

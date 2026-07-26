@@ -64,12 +64,12 @@ import ml.docilealligator.infinityforreddit.databinding.ItemCommentFullyCollapse
 import ml.docilealligator.infinityforreddit.databinding.ItemLoadMoreCommentsPlaceholderBinding;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragmentNew;
 import ml.docilealligator.infinityforreddit.markdown.CustomMarkwonAdapter;
+import ml.docilealligator.infinityforreddit.markdown.EvenBetterLinkMovementMethod;
+import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.markdown.emote.EmoteCloseBracketInlineProcessor;
 import ml.docilealligator.infinityforreddit.markdown.emote.EmotePlugin;
-import ml.docilealligator.infinityforreddit.markdown.EvenBetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.imageandgif.ImageAndGifEntry;
 import ml.docilealligator.infinityforreddit.markdown.imageandgif.ImageAndGifPlugin;
-import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.markdown.video.VideoEntry;
 import ml.docilealligator.infinityforreddit.markdown.video.VideoPlugin;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -129,6 +129,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
     private final CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private final Drawable expandDrawable;
     private final Drawable collapseDrawable;
+    private int itemWidth;
 
     private final int mSecondaryTextColor;
     private final int mPrimaryTextColor;
@@ -568,6 +569,49 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
                         params.setMargins(0, (int) Utils.convertDpToPixel(16, mActivity), 0, 0);
                     }
                 }
+
+                int bottomToolbarWidth = itemWidth - comment.getDepth() * 12;
+                if (bottomToolbarWidth > 420) {
+                    if (((CommentBaseViewHolder) holder).saveButton != null) {
+                        ((CommentBaseViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
+                    }
+                    if (((CommentBaseViewHolder) holder).replyButton != null) {
+                        ((CommentBaseViewHolder) holder).replyButton.setVisibility(View.VISIBLE);
+                    }
+                    if (((CommentBaseViewHolder) holder).expandButton != null) {
+                        ((CommentBaseViewHolder) holder).expandButton.setVisibility(View.VISIBLE);
+                    }
+                } else if (bottomToolbarWidth > 350) {
+                    if (((CommentBaseViewHolder) holder).saveButton != null) {
+                        ((CommentBaseViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
+                    }
+                    if (((CommentBaseViewHolder) holder).replyButton != null) {
+                        ((CommentBaseViewHolder) holder).replyButton.setVisibility(View.GONE);
+                    }
+                    if (((CommentBaseViewHolder) holder).expandButton != null) {
+                        ((CommentBaseViewHolder) holder).expandButton.setVisibility(View.VISIBLE);
+                    }
+                } else if (bottomToolbarWidth > 300) {
+                    if (((CommentBaseViewHolder) holder).saveButton != null) {
+                        ((CommentBaseViewHolder) holder).saveButton.setVisibility(View.GONE);
+                    }
+                    if (((CommentBaseViewHolder) holder).replyButton != null) {
+                        ((CommentBaseViewHolder) holder).replyButton.setVisibility(View.GONE);
+                    }
+                    if (((CommentBaseViewHolder) holder).expandButton != null) {
+                        ((CommentBaseViewHolder) holder).expandButton.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    if (((CommentBaseViewHolder) holder).saveButton != null) {
+                        ((CommentBaseViewHolder) holder).saveButton.setVisibility(View.GONE);
+                    }
+                    if (((CommentBaseViewHolder) holder).replyButton != null) {
+                        ((CommentBaseViewHolder) holder).replyButton.setVisibility(View.GONE);
+                    }
+                    if (((CommentBaseViewHolder) holder).expandButton != null) {
+                        ((CommentBaseViewHolder) holder).expandButton.setVisibility(View.GONE);
+                    }
+                }
             }
         } else if (holder instanceof CommentFullyCollapsedViewHolder) {
             Comment comment = getItem(position);
@@ -760,6 +804,10 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
         );
     }
 
+    public void provideItemWidth(int width) {
+        itemWidth = width;
+    }
+
     public interface CommentRecyclerViewAdapterCallback {
         void expandComment(int position);
         void collapseComment(int position);
@@ -948,9 +996,6 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
                     bundle.putParcelable(CommentMoreBottomSheetFragment.EXTRA_COMMENT, comment);
                     bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getBindingAdapterPosition());
                     bundle.putBoolean(CommentMoreBottomSheetFragment.EXTRA_IS_NSFW, mPost.isNSFW());
-                    if (comment.getDepth() >= mDepthThreshold) {
-                        bundle.putBoolean(CommentMoreBottomSheetFragment.EXTRA_SHOW_REPLY_AND_SAVE_OPTION, true);
-                    }
                     CommentMoreBottomSheetFragment commentMoreBottomSheetFragment = new CommentMoreBottomSheetFragment();
                     commentMoreBottomSheetFragment.setArguments(bundle);
                     commentMoreBottomSheetFragment.show(mFragment.getChildFragmentManager(), commentMoreBottomSheetFragment.getTag());
