@@ -154,6 +154,8 @@ public abstract class PostFragmentBase extends Fragment {
     protected AdjustableTouchSlopItemTouchHelper touchHelper;
     private boolean shouldSwipeBack;
     protected final Map<String, String> subredditOrUserIcons = new HashMap<>();
+    private View.OnLayoutChangeListener onLayoutChangeListener;
+    private int recyclerViewWidth;
 
     public PostFragmentBase() {
         // Required empty public constructor
@@ -322,6 +324,26 @@ public abstract class PostFragmentBase extends Fragment {
             return false;
         });
 
+        onLayoutChangeListener = (v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            int width = right - left;
+            if (recyclerViewWidth == width) {
+                return;
+            }
+            recyclerViewWidth = width;
+            PostRecyclerViewAdapter adapter = getPostAdapter();
+            if (adapter != null) {
+                if (mStaggeredGridLayoutManager != null) {
+                    width /= mStaggeredGridLayoutManager.getSpanCount();
+                }
+                int finalWidth = width;
+                v.post(() -> {
+                    adapter.provideItemWidth(Utils.convertPxToDp(finalWidth, mActivity));
+                    refreshAdapter();
+                });
+            }
+        };
+        getPostRecyclerView().addOnLayoutChangeListener(onLayoutChangeListener);
+
         SharedPreferencesLiveDataKt.stringLiveData(mSharedPreferences, SharedPreferencesUtils.LONG_PRESS_POST_NON_MEDIA_AREA, SharedPreferencesUtils.LONG_PRESS_POST_VALUE_SHOW_POST_OPTIONS).observe(getViewLifecycleOwner(), s -> {
             if (getPostAdapter() != null) {
                 getPostAdapter().setLongPressPostNonMediaAreaAction(s);
@@ -353,6 +375,15 @@ public abstract class PostFragmentBase extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ViewCompat.requestApplyInsets(view);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (onLayoutChangeListener != null) {
+            getPostRecyclerView().removeOnLayoutChangeListener(onLayoutChangeListener);
+            onLayoutChangeListener = null;
+        }
     }
 
     @Override

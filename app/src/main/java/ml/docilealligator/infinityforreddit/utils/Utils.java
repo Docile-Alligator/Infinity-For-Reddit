@@ -462,6 +462,11 @@ public final class Utils {
         return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
+    public static int convertPxToDp(int px, Context context) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        return Math.round(px / (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));
+    }
+
     @Nullable
     public static Drawable getTintedDrawable(Context context, int drawableId, int color) {
         final Drawable drawable = AppCompatResources.getDrawable(context, drawableId);
