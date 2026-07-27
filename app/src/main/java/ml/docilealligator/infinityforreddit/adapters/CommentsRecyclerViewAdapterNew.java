@@ -125,7 +125,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
     private final boolean mNeedBlurNsfw;
     private final boolean mDoNotBlurNsfwInNsfwSubreddits;
     private final boolean mNeedBlurSpoiler;
-    private final int mDepthThreshold;
+    //private final int mDepthThreshold;
     private final CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private final Drawable expandDrawable;
     private final Drawable collapseDrawable;
@@ -319,7 +319,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
         mShowAuthorAvatar = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_AUTHOR_AVATAR, false);
         mAlwaysShowChildCommentCount = sharedPreferences.getBoolean(SharedPreferencesUtils.ALWAYS_SHOW_CHILD_COMMENT_COUNT, false);
         mHideTheNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_VOTES_IN_COMMENTS, false);
-        mDepthThreshold = sharedPreferences.getInt(SharedPreferencesUtils.SHOW_FEWER_TOOLBAR_OPTIONS_THRESHOLD, 5);
+        //mDepthThreshold = sharedPreferences.getInt(SharedPreferencesUtils.SHOW_FEWER_TOOLBAR_OPTIONS_THRESHOLD, 5);
 
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
 
@@ -507,13 +507,13 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
 
                 ((CommentBaseViewHolder) holder).commentIndentationView.setShowOnlyOneDivider(mShowOnlyOneCommentLevelIndicator);
                 ((CommentBaseViewHolder) holder).commentIndentationView.setLevelAndColors(comment.getDepth(), verticalBlockColors);
-                if (comment.getDepth() >= mDepthThreshold) {
+                /*if (comment.getDepth() >= mDepthThreshold) {
                     ((CommentBaseViewHolder) holder).saveButton.setVisibility(View.GONE);
                     ((CommentBaseViewHolder) holder).replyButton.setVisibility(View.GONE);
                 } else {
                     ((CommentBaseViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
                     ((CommentBaseViewHolder) holder).replyButton.setVisibility(View.VISIBLE);
-                }
+                }*/
 
                 if (comment.hasReply()) {
                     if (comment.getChildCount() > 0 && (mAlwaysShowChildCommentCount || !comment.isExpanded())) {

@@ -248,6 +248,7 @@ public class AdvancedPreferenceFragment extends CustomFontPreferenceFragmentComp
                             editor.remove(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_AWARDS_LEGACY);
                             editor.remove(SharedPreferencesUtils.HIDE_COMMENT_AWARDS_LEGACY);
                             editor.remove(SharedPreferencesUtils.IMMERSIVE_INTERFACE_IGNORE_NAV_BAR_KEY_LEGACY);
+                            editor.remove(SharedPreferencesUtils.SHOW_FEWER_TOOLBAR_OPTIONS_THRESHOLD);
 
                             SharedPreferences.Editor sortTypeEditor = mSortTypeSharedPreferences.edit();
                             sortTypeEditor.remove(SharedPreferencesUtils.SORT_TYPE_ALL_POST_LEGACY);

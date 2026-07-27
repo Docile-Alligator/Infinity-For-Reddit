@@ -211,7 +211,6 @@ public class SharedPreferencesUtils {
     public static final String PINCH_TO_ZOOM_VIDEO = "pinch_to_zoom_video";
     public static final String FIXED_HEIGHT_PREVIEW_IN_CARD = "fixed_height_preview_in_card";
     public static final String HIDE_TEXT_POST_CONTENT = "hide_text_post_content";
-    public static final String SHOW_FEWER_TOOLBAR_OPTIONS_THRESHOLD = "show_fewer_toolbar_options_threshold";
     public static final String SHOW_AUTHOR_AVATAR = "show_author_avatar";
     public static final String ALWAYS_SHOW_CHILD_COMMENT_COUNT = "always_show_child_comment_count";
     public static final String HIDE_UPVOTE_RATIO = "hide_upvote_ratio";
@@ -483,6 +482,7 @@ public class SharedPreferencesUtils {
     public static final String HIDE_THE_NUMBER_OF_AWARDS_LEGACY = "hide_the_number_of_awards";
     public static final String HIDE_COMMENT_AWARDS_LEGACY = "hide_comment_awards";
     public static final String IMMERSIVE_INTERFACE_IGNORE_NAV_BAR_KEY_LEGACY = "immersive_interface_ignore_nav_bar";
+    public static final String SHOW_FEWER_TOOLBAR_OPTIONS_THRESHOLD = "show_fewer_toolbar_options_threshold";
 
     //Current account
     public static final String APPLICATION_ONLY_ACCESS_TOKEN_LEGACY = "app_only_access_token";
