@@ -929,47 +929,47 @@ public class PostDetailRecyclerViewAdapterNew extends RecyclerView.Adapter<Recyc
                     ((PostDetailGalleryViewHolder) holder).adapter.setBlurImage(
                             (mPost.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit())) || (mPost.isSpoiler() && mNeedBlurSpoiler));
                 }
+            }
 
-                if (itemWidth < 250) {
-                    if (((PostDetailGalleryViewHolder) holder).commentsCountButton != null) {
-                        ((PostDetailGalleryViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
-                    }
-                    if (((PostDetailGalleryViewHolder) holder).saveButton != null) {
-                        ((PostDetailGalleryViewHolder) holder).saveButton.setVisibility(View.GONE);
-                    }
-                    if (((PostDetailGalleryViewHolder) holder).shareButton != null) {
-                        ((PostDetailGalleryViewHolder) holder).shareButton.setVisibility(View.GONE);
-                    }
-                } else if (itemWidth < 316) {
-                    if (((PostDetailGalleryViewHolder) holder).commentsCountButton != null) {
-                        ((PostDetailGalleryViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
-                    }
-                    if (((PostDetailGalleryViewHolder) holder).saveButton != null) {
-                        ((PostDetailGalleryViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
-                    }
-                    if (((PostDetailGalleryViewHolder) holder).shareButton != null) {
-                        ((PostDetailGalleryViewHolder) holder).shareButton.setVisibility(View.GONE);
-                    }
-                } else if (itemWidth < 420) {
-                    if (((PostDetailGalleryViewHolder) holder).commentsCountButton != null) {
-                        ((PostDetailGalleryViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
-                    }
-                    if (((PostDetailGalleryViewHolder) holder).saveButton != null) {
-                        ((PostDetailGalleryViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
-                    }
-                    if (((PostDetailGalleryViewHolder) holder).shareButton != null) {
-                        ((PostDetailGalleryViewHolder) holder).shareButton.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    if (((PostDetailGalleryViewHolder) holder).commentsCountButton != null) {
-                        ((PostDetailGalleryViewHolder) holder).commentsCountButton.setVisibility(View.VISIBLE);
-                    }
-                    if (((PostDetailGalleryViewHolder) holder).saveButton != null) {
-                        ((PostDetailGalleryViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
-                    }
-                    if (((PostDetailGalleryViewHolder) holder).shareButton != null) {
-                        ((PostDetailGalleryViewHolder) holder).shareButton.setVisibility(View.VISIBLE);
-                    }
+            if (itemWidth < 250) {
+                if (((PostDetailBaseViewHolder) holder).commentsCountButton != null) {
+                    ((PostDetailBaseViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
+                }
+                if (((PostDetailBaseViewHolder) holder).saveButton != null) {
+                    ((PostDetailBaseViewHolder) holder).saveButton.setVisibility(View.GONE);
+                }
+                if (((PostDetailBaseViewHolder) holder).shareButton != null) {
+                    ((PostDetailBaseViewHolder) holder).shareButton.setVisibility(View.GONE);
+                }
+            } else if (itemWidth < 316) {
+                if (((PostDetailBaseViewHolder) holder).commentsCountButton != null) {
+                    ((PostDetailBaseViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
+                }
+                if (((PostDetailBaseViewHolder) holder).saveButton != null) {
+                    ((PostDetailBaseViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
+                }
+                if (((PostDetailBaseViewHolder) holder).shareButton != null) {
+                    ((PostDetailBaseViewHolder) holder).shareButton.setVisibility(View.GONE);
+                }
+            } else if (itemWidth < 420) {
+                if (((PostDetailBaseViewHolder) holder).commentsCountButton != null) {
+                    ((PostDetailBaseViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
+                }
+                if (((PostDetailBaseViewHolder) holder).saveButton != null) {
+                    ((PostDetailBaseViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
+                }
+                if (((PostDetailBaseViewHolder) holder).shareButton != null) {
+                    ((PostDetailBaseViewHolder) holder).shareButton.setVisibility(View.VISIBLE);
+                }
+            } else {
+                if (((PostDetailBaseViewHolder) holder).commentsCountButton != null) {
+                    ((PostDetailBaseViewHolder) holder).commentsCountButton.setVisibility(View.VISIBLE);
+                }
+                if (((PostDetailBaseViewHolder) holder).saveButton != null) {
+                    ((PostDetailBaseViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
+                }
+                if (((PostDetailBaseViewHolder) holder).shareButton != null) {
+                    ((PostDetailBaseViewHolder) holder).shareButton.setVisibility(View.VISIBLE);
                 }
             }
         }
