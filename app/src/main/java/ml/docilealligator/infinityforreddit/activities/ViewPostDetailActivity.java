@@ -529,7 +529,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         }
     }
 
-    public void saveComment(@NonNull Comment comment, int position) {
+    public void toggleSaveComment(@NonNull Comment comment, int position) {
         ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
         if (fragment != null) {
             fragment.toggleSaveComment(comment, position);

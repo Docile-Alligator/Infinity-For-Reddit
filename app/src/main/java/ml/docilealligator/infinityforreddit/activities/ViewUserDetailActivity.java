@@ -1235,6 +1235,12 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         }
     }
 
+    public void toggleSaveComment(@NonNull Comment comment, int position) {
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.toggleSaveComment(comment, position);
+        }
+    }
+
     public void deleteComment(String fullName) {
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(R.string.delete_this_comment)
@@ -1900,6 +1906,15 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             }
 
             Toast.makeText(ViewUserDetailActivity.this, R.string.cannot_find_comment, Toast.LENGTH_SHORT).show();
+        }
+
+        void toggleSaveComment(Comment comment, int position) {
+            if (fragmentManager != null) {
+                Fragment fragment = fragmentManager.findFragmentByTag("f1");
+                if (fragment instanceof CommentsListingFragment) {
+                    ((CommentsListingFragment) fragment).toggleSaveComment(comment, position);
+                }
+            }
         }
     }
 

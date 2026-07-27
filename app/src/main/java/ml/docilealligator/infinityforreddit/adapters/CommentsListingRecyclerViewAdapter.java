@@ -404,6 +404,14 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         }
     }
 
+    public void toggleSaveComment(Comment comment, int position) {
+        Comment oldComment = getItem(position);
+        if (oldComment != null) {
+            oldComment.setSaved(comment.isSaved());
+            notifyItemChanged(position);
+        }
+    }
+
     public void editComment(Comment comment, int position) {
         Comment oldComment = getItem(position);
         if (oldComment != null) {

@@ -158,7 +158,9 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
 
         binding.saveTextViewCommentMoreBottomSheetFragment.setOnClickListener(view -> {
             if (activity instanceof ViewPostDetailActivity) {
-                ((ViewPostDetailActivity) activity).saveComment(comment, bundle.getInt(EXTRA_POSITION));
+                ((ViewPostDetailActivity) activity).toggleSaveComment(comment, bundle.getInt(EXTRA_POSITION));
+            } else if (activity instanceof ViewUserDetailActivity) {
+                ((ViewUserDetailActivity) activity).toggleSaveComment(comment, bundle.getInt(EXTRA_POSITION));
             }
             dismiss();
         });

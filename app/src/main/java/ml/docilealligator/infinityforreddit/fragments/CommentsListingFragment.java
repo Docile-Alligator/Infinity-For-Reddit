@@ -55,6 +55,7 @@ import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFi
 import ml.docilealligator.infinityforreddit.databinding.FragmentCommentsListingBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.thing.ReplyNotificationsToggle;
+import ml.docilealligator.infinityforreddit.thing.SaveThing;
 import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -481,6 +482,50 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
                         Toast.makeText(mActivity, R.string.toggle_reply_notifications_failed, Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    public void toggleSaveComment(Comment comment, int position) {
+        if (comment.isSaved()) {
+            SaveThing.unsaveThing(mOauthRetrofit, mActivity.accessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
+                @Override
+                public void success() {
+                    Toast.makeText(mActivity, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
+                    comment.setSaved(false);
+                    if (mAdapter != null) {
+                        mAdapter.toggleSaveComment(comment, position);
+                    }
+                }
+
+                @Override
+                public void failed() {
+                    Toast.makeText(mActivity, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
+                    comment.setSaved(true);
+                    if (mAdapter != null) {
+                        mAdapter.toggleSaveComment(comment, position);
+                    }
+                }
+            });
+        } else {
+            SaveThing.saveThing(mOauthRetrofit, mActivity.accessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
+                @Override
+                public void success() {
+                    Toast.makeText(mActivity, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
+                    comment.setSaved(true);
+                    if (mAdapter != null) {
+                        mAdapter.toggleSaveComment(comment, position);
+                    }
+                }
+
+                @Override
+                public void failed() {
+                    Toast.makeText(mActivity, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
+                    comment.setSaved(false);
+                    if (mAdapter != null) {
+                        mAdapter.toggleSaveComment(comment, position);
+                    }
+                }
+            });
+        }
     }
 
     @Subscribe
