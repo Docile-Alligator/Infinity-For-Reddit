@@ -1081,23 +1081,23 @@ class ViewPostDetailFragmentViewModelNew(
                 if (it.isExpanded) {
                     return collapseComment(position)
                 } else {
-                    if (!it.children.isNullOrEmpty()) {
-                        val newList = ArrayList<Comment>()
-                        expandComment(it.children, newList)
+                    val updatedComment = Comment(it)
+                    updatedComment.setExpanded(true)
 
-                        val updatedComment = Comment(it)
-                        updatedComment.setExpanded(true)
+                    val newList = ArrayList<Comment>()
+                    expandComment(it.children, newList)
 
-                        val updatedComments = ArrayList(comments)
-                        updatedComments[position] = updatedComment
+                    val updatedComments = ArrayList(comments)
+                    updatedComments[position] = updatedComment
+                    if (newList.isNotEmpty()) {
                         updatedComments.addAll(position + 1, newList)
-
-                        _dataState.value = _dataState.value.copy(
-                            comments = updatedComments
-                        )
-
-                        return true
                     }
+
+                    _dataState.value = _dataState.value.copy(
+                        comments = updatedComments
+                    )
+
+                    return newList.isNotEmpty()
                 }
             }
         }
@@ -1122,6 +1122,9 @@ class ViewPostDetailFragmentViewModelNew(
         _dataState.value.comments?.let { comments ->
             val comment = comments.getOrNull(position)
             comment?.let {
+                val updatedComment = Comment(it)
+                updatedComment.setExpanded(false)
+
                 val depth: Int = it.depth
                 var allChildrenSize = 0
                 for (i in position + 1..<comments.size) {
@@ -1132,20 +1135,18 @@ class ViewPostDetailFragmentViewModelNew(
                     }
                 }
 
+                val updatedComments = ArrayList(comments)
+                updatedComments[position] = updatedComment
+
                 if (allChildrenSize > 0) {
-                    val updatedComment = Comment(it)
-                    updatedComment.setExpanded(false)
-
-                    val updatedComments = ArrayList(comments)
-                    updatedComments[position] = updatedComment
                     updatedComments.subList(position + 1, position + 1 + allChildrenSize).clear()
-
-                    _dataState.value = _dataState.value.copy(
-                        comments = updatedComments
-                    )
-
-                    return true
                 }
+
+                _dataState.value = _dataState.value.copy(
+                    comments = updatedComments
+                )
+
+                return allChildrenSize > 0
             }
         }
 

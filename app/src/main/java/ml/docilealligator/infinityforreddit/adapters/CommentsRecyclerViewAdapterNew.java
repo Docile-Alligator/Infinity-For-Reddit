@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -675,6 +676,50 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
                         params.setMargins(0, (int) Utils.convertDpToPixel(16, mActivity), 0, 0);
                     }
                 }
+
+                /*int bottomToolbarWidth = itemWidth - comment.getDepth() * 12;
+                Log.i("asdfasdf", "S " + bottomToolbarWidth);
+                if (bottomToolbarWidth > 420) {
+                    if (((CommentFullyCollapsedViewHolder) holder).saveButton != null) {
+                        ((CommentFullyCollapsedViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
+                    }
+                    if (((CommentFullyCollapsedViewHolder) holder).replyButton != null) {
+                        ((CommentFullyCollapsedViewHolder) holder).replyButton.setVisibility(View.VISIBLE);
+                    }
+                    if (((CommentFullyCollapsedViewHolder) holder).expandButton != null) {
+                        ((CommentFullyCollapsedViewHolder) holder).expandButton.setVisibility(View.VISIBLE);
+                    }
+                } else if (bottomToolbarWidth > 350) {
+                    if (((CommentFullyCollapsedViewHolder) holder).saveButton != null) {
+                        ((CommentFullyCollapsedViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
+                    }
+                    if (((CommentFullyCollapsedViewHolder) holder).replyButton != null) {
+                        ((CommentFullyCollapsedViewHolder) holder).replyButton.setVisibility(View.GONE);
+                    }
+                    if (((CommentFullyCollapsedViewHolder) holder).expandButton != null) {
+                        ((CommentFullyCollapsedViewHolder) holder).expandButton.setVisibility(View.VISIBLE);
+                    }
+                } else if (bottomToolbarWidth > 300) {
+                    if (((CommentFullyCollapsedViewHolder) holder).saveButton != null) {
+                        ((CommentFullyCollapsedViewHolder) holder).saveButton.setVisibility(View.GONE);
+                    }
+                    if (((CommentFullyCollapsedViewHolder) holder).replyButton != null) {
+                        ((CommentFullyCollapsedViewHolder) holder).replyButton.setVisibility(View.GONE);
+                    }
+                    if (((CommentFullyCollapsedViewHolder) holder).expandButton != null) {
+                        ((CommentFullyCollapsedViewHolder) holder).expandButton.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    if (((CommentFullyCollapsedViewHolder) holder).saveButton != null) {
+                        ((CommentFullyCollapsedViewHolder) holder).saveButton.setVisibility(View.GONE);
+                    }
+                    if (((CommentFullyCollapsedViewHolder) holder).replyButton != null) {
+                        ((CommentFullyCollapsedViewHolder) holder).replyButton.setVisibility(View.GONE);
+                    }
+                    if (((CommentFullyCollapsedViewHolder) holder).expandButton != null) {
+                        ((CommentFullyCollapsedViewHolder) holder).expandButton.setVisibility(View.GONE);
+                    }
+                }*/
             }
         } else if (holder instanceof LoadMoreChildCommentsViewHolder) {
             Comment placeholder = getItem(position);
