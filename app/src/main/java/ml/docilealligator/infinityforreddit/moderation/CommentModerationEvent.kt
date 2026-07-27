@@ -28,4 +28,10 @@ sealed class CommentModerationEvent(open val comment: Comment?, open val positio
 
     data class Deleted(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.delete_post_success)
     data class DeleteFailed(override val comment: Comment?, override val position: Int) : CommentModerationEvent(comment, position, R.string.delete_post_failed)
+
+    data class Saved(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.comment_saved_success)
+    data class SaveFailed(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.comment_saved_failed)
+
+    data class Unsaved(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.comment_unsaved_success)
+    data class UnsaveFailed(override val comment: Comment, override val position: Int) : CommentModerationEvent(comment, position, R.string.comment_unsaved_failed)
 }

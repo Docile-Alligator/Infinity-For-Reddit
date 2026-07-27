@@ -70,7 +70,6 @@ import ml.docilealligator.infinityforreddit.post.PostType;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostsListInterface;
-import ml.docilealligator.infinityforreddit.thing.SaveThing;
 import ml.docilealligator.infinityforreddit.thing.SortType;
 import ml.docilealligator.infinityforreddit.thing.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.user.UserProfileImagesBatchLoader;
@@ -531,7 +530,11 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     public void saveComment(@NonNull Comment comment, int position) {
-        if (comment.isSaved()) {
+        ViewPostDetailFragmentNew fragment = mSectionsPagerAdapter.getCurrentFragment();
+        if (fragment != null) {
+            fragment.toggleSaveComment(comment, position);
+        }
+        /*if (comment.isSaved()) {
             comment.setSaved(false);
             SaveThing.unsaveThing(mOauthRetrofit, accessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
                 @Override
@@ -573,7 +576,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                     Toast.makeText(ViewPostDetailActivity.this, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
                 }
             });
-        }
+        }*/
     }
 
     public boolean toggleSearchPanelVisibility() {

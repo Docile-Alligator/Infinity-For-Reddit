@@ -745,13 +745,6 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
         }
     }
 
-    public void setSaveComment(int position, boolean isSaved) {
-        Comment comment = getItem(position);
-        if (comment != null) {
-            comment.setSaved(isSaved);
-        }
-    }
-
     public int getSearchedPosition() {
         return mSearchedPosition;
     }

@@ -865,10 +865,8 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         }
     }
 
-    public void saveComment(int position, boolean isSaved) {
-        if (mCommentsAdapter != null) {
-            mCommentsAdapter.setSaveComment(position, isSaved);
-        }
+    public void toggleSaveComment(@NonNull Comment comment, int position) {
+        viewPostDetailFragmentViewModel.toggleSaveComment(comment, position);
     }
 
     public void searchComment(String query, boolean searchNextComment) {
