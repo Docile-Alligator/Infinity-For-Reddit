@@ -503,8 +503,8 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
                 mSharedPreferences, mNsfwAndSpoilerSharedPreferences,
                 new CommentsRecyclerViewAdapterNew.CommentRecyclerViewAdapterCallback() {
                     @Override
-                    public void expandComment(int position) {
-                        viewPostDetailFragmentViewModel.expandComment(position);
+                    public boolean toggleExpandComment(int position) {
+                        return viewPostDetailFragmentViewModel.toggleExpandComment(position);
                     }
 
                     @Override

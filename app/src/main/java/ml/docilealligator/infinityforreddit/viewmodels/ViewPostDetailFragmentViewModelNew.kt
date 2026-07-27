@@ -1074,29 +1074,35 @@ class ViewPostDetailFragmentViewModelNew(
         refresh(fetchPost = false, fetchComments = true)
     }
 
-    fun expandComment(position: Int) {
+    fun toggleExpandComment(position: Int): Boolean {
         _dataState.value.comments?.let { comments ->
             val comment = comments.getOrNull(position)
             comment?.let {
                 if (it.isExpanded) {
-                    collapseComment(position)
+                    return collapseComment(position)
                 } else {
-                    val updatedComment = Comment(it)
-                    updatedComment.setExpanded(true)
+                    if (!it.children.isNullOrEmpty()) {
+                        val newList = ArrayList<Comment>()
+                        expandComment(it.children, newList)
 
-                    val newList = ArrayList<Comment>()
-                    expandComment(it.children, newList)
+                        val updatedComment = Comment(it)
+                        updatedComment.setExpanded(true)
 
-                    val updatedComments = ArrayList(comments)
-                    updatedComments[position] = updatedComment
-                    updatedComments.addAll(position + 1, newList)
+                        val updatedComments = ArrayList(comments)
+                        updatedComments[position] = updatedComment
+                        updatedComments.addAll(position + 1, newList)
 
-                    _dataState.value = _dataState.value.copy(
-                        comments = updatedComments
-                    )
+                        _dataState.value = _dataState.value.copy(
+                            comments = updatedComments
+                        )
+
+                        return true
+                    }
                 }
             }
         }
+
+        return false
     }
 
     private fun expandComment(
@@ -1112,13 +1118,10 @@ class ViewPostDetailFragmentViewModelNew(
         }
     }
 
-    fun collapseComment(position: Int) {
+    fun collapseComment(position: Int): Boolean {
         _dataState.value.comments?.let { comments ->
             val comment = comments.getOrNull(position)
             comment?.let {
-                val updatedComment = Comment(it)
-                updatedComment.setExpanded(false)
-
                 val depth: Int = it.depth
                 var allChildrenSize = 0
                 for (i in position + 1..<comments.size) {
@@ -1129,18 +1132,24 @@ class ViewPostDetailFragmentViewModelNew(
                     }
                 }
 
-                val updatedComments = ArrayList(comments)
-                updatedComments[position] = updatedComment
-
                 if (allChildrenSize > 0) {
-                    updatedComments.subList(position + 1, position + 1 + allChildrenSize).clear()
-                }
+                    val updatedComment = Comment(it)
+                    updatedComment.setExpanded(false)
 
-                _dataState.value = _dataState.value.copy(
-                    comments = updatedComments
-                )
+                    val updatedComments = ArrayList(comments)
+                    updatedComments[position] = updatedComment
+                    updatedComments.subList(position + 1, position + 1 + allChildrenSize).clear()
+
+                    _dataState.value = _dataState.value.copy(
+                        comments = updatedComments
+                    )
+
+                    return true
+                }
             }
         }
+
+        return false
     }
 
     fun addComment(comment: Comment) {

@@ -802,7 +802,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
     }
 
     public interface CommentRecyclerViewAdapterCallback {
-        void expandComment(int position);
+        boolean toggleExpandComment(int position);
         void collapseComment(int position);
         void fetchMoreChildComments(int position);
     }
@@ -1275,9 +1275,8 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
             });
 
             expandButton.setOnClickListener(view -> {
-                if (expandButton.getVisibility() == View.VISIBLE) {
-                    mCommentRecyclerViewAdapterCallback.expandComment(getBindingAdapterPosition());
-                } else if (mFullyCollapseComment) {
+                if (!mCommentRecyclerViewAdapterCallback.toggleExpandComment(getBindingAdapterPosition())
+                        && mFullyCollapseComment) {
                     mCommentRecyclerViewAdapterCallback.collapseComment(getBindingAdapterPosition());
                 }
             });
@@ -1336,9 +1335,8 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
             }
         }
 
-        private boolean expandComments() {
+        private void expandComments() {
             expandButton.performClick();
-            return true;
         }
 
         private boolean hideToolbar() {
@@ -1418,7 +1416,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
             }
 
             itemView.setOnClickListener(view -> {
-                mCommentRecyclerViewAdapterCallback.expandComment(getBindingAdapterPosition());
+                mCommentRecyclerViewAdapterCallback.toggleExpandComment(getBindingAdapterPosition());
             });
 
             itemView.setOnLongClickListener(view -> {
