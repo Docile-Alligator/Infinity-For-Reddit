@@ -579,7 +579,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
                     if (((CommentBaseViewHolder) holder).replyButton != null) {
                         ((CommentBaseViewHolder) holder).replyButton.setVisibility(View.VISIBLE);
                     }
-                    if (((CommentBaseViewHolder) holder).expandButton != null) {
+                    if (((CommentBaseViewHolder) holder).expandButton != null && comment.hasReply()) {
                         ((CommentBaseViewHolder) holder).expandButton.setVisibility(View.VISIBLE);
                     }
                 } else if (bottomToolbarWidth > 350) {
@@ -589,7 +589,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
                     if (((CommentBaseViewHolder) holder).replyButton != null) {
                         ((CommentBaseViewHolder) holder).replyButton.setVisibility(View.GONE);
                     }
-                    if (((CommentBaseViewHolder) holder).expandButton != null) {
+                    if (((CommentBaseViewHolder) holder).expandButton != null && comment.hasReply()) {
                         ((CommentBaseViewHolder) holder).expandButton.setVisibility(View.VISIBLE);
                     }
                 } else if (bottomToolbarWidth > 300) {
@@ -599,7 +599,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
                     if (((CommentBaseViewHolder) holder).replyButton != null) {
                         ((CommentBaseViewHolder) holder).replyButton.setVisibility(View.GONE);
                     }
-                    if (((CommentBaseViewHolder) holder).expandButton != null) {
+                    if (((CommentBaseViewHolder) holder).expandButton != null && comment.hasReply()) {
                         ((CommentBaseViewHolder) holder).expandButton.setVisibility(View.VISIBLE);
                     }
                 } else {
