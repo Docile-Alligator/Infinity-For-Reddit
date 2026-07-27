@@ -677,49 +677,24 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
                     }
                 }
 
-                /*int bottomToolbarWidth = itemWidth - comment.getDepth() * 12;
-                Log.i("asdfasdf", "S " + bottomToolbarWidth);
-                if (bottomToolbarWidth > 420) {
-                    if (((CommentFullyCollapsedViewHolder) holder).saveButton != null) {
-                        ((CommentFullyCollapsedViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
-                    }
-                    if (((CommentFullyCollapsedViewHolder) holder).replyButton != null) {
-                        ((CommentFullyCollapsedViewHolder) holder).replyButton.setVisibility(View.VISIBLE);
-                    }
-                    if (((CommentFullyCollapsedViewHolder) holder).expandButton != null) {
-                        ((CommentFullyCollapsedViewHolder) holder).expandButton.setVisibility(View.VISIBLE);
-                    }
+                int bottomToolbarWidth = itemWidth - comment.getDepth() * 12;
+                if (bottomToolbarWidth > 400) {
+                    ((CommentFullyCollapsedViewHolder) holder).binding.childCountTextViewItemCommentFullyCollapsed.setVisibility(View.VISIBLE);
+                    ((CommentFullyCollapsedViewHolder) holder).binding.scoreTextViewItemCommentFullyCollapsed.setVisibility(View.VISIBLE);
+                    ((CommentFullyCollapsedViewHolder) holder).binding.timeTextViewItemCommentFullyCollapsed.setVisibility(View.VISIBLE);
                 } else if (bottomToolbarWidth > 350) {
-                    if (((CommentFullyCollapsedViewHolder) holder).saveButton != null) {
-                        ((CommentFullyCollapsedViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
-                    }
-                    if (((CommentFullyCollapsedViewHolder) holder).replyButton != null) {
-                        ((CommentFullyCollapsedViewHolder) holder).replyButton.setVisibility(View.GONE);
-                    }
-                    if (((CommentFullyCollapsedViewHolder) holder).expandButton != null) {
-                        ((CommentFullyCollapsedViewHolder) holder).expandButton.setVisibility(View.VISIBLE);
-                    }
+                    ((CommentFullyCollapsedViewHolder) holder).binding.childCountTextViewItemCommentFullyCollapsed.setVisibility(View.GONE);
+                    ((CommentFullyCollapsedViewHolder) holder).binding.scoreTextViewItemCommentFullyCollapsed.setVisibility(View.VISIBLE);
+                    ((CommentFullyCollapsedViewHolder) holder).binding.timeTextViewItemCommentFullyCollapsed.setVisibility(View.VISIBLE);
                 } else if (bottomToolbarWidth > 300) {
-                    if (((CommentFullyCollapsedViewHolder) holder).saveButton != null) {
-                        ((CommentFullyCollapsedViewHolder) holder).saveButton.setVisibility(View.GONE);
-                    }
-                    if (((CommentFullyCollapsedViewHolder) holder).replyButton != null) {
-                        ((CommentFullyCollapsedViewHolder) holder).replyButton.setVisibility(View.GONE);
-                    }
-                    if (((CommentFullyCollapsedViewHolder) holder).expandButton != null) {
-                        ((CommentFullyCollapsedViewHolder) holder).expandButton.setVisibility(View.VISIBLE);
-                    }
+                    ((CommentFullyCollapsedViewHolder) holder).binding.childCountTextViewItemCommentFullyCollapsed.setVisibility(View.GONE);
+                    ((CommentFullyCollapsedViewHolder) holder).binding.scoreTextViewItemCommentFullyCollapsed.setVisibility(View.GONE);
+                    ((CommentFullyCollapsedViewHolder) holder).binding.timeTextViewItemCommentFullyCollapsed.setVisibility(View.VISIBLE);
                 } else {
-                    if (((CommentFullyCollapsedViewHolder) holder).saveButton != null) {
-                        ((CommentFullyCollapsedViewHolder) holder).saveButton.setVisibility(View.GONE);
-                    }
-                    if (((CommentFullyCollapsedViewHolder) holder).replyButton != null) {
-                        ((CommentFullyCollapsedViewHolder) holder).replyButton.setVisibility(View.GONE);
-                    }
-                    if (((CommentFullyCollapsedViewHolder) holder).expandButton != null) {
-                        ((CommentFullyCollapsedViewHolder) holder).expandButton.setVisibility(View.GONE);
-                    }
-                }*/
+                    ((CommentFullyCollapsedViewHolder) holder).binding.childCountTextViewItemCommentFullyCollapsed.setVisibility(View.GONE);
+                    ((CommentFullyCollapsedViewHolder) holder).binding.scoreTextViewItemCommentFullyCollapsed.setVisibility(View.GONE);
+                    ((CommentFullyCollapsedViewHolder) holder).binding.timeTextViewItemCommentFullyCollapsed.setVisibility(View.GONE);
+                }
             }
         } else if (holder instanceof LoadMoreChildCommentsViewHolder) {
             Comment placeholder = getItem(position);
