@@ -73,6 +73,7 @@
 -keep class ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage { <fields>; }
 -keep class ml.docilealligator.infinityforreddit.commentfilter.CommentFilter { <fields>; }
 -keep class ml.docilealligator.infinityforreddit.commentfilter.CommentFilterUsage { <fields>; }
+-keep class ml.docilealligator.infinityforreddit.RedditError { <fields>; }
 
 # Prevent proguard from stripping interface information from TypeAdapter, TypeAdapterFactory,
 # JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
