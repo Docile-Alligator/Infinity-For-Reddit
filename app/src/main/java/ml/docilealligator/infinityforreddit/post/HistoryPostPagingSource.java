@@ -9,6 +9,7 @@ import androidx.paging.PagingState;
 
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.RedditError;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
@@ -26,6 +28,7 @@ import ml.docilealligator.infinityforreddit.readpost.NullReadPostsList;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostType;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.HttpException;
 import retrofit2.Response;
@@ -104,7 +107,15 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
                     return new LoadResult.Page<>(new ArrayList<>(newPosts), null, Long.toString(lastItem));
                 }
             } else {
-                return new LoadResult.Error<>(new PostPagingSource.PostPagingSourceError(response.code(), "Error getting response"));
+                try (ResponseBody errorBody = response.errorBody()) {
+                    if (errorBody != null) {
+                        RedditError redditError = new Gson().fromJson(errorBody.string(), RedditError.class);
+                        return new LoadResult.Error<>(new PostPagingSource.PostPagingSourceError(response.code(), redditError.getReason()));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return new LoadResult.Error<>(new PostPagingSource.PostPagingSourceError(response.code(), null));
             }
         } catch (IOException e) {
             e.printStackTrace();
