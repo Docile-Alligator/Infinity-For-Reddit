@@ -273,7 +273,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
                     RedditError redditError = new Gson().fromJson(errorBody.string(), RedditError.class);
                     return new LoadResult.Error<>(new PostPagingSourceError(response.code(), redditError.getReason()));
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return new LoadResult.Error<>(new PostPagingSourceError(response.code(), null));
