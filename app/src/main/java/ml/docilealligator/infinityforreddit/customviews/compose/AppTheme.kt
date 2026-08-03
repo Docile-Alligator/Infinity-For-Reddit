@@ -21,7 +21,6 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import com.giphy.sdk.analytics.GiphyPingbacks.context
 import kotlinx.coroutines.flow.onEach
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
@@ -120,20 +119,20 @@ private fun getDefaultTheme(context: Context, themeType: Int): CustomTheme {
 }
 
 private fun getTypography(context: Context, sharedPreferences: SharedPreferences): Typography {
-    val fontFamily = getFontFamily(sharedPreferences.getString(SharedPreferencesUtils.FONT_FAMILY_KEY, ml.docilealligator.infinityforreddit.font.FontFamily.Default.name))
-    val titleFontFamily = getFontFamily(sharedPreferences.getString(SharedPreferencesUtils.TITLE_FONT_FAMILY_KEY, ml.docilealligator.infinityforreddit.font.TitleFontFamily.Default.name))
-    val contentFontFamily = getFontFamily(sharedPreferences.getString(SharedPreferencesUtils.CONTENT_FONT_FAMILY_KEY, ml.docilealligator.infinityforreddit.font.ContentFontFamily.Default.name))
+    val fontFamily = getFontFamily(context, sharedPreferences.getString(SharedPreferencesUtils.FONT_FAMILY_KEY, ml.docilealligator.infinityforreddit.font.FontFamily.Default.name))
+    val titleFontFamily = getFontFamily(context, sharedPreferences.getString(SharedPreferencesUtils.TITLE_FONT_FAMILY_KEY, ml.docilealligator.infinityforreddit.font.TitleFontFamily.Default.name))
+    val contentFontFamily = getFontFamily(context, sharedPreferences.getString(SharedPreferencesUtils.CONTENT_FONT_FAMILY_KEY, ml.docilealligator.infinityforreddit.font.ContentFontFamily.Default.name))
 
-    val fontSize = getFontSize(context, sharedPreferences)
-    val titleFontSize = getTitleFontSize(context, sharedPreferences)
-    val contentFontSize = getContentFontSize(context, sharedPreferences)
+    val fontSize = getFontSize(sharedPreferences)
+    val titleFontSize = getTitleFontSize(sharedPreferences)
+    val contentFontSize = getContentFontSize(sharedPreferences)
 
     return Typography(
         fontFamily, titleFontFamily, contentFontFamily, fontSize, titleFontSize, contentFontSize
     )
 }
 
-private fun getFontFamily(fontFamily: String?): FontFamily? {
+private fun getFontFamily(context: Context, fontFamily: String?): FontFamily? {
     return when (fontFamily) {
         "Default" -> null
         "BalsamiqSans" -> FontFamily(Font(R.font.balsamiq_sans))
@@ -151,12 +150,12 @@ private fun getFontFamily(fontFamily: String?): FontFamily? {
         "Sriracha" -> FontFamily(Font(R.font.sriracha_regular))
         "AtkinsonHyperlegible" -> FontFamily(Font(R.font.atkinson_hyperlegible))
         "AtkinsonHyperlegibleBold" -> FontFamily(Font(R.font.atkinson_hyperlegible_bold_version))
-        "Custom" -> FontFamily((context.applicationContext as Infinity).typeface)
+        "Custom" -> (context.applicationContext as Infinity).typeface?.let { FontFamily(it) }
         else -> null
     }
 }
 
-private fun getFontSize(context: Context, sharedPreferences: SharedPreferences): FontSize {
+private fun getFontSize(sharedPreferences: SharedPreferences): FontSize {
     return when (sharedPreferences.getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name)) {
         "XSmall" -> FontSize(10.sp, 8.sp, 10.sp, 12.sp, 14.sp, 16.sp)
         "Small" -> FontSize(12.sp, 10.sp, 12.sp, 14.sp, 16.sp, 18.sp)
@@ -166,7 +165,7 @@ private fun getFontSize(context: Context, sharedPreferences: SharedPreferences):
     }
 }
 
-private fun getTitleFontSize(context: Context, sharedPreferences: SharedPreferences): TitleFontSize {
+private fun getTitleFontSize(sharedPreferences: SharedPreferences): TitleFontSize {
     return when (sharedPreferences.getString(SharedPreferencesUtils.TITLE_FONT_SIZE_KEY, FontStyle.Normal.name)) {
         "XSmall" -> TitleFontSize(10.sp, 10.sp, 12.sp, 14.sp, 16.sp)
         "Small" -> TitleFontSize(12.sp, 12.sp, 14.sp, 16.sp, 18.sp)
@@ -176,7 +175,7 @@ private fun getTitleFontSize(context: Context, sharedPreferences: SharedPreferen
     }
 }
 
-private fun getContentFontSize(context: Context, sharedPreferences: SharedPreferences): ContentFontSize {
+private fun getContentFontSize(sharedPreferences: SharedPreferences): ContentFontSize {
     return when (sharedPreferences.getString(SharedPreferencesUtils.CONTENT_FONT_SIZE_KEY, FontStyle.Normal.name)) {
         "XSmall" -> ContentFontSize(10.sp, 10.sp, 12.sp, 14.sp, 16.sp)
         "Small" -> ContentFontSize(12.sp, 12.sp, 14.sp, 16.sp, 18.sp)
