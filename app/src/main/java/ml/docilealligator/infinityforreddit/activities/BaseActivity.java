@@ -417,13 +417,14 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
         if (collapsingToolbarLayout != null) {
             collapsingToolbarLayout.setContentScrimColor(customThemeWrapper.getColorPrimary());
         }
-        if (setToolbarBackgroundColor) {
+        /**if (setToolbarBackgroundColor) {
             toolbar.setBackgroundColor(customThemeWrapper.getColorPrimary());
         } else if (!isImmersiveInterface()) {
             int[] colors = {customThemeWrapper.getColorPrimary(), Color.TRANSPARENT};
             GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
             toolbar.setBackground(gradientDrawable);
-        }
+        }*/
+        toolbar.setBackground(null);
         toolbar.setTitleTextColor(customThemeWrapper.getToolbarPrimaryTextAndIconColor());
         toolbar.setSubtitleTextColor(customThemeWrapper.getToolbarSecondaryTextColor());
         if (toolbar.getNavigationIcon() != null) {
@@ -477,8 +478,9 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
     }
 
     protected void applyTabLayoutTheme(TabLayout tabLayout) {
-        int toolbarAndTabBackgroundColor = customThemeWrapper.getColorPrimary();
-        tabLayout.setBackgroundColor(toolbarAndTabBackgroundColor);
+        /**int toolbarAndTabBackgroundColor = customThemeWrapper.getColorPrimary();
+        tabLayout.setBackgroundColor(toolbarAndTabBackgroundColor);**/
+        tabLayout.setBackground(null);
         tabLayout.setSelectedTabIndicatorColor(customThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabIndicator());
         tabLayout.setTabTextColors(customThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTextColor(),
                 customThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTextColor());
