@@ -49,6 +49,20 @@ public class SwipeLockLinearLayout extends LinearLayout implements SwipeLockView
     }
 
     /**
+     * If a lockable component is brought back into view, it will become unlocked again
+     */
+    @Override
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
+
+        if (locked) {
+            swipeLockInterface.unlockSwipe();
+            locked = false;
+        }
+
+        swipeLockInterface.setSwipeLocked(false);
+    }
+
+    /**
      * Unlocks swipe if the view cannot be scrolled right anymore or if {@code ev} is
      * {@link MotionEvent#ACTION_UP} or {@link MotionEvent#ACTION_CANCEL}
      */
