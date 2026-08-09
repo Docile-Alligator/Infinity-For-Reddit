@@ -1009,6 +1009,7 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
                     bundle.putParcelable(CommentMoreBottomSheetFragment.EXTRA_COMMENT, comment);
                     bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getBindingAdapterPosition());
                     bundle.putBoolean(CommentMoreBottomSheetFragment.EXTRA_IS_NSFW, mPost.isNSFW());
+                    bundle.putBoolean(CommentMoreBottomSheetFragment.EXTRA_SHOW_REPLY_OPTION, !mPost.isArchived() && !mPost.isLocked() && !comment.isLocked());
                     CommentMoreBottomSheetFragment commentMoreBottomSheetFragment = new CommentMoreBottomSheetFragment();
                     commentMoreBottomSheetFragment.setArguments(bundle);
                     commentMoreBottomSheetFragment.show(mFragment.getChildFragmentManager(), commentMoreBottomSheetFragment.getTag());
