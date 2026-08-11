@@ -4719,7 +4719,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     if (post.getPostType() == Post.TEXT_TYPE || !mSharedPreferences.getBoolean(SharedPreferencesUtils.CLICK_TO_SHOW_MEDIA_IN_GALLERY_LAYOUT, false)) {
                         openViewPostDetailActivity(post, getBindingAdapterPosition());
                     } else {
-                        openMedia(post, layoutManager.findFirstVisibleItemPosition());
+                        openMedia(post, layoutManager.findFirstVisibleItemPosition(), false);
                     }
                 }
             }
@@ -4735,7 +4735,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     if (post.getPostType() == Post.TEXT_TYPE || mSharedPreferences.getBoolean(SharedPreferencesUtils.CLICK_TO_SHOW_MEDIA_IN_GALLERY_LAYOUT, false)) {
                         openViewPostDetailActivity(post, getBindingAdapterPosition());
                     } else {
-                        openMedia(post, layoutManager.findFirstVisibleItemPosition());
+                        openMedia(post, layoutManager.findFirstVisibleItemPosition(), false);
                     }
                 }
             }
