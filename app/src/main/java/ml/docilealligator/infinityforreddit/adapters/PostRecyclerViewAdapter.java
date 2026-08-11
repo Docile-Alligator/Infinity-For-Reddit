@@ -48,6 +48,7 @@ import androidx.media3.ui.TrackSelectionDialogBuilder;
 import androidx.paging.ItemSnapshotList;
 import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -76,6 +77,7 @@ import javax.inject.Provider;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.FetchVideoLinkListener;
+import ml.docilealligator.infinityforreddit.PostGalleryGridLayoutItemDecoration;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
@@ -1024,12 +1026,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         }
                     }
                 } else if (holder instanceof PostBaseGalleryTypeViewHolder) {
+                    int gallerySize = post.getGallery().size();
                     if (mDataSavingMode && mDisableImagePreview) {
                         ((PostBaseGalleryTypeViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
                         ((PostBaseGalleryTypeViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_day_night_24dp);
                     } else {
                         ((PostBaseGalleryTypeViewHolder) holder).frameLayout.setVisibility(View.VISIBLE);
-                        ((PostBaseGalleryTypeViewHolder) holder).imageIndexTextView.setText(mActivity.getString(R.string.image_index_in_gallery, 1, post.getGallery().size()));
+                        ((PostBaseGalleryTypeViewHolder) holder).imageIndexTextView.setText(mActivity.getString(R.string.image_index_in_gallery, 1, gallerySize));
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         if (preview != null) {
                             if (mFixedHeightPreviewInCard || (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0)) {
@@ -1043,6 +1046,26 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostBaseGalleryTypeViewHolder) holder).adapter.setGalleryImages(post.getGallery());
                         ((PostBaseGalleryTypeViewHolder) holder).adapter.setBlurImage(
                                 (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit())) || (post.isSpoiler() && mNeedBlurSpoiler));
+                    }
+
+                    RecyclerView.LayoutManager layoutManager = ((PostBaseGalleryTypeViewHolder) holder).galleryRecyclerView.getLayoutManager();
+                    if (layoutManager instanceof GridLayoutManager) {
+                        int spanCount = gallerySize == 2 || gallerySize == 4 ? 2 : 3;
+                        ((GridLayoutManager) layoutManager).setSpanCount(spanCount);
+                        if (((PostBaseGalleryTypeViewHolder) holder).galleryRecyclerView.getItemDecorationCount() > 0) {
+                            RecyclerView.ItemDecoration itemDecoration = ((PostBaseGalleryTypeViewHolder) holder).galleryRecyclerView.getItemDecorationAt(0);
+                            if (itemDecoration instanceof PostGalleryGridLayoutItemDecoration) {
+                                ((PostGalleryGridLayoutItemDecoration) itemDecoration).setSpanCount(spanCount);
+                            }
+                        }
+
+                        ((PostBaseGalleryTypeViewHolder) holder).galleryRecyclerView.setPadding(0, 0, (int) (8 * mScale), 0);
+                        ((PostBaseGalleryTypeViewHolder) holder).adapter.setIsGridLayout(true);
+                        ((PostBaseGalleryTypeViewHolder) holder).imageIndexTextView.setVisibility(View.GONE);
+                    } else {
+                        ((PostBaseGalleryTypeViewHolder) holder).galleryRecyclerView.setPadding(0, 0, 0, 0);
+                        ((PostBaseGalleryTypeViewHolder) holder).adapter.setIsGridLayout(false);
+                        ((PostBaseGalleryTypeViewHolder) holder).imageIndexTextView.setVisibility(View.VISIBLE);
                     }
                 } else if (holder instanceof PostTextTypeViewHolder) {
                     if (!mHideTextPostContent && !post.isSpoiler() && post.getSelfTextPlainTrimmed() != null && !post.getSelfTextPlainTrimmed().isEmpty()) {
@@ -3209,7 +3232,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
 
                 if (mLongPressPostNonMediaAreaAction.equals(SharedPreferencesUtils.LONG_PRESS_POST_VALUE_SHOW_POST_OPTIONS)) {
-                    showPostOptions();
+                    showPostOptions(-1);
                 } else if (mLongPressPostNonMediaAreaAction.equals(SharedPreferencesUtils.LONG_PRESS_POST_VALUE_PREVIEW_IN_FULLSCREEN)) {
                     markPostRead(post, true);
                     openMedia(post, true);
@@ -3218,12 +3241,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             });
         }
 
-        void showPostOptions() {
+        void showPostOptions(int currentGalleryItemPosition) {
             PostOptionsBottomSheetFragment postOptionsBottomSheetFragment;
-            if (post.getPostType() == Post.GALLERY_TYPE && this instanceof PostBaseGalleryTypeViewHolder) {
+            if (post.getPostType() == Post.GALLERY_TYPE && this instanceof PostBaseGalleryTypeViewHolder && currentGalleryItemPosition >= 0) {
                 postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(post,
-                        getBindingAdapterPosition(),
-                        ((LinearLayoutManagerBugFixed) ((PostBaseGalleryTypeViewHolder) this).galleryRecyclerView.getLayoutManager()).findFirstVisibleItemPosition());
+                        getBindingAdapterPosition(), currentGalleryItemPosition);
             } else {
                 postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(post, getBindingAdapterPosition());
             }
@@ -3599,7 +3621,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
             imageView.setOnLongClickListener(view -> {
                 if (mLongPressPostMediaAction.equals(SharedPreferencesUtils.LONG_PRESS_POST_VALUE_SHOW_POST_OPTIONS)) {
-                    showPostOptions();
+                    showPostOptions(-1);
                     return true;
                 } else if (mLongPressPostMediaAction.equals(SharedPreferencesUtils.LONG_PRESS_POST_VALUE_PREVIEW_IN_FULLSCREEN)) {
                     markPostRead(post, true);
@@ -3721,8 +3743,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             galleryRecyclerView.setAdapter(adapter);
             new PagerSnapHelper().attachToRecyclerView(galleryRecyclerView);
             galleryRecyclerView.setRecycledViewPool(mGalleryRecycledViewPool);
-            LinearLayoutManagerBugFixed layoutManager = new LinearLayoutManagerBugFixed(mActivity, RecyclerView.HORIZONTAL, false);
+            //LinearLayoutManagerBugFixed layoutManager = new LinearLayoutManagerBugFixed(mActivity, RecyclerView.HORIZONTAL, false);
+            GridLayoutManager layoutManager = new GridLayoutManager(mActivity, 3);
             galleryRecyclerView.setLayoutManager(layoutManager);
+            PostGalleryGridLayoutItemDecoration itemDecoration =
+                    new PostGalleryGridLayoutItemDecoration(mActivity, R.dimen.staggeredLayoutManagerItemOffset, 2);
+            galleryRecyclerView.addItemDecoration(itemDecoration);
+
             galleryRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
@@ -3732,7 +3759,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
-                    imageIndexTextView.setText(mActivity.getString(R.string.image_index_in_gallery, layoutManager.findFirstVisibleItemPosition() + 1, post.getGallery().size()));
+                    RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                    if (layoutManager instanceof LinearLayoutManagerBugFixed) {
+                        imageIndexTextView.setText(mActivity.getString(R.string.image_index_in_gallery,
+                                ((LinearLayoutManagerBugFixed) layoutManager).findFirstVisibleItemPosition() + 1, post.getGallery().size()));
+                    }
                 }
             });
             galleryRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
@@ -3769,14 +3800,19 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
                             if (!dragged && !longPressed) {
                                 if (System.currentTimeMillis() - downTime >= longClickThreshold) {
+                                    View itemView = galleryRecyclerView.findChildViewUnder(e.getX(), e.getY());
+                                    int currentItemPosition = -1;
+                                    if (itemView != null) {
+                                        currentItemPosition = galleryRecyclerView.getChildAdapterPosition(itemView);
+                                    }
                                     if (mLongPressPostMediaAction.equals(SharedPreferencesUtils.LONG_PRESS_POST_VALUE_SHOW_POST_OPTIONS)) {
                                         galleryRecyclerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                                        showPostOptions();
+                                        showPostOptions(currentItemPosition);
                                         longPressed = true;
                                     } else if (mLongPressPostMediaAction.equals(SharedPreferencesUtils.LONG_PRESS_POST_VALUE_PREVIEW_IN_FULLSCREEN)) {
                                         galleryRecyclerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                                         markPostRead(post, true);
-                                        openMedia(post, layoutManager.findFirstVisibleItemPosition(), true);
+                                        openMedia(post, currentItemPosition, true);
                                         longPressed = true;
                                     }
                                 }
@@ -3799,7 +3835,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                     if (position >= 0) {
                                         if (post != null) {
                                             markPostRead(post, true);
-                                            openMedia(post, layoutManager.findFirstVisibleItemPosition(), false);
+                                            View itemView = galleryRecyclerView.findChildViewUnder(e.getX(), e.getY());
+                                            int currentItemPosition = -1;
+                                            if (itemView != null) {
+                                                currentItemPosition = galleryRecyclerView.getChildAdapterPosition(itemView);
+                                            }
+                                            openMedia(post, Math.max(currentItemPosition, 0), false);
                                         }
                                     }
                                 }
@@ -3847,11 +3888,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
             noPreviewImageView.setOnLongClickListener(view -> {
                 if (mLongPressPostMediaAction.equals(SharedPreferencesUtils.LONG_PRESS_POST_VALUE_SHOW_POST_OPTIONS)) {
-                    showPostOptions();
+                    showPostOptions(-1);
                     return true;
                 } else if (mLongPressPostMediaAction.equals(SharedPreferencesUtils.LONG_PRESS_POST_VALUE_PREVIEW_IN_FULLSCREEN)) {
                     markPostRead(post, true);
-                    openMedia(post, layoutManager.findFirstVisibleItemPosition(), true);
+                    openMedia(post, true);
                     return true;
                 }
                 return false;

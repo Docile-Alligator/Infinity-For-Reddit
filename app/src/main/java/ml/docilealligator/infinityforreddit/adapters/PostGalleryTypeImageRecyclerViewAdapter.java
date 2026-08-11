@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.MultiTransformation;
 import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 
 import io.noties.markwon.Markwon;
 import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
 import ml.docilealligator.infinityforreddit.databinding.ItemGalleryImageInPostFeedBinding;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -43,6 +46,7 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
     private boolean blurImage;
     private float ratio;
     private final boolean showCaption;
+    private boolean isGridLayout;
 
     public PostGalleryTypeImageRecyclerViewAdapter(RequestManager glide, Typeface typeface,
                                                    SaveMemoryCenterInisdeDownsampleStrategy saveMemoryCenterInisdeDownsampleStrategy,
@@ -80,11 +84,15 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        if (ratio < 0) {
+        if (isGridLayout) {
+            holder.binding.imageViewItemGalleryImageInPostFeed.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            holder.binding.imageViewItemGalleryImageInPostFeed.setRatio(1);
+        } else if (ratio < 0) {
             int height = (int) (400 * mScale);
             holder.binding.imageViewItemGalleryImageInPostFeed.setScaleType(ImageView.ScaleType.CENTER_CROP);
             holder.binding.imageViewItemGalleryImageInPostFeed.getLayoutParams().height = height;
         } else {
+            holder.binding.imageViewItemGalleryImageInPostFeed.setScaleType(ImageView.ScaleType.FIT_XY);
             holder.binding.imageViewItemGalleryImageInPostFeed.setRatio(ratio);
         }
         holder.binding.errorTextViewItemGalleryImageInPostFeed.setVisibility(View.GONE);
@@ -157,10 +165,22 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
             }
         });
         if (blurImage) {
-            imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                    .into(holder.binding.imageViewItemGalleryImageInPostFeed);
+            if (isGridLayout) {
+                imageRequestBuilder
+                        .apply(RequestOptions.bitmapTransform(new MultiTransformation<>(new CenterCrop(), new RoundedCornersTransformation(32, 0), new BlurTransformation(50, 2))))
+                        .into(holder.binding.imageViewItemGalleryImageInPostFeed);
+            } else {
+                imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
+                        .into(holder.binding.imageViewItemGalleryImageInPostFeed);
+            }
         } else {
-            imageRequestBuilder.centerInside().downsample(saveMemoryCenterInisdeDownsampleStrategy).into(holder.binding.imageViewItemGalleryImageInPostFeed);
+            if (isGridLayout) {
+                imageRequestBuilder
+                        .apply(RequestOptions.bitmapTransform(new MultiTransformation<>(new CenterCrop(), new RoundedCornersTransformation(32, 0))))
+                        .downsample(saveMemoryCenterInisdeDownsampleStrategy).into(holder.binding.imageViewItemGalleryImageInPostFeed);
+            } else {
+                imageRequestBuilder.centerInside().downsample(saveMemoryCenterInisdeDownsampleStrategy).into(holder.binding.imageViewItemGalleryImageInPostFeed);
+            }
         }
     }
 
@@ -205,6 +225,10 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
 
     public void setRatio(float ratio) {
         this.ratio = ratio;
+    }
+
+    public void setIsGridLayout(boolean isGridLayout) {
+        this.isGridLayout = isGridLayout;
     }
 
     class ImageViewHolder extends RecyclerView.ViewHolder {
