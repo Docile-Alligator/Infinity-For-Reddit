@@ -92,7 +92,7 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
             holder.binding.imageViewItemGalleryImageInPostFeed.setScaleType(ImageView.ScaleType.CENTER_CROP);
             holder.binding.imageViewItemGalleryImageInPostFeed.getLayoutParams().height = height;
         } else {
-            holder.binding.imageViewItemGalleryImageInPostFeed.setScaleType(ImageView.ScaleType.FIT_START);
+            holder.binding.imageViewItemGalleryImageInPostFeed.setScaleType(ImageView.ScaleType.FIT_CENTER);
             holder.binding.imageViewItemGalleryImageInPostFeed.setRatio(ratio);
         }
         holder.binding.errorTextViewItemGalleryImageInPostFeed.setVisibility(View.GONE);

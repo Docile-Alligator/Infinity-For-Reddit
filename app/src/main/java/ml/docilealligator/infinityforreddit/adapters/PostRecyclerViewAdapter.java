@@ -1779,6 +1779,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     ((PostBaseVideoAutoplayViewHolder) holder).toroPlayer.setDefaultResolutionAlready = false;
                 } else if (holder instanceof PostWithPreviewTypeViewHolder) {
                     mGlide.clear(((PostWithPreviewTypeViewHolder) holder).imageView);
+                    ((PostWithPreviewTypeViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
                     if (((PostWithPreviewTypeViewHolder) holder).imageWrapperFrameLayout != null) {
                         ((PostWithPreviewTypeViewHolder) holder).imageWrapperFrameLayout.setVisibility(View.GONE);
                     }
@@ -1821,6 +1822,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             ((PostGalleryViewHolder) holder).binding.titleTextViewItemPostGallery.setText("");
             ((PostGalleryViewHolder) holder).binding.titleTextViewItemPostGallery.setVisibility(View.GONE);
             mGlide.clear(((PostGalleryViewHolder) holder).binding.imageViewItemPostGallery);
+            ((PostGalleryViewHolder) holder).binding.imageViewItemPostGallery.setScaleType(ImageView.ScaleType.FIT_CENTER);
             ((PostGalleryViewHolder) holder).binding.imageViewItemPostGallery.setVisibility(View.GONE);
             ((PostGalleryViewHolder) holder).binding.progressBarItemPostGallery.setVisibility(View.GONE);
             ((PostGalleryViewHolder) holder).binding.loadImageErrorTextViewItemGallery.setVisibility(View.GONE);
