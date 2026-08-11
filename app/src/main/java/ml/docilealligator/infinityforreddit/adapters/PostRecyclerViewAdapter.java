@@ -4926,6 +4926,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.saveButtonItemPostCard2GalleryType,
                     binding.shareButtonItemPostCard2GalleryType);
 
+            binding.mediaCardViewItemPostCard2GalleryType.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
             binding.dividerItemPostCard2GalleryType.setBackgroundColor(mDividerColor);
         }
 
