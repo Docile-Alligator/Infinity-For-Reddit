@@ -1751,8 +1751,14 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         multiPlayPlayerSelector.setSimultaneousAutoplayLimit(limit);
     }
 
-    public void setShowGalleryMediaAsGrid(boolean showGalleryMediaAsGrid) {
-        mShowGalleryMediaAsGrid = showGalleryMediaAsGrid;
+    // return true if the current value is not the same as the new value
+    public boolean setShowGalleryMediaAsGrid(boolean showGalleryMediaAsGrid) {
+        if (mShowGalleryMediaAsGrid != showGalleryMediaAsGrid) {
+            mShowGalleryMediaAsGrid = showGalleryMediaAsGrid;
+            return true;
+        }
+
+        return false;
     }
 
     @OptIn(markerClass = UnstableApi.class)

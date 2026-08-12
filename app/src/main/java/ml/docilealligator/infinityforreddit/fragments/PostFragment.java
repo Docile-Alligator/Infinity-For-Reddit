@@ -864,8 +864,9 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
 
         SharedPreferencesLiveDataKt.booleanLiveData(mSharedPreferences, SharedPreferencesUtils.SHOW_GALLERY_MEDIA_AS_GRID, false).observe(getViewLifecycleOwner(), showGalleryMediaAsGrid -> {
             if (getPostAdapter() != null) {
-                getPostAdapter().setShowGalleryMediaAsGrid(showGalleryMediaAsGrid);
-                refreshAdapter();
+                if (getPostAdapter().setShowGalleryMediaAsGrid(showGalleryMediaAsGrid)) {
+                    refreshAdapter();
+                }
             }
         });
 
