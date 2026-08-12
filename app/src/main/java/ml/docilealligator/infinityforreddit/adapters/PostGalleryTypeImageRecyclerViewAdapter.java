@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
+import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -149,16 +150,21 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
             return;
         }
 
-        RequestBuilder<Drawable> imageRequestBuilder = glide.load(galleryImages.get(index).url).listener(new RequestListener<>() {
+        RequestBuilder<Drawable> imageRequestBuilder = glide.load("").listener(new RequestListener<>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 holder.binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.GONE);
-                holder.binding.errorTextViewItemGalleryImageInPostFeed.setVisibility(View.VISIBLE);
+                if (isGridLayout) {
+                    holder.binding.errorImageViewItemGalleryImageInPostFeed.setVisibility(View.VISIBLE);
+                } else {
+                    holder.binding.errorTextViewItemGalleryImageInPostFeed.setVisibility(View.VISIBLE);
+                }
                 return false;
             }
 
             @Override
             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                holder.binding.errorImageViewItemGalleryImageInPostFeed.setVisibility(View.GONE);
                 holder.binding.errorTextViewItemGalleryImageInPostFeed.setVisibility(View.GONE);
                 holder.binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.GONE);
                 return false;
@@ -246,10 +252,21 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
             }
             binding.progressBarItemGalleryImageInPostFeed.setIndicatorColor(mColorAccent);
             binding.errorTextViewItemGalleryImageInPostFeed.setTextColor(mPrimaryTextColor);
+            binding.errorImageViewItemGalleryImageInPostFeed.setColorFilter(
+                    // mPrimaryTextColor is the correct color here.
+                    mPrimaryTextColor,
+                    PorterDuff.Mode.SRC_IN
+            );
 
             binding.errorTextViewItemGalleryImageInPostFeed.setOnClickListener(view -> {
                 binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.VISIBLE);
                 binding.errorTextViewItemGalleryImageInPostFeed.setVisibility(View.GONE);
+                loadImage(this);
+            });
+
+            binding.errorImageViewItemGalleryImageInPostFeed.setOnClickListener(view -> {
+                binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.VISIBLE);
+                binding.errorImageViewItemGalleryImageInPostFeed.setVisibility(View.GONE);
                 loadImage(this);
             });
         }
