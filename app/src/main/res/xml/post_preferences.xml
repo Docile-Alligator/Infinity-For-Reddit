@@ -57,6 +57,11 @@
         app:key="fixed_height_preview_in_card"
         app:title="@string/settings_fixed_height_preview_in_card_title" />
 
+    <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="show_gallery_media_as_grid"
+        app:title="@string/settings_show_gallery_media_as_grid" />
+
     <ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceCategory
         app:title="@string/post_layout_compact" />
 

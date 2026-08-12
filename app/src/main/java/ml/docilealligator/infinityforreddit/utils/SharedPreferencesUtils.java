@@ -239,6 +239,7 @@ public class SharedPreferencesUtils {
     public static final String COMMENT_THREAD_CONTINUITY_CAPACITY = "comment_thread_continuity_capacity";
     public static final String CURRENT_VERSION = "current_version";
     public static final String ONBOARDING_FINISHED = "onboarding_finished";
+    public static final String SHOW_GALLERY_MEDIA_AS_GRID = "show_gallery_media_as_grid";
 
     public static String getPostDetailFabPortraitX(@Nullable Display display) {
         if (display == null) {

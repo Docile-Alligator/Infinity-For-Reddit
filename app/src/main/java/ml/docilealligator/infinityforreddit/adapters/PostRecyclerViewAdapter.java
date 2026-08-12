@@ -271,6 +271,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private boolean mFixedHeightPreviewInCard;
     private boolean mHideTextPostContent;
     private boolean mEasierToWatchInFullScreen;
+    private boolean mShowGalleryMediaAsGrid;
     private int mDataSavingModeDefaultResolution;
     private int mNonDataSavingModeDefaultResolution;
     private int mSimultaneousAutoplayLimit;
@@ -366,6 +367,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mFixedHeightPreviewInCard = sharedPreferences.getBoolean(SharedPreferencesUtils.FIXED_HEIGHT_PREVIEW_IN_CARD, false);
             mHideTextPostContent = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_TEXT_POST_CONTENT, false);
             mEasierToWatchInFullScreen = sharedPreferences.getBoolean(SharedPreferencesUtils.EASIER_TO_WATCH_IN_FULL_SCREEN, false);
+            mShowGalleryMediaAsGrid = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_GALLERY_MEDIA_AS_GRID, false);
             mDataSavingModeDefaultResolution = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION, "360"));
             mNonDataSavingModeDefaultResolution = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION_NO_DATA_SAVING, "0"));
             mSimultaneousAutoplayLimit = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.SIMULTANEOUS_AUTOPLAY_LIMIT, "1"));
@@ -1049,7 +1051,38 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     }
 
                     RecyclerView.LayoutManager layoutManager = ((PostBaseGalleryTypeViewHolder) holder).galleryRecyclerView.getLayoutManager();
-                    if (layoutManager instanceof GridLayoutManager) {
+                    if (mShowGalleryMediaAsGrid) {
+                        if (!(layoutManager instanceof GridLayoutManager)) {
+                            layoutManager = new GridLayoutManager(mActivity, 3);
+                            ((PostBaseGalleryTypeViewHolder) holder).galleryRecyclerView.setLayoutManager(layoutManager);
+                        }
+
+                        int spanCount = gallerySize == 2 || gallerySize == 4 ? 2 : 3;
+                        ((GridLayoutManager) layoutManager).setSpanCount(spanCount);
+                        if (((PostBaseGalleryTypeViewHolder) holder).galleryRecyclerView.getItemDecorationCount() > 0) {
+                            RecyclerView.ItemDecoration itemDecoration = ((PostBaseGalleryTypeViewHolder) holder).galleryRecyclerView.getItemDecorationAt(0);
+                            if (itemDecoration instanceof PostGalleryGridLayoutItemDecoration) {
+                                ((PostGalleryGridLayoutItemDecoration) itemDecoration).setSpanCount(spanCount);
+                            }
+                        }
+
+                        int padding = (int) (8 * mScale);
+                        ((PostBaseGalleryTypeViewHolder) holder).galleryRecyclerView.setPadding(
+                                0, (holder instanceof PostGalleryTypeViewHolder) ? 0 : padding,
+                                padding, (holder instanceof PostGalleryTypeViewHolder) ? 0 : padding);
+                        ((PostBaseGalleryTypeViewHolder) holder).adapter.setIsGridLayout(true);
+                        ((PostBaseGalleryTypeViewHolder) holder).imageIndexTextView.setVisibility(View.GONE);
+                    } else {
+                        if (!(layoutManager instanceof LinearLayoutManagerBugFixed)) {
+                            layoutManager = new LinearLayoutManagerBugFixed(mActivity, RecyclerView.HORIZONTAL, false);
+                            ((PostBaseGalleryTypeViewHolder) holder).galleryRecyclerView.setLayoutManager(layoutManager);
+                        }
+
+                        ((PostBaseGalleryTypeViewHolder) holder).galleryRecyclerView.setPadding(0, 0, 0, 0);
+                        ((PostBaseGalleryTypeViewHolder) holder).adapter.setIsGridLayout(false);
+                        ((PostBaseGalleryTypeViewHolder) holder).imageIndexTextView.setVisibility(View.VISIBLE);
+                    }
+                    /*if (layoutManager instanceof GridLayoutManager) {
                         int spanCount = gallerySize == 2 || gallerySize == 4 ? 2 : 3;
                         ((GridLayoutManager) layoutManager).setSpanCount(spanCount);
                         if (((PostBaseGalleryTypeViewHolder) holder).galleryRecyclerView.getItemDecorationCount() > 0) {
@@ -1069,7 +1102,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostBaseGalleryTypeViewHolder) holder).galleryRecyclerView.setPadding(0, 0, 0, 0);
                         ((PostBaseGalleryTypeViewHolder) holder).adapter.setIsGridLayout(false);
                         ((PostBaseGalleryTypeViewHolder) holder).imageIndexTextView.setVisibility(View.VISIBLE);
-                    }
+                    }*/
                 } else if (holder instanceof PostTextTypeViewHolder) {
                     if (!mHideTextPostContent && !post.isSpoiler() && post.getSelfTextPlainTrimmed() != null && !post.getSelfTextPlainTrimmed().isEmpty()) {
                         ((PostTextTypeViewHolder) holder).contentTextView.setVisibility(View.VISIBLE);
@@ -1716,6 +1749,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     public void setSimultaneousAutoplayLimit(int limit) {
         mSimultaneousAutoplayLimit = limit;
         multiPlayPlayerSelector.setSimultaneousAutoplayLimit(limit);
+    }
+
+    public void setShowGalleryMediaAsGrid(boolean showGalleryMediaAsGrid) {
+        mShowGalleryMediaAsGrid = showGalleryMediaAsGrid;
     }
 
     @OptIn(markerClass = UnstableApi.class)
@@ -3748,9 +3785,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             galleryRecyclerView.setAdapter(adapter);
             new PagerSnapHelper().attachToRecyclerView(galleryRecyclerView);
             galleryRecyclerView.setRecycledViewPool(mGalleryRecycledViewPool);
-            //LinearLayoutManagerBugFixed layoutManager = new LinearLayoutManagerBugFixed(mActivity, RecyclerView.HORIZONTAL, false);
+            /*//LinearLayoutManagerBugFixed layoutManager = new LinearLayoutManagerBugFixed(mActivity, RecyclerView.HORIZONTAL, false);
             GridLayoutManager layoutManager = new GridLayoutManager(mActivity, 3);
-            galleryRecyclerView.setLayoutManager(layoutManager);
+            galleryRecyclerView.setLayoutManager(layoutManager);*/
             PostGalleryGridLayoutItemDecoration itemDecoration =
                     new PostGalleryGridLayoutItemDecoration(mActivity, R.dimen.staggeredLayoutManagerItemOffset, 2);
             galleryRecyclerView.addItemDecoration(itemDecoration);

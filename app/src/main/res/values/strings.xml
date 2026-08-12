@@ -691,6 +691,7 @@
     <string name="default_swipe_area">Default</string>
     <string name="larger_swipe_area">Large</string>
     <string name="very_larger_swipe_area">Very Large</string>
+    <string name="settings_show_gallery_media_as_grid">Show Gallery Media as a Grid</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
