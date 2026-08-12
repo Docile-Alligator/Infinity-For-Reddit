@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
 import ml.docilealligator.infinityforreddit.CommentModerationActionHandler
+import ml.docilealligator.infinityforreddit.PostModerationActionHandler
 import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.comment.Comment
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment
@@ -72,11 +73,21 @@ class CommentModerationActionBottomSheetFragment : LandscapeExpandedRoundedBotto
                 binding.toggleLockTextViewCommentModerationActionBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(
                     AppCompatResources.getDrawable(it, if (comment.isLocked) R.drawable.ic_unlock_24dp else R.drawable.ic_lock_day_night_24dp), null, null, null
                 )
+
+                binding.toggleModTextViewCommentModerationActionBottomSheetFragment.setCompoundDrawablesWithIntrinsicBounds(
+                    AppCompatResources.getDrawable(it, if (comment.isModerator) R.drawable.ic_undistinguish_as_mod_24dp else R.drawable.ic_distinguish_as_mod_24dp), null, null, null
+                )
             }
 
             binding.toggleLockTextViewCommentModerationActionBottomSheetFragment.setText(if (comment.isLocked) R.string.unlock else R.string.lock)
             binding.toggleLockTextViewCommentModerationActionBottomSheetFragment.setOnClickListener {
                 (parentFragment as CommentModerationActionHandler).toggleLock(comment, position)
+                dismiss()
+            }
+
+            binding.toggleModTextViewCommentModerationActionBottomSheetFragment.setText(if (comment.isModerator) R.string.undistinguish_as_mod else R.string.distinguish_as_mod)
+            binding.toggleModTextViewCommentModerationActionBottomSheetFragment.setOnClickListener {
+                (parentFragment as CommentModerationActionHandler).toggleMod(comment, position)
                 dismiss()
             }
         }

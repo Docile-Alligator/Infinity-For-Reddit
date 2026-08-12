@@ -2280,6 +2280,46 @@ class ViewPostDetailFragmentViewModelNew(
         }
     }
 
+    fun toggleMod(comment: Comment, position: Int) {
+        viewModelScope.launch {
+            val params: MutableMap<String, String> = HashMap()
+            params[APIUtils.ID_KEY] = comment.fullName
+            params[APIUtils.HOW_KEY] = if (comment.isModerator) APIUtils.HOW_NO else APIUtils.HOW_YES
+            try {
+                val response = oauthRetrofit.create(RedditAPIKt::class.java)
+                    .toggleDistinguishedThing(APIUtils.getOAuthHeader(accessToken), params)
+
+                if (response.isSuccessful) {
+                    comment.setIsModerator(!comment.isModerator)
+
+                    updateModdedStatus(comment, position)
+
+                    commentModerationEventLiveData.postValue(
+                        if (comment.isModerator) CommentModerationEvent.DistinguishedAsMod(
+                            comment,
+                            position
+                        ) else CommentModerationEvent.UndistinguishedAsMod(comment, position)
+                    )
+                } else {
+                    commentModerationEventLiveData.postValue(
+                        if (comment.isModerator) CommentModerationEvent.UndistinguishAsModFailed(
+                            comment,
+                            position
+                        ) else CommentModerationEvent.DistinguishAsModFailed(comment, position)
+                    )
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                commentModerationEventLiveData.postValue(
+                    if (comment.isModerator) CommentModerationEvent.UndistinguishAsModFailed(
+                        comment,
+                        position
+                    ) else CommentModerationEvent.DistinguishAsModFailed(comment, position)
+                )
+            }
+        }
+    }
+
     fun updateModdedStatus(comment: Comment, position: Int) {
         _dataState.value.comments?.let { comments ->
             comments.getOrNull(position)?.let {

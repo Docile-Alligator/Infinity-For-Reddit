@@ -241,6 +241,53 @@ public class CommentViewModel extends ViewModel {
         });
     }
 
+    public void toggleMod(Comment comment, int position) {
+        Map<String, String> params = new HashMap<>();
+        params.put(APIUtils.ID_KEY, comment.getFullName());
+        params.put(APIUtils.HOW_KEY, comment.isModerator() ? APIUtils.HOW_NO : APIUtils.HOW_YES);
+
+        Call<String> call = retrofit.create(RedditAPI.class)
+                .toggleDistinguishedThing(APIUtils.getOAuthHeader(accessToken), params);
+
+        call.enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful()) {
+                    commentModerationEventLiveData.postValue(
+                            comment.isModerator()
+                                    ? new CommentModerationEvent.UndistinguishedAsMod(comment, position)
+                                    : new CommentModerationEvent.DistinguishedAsMod(comment, position)
+                    );
+
+                    List<Comment> snapshot = comments.getValue();
+                    if (snapshot != null) {
+                        if (position < snapshot.size() && position >= 0) {
+                            Comment moddedComment = snapshot.get(position);
+                            if (moddedComment != null) {
+                                moddedComment.setIsModerator(!moddedComment.isModerator());
+                            }
+                        }
+                    }
+                } else {
+                    commentModerationEventLiveData.postValue(
+                            comment.isModerator()
+                                    ? new CommentModerationEvent.UndistinguishAsModFailed(comment, position)
+                                    : new CommentModerationEvent.DistinguishAsModFailed(comment, position)
+                    );
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                commentModerationEventLiveData.postValue(
+                        comment.isModerator()
+                                ? new CommentModerationEvent.UndistinguishAsModFailed(comment, position)
+                                : new CommentModerationEvent.DistinguishAsModFailed(comment, position)
+                );
+            }
+        });
+    }
+
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
         private final Executor executor;
         private final Handler handler;
