@@ -420,7 +420,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
         }
 
-        if (mInternalSharedPreferences.getInt(SharedPreferencesUtils.CURRENT_VERSION, 1) <= BuildConfig.VERSION_CODE && savedInstanceState == null) {
+        if (mInternalSharedPreferences.getInt(SharedPreferencesUtils.CURRENT_VERSION, 1) < BuildConfig.VERSION_CODE && savedInstanceState == null) {
             /*ImportantInfoBottomSheetFragment fragment = new ImportantInfoBottomSheetFragment();
             fragment.setCancelable(false);
             fragment.show(getSupportFragmentManager(), fragment.getTag());*/
