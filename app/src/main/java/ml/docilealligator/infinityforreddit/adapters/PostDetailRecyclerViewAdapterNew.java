@@ -2644,12 +2644,12 @@ public class PostDetailRecyclerViewAdapterNew extends RecyclerView.Adapter<Recyc
             if (mShowGalleryMediaAsGrid) {
                 adapter.setIsGridLayout(true);
                 layoutManager = new GridLayoutManager(mActivity, 3);
+                PostGalleryGridLayoutItemDecoration itemDecoration =
+                        new PostGalleryGridLayoutItemDecoration(mActivity, R.dimen.staggeredLayoutManagerItemOffset, 2);
+                binding.galleryRecyclerViewItemPostDetailGallery.addItemDecoration(itemDecoration);
             } else {
                 layoutManager = new LinearLayoutManagerBugFixed(mActivity, RecyclerView.HORIZONTAL, false);
             }
-            PostGalleryGridLayoutItemDecoration itemDecoration =
-                    new PostGalleryGridLayoutItemDecoration(mActivity, R.dimen.staggeredLayoutManagerItemOffset, 2);
-            binding.galleryRecyclerViewItemPostDetailGallery.addItemDecoration(itemDecoration);
             binding.galleryRecyclerViewItemPostDetailGallery.setLayoutManager(layoutManager);
             binding.galleryRecyclerViewItemPostDetailGallery.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
