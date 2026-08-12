@@ -3785,9 +3785,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             galleryRecyclerView.setAdapter(adapter);
             new PagerSnapHelper().attachToRecyclerView(galleryRecyclerView);
             galleryRecyclerView.setRecycledViewPool(mGalleryRecycledViewPool);
-            /*//LinearLayoutManagerBugFixed layoutManager = new LinearLayoutManagerBugFixed(mActivity, RecyclerView.HORIZONTAL, false);
-            GridLayoutManager layoutManager = new GridLayoutManager(mActivity, 3);
-            galleryRecyclerView.setLayoutManager(layoutManager);*/
             PostGalleryGridLayoutItemDecoration itemDecoration =
                     new PostGalleryGridLayoutItemDecoration(mActivity, R.dimen.staggeredLayoutManagerItemOffset, 2);
             galleryRecyclerView.addItemDecoration(itemDecoration);
