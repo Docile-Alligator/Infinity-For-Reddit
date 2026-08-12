@@ -369,6 +369,7 @@
     <string name="update_flair_failed">Update flair failed</string>
 
     <string name="edit_flair">Edit Flair</string>
+    <string name="remove_flair">Remove Flair</string>
     <string name="only_allow_64_chars">Only allow less than 64 characters</string>
 
     <string name="view_all_comments">Click here to browse all comments</string>

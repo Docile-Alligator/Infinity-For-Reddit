@@ -1014,7 +1014,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
             FlairBottomSheetFragment flairBottomSheetFragment = new FlairBottomSheetFragment();
             Bundle bundle = new Bundle();
             bundle.putString(FlairBottomSheetFragment.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
-            bundle.putLong(FlairBottomSheetFragment.EXTRA_VIEW_POST_DETAIL_FRAGMENT_ID, viewPostDetailFragmentId);
+            bundle.putLong(FlairBottomSheetFragment.EXTRA_CALLING_FRAGMENT_ID, viewPostDetailFragmentId);
             flairBottomSheetFragment.setArguments(bundle);
             flairBottomSheetFragment.show(mActivity.getSupportFragmentManager(), flairBottomSheetFragment.getTag());
             return true;
@@ -1465,6 +1465,17 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
     @Override
     public void toggleSpoiler(@NonNull Post post, int position) {
         viewPostDetailFragmentViewModel.toggleSpoiler(position);
+    }
+
+    @Override
+    public void changeFlair(@NonNull Post post, int position) {
+        FlairBottomSheetFragment flairBottomSheetFragment = new FlairBottomSheetFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(FlairBottomSheetFragment.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
+        bundle.putLong(FlairBottomSheetFragment.EXTRA_CALLING_FRAGMENT_ID, viewPostDetailFragmentId);
+        bundle.putBoolean(FlairBottomSheetFragment.EXTRA_SHOW_REMOVE_FLAIR_OPTION, true);
+        flairBottomSheetFragment.setArguments(bundle);
+        flairBottomSheetFragment.show(mActivity.getSupportFragmentManager(), flairBottomSheetFragment.getTag());
     }
 
     @Override

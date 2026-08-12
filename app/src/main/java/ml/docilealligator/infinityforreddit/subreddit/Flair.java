@@ -22,7 +22,7 @@ public class Flair implements Parcelable {
     private String text;
     private boolean editable;
 
-    Flair(String id, String text, boolean editable) {
+    public Flair(String id, String text, boolean editable) {
         this.id = id;
         this.text = text;
         this.editable = editable;

@@ -1417,12 +1417,13 @@ public class PostDetailRecyclerViewAdapterNew extends RecyclerView.Adapter<Recyc
                     if (layoutManager instanceof LinearLayoutManagerBugFixed) {
                         postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(mPost,
                                 mFragment.getPostListPosition(),
-                                ((LinearLayoutManagerBugFixed) layoutManager).findFirstVisibleItemPosition());
+                                ((LinearLayoutManagerBugFixed) layoutManager).findFirstVisibleItemPosition(),
+                                false);
                     } else {
-                        postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(mPost, mFragment.getPostListPosition());
+                        postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(mPost, mFragment.getPostListPosition(), false);
                     }
                 } else {
-                    postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(mPost, mFragment.getPostListPosition());
+                    postOptionsBottomSheetFragment = PostOptionsBottomSheetFragment.newInstance(mPost, mFragment.getPostListPosition(), false);
                 }
                 postOptionsBottomSheetFragment.show(mFragment.getChildFragmentManager(), postOptionsBottomSheetFragment.getTag());
                 return true;

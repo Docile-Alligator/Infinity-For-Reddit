@@ -15,6 +15,7 @@ import ml.docilealligator.infinityforreddit.post.Post
 
 private const val EXTRA_POST = "EP"
 private const val EXTRA_POSITION = "EPO"
+private const val EXTRA_HIDE_CHANGE_FLAIR_OPTION = "EHCFO"
 
 /**
  * A simple [Fragment] subclass.
@@ -24,12 +25,14 @@ private const val EXTRA_POSITION = "EPO"
 class PostModerationActionBottomSheetFragment : LandscapeExpandedRoundedBottomSheetDialogFragment() {
     private var post: Post? = null
     private var position: Int = -1
+    private var hideChangeFlairOption: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             post = it.getParcelable(EXTRA_POST)
             position = it.getInt(EXTRA_POSITION, -1)
+            hideChangeFlairOption = it.getBoolean(EXTRA_HIDE_CHANGE_FLAIR_OPTION, false)
         }
     }
 
@@ -106,6 +109,15 @@ class PostModerationActionBottomSheetFragment : LandscapeExpandedRoundedBottomSh
                     dismiss()
                 }
 
+                if (hideChangeFlairOption) {
+                    binding.changeFlairTextViewModerationActionBottomSheetFragment.visibility = View.GONE
+                } else {
+                    binding.changeFlairTextViewModerationActionBottomSheetFragment.setOnClickListener {
+                        (parentFragment as PostModerationActionHandler).changeFlair(post, position)
+                        dismiss()
+                    }
+                }
+
                 binding.toggleModTextViewModerationActionBottomSheetFragment.setText(if (post.isModerator) R.string.undistinguish_as_mod else R.string.distinguish_as_mod)
                 binding.toggleModTextViewModerationActionBottomSheetFragment.setOnClickListener {
                     (parentFragment as PostModerationActionHandler).toggleMod(post, position)
@@ -120,10 +132,11 @@ class PostModerationActionBottomSheetFragment : LandscapeExpandedRoundedBottomSh
 
     companion object {
         @JvmStatic
-        fun newInstance(post: Post, position: Int) =
+        fun newInstance(post: Post, hideChangeFlairOption: Boolean = false, position: Int) =
             PostModerationActionBottomSheetFragment().apply {
                 arguments = Bundle().apply {
                     putParcelable(EXTRA_POST, post)
+                    putBoolean(EXTRA_HIDE_CHANGE_FLAIR_OPTION, hideChangeFlairOption)
                     putInt(EXTRA_POSITION, position)
                 }
             }

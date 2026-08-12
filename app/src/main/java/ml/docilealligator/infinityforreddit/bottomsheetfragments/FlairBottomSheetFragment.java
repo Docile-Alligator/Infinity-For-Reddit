@@ -38,7 +38,8 @@ import retrofit2.Retrofit;
 public class FlairBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
-    public static final String EXTRA_VIEW_POST_DETAIL_FRAGMENT_ID = "EPFI";
+    public static final String EXTRA_CALLING_FRAGMENT_ID = "ECFI";
+    public static final String EXTRA_SHOW_REMOVE_FLAIR_OPTION = "ESRFO";
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -67,13 +68,13 @@ public class FlairBottomSheetFragment extends LandscapeExpandedRoundedBottomShee
             Utils.setFontToAllTextViews(binding.getRoot(), mActivity.typeface);
         }
 
-        long viewPostFragmentId = getArguments().getLong(EXTRA_VIEW_POST_DETAIL_FRAGMENT_ID, -1);
+        long callingFragmentId = getArguments().getLong(EXTRA_CALLING_FRAGMENT_ID, -1);
         mAdapter = new FlairBottomSheetRecyclerViewAdapter(mActivity, mCustomThemeWrapper, flair -> {
-            if (viewPostFragmentId <= 0) {
+            if (callingFragmentId <= 0) {
                 //PostXXXActivity
                 ((FlairSelectionCallback) mActivity).flairSelected(flair);
             } else {
-                EventBus.getDefault().post(new FlairSelectedEvent(viewPostFragmentId, flair));
+                EventBus.getDefault().post(new FlairSelectedEvent(callingFragmentId, flair));
             }
             dismiss();
         });
@@ -85,6 +86,14 @@ public class FlairBottomSheetFragment extends LandscapeExpandedRoundedBottomShee
         mHandler = new Handler(Looper.getMainLooper());
 
         fetchFlairs();
+
+        if (getArguments().getBoolean(EXTRA_SHOW_REMOVE_FLAIR_OPTION, false)) {
+            binding.removeFlairTextViewFlairBottomSheetFragment.setVisibility(View.VISIBLE);
+            binding.removeFlairTextViewFlairBottomSheetFragment.setOnClickListener(view -> {
+                EventBus.getDefault().post(new FlairSelectedEvent(callingFragmentId, new Flair("", "", false)));
+                dismiss();
+            });
+        }
 
         return binding.getRoot();
     }

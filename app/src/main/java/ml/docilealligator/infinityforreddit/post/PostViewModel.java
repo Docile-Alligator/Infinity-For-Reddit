@@ -507,7 +507,7 @@ public class PostViewModel extends ViewModel {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
                     post.setIsModerator(!post.isModerator());
-                    moderationEventLiveData.postValue(post.isModerator() ? new PostModerationEvent.DistinguishedAsMod(post, position): new PostModerationEvent.UndistinguishedAsMod(post, position));
+                    moderationEventLiveData.postValue(post.isModerator() ? new PostModerationEvent.DistinguishedAsMod(post, position) : new PostModerationEvent.UndistinguishedAsMod(post, position));
                 } else {
                     moderationEventLiveData.postValue(post.isModerator() ? new PostModerationEvent.UndistinguishAsModFailed(post, position) : new PostModerationEvent.DistinguishAsModFailed(post, position));
                 }

@@ -57,6 +57,7 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
     private static final String EXTRA_POST = "EP";
     private static final String EXTRA_POST_LIST_POSITION = "EPLP";
     private static final String EXTRA_GALLERY_INDEX = "EGI";
+    private static final String EXTRA_HIDE_CHANGE_FLAIR_OPTION = "EHCFO";
 
     private BaseActivity mBaseActivity;
     private Post mPost;
@@ -83,21 +84,23 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
      * @param post Post
      * @return A new instance of fragment PostOptionsBottomSheetFragment.
      */
-    public static PostOptionsBottomSheetFragment newInstance(Post post, int postListPosition, int galleryIndex) {
+    public static PostOptionsBottomSheetFragment newInstance(Post post, int postListPosition, int galleryIndex, boolean hideChangeFlairOption) {
         PostOptionsBottomSheetFragment fragment = new PostOptionsBottomSheetFragment();
         Bundle args = new Bundle();
         args.putParcelable(EXTRA_POST, post);
         args.putInt(EXTRA_POST_LIST_POSITION, postListPosition);
         args.putInt(EXTRA_GALLERY_INDEX, galleryIndex);
+        args.putBoolean(EXTRA_HIDE_CHANGE_FLAIR_OPTION, hideChangeFlairOption);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public static PostOptionsBottomSheetFragment newInstance(Post post, int postListPosition) {
+    public static PostOptionsBottomSheetFragment newInstance(Post post, int postListPosition, boolean hideChangeFlairOption) {
         PostOptionsBottomSheetFragment fragment = new PostOptionsBottomSheetFragment();
         Bundle args = new Bundle();
         args.putParcelable(EXTRA_POST, post);
         args.putInt(EXTRA_POST_LIST_POSITION, postListPosition);
+        args.putBoolean(EXTRA_HIDE_CHANGE_FLAIR_OPTION, hideChangeFlairOption);
         fragment.setArguments(args);
         return fragment;
     }
@@ -272,7 +275,11 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                 if (mPost.isCanModPost()) {
                     binding.modTextViewPostOptionsBottomSheetFragment.setVisibility(View.VISIBLE);
                     binding.modTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {
-                        PostModerationActionBottomSheetFragment postModerationActionBottomSheetFragment = PostModerationActionBottomSheetFragment.newInstance(mPost, getArguments().getInt(EXTRA_POST_LIST_POSITION, 0));
+                        PostModerationActionBottomSheetFragment postModerationActionBottomSheetFragment =
+                                PostModerationActionBottomSheetFragment.newInstance(
+                                        mPost, getArguments().getBoolean(EXTRA_HIDE_CHANGE_FLAIR_OPTION, false),
+                                        getArguments().getInt(EXTRA_POST_LIST_POSITION, 0)
+                                );
                         Fragment parentFragment = getParentFragment();
                         if (parentFragment != null) {
                             postModerationActionBottomSheetFragment.show(parentFragment.getChildFragmentManager(), postModerationActionBottomSheetFragment.getTag());

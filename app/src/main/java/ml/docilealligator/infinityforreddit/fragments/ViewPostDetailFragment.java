@@ -1231,7 +1231,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             FlairBottomSheetFragment flairBottomSheetFragment = new FlairBottomSheetFragment();
             Bundle bundle = new Bundle();
             bundle.putString(FlairBottomSheetFragment.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
-            bundle.putLong(FlairBottomSheetFragment.EXTRA_VIEW_POST_DETAIL_FRAGMENT_ID, viewPostDetailFragmentId);
+            bundle.putLong(FlairBottomSheetFragment.EXTRA_CALLING_FRAGMENT_ID, viewPostDetailFragmentId);
             flairBottomSheetFragment.setArguments(bundle);
             flairBottomSheetFragment.show(mActivity.getSupportFragmentManager(), flairBottomSheetFragment.getTag());
             return true;
@@ -2195,6 +2195,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Override
     public void toggleSpoiler(@NonNull Post post, int position) {
         viewPostDetailFragmentViewModel.toggleSpoiler(post, position);
+    }
+
+    @Override
+    public void changeFlair(@NonNull Post post, int position) {
+
     }
 
     @Override
