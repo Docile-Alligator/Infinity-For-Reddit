@@ -533,8 +533,9 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         if (mAdapter != null) {
             String dataSavingMode = mSharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
             if (dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
-                mAdapter.setDataSavingMode(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_CELLULAR);
-                refreshAdapter(binding.recyclerViewCommentsListingFragment, mAdapter);
+                if (mAdapter.setDataSavingMode(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_CELLULAR)) {
+                    refreshAdapter(binding.recyclerViewCommentsListingFragment, mAdapter);
+                }
             }
         }
     }

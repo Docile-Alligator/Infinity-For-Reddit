@@ -1639,8 +1639,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         mShowAbsoluteNumberOfVotes = showAbsoluteNumberOfVotes;
     }
 
-    public void setAutoplay(boolean autoplay) {
-        mAutoplay = autoplay;
+    public boolean setAutoplay(boolean autoplay) {
+        if (mAutoplay != autoplay) {
+            mAutoplay = autoplay;
+            return true;
+        }
+
+        return false;
     }
 
     public boolean isAutoplay() {
@@ -1675,8 +1680,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         mCompactLayoutToolbarHiddenByDefault = compactLayoutToolbarHiddenByDefault;
     }
 
-    public void setDataSavingMode(boolean dataSavingMode) {
-        mDataSavingMode = dataSavingMode;
+    public boolean setDataSavingMode(boolean dataSavingMode) {
+        if (mDataSavingMode != dataSavingMode) {
+            mDataSavingMode = dataSavingMode;
+            return true;
+        }
+
+        return false;
     }
 
     public void setDisableImagePreview(boolean disableImagePreview) {

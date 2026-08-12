@@ -803,9 +803,8 @@ public class CommentsRecyclerViewAdapterNew extends ListAdapter<Comment, Recycle
         }
     }
 
-    public void setDataSavingMode(boolean dataSavingMode) {
-        mEmotePlugin.setDataSavingMode(dataSavingMode);
-        mImageAndGifEntry.setDataSavingMode(dataSavingMode);
+    public boolean setDataSavingMode(boolean dataSavingMode) {
+        return mEmotePlugin.setDataSavingMode(dataSavingMode) || mImageAndGifEntry.setDataSavingMode(dataSavingMode);
     }
 
     public void updatePost(@NonNull Post post) {

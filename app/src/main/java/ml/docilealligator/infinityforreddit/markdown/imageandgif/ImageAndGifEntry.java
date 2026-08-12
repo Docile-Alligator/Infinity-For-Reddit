@@ -197,8 +197,13 @@ public class ImageAndGifEntry extends MarkwonAdapter.Entry<ImageAndGifBlock, Ima
         holder.binding.captionTextViewMarkdownImageAndGifBlock.setGravity(Gravity.CENTER_HORIZONTAL);
     }
 
-    public void setDataSavingMode(boolean dataSavingMode) {
-        this.dataSavingMode = dataSavingMode;
+    public boolean setDataSavingMode(boolean dataSavingMode) {
+        if (this.dataSavingMode != dataSavingMode) {
+            this.dataSavingMode = dataSavingMode;
+            return true;
+        }
+
+        return false;
     }
 
     public void setBlurImage(boolean blurImage) {

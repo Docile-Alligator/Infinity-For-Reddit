@@ -1140,14 +1140,25 @@ public class PostDetailRecyclerViewAdapterNew extends RecyclerView.Adapter<Recyc
         mNeedBlurSpoiler = needBlurSpoiler;
     }
 
-    public void setAutoplay(boolean autoplay) {
-        mAutoplay = autoplay;
+    public boolean setAutoplay(boolean autoplay) {
+        if (mAutoplay != autoplay) {
+            mAutoplay = autoplay;
+            return true;
+        }
+
+        return false;
     }
 
-    public void setDataSavingMode(boolean dataSavingMode) {
-        mDataSavingMode = dataSavingMode;
-        mEmotePlugin.setDataSavingMode(dataSavingMode);
-        mImageAndGifEntry.setDataSavingMode(dataSavingMode);
+    public boolean setDataSavingMode(boolean dataSavingMode) {
+        if (mDataSavingMode != dataSavingMode) {
+            mDataSavingMode = dataSavingMode;
+            mEmotePlugin.setDataSavingMode(dataSavingMode);
+            mImageAndGifEntry.setDataSavingMode(dataSavingMode);
+
+            return true;
+        }
+
+        return false;
     }
 
     public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction, int swipeLeftAction, int swipeRightAction) {

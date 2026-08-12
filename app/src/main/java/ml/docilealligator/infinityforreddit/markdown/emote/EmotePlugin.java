@@ -226,8 +226,13 @@ public class EmotePlugin extends AbstractMarkwonPlugin {
         AsyncDrawableScheduler.schedule(textView);
     }
 
-    public void setDataSavingMode(boolean dataSavingMode) {
-        this.dataSavingMode = dataSavingMode;
+    public boolean setDataSavingMode(boolean dataSavingMode) {
+        if (this.dataSavingMode != dataSavingMode) {
+            this.dataSavingMode = dataSavingMode;
+            return true;
+        }
+
+        return false;
     }
 
     private static class GlideAsyncDrawableLoader extends AsyncDrawableLoader {
