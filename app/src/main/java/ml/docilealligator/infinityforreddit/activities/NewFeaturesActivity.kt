@@ -39,7 +39,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -52,7 +51,6 @@ import androidx.window.core.layout.WindowWidthSizeClass
 import ml.docilealligator.infinityforreddit.BuildConfig
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.ColorAccentText
@@ -63,25 +61,13 @@ import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryIcon
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SecondaryText
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils
-import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Named
 
 class NewFeaturesActivity: BaseActivity() {
     @Inject
-    @Named("no_oauth")
-    lateinit var mRetrofit: Retrofit
-    @Inject
-    @Named("oauth")
-    lateinit var mOauthRetrofit: Retrofit
-    @Inject
-    lateinit var mRedditDataRoomDatabase: RedditDataRoomDatabase
-    @Inject
     @Named("default")
     lateinit var mSharedPreferences: SharedPreferences
-    @Inject
-    @Named("post_layout")
-    lateinit var mPostLayoutSharedPreferences: SharedPreferences
     @Inject
     @Named("current_account")
     lateinit var mCurrentAccountSharedPreferences: SharedPreferences
@@ -115,9 +101,9 @@ class NewFeaturesActivity: BaseActivity() {
 
         setContent {
             AppTheme(mCustomThemeWrapper.themeType, mSharedPreferences) {
-                val context = LocalContext.current
                 val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
                 val isCompactWidth = windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT
+                        || windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.MEDIUM
 
                 Scaffold(
                     topBar = {
@@ -200,11 +186,11 @@ class NewFeaturesActivity: BaseActivity() {
                                 if (isCompactWidth) {
                                     Spacer(modifier = Modifier.height(16.dp))
 
-                                    JoinSubredditButton()
+                                    JoinSubredditButton(true)
 
                                     Spacer(modifier = Modifier.height(8.dp))
 
-                                    ContinueToAppButton()
+                                    ContinueToAppButton(true)
 
                                     Spacer(modifier = Modifier.height(16.dp))
                                 }
@@ -219,11 +205,11 @@ class NewFeaturesActivity: BaseActivity() {
                                     verticalArrangement = Arrangement.Center,
                                     horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
-                                    JoinSubredditButton()
+                                    JoinSubredditButton(false)
 
                                     Spacer(modifier = Modifier.height(8.dp))
 
-                                    ContinueToAppButton()
+                                    ContinueToAppButton(false)
                                 }
                             }
                         }
@@ -244,7 +230,7 @@ class NewFeaturesActivity: BaseActivity() {
     }
 
     @Composable
-    private fun JoinSubredditButton() {
+    private fun JoinSubredditButton(isCompactWidth: Boolean) {
         ColorAccentText(
             R.string.important_info_post_comments_rework_join_subreddit,
             modifier = Modifier
@@ -270,17 +256,19 @@ class NewFeaturesActivity: BaseActivity() {
                     finish()
                 }
                 .padding(horizontal = 16.dp),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            fontSize = if (isCompactWidth) LocalTypography.current.fontSize.default else LocalTypography.current.fontSize.size18
         )
     }
 
     @Composable
-    private fun ContinueToAppButton() {
+    private fun ContinueToAppButton(isCompactWidth: Boolean) {
         CustomFilledButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            stringResId = R.string.continue_to_app
+            stringResId = R.string.continue_to_app,
+            fontSize = if (isCompactWidth) LocalTypography.current.fontSize.default else LocalTypography.current.fontSize.size18
         ) {
             triggerBackPress()
         }

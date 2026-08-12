@@ -94,19 +94,8 @@ import kotlin.math.roundToInt
 
 class OnboardingActivity: BaseActivity() {
     @Inject
-    @Named("no_oauth")
-    lateinit var mRetrofit: Retrofit
-    @Inject
-    @Named("oauth")
-    lateinit var mOauthRetrofit: Retrofit
-    @Inject
-    lateinit var mRedditDataRoomDatabase: RedditDataRoomDatabase
-    @Inject
     @Named("default")
     lateinit var mSharedPreferences: SharedPreferences
-    @Inject
-    @Named("post_layout")
-    lateinit var mPostLayoutSharedPreferences: SharedPreferences
     @Inject
     @Named("current_account")
     lateinit var mCurrentAccountSharedPreferences: SharedPreferences
