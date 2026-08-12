@@ -3274,7 +3274,16 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
 
                 if (mLongPressPostNonMediaAreaAction.equals(SharedPreferencesUtils.LONG_PRESS_POST_VALUE_SHOW_POST_OPTIONS)) {
-                    showPostOptions(-1);
+                    if (post.getPostType() == Post.GALLERY_TYPE && this instanceof PostBaseGalleryTypeViewHolder) {
+                        RecyclerView.LayoutManager layoutManager = ((PostBaseGalleryTypeViewHolder) this).galleryRecyclerView.getLayoutManager();
+                        if (layoutManager instanceof LinearLayoutManagerBugFixed) {
+                            showPostOptions(((LinearLayoutManagerBugFixed) layoutManager).findFirstVisibleItemPosition());
+                        } else {
+                            showPostOptions(-1);
+                        }
+                    } else {
+                        showPostOptions(-1);
+                    }
                 } else if (mLongPressPostNonMediaAreaAction.equals(SharedPreferencesUtils.LONG_PRESS_POST_VALUE_PREVIEW_IN_FULLSCREEN)) {
                     markPostRead(post, true);
                     openMedia(post, true);
