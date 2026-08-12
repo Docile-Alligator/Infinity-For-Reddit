@@ -150,7 +150,7 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
             return;
         }
 
-        RequestBuilder<Drawable> imageRequestBuilder = glide.load("").listener(new RequestListener<>() {
+        RequestBuilder<Drawable> imageRequestBuilder = glide.load(galleryImages.get(index).url).listener(new RequestListener<>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 holder.binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.GONE);

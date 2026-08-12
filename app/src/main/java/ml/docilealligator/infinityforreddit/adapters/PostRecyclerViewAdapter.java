@@ -1059,7 +1059,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             }
                         }
 
-                        ((PostBaseGalleryTypeViewHolder) holder).galleryRecyclerView.setPadding(0, 0, (int) (8 * mScale), 0);
+                        int padding = (int) (8 * mScale);
+                        ((PostBaseGalleryTypeViewHolder) holder).galleryRecyclerView.setPadding(
+                                0, (holder instanceof PostGalleryTypeViewHolder) ? 0 : padding,
+                                padding, (holder instanceof PostGalleryTypeViewHolder) ? 0 : padding);
                         ((PostBaseGalleryTypeViewHolder) holder).adapter.setIsGridLayout(true);
                         ((PostBaseGalleryTypeViewHolder) holder).imageIndexTextView.setVisibility(View.GONE);
                     } else {
