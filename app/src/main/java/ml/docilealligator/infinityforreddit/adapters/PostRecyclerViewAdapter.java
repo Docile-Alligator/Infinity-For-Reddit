@@ -3816,8 +3816,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                         longPressed = true;
                                     } else if (mLongPressPostMediaAction.equals(SharedPreferencesUtils.LONG_PRESS_POST_VALUE_PREVIEW_IN_FULLSCREEN)) {
                                         galleryRecyclerView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                                        markPostRead(post, true);
-                                        openMedia(post, currentItemPosition, true);
+                                        if (currentItemPosition >= 0) {
+                                            markPostRead(post, true);
+                                            openMedia(post, currentItemPosition, true);
+                                        } else {
+                                            showPostOptions(currentItemPosition);
+                                        }
                                         longPressed = true;
                                     }
                                 }
@@ -3845,7 +3849,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                             if (itemView != null) {
                                                 currentItemPosition = galleryRecyclerView.getChildAdapterPosition(itemView);
                                             }
-                                            openMedia(post, Math.max(currentItemPosition, 0), false);
+                                            if (currentItemPosition >= 0) {
+                                                openMedia(post, currentItemPosition, false);
+                                            } else {
+                                                openViewPostDetailActivity(post, getBindingAdapterPosition());
+                                            }
                                         }
                                     }
                                 }
