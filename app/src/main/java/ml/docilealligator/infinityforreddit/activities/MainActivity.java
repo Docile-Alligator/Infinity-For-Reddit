@@ -88,7 +88,6 @@ import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.AccountManagement;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThings;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.ImportantInfoBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.RandomBottomSheetFragment;
@@ -421,10 +420,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
         }
 
-        if (mInternalSharedPreferences.getInt(SharedPreferencesUtils.CURRENT_VERSION, 1) < BuildConfig.VERSION_CODE && savedInstanceState == null) {
-            ImportantInfoBottomSheetFragment fragment = new ImportantInfoBottomSheetFragment();
+        if (mInternalSharedPreferences.getInt(SharedPreferencesUtils.CURRENT_VERSION, 1) <= BuildConfig.VERSION_CODE && savedInstanceState == null) {
+            /*ImportantInfoBottomSheetFragment fragment = new ImportantInfoBottomSheetFragment();
             fragment.setCancelable(false);
-            fragment.show(getSupportFragmentManager(), fragment.getTag());
+            fragment.show(getSupportFragmentManager(), fragment.getTag());*/
+            NewFeaturesActivity.Companion.startNewFeaturesActivity(this);
         }
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {

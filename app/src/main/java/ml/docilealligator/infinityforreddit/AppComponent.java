@@ -33,6 +33,7 @@ import ml.docilealligator.infinityforreddit.activities.LockScreenActivity;
 import ml.docilealligator.infinityforreddit.activities.LoginActivity;
 import ml.docilealligator.infinityforreddit.activities.LoginChromeCustomTabActivity;
 import ml.docilealligator.infinityforreddit.activities.MainActivity;
+import ml.docilealligator.infinityforreddit.activities.NewFeaturesActivity;
 import ml.docilealligator.infinityforreddit.activities.OnboardingActivity;
 import ml.docilealligator.infinityforreddit.activities.PostFilterPreferenceActivity;
 import ml.docilealligator.infinityforreddit.activities.PostFilterUsageListingActivity;
@@ -347,6 +348,8 @@ public interface AppComponent {
     void inject(OnboardingActivity onboardingActivity);
 
     void inject(BootCompletedBroadcastReceiver bootCompletedBroadcastReceiver);
+
+    void inject(NewFeaturesActivity newFeaturesActivity);
 
     @Component.Factory
     interface Factory {

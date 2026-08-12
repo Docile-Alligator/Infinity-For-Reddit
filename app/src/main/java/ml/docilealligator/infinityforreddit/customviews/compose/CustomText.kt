@@ -135,3 +135,25 @@ fun SecondaryText(
         ) else LocalTextStyle.current
     )
 }
+
+@Composable
+fun ColorAccentText(
+    stringResourceId: Int,
+    modifier: Modifier = Modifier,
+    fontFamily: FontFamily? = LocalTypography.current.fontFamily,
+    fontSize: TextUnit = LocalTypography.current.fontSize.default,
+    textAlign: TextAlign? = null,
+    fontWeight: FontWeight? = null,
+    lineHeight: TextUnit = TextUnit.Unspecified
+) {
+    Text(
+        stringResource(stringResourceId),
+        modifier = modifier,
+        color = Color(LocalAppTheme.current.colorAccent),
+        fontFamily = fontFamily,
+        fontSize = fontSize,
+        textAlign = textAlign,
+        fontWeight = fontWeight,
+        lineHeight = lineHeight
+    )
+}
