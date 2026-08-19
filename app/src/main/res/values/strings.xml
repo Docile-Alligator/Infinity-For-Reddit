@@ -693,6 +693,8 @@
     <string name="larger_swipe_area">Large</string>
     <string name="very_larger_swipe_area">Very Large</string>
     <string name="settings_show_gallery_media_as_grid">Show Gallery Media as a Grid When Available</string>
+    <string name="settings_show_post_and_comment_toolbar_items_based_on_available_space_title">Show Toolbar Items Based on Available Space</string>
+    <string name="settings_show_post_and_comment_toolbar_items_based_on_available_space_summary">Automatically show or hide toolbar items as available space changes.</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

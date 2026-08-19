@@ -205,6 +205,7 @@ public class PostDetailRecyclerViewAdapterNew extends RecyclerView.Adapter<Recyc
     private final boolean mSeparatePostAndComments;
     private final boolean mLegacyAutoplayVideoControllerUI;
     private final boolean mEasierToWatchInFullScreen;
+    private final boolean mShowToolbarItemsBasedOnSpace;
     private final int mDataSavingModeDefaultResolution;
     private final int mNonDataSavingModeDefaultResolution;
     private final PostDetailRecyclerViewAdapterCallback mPostDetailRecyclerViewAdapterCallback;
@@ -281,6 +282,7 @@ public class PostDetailRecyclerViewAdapterNew extends RecyclerView.Adapter<Recyc
         mSeparatePostAndComments = separatePostAndComments;
         mLegacyAutoplayVideoControllerUI = sharedPreferences.getBoolean(SharedPreferencesUtils.LEGACY_AUTOPLAY_VIDEO_CONTROLLER_UI, false);
         mEasierToWatchInFullScreen = sharedPreferences.getBoolean(SharedPreferencesUtils.EASIER_TO_WATCH_IN_FULL_SCREEN, false);
+        mShowToolbarItemsBasedOnSpace = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_POST_AND_COMMENT_TOOLBAR_ITEMS_BASED_ON_SPACE, false);
         mDataSavingModeDefaultResolution = Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION, "360"));
         mNonDataSavingModeDefaultResolution = Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION_NO_DATA_SAVING, "0"));
 
@@ -958,35 +960,47 @@ public class PostDetailRecyclerViewAdapterNew extends RecyclerView.Adapter<Recyc
                 }
             }
 
-            if (itemWidth < 250) {
-                if (((PostDetailBaseViewHolder) holder).commentsCountButton != null) {
-                    ((PostDetailBaseViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
-                }
-                if (((PostDetailBaseViewHolder) holder).saveButton != null) {
-                    ((PostDetailBaseViewHolder) holder).saveButton.setVisibility(View.GONE);
-                }
-                if (((PostDetailBaseViewHolder) holder).shareButton != null) {
-                    ((PostDetailBaseViewHolder) holder).shareButton.setVisibility(View.GONE);
-                }
-            } else if (itemWidth < 316) {
-                if (((PostDetailBaseViewHolder) holder).commentsCountButton != null) {
-                    ((PostDetailBaseViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
-                }
-                if (((PostDetailBaseViewHolder) holder).saveButton != null) {
-                    ((PostDetailBaseViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
-                }
-                if (((PostDetailBaseViewHolder) holder).shareButton != null) {
-                    ((PostDetailBaseViewHolder) holder).shareButton.setVisibility(View.GONE);
-                }
-            } else if (itemWidth < 420) {
-                if (((PostDetailBaseViewHolder) holder).commentsCountButton != null) {
-                    ((PostDetailBaseViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
-                }
-                if (((PostDetailBaseViewHolder) holder).saveButton != null) {
-                    ((PostDetailBaseViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
-                }
-                if (((PostDetailBaseViewHolder) holder).shareButton != null) {
-                    ((PostDetailBaseViewHolder) holder).shareButton.setVisibility(View.VISIBLE);
+            if (mShowToolbarItemsBasedOnSpace) {
+                if (itemWidth < 250) {
+                    if (((PostDetailBaseViewHolder) holder).commentsCountButton != null) {
+                        ((PostDetailBaseViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
+                    }
+                    if (((PostDetailBaseViewHolder) holder).saveButton != null) {
+                        ((PostDetailBaseViewHolder) holder).saveButton.setVisibility(View.GONE);
+                    }
+                    if (((PostDetailBaseViewHolder) holder).shareButton != null) {
+                        ((PostDetailBaseViewHolder) holder).shareButton.setVisibility(View.GONE);
+                    }
+                } else if (itemWidth < 316) {
+                    if (((PostDetailBaseViewHolder) holder).commentsCountButton != null) {
+                        ((PostDetailBaseViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
+                    }
+                    if (((PostDetailBaseViewHolder) holder).saveButton != null) {
+                        ((PostDetailBaseViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
+                    }
+                    if (((PostDetailBaseViewHolder) holder).shareButton != null) {
+                        ((PostDetailBaseViewHolder) holder).shareButton.setVisibility(View.GONE);
+                    }
+                } else if (itemWidth < 420) {
+                    if (((PostDetailBaseViewHolder) holder).commentsCountButton != null) {
+                        ((PostDetailBaseViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
+                    }
+                    if (((PostDetailBaseViewHolder) holder).saveButton != null) {
+                        ((PostDetailBaseViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
+                    }
+                    if (((PostDetailBaseViewHolder) holder).shareButton != null) {
+                        ((PostDetailBaseViewHolder) holder).shareButton.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    if (((PostDetailBaseViewHolder) holder).commentsCountButton != null) {
+                        ((PostDetailBaseViewHolder) holder).commentsCountButton.setVisibility(View.VISIBLE);
+                    }
+                    if (((PostDetailBaseViewHolder) holder).saveButton != null) {
+                        ((PostDetailBaseViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
+                    }
+                    if (((PostDetailBaseViewHolder) holder).shareButton != null) {
+                        ((PostDetailBaseViewHolder) holder).shareButton.setVisibility(View.VISIBLE);
+                    }
                 }
             } else {
                 if (((PostDetailBaseViewHolder) holder).commentsCountButton != null) {

@@ -118,6 +118,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private final String mTimeFormatPattern;
     private final boolean mShowCommentDivider;
     private final boolean mShowAbsoluteNumberOfVotes;
+    private final boolean mShowToolbarItemsBasedOnSpace;
     private boolean canStartActivity = true;
     private NetworkState networkState;
     private final RetryLoadingMoreCallback mRetryLoadingMoreCallback;
@@ -143,6 +144,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mShowAbsoluteNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
         mVoteButtonsOnTheRight = sharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
         mTimeFormatPattern = sharedPreferences.getString(SharedPreferencesUtils.TIME_FORMAT_KEY, SharedPreferencesUtils.TIME_FORMAT_DEFAULT_VALUE);
+        mShowToolbarItemsBasedOnSpace = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_POST_AND_COMMENT_TOOLBAR_ITEMS_BASED_ON_SPACE, false);
         mRetryLoadingMoreCallback = retryLoadingMoreCallback;
         mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
@@ -318,13 +320,19 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     ((CommentBaseViewHolder) holder).saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
                 }
 
-                if (itemWidth > 350) {
-                    if (((CommentBaseViewHolder) holder).saveButton != null) {
-                        ((CommentBaseViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
+                if (mShowToolbarItemsBasedOnSpace) {
+                    if (itemWidth > 350) {
+                        if (((CommentBaseViewHolder) holder).saveButton != null) {
+                            ((CommentBaseViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        if (((CommentBaseViewHolder) holder).saveButton != null) {
+                            ((CommentBaseViewHolder) holder).saveButton.setVisibility(View.GONE);
+                        }
                     }
                 } else {
                     if (((CommentBaseViewHolder) holder).saveButton != null) {
-                        ((CommentBaseViewHolder) holder).saveButton.setVisibility(View.GONE);
+                        ((CommentBaseViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
                     }
                 }
             }

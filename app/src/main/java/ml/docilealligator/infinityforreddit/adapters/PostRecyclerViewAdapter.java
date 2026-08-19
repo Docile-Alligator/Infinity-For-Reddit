@@ -272,6 +272,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private boolean mHideTextPostContent;
     private boolean mEasierToWatchInFullScreen;
     private boolean mShowGalleryMediaAsGrid;
+    private boolean mShowToolbarItemsBasedOnSpace;
     private int mDataSavingModeDefaultResolution;
     private int mNonDataSavingModeDefaultResolution;
     private int mSimultaneousAutoplayLimit;
@@ -368,6 +369,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mHideTextPostContent = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_TEXT_POST_CONTENT, false);
             mEasierToWatchInFullScreen = sharedPreferences.getBoolean(SharedPreferencesUtils.EASIER_TO_WATCH_IN_FULL_SCREEN, false);
             mShowGalleryMediaAsGrid = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_GALLERY_MEDIA_AS_GRID, false);
+            mShowToolbarItemsBasedOnSpace = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_POST_AND_COMMENT_TOOLBAR_ITEMS_BASED_ON_SPACE, false);
             mDataSavingModeDefaultResolution = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION, "360"));
             mNonDataSavingModeDefaultResolution = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION_NO_DATA_SAVING, "0"));
             mSimultaneousAutoplayLimit = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.SIMULTANEOUS_AUTOPLAY_LIMIT, "1"));
@@ -1250,35 +1252,47 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 mCallback.currentlyBindItem(holder.getBindingAdapterPosition());
             }
 
-            if (itemWidth < 250) {
-                if (((PostViewHolder) holder).commentsCountButton != null) {
-                    ((PostViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
-                }
-                if (((PostViewHolder) holder).saveButton != null) {
-                    ((PostViewHolder) holder).saveButton.setVisibility(View.GONE);
-                }
-                if (((PostViewHolder) holder).shareButton != null) {
-                    ((PostViewHolder) holder).shareButton.setVisibility(View.GONE);
-                }
-            } else if (itemWidth < 316) {
-                if (((PostViewHolder) holder).commentsCountButton != null) {
-                    ((PostViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
-                }
-                if (((PostViewHolder) holder).saveButton != null) {
-                    ((PostViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
-                }
-                if (((PostViewHolder) holder).shareButton != null) {
-                    ((PostViewHolder) holder).shareButton.setVisibility(View.GONE);
-                }
-            } else if (itemWidth < 420) {
-                if (((PostViewHolder) holder).commentsCountButton != null) {
-                    ((PostViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
-                }
-                if (((PostViewHolder) holder).saveButton != null) {
-                    ((PostViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
-                }
-                if (((PostViewHolder) holder).shareButton != null) {
-                    ((PostViewHolder) holder).shareButton.setVisibility(View.VISIBLE);
+            if (mShowToolbarItemsBasedOnSpace) {
+                if (itemWidth < 250) {
+                    if (((PostViewHolder) holder).commentsCountButton != null) {
+                        ((PostViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
+                    }
+                    if (((PostViewHolder) holder).saveButton != null) {
+                        ((PostViewHolder) holder).saveButton.setVisibility(View.GONE);
+                    }
+                    if (((PostViewHolder) holder).shareButton != null) {
+                        ((PostViewHolder) holder).shareButton.setVisibility(View.GONE);
+                    }
+                } else if (itemWidth < 316) {
+                    if (((PostViewHolder) holder).commentsCountButton != null) {
+                        ((PostViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
+                    }
+                    if (((PostViewHolder) holder).saveButton != null) {
+                        ((PostViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
+                    }
+                    if (((PostViewHolder) holder).shareButton != null) {
+                        ((PostViewHolder) holder).shareButton.setVisibility(View.GONE);
+                    }
+                } else if (itemWidth < 420) {
+                    if (((PostViewHolder) holder).commentsCountButton != null) {
+                        ((PostViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
+                    }
+                    if (((PostViewHolder) holder).saveButton != null) {
+                        ((PostViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
+                    }
+                    if (((PostViewHolder) holder).shareButton != null) {
+                        ((PostViewHolder) holder).shareButton.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    if (((PostViewHolder) holder).commentsCountButton != null) {
+                        ((PostViewHolder) holder).commentsCountButton.setVisibility(View.VISIBLE);
+                    }
+                    if (((PostViewHolder) holder).saveButton != null) {
+                        ((PostViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
+                    }
+                    if (((PostViewHolder) holder).shareButton != null) {
+                        ((PostViewHolder) holder).shareButton.setVisibility(View.VISIBLE);
+                    }
                 }
             } else {
                 if (((PostViewHolder) holder).commentsCountButton != null) {
@@ -1765,6 +1779,16 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     public boolean setShowGalleryMediaAsGrid(boolean showGalleryMediaAsGrid) {
         if (mShowGalleryMediaAsGrid != showGalleryMediaAsGrid) {
             mShowGalleryMediaAsGrid = showGalleryMediaAsGrid;
+            return true;
+        }
+
+        return false;
+    }
+
+    // return true if the current value is not the same as the new value
+    public boolean setShowToolbarItemsBasedOnSpace(boolean showToolbarItemsBasedOnSpace) {
+        if (mShowToolbarItemsBasedOnSpace != showToolbarItemsBasedOnSpace) {
+            mShowToolbarItemsBasedOnSpace = showToolbarItemsBasedOnSpace;
             return true;
         }
 

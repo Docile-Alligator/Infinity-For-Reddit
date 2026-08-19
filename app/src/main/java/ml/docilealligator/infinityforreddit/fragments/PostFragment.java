@@ -871,6 +871,14 @@ public class PostFragment extends PostFragmentBase implements FragmentCommunicat
             }
         });
 
+        SharedPreferencesLiveDataKt.booleanLiveData(mSharedPreferences, SharedPreferencesUtils.SHOW_POST_AND_COMMENT_TOOLBAR_ITEMS_BASED_ON_SPACE, false).observe(getViewLifecycleOwner(), showPostAndCommentToolbarItemsBasedOnSpace -> {
+            if (getPostAdapter() != null) {
+                if (getPostAdapter().setShowToolbarItemsBasedOnSpace(showPostAndCommentToolbarItemsBasedOnSpace)) {
+                    refreshAdapter();
+                }
+            }
+        });
+
         return binding.getRoot();
     }
 

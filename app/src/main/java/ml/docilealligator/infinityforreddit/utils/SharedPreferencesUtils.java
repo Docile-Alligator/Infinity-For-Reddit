@@ -240,6 +240,7 @@ public class SharedPreferencesUtils {
     public static final String CURRENT_VERSION = "current_version";
     public static final String ONBOARDING_FINISHED = "onboarding_finished";
     public static final String SHOW_GALLERY_MEDIA_AS_GRID = "show_gallery_media_as_grid";
+    public static final String SHOW_POST_AND_COMMENT_TOOLBAR_ITEMS_BASED_ON_SPACE = "show_post_and_comment_toolbar_items_based_on_space";
 
     public static String getPostDetailFabPortraitX(@Nullable Display display) {
         if (display == null) {
