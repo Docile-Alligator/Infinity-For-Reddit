@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.viewmodels
 
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.Nullable
 import androidx.core.content.edit
@@ -9,6 +10,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import androidx.paging.PagingSource
+import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +19,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ml.docilealligator.infinityforreddit.AppResult
 import ml.docilealligator.infinityforreddit.PostDetailCommentsCache
+import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
+import ml.docilealligator.infinityforreddit.RedditError
 import ml.docilealligator.infinityforreddit.SingleLiveEvent
 import ml.docilealligator.infinityforreddit.account.Account
 import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
@@ -28,6 +33,7 @@ import ml.docilealligator.infinityforreddit.moderation.CommentModerationEvent
 import ml.docilealligator.infinityforreddit.moderation.PostModerationEvent
 import ml.docilealligator.infinityforreddit.post.ParsePost
 import ml.docilealligator.infinityforreddit.post.Post
+import ml.docilealligator.infinityforreddit.post.PostPagingSource.PostPagingSourceError
 import ml.docilealligator.infinityforreddit.post.hidePost
 import ml.docilealligator.infinityforreddit.post.unhidePost
 import ml.docilealligator.infinityforreddit.readpost.ReadPostType
@@ -80,7 +86,8 @@ class ViewPostDetailFragmentViewModelNew(
         val isRefreshing: Boolean,
         val isLoadingMoreChildren: Boolean,
         val loadMoreChildrenSuccess: Boolean,
-        val shouldShowErrorView: Boolean,
+        //val shouldShowErrorView: Boolean,
+        val errorViewError: ViewPostDetailFragmentViewModelError?,
         val singleCommentId: String?
     )
 
@@ -99,11 +106,26 @@ class ViewPostDetailFragmentViewModelNew(
         val children: ArrayList<String>
     )
 
-    sealed class SubredditError {
-        data class Network(val e: Exception?) : SubredditError()
-        data class Response(val code: Int, val message: String?) : SubredditError()
-        object Quarantined : SubredditError()
-        data class Json(val e: JSONException?) : SubredditError()
+    sealed class ViewPostDetailFragmentViewModelError {
+        data class Network(val e: Exception?) : ViewPostDetailFragmentViewModelError()
+        data class Response(val code: Int, val message: String?) : ViewPostDetailFragmentViewModelError()
+        object Quarantined : ViewPostDetailFragmentViewModelError()
+        data class Json(val e: JSONException?) : ViewPostDetailFragmentViewModelError()
+        data class RedditErrorWrapper(val e: RedditError) : ViewPostDetailFragmentViewModelError()
+        object InvalidPostId : ViewPostDetailFragmentViewModelError()
+
+        fun getErrorReason(context: Context): String {
+            return when (this) {
+                InvalidPostId -> context.getString(R.string.invalid_post_id)
+                is Json -> context.getString(R.string.parse_json_response_error)
+                is Network -> e?.localizedMessage ?: context.getString(R.string.network_error)
+                Quarantined -> context.getString(R.string.quarantined_subreddit)
+                is RedditErrorWrapper -> e.reason ?: e.message ?: context.getString(R.string.unknown_error)
+                is ViewPostDetailFragmentViewModelError.Response -> message?.let {
+                    context.getString(R.string.response_error_with_code_and_message, code, it)
+                } ?: context.getString(R.string.response_error_with_code, code)
+            }
+        }
     }
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(
@@ -115,7 +137,8 @@ class ViewPostDetailFragmentViewModelNew(
             isRefreshing = false,
             isLoadingMoreChildren = false,
             loadMoreChildrenSuccess = true,
-            shouldShowErrorView = false,
+            //shouldShowErrorView = false,
+            errorViewError = null,
             singleCommentId = singleCommentId
         )
     )
@@ -276,7 +299,8 @@ class ViewPostDetailFragmentViewModelNew(
             isInitialLoading = true,
             isInitialLoadingFailed = false,
             fetchPostFailed = false,
-            shouldShowErrorView = false
+            //shouldShowErrorView = false
+            errorViewError = null
         )
 
         val derivedPostId = derivedPostId
@@ -365,7 +389,8 @@ class ViewPostDetailFragmentViewModelNew(
                         isInitialLoading = true,
                         isInitialLoadingFailed = false,
                         fetchPostFailed = false,
-                        shouldShowErrorView = false
+                        //shouldShowErrorView = false
+                        errorViewError = null
                     )
 
                     val response: Response<String>
@@ -447,14 +472,35 @@ class ViewPostDetailFragmentViewModelNew(
                             _uiState.value = _uiState.value.copy(
                                 isInitialLoading = false,
                                 isInitialLoadingFailed = true,
-                                shouldShowErrorView = true
+                                //shouldShowErrorView = true
+                                errorViewError = ViewPostDetailFragmentViewModelError.Json(null)
                             )
                         }
                     } else {
+                        //{"reason": "banned", "message": "Not Found", "error": 404}
+                        try {
+                            response.errorBody().use { errorBody ->
+                                if (errorBody != null) {
+                                    val redditError = Gson().fromJson(
+                                        errorBody.string(),
+                                        RedditError::class.java
+                                    )
+                                    _uiState.value = _uiState.value.copy(
+                                        isInitialLoading = false,
+                                        isInitialLoadingFailed = true,
+                                        errorViewError = ViewPostDetailFragmentViewModelError.RedditErrorWrapper(redditError)
+                                    )
+                                    return@launch
+                                }
+                            }
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
                         _uiState.value = _uiState.value.copy(
                             isInitialLoading = false,
                             isInitialLoadingFailed = true,
-                            shouldShowErrorView = true
+                            //shouldShowErrorView = true
+                            errorViewError = ViewPostDetailFragmentViewModelError.Response(response.code(), response.message())
                         )
                     }
                 } catch (e: Exception) {
@@ -462,14 +508,16 @@ class ViewPostDetailFragmentViewModelNew(
                     _uiState.value = _uiState.value.copy(
                         isInitialLoading = false,
                         isInitialLoadingFailed = true,
-                        shouldShowErrorView = true
+                        //shouldShowErrorView = true
+                        errorViewError = ViewPostDetailFragmentViewModelError.Network(e)
                     )
                 }
             } ?: run {
                 _uiState.value = _uiState.value.copy(
                     isInitialLoading = false,
                     isInitialLoadingFailed = true,
-                    shouldShowErrorView = true
+                    //shouldShowErrorView = true
+                    errorViewError = ViewPostDetailFragmentViewModelError.InvalidPostId
                 )
             }
         }
@@ -766,7 +814,7 @@ class ViewPostDetailFragmentViewModelNew(
         return CommentFilter.mergeCommentFilter(commentFilterList)
     }
 
-    suspend fun fetchSubredditData(subredditName: String): AppResult<SubredditData?, SubredditError> {
+    suspend fun fetchSubredditData(subredditName: String): AppResult<SubredditData?, ViewPostDetailFragmentViewModelError> {
         try {
             val response: Response<String> = if (accountName == Account.ANONYMOUS_ACCOUNT) {
                 retrofit.create(RedditAPIKt::class.java).getSubredditData(subredditName)
@@ -782,19 +830,19 @@ class ViewPostDetailFragmentViewModelNew(
                         AppResult.Success(ParseSubredditData.parseSubredditDataSync(data, true))
                     } catch (e: JSONException) {
                         e.printStackTrace()
-                        AppResult.Error(SubredditError.Json(e))
+                        AppResult.Error(ViewPostDetailFragmentViewModelError.Json(e))
                     }
                 }
             } else {
                 return if (response.code() == 403) {
-                    AppResult.Error(SubredditError.Quarantined)
+                    AppResult.Error(ViewPostDetailFragmentViewModelError.Quarantined)
                 } else {
-                    AppResult.Error(SubredditError.Response(response.code(), response.errorBody()?.string()))
+                    AppResult.Error(ViewPostDetailFragmentViewModelError.Response(response.code(), response.errorBody()?.string()))
                 }
             }
         } catch (e: IOException) {
             e.printStackTrace()
-            return AppResult.Error(SubredditError.Network(e))
+            return AppResult.Error(ViewPostDetailFragmentViewModelError.Network(e))
         }
     }
 
@@ -804,7 +852,8 @@ class ViewPostDetailFragmentViewModelNew(
                 _uiState.value = _uiState.value.copy(
                     isRefreshing = true,
                     fetchPostFailed = false,
-                    shouldShowErrorView = false
+                    //shouldShowErrorView = false
+                    errorViewError = null
                 )
 
                 if (!fetchPost && fetchComments) {

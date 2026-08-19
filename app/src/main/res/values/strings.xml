@@ -123,6 +123,13 @@
     <string name="load_posts_error_with_reason">Error loading posts. Reason: %1$s.\nTap to retry.</string>
     <string name="load_more_posts_error">Error loading posts.</string>
     <string name="load_post_error">Error loading this post.\nTap to retry.</string>
+    <string name="load_post_error_with_reason">Error loading this post. Reason: %1$s.\nTap to retry.</string>
+    <string name="invalid_post_id">Invalid Post Id</string>
+    <string name="network_error">Network Error</string>
+    <string name="response_error_with_code">Response Error: %1$d</string>
+    <string name="response_error_with_code_and_message">Response Error: %1$d. Message: %2$s</string>
+    <string name="quarantined_subreddit">Quarantined Subreddit</string>
+    <string name="unknown_error">Unknown Error</string>
     <string name="search_subreddits_error">Error searching subreddits.\nTap to retry.</string>
     <string name="search_users_error">Error searching users.\nTap to retry.</string>
     <string name="no_posts">No posts found</string>

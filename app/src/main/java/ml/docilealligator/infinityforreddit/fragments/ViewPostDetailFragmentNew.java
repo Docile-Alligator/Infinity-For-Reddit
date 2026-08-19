@@ -550,8 +550,9 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
 
                 mCommentsAdapter.initiallyLoading();
             } else {
-                if (uiState.getShouldShowErrorView()) {
-                    showErrorView(viewPostDetailFragmentViewModel.getDerivedPostId());
+                if (uiState.getErrorViewError() != null) {
+                    ViewPostDetailFragmentViewModelNew.ViewPostDetailFragmentViewModelError error = uiState.getErrorViewError();
+                    showErrorView(error);
                 } else if (!uiState.isInitialLoadingFailed()) {
                     if (!renderContent()) {
                         return;
@@ -1171,9 +1172,14 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
         return true;
     }
 
-    private void showErrorView(String postId) {
+    private void showErrorView(ViewPostDetailFragmentViewModelNew.ViewPostDetailFragmentViewModelError error) {
+        String errorReason = error.getErrorReason(mActivity);
         binding.fetchPostInfoLinearLayoutViewPostDetailFragment.setVisibility(View.VISIBLE);
-        binding.fetchPostInfoTextViewViewPostDetailFragment.setText(R.string.load_post_error);
+        if (!errorReason.isBlank()) {
+            binding.fetchPostInfoTextViewViewPostDetailFragment.setText(getString(R.string.load_post_error_with_reason, errorReason));
+        } else {
+            binding.fetchPostInfoTextViewViewPostDetailFragment.setText(R.string.load_post_error);
+        }
         mGlide.load(R.drawable.error_image).into(binding.fetchPostInfoImageViewViewPostDetailFragment);
     }
 
