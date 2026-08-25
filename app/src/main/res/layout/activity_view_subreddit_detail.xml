@@ -79,28 +79,23 @@
                         app:layout_constraintEnd_toStartOf="@id/barrier"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/barrier5"
-                        app:layout_constraintHorizontal_bias="0" />
-
-                    <TextView
-                        android:id="@+id/online_subscriber_count_text_view_view_subreddit_detail_activity"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="?attr/font_family"
-                        android:textSize="?attr/font_default"
-                        app:layout_constraintEnd_toStartOf="@id/barrier"
                         app:layout_constraintHorizontal_bias="0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/subscriber_count_text_view_view_subreddit_detail_activity" />
+                        app:layout_constraintWidth_max="wrap"
+                        app:layout_constraintWidth_percent="0.5" />
 
                     <TextView
                         android:id="@+id/since_text_view_view_subreddit_detail_activity"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:fontFamily="?attr/font_family"
+                        android:gravity="end"
                         android:text="@string/since"
+                        android:fontFamily="?attr/font_family"
+                        android:textSize="?attr/font_default"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/barrier5" />
+                        app:layout_constraintTop_toBottomOf="@id/barrier5"
+                        app:layout_constraintWidth_max="wrap"
+                        app:layout_constraintWidth_percent="0.5" />
 
                     <TextView
                         android:id="@+id/creation_time_text_view_view_subreddit_detail_activity"
@@ -110,7 +105,9 @@
                         android:gravity="end"
                         android:textSize="?attr/font_default"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/since_text_view_view_subreddit_detail_activity" />
+                        app:layout_constraintTop_toBottomOf="@id/since_text_view_view_subreddit_detail_activity"
+                        app:layout_constraintWidth_max="wrap"
+                        app:layout_constraintWidth_percent="0.5" />
 
                     <TextView
                         android:id="@+id/description_text_view_view_subreddit_detail_activity"
@@ -120,7 +117,7 @@
                         android:fontFamily="?attr/font_family"
                         android:textSize="?attr/font_default"
                         android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@id/barrier6"
+                        app:layout_constraintTop_toBottomOf="@id/creation_time_text_view_view_subreddit_detail_activity"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -139,13 +136,6 @@
                         android:layout_height="wrap_content"
                         app:barrierDirection="bottom"
                         app:constraint_referenced_ids="icon_gif_image_view_view_subreddit_detail_activity,subscribe_subreddit_chip_view_subreddit_detail_activity" />
-
-                    <androidx.constraintlayout.widget.Barrier
-                        android:id="@+id/barrier6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:barrierDirection="bottom"
-                        app:constraint_referenced_ids="creation_time_text_view_view_subreddit_detail_activity,online_subscriber_count_text_view_view_subreddit_detail_activity" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
