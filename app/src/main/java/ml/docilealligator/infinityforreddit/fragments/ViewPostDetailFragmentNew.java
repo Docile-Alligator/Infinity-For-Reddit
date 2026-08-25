@@ -86,6 +86,7 @@ import ml.docilealligator.infinityforreddit.adapters.PostDetailRecyclerViewAdapt
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostCommentSortTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AdjustableTouchSlopItemTouchHelper;
@@ -774,6 +775,7 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
             mMenu.findItem(R.id.action_report_view_post_detail_fragment).setVisible(true);
             mMenu.findItem(R.id.action_crosspost_view_post_detail_fragment).setVisible(true);
             mMenu.findItem(R.id.action_add_to_post_filter_view_post_detail_fragment).setVisible(true);
+            mMenu.findItem(R.id.action_more_post_options_view_post_detail_fragment).setVisible(true);
 
             if (mPost.isHidden()) {
                 Utils.setTitleWithCustomFontToMenuItem(mActivity.typeface, hideItem, mActivity.getString(R.string.action_unhide_post));
@@ -1039,6 +1041,12 @@ public class ViewPostDetailFragmentNew extends Fragment implements FragmentCommu
             intent.putExtra(PostFilterPreferenceActivity.EXTRA_POST, mPost);
             startActivity(intent);
             return true;
+        } else if (itemId == R.id.action_more_post_options_view_post_detail_fragment) {
+            if (mPost != null) {
+                PostOptionsBottomSheetFragment postOptionsBottomSheetFragment =
+                        PostOptionsBottomSheetFragment.newInstance(mPost, postListPosition, false);
+                postOptionsBottomSheetFragment.show(getChildFragmentManager(), postOptionsBottomSheetFragment.getTag());
+            }
         }
         return false;
     }

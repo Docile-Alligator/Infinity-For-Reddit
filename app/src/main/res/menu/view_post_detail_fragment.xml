@@ -102,4 +102,11 @@
         android:title="@string/action_add_to_post_filter"
         app:showAsAction="never"
         android:visible="false" />
+
+    <item
+        android:id="@+id/action_more_post_options_view_post_detail_fragment"
+        android:orderInCategory="16"
+        android:title="@string/action_more_post_options"
+        app:showAsAction="never"
+        android:visible="false" />
 </menu>
