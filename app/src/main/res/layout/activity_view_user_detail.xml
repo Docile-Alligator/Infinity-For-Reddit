@@ -81,7 +81,9 @@
                         app:layout_constraintEnd_toStartOf="@id/cakeday_text_view_view_user_detail_activity"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/barrier5"
-                        app:layout_constraintHorizontal_bias="0" />
+                        app:layout_constraintHorizontal_bias="0"
+                        app:layout_constraintWidth_max="wrap"
+                        app:layout_constraintWidth_percent="0.5" />
 
                     <TextView
                         android:id="@+id/cakeday_text_view_view_user_detail_activity"
@@ -92,7 +94,9 @@
                         android:textSize="?attr/font_default"
                         android:fontFamily="?attr/font_family"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/barrier5" />
+                        app:layout_constraintTop_toBottomOf="@id/barrier5"
+                        app:layout_constraintWidth_max="wrap"
+                        app:layout_constraintWidth_percent="0.5" />
 
                     <TextView
                         android:id="@+id/description_text_view_view_user_detail_activity"
