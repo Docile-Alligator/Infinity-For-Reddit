@@ -22,7 +22,7 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:fontFamily="?attr/font_family"
-            android:text="@string/important_info_post_comments_rework_title"
+            android:text="@string/whats_new_in"
             android:textSize="?attr/font_20"
             android:textStyle="bold" />
 
@@ -34,7 +34,7 @@
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:fontFamily="?attr/font_family"
-            android:text="@string/important_info_post_comments_rework_description"
+            android:text="@string/whats_new_changelogs"
             android:textSize="?attr/font_16" />
 
         <TextView

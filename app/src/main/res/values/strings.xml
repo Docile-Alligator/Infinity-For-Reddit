@@ -1524,16 +1524,32 @@
     <string name="restore_subscription_purchase">Restore subscription purchase</string>
 
     <string name="i_understand">I understand</string>
-    <string name="important_info_post_comments_rework_title">Important Beta Information (v8.3.0-beta6)</string>
-    <string name="important_info_post_comments_rework_description">New Features:
-        \nSettings->Interface->Post->Show Gallery Media as a Grid When Available
-        \nSettings->Interface->Post Details->Show Gallery Media as a Grid When Available
+    <string name="whats_new_in">What’s New in %1$s?</string>
+    <string name="whats_new_changelogs">New Features:
+        \nReminders: Set a reminder for a post or comment and get notified to check back later.
+        \nOnboarding screen: An introduction for new users.
+        \nSupport videos in posts and comments.
         \nNew moderator option in post details: "Edit Flair"
         \nNew moderator option in comments: "(Un)distinguish as moderator"
-        \n\nYou are currently using the beta version of the new release.
-        \n\nThis beta includes major under-the-hood changes to the post comments section as part of a large code cleanup and rewrite.
-        The functionality should remain mostly the same, but because many internal systems have changed, bugs and unexpected issues are to be expected during this stage.
-        \n\nThank you for testing the beta and for your patience.</string>
+        \nBackup and restore comment drafts, read posts, reminders.
+        \nShow specific reasons when posts fail to load.
+        \nYou can now use Firefox to login.
+
+        \n\nNew Options:
+        \nSettings->Interface->Post->Show Gallery Media as a Grid When Available
+        \nSettings->Interface->Post Details->Show Gallery Media as a Grid When Available
+        \nSettings->Interface->Show Toolbar Items BAsed on Available Space
+
+        \n\nWhat\’s Removed:
+        \nRemove "Show Fewer Toolbar Options Starting From" since comment toolbar options are now automatically adjusted when space is limited.
+        \nRemove "Switch to Landscape Orientation in Video Player Automatically" for tablets due to new Android platform limitations.
+        \nLink posts now include the shared page title and URL when shared from other apps.
+
+        \n\nWhat\'s Fixed:
+        \nFixed title suggestions not working when submitting link posts.
+        \nFixed imgur handling.
+        \nMany under-the-hood bug fixes and improvements.
+    </string>
     <string name="important_info_post_comments_rework_join_subreddit">Click here to join r/Infinity_For_Reddit</string>
 
     <string name="add_to_comment_filter">Add to Comment Filter</string>

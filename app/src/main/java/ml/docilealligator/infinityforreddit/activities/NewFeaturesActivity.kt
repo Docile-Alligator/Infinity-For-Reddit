@@ -160,7 +160,7 @@ class NewFeaturesActivity: BaseActivity() {
                                     }
 
                                     PrimaryText(
-                                        R.string.important_info_post_comments_rework_title,
+                                        stringResource(R.string.whats_new_in, BuildConfig.VERSION_NAME),
                                         modifier = Modifier.padding(horizontal = 16.dp),
                                         fontSize = if (isCompactWidth) LocalTypography.current.fontSize.size20 else 48.sp,
                                         fontWeight = FontWeight.Bold,
@@ -170,7 +170,7 @@ class NewFeaturesActivity: BaseActivity() {
                                     Spacer(modifier = Modifier.height(16.dp))
 
                                     SecondaryText(
-                                        R.string.important_info_post_comments_rework_description,
+                                        R.string.whats_new_changelogs,
                                         modifier = Modifier.padding(horizontal = 16.dp),
                                         fontSize = if (isCompactWidth) LocalTypography.current.fontSize.default else LocalTypography.current.fontSize.size20,
                                         lineHeight = if (isCompactWidth) TextUnit.Unspecified else 24.sp
