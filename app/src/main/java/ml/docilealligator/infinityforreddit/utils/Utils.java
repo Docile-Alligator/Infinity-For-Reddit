@@ -522,15 +522,18 @@ public final class Utils {
     public static String getFileName(Context context, Uri uri) {
         ContentResolver contentResolver = context.getContentResolver();
         if (contentResolver != null) {
-            Cursor cursor = contentResolver.query(uri, null, null, null, null);
-            if (cursor != null) {
-                int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                cursor.moveToFirst();
-                String fileName = cursor.getString(nameIndex);
-                if (fileName != null && fileName.contains(".")) {
-                    fileName = fileName.substring(0, fileName.lastIndexOf('.'));
+            try(Cursor cursor = contentResolver.query(uri, null, null, null, null)) {
+                if (cursor != null) {
+                    int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    cursor.moveToFirst();
+                    String fileName = cursor.getString(nameIndex);
+                    if (fileName != null && fileName.contains(".")) {
+                        fileName = fileName.substring(0, fileName.lastIndexOf('.'));
+                    }
+                    return fileName;
                 }
-                return fileName;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
