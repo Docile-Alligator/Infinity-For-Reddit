@@ -794,22 +794,27 @@ public class DownloadMediaService extends JobService {
                     throw new IOException("Failed to create new MediaStore record.");
                 }
 
-                OutputStream stream = contentResolver.openOutputStream(uri);
+                try (OutputStream stream = contentResolver.openOutputStream(uri)) {
+                    if (stream == null) {
+                        throw new IOException("Failed to get output stream.");
+                    }
 
-                if (stream == null) {
-                    throw new IOException("Failed to get output stream.");
+                    InputStream in = body.byteStream();
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while ((len = in.read(buf)) > 0) {
+                        stream.write(buf, 0, len);
+                    }
+                    contentValues.clear();
+                    contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0);
+                    try {
+                        contentResolver.update(uri, contentValues, null, null);
+                        destinationFileUriString = uri.toString();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw new IOException("Failed to update content at the specified URI.");
+                    }
                 }
-
-                InputStream in = body.byteStream();
-                byte[] buf = new byte[1024];
-                int len;
-                while ((len = in.read(buf)) > 0) {
-                    stream.write(buf, 0, len);
-                }
-                contentValues.clear();
-                contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0);
-                contentResolver.update(uri, contentValues, null, null);
-                destinationFileUriString = uri.toString();
             }
         } else {
             try (OutputStream stream = contentResolver.openOutputStream(Uri.parse(destinationFileUriString))) {
