@@ -125,6 +125,9 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
         if (mPost != null) {
             switch (mPost.getPostType()) {
                 case Post.IMAGE_TYPE:
+                    binding.downloadTextViewPostOptionsBottomSheetFragment.setVisibility(View.VISIBLE);
+                    binding.downloadTextViewPostOptionsBottomSheetFragment.setText(R.string.download_image);
+                    break;
                 case Post.GALLERY_TYPE:
                     if (getArguments().getInt(EXTRA_GALLERY_INDEX, -1) >= 0) {
                         binding.downloadTextViewPostOptionsBottomSheetFragment.setVisibility(View.VISIBLE);
