@@ -553,96 +553,98 @@ public class DownloadMediaService extends JobService {
         boolean isDefaultDestination = true;
         try {
             response = retrofit.create(DownloadFile.class).downloadFile(fileUrl).execute();
-            if (response.isSuccessful() && response.body() != null) {
-                String destinationFileDirectory = getDownloadLocation(mediaType, isNsfw);
-                if (destinationFileDirectory.equals("")) {
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                        File directory = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-                        if (directory != null) {
-                            String directoryPath = separateDownloadFolder && subredditName != null && !subredditName.equals("") ? directory.getAbsolutePath() + "/Infinity/" + subredditName + "/" : directory.getAbsolutePath() + "/Infinity/";
-                            File infinityDir = new File(directoryPath);
-                            if (!infinityDir.exists() && !infinityDir.mkdirs()) {
+            try (ResponseBody responseBody = response.body()) {
+                if (response.isSuccessful() && responseBody != null) {
+                    String destinationFileDirectory = getDownloadLocation(mediaType, isNsfw);
+                    if (destinationFileDirectory.isEmpty()) {
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                            File directory = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+                            if (directory != null) {
+                                String directoryPath = separateDownloadFolder && subredditName != null && !subredditName.isEmpty() ? directory.getAbsolutePath() + "/Infinity/" + subredditName + "/" : directory.getAbsolutePath() + "/Infinity/";
+                                File infinityDir = new File(directoryPath);
+                                if (!infinityDir.exists() && !infinityDir.mkdirs()) {
+                                    downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
+                                            null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, multipleDownloads);
+                                    return false;
+                                }
+                                destinationFileUriString = directoryPath + fileName;
+                            } else {
                                 downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
                                         null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, multipleDownloads);
                                 return false;
                             }
-                            destinationFileUriString = directoryPath + fileName;
                         } else {
-                            downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
-                                    null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, multipleDownloads);
-                            return false;
+                            String dir = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? Environment.DIRECTORY_MOVIES : Environment.DIRECTORY_PICTURES;
+                            destinationFileUriString = separateDownloadFolder && subredditName != null && !subredditName.isEmpty() ? dir + "/Infinity/" + subredditName + "/" : dir + "/Infinity/";
                         }
                     } else {
-                        String dir = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? Environment.DIRECTORY_MOVIES : Environment.DIRECTORY_PICTURES;
-                        destinationFileUriString = separateDownloadFolder && subredditName != null && !subredditName.equals("") ? dir + "/Infinity/" + subredditName + "/" : dir + "/Infinity/";
-                    }
-                } else {
-                    isDefaultDestination = false;
-                    DocumentFile picFile;
-                    DocumentFile dir;
-                    if (separateDownloadFolder && subredditName != null && !subredditName.equals("")) {
-                        dir = DocumentFile.fromTreeUri(DownloadMediaService.this, Uri.parse(destinationFileDirectory));
-                        if (dir == null) {
-                            downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
-                                    null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, multipleDownloads);
-                            return false;
-                        }
-                        dir = dir.findFile(subredditName);
-                        if (dir == null) {
-                            dir = DocumentFile.fromTreeUri(DownloadMediaService.this, Uri.parse(destinationFileDirectory)).createDirectory(subredditName);
+                        isDefaultDestination = false;
+                        DocumentFile picFile;
+                        DocumentFile dir;
+                        if (separateDownloadFolder && subredditName != null && !subredditName.isEmpty()) {
+                            dir = DocumentFile.fromTreeUri(DownloadMediaService.this, Uri.parse(destinationFileDirectory));
+                            if (dir == null) {
+                                downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
+                                        null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, multipleDownloads);
+                                return false;
+                            }
+                            dir = dir.findFile(subredditName);
+                            if (dir == null) {
+                                dir = DocumentFile.fromTreeUri(DownloadMediaService.this, Uri.parse(destinationFileDirectory)).createDirectory(subredditName);
+                                if (dir == null) {
+                                    downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
+                                            null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, multipleDownloads);
+                                    return false;
+                                }
+                            }
+                        } else {
+                            dir = DocumentFile.fromTreeUri(DownloadMediaService.this, Uri.parse(destinationFileDirectory));
                             if (dir == null) {
                                 downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
                                         null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, multipleDownloads);
                                 return false;
                             }
                         }
-                    } else {
-                        dir = DocumentFile.fromTreeUri(DownloadMediaService.this, Uri.parse(destinationFileDirectory));
-                        if (dir == null) {
+                        DocumentFile checkForDuplicates = dir.findFile(fileName);
+                        int extensionPosition = fileName.lastIndexOf('.');
+                        String extension = fileName.substring(extensionPosition);
+                        int num = 1;
+                        while (checkForDuplicates != null) {
+                            fileName = fileName.substring(0, extensionPosition) + " (" + num + ")" + extension;
+                            checkForDuplicates = dir.findFile(fileName);
+                            num++;
+                        }
+                        picFile = dir.createFile(mimeType, fileName);
+                        if (picFile == null) {
                             downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
                                     null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, multipleDownloads);
                             return false;
                         }
+                        destinationFileUriString = picFile.getUri().toString();
                     }
-                    DocumentFile checkForDuplicates = dir.findFile(fileName);
-                    int extensionPosition = fileName.lastIndexOf('.');
-                    String extension = fileName.substring(extensionPosition);
-                    int num = 1;
-                    while (checkForDuplicates != null) {
-                        fileName = fileName.substring(0, extensionPosition) + " (" + num + ")" + extension;
-                        checkForDuplicates = dir.findFile(fileName);
-                        num++;
-                    }
-                    picFile = dir.createFile(mimeType, fileName);
-                    if (picFile == null) {
-                        downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType,
-                                null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY, multipleDownloads);
-                        return false;
-                    }
-                    destinationFileUriString = picFile.getUri().toString();
+                } else {
+                    downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType, null,
+                            ERROR_FILE_CANNOT_DOWNLOAD, multipleDownloads);
+                    return false;
                 }
-            } else {
-                downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType, null,
-                        ERROR_FILE_CANNOT_DOWNLOAD, multipleDownloads);
-                return false;
+
+                try {
+                    Uri destinationFileUri = writeResponseBodyToDisk(responseBody, isDefaultDestination, destinationFileUriString,
+                            fileName, mediaType);
+                    downloadFinished(params, builder, mediaType, randomNotificationIdOffset,
+                            mimeType, destinationFileUri, NO_ERROR, multipleDownloads);
+                    return true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    downloadFinished(params, builder, mediaType, randomNotificationIdOffset,
+                            mimeType, null, ERROR_FILE_CANNOT_SAVE, multipleDownloads);
+                    return false;
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
             downloadFinished(params, builder, mediaType, randomNotificationIdOffset, mimeType, null,
                     ERROR_FILE_CANNOT_DOWNLOAD, multipleDownloads);
-            return false;
-        }
-
-        try {
-            Uri destinationFileUri = writeResponseBodyToDisk(response.body(), isDefaultDestination, destinationFileUriString,
-                    fileName, mediaType);
-            downloadFinished(params, builder, mediaType, randomNotificationIdOffset,
-                    mimeType, destinationFileUri, NO_ERROR, multipleDownloads);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            downloadFinished(params, builder, mediaType, randomNotificationIdOffset,
-                    mimeType, null, ERROR_FILE_CANNOT_SAVE, multipleDownloads);
             return false;
         }
     }
