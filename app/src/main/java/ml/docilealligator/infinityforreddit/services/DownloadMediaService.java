@@ -751,26 +751,27 @@ public class DownloadMediaService extends JobService {
         ContentResolver contentResolver = getContentResolver();
         if (isDefaultDestination) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                InputStream inputStream = body.byteStream();
-                OutputStream outputStream = new FileOutputStream(destinationFileUriString);
-                byte[] fileReader = new byte[4096];
+                try (InputStream inputStream = body.byteStream();
+                     OutputStream outputStream = new FileOutputStream(destinationFileUriString)) {
+                    byte[] fileReader = new byte[4096];
 
-                long fileSize = body.contentLength();
-                long fileSizeDownloaded = 0;
+                    long fileSize = body.contentLength();
+                    long fileSizeDownloaded = 0;
 
-                while (true) {
-                    int read = inputStream.read(fileReader);
+                    while (true) {
+                        int read = inputStream.read(fileReader);
 
-                    if (read == -1) {
-                        break;
+                        if (read == -1) {
+                            break;
+                        }
+
+                        outputStream.write(fileReader, 0, read);
+
+                        fileSizeDownloaded += read;
                     }
 
-                    outputStream.write(fileReader, 0, read);
-
-                    fileSizeDownloaded += read;
+                    outputStream.flush();
                 }
-
-                outputStream.flush();
             } else {
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, destinationFileName);
