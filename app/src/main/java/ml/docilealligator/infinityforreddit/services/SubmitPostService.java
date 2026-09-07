@@ -379,8 +379,11 @@ public class SubmitPostService extends JobService {
                                  Retrofit newAuthenticatorOauthRetrofit, Account selectedAccount, Uri mediaUri,
                                  String subredditName, String title, String content, Flair flair,
                                  boolean isSpoiler, boolean isNSFW, boolean receivePostReplyNotifications) {
-        try {
-            InputStream in = getContentResolver().openInputStream(mediaUri);
+        try(InputStream in = getContentResolver().openInputStream(mediaUri)) {
+            if (in == null) {
+                handler.post(() -> EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(false, false, getString(R.string.submit_video_or_gif_post_failed_cannot_access_file))));
+                return;
+            }
             String type = getContentResolver().getType(mediaUri);
             File cacheDir = Utils.getCacheDir(this);
             if (cacheDir == null) {
@@ -521,11 +524,12 @@ public class SubmitPostService extends JobService {
     }
 
     private static void copyFileToCache(InputStream fileInputStream, String destinationFilePath) throws IOException {
-        OutputStream out = new FileOutputStream(destinationFilePath);
-        byte[] buf = new byte[2048];
-        int len;
-        while ((len = fileInputStream.read(buf)) > 0) {
-            out.write(buf, 0, len);
+        try (OutputStream out = new FileOutputStream(destinationFilePath)) {
+            byte[] buf = new byte[2048];
+            int len;
+            while ((len = fileInputStream.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
         }
     }
 

@@ -269,6 +269,7 @@
     <string name="no_camera_available">No camera app available</string>
     <string name="error_creating_temp_file">Error creating temp file</string>
 
+    <string name="submit_video_or_gif_post_failed_cannot_access_file">Unable to submit post: cannot access the file</string>
     <string name="submit_video_or_gif_post_failed_cannot_get_cache_directory">Unable to submit post: cannot access cache directory</string>
     <string name="video_is_processing">Video is processing. Please wait.</string>
     <string name="image_is_processing">Image is processing. Please wait.</string>
