@@ -25,7 +25,7 @@ import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -201,7 +201,7 @@ public class EditProfileService extends JobService {
                 handler.post(() -> EventBus.getDefault().post(new SubmitChangeBannerEvent(false, potentialError)));
                 jobFinished(parameters, false);
             }
-        } catch (InterruptedException | ExecutionException | FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             handler.post(() -> EventBus.getDefault().post(new SubmitChangeBannerEvent(false, e.getLocalizedMessage())));
             jobFinished(parameters, false);
@@ -257,10 +257,12 @@ public class EditProfileService extends JobService {
                 .build();
     }
 
-    private int getWidthBanner(Uri mediaUri) throws FileNotFoundException {
+    private int getWidthBanner(Uri mediaUri) throws Exception {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        BitmapFactory.decodeStream(getContentResolver().openInputStream(mediaUri), null, options);
-        return Math.max(Math.min(options.outWidth, MAX_BANNER_WIDTH), MIN_BANNER_WIDTH);
+        try (InputStream inputStream = getContentResolver().openInputStream(mediaUri)) {
+            BitmapFactory.decodeStream(inputStream, null, options);
+            return Math.max(Math.min(options.outWidth, MAX_BANNER_WIDTH), MIN_BANNER_WIDTH);
+        }
     }
 }
