@@ -221,13 +221,11 @@ public class BackupSettings {
     }
 
     private static boolean zipAndMoveToDestinationDir(Context context, File cacheDir, ContentResolver contentResolver, Uri destinationDirUri) {
-        OutputStream outputStream = null;
         boolean result = false;
-        try {
-            String time = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date(System.currentTimeMillis()));
-            String fileName = "Infinity_For_Reddit_Settings_Backup_v" + BuildConfig.VERSION_NAME + "-" + BuildConfig.VERSION_CODE + "-" + time + ".zip";
-            String filePath = cacheDir + "/Backup/" + fileName;
-            ZipFile zip = new ZipFile(filePath, "123321".toCharArray());
+        String time = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date(System.currentTimeMillis()));
+        String fileName = "Infinity_For_Reddit_Settings_Backup_v" + BuildConfig.VERSION_NAME + "-" + BuildConfig.VERSION_CODE + "-" + time + ".zip";
+        String filePath = cacheDir + "/Backup/" + fileName;
+        try (ZipFile zip = new ZipFile(filePath, "123321".toCharArray())) {
             ZipParameters zipParameters = new ZipParameters();
             zipParameters.setEncryptFiles(true);
             zipParameters.setEncryptionMethod(EncryptionMethod.AES);
@@ -246,35 +244,28 @@ public class BackupSettings {
                 return false;
             }
 
-            outputStream = contentResolver.openOutputStream(destinationFile.getUri());
-            if (outputStream == null) {
-                return false;
-            }
-
-            byte[] fileReader = new byte[1024];
-
-            FileInputStream inputStream = new FileInputStream(filePath);
-            while (true) {
-                int read = inputStream.read(fileReader);
-
-                if (read == -1) {
-                    break;
+            try (OutputStream outputStream = contentResolver.openOutputStream(destinationFile.getUri());
+                 FileInputStream inputStream = new FileInputStream(filePath)) {
+                if (outputStream == null) {
+                    return false;
                 }
 
-                outputStream.write(fileReader, 0, read);
+                byte[] fileReader = new byte[1024];
+
+
+                while (true) {
+                    int read = inputStream.read(fileReader);
+
+                    if (read == -1) {
+                        break;
+                    }
+
+                    outputStream.write(fileReader, 0, read);
+                }
+                result = true;
             }
-            result = true;
         } catch (IOException e) {
             e.printStackTrace();
-
-        } finally {
-            if (outputStream != null) {
-                try {
-                    outputStream.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
 
         return result;

@@ -100,6 +100,9 @@ public class UploadImageUtils {
         if (uploadImageResponse.isSuccessful()) {
             Map<String, RequestBody> nameValuePairsMap = parseJSONResponseFromAWS(uploadImageResponse.body());
             try (InputStream inputStream = contentResolver.openInputStream(imageUri)) {
+                if (inputStream == null) {
+                    return "Error: Cannot access the image.";
+                }
                 byte[] buf = IOUtils.toByteArray(inputStream);
                 RequestBody fileBody = RequestBody.create(buf, MediaType.parse("application/octet-stream"));
                 MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", "post_image." + extension, fileBody);
