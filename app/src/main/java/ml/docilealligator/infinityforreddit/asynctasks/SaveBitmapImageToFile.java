@@ -11,16 +11,12 @@ import java.util.concurrent.Executor;
 
 public class SaveBitmapImageToFile {
 
-    public static void SaveBitmapImageToFile(Executor executor, Handler handler, Bitmap resource, String cacheDirPath, String fileName,
+    public static void saveBitmapImageToFile(Executor executor, Handler handler, Bitmap resource, String cacheDirPath, String fileName,
                                              SaveBitmapImageToFileListener saveBitmapImageToFileListener) {
         executor.execute(() -> {
-            try {
-                File imageFile = new File(cacheDirPath, fileName);
-                OutputStream outputStream = new FileOutputStream(imageFile);
+            File imageFile = new File(cacheDirPath, fileName);
+            try (OutputStream outputStream = new FileOutputStream(imageFile)) {
                 resource.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                outputStream.flush();
-                outputStream.close();
-
                 handler.post(() -> saveBitmapImageToFileListener.saveSuccess(imageFile));
             } catch (IOException e) {
                 handler.post(saveBitmapImageToFileListener::saveFailed);

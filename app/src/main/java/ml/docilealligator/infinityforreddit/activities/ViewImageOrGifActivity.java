@@ -389,7 +389,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                 File cacheDir = Utils.getCacheDir(ViewImageOrGifActivity.this);
                 if (cacheDir != null) {
                     Toast.makeText(ViewImageOrGifActivity.this, R.string.save_image_first, Toast.LENGTH_SHORT).show();
-                    SaveBitmapImageToFile.SaveBitmapImageToFile(mExecutor, handler, resource,
+                    SaveBitmapImageToFile.saveBitmapImageToFile(mExecutor, handler, resource,
                             cacheDir.getPath(), mImageFileName,
                             new SaveBitmapImageToFile.SaveBitmapImageToFileListener() {
                                 @Override
