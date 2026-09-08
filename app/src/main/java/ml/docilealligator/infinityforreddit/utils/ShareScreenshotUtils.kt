@@ -22,7 +22,6 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
@@ -52,6 +51,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Locale
+import androidx.core.graphics.createBitmap
 
 fun sharePostAsScreenshot(
     baseActivity: BaseActivity, post: Post, customThemeWrapper: CustomThemeWrapper,
@@ -216,7 +216,7 @@ private fun measureView(rootView: View) {
 }
 
 private fun getBitmapFromView(rootView: View): Bitmap {
-    val bitmap = Bitmap.createBitmap(rootView.width, rootView.height, Bitmap.Config.ARGB_8888)
+    val bitmap = createBitmap(rootView.width, rootView.height)
     val canvas = Canvas(bitmap)
     val bgDrawable = rootView.background
     if (bgDrawable != null) bgDrawable.draw(canvas)
@@ -263,9 +263,9 @@ private fun shareScreenshot(context: Context, bitmap: Bitmap) {
         }
 
         val file = File(cachePath, "shared_view.png")
-        val stream = FileOutputStream(file)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-        stream.close()
+        FileOutputStream(file).use { stream ->
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        }
 
         val uri = FileProvider.getUriForFile(
             context,
