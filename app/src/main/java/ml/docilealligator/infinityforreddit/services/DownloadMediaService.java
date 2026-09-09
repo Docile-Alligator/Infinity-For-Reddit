@@ -20,13 +20,12 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.PersistableBundle;
 import android.provider.MediaStore;
+import android.webkit.MimeTypeMap;
 
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.documentfile.provider.DocumentFile;
-
-import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -774,23 +773,36 @@ public class DownloadMediaService extends JobService {
                 }
             } else {
                 ContentValues contentValues = new ContentValues();
+                String extension = StringKt.getExtensionFromFileName(destinationFileName);
+                String mimeType = null;
+                if (extension != null) {
+                    mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+                    if (mediaType == EXTRA_MEDIA_TYPE_VIDEO && (mimeType == null || mimeType.startsWith("image"))) {
+                        extension = "mp4";
+                        mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+                    }
+                    destinationFileName = StringKt.getLowercaseExtensionForFileName(destinationFileName, extension);
+                }
                 contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, destinationFileName);
-                String mimeType;
-                switch (mediaType) {
-                    case EXTRA_MEDIA_TYPE_VIDEO:
-                        mimeType = "video/mpeg";
-                        break;
-                    case EXTRA_MEDIA_TYPE_GIF:
-                        mimeType = "image/gif";
-                        break;
-                    default:
-                        mimeType = "image/jpeg";
+                if (mimeType == null) {
+                    switch (mediaType) {
+                        case EXTRA_MEDIA_TYPE_VIDEO:
+                            mimeType = "video/mpeg";
+                            break;
+                        case EXTRA_MEDIA_TYPE_GIF:
+                            mimeType = "image/gif";
+                            break;
+                        default:
+                            mimeType = "image/png";
+                    }
                 }
                 contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mimeType);
                 contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, destinationFileUriString);
                 contentValues.put(MediaStore.MediaColumns.IS_PENDING, 1);
 
-                final Uri contentUri = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY) : MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+                final Uri contentUri = mimeType.startsWith("video") ?
+                        MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+                        : MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
                 Uri uri = contentResolver.insert(contentUri, contentValues);
 
                 if (uri == null) {

@@ -35,3 +35,21 @@ fun String.linkify(mask: Int, linkStyle: SpanStyle, onUrlClick: (Uri) -> Unit) =
 fun String.getFileNameFromUrlString(): String? {
     return toUri().lastPathSegment
 }
+
+fun String.getExtensionFromFileName(): String? {
+    val extension = substringAfterLast(".", "")
+    if (extension.isEmpty()) {
+        return null
+    }
+
+    return extension.lowercase()
+}
+
+fun String.getLowercaseExtensionForFileName(extension: String): String {
+    val index = lastIndexOf(".")
+    return if (index >= 0) {
+        "${this.substring(0, index)}.$extension"
+    } else {
+        "$this.$extension"
+    }
+}
