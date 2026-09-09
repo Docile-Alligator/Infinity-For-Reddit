@@ -72,6 +72,7 @@ import androidx.media3.ui.PlayerControlView;
 import androidx.media3.ui.PlayerView;
 import androidx.media3.ui.TrackSelectionDialogBuilder;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.common.collect.ImmutableList;
 import com.otaliastudios.zoom.ZoomEngine;
 import com.otaliastudios.zoom.ZoomSurfaceView;
@@ -889,9 +890,43 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         if (viewVideoViewModel.getVideoType() != VIDEO_TYPE_NORMAL && viewVideoViewModel.getVideoType() != VIDEO_TYPE_MARKDOWN_PARSED) {
             PersistableBundle extras = new PersistableBundle();
             if (viewVideoViewModel.getPost() != null && viewVideoViewModel.getPost().getPostType() == Post.GIF_TYPE) {
-                extras.putString(DownloadMediaService.EXTRA_URL, viewVideoViewModel.getPost().getVideoUrl());
-                extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_GIF);
-                extras.putString(DownloadMediaService.EXTRA_FILE_NAME, viewVideoViewModel.getFileName());
+                if (viewVideoViewModel.getPost().getMp4Variant() != null) {
+                    String[] choices = {getString(R.string.gif), getString(R.string.video)};
+                    final int[] selectedOption = {0};
+                    new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                            .setTitle(R.string.action_download)
+                            .setSingleChoiceItems(choices, 0, (dialog, which) -> {
+                                selectedOption[0] = which;
+                            })
+                            .setPositiveButton(R.string.ok, (dialogInterface, i)
+                                    -> {
+                                if (selectedOption[0] == 0) {
+                                    extras.putString(DownloadMediaService.EXTRA_URL, viewVideoViewModel.getPost().getVideoUrl());
+                                    extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_GIF);
+                                    extras.putString(DownloadMediaService.EXTRA_FILE_NAME, viewVideoViewModel.getFileName());
+                                } else {
+                                    extras.putString(DownloadMediaService.EXTRA_URL, viewVideoViewModel.getPost().getMp4Variant());
+                                    extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
+                                    extras.putString(DownloadMediaService.EXTRA_FILE_NAME, viewVideoViewModel.getFileName());
+                                }
+
+                                extras.putString(DownloadMediaService.EXTRA_SUBREDDIT_NAME, viewVideoViewModel.getSubredditName());
+                                extras.putInt(DownloadMediaService.EXTRA_IS_NSFW, viewVideoViewModel.isNSFW() ? 1 : 0);
+
+                                //TODO: contentEstimatedBytes
+                                JobInfo jobInfo = DownloadMediaService.constructJobInfo(this, 5000000, extras);
+                                ((JobScheduler) getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
+
+                                Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
+                            })
+                            .setNegativeButton(R.string.cancel, null)
+                            .show();
+                    return;
+                } else {
+                    extras.putString(DownloadMediaService.EXTRA_URL, viewVideoViewModel.getPost().getVideoUrl());
+                    extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_GIF);
+                    extras.putString(DownloadMediaService.EXTRA_FILE_NAME, viewVideoViewModel.getFileName());
+                }
             } else {
                 extras.putString(DownloadMediaService.EXTRA_URL, viewVideoViewModel.getVideoDownloadUrl());
                 extras.putInt(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
