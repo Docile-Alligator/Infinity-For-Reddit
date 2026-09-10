@@ -137,6 +137,10 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                 case Post.GIF_TYPE:
                     binding.downloadTextViewPostOptionsBottomSheetFragment.setVisibility(View.VISIBLE);
                     binding.downloadTextViewPostOptionsBottomSheetFragment.setText(R.string.download_gif);
+                    if (mPost.getMp4Variant() != null) {
+                        binding.downloadMp4VariantTextViewPostOptionsBottomSheetFragment.setVisibility(View.VISIBLE);
+                        binding.downloadMp4VariantTextViewPostOptionsBottomSheetFragment.setText(R.string.download_video);
+                    }
                     break;
                 case Post.VIDEO_TYPE:
                     binding.downloadTextViewPostOptionsBottomSheetFragment.setVisibility(View.VISIBLE);
@@ -151,6 +155,33 @@ public class PostOptionsBottomSheetFragment extends LandscapeExpandedRoundedBott
                         if (!mPost.isRedgifs() && !mPost.isStreamable() && !mPost.isImgur()) {
                             PersistableBundle extras = new PersistableBundle();
                             extras.putString(DownloadRedditVideoService.EXTRA_VIDEO_URL, mPost.getVideoDownloadUrl());
+                            extras.putString(DownloadRedditVideoService.EXTRA_POST_ID, mPost.getId());
+                            extras.putString(DownloadRedditVideoService.EXTRA_SUBREDDIT, mPost.getSubredditName());
+                            extras.putInt(DownloadRedditVideoService.EXTRA_IS_NSFW, mPost.isNSFW() ? 1 : 0);
+
+                            //TODO: contentEstimatedBytes
+                            JobInfo jobInfo = DownloadRedditVideoService.constructJobInfo(mBaseActivity, 5000000, extras);
+                            ((JobScheduler) mBaseActivity.getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
+
+                            dismiss();
+                            return;
+                        }
+                    }
+
+                    JobInfo jobInfo = DownloadMediaService.constructJobInfo(mBaseActivity, 5000000, mPost, getArguments().getInt(EXTRA_GALLERY_INDEX, 0));
+                    ((JobScheduler) mBaseActivity.getSystemService(Context.JOB_SCHEDULER_SERVICE)).schedule(jobInfo);
+
+                    dismiss();
+                });
+            }
+
+            if (binding.downloadMp4VariantTextViewPostOptionsBottomSheetFragment.getVisibility() == View.VISIBLE) {
+                binding.downloadMp4VariantTextViewPostOptionsBottomSheetFragment.setOnClickListener(view -> {
+                    Toast.makeText(mBaseActivity, R.string.download_started, Toast.LENGTH_SHORT).show();
+                    if (mPost.getPostType() == Post.GIF_TYPE) {
+                        if (mPost.getMp4Variant() != null) {
+                            PersistableBundle extras = new PersistableBundle();
+                            extras.putString(DownloadRedditVideoService.EXTRA_VIDEO_URL, mPost.getMp4Variant());
                             extras.putString(DownloadRedditVideoService.EXTRA_POST_ID, mPost.getId());
                             extras.putString(DownloadRedditVideoService.EXTRA_SUBREDDIT, mPost.getSubredditName());
                             extras.putInt(DownloadRedditVideoService.EXTRA_IS_NSFW, mPost.isNSFW() ? 1 : 0);
