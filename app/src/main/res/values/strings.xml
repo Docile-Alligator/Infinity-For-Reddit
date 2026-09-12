@@ -1627,8 +1627,8 @@
     <string name="download_video">Download Video</string>
     <string name="download_all_gallery_images">Download All Gallery Images</string>
 
-    <string name="proxy_http">HTTP</string>
-    <string name="proxy_socks">SOCKS</string>
+    <string name="proxy_http" translatable="false">HTTP</string>
+    <string name="proxy_socks" translatable="false">SOCKS</string>
     <string name="proxy_direct">Direct</string>
 
     <string name="jump_to_parent_comment">Jump to Parent Comment</string>
@@ -1696,7 +1696,7 @@
     <string name="reminder">Reminder</string>
 
     <string name="onboarding_welcome_to">Welcome to</string>
-    <string name="onboarding_infinity_for_reddit">Infinity for Reddit</string>
+    <string name="onboarding_infinity_for_reddit" translatable="false">Infinity for Reddit</string>
     <string name="content_description_infinity_icon">Icon of Infinity for Reddit</string>
     <string name="content_description_background">Background</string>
     <string name="infinitely_better_experience">The infinitely better Reddit experience</string>
