@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.activities
 
+import android.R.attr.onClick
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -12,6 +13,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,6 +43,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -88,6 +91,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButton
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomNeutralTextButton
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalTypography
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
@@ -293,14 +297,7 @@ class OnboardingActivity: BaseActivity() {
                                             pagerState.animateScrollToPage(pagerState.currentPage + 1)
                                         }
                                     } else {
-                                        mInternalSharedPreferences.edit {
-                                            putBoolean(
-                                                SharedPreferencesUtils.ONBOARDING_FINISHED,
-                                                true
-                                            )
-                                        }
-                                        startActivity(Intent(context, MainActivity::class.java))
-                                        finish()
+                                        finishOnboarding()
                                     }
                                 }
 
@@ -374,24 +371,44 @@ class OnboardingActivity: BaseActivity() {
         ) {
             Spacer(modifier = Modifier.height(verticalPadding))
 
-            Image(
-                painterResource(R.drawable.onboarding_icon),
-                contentDescription = stringResource(R.string.content_description_infinity_icon),
-                modifier = Modifier
-                    .width(
-                        if (
-                            !(windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT ||
-                                    windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT)
-                        ) 200.dp else if (windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT) 70.dp else 100.dp
-                    )
-                    .offset {
-                        offset
-                    }
-                    .graphicsLayer {
-                        alpha = alphaValue
-                    }
-                    .clip(CircleShape)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painterResource(R.drawable.onboarding_icon),
+                    contentDescription = stringResource(R.string.content_description_infinity_icon),
+                    modifier = Modifier
+                        .width(
+                            if (
+                                !(windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT ||
+                                        windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT)
+                            ) 200.dp else if (windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT) 70.dp else 100.dp
+                        )
+                        .offset {
+                            offset
+                        }
+                        .graphicsLayer {
+                            alpha = alphaValue
+                        }
+                        .clip(CircleShape)
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                CustomNeutralTextButton(
+                    modifier = Modifier
+                        .offset {
+                            offset
+                        }
+                        .graphicsLayer {
+                            alpha = alphaValue
+                        },
+                    stringResId = R.string.skip
+                ) {
+                    finishOnboarding()
+                }
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -545,6 +562,17 @@ class OnboardingActivity: BaseActivity() {
                 )
             }
         }
+    }
+
+    private fun finishOnboarding() {
+        mInternalSharedPreferences.edit {
+            putBoolean(
+                SharedPreferencesUtils.ONBOARDING_FINISHED,
+                true
+            )
+        }
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 
     override fun getDefaultSharedPreferences(): SharedPreferences {
