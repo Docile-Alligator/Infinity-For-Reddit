@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -75,6 +76,11 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
+import com.bumptech.glide.request.RequestOptions
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
@@ -459,6 +465,7 @@ class OnboardingActivity: BaseActivity() {
         }
     }
 
+    @OptIn(ExperimentalGlideComposeApi::class)
     @Composable
     fun OnboardingPage(page: Int, verticalPadding: Dp, windowSizeClass: WindowSizeClass) {
         if (windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.COMPACT) {
@@ -466,15 +473,15 @@ class OnboardingActivity: BaseActivity() {
                 modifier = Modifier.padding(vertical = verticalPadding),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painterResource(onboardingPageData[page - 1].drawableResId),
-                    contentDescription = onboardingPageData[page - 1].contentDescription,
+                GlideImage(
                     modifier = if (windowSizeClass.windowHeightSizeClass != WindowHeightSizeClass.COMPACT) Modifier
                         .heightIn(max = 700.dp)
                         .widthIn(max = 500.dp)
                         .fillMaxSize(0.7f)
                         .weight(1f) else Modifier
-                        .weight(1f)
+                        .weight(1f),
+                    model = onboardingPageData[page - 1].drawableResId,
+                    contentDescription = onboardingPageData[page - 1].contentDescription
                 )
 
                 Spacer(modifier = Modifier.width(36.dp))
