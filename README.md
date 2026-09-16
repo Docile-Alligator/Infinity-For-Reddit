@@ -78,6 +78,7 @@ Bitcoin: bc1qxtkd5ap9na7uy8nr9qpt6jny6tdwaj4v43ddle
     - [Variables reference](#variables-reference)
 - [Roadmap](#roadmap)
 - [Contributing](#contributing)
+- [Build Instructions](#build-instructions)
 - [Support](#support)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
@@ -166,6 +167,12 @@ Here are other ways you can help:
 - [Translate The App](https://poeditor.com/join/project?hash=b2IRyfaJv6)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
+
+## Build Instructions
+
+There's a dedicated Docker-based build approach, which also allows to use a custom API key & User Agent. To run it, make sure you have Docker installed and set up in your machine, then copy the `.env.sample` to `.env` to change the API key & User Agent if you want. Then run `./build.sh`.
+
+After the shell script finishes the build, you'll find the `Infinity.apk` file on the root of this directory.
 
 ## License
 
