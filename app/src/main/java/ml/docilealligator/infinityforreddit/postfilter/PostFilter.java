@@ -41,6 +41,8 @@ public class PostFilter implements Parcelable {
     public boolean onlyNSFW;
     @ColumnInfo(name = "only_spoiler")
     public boolean onlySpoiler;
+    @ColumnInfo(name = "hide_spoilers")
+    public boolean hideSpoilers;
     @ColumnInfo(name = "post_title_excludes_regex")
     public String postTitleExcludesRegex;
     @ColumnInfo(name = "post_title_contains_regex")
@@ -97,6 +99,7 @@ public class PostFilter implements Parcelable {
         allowNSFW = in.readByte() != 0;
         onlyNSFW = in.readByte() != 0;
         onlySpoiler = in.readByte() != 0;
+        hideSpoilers = in.readByte() != 0;
         postTitleExcludesRegex = in.readString();
         postTitleContainsRegex = in.readString();
         postTitleExcludesStrings = in.readString();
@@ -162,6 +165,9 @@ public class PostFilter implements Parcelable {
             if (postFilter.onlyNSFW) {
                 return post.isNSFW();
             }
+            return false;
+        }
+        if (postFilter.hideSpoilers && post.isSpoiler()) {
             return false;
         }
         if (!postFilter.containTextType && post.getPostType() == Post.TEXT_TYPE) {
@@ -360,6 +366,7 @@ public class PostFilter implements Parcelable {
 
             postFilter.onlyNSFW = p.onlyNSFW ? p.onlyNSFW : postFilter.onlyNSFW;
             postFilter.onlySpoiler = p.onlySpoiler ? p.onlySpoiler : postFilter.onlySpoiler;
+            postFilter.hideSpoilers = p.hideSpoilers ? p.hideSpoilers : postFilter.hideSpoilers;
 
             if (p.postTitleExcludesRegex != null && !p.postTitleExcludesRegex.isEmpty()) {
                 postFilter.postTitleExcludesRegexes.add(p.postTitleExcludesRegex);
@@ -459,6 +466,7 @@ public class PostFilter implements Parcelable {
         parcel.writeByte((byte) (allowNSFW ? 1 : 0));
         parcel.writeByte((byte) (onlyNSFW ? 1 : 0));
         parcel.writeByte((byte) (onlySpoiler ? 1 : 0));
+        parcel.writeByte((byte) (hideSpoilers ? 1 : 0));
         parcel.writeString(postTitleExcludesRegex);
         parcel.writeString(postTitleContainsRegex);
         parcel.writeString(postTitleExcludesStrings);
