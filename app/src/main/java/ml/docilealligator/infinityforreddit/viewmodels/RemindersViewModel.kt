@@ -5,9 +5,11 @@ import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.reminder.Reminder
 import ml.docilealligator.infinityforreddit.reminder.ReminderManager
@@ -26,6 +28,12 @@ class RemindersViewModel(
     suspend fun initializeReminders() {
         reminderManager.getAllRemindersFlow().collect {
             _reminders.value = it
+        }
+    }
+
+    fun deleteReminder(reminder: Reminder) {
+        viewModelScope.launch {
+            reminderManager.deleteReminder(reminder)
         }
     }
 

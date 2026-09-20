@@ -72,6 +72,10 @@ class ReminderManager(
         return redditRoomDatabase.reminderDao().getAllRemindersFlow()
     }
 
+    suspend fun deleteReminder(reminder: Reminder) {
+        redditRoomDatabase.reminderDao().deleteReminder(reminder)
+    }
+
     companion object {
         fun sendNotification(
             context: Context,

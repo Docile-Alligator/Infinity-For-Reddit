@@ -9,12 +9,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
@@ -23,20 +26,27 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
@@ -111,6 +121,12 @@ class ReminderListingActivity : BaseActivity() {
                 val context = LocalContext.current
                 val scrollBehavior = enterAlwaysScrollBehavior()
                 val reminders by mViewModel.reminders.collectAsStateWithLifecycle()
+                val haptics = LocalHapticFeedback.current
+
+                var showReminderOptionSheet by remember { mutableStateOf(false) }
+                val reminderOptionSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+                var reminderToBeEditedOrDeleted: Reminder? by remember { mutableStateOf(null) }
+                var showEditReminderDialog by remember { mutableStateOf(false) }
 
                 LaunchedEffect(Unit) {
                     mViewModel.initializeReminders()
@@ -149,14 +165,20 @@ class ReminderListingActivity : BaseActivity() {
                                         Modifier
                                             .padding(horizontal = 16.dp)
                                             .padding(bottom = 16.dp),
-                                        reminder
-                                    ) {
-                                        startActivity(
-                                            Intent(context, ViewPostDetailActivity::class.java).apply {
-                                                putExtra(ViewPostDetailActivity.EXTRA_POST_ID, reminder.postId)
-                                            }
-                                        )
-                                    }
+                                        reminder,
+                                        onClick = {
+                                            startActivity(
+                                                Intent(context, ViewPostDetailActivity::class.java).apply {
+                                                    putExtra(ViewPostDetailActivity.EXTRA_POST_ID, reminder.postId)
+                                                }
+                                            )
+                                        },
+                                        onLongClick = {
+                                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                            reminderToBeEditedOrDeleted = reminder
+                                            showReminderOptionSheet = true
+                                        }
+                                    )
                                 } else {
                                     CommentReminder(
                                         Modifier
@@ -175,13 +197,53 @@ class ReminderListingActivity : BaseActivity() {
                             }
                         }
                     }
+
+                    if (showReminderOptionSheet) {
+                        ModalBottomSheet(
+                            containerColor = Color(LocalAppTheme.current.backgroundColor),
+                            onDismissRequest = {
+                                showReminderOptionSheet = false
+                            },
+                            sheetState = reminderOptionSheetState
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .padding(vertical = 16.dp)
+                                    .verticalScroll(rememberScrollState())
+                            ) {
+                                PrimaryText(
+                                    R.string.edit,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            showReminderOptionSheet = false
+                                            showEditReminderDialog = true
+                                        }
+                                        .padding(16.dp)
+                                )
+
+                                PrimaryText(
+                                    R.string.delete,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            showReminderOptionSheet = false
+                                            reminderToBeEditedOrDeleted?.let {
+                                                mViewModel.deleteReminder(it)
+                                            }
+                                        }
+                                        .padding(16.dp)
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
     @Composable
-    private fun PostReminder(modifier: Modifier, reminder: Reminder, onClick: () -> Unit) {
+    private fun PostReminder(modifier: Modifier, reminder: Reminder, onClick: () -> Unit, onLongClick: () -> Unit) {
         val context = LocalContext.current
         val remainingTimeText by remember {
             mutableStateOf(getRemainingTimeText(context, reminder.reminderTime))
@@ -191,9 +253,10 @@ class ReminderListingActivity : BaseActivity() {
             modifier = modifier
                 .fillMaxSize(1f)
                 .clip(RoundedCornerShape(16.dp))
-                .clickable {
-                    onClick()
-                }
+                .combinedClickable(
+                    onClick = onClick,
+                    onLongClick = onLongClick
+                )
                 .background(Color(LocalAppTheme.current.filledCardViewBackgroundColor))
                 .padding(16.dp)
         ) {
