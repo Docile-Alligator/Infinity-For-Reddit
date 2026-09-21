@@ -21,7 +21,7 @@ interface ReminderDao {
     @Query("SELECT * FROM reminders")
     fun getAllRemindersForBackup(): List<Reminder>
 
-    @Query("SELECT * FROM reminders")
+    @Query("SELECT * FROM reminders ORDER BY reminder_time")
     fun getAllRemindersFlow(): Flow<List<Reminder>>
 
     @Delete

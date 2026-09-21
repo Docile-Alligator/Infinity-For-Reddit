@@ -359,7 +359,7 @@ class SetReminderActivity: BaseActivity() {
 
                         Row(
                             modifier = Modifier
-                                .fillMaxWidth(1f)
+                                .fillMaxWidth()
                                 .padding(top = 4.dp),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {

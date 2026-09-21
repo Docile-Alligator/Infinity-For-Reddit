@@ -128,3 +128,26 @@ fun CustomNeutralTextButton(
         )
     }
 }
+
+@Composable
+fun CustomNegativeTextButton(
+    modifier: Modifier = Modifier,
+    @StringRes stringResId: Int,
+    fontFamily: FontFamily? = LocalTypography.current.fontFamily,
+    fontSize: TextUnit = LocalTypography.current.fontSize.default,
+    onclick: () -> Unit
+) {
+    TextButton(
+        modifier = modifier,
+        colors = ButtonDefaults.textButtonColors().copy(
+            contentColor = Color.Red
+        ),
+        onClick = onclick
+    ) {
+        Text(
+            stringResource(stringResId),
+            fontFamily = fontFamily,
+            fontSize = fontSize
+        )
+    }
+}

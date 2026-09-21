@@ -1,8 +1,5 @@
 package ml.docilealligator.infinityforreddit.viewmodels
 
-import android.content.SharedPreferences
-import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -10,17 +7,11 @@ import androidx.lifecycle.viewmodel.CreationExtras
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.reminder.Reminder
 import ml.docilealligator.infinityforreddit.reminder.ReminderManager
-import retrofit2.Retrofit
 
 class RemindersViewModel(
-    private val retrofit: Retrofit,
-    private val oauthRetrofit: Retrofit,
-    private val mRedditDataRoomDatabase: RedditDataRoomDatabase,
-    private val reminderManager: ReminderManager,
-    private val mCurrentAccountSharedPreferences: SharedPreferences
+    private val reminderManager: ReminderManager
 ) : ViewModel() {
     private val _reminders = MutableStateFlow<List<Reminder>?>(null)
     val reminders = _reminders.asStateFlow()
@@ -28,6 +19,14 @@ class RemindersViewModel(
     suspend fun initializeReminders() {
         reminderManager.getAllRemindersFlow().collect {
             _reminders.value = it
+        }
+    }
+
+    fun updateReminder(reminder: Reminder, newReminderTime: Long) {
+        if (reminder.reminderTime != newReminderTime) {
+            viewModelScope.launch {
+                reminderManager.updateReminder(reminder, newReminderTime)
+            }
         }
     }
 
@@ -39,11 +38,7 @@ class RemindersViewModel(
 
     companion object {
         fun provideFactory(
-            retrofit: Retrofit,
-            oauthRetrofit: Retrofit,
-            redditRoomDatabase: RedditDataRoomDatabase,
-            reminderManager: ReminderManager,
-            currentAccountSharedPreferences: SharedPreferences
+            reminderManager: ReminderManager
         ) : ViewModelProvider.Factory {
             return object: ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
@@ -51,13 +46,7 @@ class RemindersViewModel(
                     modelClass: Class<T>,
                     extras: CreationExtras
                 ): T {
-                    return RemindersViewModel(
-                        retrofit,
-                        oauthRetrofit,
-                        redditRoomDatabase,
-                        reminderManager,
-                        currentAccountSharedPreferences
-                    ) as T
+                    return RemindersViewModel(reminderManager) as T
                 }
             }
         }

@@ -29,14 +29,21 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBarDefaults.enterAlwaysScrollBehavior
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -47,15 +54,20 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButton
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomNegativeTextButton
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomNeutralTextButton
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomPositiveTextButton
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalTypography
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
@@ -63,22 +75,20 @@ import ml.docilealligator.infinityforreddit.customviews.compose.SecondaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
 import ml.docilealligator.infinityforreddit.reminder.Reminder
 import ml.docilealligator.infinityforreddit.reminder.ReminderManager
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils
 import ml.docilealligator.infinityforreddit.utils.Utils
 import ml.docilealligator.infinityforreddit.viewmodels.RemindersViewModel
 import ml.docilealligator.infinityforreddit.viewmodels.RemindersViewModel.Companion.provideFactory
-import retrofit2.Retrofit
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
 
 class ReminderListingActivity : BaseActivity() {
-    @Inject
-    @Named("no_oauth")
-    lateinit var mRetrofit: Retrofit
-    @Inject
-    @Named("oauth")
-    lateinit var mOauthRetrofit: Retrofit
-    @Inject
-    lateinit var mRedditDataRoomDatabase: RedditDataRoomDatabase
     @Inject
     @Named("default")
     lateinit var mSharedPreferences: SharedPreferences
@@ -109,12 +119,19 @@ class ReminderListingActivity : BaseActivity() {
 
         mViewModel = ViewModelProvider.create(
             this,
-            provideFactory(mRetrofit, mOauthRetrofit, mRedditDataRoomDatabase,
-                mReminderManager, mCurrentAccountSharedPreferences)
+            provideFactory(mReminderManager)
         )[RemindersViewModel::class.java]
 
         val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
         windowInsetsController.isAppearanceLightStatusBars = customThemeWrapper.isLightStatusBar
+
+        val calendar = Calendar.getInstance()
+        val formatter = DateTimeFormatter.ofPattern(
+            mSharedPreferences.getString(
+                SharedPreferencesUtils.TIME_FORMAT_KEY,
+                SharedPreferencesUtils.TIME_FORMAT_DEFAULT_VALUE
+            ), Locale.getDefault()
+        )
 
         setContent {
             AppTheme(customThemeWrapper.themeType, mSharedPreferences) {
@@ -126,10 +143,35 @@ class ReminderListingActivity : BaseActivity() {
                 var showReminderOptionSheet by remember { mutableStateOf(false) }
                 val reminderOptionSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
                 var reminderToBeEditedOrDeleted: Reminder? by remember { mutableStateOf(null) }
-                var showEditReminderDialog by remember { mutableStateOf(false) }
+                var showEditReminderDateDialog by remember { mutableStateOf(false) }
+                var showEditReminderTimeDialog by remember { mutableStateOf(false) }
+                val datePickerState = rememberDatePickerState()
+                val timePickerState = rememberTimePickerState(
+                    initialHour = calendar.get(Calendar.HOUR_OF_DAY),
+                    initialMinute = calendar.get(Calendar.MINUTE),
+                    is24Hour = true,
+                )
+
+                var reminderTimeMillis: Long by remember {
+                    mutableLongStateOf(System.currentTimeMillis() + 60 * 60 * 24 * 1000)
+                }
+                var reminderTimeString: String by remember {
+                    mutableStateOf("")
+                }
 
                 LaunchedEffect(Unit) {
                     mViewModel.initializeReminders()
+                }
+
+                LaunchedEffect(timePickerState.hour, timePickerState.minute, datePickerState.selectedDateMillis) {
+                    datePickerState.selectedDateMillis?.let {
+                        reminderTimeMillis = getDateAndTimeMillis(it, timePickerState.hour, timePickerState.minute)
+                        val instant = Instant.ofEpochMilli(reminderTimeMillis)
+                        reminderTimeString = formatter.withZone(ZoneId.systemDefault()).format(instant)
+                    } ?: run {
+                        reminderTimeMillis = 0
+                        reminderTimeString = ""
+                    }
                 }
 
                 Scaffold(
@@ -159,7 +201,9 @@ class ReminderListingActivity : BaseActivity() {
                             item {
                                 Spacer(Modifier.height(16.dp))
                             }
-                            items(it) { reminder ->
+                            items(it, key = {
+                                it.hashCode()
+                            } ) { reminder ->
                                 if (reminder.commentId.isEmpty()) {
                                     PostReminder(
                                         Modifier
@@ -176,6 +220,13 @@ class ReminderListingActivity : BaseActivity() {
                                         onLongClick = {
                                             haptics.performHapticFeedback(HapticFeedbackType.LongPress)
                                             reminderToBeEditedOrDeleted = reminder
+                                            val millis = reminder.reminderTime + ZonedDateTime.now().offset.totalSeconds * 1000
+                                            datePickerState.selectedDateMillis = millis
+
+                                            timePickerState.minute = (millis / 1000 / 60 % 60).toInt()
+                                            timePickerState.hour = (millis / 1000 / 60 / 60 % 24).toInt()
+                                            reminderTimeMillis = reminder.reminderTime
+
                                             showReminderOptionSheet = true
                                         }
                                     )
@@ -211,31 +262,114 @@ class ReminderListingActivity : BaseActivity() {
                                     .padding(vertical = 16.dp)
                                     .verticalScroll(rememberScrollState())
                             ) {
-                                PrimaryText(
-                                    R.string.edit,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .clickable {
-                                            showReminderOptionSheet = false
-                                            showEditReminderDialog = true
-                                        }
-                                        .padding(16.dp)
-                                )
+                                Row(
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    PrimaryText(
+                                        R.string.reminder_time,
+                                        modifier = Modifier
+                                            .padding(horizontal = 16.dp),
+                                        fontWeight = FontWeight.Bold,
+                                        textAlign = TextAlign.Center
+                                    )
 
-                                PrimaryText(
-                                    R.string.delete,
+                                    Spacer(modifier = Modifier.weight(1f))
+
+                                    PrimaryText(
+                                        reminderTimeString,
+                                        modifier = Modifier
+                                            .padding(end = 16.dp),
+                                        fontWeight = FontWeight.Bold,
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+
+                                Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .clickable {
-                                            showReminderOptionSheet = false
-                                            reminderToBeEditedOrDeleted?.let {
-                                                mViewModel.deleteReminder(it)
-                                            }
+                                        .padding(top = 4.dp)
+                                        .padding(horizontal = 8.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    CustomPositiveTextButton(
+                                        stringResId = R.string.set_date
+                                    ) {
+                                        showEditReminderDateDialog = true
+                                    }
+
+                                    CustomPositiveTextButton(
+                                        stringResId = R.string.set_time
+                                    ) {
+                                        showEditReminderTimeDialog = true
+                                    }
+
+                                    CustomNegativeTextButton(
+                                        stringResId = R.string.delete
+                                    ) {
+                                        showReminderOptionSheet = false
+                                        reminderToBeEditedOrDeleted?.let {
+                                            mViewModel.deleteReminder(it)
                                         }
-                                        .padding(16.dp)
-                                )
+                                    }
+                                }
+
+                                CustomFilledButton(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp)
+                                        .padding(top = 4.dp),
+                                    stringResId = R.string.ok
+                                ) {
+                                    showReminderOptionSheet = false
+                                    reminderToBeEditedOrDeleted?.let {
+                                        mViewModel.updateReminder(it, reminderTimeMillis)
+                                    }
+                                }
                             }
                         }
+                    }
+
+                    if (showEditReminderDateDialog) {
+                        DatePickerDialog(
+                            onDismissRequest = {
+                                showEditReminderDateDialog = false
+                            },
+                            confirmButton = {
+                                CustomPositiveTextButton(stringResId = R.string.ok) {
+                                    showEditReminderDateDialog = false
+                                }
+                            },
+                            dismissButton = {
+                                CustomNeutralTextButton(stringResId = R.string.cancel) {
+                                    showEditReminderDateDialog = false
+                                }
+                            }
+                        ) {
+                            DatePicker(state = datePickerState)
+                        }
+                    }
+
+                    if (showEditReminderTimeDialog) {
+                        AlertDialog(
+                            onDismissRequest = {
+                                showEditReminderTimeDialog = false
+                            },
+                            dismissButton = {
+                                CustomNeutralTextButton(stringResId = R.string.cancel) {
+                                    showEditReminderTimeDialog = false
+                                }
+                            },
+                            confirmButton = {
+                                CustomPositiveTextButton(stringResId = R.string.ok) {
+                                    showEditReminderTimeDialog = false
+                                }
+                            },
+                            text = {
+                                TimePicker(
+                                    state = timePickerState,
+                                )
+                            }
+                        )
                     }
                 }
             }
@@ -307,6 +441,10 @@ class ReminderListingActivity : BaseActivity() {
 
             SecondaryText(reminder.content, fontSize = LocalTypography.current.titleFontSize.default)
         }
+    }
+
+    fun getDateAndTimeMillis(dateMillis: Long, hour: Int, minute: Int): Long {
+        return dateMillis + hour * 60 * 60 * 1000 + minute * 60 * 1000 - ZonedDateTime.now().offset.totalSeconds * 1000
     }
 
     fun getRemainingTimeText(context: Context, time: Long): String {
