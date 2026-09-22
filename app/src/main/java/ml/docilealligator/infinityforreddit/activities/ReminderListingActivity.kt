@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -333,6 +334,14 @@ class ReminderListingActivity : BaseActivity() {
                                         .padding(top = 4.dp),
                                     stringResId = R.string.ok
                                 ) {
+                                    if (reminderTimeMillis == reminderToBeEditedOrDeleted?.reminderTime) {
+                                        showReminderOptionSheet = false
+                                        return@CustomFilledButton
+                                    }
+                                    if (reminderTimeMillis < System.currentTimeMillis()) {
+                                        Toast.makeText(context, R.string.reminder_time_must_be_in_future, Toast.LENGTH_SHORT).show()
+                                        return@CustomFilledButton
+                                    }
                                     showReminderOptionSheet = false
                                     reminderToBeEditedOrDeleted?.let {
                                         mViewModel.updateReminder(it, reminderTimeMillis)

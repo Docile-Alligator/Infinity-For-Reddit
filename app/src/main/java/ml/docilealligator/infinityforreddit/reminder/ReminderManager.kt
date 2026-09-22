@@ -74,10 +74,11 @@ class ReminderManager(
 
     suspend fun updateReminder(reminder: Reminder, newReminderTime: Long) {
         redditRoomDatabase.reminderDao().deleteReminder(reminder)
-        redditRoomDatabase.reminderDao().insert(reminder.copy(
+        val newReminder = reminder.copy(
             reminderTime = newReminderTime
-        ))
-        setAlarm(reminder)
+        )
+        redditRoomDatabase.reminderDao().insert(newReminder)
+        setAlarm(newReminder)
     }
 
     suspend fun deleteReminder(reminder: Reminder) {
