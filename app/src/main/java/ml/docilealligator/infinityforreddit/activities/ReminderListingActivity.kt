@@ -235,15 +235,28 @@ class ReminderListingActivity : BaseActivity() {
                                         Modifier
                                             .padding(horizontal = 16.dp)
                                             .padding(bottom = 16.dp),
-                                        reminder
-                                    ) {
-                                        startActivity(
-                                            Intent(context, ViewPostDetailActivity::class.java).apply {
-                                                putExtra(ViewPostDetailActivity.EXTRA_POST_ID, reminder.postId)
-                                                putExtra(ViewPostDetailActivity.EXTRA_SINGLE_COMMENT_ID, reminder.commentId)
-                                            }
-                                        )
-                                    }
+                                        reminder,
+                                        onClick = {
+                                            startActivity(
+                                                Intent(context, ViewPostDetailActivity::class.java).apply {
+                                                    putExtra(ViewPostDetailActivity.EXTRA_POST_ID, reminder.postId)
+                                                    putExtra(ViewPostDetailActivity.EXTRA_SINGLE_COMMENT_ID, reminder.commentId)
+                                                }
+                                            )
+                                        },
+                                        onLongClick = {
+                                            haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                                            reminderToBeEditedOrDeleted = reminder
+                                            val millis = reminder.reminderTime + ZonedDateTime.now().offset.totalSeconds * 1000
+                                            datePickerState.selectedDateMillis = millis
+
+                                            timePickerState.minute = (millis / 1000 / 60 % 60).toInt()
+                                            timePickerState.hour = (millis / 1000 / 60 / 60 % 24).toInt()
+                                            reminderTimeMillis = reminder.reminderTime
+
+                                            showReminderOptionSheet = true
+                                        }
+                                    )
                                 }
                             }
                         }
@@ -411,7 +424,7 @@ class ReminderListingActivity : BaseActivity() {
     }
 
     @Composable
-    private fun CommentReminder(modifier: Modifier, reminder: Reminder, onClick: () -> Unit) {
+    private fun CommentReminder(modifier: Modifier, reminder: Reminder, onClick: () -> Unit, onLongClick: () -> Unit) {
         val context = LocalContext.current
         val remainingTimeText by remember {
             mutableStateOf(getRemainingTimeText(context, reminder.reminderTime))
