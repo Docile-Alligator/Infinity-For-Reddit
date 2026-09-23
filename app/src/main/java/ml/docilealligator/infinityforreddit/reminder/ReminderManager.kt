@@ -83,6 +83,10 @@ class ReminderManager(
 
     suspend fun deleteReminder(reminder: Reminder) {
         redditRoomDatabase.reminderDao().deleteReminder(reminder)
+        PendingIntent.getBroadcast(applicationContext, reminder.createdAt.toInt(), Intent(
+            applicationContext,
+            ReminderAlarmReceiver::class.java
+        ), PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT).cancel();
     }
 
     companion object {
