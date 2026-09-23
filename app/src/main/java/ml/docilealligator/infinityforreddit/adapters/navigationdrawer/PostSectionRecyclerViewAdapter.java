@@ -19,7 +19,7 @@ public class PostSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
     private static final int VIEW_TYPE_MENU_GROUP_TITLE = 1;
     private static final int VIEW_TYPE_MENU_ITEM = 2;
-    private static final int POST_SECTION_ITEMS = 4;
+    private static final int POST_SECTION_ITEMS = 5;
 
     private final BaseActivity baseActivity;
     private final int primaryTextColor;
@@ -96,6 +96,10 @@ public class PostSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
                 case 4:
                     stringId = R.string.account_saved_thing_activity_label;
                     drawableId = R.drawable.ic_bookmarks_day_night_24dp;
+                    break;
+                case 5:
+                    stringId = R.string.reminders;
+                    drawableId = R.drawable.ic_reminder_day_night_24dp;
                     break;
             }
 
