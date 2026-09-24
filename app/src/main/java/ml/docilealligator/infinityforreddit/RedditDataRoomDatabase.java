@@ -330,7 +330,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
             database.execSQL("CREATE TABLE post_filter"
                     + "(name TEXT NOT NULL PRIMARY KEY, max_vote INTEGER NOT NULL, min_vote INTEGER NOT NULL, " +
                     "max_comments INTEGER NOT NULL, min_comments INTEGER NOT NULL, max_awards INTEGER NOT NULL, " +
-                    "min_awards INTEGER NOT NULL, only_nsfw INTEGER NOT NULL, only_spoiler INTEGER NOT NULL, " +
+                    "min_awards INTEGER NOT NULL, only_nsfw INTEGER NOT NULL, only_spoiler INTEGER NOT NULL, hide_spoilers INTEGER NOT NULL, " +
                     "post_title_excludes_regex TEXT, post_title_excludes_strings TEXT, exclude_subreddits TEXT, " +
                     "exclude_users TEXT, contain_flairs TEXT, exclude_flairs TEXT, contain_text_type INTEGER NOT NULL, " +
                     "contain_link_type INTEGER NOT NULL, contain_image_type INTEGER NOT NULL, " +
