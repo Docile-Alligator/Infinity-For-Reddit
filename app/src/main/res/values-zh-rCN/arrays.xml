@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        简体中文数组资源
+        注意：本文件中的 string-array 采用 index 映射，
+              条目数量和顺序必须与 values/arrays.xml 严格一致。
+              显示项(entries)可翻译，取值项(_values)禁止改动。
+    -->
+
+    <!-- ========== 排序类型 ========== -->
+
+    <string-array name="settings_subreddit_default_sort_type">
+        <item>@string/sort_hot</item>
+        <item>@string/sort_new</item>
+        <item>@string/sort_rising</item>
+        <item>@string/sort_top</item>
+        <item>@string/sort_controversial</item>
+    </string-array>
+
+    <!-- 注意：顺序与版块排序不同，New 在前 -->
+    <string-array name="settings_user_default_sort_type">
+        <item>@string/sort_new</item>
+        <item>@string/sort_hot</item>
+        <item>@string/sort_top</item>
+        <item>@string/sort_controversial</item>
+    </string-array>
+
+    <string-array name="settings_default_sort_time">
+        <item>@string/sort_time_hour</item>
+        <item>@string/sort_time_day</item>
+        <item>@string/sort_time_week</item>
+        <item>@string/sort_time_month</item>
+        <item>@string/sort_time_year</item>
+        <item>@string/sort_time_all_time</item>
+    </string-array>
+
+    <!-- ========== 时间与间隔 ========== -->
+
+    <string-array name="settings_notification_interval">
+        <item>15 分钟</item>
+        <item>30 分钟</item>
+        <item>1 小时</item>
+        <item>2 小时</item>
+        <item>3 小时</item>
+        <item>4 小时</item>
+        <item>6 小时</item>
+        <item>12 小时</item>
+        <item>1 天</item>
+    </string-array>
+
+    <string-array name="settings_lazy_mode_interval">
+        <item>1 秒</item>
+        <item>2 秒</item>
+        <item>2.5 秒</item>
+        <item>3 秒</item>
+        <item>5 秒</item>
+        <item>7 秒</item>
+        <item>10 秒</item>
+    </string-array>
+
+    <!--
+        时间格式示例。
+        这些条目展示的是「选定格式后时间的实际显示效果」。
+        app 使用 SimpleDateFormat(pattern, 当前Locale) 渲染，
+        因此在中文界面下 MMM 显示为「1月」、a 显示为「下午」，
+        示例文本按中文界面的真实输出填写。
+    -->
+    <string-array name="settings_time_format">
+        <item>1月 23, 2020, 23:45</item>
+        <item>1月 23, 2020, 11:45 下午</item>
+        <item>23 1月 2020, 23:45</item>
+        <item>23 1月 2020, 11:45 下午</item>
+        <item>1/23/2020 23:45</item>
+        <item>1/23/2020 11:45 下午</item>
+        <item>23/1/2020 23:45</item>
+        <item>23/1/2020 11:45 下午</item>
+        <item>2020/1/23 23:45</item>
+        <item>2020/1/23 11:45 下午</item>
+        <item>1-23-2020 23:45</item>
+        <item>1-23-2020 11:45 下午</item>
+        <item>23-1-2020 23:45</item>
+        <item>23-1-2020 11:45 下午</item>
+        <item>2020-1-23 23:45</item>
+        <item>2020-1-23 11:45 下午</item>
+        <item>2020-01-23 23:45</item>
+        <item>1.23.2020 23:45</item>
+        <item>1.23.2020 11:45 下午</item>
+        <item>23.1.2020 23:45</item>
+        <item>23.1.2020 11:45 下午</item>
+        <item>2020.1.23 23:45</item>
+        <item>2020.1.23 11:45 下午</item>
+    </string-array>
+
+    <!-- ========== 播放 ========== -->
+
+    <string-array name="default_playback_speed">
+        <item>0.25 倍</item>
+        <item>0.5 倍</item>
+        <item>0.75 倍</item>
+        <item>@string/normal</item>
+        <item>1.25 倍</item>
+        <item>1.5 倍</item>
+        <item>1.75 倍</item>
+        <item>2 倍</item>
+    </string-array>
+
+    <string-array name="settings_reddit_video_default_resolution">
+        <item>自动</item>
+        <item>1080p</item>
+        <item>720p</item>
+        <item>480p</item>
+        <item>360p</item>
+        <item>240p</item>
+        <item>144p</item>
+    </string-array>
+
+    <!-- ========== 评论显示 ========== -->
+
+    <string-array name="settings_comment_divider_type">
+        <item>@string/normal</item>
+        <item>仅顶层评论</item>
+    </string-array>
+
+    <!-- ========== 字体 ========== -->
+    <!-- 字体名称为专有名词，保留原文；"无斜体"说明需翻译 -->
+
+    <string-array name="settings_font_family">
+        <item>@string/default_in_array</item>
+        <item>Balsamiq Sans</item>
+        <item>Balsamiq Sans Bold</item>
+        <item>Noto Sans</item>
+        <item>Noto Sans Bold</item>
+        <item>Harmonia Sans</item>
+        <item>Harmonia Sans Bold（无斜体）</item>
+        <item>Roboto Condensed</item>
+        <item>Roboto Condensed Bold</item>
+        <item>Inter（无斜体）</item>
+        <item>Inter Bold（无斜体）</item>
+        <item>Manrope（无斜体）</item>
+        <item>Manrope Bold（无斜体）</item>
+        <item>Sriracha</item>
+        <item>Atkinson Hyperlegible</item>
+        <item>Atkinson Hyperlegible Bold</item>
+        <item>@string/settings_custom_font_family_title</item>
+    </string-array>
+
+    <!-- ========== 语言 ========== -->
+    <!-- 语言名称按国际惯例保留母语原文，不翻译 -->
+
+    <string-array name="settings_language">
+        <item>自动</item>
+        <item>简体中文</item>
+        <item>Hrvatski</item>
+        <item>čeština</item>
+        <item>Nederlands</item>
+        <item>English</item>
+        <item>Française</item>
+        <item>Deutsche</item>
+        <item>Ελληνικά</item>
+        <item>हिंदी</item>
+        <item>Magyar</item>
+        <item>Italiana</item>
+        <item>日本語</item>
+        <item>한국인</item>
+        <item>Polskie</item>
+        <item>Português</item>
+        <item>Português (BR)</item>
+        <item>Română</item>
+        <item>русский</item>
+        <item>Soomaali</item>
+        <item>Español</item>
+        <item>தமிழ்</item>
+        <item>Türkçe</item>
+        <item>Українська</item>
+        <item>Tiếng Việt</item>
+    </string-array>
+</resources>
