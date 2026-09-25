@@ -434,7 +434,7 @@ public class DownloadMediaService extends JobService {
                                             if (currentTime - time > 1000) {
                                                 time = currentTime;
                                                 int currentMediaProgress = (int) (((float) bytesRead / contentLength + (float) finalI / urls.length) * 100);
-                                                updateNotification(builder, currentMediaType, 0,
+                                                updateNotification(builder, currentMediaType, null, 0,
                                                         currentMediaProgress, randomNotificationIdOffset,
                                                         null, null);
                                             }
@@ -444,7 +444,7 @@ public class DownloadMediaService extends JobService {
                             });
                 }
 
-                updateNotification(builder, mediaType,
+                updateNotification(builder, mediaType, null,
                         allImagesDownloadedSuccessfully ? R.string.downloading_media_finished : R.string.download_gallery_failed_some_images,
                         -1, randomNotificationIdOffset,
                         null, null);
@@ -463,7 +463,7 @@ public class DownloadMediaService extends JobService {
                                         long currentTime = System.currentTimeMillis();
                                         if (currentTime - time > 1000) {
                                             time = currentTime;
-                                            updateNotification(builder, mediaType, 0,
+                                            updateNotification(builder, mediaType, null, 0,
                                                     (int) ((100 * bytesRead) / contentLength), randomNotificationIdOffset, null, null);
                                         }
                                     }
@@ -546,7 +546,7 @@ public class DownloadMediaService extends JobService {
         boolean separateDownloadFolder = mSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_FOLDER_FOR_EACH_SUBREDDIT, false);
 
         Response<ResponseBody> response;
-        String destinationFileUriString = null;
+        String destinationFileUriString;
         boolean isDefaultDestination = true;
         try {
             response = retrofit.create(DownloadFile.class).downloadFile(fileUrl).execute();
@@ -576,6 +576,9 @@ public class DownloadMediaService extends JobService {
                                 mimeType = "image/png";
                         }
                     }
+
+                    updateNotification(builder, mediaType, fileName, 0,
+                            -1, randomNotificationIdOffset, null, mimeType);
 
                     if (destinationFileDirectory.isEmpty()) {
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
@@ -681,13 +684,24 @@ public class DownloadMediaService extends JobService {
                 .build();
     }
 
-    private void updateNotification(NotificationCompat.Builder builder, int mediaType, int contentStringResId, int progress, int randomNotificationIdOffset,
-                                    Uri mediaUri, String mimeType) {
+    private void updateNotification(
+            NotificationCompat.Builder builder,
+            int mediaType,
+            String fileName,
+            int contentStringResId,
+            int progress,
+            int randomNotificationIdOffset,
+            Uri mediaUri,
+            String mimeType
+    ) {
         if (notificationManager != null) {
             if (progress < 0) {
                 builder.setProgress(0, 0, false);
             } else {
                 builder.setProgress(100, progress, false);
+            }
+            if (fileName != null) {
+                builder.setContentTitle(fileName);
             }
             if (contentStringResId != 0) {
                 builder.setContentText(getString(contentStringResId));
@@ -854,33 +868,33 @@ public class DownloadMediaService extends JobService {
     }
 
     private void downloadFinished(JobParameters parameters, NotificationCompat.Builder builder, int mediaType,
-                                  int randomNotificationIdOffset, String mimeType, Uri destinationFileUri,
-                                  int errorCode, boolean multipleDownloads) {
+                                  int randomNotificationIdOffset, String mimeType,
+                                  Uri destinationFileUri, int errorCode, boolean multipleDownloads) {
         if (errorCode != NO_ERROR) {
             if (!multipleDownloads) {
                 switch (errorCode) {
                     case ERROR_CANNOT_GET_DESTINATION_DIRECTORY:
-                        updateNotification(builder, mediaType, R.string.downloading_image_or_gif_failed_cannot_get_destination_directory,
+                        updateNotification(builder, mediaType, null, R.string.downloading_image_or_gif_failed_cannot_get_destination_directory,
                                 -1, randomNotificationIdOffset, null, null);
                         break;
                     case ERROR_FILE_CANNOT_DOWNLOAD:
-                        updateNotification(builder, mediaType, R.string.downloading_media_failed_cannot_download_media,
+                        updateNotification(builder, mediaType, null, R.string.downloading_media_failed_cannot_download_media,
                                 -1, randomNotificationIdOffset, null, null);
                         break;
                     case ERROR_FILE_CANNOT_SAVE:
-                        updateNotification(builder, mediaType, R.string.downloading_media_failed_cannot_save_to_destination_directory,
+                        updateNotification(builder, mediaType, null, R.string.downloading_media_failed_cannot_save_to_destination_directory,
                                 -1, randomNotificationIdOffset, null, null);
                         break;
                     case ERROR_FILE_CANNOT_FETCH_REDGIFS_VIDEO_LINK:
-                        updateNotification(builder, mediaType, R.string.download_media_failed_cannot_fetch_redgifs_url,
+                        updateNotification(builder, mediaType, null, R.string.download_media_failed_cannot_fetch_redgifs_url,
                                 -1, randomNotificationIdOffset, null, null);
                         break;
                     case ERROR_CANNOT_FETCH_STREAMABLE_VIDEO_LINK:
-                        updateNotification(builder, mediaType, R.string.download_media_failed_cannot_fetch_streamable_url,
+                        updateNotification(builder, mediaType, null, R.string.download_media_failed_cannot_fetch_streamable_url,
                                 -1, randomNotificationIdOffset, null, null);
                         break;
                     case ERROR_INVALID_ARGUMENT:
-                        updateNotification(builder, mediaType, R.string.download_media_failed_invalid_argument,
+                        updateNotification(builder, mediaType, null, R.string.download_media_failed_invalid_argument,
                                 -1, randomNotificationIdOffset, null, null);
                         break;
                 }
@@ -892,7 +906,7 @@ public class DownloadMediaService extends JobService {
                     DownloadMediaService.this, new String[]{destinationFileUri.toString()}, null,
                     (path, uri) -> {
                         if (!multipleDownloads) {
-                            updateNotification(builder, mediaType, R.string.downloading_media_finished, -1,
+                            updateNotification(builder, mediaType, null, R.string.downloading_media_finished, -1,
                                     randomNotificationIdOffset, destinationFileUri, mimeType);
 
                             jobFinished(parameters, false);
