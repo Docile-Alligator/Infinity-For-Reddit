@@ -409,6 +409,37 @@
 
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/hide_spoilers_linear_layout_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground">
+
+                        <TextView
+                            android:id="@+id/hide_spoilers_text_view_customize_post_filter_activity"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"
+                            android:drawablePadding="32dp"
+                            android:text="@string/hide_spoilers"
+                            android:fontFamily="?attr/font_default"
+                            android:textSize="?attr/font_default" />
+
+                        <ml.docilealligator.infinityforreddit.customviews.ThemedMaterialSwitch
+                            android:id="@+id/hide_spoilers_switch_customize_post_filter_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </com.google.android.material.card.MaterialCardView>
