@@ -113,6 +113,7 @@
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
+            android:drawableStart="@drawable/ic_link_day_night_24dp"
             android:drawablePadding="48dp"
             android:clickable="true"
             android:focusable="true"
