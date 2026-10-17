@@ -89,7 +89,7 @@ abstract class NetworkModule {
 
     @Provides
     static ConnectionPool provideConnectionPool() {
-        return new ConnectionPool(0, 1, TimeUnit.NANOSECONDS);
+        return new ConnectionPool(8, 2, TimeUnit.MINUTES);
     }
 
     @Provides
