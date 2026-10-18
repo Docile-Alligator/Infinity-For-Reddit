@@ -26,6 +26,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -39,7 +40,7 @@ import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.LoadingIndicator
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
@@ -79,7 +80,9 @@ import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Named
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3ExpressiveApi::class
+)
 class ModMailActivity : BaseActivity() {
     @Inject
     @Named("oauth")
@@ -341,7 +344,7 @@ class ModMailActivity : BaseActivity() {
             onRefresh = onRefresh,
             state = state,
             indicator = {
-                Indicator(
+                LoadingIndicator(
                     modifier = Modifier.align(Alignment.TopCenter),
                     isRefreshing = loadState == DataLoadState.Loading && conversations == null,
                     state = state,
@@ -421,7 +424,7 @@ class ModMailActivity : BaseActivity() {
             },
             state = pullToRefreshState,
             indicator = {
-                Indicator(
+                LoadingIndicator(
                     modifier = Modifier.align(Alignment.TopCenter),
                     isRefreshing = refreshState.value,
                     state = pullToRefreshState,
