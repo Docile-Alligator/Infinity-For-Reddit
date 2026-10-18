@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
 import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
@@ -43,6 +44,12 @@ class ModMailConversationViewModel(
     val unreadModMailConversationRepository = ModMailConversationRepository(
         oauthRetrofit, accessToken, sharedPreferences, "unread"
     )
+
+    fun initialLoad(repository: ModMailConversationRepository) {
+        viewModelScope.launch {
+            repository.initialLoad()
+        }
+    }
 
     @Suppress("UNCHECKED_CAST")
     class Factory(

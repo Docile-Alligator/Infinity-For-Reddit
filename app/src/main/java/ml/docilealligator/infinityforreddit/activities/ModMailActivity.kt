@@ -120,6 +120,20 @@ class ModMailActivity : BaseActivity() {
             AppTheme(customThemeWrapper.themeType, mSharedPreferences) {
                 val scrollBehavior = enterAlwaysScrollBehavior()
 
+                val scope = rememberCoroutineScope()
+                val pagerState = rememberPagerState { 4 }
+                val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
+
+                LaunchedEffect(pagerState.currentPage) {
+                    conversationViewModel.initialLoad(when(pagerState.currentPage) {
+                        0 -> conversationViewModel.unreadModMailConversationRepository
+                        1 -> conversationViewModel.recentModMailConversationRepository
+                        2 -> conversationViewModel.modModMailConversationRepository
+                        3 -> conversationViewModel.userModMailConversationRepository
+                        else -> conversationViewModel.recentModMailConversationRepository
+                    })
+                }
+
                 Scaffold(
                     topBar = {
                         ThemedTopAppBar(
@@ -145,20 +159,6 @@ class ModMailActivity : BaseActivity() {
                     },
                     containerColor = Color(mCustomThemeWrapper.backgroundColor),
                 ) { innerPadding ->
-                    val scope = rememberCoroutineScope()
-                    val pagerState = rememberPagerState { 4 }
-                    val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
-
-                    LaunchedEffect(pagerState.currentPage) {
-                        when(pagerState.currentPage) {
-                            0 -> conversationViewModel.unreadModMailConversationRepository.initialLoad()
-                            1 -> conversationViewModel.recentModMailConversationRepository.initialLoad()
-                            2 -> conversationViewModel.modModMailConversationRepository.initialLoad()
-                            3 -> conversationViewModel.userModMailConversationRepository.initialLoad()
-                            else -> conversationViewModel.recentModMailConversationRepository.initialLoad()
-                        }
-                    }
-
                     Column(
                         modifier = Modifier
                             .padding(
