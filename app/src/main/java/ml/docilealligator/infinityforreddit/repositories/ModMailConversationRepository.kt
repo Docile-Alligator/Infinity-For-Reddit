@@ -25,13 +25,30 @@ class ModMailConversationRepository(
     val conversations = _conversations.asStateFlow()
 
     // Conversations are saved in _conversations
-    val loadState: MutableStateFlow<DataLoadState<Unit>> = MutableStateFlow(DataLoadState.Idle);
+    private val _loadState: MutableStateFlow<DataLoadState<Unit>> = MutableStateFlow(DataLoadState.Idle)
+    val loadState = _loadState.asStateFlow()
 
     private var after: String? = null
 
-    suspend fun load() {
+    suspend fun initialLoad() {
+        if (_loadState.value == DataLoadState.Idle) {
+            load()
+        }
+    }
+
+    suspend fun loadNextPage() {
+        if (_conversations.value.isNullOrEmpty() || after.isNullOrEmpty()) {
+            return
+        }
+
+        if (_loadState.value != DataLoadState.Loading) {
+            load()
+        }
+    }
+
+    private suspend fun load() {
         try {
-            loadState.value = DataLoadState.Loading
+            _loadState.value = DataLoadState.Loading
             val response = oauthRetrofit.create(RedditAPIKt::class.java)
                 .getModMailConversations(APIUtils.getOAuthHeader(accessToken), sort, after)
 
@@ -50,14 +67,14 @@ class ModMailConversationRepository(
                         after = null
                     }
 
-                    loadState.value = DataLoadState.Success(Unit)
+                    _loadState.value = DataLoadState.Success(Unit)
                 }
             } else {
-                loadState.value = DataLoadState.Error(response.errorBody()?.string() ?: "Error loading conversations")
+                _loadState.value = DataLoadState.Error(response.errorBody()?.string() ?: "Error loading conversations")
             }
         } catch (e: IOException) {
             e.printStackTrace()
-            loadState.value = DataLoadState.Error(e.message ?: "Error loading conversations")
+            _loadState.value = DataLoadState.Error(e.message ?: "Error loading conversations")
         }
     }
 

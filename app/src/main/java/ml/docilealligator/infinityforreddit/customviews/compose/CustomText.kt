@@ -157,3 +157,47 @@ fun ColorAccentText(
         lineHeight = lineHeight
     )
 }
+
+@Composable
+fun SubredditText(
+    text: String,
+    modifier: Modifier = Modifier,
+    fontFamily: FontFamily? = LocalTypography.current.fontFamily,
+    fontSize: TextUnit = LocalTypography.current.fontSize.default,
+    textAlign: TextAlign? = null,
+    fontWeight: FontWeight? = null,
+    lineHeight: TextUnit = TextUnit.Unspecified
+) {
+    Text(
+        text = text,
+        modifier = modifier,
+        color = Color(LocalAppTheme.current.subreddit),
+        fontFamily = fontFamily,
+        fontSize = fontSize,
+        textAlign = textAlign,
+        fontWeight = fontWeight,
+        lineHeight = lineHeight
+    )
+}
+
+@Composable
+fun UserText(
+    text: String,
+    modifier: Modifier = Modifier,
+    fontFamily: FontFamily? = LocalTypography.current.fontFamily,
+    fontSize: TextUnit = LocalTypography.current.fontSize.default,
+    textAlign: TextAlign? = null,
+    fontWeight: FontWeight? = null,
+    lineHeight: TextUnit = TextUnit.Unspecified
+) {
+    Text(
+        text = text,
+        modifier = modifier,
+        color = Color(LocalAppTheme.current.username),
+        fontFamily = fontFamily,
+        fontSize = fontSize,
+        textAlign = textAlign,
+        fontWeight = fontWeight,
+        lineHeight = lineHeight
+    )
+}

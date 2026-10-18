@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
@@ -45,6 +46,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -66,7 +68,10 @@ import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
+import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
+import ml.docilealligator.infinityforreddit.customviews.compose.SubredditText
 import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
+import ml.docilealligator.infinityforreddit.customviews.compose.UserText
 import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
 import ml.docilealligator.infinityforreddit.viewmodels.ModMailConversationViewModel
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModMessage
@@ -142,14 +147,24 @@ class ModMailActivity : BaseActivity() {
                 ) { innerPadding ->
                     val scope = rememberCoroutineScope()
                     val pagerState = rememberPagerState { 4 }
-                    val selectedTabIndex = remember { derivedStateOf { pagerState.currentPage } }
+                    val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
+
+                    LaunchedEffect(pagerState.currentPage) {
+                        when(pagerState.currentPage) {
+                            0 -> conversationViewModel.unreadModMailConversationRepository.initialLoad()
+                            1 -> conversationViewModel.recentModMailConversationRepository.initialLoad()
+                            2 -> conversationViewModel.modModMailConversationRepository.initialLoad()
+                            3 -> conversationViewModel.userModMailConversationRepository.initialLoad()
+                            else -> conversationViewModel.recentModMailConversationRepository.initialLoad()
+                        }
+                    }
 
                     Column(
                         modifier = Modifier
                             .padding(
                                 top = innerPadding.calculateTopPadding()
                             )
-                            .fillMaxWidth()
+                            .fillMaxSize()
                     ) {
                         Row(
                             modifier = Modifier
@@ -159,14 +174,14 @@ class ModMailActivity : BaseActivity() {
                             val tabTitles = listOf(getString(R.string.mod_mail_unread), getString(R.string.mod_mail_recent),
                                 getString(R.string.mod_mail_mod), getString(R.string.mod_mail_user))
                             PrimaryScrollableTabRow(
-                                selectedTabIndex = selectedTabIndex.value,
+                                selectedTabIndex = selectedTabIndex,
                                 containerColor = Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabBackground),
                                 modifier = Modifier.fillMaxWidth(),
                                 edgePadding = 0.dp,
                                 indicator = {
                                     TabRowDefaults.PrimaryIndicator(
                                         modifier = Modifier
-                                            .tabIndicatorOffset(selectedTabIndex.value, matchContentSize = true)
+                                            .tabIndicatorOffset(selectedTabIndex, matchContentSize = true)
                                             .background(Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabBackground)),
                                         width = Dp.Unspecified,
                                         color = Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabIndicator),
@@ -176,7 +191,7 @@ class ModMailActivity : BaseActivity() {
                             ) {
                                 tabTitles.forEachIndexed { index, title ->
                                     Tab(
-                                        selected = selectedTabIndex.value == index,
+                                        selected = selectedTabIndex == index,
                                         onClick = {
                                             scope.launch {
                                                 pagerState.animateScrollToPage(index)
@@ -356,8 +371,6 @@ class ModMailActivity : BaseActivity() {
                         }
                     }
                 }
-            } ?: run {
-
             }
         }
     }
@@ -371,19 +384,19 @@ class ModMailActivity : BaseActivity() {
                 .clickable { onItemClick(conversation) }
         ) {
             conversation.owner?.displayName?.let {
-                Text(text = it, color = Color(mCustomThemeWrapper.subreddit))
+                SubredditText(it)
             }
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 for (author in conversation.authors) {
                     author.name?.let {
-                        Text(text = it, color = Color(mCustomThemeWrapper.username))
+                        UserText(it)
                     }
                 }
             }
             conversation.subject?.let {
-                Text(text = it)
+                PrimaryText(it)
             }
         }
     }
