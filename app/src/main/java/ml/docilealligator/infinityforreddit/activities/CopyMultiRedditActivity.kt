@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -210,7 +209,7 @@ class CopyMultiRedditActivity : BaseActivity() {
                     contentWindowInsets = if (isImmersiveInterfaceEnabled) WindowInsets.safeDrawing else WindowInsets.navigationBars.only(WindowInsetsSides.Bottom)
                 ) { innerPadding ->
                     when(multiRedditState) {
-                        is DataLoadState.Loading -> {
+                        is DataLoadState.Idle, DataLoadState.Loading -> {
                             Box(modifier = Modifier
                                 .fillMaxSize()
                                 .background(Color(LocalAppTheme.current.backgroundColor))

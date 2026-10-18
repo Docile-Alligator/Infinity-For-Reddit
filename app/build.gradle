@@ -74,6 +74,7 @@ dependencies {
     implementation 'androidx.browser:browser:1.9.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.activity:activity:1.10.1'
     implementation 'androidx.fragment:fragment:1.8.8'
@@ -217,11 +218,17 @@ dependencies {
     implementation 'androidx.compose.material3:material3:1.5.0-alpha01'
     implementation 'androidx.compose.ui:ui-tooling-preview'
     debugImplementation 'androidx.compose.ui:ui-tooling'
-    implementation'androidx.compose.material3.adaptive:adaptive:1.1.0'
+    implementation 'androidx.compose.material3.adaptive:adaptive:1.1.0'
+    implementation 'androidx.compose.material3.adaptive:adaptive-layout:1.1.0'
+    implementation 'androidx.compose.material3.adaptive:adaptive-navigation:1.1.0'
     configurations.configureEach {
         resolutionStrategy.force(
                 "androidx.compose.material3.adaptive:adaptive:1.1.0",
-                "androidx.compose.material3.adaptive:adaptive-android:1.1.0"
+                "androidx.compose.material3.adaptive:adaptive-android:1.1.0",
+                "androidx.compose.material3.adaptive:adaptive-layout:1.1.0",
+                "androidx.compose.material3.adaptive:adaptive-layout-android:1.1.0",
+                "androidx.compose.material3.adaptive:adaptive-navigation:1.1.0",
+                "androidx.compose.material3.adaptive:adaptive-navigation-android:1.1.0"
         )
     }
     implementation 'androidx.activity:activity-compose:1.10.1'

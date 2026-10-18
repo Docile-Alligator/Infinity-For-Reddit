@@ -317,4 +317,17 @@ interface RedditAPIKt {
         @Query("id") id: String,
         @HeaderMap headers: Map<String, String>
     ): Response<String>
+
+    @GET("/api/mod/conversations")
+    suspend fun getModMailConversations(
+        @HeaderMap headers: Map<String, String>,
+        @Query("sort") sort: String?,
+        @Query("after") after: String?
+    ): Response<String>
+
+    @GET("/api/mod/conversations/{id}")
+    suspend fun getModMailConversation(
+        @Path("id") id: String,
+        @HeaderMap headers: Map<String, String>
+    ): Response<String>
 }

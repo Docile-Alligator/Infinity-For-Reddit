@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit.viewmodels
 
 import android.content.SharedPreferences
 import android.net.Uri
-import android.os.Bundle
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -24,7 +23,6 @@ import ml.docilealligator.infinityforreddit.fetchVideoLink
 import ml.docilealligator.infinityforreddit.post.Post
 import ml.docilealligator.infinityforreddit.thing.StreamableVideo
 import ml.docilealligator.infinityforreddit.utils.getRandomString
-import org.apache.commons.io.FilenameUtils
 import retrofit2.Retrofit
 import javax.inject.Provider
 
