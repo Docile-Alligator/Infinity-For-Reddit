@@ -19,9 +19,9 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class PreferenceSectionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int VIEW_TYPE_MENU_GROUP_TITLE = 1;
-    private static final int VIEW_TYPE_MENU_ITEM = 2;
-    private static final int PREFERENCES_SECTION_ITEMS = 2;
+    private final int VIEW_TYPE_MENU_GROUP_TITLE = 1;
+    private final int VIEW_TYPE_MENU_ITEM = 2;
+    private final int PREFERENCES_SECTION_ITEMS = 2;
 
     private final BaseActivity baseActivity;
     private final Resources resources;

@@ -969,6 +969,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             }
                         } else if (stringId == R.string.reminders) {
                             intent = new Intent(MainActivity.this, ReminderListingActivity.class);
+                        } else if (stringId == R.string.mod_mail) {
+                            intent = new Intent(MainActivity.this, ModMailActivity.class);
                         } else if (stringId == R.string.light_theme) {
                             mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "0").apply();
                             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);

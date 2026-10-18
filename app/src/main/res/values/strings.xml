@@ -393,6 +393,7 @@
     <string name="label_account">Account</string>
     <string name="label_reddit">Reddit</string>
     <string name="label_post">Post</string>
+    <string name="label_moderation">Moderation</string>
     <string name="label_preferences">Preferences</string>
 
     <string name="account_switched">Account Switched. So all other pages are gone.</string>
@@ -1723,6 +1724,7 @@
     <string name="more_features_description">Discover even more tools and features waiting for you inside the app</string>
     <string name="content_description_more_features">Screenshot of more features</string>
 
+    <string name="mod_mail">Mod Mail</string>
     <string name="mod_mail_unread">Unread</string>
     <string name="mod_mail_recent">Recent</string>
     <string name="mod_mail_mod">Mod</string>
