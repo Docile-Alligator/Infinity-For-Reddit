@@ -440,6 +440,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                                         -> {
                                     setEnabled(false);
                                     triggerBackPress();
+                                    setEnabled(true);
                                 })
                                 .setNegativeButton(R.string.no, null)
                                 .show();
@@ -448,6 +449,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     } else {
                         setEnabled(false);
                         triggerBackPress();
+                        setEnabled(true);
                     }
                 }
             }
