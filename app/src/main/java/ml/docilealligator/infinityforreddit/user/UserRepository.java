@@ -2,7 +2,7 @@ package ml.docilealligator.infinityforreddit.user;
 
 import androidx.lifecycle.LiveData;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.database.RedditDataRoomDatabase;
 
 public class UserRepository {
     private final LiveData<UserData> mUserLiveData;

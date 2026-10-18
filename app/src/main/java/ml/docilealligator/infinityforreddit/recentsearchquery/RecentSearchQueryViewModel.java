@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.util.List;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.database.RedditDataRoomDatabase;
 
 public class RecentSearchQueryViewModel extends ViewModel {
     private final LiveData<List<RecentSearchQuery>> mAllRecentSearchQueries;

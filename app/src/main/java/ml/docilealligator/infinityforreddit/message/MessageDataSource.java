@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.NetworkState;
+import ml.docilealligator.infinityforreddit.state.NetworkState;
 import retrofit2.Retrofit;
 
 class MessageDataSource extends PageKeyedDataSource<String, Message> {

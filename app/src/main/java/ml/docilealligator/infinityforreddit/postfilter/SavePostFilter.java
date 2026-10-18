@@ -5,7 +5,7 @@ import android.os.Handler;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.database.RedditDataRoomDatabase;
 
 public class SavePostFilter {
     public interface SavePostFilterListener {

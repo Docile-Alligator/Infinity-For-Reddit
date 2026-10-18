@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import kotlinx.coroutines.flow.Flow;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.database.RedditDataRoomDatabase;
 
 public class LocalCustomThemeRepository {
     private final LiveData<List<CustomTheme>> mAllCustomThemes;

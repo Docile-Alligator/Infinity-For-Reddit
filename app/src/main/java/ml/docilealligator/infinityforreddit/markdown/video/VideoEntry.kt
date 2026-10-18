@@ -14,10 +14,8 @@ import ml.docilealligator.infinityforreddit.activities.BaseActivity
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment
 import ml.docilealligator.infinityforreddit.databinding.MarkdownVideoBlockBinding
-import ml.docilealligator.infinityforreddit.managers.VideoMuteManager
 import ml.docilealligator.infinityforreddit.thing.MediaMetadata
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils
-import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator
 
 class VideoEntry(
     private val baseActivity: BaseActivity,

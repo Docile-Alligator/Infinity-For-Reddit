@@ -13,7 +13,7 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Provider;
 
-import ml.docilealligator.infinityforreddit.FetchVideoLinkListener;
+import ml.docilealligator.infinityforreddit.video.FetchVideoLinkListener;
 import ml.docilealligator.infinityforreddit.thing.StreamableVideo;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;

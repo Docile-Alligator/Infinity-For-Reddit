@@ -2,10 +2,10 @@ package ml.docilealligator.infinityforreddit.repositories
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import ml.docilealligator.infinityforreddit.APIError
-import ml.docilealligator.infinityforreddit.APIResult
+import ml.docilealligator.infinityforreddit.result.APIError
+import ml.docilealligator.infinityforreddit.result.APIResult
 import ml.docilealligator.infinityforreddit.R
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
+import ml.docilealligator.infinityforreddit.database.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.account.Account
 import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
 import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubreddit

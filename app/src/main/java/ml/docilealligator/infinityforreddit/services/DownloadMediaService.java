@@ -41,10 +41,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import ml.docilealligator.infinityforreddit.DownloadProgressResponseBody;
+import ml.docilealligator.infinityforreddit.network.DownloadProgressResponseBody;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.VideoLinkFetcher;
+import ml.docilealligator.infinityforreddit.video.VideoLinkFetcher;
 import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.apis.DownloadFile;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;

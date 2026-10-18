@@ -8,9 +8,9 @@ import androidx.media3.common.util.UnstableApi;
 import androidx.media3.exoplayer.ExoPlayer;
 
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.videoautoplay.Config;
-import ml.docilealligator.infinityforreddit.videoautoplay.DefaultExoCreator;
-import ml.docilealligator.infinityforreddit.videoautoplay.ToroExo;
+import ml.docilealligator.infinityforreddit.video.videoautoplay.Config;
+import ml.docilealligator.infinityforreddit.video.videoautoplay.DefaultExoCreator;
+import ml.docilealligator.infinityforreddit.video.videoautoplay.ToroExo;
 
 @UnstableApi
 public class LoopAvailableExoCreator extends DefaultExoCreator {

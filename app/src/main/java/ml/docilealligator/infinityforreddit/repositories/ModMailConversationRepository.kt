@@ -1,13 +1,12 @@
 package ml.docilealligator.infinityforreddit.repositories
 
 import android.content.SharedPreferences
-import androidx.paging.PagingState
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
-import ml.docilealligator.infinityforreddit.DataLoadState
+import ml.docilealligator.infinityforreddit.state.DataLoadState
 import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
 import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
 import ml.docilealligator.infinityforreddit.utils.APIUtils

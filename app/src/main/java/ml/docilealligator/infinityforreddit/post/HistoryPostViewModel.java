@@ -18,7 +18,7 @@ import androidx.paging.PagingLiveData;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.database.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.user.UserProfileImagesBatchLoader;
 import retrofit2.Retrofit;

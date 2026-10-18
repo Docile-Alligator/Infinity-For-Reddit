@@ -14,7 +14,7 @@ import androidx.paging.PagedList;
 
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.NetworkState;
+import ml.docilealligator.infinityforreddit.state.NetworkState;
 import ml.docilealligator.infinityforreddit.thing.SortType;
 import retrofit2.Retrofit;
 

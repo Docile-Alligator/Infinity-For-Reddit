@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.database.RedditDataRoomDatabase;
 
 public class AccountViewModel extends ViewModel {
     private final AccountRepository mAccountRepository;

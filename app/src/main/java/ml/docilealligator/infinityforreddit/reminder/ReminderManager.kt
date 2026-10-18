@@ -9,7 +9,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.R
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase
+import ml.docilealligator.infinityforreddit.database.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity
 import ml.docilealligator.infinityforreddit.broadcastreceivers.ReminderAlarmReceiver
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper

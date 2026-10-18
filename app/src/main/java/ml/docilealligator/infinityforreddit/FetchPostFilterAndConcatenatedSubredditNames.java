@@ -6,14 +6,15 @@ import java.util.List;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.database.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubreddit;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 
 public class FetchPostFilterAndConcatenatedSubredditNames {
     public static void fetchPostFilter(RedditDataRoomDatabase redditDataRoomDatabase, Executor executor,
-                                                   Handler handler, int postFilterUsage,
-                                                   String nameOfUsage, FetchPostFilterListerner fetchPostFilterListerner) {
+                                       Handler handler, int postFilterUsage,
+                                       String nameOfUsage, FetchPostFilterListerner fetchPostFilterListerner) {
         executor.execute(() -> {
             List<PostFilter> postFilters = redditDataRoomDatabase.postFilterDao().getValidPostFilters(postFilterUsage, nameOfUsage);
             PostFilter mergedPostFilter = PostFilter.mergePostFilter(postFilters);

@@ -2,7 +2,7 @@ package ml.docilealligator.infinityforreddit.commentfilter;
 
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.database.RedditDataRoomDatabase;
 
 public class SaveCommentFilterUsage {
     public static void saveCommentFilterUsage(RedditDataRoomDatabase redditDataRoomDatabase, Executor executor,

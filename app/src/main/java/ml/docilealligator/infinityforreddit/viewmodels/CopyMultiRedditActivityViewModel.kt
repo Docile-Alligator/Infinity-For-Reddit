@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import ml.docilealligator.infinityforreddit.APIError
-import ml.docilealligator.infinityforreddit.APIResult
-import ml.docilealligator.infinityforreddit.ActionState
-import ml.docilealligator.infinityforreddit.ActionStateError
-import ml.docilealligator.infinityforreddit.DataLoadState
+import ml.docilealligator.infinityforreddit.result.APIError
+import ml.docilealligator.infinityforreddit.result.APIResult
+import ml.docilealligator.infinityforreddit.state.ActionState
+import ml.docilealligator.infinityforreddit.state.ActionStateError
+import ml.docilealligator.infinityforreddit.state.DataLoadState
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit
 import ml.docilealligator.infinityforreddit.repositories.CopyMultiRedditActivityRepository
 

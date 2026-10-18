@@ -5,7 +5,7 @@ import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.Preference.SummaryProvider
 import ml.docilealligator.infinityforreddit.Infinity
-import ml.docilealligator.infinityforreddit.PostDetailCommentsCacheManager
+import ml.docilealligator.infinityforreddit.comment.PostDetailCommentsCacheManager
 import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.customviews.preference.CustomFontPreferenceFragmentCompat
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils
