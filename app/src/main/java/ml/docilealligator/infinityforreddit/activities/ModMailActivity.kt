@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.add
@@ -27,6 +28,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -69,6 +71,7 @@ import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
+import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SubredditText
 import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
@@ -184,7 +187,10 @@ class ModMailActivity : BaseActivity() {
                                 indicator = {
                                     TabRowDefaults.PrimaryIndicator(
                                         modifier = Modifier
-                                            .tabIndicatorOffset(selectedTabIndex, matchContentSize = true)
+                                            .tabIndicatorOffset(
+                                                selectedTabIndex,
+                                                matchContentSize = true
+                                            )
                                             .background(Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabBackground)),
                                         width = Dp.Unspecified,
                                         color = Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabIndicator),
@@ -305,10 +311,6 @@ class ModMailActivity : BaseActivity() {
         }
 
         ListDetailPaneScaffold(
-            modifier = Modifier.padding(
-                start = 16.dp,
-                end = 16.dp
-            ),
             directive = navigator.scaffoldDirective,
             value = navigator.scaffoldValue,
             listPane = {
@@ -356,9 +358,9 @@ class ModMailActivity : BaseActivity() {
             conversations?.let {
                 if (conversations.isNotEmpty()) {
                     LazyColumn(
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        //verticalArrangement = Arrangement.spacedBy(16.dp),
                         state = listState,
-                        contentPadding = WindowInsets(top = 16.dp).add(WindowInsets.navigationBars).asPaddingValues(),
+                        contentPadding = WindowInsets.navigationBars.asPaddingValues(),
                         modifier = Modifier.clipToBounds()
                     ) {
                         items(
@@ -385,11 +387,16 @@ class ModMailActivity : BaseActivity() {
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onItemClick(conversation) }
+                .padding(top = 12.dp)
         ) {
             conversation.owner?.displayName?.let {
-                SubredditText(it)
+                SubredditText(
+                    it,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
             }
-            Row(
+            FlowRow(
+                modifier = Modifier.padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 for (author in conversation.authors) {
@@ -399,8 +406,16 @@ class ModMailActivity : BaseActivity() {
                 }
             }
             conversation.subject?.let {
-                PrimaryText(it)
+                PrimaryText(
+                    it,
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                )
             }
+
+            HorizontalDivider(
+                modifier = Modifier.padding(top = 4.dp),
+                color = Color(LocalAppTheme.current.dividerColor)
+            )
         }
     }
 
