@@ -51,6 +51,12 @@ class ModMailConversationViewModel(
         }
     }
 
+    fun refresh(repository: ModMailConversationRepository) {
+        viewModelScope.launch {
+            repository.refresh()
+        }
+    }
+
     @Suppress("UNCHECKED_CAST")
     class Factory(
         private val oauthRetrofit: Retrofit,

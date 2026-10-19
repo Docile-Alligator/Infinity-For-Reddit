@@ -269,12 +269,19 @@ class ModMailActivity : BaseActivity() {
             3 -> conversationViewModel.userModMailConversationRepository.conversations.collectAsStateWithLifecycle()
             else -> conversationViewModel.recentModMailConversationRepository.conversations.collectAsStateWithLifecycle()
         }
-        val loadState = when(page) {
+        val loadState by when(page) {
             0 -> conversationViewModel.unreadModMailConversationRepository.loadState.collectAsStateWithLifecycle()
             1 -> conversationViewModel.recentModMailConversationRepository.loadState.collectAsStateWithLifecycle()
             2 -> conversationViewModel.modModMailConversationRepository.loadState.collectAsStateWithLifecycle()
             3 -> conversationViewModel.userModMailConversationRepository.loadState.collectAsStateWithLifecycle()
             else -> conversationViewModel.recentModMailConversationRepository.loadState.collectAsStateWithLifecycle()
+        }
+        val isRefreshing by when(page) {
+            0 -> conversationViewModel.unreadModMailConversationRepository.isRefreshing.collectAsStateWithLifecycle()
+            1 -> conversationViewModel.recentModMailConversationRepository.isRefreshing.collectAsStateWithLifecycle()
+            2 -> conversationViewModel.modModMailConversationRepository.isRefreshing.collectAsStateWithLifecycle()
+            3 -> conversationViewModel.userModMailConversationRepository.isRefreshing.collectAsStateWithLifecycle()
+            else -> conversationViewModel.recentModMailConversationRepository.isRefreshing.collectAsStateWithLifecycle()
         }
         val scope = rememberCoroutineScope()
 
@@ -315,8 +322,14 @@ class ModMailActivity : BaseActivity() {
             value = navigator.scaffoldValue,
             listPane = {
                 AnimatedPane {
-                    ConversationListView(conversations.value, loadState.value, navigator, listState) {
-
+                    ConversationListView(conversations.value, loadState, isRefreshing, navigator, listState) {
+                        conversationViewModel.refresh(when(page) {
+                            0 -> conversationViewModel.unreadModMailConversationRepository
+                            1 -> conversationViewModel.recentModMailConversationRepository
+                            2 -> conversationViewModel.modModMailConversationRepository
+                            3 -> conversationViewModel.userModMailConversationRepository
+                            else -> conversationViewModel.recentModMailConversationRepository
+                        })
                     }
                 }
             },
@@ -334,6 +347,7 @@ class ModMailActivity : BaseActivity() {
     fun ConversationListView(
         conversations: List<Conversation>?,
         loadState: DataLoadState<Unit>,
+        isRefreshing: Boolean,
         navigator: ThreePaneScaffoldNavigator<Conversation>,
         listState: LazyListState,
         onRefresh: () -> Unit
@@ -342,13 +356,13 @@ class ModMailActivity : BaseActivity() {
         val scope = rememberCoroutineScope()
 
         PullToRefreshBox(
-            isRefreshing = loadState == DataLoadState.Loading && conversations == null,
+            isRefreshing = (loadState == DataLoadState.Loading && conversations == null) || isRefreshing,
             onRefresh = onRefresh,
             state = state,
             indicator = {
                 LoadingIndicator(
                     modifier = Modifier.align(Alignment.TopCenter),
-                    isRefreshing = loadState == DataLoadState.Loading && conversations == null,
+                    isRefreshing = (loadState == DataLoadState.Loading && conversations == null) || isRefreshing,
                     state = state,
                     containerColor = Color(mCustomThemeWrapper.circularProgressBarBackground),
                     color = Color(mCustomThemeWrapper.colorAccent)
@@ -358,7 +372,6 @@ class ModMailActivity : BaseActivity() {
             conversations?.let {
                 if (conversations.isNotEmpty()) {
                     LazyColumn(
-                        //verticalArrangement = Arrangement.spacedBy(16.dp),
                         state = listState,
                         contentPadding = WindowInsets.navigationBars.asPaddingValues(),
                         modifier = Modifier.clipToBounds()
@@ -397,7 +410,8 @@ class ModMailActivity : BaseActivity() {
             }
             FlowRow(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 for (author in conversation.authors) {
                     author.name?.let {

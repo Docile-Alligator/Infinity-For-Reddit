@@ -28,12 +28,22 @@ class ModMailConversationRepository(
     private val _loadState: MutableStateFlow<DataLoadState<Unit>> = MutableStateFlow(DataLoadState.Idle)
     val loadState = _loadState.asStateFlow()
 
+    private val _isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isRefreshing = _isRefreshing.asStateFlow()
+
     private var after: String? = null
 
     suspend fun initialLoad() {
         if (_loadState.value == DataLoadState.Idle) {
             load()
         }
+    }
+
+    suspend fun refresh() {
+        _isRefreshing.value = true
+        after = null
+        load()
+        _isRefreshing.value = false
     }
 
     suspend fun loadNextPage() {
@@ -56,11 +66,15 @@ class ModMailConversationRepository(
                 response.body()?.let { body ->
                     val conversations: MutableList<Conversation>? = parseConversations(body)
                     conversations?.let {
-                        val currentValue = _conversations.value
-                        if (currentValue == null) {
+                        if (_isRefreshing.value) {
                             _conversations.value = it
                         } else {
-                            _conversations.value = currentValue + it
+                            val currentValue = _conversations.value
+                            if (currentValue == null) {
+                                _conversations.value = it
+                            } else {
+                                _conversations.value = currentValue + it
+                            }
                         }
                         after = if (it.isEmpty()) null else "ModmailConversation_" + it[it.size - 1].id
                     } ?: run {
