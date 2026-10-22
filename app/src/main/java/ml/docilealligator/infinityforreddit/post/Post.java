@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
+import androidx.media3.common.MimeTypes;
+import androidx.media3.common.util.UnstableApi;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -824,14 +827,15 @@ public class Post implements Parcelable {
         public String caption;
         public String captionUrl;
 
+        @OptIn(markerClass = UnstableApi.class)
         public Gallery(String mimeType, String url, String fallbackUrl, String fileName, String caption, String captionUrl) {
             this.mimeType = mimeType;
             this.url = url;
             this.fallbackUrl = fallbackUrl;
             this.fileName = fileName;
-            if (mimeType.contains("gif")) {
+            if (mimeType.equals("image/gif")) {
                 mediaType = TYPE_GIF;
-            } else if (mimeType.contains("jpg") || mimeType.contains("png")) {
+            } else if (MimeTypes.isImage(mimeType)) {
                 mediaType = TYPE_IMAGE;
             } else {
                 mediaType = TYPE_VIDEO;
