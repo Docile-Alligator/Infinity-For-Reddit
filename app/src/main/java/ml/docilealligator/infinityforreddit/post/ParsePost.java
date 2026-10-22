@@ -6,7 +6,10 @@ import android.text.Html;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
 import androidx.annotation.WorkerThread;
+import androidx.media3.common.MimeTypes;
+import androidx.media3.common.util.UnstableApi;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -279,6 +282,7 @@ public class ParsePost {
         }
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     private static Post parseData(JSONObject data, String permalink, String id, String fullName,
                                   String subredditName, String subredditNamePrefixed, String subredditIconUrl,
                                   String author, String authorFullname, String authorFlair, String authorFlairHTML,
@@ -764,11 +768,11 @@ public class ParsePost {
                         JSONObject singleGalleryObject = galleryObject.getJSONObject(galleryId);
                         String mimeType = singleGalleryObject.getString(JSONUtils.M_KEY);
                         String galleryItemUrl;
-                        if (mimeType.contains("jpg") || mimeType.contains("png")) {
+                        if (MimeTypes.isImage(mimeType) && !mimeType.equals("image/gif")) {
                             galleryItemUrl = singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getString(JSONUtils.U_KEY);
                         } else {
                             JSONObject sourceObject = singleGalleryObject.getJSONObject(JSONUtils.S_KEY);
-                            if (mimeType.contains("gif")) {
+                            if (mimeType.equals("image/gif")) {
                                 galleryItemUrl = sourceObject.getString(JSONUtils.GIF_KEY);
                             } else {
                                 galleryItemUrl = sourceObject.getString(JSONUtils.MP4_KEY);
@@ -786,16 +790,20 @@ public class ParsePost {
                             galleryItemCaptionUrl = galleryItem.getString(JSONUtils.CAPTION_URL_KEY).trim();
                         }
 
-                        if (previews.isEmpty() && (mimeType.contains("jpg") || mimeType.contains("png"))) {
+                        if (previews.isEmpty() && MimeTypes.isImage(mimeType) && !mimeType.equals("image/gif")) {
                             previews.add(new Post.Preview(galleryItemUrl, singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.X_KEY),
                                     singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.Y_KEY), galleryItemCaption, galleryItemCaptionUrl));
                         }
 
-                        Post.Gallery postGalleryItem = new Post.Gallery(mimeType, galleryItemUrl, "", subredditName + "-" + galleryId + "." + mimeType.substring(mimeType.lastIndexOf("/") + 1), galleryItemCaption, galleryItemCaptionUrl);
+                        Post.Gallery postGalleryItem = new Post.Gallery(
+                                mimeType, galleryItemUrl, "",
+                                subredditName + "-" + galleryId + "." + mimeType.substring(mimeType.lastIndexOf("/") + 1),
+                                galleryItemCaption, galleryItemCaptionUrl
+                        );
 
                         // For issue #558
                         // Construct a fallback image url
-                        if (!TextUtils.isEmpty(galleryItemUrl) && !TextUtils.isEmpty(mimeType) && (mimeType.contains("jpg") || mimeType.contains("png"))) {
+                        if (!TextUtils.isEmpty(galleryItemUrl) && !TextUtils.isEmpty(mimeType) && MimeTypes.isImage(mimeType) && !mimeType.equals("image/gif")) {
                             postGalleryItem.setFallbackUrl("https://i.redd.it/" + galleryId + "." +  mimeType.substring(mimeType.lastIndexOf("/") + 1));
                             postGalleryItem.setHasFallback(true);
                         }
