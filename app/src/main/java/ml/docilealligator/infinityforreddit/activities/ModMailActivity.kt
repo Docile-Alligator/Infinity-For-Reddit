@@ -79,6 +79,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.UserText
 import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
 import ml.docilealligator.infinityforreddit.viewmodels.ModMailConversationViewModel
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModMessage
+import ml.docilealligator.infinityforreddit.repositories.ModMailConversationRepository
 import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Named
@@ -258,31 +259,25 @@ class ModMailActivity : BaseActivity() {
         refreshState.value = false
     }
 
+    fun getRepository(page: Int): ModMailConversationRepository {
+        return when(page) {
+            0 -> conversationViewModel.unreadModMailConversationRepository
+            1 -> conversationViewModel.recentModMailConversationRepository
+            2 -> conversationViewModel.modModMailConversationRepository
+            3 -> conversationViewModel.userModMailConversationRepository
+            else -> conversationViewModel.recentModMailConversationRepository
+        }
+    }
+
     @Composable
     fun ConversationListDetailPaneView(page: Int) {
         val listState: LazyListState = rememberLazyListState()
         val navigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
-        val conversations = when(page) {
-            0 -> conversationViewModel.unreadModMailConversationRepository.conversations.collectAsStateWithLifecycle()
-            1 -> conversationViewModel.recentModMailConversationRepository.conversations.collectAsStateWithLifecycle()
-            2 -> conversationViewModel.modModMailConversationRepository.conversations.collectAsStateWithLifecycle()
-            3 -> conversationViewModel.userModMailConversationRepository.conversations.collectAsStateWithLifecycle()
-            else -> conversationViewModel.recentModMailConversationRepository.conversations.collectAsStateWithLifecycle()
-        }
-        val loadState by when(page) {
-            0 -> conversationViewModel.unreadModMailConversationRepository.loadState.collectAsStateWithLifecycle()
-            1 -> conversationViewModel.recentModMailConversationRepository.loadState.collectAsStateWithLifecycle()
-            2 -> conversationViewModel.modModMailConversationRepository.loadState.collectAsStateWithLifecycle()
-            3 -> conversationViewModel.userModMailConversationRepository.loadState.collectAsStateWithLifecycle()
-            else -> conversationViewModel.recentModMailConversationRepository.loadState.collectAsStateWithLifecycle()
-        }
-        val isRefreshing by when(page) {
-            0 -> conversationViewModel.unreadModMailConversationRepository.isRefreshing.collectAsStateWithLifecycle()
-            1 -> conversationViewModel.recentModMailConversationRepository.isRefreshing.collectAsStateWithLifecycle()
-            2 -> conversationViewModel.modModMailConversationRepository.isRefreshing.collectAsStateWithLifecycle()
-            3 -> conversationViewModel.userModMailConversationRepository.isRefreshing.collectAsStateWithLifecycle()
-            else -> conversationViewModel.recentModMailConversationRepository.isRefreshing.collectAsStateWithLifecycle()
-        }
+
+        val conversations by getRepository(page).conversations.collectAsStateWithLifecycle()
+        val loadState by getRepository(page).loadState.collectAsStateWithLifecycle()
+        val isManualRefreshing by getRepository(page).isRefreshing.collectAsStateWithLifecycle()
+
         val scope = rememberCoroutineScope()
 
         val updateConversation: (Conversation, Conversation) -> Unit = { conversation, updatedConversation ->
@@ -322,7 +317,7 @@ class ModMailActivity : BaseActivity() {
             value = navigator.scaffoldValue,
             listPane = {
                 AnimatedPane {
-                    ConversationListView(conversations.value, loadState, isRefreshing, navigator, listState) {
+                    ConversationListView(conversations, loadState, isManualRefreshing, navigator, listState) {
                         conversationViewModel.refresh(when(page) {
                             0 -> conversationViewModel.unreadModMailConversationRepository
                             1 -> conversationViewModel.recentModMailConversationRepository
@@ -347,7 +342,7 @@ class ModMailActivity : BaseActivity() {
     fun ConversationListView(
         conversations: List<Conversation>?,
         loadState: DataLoadState<Unit>,
-        isRefreshing: Boolean,
+        isManualRefreshing: Boolean,
         navigator: ThreePaneScaffoldNavigator<Conversation>,
         listState: LazyListState,
         onRefresh: () -> Unit
@@ -356,13 +351,13 @@ class ModMailActivity : BaseActivity() {
         val scope = rememberCoroutineScope()
 
         PullToRefreshBox(
-            isRefreshing = (loadState == DataLoadState.Loading && conversations == null) || isRefreshing,
+            isRefreshing = (loadState == DataLoadState.Loading && conversations == null) || isManualRefreshing,
             onRefresh = onRefresh,
             state = state,
             indicator = {
                 LoadingIndicator(
                     modifier = Modifier.align(Alignment.TopCenter),
-                    isRefreshing = (loadState == DataLoadState.Loading && conversations == null) || isRefreshing,
+                    isRefreshing = (loadState == DataLoadState.Loading && conversations == null) || isManualRefreshing,
                     state = state,
                     containerColor = Color(mCustomThemeWrapper.circularProgressBarBackground),
                     color = Color(mCustomThemeWrapper.colorAccent)

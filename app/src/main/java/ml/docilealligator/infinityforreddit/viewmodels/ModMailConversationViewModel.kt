@@ -4,25 +4,9 @@ import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.cachedIn
-import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
-import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
 import ml.docilealligator.infinityforreddit.repositories.ModMailConversationRepository
-import ml.docilealligator.infinityforreddit.utils.APIUtils
-import ml.docilealligator.infinityforreddit.utils.JSONUtils
-import org.json.JSONObject
 import retrofit2.Retrofit
-import java.io.IOException
 
 class ModMailConversationViewModel(
     private val oauthRetrofit: Retrofit,
