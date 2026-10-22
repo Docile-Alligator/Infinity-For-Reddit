@@ -1528,8 +1528,8 @@
 
     <string name="i_understand">I understand</string>
     <string name="whats_new_in">What’s New in %1$s?</string>
-    <string name="whats_new_changelogs">Long press the reminder in the reminders page to edit or delete it.
-        \nFixed the incorrect filename when downloading the gif as a video.
+    <string name="whats_new_changelogs">Fixed gallery posts not displaying properly.
+        \nFixed an issue where the Main Page Back Button Action stopped working after the first use.
         \nMinor bugs fixed.
     </string>
     <string name="important_info_post_comments_rework_join_subreddit">Click here to join r/Infinity_For_Reddit</string>
