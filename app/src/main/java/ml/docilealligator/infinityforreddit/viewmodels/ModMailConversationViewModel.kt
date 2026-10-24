@@ -35,6 +35,12 @@ class ModMailConversationViewModel(
         }
     }
 
+    fun loadNextPage(repository: ModMailConversationRepository) {
+        viewModelScope.launch {
+            repository.loadNextPage()
+        }
+    }
+
     fun refresh(repository: ModMailConversationRepository) {
         viewModelScope.launch {
             repository.refresh()

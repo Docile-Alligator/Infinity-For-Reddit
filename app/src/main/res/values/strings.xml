@@ -1730,4 +1730,5 @@
     <string name="mod_mail_mod">Mod</string>
     <string name="mod_mail_user">User</string>
     <string name="refresh_conversation_failed">Cannot refresh the conversation</string>
+    <string name="could_not_load_mod_mail_with_reason">Couldn\'t load mod mail. Reason: %1$s.</string>
 </resources>

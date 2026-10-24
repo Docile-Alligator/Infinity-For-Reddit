@@ -3,29 +3,37 @@ package ml.docilealligator.infinityforreddit.activities
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
@@ -56,7 +64,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -64,6 +76,9 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.window.core.layout.WindowHeightSizeClass
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.state.DataLoadState
@@ -71,8 +86,11 @@ import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButton
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingIndicator
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
+import ml.docilealligator.infinityforreddit.customviews.compose.SecondaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SubredditText
 import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
 import ml.docilealligator.infinityforreddit.customviews.compose.UserText
@@ -85,7 +103,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class,
-    ExperimentalMaterial3ExpressiveApi::class
+    ExperimentalMaterial3ExpressiveApi::class, ExperimentalGlideComposeApi::class
 )
 class ModMailActivity : BaseActivity() {
     @Inject
@@ -278,7 +296,21 @@ class ModMailActivity : BaseActivity() {
         val loadState by getRepository(page).loadState.collectAsStateWithLifecycle()
         val isManualRefreshing by getRepository(page).isRefreshing.collectAsStateWithLifecycle()
 
+        val needPagination by remember {
+            derivedStateOf {
+                conversations?.let {
+                    (it.isNotEmpty() && listState.firstVisibleItemIndex >= it.size - 5) || !listState.canScrollForward
+                } ?: false
+            }
+        }
+
         val scope = rememberCoroutineScope()
+
+        LaunchedEffect(needPagination) {
+            if (needPagination) {
+                conversationViewModel.loadNextPage(getRepository(page))
+            }
+        }
 
         val updateConversation: (Conversation, Conversation) -> Unit = { conversation, updatedConversation ->
             conversation.apply {
@@ -317,15 +349,27 @@ class ModMailActivity : BaseActivity() {
             value = navigator.scaffoldValue,
             listPane = {
                 AnimatedPane {
-                    ConversationListView(conversations, loadState, isManualRefreshing, navigator, listState) {
-                        conversationViewModel.refresh(when(page) {
-                            0 -> conversationViewModel.unreadModMailConversationRepository
-                            1 -> conversationViewModel.recentModMailConversationRepository
-                            2 -> conversationViewModel.modModMailConversationRepository
-                            3 -> conversationViewModel.userModMailConversationRepository
-                            else -> conversationViewModel.recentModMailConversationRepository
-                        })
-                    }
+                    ConversationListView(
+                        conversations,
+                        loadState,
+                        isManualRefreshing,
+                        navigator,
+                        listState,
+                        onRefresh = {
+                            conversationViewModel.refresh(
+                                when (page) {
+                                    0 -> conversationViewModel.unreadModMailConversationRepository
+                                    1 -> conversationViewModel.recentModMailConversationRepository
+                                    2 -> conversationViewModel.modModMailConversationRepository
+                                    3 -> conversationViewModel.userModMailConversationRepository
+                                    else -> conversationViewModel.recentModMailConversationRepository
+                                }
+                            )
+                        },
+                        onRetryPagination = {
+                            conversationViewModel.loadNextPage(getRepository(page))
+                        }
+                    )
                 }
             },
             detailPane = {
@@ -345,7 +389,8 @@ class ModMailActivity : BaseActivity() {
         isManualRefreshing: Boolean,
         navigator: ThreePaneScaffoldNavigator<Conversation>,
         listState: LazyListState,
-        onRefresh: () -> Unit
+        onRefresh: () -> Unit,
+        onRetryPagination: () -> Unit
     ) {
         val state: PullToRefreshState = rememberPullToRefreshState()
         val scope = rememberCoroutineScope()
@@ -382,6 +427,73 @@ class ModMailActivity : BaseActivity() {
                                 }
                             }
                         }
+
+                        if (loadState is DataLoadState.Loading) {
+                            item {
+                                Box(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CustomLoadingIndicator(
+                                        modifier = Modifier.padding(16.dp)
+                                    )
+                                }
+                            }
+                        } else if (loadState is DataLoadState.Error) {
+                            item {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    SecondaryText(
+                                        stringResource(R.string.could_not_load_mod_mail_with_reason, loadState.message),
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .padding(16.dp)
+                                    )
+
+                                    CustomFilledButton(
+                                        modifier = Modifier.padding(16.dp),
+                                        stringResId = R.string.retry
+                                    ) {
+                                        onRetryPagination()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } ?: run {
+                if (loadState is DataLoadState.Error) {
+                    Column(
+                        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Spacer(
+                            modifier = Modifier.weight(1f)
+                        )
+
+                        GlideImage(
+                            model = R.drawable.error_image,
+                            contentDescription = null
+                        )
+
+                        SecondaryText(
+                            stringResource(R.string.could_not_load_mod_mail_with_reason, loadState.message),
+                            modifier = Modifier
+                                .padding(16.dp)
+                        )
+
+                        CustomFilledButton(
+                            modifier = Modifier.padding(16.dp),
+                            stringResId = R.string.retry
+                        ) {
+                            onRefresh()
+                        }
+
+                        Spacer(
+                            modifier = Modifier.weight(1f)
+                        )
                     }
                 }
             }

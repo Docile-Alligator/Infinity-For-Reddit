@@ -20,7 +20,7 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
     private final AccountSectionRecyclerViewAdapter accountSectionRecyclerViewAdapter;
     private final RedditSectionRecyclerViewAdapter redditSectionRecyclerViewAdapter;
     private final PostSectionRecyclerViewAdapter postSectionRecyclerViewAdapter;
-    //private final ModerationSectionRecyclerViewAdapter moderationSectionRecyclerViewAdapter;
+    private final ModerationSectionRecyclerViewAdapter moderationSectionRecyclerViewAdapter;
     private final PreferenceSectionRecyclerViewAdapter preferenceSectionRecyclerViewAdapter;
     private final FavoriteSubscribedSubredditsSectionRecyclerViewAdapter favoriteSubscribedSubredditsSectionRecyclerViewAdapter;
     private final SubscribedSubredditsRecyclerViewAdapter subscribedSubredditsRecyclerViewAdapter;
@@ -55,8 +55,8 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
                 navigationDrawerSharedPreferences, itemClickListener);
         postSectionRecyclerViewAdapter = new PostSectionRecyclerViewAdapter(baseActivity, customThemeWrapper,
                 navigationDrawerSharedPreferences, itemClickListener);
-        /*moderationSectionRecyclerViewAdapter = new ModerationSectionRecyclerViewAdapter(baseActivity, customThemeWrapper,
-                navigationDrawerSharedPreferences, itemClickListener);*/
+        moderationSectionRecyclerViewAdapter = new ModerationSectionRecyclerViewAdapter(baseActivity, customThemeWrapper,
+                navigationDrawerSharedPreferences, itemClickListener);
         preferenceSectionRecyclerViewAdapter = new PreferenceSectionRecyclerViewAdapter(baseActivity, customThemeWrapper,
                 navigationDrawerSharedPreferences, itemClickListener);
         favoriteSubscribedSubredditsSectionRecyclerViewAdapter = new FavoriteSubscribedSubredditsSectionRecyclerViewAdapter(
@@ -71,7 +71,7 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
                 accountSectionRecyclerViewAdapter,
                 redditSectionRecyclerViewAdapter,
                 postSectionRecyclerViewAdapter,
-                //moderationSectionRecyclerViewAdapter,
+                moderationSectionRecyclerViewAdapter,
                 preferenceSectionRecyclerViewAdapter,
                 favoriteSubscribedSubredditsSectionRecyclerViewAdapter,
                 subscribedSubredditsRecyclerViewAdapter);
@@ -85,7 +85,7 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
         mainPageConcatAdapter.removeAdapter(accountSectionRecyclerViewAdapter);
         mainPageConcatAdapter.removeAdapter(redditSectionRecyclerViewAdapter);
         mainPageConcatAdapter.removeAdapter(postSectionRecyclerViewAdapter);
-        //mainPageConcatAdapter.removeAdapter(moderationSectionRecyclerViewAdapter);
+        mainPageConcatAdapter.removeAdapter(moderationSectionRecyclerViewAdapter);
         mainPageConcatAdapter.removeAdapter(preferenceSectionRecyclerViewAdapter);
         mainPageConcatAdapter.removeAdapter(favoriteSubscribedSubredditsSectionRecyclerViewAdapter);
         mainPageConcatAdapter.removeAdapter(subscribedSubredditsRecyclerViewAdapter);
