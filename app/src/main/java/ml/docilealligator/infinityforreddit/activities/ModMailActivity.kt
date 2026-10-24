@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
@@ -70,6 +71,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -90,6 +92,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingIndicator
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
+import ml.docilealligator.infinityforreddit.customviews.compose.LocalTypography
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SecondaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SubredditText
@@ -507,7 +510,7 @@ class ModMailActivity : BaseActivity() {
     @Composable
     fun ConversationView(conversation: Conversation, onItemClick: (Conversation) -> Unit) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            //verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onItemClick(conversation) }
@@ -516,7 +519,9 @@ class ModMailActivity : BaseActivity() {
             conversation.owner?.displayName?.let {
                 SubredditText(
                     it,
-                    modifier = Modifier.padding(horizontal = 16.dp)
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        //.padding(bottom = 4.dp)
                 )
             }
             FlowRow(
@@ -530,15 +535,21 @@ class ModMailActivity : BaseActivity() {
                     }
                 }
             }
+
+            Spacer(
+                modifier = Modifier.height(12.dp)
+            )
+
             conversation.subject?.let {
                 PrimaryText(
                     it,
-                    modifier = Modifier.padding(horizontal = 16.dp)
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    fontSize = LocalTypography.current.fontSize.size16
                 )
             }
 
             HorizontalDivider(
-                modifier = Modifier.padding(top = 4.dp),
+                modifier = Modifier.padding(top = 12.dp),
                 color = Color(LocalAppTheme.current.dividerColor)
             )
         }
