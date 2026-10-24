@@ -14,6 +14,7 @@ import ml.docilealligator.infinityforreddit.utils.JSONUtils
 import org.json.JSONObject
 import retrofit2.Retrofit
 import java.io.IOException
+import kotlin.coroutines.cancellation.CancellationException
 
 class ModMailConversationRepository(
     private val oauthRetrofit: Retrofit,
@@ -86,9 +87,15 @@ class ModMailConversationRepository(
             } else {
                 _loadState.value = DataLoadState.Error(response.errorBody()?.string() ?: "Error loading conversations")
             }
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             e.printStackTrace()
-            _loadState.value = DataLoadState.Error(e.message ?: "Error loading conversations")
+
+            if (e is CancellationException) {
+                _loadState.value = DataLoadState.Error("Error loading conversations")
+                throw e
+            } else {
+                _loadState.value = DataLoadState.Error(e.message ?: "Error loading conversations")
+            }
         }
     }
 

@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -98,6 +99,7 @@ import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
 import ml.docilealligator.infinityforreddit.viewmodels.ModMailConversationViewModel
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModMessage
 import ml.docilealligator.infinityforreddit.repositories.ModMailConversationRepository
+import ml.docilealligator.infinityforreddit.utils.deriveContrastingColor
 import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Named
@@ -150,13 +152,7 @@ class ModMailActivity : BaseActivity() {
                 val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
 
                 LaunchedEffect(pagerState.currentPage) {
-                    conversationViewModel.initialLoad(when(pagerState.currentPage) {
-                        0 -> conversationViewModel.unreadModMailConversationRepository
-                        1 -> conversationViewModel.recentModMailConversationRepository
-                        2 -> conversationViewModel.modModMailConversationRepository
-                        3 -> conversationViewModel.userModMailConversationRepository
-                        else -> conversationViewModel.recentModMailConversationRepository
-                    })
+                    conversationViewModel.initialLoad(getRepository(pagerState.currentPage))
                 }
 
                 Scaffold(
@@ -404,8 +400,9 @@ class ModMailActivity : BaseActivity() {
                     modifier = Modifier.align(Alignment.TopCenter),
                     isRefreshing = (loadState == DataLoadState.Loading && conversations == null) || isManualRefreshing,
                     state = state,
-                    containerColor = Color(mCustomThemeWrapper.circularProgressBarBackground),
-                    color = Color(mCustomThemeWrapper.colorAccent)
+                    containerColor = Color(LocalAppTheme.current.circularProgressBarBackground),
+                    color = Color(LocalAppTheme.current.colorAccent),
+                    elevation = 4.dp
                 )
             }
         ) {
@@ -470,29 +467,36 @@ class ModMailActivity : BaseActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Spacer(
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier
+                                .weight(1f)
                         )
 
                         GlideImage(
                             model = R.drawable.error_image,
-                            contentDescription = null
+                            contentDescription = null,
+                            modifier = Modifier
+                                .padding(top = 32.dp)
+                                .padding(horizontal = 32.dp)
                         )
 
                         SecondaryText(
                             stringResource(R.string.could_not_load_mod_mail_with_reason, loadState.message),
                             modifier = Modifier
-                                .padding(16.dp)
+                                .padding(vertical = 16.dp, horizontal = 32.dp)
                         )
 
                         CustomFilledButton(
-                            modifier = Modifier.padding(16.dp),
+                            modifier = Modifier
+                                .padding(bottom = 32.dp)
+                                .padding(horizontal = 32.dp),
                             stringResId = R.string.retry
                         ) {
                             onRefresh()
                         }
 
                         Spacer(
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier
+                                .weight(1f)
                         )
                     }
                 }
@@ -564,8 +568,9 @@ class ModMailActivity : BaseActivity() {
                     modifier = Modifier.align(Alignment.TopCenter),
                     isRefreshing = refreshState.value,
                     state = pullToRefreshState,
-                    containerColor = Color(mCustomThemeWrapper.circularProgressBarBackground),
-                    color = Color(mCustomThemeWrapper.colorAccent)
+                    containerColor = Color(LocalAppTheme.current.circularProgressBarBackground),
+                    color = Color(LocalAppTheme.current.colorAccent),
+                    elevation = 4.dp
                 )
             }
         ) {
