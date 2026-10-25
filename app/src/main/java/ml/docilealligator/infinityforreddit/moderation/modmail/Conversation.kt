@@ -5,6 +5,7 @@ import androidx.room.Ignore
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.CancellationException
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
 import ml.docilealligator.infinityforreddit.utils.APIUtils
@@ -13,6 +14,8 @@ import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.Retrofit
 import java.io.IOException
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.jvm.java
 
 @Parcelize
@@ -42,6 +45,22 @@ data class Conversation(
         get() = _messages ?: mutableListOf<ModMessage>().also { _messages = it }
         set(newMessages) {
             _messages = newMessages
+        }
+
+    @IgnoredOnParcel
+    @Transient
+    private var _lastUpdatedUTC: Long? = null
+
+    val lastUpdatedUTC: Long
+        get() {
+            if (_lastUpdatedUTC == null) {
+                _lastUpdatedUTC = lastUpdated?.let {
+                    val formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSxx")
+                    OffsetDateTime.parse(it, formatter1).toInstant().toEpochMilli()
+                } ?: 0
+            }
+
+            return _lastUpdatedUTC!!
         }
 
     override fun equals(other: Any?): Boolean {

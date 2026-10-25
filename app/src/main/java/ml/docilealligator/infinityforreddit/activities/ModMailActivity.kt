@@ -3,14 +3,12 @@ package ml.docilealligator.infinityforreddit.activities
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,15 +18,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -66,12 +61,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -79,7 +71,6 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.window.core.layout.WindowHeightSizeClass
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.google.gson.Gson
@@ -102,7 +93,7 @@ import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
 import ml.docilealligator.infinityforreddit.viewmodels.ModMailConversationViewModel
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModMessage
 import ml.docilealligator.infinityforreddit.repositories.ModMailConversationRepository
-import ml.docilealligator.infinityforreddit.utils.deriveContrastingColor
+import ml.docilealligator.infinityforreddit.utils.Utils
 import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Named
@@ -515,13 +506,31 @@ class ModMailActivity : BaseActivity() {
                 .clickable { onItemClick(conversation) }
                 .padding(top = 12.dp)
         ) {
-            conversation.owner?.displayName?.let {
-                SubredditText(
-                    it,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                )
+            Row(modifier = Modifier.fillMaxWidth()) {
+                conversation.owner?.displayName?.let {
+                    SubredditText(
+                        it,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 16.dp)
+                    )
+                } ?: run {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+
+                if (conversation.lastUpdatedUTC > 0) {
+                    SecondaryText(
+                        Utils.getElapsedTime(this@ModMailActivity, conversation.lastUpdatedUTC),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 16.dp),
+                        textAlign = TextAlign.End
+                    )
+                } else {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
             }
+
             FlowRow(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
