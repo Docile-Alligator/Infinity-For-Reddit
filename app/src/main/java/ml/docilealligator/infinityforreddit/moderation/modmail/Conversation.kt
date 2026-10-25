@@ -31,6 +31,11 @@ data class Conversation(
     @SerializedName("authors") var authors: ArrayList<Author> = arrayListOf(),
     @SerializedName("lastUpdated") var lastUpdated: String? = null,
     @SerializedName("legacyFirstMessageId") var legacyFirstMessageId: String? = null,
+    /*
+        0:  new
+        1:  in progress
+        2:  archived
+    */
     @SerializedName("state") var state: Int? = null,
     @SerializedName("conversationType") var conversationType: String? = null,
     @SerializedName("lastUnread") var lastUnread: String? = null,

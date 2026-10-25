@@ -802,7 +802,7 @@ class ModMailActivity : BaseActivity() {
                 AndroidView(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 10.dp),
+                        .padding(horizontal = 8.dp),
                     factory = { context ->
                         markwonAdapter.setMarkdown(markwon, it)
                         // Creates view
