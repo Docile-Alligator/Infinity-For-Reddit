@@ -1,8 +1,14 @@
 package ml.docilealligator.infinityforreddit.activities
 
+import android.R.attr.fragment
+import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.Spanned
+import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -67,18 +73,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.google.gson.Gson
+import io.noties.markwon.AbstractMarkwonPlugin
+import io.noties.markwon.LinkResolver
+import io.noties.markwon.Markwon
+import io.noties.markwon.MarkwonConfiguration
+import io.noties.markwon.MarkwonPlugin
+import io.noties.markwon.core.MarkwonTheme
 import kotlinx.coroutines.launch
-import ml.docilealligator.infinityforreddit.state.DataLoadState
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed
 import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingIndicator
@@ -89,11 +104,13 @@ import ml.docilealligator.infinityforreddit.customviews.compose.SecondaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SubredditText
 import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
 import ml.docilealligator.infinityforreddit.customviews.compose.UserText
+import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils
 import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
-import ml.docilealligator.infinityforreddit.viewmodels.ModMailConversationViewModel
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModMessage
 import ml.docilealligator.infinityforreddit.repositories.ModMailConversationRepository
+import ml.docilealligator.infinityforreddit.state.DataLoadState
 import ml.docilealligator.infinityforreddit.utils.Utils
+import ml.docilealligator.infinityforreddit.viewmodels.ModMailConversationViewModel
 import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Named
@@ -232,22 +249,6 @@ class ModMailActivity : BaseActivity() {
                 }
             }
         }
-    }
-
-    override fun getDefaultSharedPreferences(): SharedPreferences {
-        return mSharedPreferences
-    }
-
-    override fun getCurrentAccountSharedPreferences(): SharedPreferences {
-        return mCurrentAccountSharedPreferences
-    }
-
-    override fun getCustomThemeWrapper(): CustomThemeWrapper {
-        return mCustomThemeWrapper
-    }
-
-    override fun applyCustomTheme() {
-
     }
 
     private suspend fun refreshConversation(conversation: Conversation, refreshState: MutableState<Boolean>,
@@ -457,7 +458,9 @@ class ModMailActivity : BaseActivity() {
             } ?: run {
                 if (loadState is DataLoadState.Error) {
                     Column(
-                        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState()),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Spacer(
@@ -566,6 +569,45 @@ class ModMailActivity : BaseActivity() {
     fun ConversationDetailsView(conversation: Conversation, updateConversation: (Conversation, Conversation) -> Unit) {
         val pullToRefreshState: PullToRefreshState = rememberPullToRefreshState()
         val refreshState = remember { mutableStateOf(false) }
+        val markwon = remember {
+            val miscPlugin: MarkwonPlugin = object : AbstractMarkwonPlugin() {
+                override fun beforeSetText(textView: TextView, markdown: Spanned) {
+                    if (this@ModMailActivity.contentTypeface != null) {
+                        textView.setTypeface(this@ModMailActivity.contentTypeface)
+                    }
+                    textView.setTextColor(mCustomThemeWrapper.primaryTextColor)
+                    textView.highlightColor = android.graphics.Color.TRANSPARENT
+                }
+
+                override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
+                    builder.linkResolver(LinkResolver { view: View?, link: String? ->
+                        val intent = Intent(this@ModMailActivity, LinkResolverActivity::class.java)
+                        val uri = Uri.parse(link)
+                        intent.setData(uri)
+                        startActivity(intent)
+                    })
+                }
+
+                override fun configureTheme(builder: MarkwonTheme.Builder) {
+                    builder.linkColor(mCustomThemeWrapper.linkColor)
+                }
+            }
+
+            MarkdownUtils.createDescriptionMarkwon(
+                this@ModMailActivity,
+                miscPlugin
+            ) { textView, url ->
+                val urlMenuBottomSheetFragment = UrlMenuBottomSheetFragment()
+                val bundle = Bundle()
+                bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url)
+                urlMenuBottomSheetFragment.setArguments(bundle)
+                urlMenuBottomSheetFragment.show(
+                    supportFragmentManager,
+                    urlMenuBottomSheetFragment.tag
+                )
+                return@createDescriptionMarkwon true
+            }
+        }
 
         if (!conversation.isUpdated) {
             LaunchedEffect(conversation.id) {
@@ -598,14 +640,18 @@ class ModMailActivity : BaseActivity() {
                 modifier = Modifier.clipToBounds()
             ) {
                 items(count = conversation.messages.size, key = { index -> conversation.messages[index].id ?: index }) { index: Int ->
-                    MessageView(conversation.messages[index])
+                    MessageView(conversation.messages[index], markwon)
                 }
             }
         }
     }
 
     @Composable
-    fun MessageView(message: ModMessage) {
+    fun MessageView(message: ModMessage, markwon: Markwon) {
+        val markwonAdapter = remember {
+            MarkdownUtils.createCustomTablesAdapter(this@ModMailActivity)
+        }
+
         Column(
             modifier = Modifier.fillMaxHeight(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -623,8 +669,45 @@ class ModMailActivity : BaseActivity() {
             }
 
             message.bodyMarkdown?.let {
-                Text(text = it)
+                AndroidView(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    factory = { context ->
+                        markwonAdapter.setMarkdown(markwon, it)
+                        // Creates view
+                        RecyclerView(this@ModMailActivity).apply {
+                            isNestedScrollingEnabled = false
+                            layoutManager = LinearLayoutManagerBugFixed(this@ModMailActivity)
+                            adapter = markwonAdapter
+                        }
+                    },
+                    update = { view ->
+                        // View's been inflated or state read in this block has been updated
+                        // Add logic here if necessary
+
+                        // As selectedItem is read here, AndroidView will recompose
+                        // whenever the state changes
+                        // Example of Compose -> View communication
+                    }
+                )
             }
         }
+    }
+
+    override fun getDefaultSharedPreferences(): SharedPreferences {
+        return mSharedPreferences
+    }
+
+    override fun getCurrentAccountSharedPreferences(): SharedPreferences {
+        return mCurrentAccountSharedPreferences
+    }
+
+    override fun getCustomThemeWrapper(): CustomThemeWrapper {
+        return mCustomThemeWrapper
+    }
+
+    override fun applyCustomTheme() {
+
     }
 }
