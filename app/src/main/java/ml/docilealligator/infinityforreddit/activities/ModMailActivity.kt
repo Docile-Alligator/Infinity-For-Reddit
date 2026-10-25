@@ -510,7 +510,6 @@ class ModMailActivity : BaseActivity() {
     @Composable
     fun ConversationView(conversation: Conversation, onItemClick: (Conversation) -> Unit) {
         Column(
-            //verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onItemClick(conversation) }
@@ -521,7 +520,6 @@ class ModMailActivity : BaseActivity() {
                     it,
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
-                        //.padding(bottom = 4.dp)
                 )
             }
             FlowRow(

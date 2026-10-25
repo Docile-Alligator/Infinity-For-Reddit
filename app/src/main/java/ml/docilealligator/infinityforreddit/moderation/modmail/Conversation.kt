@@ -3,8 +3,8 @@ package ml.docilealligator.infinityforreddit.moderation.modmail
 import android.os.Parcelable
 import androidx.room.Ignore
 import com.google.gson.Gson
-import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.CancellationException
 import kotlinx.parcelize.Parcelize
 import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
 import ml.docilealligator.infinityforreddit.utils.APIUtils
@@ -65,7 +65,9 @@ data class Conversation(
                                 try {
                                     messages.add(gson.fromJson(messagesJSONObject.getString(id), ModMessage::class.java))
                                     print(messagesJSONObject)
-                                } catch (ignore: IOException) {
+                                } catch (e: CancellationException) {
+                                    throw e
+                                } catch (ignore: Exception) {
                                     ignore.printStackTrace()
                                 }
                             }

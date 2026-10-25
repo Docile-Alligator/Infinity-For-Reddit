@@ -34,6 +34,8 @@ class ModMailConversationRepository(
 
     private var after: String? = null
 
+    private var conversationIds = mutableSetOf<String>()
+
     suspend fun initialLoad() {
         if (_loadState.value == DataLoadState.Idle) {
             load()
@@ -42,6 +44,7 @@ class ModMailConversationRepository(
 
     suspend fun refresh() {
         _isRefreshing.value = true
+        conversationIds.clear()
         after = null
         load()
         _isRefreshing.value = false
@@ -67,17 +70,22 @@ class ModMailConversationRepository(
                 response.body()?.let { body ->
                     val conversations: MutableList<Conversation>? = parseConversations(body)
                     conversations?.let {
+                        val deduplicatedValue = it.filter { conversation ->
+                            conversation.id?.let { id ->
+                                conversationIds.add(id)
+                            } ?: false
+                        }
                         if (_isRefreshing.value) {
-                            _conversations.value = it
+                            _conversations.value = deduplicatedValue
                         } else {
                             val currentValue = _conversations.value
                             if (currentValue == null) {
-                                _conversations.value = it
+                                _conversations.value = deduplicatedValue
                             } else {
-                                _conversations.value = currentValue + it
+                                _conversations.value = currentValue + deduplicatedValue
                             }
                         }
-                        after = if (it.isEmpty()) null else "ModmailConversation_" + it[it.size - 1].id
+                        after = if (deduplicatedValue.isEmpty()) null else "ModmailConversation_" + deduplicatedValue[deduplicatedValue.size - 1].id
                     } ?: run {
                         after = null
                     }
@@ -114,7 +122,9 @@ class ModMailConversationRepository(
                     val conversationId = conversationIdsArray.getString(i)
                     try {
                         conversations.add(Conversation.parseConversation(gson, json.getJSONObject(JSONUtils.CONVERSATIONS_KEY).getString(conversationId), messagesJSONObject))
-                    } catch (ignore: IOException) {
+                    } catch (e: kotlinx.coroutines.CancellationException) {
+                        throw e
+                    } catch (ignore: Exception) {
                         ignore.printStackTrace()
                     }
                 }
