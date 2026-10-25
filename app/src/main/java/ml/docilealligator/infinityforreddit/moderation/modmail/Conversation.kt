@@ -34,6 +34,7 @@ data class Conversation(
     @SerializedName("state") var state: Int? = null,
     @SerializedName("conversationType") var conversationType: String? = null,
     @SerializedName("lastUnread") var lastUnread: String? = null,
+    // Owner should contain the subreddit name in its displayName field
     @SerializedName("owner") var owner: Owner? = Owner(),
     @SerializedName("subject") var subject: String? = null,
     @SerializedName("id") var id: String? = null,
@@ -140,6 +141,7 @@ data class ObjId(
 
 @Parcelize
 data class Owner(
+    // displayName should be the subreddit name
     @SerializedName("displayName") var displayName: String? = null,
     @SerializedName("type") var type: String? = null,
     @SerializedName("id") var id: String? = null

@@ -12,6 +12,7 @@ data class Author(
     @SerializedName("isOp") var isOp: Boolean? = null,
     @SerializedName("isParticipant") var isParticipant: Boolean? = null,
     @SerializedName("isApproved") var isApproved: Boolean? = null,
+    // isHidden will be true for replying as subreddit
     @SerializedName("isHidden") var isHidden: Boolean? = null,
     @SerializedName("id") var id: String? = null,
     @SerializedName("isDeleted") var isDeleted: Boolean? = null

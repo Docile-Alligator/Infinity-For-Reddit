@@ -523,7 +523,10 @@ class ModMailActivity : BaseActivity() {
                                         this@ModMailActivity,
                                         ViewSubredditDetailActivity::class.java
                                     ).apply {
-                                        putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, it)
+                                        putExtra(
+                                            ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                                            it
+                                        )
                                     }
                                 )
                             }
@@ -664,14 +667,14 @@ class ModMailActivity : BaseActivity() {
                 modifier = Modifier.clipToBounds()
             ) {
                 items(count = conversation.messages.size, key = { index -> conversation.messages[index].id ?: index }) { index: Int ->
-                    MessageView(conversation.messages[index], markwon)
+                    MessageView(conversation, conversation.messages[index], markwon)
                 }
             }
         }
     }
 
     @Composable
-    fun MessageView(message: ModMessage, markwon: Markwon) {
+    fun MessageView(conversation: Conversation, message: ModMessage, markwon: Markwon) {
         val markwonAdapter = remember {
             MarkdownUtils.createCustomTablesAdapter(this@ModMailActivity)
         }
@@ -681,24 +684,53 @@ class ModMailActivity : BaseActivity() {
         ) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 message.author?.name?.let {
-                    UserText(
-                        it,
+                    Column(
                         modifier = Modifier
                             .weight(1f)
-                            .clickable {
-                                if (it != "[deleted") {
-                                    startActivity(
-                                        Intent(
-                                            this@ModMailActivity,
-                                            ViewUserDetailActivity::class.java
-                                        ).apply {
-                                            putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, it)
-                                        }
-                                    )
+                    ) {
+                        UserText(
+                            it,
+                            modifier = Modifier
+                                .clickable {
+                                    if (it != "[deleted]") {
+                                        startActivity(
+                                            Intent(
+                                                this@ModMailActivity,
+                                                ViewUserDetailActivity::class.java
+                                            ).apply {
+                                                putExtra(
+                                                    ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
+                                                    it
+                                                )
+                                            }
+                                        )
+                                    }
                                 }
-                            }
-                            .padding(horizontal = 16.dp)
-                    )
+                                .padding(horizontal = 16.dp)
+                        )
+
+                        if (message.author?.isHidden == true) {
+                            SubredditText(
+                                "As r/${conversation.owner?.displayName}",
+                                modifier = Modifier
+                                    .clickable {
+                                        startActivity(
+                                            Intent(
+                                                this@ModMailActivity,
+                                                ViewSubredditDetailActivity::class.java
+                                            ).apply {
+                                                putExtra(
+                                                    ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                                                    conversation.owner?.displayName
+                                                )
+                                            }
+                                        )
+                                    }
+                                    .padding(horizontal = 16.dp),
+                                fontSize = LocalTypography.current.fontSize.size12
+                            )
+                        }
+                    }
                 } ?: run {
                     Spacer(modifier = Modifier.weight(1f))
                 }
@@ -706,7 +738,9 @@ class ModMailActivity : BaseActivity() {
                 if (message.isInternal == true) {
                     PrimaryText(
                         R.string.mods_only,
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 16.dp),
                         textAlign = TextAlign.Center
                     )
                 }
