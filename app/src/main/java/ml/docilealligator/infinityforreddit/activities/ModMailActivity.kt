@@ -188,7 +188,7 @@ class ModMailActivity : BaseActivity() {
                                 }*/
                             }
                         ) {
-                            finish()
+                            triggerBackPress()
                         }
                     },
                     containerColor = Color(mCustomThemeWrapper.backgroundColor),
@@ -517,6 +517,16 @@ class ModMailActivity : BaseActivity() {
                         it,
                         modifier = Modifier
                             .weight(1f)
+                            .clickable {
+                                startActivity(
+                                    Intent(
+                                        this@ModMailActivity,
+                                        ViewSubredditDetailActivity::class.java
+                                    ).apply {
+                                        putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, it)
+                                    }
+                                )
+                            }
                             .padding(horizontal = 16.dp)
                     )
                 } ?: run {
@@ -543,7 +553,21 @@ class ModMailActivity : BaseActivity() {
             ) {
                 for (author in conversation.authors) {
                     author.name?.let {
-                        UserText(it)
+                        UserText(
+                            it,
+                            modifier = Modifier.clickable {
+                                if (it != "[deleted") {
+                                    startActivity(
+                                        Intent(
+                                            this@ModMailActivity,
+                                            ViewUserDetailActivity::class.java
+                                        ).apply {
+                                            putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, it)
+                                        }
+                                    )
+                                }
+                            }
+                        )
                     }
                 }
             }
@@ -661,10 +685,30 @@ class ModMailActivity : BaseActivity() {
                         it,
                         modifier = Modifier
                             .weight(1f)
+                            .clickable {
+                                if (it != "[deleted") {
+                                    startActivity(
+                                        Intent(
+                                            this@ModMailActivity,
+                                            ViewUserDetailActivity::class.java
+                                        ).apply {
+                                            putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, it)
+                                        }
+                                    )
+                                }
+                            }
                             .padding(horizontal = 16.dp)
                     )
                 } ?: run {
                     Spacer(modifier = Modifier.weight(1f))
+                }
+
+                if (message.isInternal == true) {
+                    PrimaryText(
+                        R.string.mods_only,
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center
+                    )
                 }
 
                 if (message.dateUTC > 0) {
@@ -688,9 +732,9 @@ class ModMailActivity : BaseActivity() {
                     factory = { context ->
                         markwonAdapter.setMarkdown(markwon, it)
                         // Creates view
-                        RecyclerView(this@ModMailActivity).apply {
+                        RecyclerView(context).apply {
                             isNestedScrollingEnabled = false
-                            layoutManager = LinearLayoutManagerBugFixed(this@ModMailActivity)
+                            layoutManager = LinearLayoutManagerBugFixed(context)
                             adapter = markwonAdapter
                         }
                     },

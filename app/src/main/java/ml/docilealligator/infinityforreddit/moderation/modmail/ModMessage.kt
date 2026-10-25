@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter
 data class ModMessage(
     @SerializedName("body") var body: String? = null,
     @SerializedName("author") var author: Author? = Author(),
+    // isInternal will be true for Mods Only message
     @SerializedName("isInternal") var isInternal: Boolean? = null,
     @SerializedName("date") var date: String? = null,
     @SerializedName("bodyMarkdown") var bodyMarkdown: String? = null,

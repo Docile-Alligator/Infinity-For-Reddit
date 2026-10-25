@@ -25,6 +25,7 @@ data class Conversation(
     @SerializedName("objIds") var objIds: ArrayList<ObjId> = arrayListOf(),
     @SerializedName("isRepliable") var isRepliable: Boolean? = null,
     @SerializedName("lastUserUpdate") var lastUserUpdate: String? = null,
+    // isInternal will be true for Mods Only conversation
     @SerializedName("isInternal") var isInternal: Boolean? = null,
     @SerializedName("lastModUpdate") var lastModUpdate: String? = null,
     @SerializedName("authors") var authors: ArrayList<Author> = arrayListOf(),
