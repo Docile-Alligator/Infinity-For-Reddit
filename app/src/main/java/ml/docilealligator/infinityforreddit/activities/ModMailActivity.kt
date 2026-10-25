@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.activities
 
+import android.R.attr.name
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -18,17 +19,24 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContent
+import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -68,10 +76,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsControllerCompat
@@ -81,6 +91,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
 import com.giphy.sdk.ui.themes.GPHCustomTheme.backgroundColor
 import com.google.gson.Gson
 import io.noties.markwon.AbstractMarkwonPlugin
@@ -99,6 +110,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomHorizontalDivider
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingIndicator
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextField
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalTypography
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
@@ -204,6 +216,10 @@ class ModMailActivity : BaseActivity() {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabBackground))
+                                .padding(PaddingValues(
+                                    start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+                                    end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
+                                )),
                         ) {
                             val tabTitles = listOf(getString(R.string.mod_mail_unread), getString(R.string.mod_mail_recent),
                                 getString(R.string.mod_mail_mod), getString(R.string.mod_mail_user))
@@ -243,7 +259,11 @@ class ModMailActivity : BaseActivity() {
                         }
 
                         HorizontalPager(
-                            state = pagerState
+                            state = pagerState,
+                            contentPadding = PaddingValues(
+                                start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+                                end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
+                            )
                         ) { page ->
                             ConversationListDetailPaneView(page)
                         }
@@ -509,7 +529,7 @@ class ModMailActivity : BaseActivity() {
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onItemClick(conversation) }
-                .padding(top = 12.dp)
+                .padding(top = 16.dp)
         ) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 conversation.owner?.displayName?.let {
@@ -588,7 +608,7 @@ class ModMailActivity : BaseActivity() {
             }
 
             CustomHorizontalDivider(
-                modifier = Modifier.padding(top = 12.dp)
+                modifier = Modifier.padding(top = 16.dp)
             )
         }
     }
@@ -597,6 +617,9 @@ class ModMailActivity : BaseActivity() {
     fun ConversationDetailsView(conversation: Conversation, updateConversation: (Conversation, Conversation) -> Unit) {
         val pullToRefreshState: PullToRefreshState = rememberPullToRefreshState()
         val refreshState = remember { mutableStateOf(false) }
+        val newMessage by remember {
+            mutableStateOf("")
+        }
         val markwon = remember {
             val miscPlugin: MarkwonPlugin = object : AbstractMarkwonPlugin() {
                 override fun beforeSetText(textView: TextView, markdown: Spanned) {
@@ -608,12 +631,12 @@ class ModMailActivity : BaseActivity() {
                 }
 
                 override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
-                    builder.linkResolver(LinkResolver { view: View?, link: String? ->
+                    builder.linkResolver { view: View?, link: String? ->
                         val intent = Intent(this@ModMailActivity, LinkResolverActivity::class.java)
                         val uri = Uri.parse(link)
                         intent.setData(uri)
                         startActivity(intent)
-                    })
+                    }
                 }
 
                 override fun configureTheme(builder: MarkwonTheme.Builder) {
@@ -643,32 +666,47 @@ class ModMailActivity : BaseActivity() {
             }
         }
 
-        PullToRefreshBox(
-            isRefreshing = refreshState.value,
-            onRefresh = {
-                lifecycleScope.launch {
-                    refreshConversation(conversation, refreshState, updateConversation)
-                }
-            },
-            state = pullToRefreshState,
-            indicator = {
-                LoadingIndicator(
-                    modifier = Modifier.align(Alignment.TopCenter),
-                    isRefreshing = refreshState.value,
-                    state = pullToRefreshState,
-                    containerColor = Color(LocalAppTheme.current.circularProgressBarBackground),
-                    color = Color(LocalAppTheme.current.colorAccent),
-                    elevation = 4.dp
-                )
-            }
+        Column(
+            modifier = Modifier.fillMaxSize()
         ) {
-            LazyColumn(
-                contentPadding = WindowInsets(top = 16.dp).add(WindowInsets.navigationBars).asPaddingValues(),
-                modifier = Modifier.clipToBounds()
-            ) {
-                items(count = conversation.messages.size, key = { index -> conversation.messages[index].id ?: index }) { index: Int ->
-                    MessageView(conversation, conversation.messages[index], markwon)
+            PullToRefreshBox(
+                modifier = Modifier.weight(1f),
+                isRefreshing = refreshState.value,
+                onRefresh = {
+                    lifecycleScope.launch {
+                        refreshConversation(conversation, refreshState, updateConversation)
+                    }
+                },
+                state = pullToRefreshState,
+                indicator = {
+                    LoadingIndicator(
+                        modifier = Modifier.align(Alignment.TopCenter),
+                        isRefreshing = refreshState.value,
+                        state = pullToRefreshState,
+                        containerColor = Color(LocalAppTheme.current.circularProgressBarBackground),
+                        color = Color(LocalAppTheme.current.colorAccent),
+                        elevation = 4.dp
+                    )
                 }
+            ) {
+                LazyColumn(
+                    modifier = Modifier.clipToBounds()
+                ) {
+                    items(count = conversation.messages.size, key = { index -> conversation.messages[index].id ?: index }) { index: Int ->
+                        MessageView(conversation, conversation.messages[index], markwon)
+                    }
+                }
+            }
+
+            CustomTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(WindowInsets.navigationBars.asPaddingValues())
+                    .padding(16.dp),
+                value = newMessage,
+                placeholder = stringResource(R.string.new_mod_mail_message_hint)
+            ) {
+
             }
         }
     }
@@ -680,7 +718,9 @@ class ModMailActivity : BaseActivity() {
         }
 
         Column(
-            modifier = Modifier.fillMaxHeight()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
         ) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 message.author?.name?.let {
@@ -783,7 +823,7 @@ class ModMailActivity : BaseActivity() {
                 )
             }
 
-            CustomHorizontalDivider(modifier = Modifier.padding(top = 12.dp, bottom = 16.dp))
+            CustomHorizontalDivider(modifier = Modifier.padding(top = 12.dp))
         }
     }
 

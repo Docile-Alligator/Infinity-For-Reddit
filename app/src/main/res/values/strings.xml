@@ -1732,4 +1732,5 @@
     <string name="refresh_conversation_failed">Cannot refresh the conversation</string>
     <string name="could_not_load_mod_mail_with_reason">Couldn\'t load mod mail. Reason: %1$s.</string>
     <string name="mods_only">Mods Only</string>
+    <string name="new_mod_mail_message_hint">Message</string>
 </resources>
