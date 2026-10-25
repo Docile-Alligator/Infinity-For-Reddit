@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.activities
 
-import android.R.attr.fragment
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -36,6 +35,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
@@ -81,6 +81,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.giphy.sdk.ui.themes.GPHCustomTheme.backgroundColor
 import com.google.gson.Gson
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.LinkResolver
@@ -96,6 +97,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed
 import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButton
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomHorizontalDivider
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingIndicator
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalTypography
@@ -558,9 +560,8 @@ class ModMailActivity : BaseActivity() {
                 )
             }
 
-            HorizontalDivider(
-                modifier = Modifier.padding(top = 12.dp),
-                color = Color(LocalAppTheme.current.dividerColor)
+            CustomHorizontalDivider(
+                modifier = Modifier.padding(top = 12.dp)
             )
         }
     }
@@ -635,7 +636,6 @@ class ModMailActivity : BaseActivity() {
             }
         ) {
             LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(16.dp),
                 contentPadding = WindowInsets(top = 16.dp).add(WindowInsets.navigationBars).asPaddingValues(),
                 modifier = Modifier.clipToBounds()
             ) {
@@ -653,18 +653,30 @@ class ModMailActivity : BaseActivity() {
         }
 
         Column(
-            modifier = Modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier.fillMaxHeight()
         ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
+            Row(modifier = Modifier.fillMaxWidth()) {
                 message.author?.name?.let {
-                    Text(text = it)
+                    UserText(
+                        it,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 16.dp)
+                    )
+                } ?: run {
+                    Spacer(modifier = Modifier.weight(1f))
                 }
-                message.date?.let {
-                    Text(text = it)
+
+                if (message.dateUTC > 0) {
+                    SecondaryText(
+                        Utils.getElapsedTime(this@ModMailActivity, message.dateUTC),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 16.dp),
+                        textAlign = TextAlign.End
+                    )
+                } else {
+                    Spacer(modifier = Modifier.weight(1f))
                 }
             }
 
@@ -672,7 +684,7 @@ class ModMailActivity : BaseActivity() {
                 AndroidView(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(horizontal = 10.dp),
                     factory = { context ->
                         markwonAdapter.setMarkdown(markwon, it)
                         // Creates view
@@ -692,6 +704,8 @@ class ModMailActivity : BaseActivity() {
                     }
                 )
             }
+
+            CustomHorizontalDivider(modifier = Modifier.padding(top = 12.dp, bottom = 16.dp))
         }
     }
 
