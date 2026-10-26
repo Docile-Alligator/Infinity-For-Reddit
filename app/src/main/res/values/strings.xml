@@ -1733,4 +1733,6 @@
     <string name="could_not_load_mod_mail_with_reason">Couldn\'t load mod mail. Reason: %1$s.</string>
     <string name="mods_only">Mods Only</string>
     <string name="new_mod_mail_message_hint">Message</string>
+    <string name="mod_mail_reply_as_subreddit">Reply as subreddit</string>
+    <string name="mod_mail_reply_as">Reply as %1$s</string>
 </resources>

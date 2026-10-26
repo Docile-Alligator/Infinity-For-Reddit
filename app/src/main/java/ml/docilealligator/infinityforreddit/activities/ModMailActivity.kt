@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.activities
 
+import android.R.attr.checked
 import android.R.attr.name
 import android.content.Intent
 import android.content.SharedPreferences
@@ -36,6 +37,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -45,9 +47,14 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -72,6 +79,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -110,9 +118,11 @@ import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomHorizontalDivider
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingIndicator
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomPositiveTextButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextField
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalTypography
+import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryIcon
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SecondaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SubredditText
@@ -216,10 +226,14 @@ class ModMailActivity : BaseActivity() {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabBackground))
-                                .padding(PaddingValues(
-                                    start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
-                                    end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
-                                )),
+                                .padding(
+                                    PaddingValues(
+                                        start = innerPadding.calculateStartPadding(
+                                            LocalLayoutDirection.current
+                                        ),
+                                        end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
+                                    )
+                                ),
                         ) {
                             val tabTitles = listOf(getString(R.string.mod_mail_unread), getString(R.string.mod_mail_recent),
                                 getString(R.string.mod_mail_mod), getString(R.string.mod_mail_user))
@@ -617,9 +631,14 @@ class ModMailActivity : BaseActivity() {
     fun ConversationDetailsView(conversation: Conversation, updateConversation: (Conversation, Conversation) -> Unit) {
         val pullToRefreshState: PullToRefreshState = rememberPullToRefreshState()
         val refreshState = remember { mutableStateOf(false) }
-        val newMessage by remember {
+        var newMessage by remember {
             mutableStateOf("")
         }
+        var roleMenuExpanded by remember { mutableStateOf(false) }
+        // Reply as subreddit if true
+        var isAuthorHidden by remember { mutableStateOf(true) }
+        // Reply as mods only if true
+        var isInternal by remember { mutableStateOf(false) }
         val markwon = remember {
             val miscPlugin: MarkwonPlugin = object : AbstractMarkwonPlugin() {
                 override fun beforeSetText(textView: TextView, markdown: Spanned) {
@@ -698,15 +717,86 @@ class ModMailActivity : BaseActivity() {
                 }
             }
 
+            Box(
+                modifier = Modifier.padding(horizontal = 16.dp)
+            ) {
+                CustomPositiveTextButton(
+                    text = if (isInternal) {
+                        stringResource(R.string.mods_only)
+                    } else if (isAuthorHidden) {
+                        conversation.owner?.displayName?.let {
+                            stringResource(R.string.mod_mail_reply_as, "r/$it")
+                        } ?: stringResource(R.string.mod_mail_reply_as_subreddit)
+                    } else {
+                        stringResource(
+                            R.string.mod_mail_reply_as,
+                            "u/$accountName"
+                        )
+                    }
+                ) {
+                    roleMenuExpanded = true
+                }
+
+                DropdownMenu(
+                    expanded = roleMenuExpanded,
+                    onDismissRequest = { roleMenuExpanded = false }
+                ) {
+                    DropdownMenuItem(
+                        text = {
+                            PrimaryText(
+                                conversation.owner?.displayName?.let {
+                                    stringResource(R.string.mod_mail_reply_as, "r/$it")
+                                } ?: stringResource(R.string.mod_mail_reply_as_subreddit)
+                            )
+                        },
+                        onClick = {
+                            isAuthorHidden = true
+                            isInternal = false
+
+                            roleMenuExpanded = false
+                        }
+                    )
+
+                    DropdownMenuItem(
+                        text = {
+                            PrimaryText(
+                                stringResource(R.string.mod_mail_reply_as, "u/$accountName")
+                            )
+                        },
+                        onClick = {
+                            isAuthorHidden = false
+                            isInternal = false
+
+                            roleMenuExpanded = false
+                        }
+                    )
+
+                    DropdownMenuItem(
+                        text = {
+                            PrimaryText(
+                                R.string.mods_only
+                            )
+                        },
+                        onClick = {
+                            isAuthorHidden = false
+                            isInternal = true
+
+                            roleMenuExpanded = false
+                        }
+                    )
+                }
+            }
+
             CustomTextField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(WindowInsets.navigationBars.asPaddingValues())
-                    .padding(16.dp),
+                    .padding(bottom = 16.dp)
+                    .padding(horizontal = 16.dp),
                 value = newMessage,
                 placeholder = stringResource(R.string.new_mod_mail_message_hint)
             ) {
-
+                newMessage = it
             }
         }
     }
