@@ -119,12 +119,14 @@ import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButt
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomHorizontalDivider
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingIndicator
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomPositiveTextButton
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextField
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalTypography
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryIcon
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SecondaryText
+import ml.docilealligator.infinityforreddit.customviews.compose.SendMessageIcon
 import ml.docilealligator.infinityforreddit.customviews.compose.SubredditText
 import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
 import ml.docilealligator.infinityforreddit.customviews.compose.UserText
@@ -720,7 +722,7 @@ class ModMailActivity : BaseActivity() {
             Box(
                 modifier = Modifier.padding(horizontal = 16.dp)
             ) {
-                CustomPositiveTextButton(
+                CustomTextButton(
                     text = if (isInternal) {
                         stringResource(R.string.mods_only)
                     } else if (isAuthorHidden) {
@@ -732,18 +734,26 @@ class ModMailActivity : BaseActivity() {
                             R.string.mod_mail_reply_as,
                             "u/$accountName"
                         )
-                    }
+                    },
+                    textColor = Color(if (isInternal) {
+                        LocalAppTheme.current.primaryTextColor
+                    } else if (isAuthorHidden) {
+                        LocalAppTheme.current.subreddit
+                    } else {
+                        LocalAppTheme.current.username
+                    }),
                 ) {
                     roleMenuExpanded = true
                 }
 
                 DropdownMenu(
                     expanded = roleMenuExpanded,
+                    containerColor = Color(LocalAppTheme.current.backgroundColor),
                     onDismissRequest = { roleMenuExpanded = false }
                 ) {
                     DropdownMenuItem(
                         text = {
-                            PrimaryText(
+                            SubredditText(
                                 conversation.owner?.displayName?.let {
                                     stringResource(R.string.mod_mail_reply_as, "r/$it")
                                 } ?: stringResource(R.string.mod_mail_reply_as_subreddit)
@@ -759,7 +769,7 @@ class ModMailActivity : BaseActivity() {
 
                     DropdownMenuItem(
                         text = {
-                            PrimaryText(
+                            UserText(
                                 stringResource(R.string.mod_mail_reply_as, "u/$accountName")
                             )
                         },
@@ -794,7 +804,15 @@ class ModMailActivity : BaseActivity() {
                     .padding(bottom = 16.dp)
                     .padding(horizontal = 16.dp),
                 value = newMessage,
-                placeholder = stringResource(R.string.new_mod_mail_message_hint)
+                placeholder = stringResource(R.string.new_mod_mail_message_hint),
+                trailingIcon = {
+                    SendMessageIcon(
+                        modifier = Modifier
+                            .clickable {
+
+                            }
+                    )
+                }
             ) {
                 newMessage = it
             }

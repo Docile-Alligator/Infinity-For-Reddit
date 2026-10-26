@@ -151,3 +151,27 @@ fun CustomNegativeTextButton(
         )
     }
 }
+
+@Composable
+fun CustomTextButton(
+    modifier: Modifier = Modifier,
+    text: String,
+    textColor: Color = Color(LocalAppTheme.current.primaryTextColor),
+    fontFamily: FontFamily? = LocalTypography.current.fontFamily,
+    fontSize: TextUnit = LocalTypography.current.fontSize.default,
+    onclick: () -> Unit
+) {
+    TextButton(
+        modifier = modifier,
+        colors = ButtonDefaults.textButtonColors().copy(
+            contentColor = textColor
+        ),
+        onClick = onclick
+    ) {
+        Text(
+            text,
+            fontFamily = fontFamily,
+            fontSize = fontSize
+        )
+    }
+}

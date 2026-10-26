@@ -44,6 +44,7 @@ fun CustomTextField(
     singleLine: Boolean = false,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     minLines: Int = 1,
+    trailingIcon: (@Composable () -> Unit)? = null,
     onValueChange: (String) -> Unit
 ) {
     OutlinedTextField(
@@ -65,6 +66,7 @@ fun CustomTextField(
             unfocusedBorderColor = Color(LocalAppTheme.current.secondaryTextColor),
             cursorColor = Color(LocalAppTheme.current.colorPrimary)
         ),
+        trailingIcon = trailingIcon,
         onValueChange = onValueChange
     )
 }

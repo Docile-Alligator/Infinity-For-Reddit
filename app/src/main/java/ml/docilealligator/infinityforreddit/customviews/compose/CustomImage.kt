@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.customviews.compose
 
+import android.R.attr.contentDescription
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -28,5 +29,15 @@ fun ToolbarIcon(modifier: Modifier = Modifier, drawableId: Int = R.drawable.ic_a
         painter = painterResource(drawableId),
         contentDescription = contentDescription,
         colorFilter = ColorFilter.tint(Color(LocalAppTheme.current.toolbarPrimaryTextAndIconColor))
+    )
+}
+
+@Composable
+fun SendMessageIcon(modifier: Modifier = Modifier) {
+    Image(
+        modifier = modifier,
+        painter = painterResource(R.drawable.ic_send_black_24dp),
+        contentDescription = stringResource(R.string.content_description_send_message),
+        colorFilter = ColorFilter.tint(Color(LocalAppTheme.current.sendMessageIconColor))
     )
 }
