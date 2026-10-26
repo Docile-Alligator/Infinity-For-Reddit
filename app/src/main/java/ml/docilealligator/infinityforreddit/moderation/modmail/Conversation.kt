@@ -103,23 +103,19 @@ data class Conversation(
             }
         }
 
-        suspend fun fetchConversation(oauthRetrofit: Retrofit, accessToken: String, conversationId: String, gson: Gson): Conversation? {
-            try {
-                val response: Response<String> = oauthRetrofit.create(RedditAPIKt::class.java).getModMailConversation(
-                    conversationId, APIUtils.getOAuthHeader(accessToken))
-                if (response.isSuccessful && response.body() != null) {
-                    val responseJson = JSONObject(response.body()!!)
-                    return parseConversation(
-                        gson, responseJson.getString(JSONUtils.CONVERSATION_KEY),
-                        responseJson.getJSONObject(JSONUtils.MESSAGES_KEY)
-                    ).apply {
-                        isUpdated = true
-                    }
-                } else {
-                    return null
+        suspend fun fetchConversation(oauthRetrofit: Retrofit, accessToken: String, conversationId: String, gson: Gson): Conversation {
+            val response: Response<String> = oauthRetrofit.create(RedditAPIKt::class.java).getModMailConversation(
+                conversationId, APIUtils.getOAuthHeader(accessToken))
+            if (response.isSuccessful && response.body() != null) {
+                val responseJson = JSONObject(response.body()!!)
+                return parseConversation(
+                    gson, responseJson.getString(JSONUtils.CONVERSATION_KEY),
+                    responseJson.getJSONObject(JSONUtils.MESSAGES_KEY)
+                ).apply {
+                    isUpdated = true
                 }
-            } catch (e: IOException) {
-                return null
+            } else {
+                throw IOException(response.errorBody()?.string())
             }
         }
     }

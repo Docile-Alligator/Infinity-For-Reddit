@@ -1,16 +1,22 @@
 package ml.docilealligator.infinityforreddit.customviews.compose
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.Image
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.TextUnit
+import ml.docilealligator.infinityforreddit.R
 
 @Composable
 fun CustomFilledButton(
@@ -172,6 +178,23 @@ fun CustomTextButton(
             text,
             fontFamily = fontFamily,
             fontSize = fontSize
+        )
+    }
+}
+
+@Composable
+fun SendMessageIconButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    IconButton(
+        modifier = modifier,
+        onClick = onClick
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_send_black_24dp),
+            contentDescription = stringResource(R.string.content_description_send_message),
+            tint = Color(LocalAppTheme.current.sendMessageIconColor)
         )
     }
 }

@@ -1,11 +1,13 @@
 package ml.docilealligator.infinityforreddit.repositories
 
 import android.content.SharedPreferences
+import android.widget.Toast
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
+import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.state.DataLoadState
 import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
 import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
@@ -13,7 +15,6 @@ import ml.docilealligator.infinityforreddit.utils.APIUtils
 import ml.docilealligator.infinityforreddit.utils.JSONUtils
 import org.json.JSONObject
 import retrofit2.Retrofit
-import java.io.IOException
 import kotlin.coroutines.cancellation.CancellationException
 
 class ModMailConversationRepository(
@@ -29,42 +30,45 @@ class ModMailConversationRepository(
     private val _loadState: MutableStateFlow<DataLoadState<Unit>> = MutableStateFlow(DataLoadState.Idle)
     val loadState = _loadState.asStateFlow()
 
-    private val _isRefreshing: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isRefreshing = _isRefreshing.asStateFlow()
+    private val _isRefreshingConversations: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isRefreshingConversations = _isRefreshingConversations.asStateFlow()
 
-    private var after: String? = null
+    private var conversationsAfter: String? = null
 
     private var conversationIds = mutableSetOf<String>()
 
-    suspend fun initialLoad() {
+    private var _conversationMessagesDataLoadState = MutableStateFlow<DataLoadState<Unit>>(DataLoadState.Idle)
+    val conversationMessagesDataLoadState = _conversationMessagesDataLoadState.asStateFlow()
+
+    suspend fun initialLoadConversations() {
         if (_loadState.value == DataLoadState.Idle) {
-            load()
+            loadConversations()
         }
     }
 
-    suspend fun refresh() {
-        _isRefreshing.value = true
+    suspend fun refreshConversations() {
+        _isRefreshingConversations.value = true
         conversationIds.clear()
-        after = null
-        load()
-        _isRefreshing.value = false
+        conversationsAfter = null
+        loadConversations()
+        _isRefreshingConversations.value = false
     }
 
-    suspend fun loadNextPage() {
-        if (_conversations.value.isNullOrEmpty() || after.isNullOrEmpty()) {
+    suspend fun loadNextPageConversations() {
+        if (_conversations.value.isNullOrEmpty() || conversationsAfter.isNullOrEmpty()) {
             return
         }
 
         if (_loadState.value != DataLoadState.Loading) {
-            load()
+            loadConversations()
         }
     }
 
-    private suspend fun load() {
+    private suspend fun loadConversations() {
         try {
             _loadState.value = DataLoadState.Loading
             val response = oauthRetrofit.create(RedditAPIKt::class.java)
-                .getModMailConversations(APIUtils.getOAuthHeader(accessToken), sort, after)
+                .getModMailConversations(APIUtils.getOAuthHeader(accessToken), sort, conversationsAfter)
 
             if (response.isSuccessful) {
                 response.body()?.let { body ->
@@ -75,7 +79,7 @@ class ModMailConversationRepository(
                                 conversationIds.add(id)
                             } ?: false
                         }
-                        if (_isRefreshing.value) {
+                        if (_isRefreshingConversations.value) {
                             _conversations.value = deduplicatedValue
                         } else {
                             val currentValue = _conversations.value
@@ -85,9 +89,9 @@ class ModMailConversationRepository(
                                 _conversations.value = currentValue + deduplicatedValue
                             }
                         }
-                        after = if (deduplicatedValue.isEmpty()) null else "ModmailConversation_" + deduplicatedValue[deduplicatedValue.size - 1].id
+                        conversationsAfter = if (deduplicatedValue.isEmpty()) null else "ModmailConversation_" + deduplicatedValue[deduplicatedValue.size - 1].id
                     } ?: run {
-                        after = null
+                        conversationsAfter = null
                     }
 
                     _loadState.value = DataLoadState.Success(Unit)
@@ -133,4 +137,57 @@ class ModMailConversationRepository(
             }
         }
     }
+
+    suspend fun refreshMessagesInConversation(conversation: Conversation) {
+        conversation.id?.let { id ->
+            if (_conversationMessagesDataLoadState.value !is DataLoadState.Loading) {
+                _conversationMessagesDataLoadState.value = DataLoadState.Loading
+            }
+
+            try {
+                val updatedConversation = Conversation.fetchConversation(
+                    oauthRetrofit, accessToken, id, Gson()
+                )
+
+                updateConversation(conversation, updatedConversation)
+
+                _conversationMessagesDataLoadState.value = DataLoadState.Success(Unit)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _conversationMessagesDataLoadState.value = DataLoadState.Error(e.message ?: "Error refreshing the conversation")
+
+                if (e is CancellationException) {
+                    throw e
+                }
+            }
+        }
+    }
+
+    val updateConversation: (Conversation, Conversation) -> Unit = { conversation, updatedConversation ->
+        conversation.apply {
+            if (updatedConversation.id == id) {
+                isAuto = updatedConversation.isAuto
+                participant = updatedConversation.participant
+                objIds = updatedConversation.objIds
+                isRepliable = updatedConversation.isRepliable
+                lastUserUpdate = updatedConversation.lastUserUpdate
+                isInternal = updatedConversation.isInternal
+                lastModUpdate = updatedConversation.lastModUpdate
+                authors = updatedConversation.authors
+                lastUpdated = updatedConversation.lastUpdated
+                legacyFirstMessageId = updatedConversation.legacyFirstMessageId
+                this.state = updatedConversation.state
+                conversationType = updatedConversation.conversationType
+                lastUnread = updatedConversation.lastUnread
+                owner = updatedConversation.owner
+                subject = updatedConversation.subject
+                isHighlighted = updatedConversation.isHighlighted
+                numMessages = updatedConversation.numMessages
+                messages = updatedConversation.messages
+                isUpdated = true
+            }
+        }
+    }
+
+
 }

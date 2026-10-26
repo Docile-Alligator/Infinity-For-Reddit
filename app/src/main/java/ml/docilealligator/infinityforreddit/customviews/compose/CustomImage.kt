@@ -31,13 +31,3 @@ fun ToolbarIcon(modifier: Modifier = Modifier, drawableId: Int = R.drawable.ic_a
         colorFilter = ColorFilter.tint(Color(LocalAppTheme.current.toolbarPrimaryTextAndIconColor))
     )
 }
-
-@Composable
-fun SendMessageIcon(modifier: Modifier = Modifier) {
-    Image(
-        modifier = modifier,
-        painter = painterResource(R.drawable.ic_send_black_24dp),
-        contentDescription = stringResource(R.string.content_description_send_message),
-        colorFilter = ColorFilter.tint(Color(LocalAppTheme.current.sendMessageIconColor))
-    )
-}

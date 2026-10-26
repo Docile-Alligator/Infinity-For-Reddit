@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
 import ml.docilealligator.infinityforreddit.repositories.ModMailConversationRepository
 import retrofit2.Retrofit
 
@@ -31,20 +32,24 @@ class ModMailConversationViewModel(
 
     fun initialLoad(repository: ModMailConversationRepository) {
         viewModelScope.launch {
-            repository.initialLoad()
+            repository.initialLoadConversations()
         }
     }
 
     fun loadNextPage(repository: ModMailConversationRepository) {
         viewModelScope.launch {
-            repository.loadNextPage()
+            repository.loadNextPageConversations()
         }
     }
 
-    fun refresh(repository: ModMailConversationRepository) {
+    fun refreshConversations(repository: ModMailConversationRepository) {
         viewModelScope.launch {
-            repository.refresh()
+            repository.refreshConversations()
         }
+    }
+
+    suspend fun refreshMessagesInConversation(conversation: Conversation, repository: ModMailConversationRepository) {
+        repository.refreshMessagesInConversation(conversation)
     }
 
     @Suppress("UNCHECKED_CAST")

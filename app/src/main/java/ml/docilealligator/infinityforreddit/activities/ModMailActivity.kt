@@ -1,13 +1,12 @@
 package ml.docilealligator.infinityforreddit.activities
 
-import android.R.attr.checked
-import android.R.attr.name
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Spanned
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -24,7 +23,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -34,27 +32,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContent
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -89,7 +77,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsControllerCompat
@@ -99,11 +86,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.bumptech.glide.integration.compose.placeholder
-import com.giphy.sdk.ui.themes.GPHCustomTheme.backgroundColor
 import com.google.gson.Gson
 import io.noties.markwon.AbstractMarkwonPlugin
-import io.noties.markwon.LinkResolver
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.MarkwonPlugin
@@ -118,15 +102,13 @@ import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomHorizontalDivider
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingIndicator
-import ml.docilealligator.infinityforreddit.customviews.compose.CustomPositiveTextButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextField
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalTypography
-import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryIcon
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SecondaryText
-import ml.docilealligator.infinityforreddit.customviews.compose.SendMessageIcon
+import ml.docilealligator.infinityforreddit.customviews.compose.SendMessageIconButton
 import ml.docilealligator.infinityforreddit.customviews.compose.SubredditText
 import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
 import ml.docilealligator.infinityforreddit.customviews.compose.UserText
@@ -289,23 +271,6 @@ class ModMailActivity : BaseActivity() {
         }
     }
 
-    private suspend fun refreshConversation(conversation: Conversation, refreshState: MutableState<Boolean>,
-                                            updateConversation: (Conversation, Conversation) -> Unit) {
-        refreshState.value = true
-
-        conversation.id?.let { id ->
-            val updatedConversation = Conversation.fetchConversation(
-                mOauthRetrofit, accessToken!!, id, Gson()
-            )
-
-            updatedConversation?.let {
-                updateConversation(conversation, it)
-            } ?: Toast.makeText(this, R.string.refresh_conversation_failed, Toast.LENGTH_SHORT).show()
-        }
-
-        refreshState.value = false
-    }
-
     fun getRepository(page: Int): ModMailConversationRepository {
         return when(page) {
             0 -> conversationViewModel.unreadModMailConversationRepository
@@ -323,7 +288,7 @@ class ModMailActivity : BaseActivity() {
 
         val conversations by getRepository(page).conversations.collectAsStateWithLifecycle()
         val loadState by getRepository(page).loadState.collectAsStateWithLifecycle()
-        val isManualRefreshing by getRepository(page).isRefreshing.collectAsStateWithLifecycle()
+        val isRefreshingConversations by getRepository(page).isRefreshingConversations.collectAsStateWithLifecycle()
 
         val needPagination by remember {
             derivedStateOf {
@@ -381,11 +346,11 @@ class ModMailActivity : BaseActivity() {
                     ConversationListView(
                         conversations,
                         loadState,
-                        isManualRefreshing,
+                        isRefreshingConversations,
                         navigator,
                         listState,
                         onRefresh = {
-                            conversationViewModel.refresh(
+                            conversationViewModel.refreshConversations(
                                 when (page) {
                                     0 -> conversationViewModel.unreadModMailConversationRepository
                                     1 -> conversationViewModel.recentModMailConversationRepository
@@ -404,7 +369,7 @@ class ModMailActivity : BaseActivity() {
             detailPane = {
                 AnimatedPane {
                     navigator.currentDestination?.contentKey?.let {
-                        ConversationDetailsView(it, updateConversation)
+                        ConversationDetailsView(page, it, updateConversation)
                     }
                 }
             }
@@ -630,9 +595,9 @@ class ModMailActivity : BaseActivity() {
     }
 
     @Composable
-    fun ConversationDetailsView(conversation: Conversation, updateConversation: (Conversation, Conversation) -> Unit) {
+    fun ConversationDetailsView(page: Int, conversation: Conversation, updateConversation: (Conversation, Conversation) -> Unit) {
         val pullToRefreshState: PullToRefreshState = rememberPullToRefreshState()
-        val refreshState = remember { mutableStateOf(false) }
+        var refreshState by remember { mutableStateOf<DataLoadState<Unit>>(DataLoadState.Idle) }
         var newMessage by remember {
             mutableStateOf("")
         }
@@ -680,10 +645,24 @@ class ModMailActivity : BaseActivity() {
                 return@createDescriptionMarkwon true
             }
         }
+        val scope = rememberCoroutineScope()
+
+        suspend fun refresh() {
+            if (refreshState != DataLoadState.Loading) {
+                refreshState = DataLoadState.Loading
+
+                try {
+                    conversationViewModel.refreshMessagesInConversation(conversation, getRepository(page))
+                    refreshState = DataLoadState.Success(Unit)
+                } catch (e: Exception) {
+                    refreshState = DataLoadState.Error(e.message ?: getString(R.string.refresh_conversation_failed))
+                }
+            }
+        }
 
         if (!conversation.isUpdated) {
             LaunchedEffect(conversation.id) {
-                refreshConversation(conversation, refreshState, updateConversation)
+                refresh()
             }
         }
 
@@ -692,17 +671,17 @@ class ModMailActivity : BaseActivity() {
         ) {
             PullToRefreshBox(
                 modifier = Modifier.weight(1f),
-                isRefreshing = refreshState.value,
+                isRefreshing = refreshState == DataLoadState.Loading,
                 onRefresh = {
-                    lifecycleScope.launch {
-                        refreshConversation(conversation, refreshState, updateConversation)
+                    scope.launch {
+                        refresh()
                     }
                 },
                 state = pullToRefreshState,
                 indicator = {
                     LoadingIndicator(
                         modifier = Modifier.align(Alignment.TopCenter),
-                        isRefreshing = refreshState.value,
+                        isRefreshing = refreshState == DataLoadState.Loading,
                         state = pullToRefreshState,
                         containerColor = Color(LocalAppTheme.current.circularProgressBarBackground),
                         color = Color(LocalAppTheme.current.colorAccent),
@@ -711,7 +690,9 @@ class ModMailActivity : BaseActivity() {
                 }
             ) {
                 LazyColumn(
-                    modifier = Modifier.clipToBounds()
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .clipToBounds()
                 ) {
                     items(count = conversation.messages.size, key = { index -> conversation.messages[index].id ?: index }) { index: Int ->
                         MessageView(conversation, conversation.messages[index], markwon)
@@ -805,13 +786,13 @@ class ModMailActivity : BaseActivity() {
                     .padding(horizontal = 16.dp),
                 value = newMessage,
                 placeholder = stringResource(R.string.new_mod_mail_message_hint),
+                maxLines = 3,
                 trailingIcon = {
-                    SendMessageIcon(
-                        modifier = Modifier
-                            .clickable {
+                    SendMessageIconButton(
+                        modifier = Modifier.padding(end = 8.dp)
+                    ) {
 
-                            }
-                    )
+                    }
                 }
             ) {
                 newMessage = it
