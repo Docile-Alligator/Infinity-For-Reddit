@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 
 @Composable
 fun CustomTextField(
@@ -45,6 +46,7 @@ fun CustomTextField(
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     minLines: Int = 1,
     trailingIcon: (@Composable () -> Unit)? = null,
+    shape: Shape = OutlinedTextFieldDefaults.shape,
     onValueChange: (String) -> Unit
 ) {
     OutlinedTextField(
@@ -67,6 +69,7 @@ fun CustomTextField(
             cursorColor = Color(LocalAppTheme.current.colorPrimary)
         ),
         trailingIcon = trailingIcon,
+        shape = shape,
         onValueChange = onValueChange
     )
 }

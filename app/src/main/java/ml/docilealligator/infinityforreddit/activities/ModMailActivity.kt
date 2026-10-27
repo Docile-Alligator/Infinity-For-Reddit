@@ -32,13 +32,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -606,6 +610,7 @@ class ModMailActivity : BaseActivity() {
         var isAuthorHidden by remember { mutableStateOf(true) }
         // Reply as mods only if true
         var isInternal by remember { mutableStateOf(false) }
+        var isSendingMessage by remember { mutableStateOf(false) }
         val markwon = remember {
             val miscPlugin: MarkwonPlugin = object : AbstractMarkwonPlugin() {
                 override fun beforeSetText(textView: TextView, markdown: Spanned) {
@@ -788,12 +793,22 @@ class ModMailActivity : BaseActivity() {
                 placeholder = stringResource(R.string.new_mod_mail_message_hint),
                 maxLines = 3,
                 trailingIcon = {
-                    SendMessageIconButton(
-                        modifier = Modifier.padding(end = 8.dp)
-                    ) {
-
+                    if (isSendingMessage) {
+                        CircularWavyProgressIndicator(
+                            modifier = Modifier
+                                .padding(end = 8.dp)
+                                .size(28.dp)
+                        )
+                    } else {
+                        SendMessageIconButton(
+                            modifier = Modifier
+                                .padding(end = 8.dp)
+                        ) {
+                            isSendingMessage = true
+                        }
                     }
-                }
+                },
+                shape = RoundedCornerShape(16.dp)
             ) {
                 newMessage = it
             }
