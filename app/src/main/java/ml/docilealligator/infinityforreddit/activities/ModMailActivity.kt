@@ -612,6 +612,8 @@ class ModMailActivity : BaseActivity() {
         // Reply as mods only if true
         var isInternal by remember { mutableStateOf(false) }
         var isSendingMessage by remember { mutableStateOf(false) }
+        val lazyColumnScrollState = rememberLazyListState()
+
         val markwon = remember {
             val miscPlugin: MarkwonPlugin = object : AbstractMarkwonPlugin() {
                 override fun beforeSetText(textView: TextView, markdown: Spanned) {
@@ -702,6 +704,10 @@ class ModMailActivity : BaseActivity() {
             }
         }
 
+        LaunchedEffect(conversation.messages.size) {
+            lazyColumnScrollState.animateScrollToItem(conversation.messages.size - 1)
+        }
+
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -728,7 +734,8 @@ class ModMailActivity : BaseActivity() {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxHeight()
-                        .clipToBounds()
+                        .clipToBounds(),
+                    state = lazyColumnScrollState
                 ) {
                     items(count = conversation.messages.size, key = { index -> conversation.messages[index].id ?: index }) { index: Int ->
                         MessageView(conversation, conversation.messages[index], markwon)
