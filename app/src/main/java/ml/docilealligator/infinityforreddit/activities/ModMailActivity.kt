@@ -372,7 +372,7 @@ class ModMailActivity : BaseActivity() {
         navigator: ThreePaneScaffoldNavigator<Conversation>
     ) {
         val listState: LazyListState = rememberLazyListState()
-        var isInitial by rememberSaveable { mutableStateOf(true) }
+        var isInitial by remember { mutableStateOf(true) }
 
         val conversations by getRepository(page).conversations.collectAsStateWithLifecycle()
         val loadState by getRepository(page).loadState.collectAsStateWithLifecycle()
@@ -400,15 +400,7 @@ class ModMailActivity : BaseActivity() {
                 return@LaunchedEffect
             }
 
-            conversationViewModel.refreshConversations(
-                when (page) {
-                    0 -> conversationViewModel.unreadModMailConversationRepository
-                    1 -> conversationViewModel.recentModMailConversationRepository
-                    2 -> conversationViewModel.modModMailConversationRepository
-                    3 -> conversationViewModel.userModMailConversationRepository
-                    else -> conversationViewModel.recentModMailConversationRepository
-                }
-            )
+            conversationViewModel.refreshConversations(getRepository(page))
         }
 
         val updateConversation: (Conversation, Conversation) -> Unit = { conversation, updatedConversation ->
@@ -455,15 +447,7 @@ class ModMailActivity : BaseActivity() {
                         navigator,
                         listState,
                         onRefresh = {
-                            conversationViewModel.refreshConversations(
-                                when (page) {
-                                    0 -> conversationViewModel.unreadModMailConversationRepository
-                                    1 -> conversationViewModel.recentModMailConversationRepository
-                                    2 -> conversationViewModel.modModMailConversationRepository
-                                    3 -> conversationViewModel.userModMailConversationRepository
-                                    else -> conversationViewModel.recentModMailConversationRepository
-                                }
-                            )
+                            conversationViewModel.refreshConversations(getRepository(page))
                         },
                         onRetryPagination = {
                             conversationViewModel.loadNextPage(getRepository(page))
@@ -724,7 +708,7 @@ class ModMailActivity : BaseActivity() {
         var isSendingMessage by remember { mutableStateOf(false) }
         val lazyColumnScrollState = rememberLazyListState()
 
-        var isInitial by rememberSaveable { mutableStateOf(true) }
+        var isInitial by remember { mutableStateOf(true) }
 
         val markwon = remember {
             val miscPlugin: MarkwonPlugin = object : AbstractMarkwonPlugin() {
@@ -820,14 +804,14 @@ class ModMailActivity : BaseActivity() {
             lazyColumnScrollState.animateScrollToItem(conversation.messages.size - 1)
         }
 
-        LaunchedEffect(refreshConversationMessagesTrigger) {
+        /*LaunchedEffect(refreshConversationMessagesTrigger) {
             if (isInitial) {
                 isInitial = false
                 return@LaunchedEffect
             }
 
             refresh()
-        }
+        }*/
 
         Column(
             modifier = Modifier.fillMaxSize()
