@@ -182,15 +182,12 @@ class ModMailActivity : BaseActivity() {
                 val pagerState = rememberPagerState { 4 }
                 val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
                 var isToolbarMenuOpen by remember { mutableStateOf(false) }
-                /*val _navigators = listOf(
-                    rememberListDetailPaneScaffoldNavigator<Conversation>(),
-                    rememberListDetailPaneScaffoldNavigator<Conversation>(),
-                    rememberListDetailPaneScaffoldNavigator<Conversation>(),
-                    rememberListDetailPaneScaffoldNavigator<Conversation>(),
-                )*/
-                val navigators = remember {
-                    mutableStateMapOf<Int, ThreePaneScaffoldNavigator<Conversation>>()
-                }
+
+                val unreadNavigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
+                val recentNavigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
+                val modNavigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
+                val userNavigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
+
                 val refreshConversationsTriggers = listOf(
                     remember { mutableStateOf(false) },
                     remember { mutableStateOf(false) },
@@ -204,6 +201,16 @@ class ModMailActivity : BaseActivity() {
                     remember { mutableStateOf(false) },
                     remember { mutableStateOf(false) }
                 )
+
+                fun getNavigator(page: Int): ThreePaneScaffoldNavigator<Conversation> {
+                    return when(page) {
+                        0 -> unreadNavigator
+                        1 -> recentNavigator
+                        2 -> modNavigator
+                        3 -> userNavigator
+                        else -> recentNavigator
+                    }
+                }
 
                 LaunchedEffect(pagerState.currentPage) {
                     conversationViewModel.initialLoad(getRepository(pagerState.currentPage))
@@ -232,7 +239,7 @@ class ModMailActivity : BaseActivity() {
                                         containerColor = Color(LocalAppTheme.current.backgroundColor),
                                         onDismissRequest = { isToolbarMenuOpen = false }
                                     ) {
-                                        if (navigators[pagerState.currentPage]?.scaffoldValue?.get(ListDetailPaneScaffoldRole.List) != PaneAdaptedValue.Hidden) {
+                                        if (getNavigator(selectedTabIndex).scaffoldValue.get(ListDetailPaneScaffoldRole.List) != PaneAdaptedValue.Hidden) {
                                             DropdownMenuItem(
                                                 text = {
                                                     PrimaryText(
@@ -246,7 +253,7 @@ class ModMailActivity : BaseActivity() {
                                             )
                                         }
 
-                                        if (navigators[pagerState.currentPage]?.currentDestination?.contentKey != null) {
+                                        if (getNavigator(selectedTabIndex).currentDestination?.contentKey != null) {
                                             DropdownMenuItem(
                                                 text = {
                                                     PrimaryText(
@@ -338,9 +345,7 @@ class ModMailActivity : BaseActivity() {
                                 page,
                                 refreshConversationsTriggers[page].value,
                                 refreshConversationMessagesTriggers[page].value,
-                                navigators.getOrPut(page) {
-                                    rememberListDetailPaneScaffoldNavigator<Conversation>()
-                                }
+                                getNavigator(page)
                             )
                         }
                     }
