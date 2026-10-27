@@ -47,6 +47,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
@@ -57,6 +58,7 @@ import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
 import androidx.compose.material3.adaptive.navigation.ThreePaneScaffoldNavigator
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -116,6 +118,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.SecondaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SendMessageIconButton
 import ml.docilealligator.infinityforreddit.customviews.compose.SubredditText
 import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
+import ml.docilealligator.infinityforreddit.customviews.compose.ToolbarIcon
 import ml.docilealligator.infinityforreddit.customviews.compose.UserText
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils
 import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
@@ -174,6 +177,13 @@ class ModMailActivity : BaseActivity() {
                 val scope = rememberCoroutineScope()
                 val pagerState = rememberPagerState { 4 }
                 val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
+                var isToolbarMenuOpen by remember { mutableStateOf(false) }
+                val navigators = listOf(
+                    rememberListDetailPaneScaffoldNavigator<Conversation>(),
+                    rememberListDetailPaneScaffoldNavigator<Conversation>(),
+                    rememberListDetailPaneScaffoldNavigator<Conversation>(),
+                    rememberListDetailPaneScaffoldNavigator<Conversation>(),
+                )
 
                 LaunchedEffect(pagerState.currentPage) {
                     conversationViewModel.initialLoad(getRepository(pagerState.currentPage))
@@ -187,16 +197,48 @@ class ModMailActivity : BaseActivity() {
                             scrollBehavior = scrollBehavior,
                             windowInsetsController = windowInsetsController,
                             actions = {
-                                /*IconButton(onClick = {
-                                    if (multiRedditState is DataLoadState.Success) {
-                                        copyMultiRedditActivityViewModel.copyMultiRedditInfo()
+                                Box {
+                                    IconButton(onClick = {
+                                        isToolbarMenuOpen = true
+                                    }) {
+                                        ToolbarIcon(
+                                            drawableId = R.drawable.ic_more_vert_grey_24dp,
+                                            contentDescription = stringResource(R.string.content_description_toolbar_menu_icon)
+                                        )
                                     }
-                                }) {
-                                    ToolbarIcon(
-                                        drawableId = R.drawable.ic_check_circle_toolbar_24dp,
-                                        contentDescription = stringResource(R.string.action_copy_multi_reddit)
-                                    )
-                                }*/
+
+                                    DropdownMenu(
+                                        expanded = isToolbarMenuOpen,
+                                        containerColor = Color(LocalAppTheme.current.backgroundColor),
+                                        onDismissRequest = { isToolbarMenuOpen = false }
+                                    ) {
+                                        if (navigators[pagerState.currentPage].scaffoldValue[ListDetailPaneScaffoldRole.List] != PaneAdaptedValue.Hidden) {
+                                            DropdownMenuItem(
+                                                text = {
+                                                    PrimaryText(
+                                                        R.string.action_refresh_mod_mail_conversations
+                                                    )
+                                                },
+                                                onClick = {
+                                                    isToolbarMenuOpen = false
+                                                }
+                                            )
+                                        }
+
+                                        if (navigators[pagerState.currentPage].currentDestination?.contentKey != null) {
+                                            DropdownMenuItem(
+                                                text = {
+                                                    PrimaryText(
+                                                        R.string.action_refresh_mod_mail_messages_in_conversation
+                                                    )
+                                                },
+                                                onClick = {
+                                                    isToolbarMenuOpen = false
+                                                }
+                                            )
+                                        }
+                                    }
+                                }
                             }
                         ) {
                             triggerBackPress()
@@ -268,7 +310,7 @@ class ModMailActivity : BaseActivity() {
                                 end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
                             )
                         ) { page ->
-                            ConversationListDetailPaneView(page)
+                            ConversationListDetailPaneView(page, navigators[page])
                         }
                     }
                 }
@@ -287,9 +329,9 @@ class ModMailActivity : BaseActivity() {
     }
 
     @Composable
-    fun ConversationListDetailPaneView(page: Int) {
+    fun ConversationListDetailPaneView(page: Int, navigator: ThreePaneScaffoldNavigator<Conversation>) {
         val listState: LazyListState = rememberLazyListState()
-        val navigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
+
 
         val conversations by getRepository(page).conversations.collectAsStateWithLifecycle()
         val loadState by getRepository(page).loadState.collectAsStateWithLifecycle()
