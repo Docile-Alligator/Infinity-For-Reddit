@@ -499,18 +499,18 @@ class ModMailActivity : BaseActivity() {
             }
         ) {
             conversations?.let {
-                if (conversations.isNotEmpty()) {
+                if (it.isNotEmpty()) {
                     LazyColumn(
                         state = listState,
                         contentPadding = WindowInsets.navigationBars.asPaddingValues(),
                         modifier = Modifier.clipToBounds()
                     ) {
                         items(
-                            count = conversations.size,
+                            count = it.size,
                             contentType = { _ -> 1 },
-                            key = { index -> conversations[index].id ?: index }
+                            key = { index -> it[index].id ?: index }
                         ) { index: Int ->
-                            ConversationView(conversations[index]) { conversation ->
+                            ConversationView(it[index]) { conversation ->
                                 scope.launch {
                                     navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, conversation)
                                 }
@@ -804,14 +804,14 @@ class ModMailActivity : BaseActivity() {
             lazyColumnScrollState.animateScrollToItem(conversation.messages.size - 1)
         }
 
-        /*LaunchedEffect(refreshConversationMessagesTrigger) {
+        LaunchedEffect(refreshConversationMessagesTrigger) {
             if (isInitial) {
                 isInitial = false
                 return@LaunchedEffect
             }
 
             refresh()
-        }*/
+        }
 
         Column(
             modifier = Modifier.fillMaxSize()
