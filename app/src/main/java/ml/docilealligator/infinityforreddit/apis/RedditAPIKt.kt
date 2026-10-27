@@ -330,4 +330,12 @@ interface RedditAPIKt {
         @Path("id") id: String,
         @HeaderMap headers: Map<String, String>
     ): Response<String>
+
+    @FormUrlEncoded
+    @POST("/api/mod/conversations/{id}")
+    suspend fun replyToModMailConversation(
+        @Path("id") id: String,
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): Response<String>
 }

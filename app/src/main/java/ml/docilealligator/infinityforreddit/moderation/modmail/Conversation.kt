@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.CancellationException
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import ml.docilealligator.infinityforreddit.RedditError
 import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
 import ml.docilealligator.infinityforreddit.utils.APIUtils
 import ml.docilealligator.infinityforreddit.utils.JSONUtils
@@ -16,7 +17,6 @@ import retrofit2.Retrofit
 import java.io.IOException
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
-import kotlin.jvm.java
 
 @Parcelize
 data class Conversation(
@@ -116,6 +116,37 @@ data class Conversation(
                 }
             } else {
                 throw IOException(response.errorBody()?.string())
+            }
+        }
+
+        suspend fun reply(
+            oauthRetrofit: Retrofit,
+            accessToken: String,
+            conversationId: String,
+            content: String,
+            isAuthorHidden: Boolean,
+            isInternal: Boolean
+        ) {
+            val response: Response<String> = oauthRetrofit.create(RedditAPIKt::class.java).replyToModMailConversation(
+                conversationId,
+                APIUtils.getOAuthHeader(accessToken),
+                mutableMapOf<String, String>().apply {
+                    this[APIUtils.BODY_KEY] = content
+                    this[APIUtils.IS_AUTHOR_HIDDEN_KEY] = isAuthorHidden.toString()
+                    this[APIUtils.IS_INTERNAL_KEY] = isInternal.toString()
+                }
+            )
+
+            if (!response.isSuccessful) {
+                // The response.body() will be the current conversation object but without the new message. Weird.
+                response.errorBody()?.string().let {
+                    val redditError: RedditError? = Gson().fromJson(it, RedditError::class.java)
+                    redditError?.let { redditError ->
+                        throw IOException(redditError.reason ?: "Could not send message")
+                    }
+                }
+
+                throw IOException("Could not send message")
             }
         }
     }

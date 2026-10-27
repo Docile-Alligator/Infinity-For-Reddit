@@ -189,5 +189,11 @@ class ModMailConversationRepository(
         }
     }
 
-
+    suspend fun sendMessage(conversation: Conversation, content: String, isAuthorHidden: Boolean, isInternal: Boolean) {
+        conversation.id?.let { id ->
+            Conversation.reply(
+                oauthRetrofit, accessToken, id, content, isAuthorHidden, isInternal
+            )
+        }
+    }
 }

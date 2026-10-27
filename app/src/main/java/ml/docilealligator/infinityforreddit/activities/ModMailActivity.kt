@@ -96,6 +96,7 @@ import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.MarkwonPlugin
 import io.noties.markwon.core.MarkwonTheme
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
@@ -665,6 +666,36 @@ class ModMailActivity : BaseActivity() {
             }
         }
 
+        fun sendMessage() {
+            if (!isSendingMessage) {
+                isSendingMessage = true
+
+                scope.launch {
+                    try {
+                        conversationViewModel.sendMessage(
+                            conversation,
+                            newMessage,
+                            isAuthorHidden,
+                            isInternal,
+                            getRepository(page)
+                        )
+                    } catch (e: Exception) {
+                        if (e !is CancellationException) {
+                            Toast.makeText(this@ModMailActivity, e.message?.let {
+                                getString(R.string.could_not_send_message_with_reason, it)
+                            } ?: getString(R.string.could_not_send_message), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    newMessage = ""
+
+                    isSendingMessage = false
+
+                    refresh()
+                }
+            }
+        }
+
         if (!conversation.isUpdated) {
             LaunchedEffect(conversation.id) {
                 refresh()
@@ -804,13 +835,15 @@ class ModMailActivity : BaseActivity() {
                             modifier = Modifier
                                 .padding(end = 8.dp)
                         ) {
-                            isSendingMessage = true
+                            sendMessage()
                         }
                     }
                 },
                 shape = RoundedCornerShape(16.dp)
             ) {
-                newMessage = it
+                if (!isSendingMessage) {
+                    newMessage = it
+                }
             }
         }
     }

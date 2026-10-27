@@ -52,6 +52,16 @@ class ModMailConversationViewModel(
         repository.refreshMessagesInConversation(conversation)
     }
 
+    suspend fun sendMessage(
+        conversation: Conversation,
+        content: String,
+        isAuthorHidden: Boolean,
+        isInternal: Boolean,
+        repository: ModMailConversationRepository
+    ) {
+        repository.sendMessage(conversation, content, isAuthorHidden, isInternal)
+    }
+
     @Suppress("UNCHECKED_CAST")
     class Factory(
         private val oauthRetrofit: Retrofit,

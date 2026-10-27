@@ -1735,4 +1735,6 @@
     <string name="new_mod_mail_message_hint">Message</string>
     <string name="mod_mail_reply_as_subreddit">Reply as subreddit</string>
     <string name="mod_mail_reply_as">Reply as %1$s</string>
+    <string name="could_not_send_message">Could not send message.</string>
+    <string name="could_not_send_message_with_reason">Could not send message. Error: %1$s</string>
 </resources>
