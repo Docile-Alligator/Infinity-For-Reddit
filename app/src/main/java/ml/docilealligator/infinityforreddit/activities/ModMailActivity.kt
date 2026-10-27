@@ -208,7 +208,7 @@ class ModMailActivity : BaseActivity() {
                         1 -> recentNavigator
                         2 -> modNavigator
                         3 -> userNavigator
-                        else -> recentNavigator
+                        else -> unreadNavigator
                     }
                 }
 
@@ -360,7 +360,7 @@ class ModMailActivity : BaseActivity() {
             1 -> conversationViewModel.recentModMailConversationRepository
             2 -> conversationViewModel.modModMailConversationRepository
             3 -> conversationViewModel.userModMailConversationRepository
-            else -> conversationViewModel.recentModMailConversationRepository
+            else -> conversationViewModel.unreadModMailConversationRepository
         }
     }
 
