@@ -130,6 +130,10 @@ public class APIUtils {
 
     public static final String PLATFORM_KEY = "platform";
 
+    public static final String BODY_KEY = "body";
+    public static final String IS_AUTHOR_HIDDEN_KEY = "isAuthorHidden";
+    public static final String IS_INTERNAL_KEY = "isInternal";
+
     public static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();
         String credentials = String.format("%s:%s", APIUtils.CLIENT_ID, "");
