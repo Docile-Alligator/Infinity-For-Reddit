@@ -70,10 +70,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
@@ -99,6 +102,7 @@ import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.MarkwonPlugin
 import io.noties.markwon.core.MarkwonTheme
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
@@ -178,11 +182,27 @@ class ModMailActivity : BaseActivity() {
                 val pagerState = rememberPagerState { 4 }
                 val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
                 var isToolbarMenuOpen by remember { mutableStateOf(false) }
-                val navigators = listOf(
+                /*val _navigators = listOf(
                     rememberListDetailPaneScaffoldNavigator<Conversation>(),
                     rememberListDetailPaneScaffoldNavigator<Conversation>(),
                     rememberListDetailPaneScaffoldNavigator<Conversation>(),
                     rememberListDetailPaneScaffoldNavigator<Conversation>(),
+                )*/
+                val navigators = remember {
+                    mutableStateMapOf<Int, ThreePaneScaffoldNavigator<Conversation>>()
+                }
+                val refreshConversationsTriggers = listOf(
+                    remember { mutableStateOf(false) },
+                    remember { mutableStateOf(false) },
+                    remember { mutableStateOf(false) },
+                    remember { mutableStateOf(false) }
+                )
+
+                val refreshConversationMessagesTriggers = listOf(
+                    remember { mutableStateOf(false) },
+                    remember { mutableStateOf(false) },
+                    remember { mutableStateOf(false) },
+                    remember { mutableStateOf(false) }
                 )
 
                 LaunchedEffect(pagerState.currentPage) {
@@ -212,7 +232,7 @@ class ModMailActivity : BaseActivity() {
                                         containerColor = Color(LocalAppTheme.current.backgroundColor),
                                         onDismissRequest = { isToolbarMenuOpen = false }
                                     ) {
-                                        if (navigators[pagerState.currentPage].scaffoldValue[ListDetailPaneScaffoldRole.List] != PaneAdaptedValue.Hidden) {
+                                        if (navigators[pagerState.currentPage]?.scaffoldValue?.get(ListDetailPaneScaffoldRole.List) != PaneAdaptedValue.Hidden) {
                                             DropdownMenuItem(
                                                 text = {
                                                     PrimaryText(
@@ -221,11 +241,12 @@ class ModMailActivity : BaseActivity() {
                                                 },
                                                 onClick = {
                                                     isToolbarMenuOpen = false
+                                                    refreshConversationsTriggers[selectedTabIndex].value = !refreshConversationsTriggers[selectedTabIndex].value
                                                 }
                                             )
                                         }
 
-                                        if (navigators[pagerState.currentPage].currentDestination?.contentKey != null) {
+                                        if (navigators[pagerState.currentPage]?.currentDestination?.contentKey != null) {
                                             DropdownMenuItem(
                                                 text = {
                                                     PrimaryText(
@@ -234,6 +255,7 @@ class ModMailActivity : BaseActivity() {
                                                 },
                                                 onClick = {
                                                     isToolbarMenuOpen = false
+                                                    refreshConversationMessagesTriggers[selectedTabIndex].value = !refreshConversationMessagesTriggers[selectedTabIndex].value
                                                 }
                                             )
                                         }
@@ -297,7 +319,9 @@ class ModMailActivity : BaseActivity() {
                                         },
                                         selectedContentColor = Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabIndicator),
                                         unselectedContentColor = Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabIndicator),
-                                        text = { Text(text = title, maxLines = 1, overflow = TextOverflow.Ellipsis) }
+                                        text = {
+                                            Text(text = title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                        }
                                     )
                                 }
                             }
@@ -310,7 +334,14 @@ class ModMailActivity : BaseActivity() {
                                 end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
                             )
                         ) { page ->
-                            ConversationListDetailPaneView(page, navigators[page])
+                            ConversationListDetailPaneView(
+                                page,
+                                refreshConversationsTriggers[page].value,
+                                refreshConversationMessagesTriggers[page].value,
+                                navigators.getOrPut(page) {
+                                    rememberListDetailPaneScaffoldNavigator<Conversation>()
+                                }
+                            )
                         }
                     }
                 }
@@ -329,9 +360,14 @@ class ModMailActivity : BaseActivity() {
     }
 
     @Composable
-    fun ConversationListDetailPaneView(page: Int, navigator: ThreePaneScaffoldNavigator<Conversation>) {
+    fun ConversationListDetailPaneView(
+        page: Int,
+        refreshConversationsTrigger: Boolean,
+        refreshConversationMessagesTrigger: Boolean,
+        navigator: ThreePaneScaffoldNavigator<Conversation>
+    ) {
         val listState: LazyListState = rememberLazyListState()
-
+        var isInitial by rememberSaveable { mutableStateOf(true) }
 
         val conversations by getRepository(page).conversations.collectAsStateWithLifecycle()
         val loadState by getRepository(page).loadState.collectAsStateWithLifecycle()
@@ -351,6 +387,23 @@ class ModMailActivity : BaseActivity() {
             if (needPagination) {
                 conversationViewModel.loadNextPage(getRepository(page))
             }
+        }
+
+        LaunchedEffect(refreshConversationsTrigger) {
+            if (isInitial) {
+                isInitial = false
+                return@LaunchedEffect
+            }
+
+            conversationViewModel.refreshConversations(
+                when (page) {
+                    0 -> conversationViewModel.unreadModMailConversationRepository
+                    1 -> conversationViewModel.recentModMailConversationRepository
+                    2 -> conversationViewModel.modModMailConversationRepository
+                    3 -> conversationViewModel.userModMailConversationRepository
+                    else -> conversationViewModel.recentModMailConversationRepository
+                }
+            )
         }
 
         val updateConversation: (Conversation, Conversation) -> Unit = { conversation, updatedConversation ->
@@ -416,7 +469,12 @@ class ModMailActivity : BaseActivity() {
             detailPane = {
                 AnimatedPane {
                     navigator.currentDestination?.contentKey?.let {
-                        ConversationDetailsView(page, it, updateConversation)
+                        ConversationDetailsView(
+                            page,
+                            it,
+                            refreshConversationMessagesTrigger,
+                            updateConversation
+                        )
                     }
                 }
             }
@@ -642,7 +700,12 @@ class ModMailActivity : BaseActivity() {
     }
 
     @Composable
-    fun ConversationDetailsView(page: Int, conversation: Conversation, updateConversation: (Conversation, Conversation) -> Unit) {
+    fun ConversationDetailsView(
+        page: Int,
+        conversation: Conversation,
+        refreshConversationMessagesTrigger: Boolean,
+        updateConversation: (Conversation, Conversation) -> Unit
+    ) {
         val pullToRefreshState: PullToRefreshState = rememberPullToRefreshState()
         var refreshState by remember { mutableStateOf<DataLoadState<Unit>>(DataLoadState.Idle) }
         var newMessage by remember {
@@ -655,6 +718,8 @@ class ModMailActivity : BaseActivity() {
         var isInternal by remember { mutableStateOf(false) }
         var isSendingMessage by remember { mutableStateOf(false) }
         val lazyColumnScrollState = rememberLazyListState()
+
+        var isInitial by rememberSaveable { mutableStateOf(true) }
 
         val markwon = remember {
             val miscPlugin: MarkwonPlugin = object : AbstractMarkwonPlugin() {
@@ -748,6 +813,15 @@ class ModMailActivity : BaseActivity() {
 
         LaunchedEffect(conversation.messages.size) {
             lazyColumnScrollState.animateScrollToItem(conversation.messages.size - 1)
+        }
+
+        LaunchedEffect(refreshConversationMessagesTrigger) {
+            if (isInitial) {
+                isInitial = false
+                return@LaunchedEffect
+            }
+
+            refresh()
         }
 
         Column(
