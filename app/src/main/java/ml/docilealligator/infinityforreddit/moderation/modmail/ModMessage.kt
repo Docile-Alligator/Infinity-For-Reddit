@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.moderation.modmail
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
@@ -15,9 +14,9 @@ data class ModMessage(
     @SerializedName("isInternal") var isInternal: Boolean? = null,
     @SerializedName("date") var date: String? = null,
     @SerializedName("bodyMarkdown") var bodyMarkdown: String? = null,
-    @SerializedName("id") var id: String? = null,
+    @SerializedName("id") override var id: String? = null,
     @SerializedName("participatingAs") var participatingAs: String? = null
-): Parcelable {
+): ModMailItem {
     @IgnoredOnParcel
     @Transient
     private var _dateUTC: Long? = null
@@ -26,8 +25,8 @@ data class ModMessage(
         get() {
             if (_dateUTC == null) {
                 _dateUTC = date?.let {
-                    val formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSxx")
-                    OffsetDateTime.parse(it, formatter1).toInstant().toEpochMilli()
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSxx")
+                    OffsetDateTime.parse(it, formatter).toInstant().toEpochMilli()
                 } ?: 0
             }
 

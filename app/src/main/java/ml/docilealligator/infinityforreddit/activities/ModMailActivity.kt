@@ -1,12 +1,12 @@
 package ml.docilealligator.infinityforreddit.activities
 
+import android.R.id.message
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Spanned
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -33,7 +33,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -70,19 +69,17 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -91,18 +88,15 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.google.gson.Gson
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.MarkwonPlugin
 import io.noties.markwon.core.MarkwonTheme
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
@@ -113,6 +107,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomHorizontalDivider
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingIndicator
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomModalBottomSheet
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextField
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
@@ -126,6 +121,8 @@ import ml.docilealligator.infinityforreddit.customviews.compose.ToolbarIcon
 import ml.docilealligator.infinityforreddit.customviews.compose.UserText
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils
 import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
+import ml.docilealligator.infinityforreddit.moderation.modmail.ModAction
+import ml.docilealligator.infinityforreddit.moderation.modmail.ModActionType
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModMessage
 import ml.docilealligator.infinityforreddit.repositories.ModMailConversationRepository
 import ml.docilealligator.infinityforreddit.state.DataLoadState
@@ -196,6 +193,13 @@ class ModMailActivity : BaseActivity() {
                 )
 
                 val refreshConversationMessagesTriggers = listOf(
+                    remember { mutableStateOf(false) },
+                    remember { mutableStateOf(false) },
+                    remember { mutableStateOf(false) },
+                    remember { mutableStateOf(false) }
+                )
+
+                val shouldShowUserInfoStates = listOf(
                     remember { mutableStateOf(false) },
                     remember { mutableStateOf(false) },
                     remember { mutableStateOf(false) },
@@ -274,7 +278,18 @@ class ModMailActivity : BaseActivity() {
                                                 },
                                                 onClick = {
                                                     isToolbarMenuOpen = false
+                                                }
+                                            )
 
+                                            DropdownMenuItem(
+                                                text = {
+                                                    PrimaryText(
+                                                        R.string.action_view_user_info
+                                                    )
+                                                },
+                                                onClick = {
+                                                    isToolbarMenuOpen = false
+                                                    shouldShowUserInfoStates[selectedTabIndex].value = true
                                                 }
                                             )
                                         }
@@ -357,6 +372,7 @@ class ModMailActivity : BaseActivity() {
                                 page,
                                 refreshConversationsTriggers[page].value,
                                 refreshConversationMessagesTriggers[page].value,
+                                shouldShowUserInfoStates[page],
                                 getNavigator(page)
                             )
                         }
@@ -381,6 +397,7 @@ class ModMailActivity : BaseActivity() {
         page: Int,
         refreshConversationsTrigger: Boolean,
         refreshConversationMessagesTrigger: Boolean,
+        showUserInfo: MutableState<Boolean>,
         navigator: ThreePaneScaffoldNavigator<Conversation>
     ) {
         val listState: LazyListState = rememberLazyListState()
@@ -389,6 +406,7 @@ class ModMailActivity : BaseActivity() {
         val conversations by getRepository(page).conversations.collectAsStateWithLifecycle()
         val loadState by getRepository(page).loadState.collectAsStateWithLifecycle()
         val isRefreshingConversations by getRepository(page).isRefreshingConversations.collectAsStateWithLifecycle()
+        val modMailUser by getRepository(page).modMailUser.collectAsStateWithLifecycle()
 
         val needPagination by remember {
             derivedStateOf {
@@ -435,7 +453,7 @@ class ModMailActivity : BaseActivity() {
                     subject = updatedConversation.subject
                     isHighlighted = updatedConversation.isHighlighted
                     numMessages = updatedConversation.numMessages
-                    messages = updatedConversation.messages
+                    modMailItems = updatedConversation.modMailItems
                     isUpdated = true
                 }
             }
@@ -480,6 +498,18 @@ class ModMailActivity : BaseActivity() {
                 }
             }
         )
+
+        if (showUserInfo.value) {
+            CustomModalBottomSheet(onDismissRequest = { showUserInfo.value = false }) {
+                modMailUser?.let {
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        UserText(
+                            it.name
+                        )
+                    }
+                }
+            }
+        }
     }
 
     @Composable
@@ -812,8 +842,8 @@ class ModMailActivity : BaseActivity() {
             }
         }
 
-        LaunchedEffect(conversation.messages.size) {
-            lazyColumnScrollState.animateScrollToItem(conversation.messages.size - 1)
+        LaunchedEffect(conversation.modMailItems.size) {
+            lazyColumnScrollState.animateScrollToItem(conversation.modMailItems.size - 1)
         }
 
         LaunchedEffect(refreshConversationMessagesTrigger) {
@@ -854,8 +884,22 @@ class ModMailActivity : BaseActivity() {
                         .clipToBounds(),
                     state = lazyColumnScrollState
                 ) {
-                    items(count = conversation.messages.size, key = { index -> conversation.messages[index].id ?: index }) { index: Int ->
-                        MessageView(conversation, conversation.messages[index], markwon)
+                    items(count = conversation.modMailItems.size, key = { index -> conversation.modMailItems[index].id ?: index }) { index: Int ->
+                        when (conversation.modMailItems[index]) {
+                            is ModMessage -> {
+                                MessageView(
+                                    conversation,
+                                    conversation.modMailItems[index] as ModMessage,
+                                    markwon
+                                )
+                            }
+                            is ModAction -> {
+                                ModActionView(
+                                    conversation,
+                                    conversation.modMailItems[index] as ModAction
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -1083,6 +1127,98 @@ class ModMailActivity : BaseActivity() {
                     }
                 )
             }
+
+            CustomHorizontalDivider(modifier = Modifier.padding(top = 12.dp))
+        }
+    }
+
+    @Composable
+    fun ModActionView(conversation: Conversation, modAction: ModAction) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        ) {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                modAction.author?.name?.let {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                    ) {
+                        UserText(
+                            it,
+                            modifier = Modifier
+                                .clickable {
+                                    if (it != "[deleted]") {
+                                        startActivity(
+                                            Intent(
+                                                this@ModMailActivity,
+                                                ViewUserDetailActivity::class.java
+                                            ).apply {
+                                                putExtra(
+                                                    ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
+                                                    it
+                                                )
+                                            }
+                                        )
+                                    }
+                                }
+                                .padding(horizontal = 16.dp)
+                        )
+
+                        if (modAction.author.isHidden == true) {
+                            SubredditText(
+                                "As r/${conversation.owner?.displayName}",
+                                modifier = Modifier
+                                    .clickable {
+                                        startActivity(
+                                            Intent(
+                                                this@ModMailActivity,
+                                                ViewSubredditDetailActivity::class.java
+                                            ).apply {
+                                                putExtra(
+                                                    ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                                                    conversation.owner?.displayName
+                                                )
+                                            }
+                                        )
+                                    }
+                                    .padding(horizontal = 16.dp),
+                                fontSize = LocalTypography.current.fontSize.size12
+                            )
+                        }
+                    }
+                } ?: run {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+
+                if (modAction.dateUTC > 0) {
+                    SecondaryText(
+                        Utils.getElapsedTime(this@ModMailActivity, modAction.dateUTC),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 16.dp),
+                        textAlign = TextAlign.End
+                    )
+                } else {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
+
+            PrimaryText(
+                stringResource(when (modAction.actionType) {
+                    ModActionType.HIGHLIGHT -> R.string.mod_action_highlighted_by
+                    ModActionType.UN_HIGHLIGHT -> R.string.mod_action_unhighlighted_by
+                    ModActionType.ARCHIVE -> R.string.mod_action_archived_by
+                    ModActionType.UN_ARCHIVE -> R.string.mod_action_unarchived_by
+                    ModActionType.REPORTED_TO_ADMINS -> R.string.mod_action_reported_to_admins_by
+                    ModActionType.MUTE -> R.string.mod_action_muted_by
+                    ModActionType.UN_MUTE -> R.string.mod_action_unmuted_by
+                    ModActionType.UNKNOWN -> R.string.mod_action_unknown_action_by
+                }, modAction.author?.name?.let {"u/$it"} ?: stringResource(R.string.mod_action_unknown_user)),
+                modifier = Modifier.padding(16.dp),
+                fontWeight = FontWeight.Bold
+            )
 
             CustomHorizontalDivider(modifier = Modifier.padding(top = 12.dp))
         }

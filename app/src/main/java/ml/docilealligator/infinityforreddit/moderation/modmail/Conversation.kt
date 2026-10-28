@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.moderation.modmail
 import android.os.Parcelable
 import androidx.room.Ignore
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.CancellationException
 import kotlinx.parcelize.IgnoredOnParcel
@@ -35,6 +36,7 @@ data class Conversation(
         0:  new
         1:  in progress
         2:  archived
+        7:  conversation started by reddit??
     */
     @SerializedName("state") var state: Int? = null,
     @SerializedName("conversationType") var conversationType: String? = null,
@@ -45,13 +47,13 @@ data class Conversation(
     @SerializedName("id") var id: String? = null,
     @SerializedName("isHighlighted") var isHighlighted: Boolean? = null,
     @SerializedName("numMessages") var numMessages: Int? = null,
-    @Ignore private var _messages: MutableList<ModMessage>? = mutableListOf(),
+    @Ignore private var _modMailItems: MutableList<ModMailItem>? = mutableListOf(),
     @Ignore var isUpdated: Boolean
 ): Parcelable {
-    var messages: MutableList<ModMessage>
-        get() = _messages ?: mutableListOf<ModMessage>().also { _messages = it }
+    var modMailItems: MutableList<ModMailItem>
+        get() = _modMailItems ?: mutableListOf<ModMailItem>().also { _modMailItems = it }
         set(newMessages) {
-            _messages = newMessages
+            _modMailItems = newMessages
         }
 
     @IgnoredOnParcel
@@ -78,39 +80,72 @@ data class Conversation(
             return false
         }
 
-        return other.id == id && other.messages == messages && other.isUpdated == isUpdated
+        return other.id == id && other.modMailItems == modMailItems && other.isUpdated == isUpdated
     }
 
     companion object {
-        fun parseConversation(gson: Gson, conversationJson: String, messagesJSONObject: JSONObject): Conversation {
+        fun parseConversation(
+            gson: Gson,
+            conversationJson: String,
+            messagesJSONObject: JSONObject,
+            modActionsJSONObject: JSONObject?
+        ): Conversation {
             return gson.fromJson(conversationJson, Conversation::class.java).apply {
                 for (objId in objIds) {
                     objId.key?.let { key ->
                         if (key == "messages") {
                             objId.id?.let { id ->
                                 try {
-                                    messages.add(gson.fromJson(messagesJSONObject.getString(id), ModMessage::class.java))
-                                    print(messagesJSONObject)
+                                    modMailItems.add(
+                                        gson.fromJson(
+                                            messagesJSONObject.getString(id),
+                                            ModMessage::class.java
+                                        )
+                                    )
                                 } catch (e: CancellationException) {
                                     throw e
                                 } catch (ignore: Exception) {
                                     ignore.printStackTrace()
                                 }
                             }
+                        } else if (key == "modActions" && modActionsJSONObject != null) {
+                            objId.id?.let { id ->
+                                try {
+                                    modMailItems.add(
+                                        gson.fromJson(
+                                            modActionsJSONObject.getString(id),
+                                            ModAction::class.java
+                                        )
+                                    )
+                                } catch (e: CancellationException) {
+                                    throw e
+                                } catch (ignore: Exception) {
+                                    ignore.printStackTrace()
+                                }
+                            }
+                        } else {
+
                         }
                     }
                 }
             }
         }
 
-        suspend fun fetchConversation(oauthRetrofit: Retrofit, accessToken: String, conversationId: String, gson: Gson): Pair<Conversation, ModMailUser> {
+        suspend fun fetchConversation(oauthRetrofit: Retrofit, accessToken: String, conversationId: String): Pair<Conversation, ModMailUser> {
             val response: Response<String> = oauthRetrofit.create(RedditAPIKt::class.java).getModMailConversation(
                 conversationId, APIUtils.getOAuthHeader(accessToken))
             if (response.isSuccessful && response.body() != null) {
                 val responseJson = JSONObject(response.body()!!)
+                val gson = GsonBuilder()
+                    .registerTypeAdapter(
+                        ModActionType::class.java,
+                        ModActionTypeDeserializer()
+                    )
+                    .create()
                 val conversation = parseConversation(
                     gson, responseJson.getString(JSONUtils.CONVERSATION_KEY),
-                    responseJson.getJSONObject(JSONUtils.MESSAGES_KEY)
+                    responseJson.getJSONObject(JSONUtils.MESSAGES_KEY),
+                    if (responseJson.has(JSONUtils.MOD_ACTIONS_KEY)) responseJson.getJSONObject(JSONUtils.MOD_ACTIONS_KEY) else null
                 ).apply {
                     isUpdated = true
                 }

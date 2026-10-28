@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.repositories
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -9,6 +10,8 @@ import kotlinx.coroutines.withContext
 import ml.docilealligator.infinityforreddit.state.DataLoadState
 import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
 import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
+import ml.docilealligator.infinityforreddit.moderation.modmail.ModAction
+import ml.docilealligator.infinityforreddit.moderation.modmail.ModActionTypeDeserializer
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModMailUser
 import ml.docilealligator.infinityforreddit.utils.APIUtils
 import ml.docilealligator.infinityforreddit.utils.JSONUtils
@@ -123,11 +126,17 @@ class ModMailConversationRepository(
                 val gson = Gson()
                 val conversations: MutableList<Conversation> = mutableListOf()
 
-                val messagesJSONObject = json.getJSONObject(JSONUtils.MESSAGES_KEY)
                 for (i in 0 until conversationIdsArray.length()) {
                     val conversationId = conversationIdsArray.getString(i)
                     try {
-                        conversations.add(Conversation.parseConversation(gson, json.getJSONObject(JSONUtils.CONVERSATIONS_KEY).getString(conversationId), messagesJSONObject))
+                        conversations.add(
+                            Conversation.parseConversation(
+                            gson,
+                            json.getJSONObject(JSONUtils.CONVERSATIONS_KEY).getString(conversationId),
+                            json.getJSONObject(JSONUtils.MESSAGES_KEY),
+                                if (json.has(JSONUtils.MOD_ACTIONS_KEY)) json.getJSONObject(JSONUtils.MOD_ACTIONS_KEY) else null
+                            )
+                        )
                     } catch (e: kotlinx.coroutines.CancellationException) {
                         throw e
                     } catch (ignore: Exception) {
@@ -148,7 +157,7 @@ class ModMailConversationRepository(
 
             try {
                 val (updatedConversation, modMailUser) = Conversation.fetchConversation(
-                    oauthRetrofit, accessToken, id, Gson()
+                    oauthRetrofit, accessToken, id
                 )
 
                 _modMailUser.value = modMailUser
@@ -187,7 +196,7 @@ class ModMailConversationRepository(
                 subject = updatedConversation.subject
                 isHighlighted = updatedConversation.isHighlighted
                 numMessages = updatedConversation.numMessages
-                messages = updatedConversation.messages
+                modMailItems = updatedConversation.modMailItems
                 isUpdated = true
             }
         }

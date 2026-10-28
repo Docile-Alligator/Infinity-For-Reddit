@@ -113,6 +113,7 @@
     <string name="action_refresh_mod_mail_conversations">Refresh Conversations</string>
     <string name="action_refresh_mod_mail_messages_in_conversation">Refresh Messages</string>
     <string name="action_user_mod_action">User Actions</string>
+    <string name="action_view_user_info">View User Info</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -1741,4 +1742,13 @@
     <string name="mod_mail_reply_as">Reply as %1$s</string>
     <string name="could_not_send_message">Could not send message.</string>
     <string name="could_not_send_message_with_reason">Could not send message. Error: %1$s</string>
+    <string name="mod_action_highlighted_by">Highlighted by %1$s.</string>
+    <string name="mod_action_unhighlighted_by">Unhighlighted by %1$s.</string>
+    <string name="mod_action_archived_by">Archived by %1$s.</string>
+    <string name="mod_action_unarchived_by">Unarchived by %1$s.</string>
+    <string name="mod_action_reported_to_admins_by">Reported to admins by %1$s.</string>
+    <string name="mod_action_muted_by">Muted by %1$s.</string>
+    <string name="mod_action_unmuted_by">Unmuted by %1$s.</string>
+    <string name="mod_action_unknown_action_by">Unknown action by %1$s.</string>
+    <string name="mod_action_unknown_user">unknown user</string>
 </resources>
