@@ -103,17 +103,20 @@ data class Conversation(
             }
         }
 
-        suspend fun fetchConversation(oauthRetrofit: Retrofit, accessToken: String, conversationId: String, gson: Gson): Conversation {
+        suspend fun fetchConversation(oauthRetrofit: Retrofit, accessToken: String, conversationId: String, gson: Gson): Pair<Conversation, ModMailUser> {
             val response: Response<String> = oauthRetrofit.create(RedditAPIKt::class.java).getModMailConversation(
                 conversationId, APIUtils.getOAuthHeader(accessToken))
             if (response.isSuccessful && response.body() != null) {
                 val responseJson = JSONObject(response.body()!!)
-                return parseConversation(
+                val conversation = parseConversation(
                     gson, responseJson.getString(JSONUtils.CONVERSATION_KEY),
                     responseJson.getJSONObject(JSONUtils.MESSAGES_KEY)
                 ).apply {
                     isUpdated = true
                 }
+                val modMailUserResponse = ModMailUser.parseModMailUser(gson, responseJson.getString(JSONUtils.USER_KEY))
+
+                return Pair(conversation, modMailUserResponse)
             } else {
                 throw IOException(response.errorBody()?.string())
             }
@@ -168,6 +171,7 @@ data class Participant(
 @Parcelize
 data class ObjId(
     @SerializedName("id") var id: String? = null,
+    // The key can be "messages" or "ModAction"
     @SerializedName("key") var key: String? = null
 ): Parcelable
 

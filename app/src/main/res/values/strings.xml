@@ -112,6 +112,7 @@
     <string name="action_more_post_options">More Post Options</string>
     <string name="action_refresh_mod_mail_conversations">Refresh Conversations</string>
     <string name="action_refresh_mod_mail_messages_in_conversation">Refresh Messages</string>
+    <string name="action_user_mod_action">User Actions</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>

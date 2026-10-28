@@ -265,6 +265,18 @@ class ModMailActivity : BaseActivity() {
                                                     refreshConversationMessagesTriggers[selectedTabIndex].value = !refreshConversationMessagesTriggers[selectedTabIndex].value
                                                 }
                                             )
+
+                                            DropdownMenuItem(
+                                                text = {
+                                                    PrimaryText(
+                                                        R.string.action_user_mod_action
+                                                    )
+                                                },
+                                                onClick = {
+                                                    isToolbarMenuOpen = false
+
+                                                }
+                                            )
                                         }
                                     }
                                 }

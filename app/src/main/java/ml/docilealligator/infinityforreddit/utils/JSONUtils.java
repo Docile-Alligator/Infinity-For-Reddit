@@ -216,6 +216,7 @@ public class JSONUtils {
     public static final String OBJ_IDS_KEY = "objIds";
     public static final String MESSAGES_KEY = "messages";
     public static final String CONVERSATION_KEY = "conversation";
+    public static final String USER_KEY = "user";
 
     @Nullable
     public static Map<String, MediaMetadata> parseMediaMetadata(JSONObject data) {

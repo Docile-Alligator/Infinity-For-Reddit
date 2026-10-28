@@ -1,16 +1,15 @@
 package ml.docilealligator.infinityforreddit.repositories
 
 import android.content.SharedPreferences
-import android.widget.Toast
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
-import ml.docilealligator.infinityforreddit.R
 import ml.docilealligator.infinityforreddit.state.DataLoadState
 import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
 import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
+import ml.docilealligator.infinityforreddit.moderation.modmail.ModMailUser
 import ml.docilealligator.infinityforreddit.utils.APIUtils
 import ml.docilealligator.infinityforreddit.utils.JSONUtils
 import org.json.JSONObject
@@ -25,6 +24,9 @@ class ModMailConversationRepository(
 ) {
     private val _conversations = MutableStateFlow<List<Conversation>?>(null)
     val conversations = _conversations.asStateFlow()
+
+    private val _modMailUser = MutableStateFlow<ModMailUser?>(null)
+    val modMailUser = _modMailUser.asStateFlow()
 
     // Conversations are saved in _conversations
     private val _loadState: MutableStateFlow<DataLoadState<Unit>> = MutableStateFlow(DataLoadState.Idle)
@@ -145,9 +147,11 @@ class ModMailConversationRepository(
             }
 
             try {
-                val updatedConversation = Conversation.fetchConversation(
+                val (updatedConversation, modMailUser) = Conversation.fetchConversation(
                     oauthRetrofit, accessToken, id, Gson()
                 )
+
+                _modMailUser.value = modMailUser
 
                 updateConversation(conversation, updatedConversation)
 
