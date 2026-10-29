@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -68,6 +69,14 @@ class ModMailConversationViewModel(
         repository.sendMessage(conversation, content, isAuthorHidden, isInternal)
     }
 
+    suspend fun executeModConversationAction(
+        conversation: Conversation,
+        modConversationAction: ModConversationAction,
+        repository: ModMailConversationRepository
+    ) {
+        repository.executeModConversationAction(conversation, modConversationAction)
+    }
+
     fun switchState(state: ModMailState) {
         if (_currentState.value != state) {
             recentModMailConversationRepository.resetState()
@@ -113,4 +122,16 @@ enum class ModMailState(
             return entries.find { it.rawValue.equals(value, ignoreCase = true) } ?: ALL
         }
     }
+}
+
+enum class ModConversationAction(
+    val rawValue: String
+) {
+    ARCHIVE("archive"),
+    UNARCHIVE("unarchive"),
+    HIGHLIGHT("highlight"),
+    // Unhighlight is DELETE, not POST
+    UNHIGHLIGHT("highlight"),
+    READ("read"),
+    UNREAD("unread")
 }

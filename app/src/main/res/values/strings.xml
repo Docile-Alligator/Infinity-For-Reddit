@@ -1758,4 +1758,10 @@
     <string name="unhighlight">Unhighlight</string>
     <string name="read">Read</string>
     <string name="unread">Unread</string>
+    <string name="archived">Archived</string>
+    <string name="archive_failed">Failed to archive</string>
+    <string name="archive_failed_with_reason">Failed to archive. Error: %1$s</string>
+    <string name="unarchived">Unarchived</string>
+    <string name="unarchive_failed">Failed to unarchive</string>
+    <string name="unarchive_failed_with_reason">Failed to unarchive. Error: %1$s</string>
 </resources>

@@ -12,6 +12,7 @@ import ml.docilealligator.infinityforreddit.RedditError
 import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
 import ml.docilealligator.infinityforreddit.utils.APIUtils
 import ml.docilealligator.infinityforreddit.utils.JSONUtils
+import ml.docilealligator.infinityforreddit.viewmodels.ModConversationAction
 import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -191,6 +192,31 @@ data class Conversation(
                 }
 
                 throw IOException("Could not send message")
+            }
+        }
+
+        suspend fun executeAction(
+            oauthRetrofit: Retrofit,
+            accessToken: String,
+            conversationId: String,
+            modConversationAction: ModConversationAction
+        ) {
+            val response: Response<String> = oauthRetrofit.create(RedditAPIKt::class.java).executeModMailConversationAction(
+                "ModmailConversation_$conversationId",
+                modConversationAction.rawValue,
+                APIUtils.getOAuthHeader(accessToken)
+            )
+
+            // The response does not have the updated conversation state.
+            if (!response.isSuccessful) {
+                response.errorBody()?.string().let {
+                    val redditError: RedditError? = Gson().fromJson(it, RedditError::class.java)
+                    redditError?.let { redditError ->
+                        throw IOException(redditError.reason ?: "Failed")
+                    }
+                }
+
+                throw IOException("Failed")
             }
         }
     }

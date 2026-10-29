@@ -16,6 +16,7 @@ import ml.docilealligator.infinityforreddit.moderation.modmail.ModActionTypeDese
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModMailUser
 import ml.docilealligator.infinityforreddit.utils.APIUtils
 import ml.docilealligator.infinityforreddit.utils.JSONUtils
+import ml.docilealligator.infinityforreddit.viewmodels.ModConversationAction
 import ml.docilealligator.infinityforreddit.viewmodels.ModMailState
 import org.json.JSONObject
 import retrofit2.Retrofit
@@ -213,6 +214,17 @@ class ModMailConversationRepository(
         conversation.id?.let { id ->
             Conversation.reply(
                 oauthRetrofit, accessToken, id, content, isAuthorHidden, isInternal
+            )
+        }
+    }
+
+    suspend fun executeModConversationAction(
+        conversation: Conversation,
+        modConversationAction: ModConversationAction
+    ) {
+        conversation.id?.let { id ->
+            Conversation.executeAction(
+                oauthRetrofit, accessToken, id, modConversationAction
             )
         }
     }

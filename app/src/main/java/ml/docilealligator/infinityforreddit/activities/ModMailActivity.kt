@@ -132,6 +132,7 @@ import ml.docilealligator.infinityforreddit.moderation.modmail.ModMessage
 import ml.docilealligator.infinityforreddit.repositories.ModMailConversationRepository
 import ml.docilealligator.infinityforreddit.state.DataLoadState
 import ml.docilealligator.infinityforreddit.utils.Utils
+import ml.docilealligator.infinityforreddit.viewmodels.ModConversationAction
 import ml.docilealligator.infinityforreddit.viewmodels.ModMailConversationViewModel
 import ml.docilealligator.infinityforreddit.viewmodels.ModMailState
 import retrofit2.Retrofit
@@ -547,7 +548,33 @@ class ModMailActivity : BaseActivity() {
                         text = stringResource(if (it.isArchived) R.string.unarchive else R.string.archive),
                         drawableResource = if (it.isArchived) R.drawable.ic_unarchive_rounded_24dp else R.drawable.ic_archive_rounded_24dp
                     ) {
+                        conversationForOptionsSheet = null
 
+                        scope.launch {
+                            try {
+                                conversationViewModel.executeModConversationAction(
+                                    it,
+                                    if (it.isArchived) ModConversationAction.UNARCHIVE else ModConversationAction.ARCHIVE,
+                                    getRepository(page)
+                                )
+
+                                Toast.makeText(
+                                    this@ModMailActivity,
+                                    getString(if (it.isArchived) R.string.unarchived else R.string.archived),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } catch (e: Exception) {
+                                if (e is CancellationException) {
+                                    throw e
+                                }
+
+                                e.printStackTrace()
+
+                                Toast.makeText(this@ModMailActivity, e.message?.let { message ->
+                                    getString(if (it.isArchived) R.string.unarchive_failed_with_reason else R.string.archive_failed_with_reason, message)
+                                } ?: getString(if (it.isArchived) R.string.unarchive_failed else R.string.archive_failed), Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     }
 
                     IconTextRowButton(
@@ -604,7 +631,9 @@ class ModMailActivity : BaseActivity() {
                     LazyColumn(
                         state = listState,
                         contentPadding = WindowInsets.navigationBars.asPaddingValues(),
-                        modifier = Modifier.clipToBounds()
+                        modifier = Modifier
+                            .clipToBounds()
+                            .fillMaxHeight()
                     ) {
                         items(
                             count = it.size,
@@ -936,6 +965,10 @@ class ModMailActivity : BaseActivity() {
                             Toast.makeText(this@ModMailActivity, e.message?.let {
                                 getString(R.string.could_not_send_message_with_reason, it)
                             } ?: getString(R.string.could_not_send_message), Toast.LENGTH_SHORT).show()
+
+                            e.printStackTrace()
+                        } else {
+                            throw e
                         }
                     }
 
