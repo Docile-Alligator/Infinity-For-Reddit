@@ -657,6 +657,37 @@ class ModMailActivity : BaseActivity() {
                                 .weight(1f)
                         )
                     }
+                } else if (loadState is DataLoadState.Success) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState()),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Spacer(
+                            modifier = Modifier
+                                .weight(1f)
+                        )
+
+                        GlideImage(
+                            model = R.drawable.error_image,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .padding(top = 32.dp)
+                                .padding(horizontal = 32.dp)
+                        )
+
+                        SecondaryText(
+                            stringResource(R.string.no_mod_mail),
+                            modifier = Modifier
+                                .padding(vertical = 16.dp, horizontal = 32.dp)
+                        )
+
+                        Spacer(
+                            modifier = Modifier
+                                .weight(1f)
+                        )
+                    }
                 }
             }
         }

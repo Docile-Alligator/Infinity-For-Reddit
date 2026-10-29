@@ -1751,4 +1751,5 @@
     <string name="mod_action_unmuted_by">Unmuted by %1$s.</string>
     <string name="mod_action_unknown_action_by">Unknown action by %1$s.</string>
     <string name="mod_action_unknown_user">unknown user</string>
+    <string name="no_mod_mail">No mod mail.</string>
 </resources>
