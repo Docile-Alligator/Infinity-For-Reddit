@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.apis
 import ml.docilealligator.infinityforreddit.thing.SortType
 import retrofit2.Call
 import retrofit2.Response
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FieldMap
 import retrofit2.http.FormUrlEncoded
@@ -345,5 +346,21 @@ interface RedditAPIKt {
         @Path("id") id: String,
         @Path("action") action: String,
         @HeaderMap headers: Map<String, String>
+    ): Response<String>
+
+    @DELETE("/api/mod/conversations/{id}/highlight")
+    suspend fun unhighlightModMailConversation(
+        @Path("id") id: String,
+        @Path("action") action: String,
+        @HeaderMap headers: Map<String, String>
+    ): Response<String>
+
+    @FormUrlEncoded
+    @POST("/api/mod/conversations/{action}")
+    suspend fun toggleModMailConversationsRead(
+        @Path("action") action: String,
+        @HeaderMap headers: Map<String, String>,
+        //A comma-separated list of items
+        @FieldMap params: Map<String, String>
     ): Response<String>
 }

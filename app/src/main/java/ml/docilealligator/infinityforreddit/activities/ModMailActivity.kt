@@ -582,7 +582,33 @@ class ModMailActivity : BaseActivity() {
                         text = stringResource(if (it.isHighlighted == true) R.string.unhighlight else R.string.highlight),
                         drawableResource = if (it.isHighlighted == true) R.drawable.ic_unhighlight_rounded_24dp else R.drawable.ic_highlight_rounded_24dp
                     ) {
+                        conversationForOptionsSheet = null
 
+                        scope.launch {
+                            try {
+                                conversationViewModel.executeModConversationAction(
+                                    it,
+                                    if (it.isHighlighted == true) ModConversationAction.UNHIGHLIGHT else ModConversationAction.HIGHLIGHT,
+                                    getRepository(page)
+                                )
+
+                                Toast.makeText(
+                                    this@ModMailActivity,
+                                    getString(if (it.isHighlighted == true) R.string.unhighlighted else R.string.highlighted),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } catch (e: Exception) {
+                                if (e is CancellationException) {
+                                    throw e
+                                }
+
+                                e.printStackTrace()
+
+                                Toast.makeText(this@ModMailActivity, e.message?.let { message ->
+                                    getString(if (it.isHighlighted == true) R.string.unhighlight_failed_with_reason else R.string.highlight_failed_with_reason, message)
+                                } ?: getString(if (it.isHighlighted == true) R.string.unhighlight_failed else R.string.highlight_failed), Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     }
 
                     IconTextRowButton(
@@ -590,7 +616,33 @@ class ModMailActivity : BaseActivity() {
                         text = stringResource(if (it.isRead) R.string.unread else R.string.read),
                         drawableResource = if (it.isRead) R.drawable.ic_unread_rounded_24dp else R.drawable.ic_read_rounded_24dp
                     ) {
+                        conversationForOptionsSheet = null
 
+                        scope.launch {
+                            try {
+                                conversationViewModel.executeModConversationAction(
+                                    it,
+                                    if (it.isRead) ModConversationAction.UNREAD else ModConversationAction.READ,
+                                    getRepository(page)
+                                )
+
+                                Toast.makeText(
+                                    this@ModMailActivity,
+                                    getString(if (it.isRead) R.string.unread else R.string.read),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } catch (e: Exception) {
+                                if (e is CancellationException) {
+                                    throw e
+                                }
+
+                                e.printStackTrace()
+
+                                Toast.makeText(this@ModMailActivity, e.message?.let { message ->
+                                    getString(if (it.isRead) R.string.unread_failed_with_reason else R.string.read_failed_with_reason, message)
+                                } ?: getString(if (it.isRead) R.string.unread_failed else R.string.read_failed), Toast.LENGTH_SHORT).show()
+                            }
+                        }
                     }
                 }
             }

@@ -1764,4 +1764,14 @@
     <string name="unarchived">Unarchived</string>
     <string name="unarchive_failed">Failed to unarchive</string>
     <string name="unarchive_failed_with_reason">Failed to unarchive. Error: %1$s</string>
+    <string name="highlighted">Highlighted</string>
+    <string name="highlight_failed">Failed to highlight</string>
+    <string name="highlight_failed_with_reason">Failed to highlight. Error: %1$s</string>
+    <string name="unhighlighted">Unhighlighted</string>
+    <string name="unhighlight_failed">Failed to unhighlight</string>
+    <string name="unhighlight_failed_with_reason">Failed to unhighlight. Error: %1$s</string>
+    <string name="read_failed">Failed to read</string>
+    <string name="read_failed_with_reason">Failed to read. Error: %1$s</string>
+    <string name="unread_failed">Failed to unread</string>
+    <string name="unread_failed_with_reason">Failed to unread. Error: %1$s</string>
 </resources>

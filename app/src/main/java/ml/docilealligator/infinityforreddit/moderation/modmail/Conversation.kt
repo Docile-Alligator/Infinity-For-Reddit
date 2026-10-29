@@ -201,11 +201,28 @@ data class Conversation(
             conversationId: String,
             modConversationAction: ModConversationAction
         ) {
-            val response: Response<String> = oauthRetrofit.create(RedditAPIKt::class.java).executeModMailConversationAction(
-                "ModmailConversation_$conversationId",
-                modConversationAction.rawValue,
-                APIUtils.getOAuthHeader(accessToken)
-            )
+            val response: Response<String> = if (modConversationAction == ModConversationAction.UNHIGHLIGHT) {
+                oauthRetrofit.create(RedditAPIKt::class.java).unhighlightModMailConversation(
+                    "ModmailConversation_$conversationId",
+                    modConversationAction.rawValue,
+                    APIUtils.getOAuthHeader(accessToken)
+                )
+            } else if (modConversationAction == ModConversationAction.READ || modConversationAction == ModConversationAction.UNREAD) {
+                // Response will be empty
+                oauthRetrofit.create(RedditAPIKt::class.java).toggleModMailConversationsRead(
+                    modConversationAction.rawValue,
+                    APIUtils.getOAuthHeader(accessToken),
+                    mutableMapOf<String, String>().apply {
+                        this[APIUtils.CONVERSATION_IDS_KEY] = conversationId
+                    }
+                )
+            } else {
+                oauthRetrofit.create(RedditAPIKt::class.java).executeModMailConversationAction(
+                    "ModmailConversation_$conversationId",
+                    modConversationAction.rawValue,
+                    APIUtils.getOAuthHeader(accessToken)
+                )
+            }
 
             // The response does not have the updated conversation state.
             if (!response.isSuccessful) {
