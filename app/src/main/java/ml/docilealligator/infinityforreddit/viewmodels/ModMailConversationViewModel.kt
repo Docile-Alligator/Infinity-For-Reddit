@@ -71,6 +71,9 @@ class ModMailConversationViewModel(
     fun switchState(state: ModMailState) {
         if (_currentState.value != state) {
             recentModMailConversationRepository.resetState()
+            modModMailConversationRepository.resetState()
+            userModMailConversationRepository.resetState()
+            unreadModMailConversationRepository.resetState()
             _currentState.value = state
         }
     }
@@ -87,24 +90,27 @@ class ModMailConversationViewModel(
     }
 }
 
-enum class ModMailState(val rawValue: String) {
-    ALL("all"),
-    APPEALS("appeals"),
-    NOTIFICATIONS("notifications"),
-    INBOX("inbox"),
-    FILTERED("filtered"),
-    IN_PROGRESS("inprogress"),
-    MOD("mod"),
-    ARCHIVED("archived"),
-    DEFAULT("default"),
-    HIGHLIGHTED("highlighted"),
-    ADMIN("admin"),
-    JOIN_REQUESTS("join_requests"),
-    NEW("new");
+enum class ModMailState(
+    val rawValue: String,
+    val title: String
+) {
+    ALL("all", "All"),
+    APPEALS("appeals", "Appeals"),
+    NOTIFICATIONS("notifications", "Notifications"),
+    INBOX("inbox", "Inbox"),
+    FILTERED("filtered", "Filtered"),
+    IN_PROGRESS("inprogress", "In progress"),
+    MOD("mod", "Mod"),
+    ARCHIVED("archived", "Archived"),
+    DEFAULT("default", "Default"),
+    HIGHLIGHTED("highlighted", "Highlighted"),
+    ADMIN("admin", "Admin"),
+    JOIN_REQUESTS("join_requests", "Join requests"),
+    NEW("new", "New");
 
     companion object {
         fun fromString(value: String?): ModMailState {
-            return entries.find { it.rawValue.equals(value, ignoreCase = true) } ?: DEFAULT
+            return entries.find { it.rawValue.equals(value, ignoreCase = true) } ?: ALL
         }
     }
 }

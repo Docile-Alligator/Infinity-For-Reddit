@@ -99,6 +99,7 @@ import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.MarkwonPlugin
 import io.noties.markwon.core.MarkwonTheme
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
@@ -110,6 +111,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButt
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomHorizontalDivider
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingIndicator
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomModalBottomSheet
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomSpinner
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextField
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
@@ -186,6 +188,8 @@ class ModMailActivity : BaseActivity() {
                     val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
                     var isToolbarMenuOpen by remember { mutableStateOf(false) }
 
+                    var isStateSpinnerShownState = remember { mutableStateOf(false) }
+
                     val unreadNavigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
                     val recentNavigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
                     val modNavigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
@@ -234,6 +238,17 @@ class ModMailActivity : BaseActivity() {
                                 scrollBehavior = scrollBehavior,
                                 windowInsetsController = windowInsetsController,
                                 actions = {
+                                    CustomSpinner(
+                                        isSpinnershownState = isStateSpinnerShownState,
+                                        spinnerButtonText = state.title,
+                                        options = ModMailState.entries,
+                                        optionName = { state ->
+                                            state.title
+                                        }
+                                    ) { state ->
+                                        conversationViewModel.switchState(state)
+                                    }
+
                                     Box {
                                         IconButton(onClick = {
                                             isToolbarMenuOpen = true
@@ -284,7 +299,6 @@ class ModMailActivity : BaseActivity() {
                                                     },
                                                     onClick = {
                                                         isToolbarMenuOpen = false
-                                                        conversationViewModel.switchState(ModMailState.MOD)
                                                     }
                                                 )
 
