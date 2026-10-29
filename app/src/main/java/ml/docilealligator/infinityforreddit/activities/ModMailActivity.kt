@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Spanned
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -69,6 +70,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -128,6 +130,7 @@ import ml.docilealligator.infinityforreddit.repositories.ModMailConversationRepo
 import ml.docilealligator.infinityforreddit.state.DataLoadState
 import ml.docilealligator.infinityforreddit.utils.Utils
 import ml.docilealligator.infinityforreddit.viewmodels.ModMailConversationViewModel
+import ml.docilealligator.infinityforreddit.viewmodels.ModMailState
 import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Named
@@ -173,208 +176,213 @@ class ModMailActivity : BaseActivity() {
 
         setContent {
             AppTheme(customThemeWrapper.themeType, mSharedPreferences) {
-                val scrollBehavior = enterAlwaysScrollBehavior()
+                val state by conversationViewModel.currentState.collectAsStateWithLifecycle()
 
-                val scope = rememberCoroutineScope()
-                val pagerState = rememberPagerState { 4 }
-                val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
-                var isToolbarMenuOpen by remember { mutableStateOf(false) }
+                key(state) {
+                    val scrollBehavior = enterAlwaysScrollBehavior()
 
-                val unreadNavigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
-                val recentNavigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
-                val modNavigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
-                val userNavigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
+                    val scope = rememberCoroutineScope()
+                    val pagerState = rememberPagerState { 4 }
+                    val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
+                    var isToolbarMenuOpen by remember { mutableStateOf(false) }
 
-                val refreshConversationsTriggers = listOf(
-                    remember { mutableStateOf(false) },
-                    remember { mutableStateOf(false) },
-                    remember { mutableStateOf(false) },
-                    remember { mutableStateOf(false) }
-                )
+                    val unreadNavigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
+                    val recentNavigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
+                    val modNavigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
+                    val userNavigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
 
-                val refreshConversationMessagesTriggers = listOf(
-                    remember { mutableStateOf(false) },
-                    remember { mutableStateOf(false) },
-                    remember { mutableStateOf(false) },
-                    remember { mutableStateOf(false) }
-                )
+                    val refreshConversationsTriggers = listOf(
+                        remember { mutableStateOf(false) },
+                        remember { mutableStateOf(false) },
+                        remember { mutableStateOf(false) },
+                        remember { mutableStateOf(false) }
+                    )
 
-                val shouldShowUserInfoStates = listOf(
-                    remember { mutableStateOf(false) },
-                    remember { mutableStateOf(false) },
-                    remember { mutableStateOf(false) },
-                    remember { mutableStateOf(false) }
-                )
+                    val refreshConversationMessagesTriggers = listOf(
+                        remember { mutableStateOf(false) },
+                        remember { mutableStateOf(false) },
+                        remember { mutableStateOf(false) },
+                        remember { mutableStateOf(false) }
+                    )
 
-                fun getNavigator(page: Int): ThreePaneScaffoldNavigator<Conversation> {
-                    return when(page) {
-                        0 -> unreadNavigator
-                        1 -> recentNavigator
-                        2 -> modNavigator
-                        3 -> userNavigator
-                        else -> unreadNavigator
+                    val shouldShowUserInfoStates = listOf(
+                        remember { mutableStateOf(false) },
+                        remember { mutableStateOf(false) },
+                        remember { mutableStateOf(false) },
+                        remember { mutableStateOf(false) }
+                    )
+
+                    fun getNavigator(page: Int): ThreePaneScaffoldNavigator<Conversation> {
+                        return when(page) {
+                            0 -> unreadNavigator
+                            1 -> recentNavigator
+                            2 -> modNavigator
+                            3 -> userNavigator
+                            else -> unreadNavigator
+                        }
                     }
-                }
 
-                LaunchedEffect(pagerState.currentPage) {
-                    conversationViewModel.initialLoad(getRepository(pagerState.currentPage))
-                }
+                    LaunchedEffect(pagerState.currentPage) {
+                        conversationViewModel.initialLoad(getRepository(pagerState.currentPage))
+                    }
 
-                Scaffold(
-                    topBar = {
-                        ThemedTopAppBar(
-                            titleStringResId = R.string.mod_mail_activity_label,
-                            isImmersiveInterfaceEnabled = isImmersiveInterfaceEnabled,
-                            scrollBehavior = scrollBehavior,
-                            windowInsetsController = windowInsetsController,
-                            actions = {
-                                Box {
-                                    IconButton(onClick = {
-                                        isToolbarMenuOpen = true
-                                    }) {
-                                        ToolbarIcon(
-                                            drawableId = R.drawable.ic_more_vert_grey_24dp,
-                                            contentDescription = stringResource(R.string.content_description_toolbar_menu_icon)
+                    Scaffold(
+                        topBar = {
+                            ThemedTopAppBar(
+                                titleStringResId = R.string.mod_mail_activity_label,
+                                isImmersiveInterfaceEnabled = isImmersiveInterfaceEnabled,
+                                scrollBehavior = scrollBehavior,
+                                windowInsetsController = windowInsetsController,
+                                actions = {
+                                    Box {
+                                        IconButton(onClick = {
+                                            isToolbarMenuOpen = true
+                                        }) {
+                                            ToolbarIcon(
+                                                drawableId = R.drawable.ic_more_vert_grey_24dp,
+                                                contentDescription = stringResource(R.string.content_description_toolbar_menu_icon)
+                                            )
+                                        }
+
+                                        DropdownMenu(
+                                            expanded = isToolbarMenuOpen,
+                                            containerColor = Color(LocalAppTheme.current.backgroundColor),
+                                            onDismissRequest = { isToolbarMenuOpen = false }
+                                        ) {
+                                            if (getNavigator(selectedTabIndex).scaffoldValue.get(ListDetailPaneScaffoldRole.List) != PaneAdaptedValue.Hidden) {
+                                                DropdownMenuItem(
+                                                    text = {
+                                                        PrimaryText(
+                                                            R.string.action_refresh_mod_mail_conversations
+                                                        )
+                                                    },
+                                                    onClick = {
+                                                        isToolbarMenuOpen = false
+                                                        refreshConversationsTriggers[selectedTabIndex].value = !refreshConversationsTriggers[selectedTabIndex].value
+                                                    }
+                                                )
+                                            }
+
+                                            if (getNavigator(selectedTabIndex).currentDestination?.contentKey != null) {
+                                                DropdownMenuItem(
+                                                    text = {
+                                                        PrimaryText(
+                                                            R.string.action_refresh_mod_mail_messages_in_conversation
+                                                        )
+                                                    },
+                                                    onClick = {
+                                                        isToolbarMenuOpen = false
+                                                        refreshConversationMessagesTriggers[selectedTabIndex].value = !refreshConversationMessagesTriggers[selectedTabIndex].value
+                                                    }
+                                                )
+
+                                                DropdownMenuItem(
+                                                    text = {
+                                                        PrimaryText(
+                                                            R.string.action_user_mod_action
+                                                        )
+                                                    },
+                                                    onClick = {
+                                                        isToolbarMenuOpen = false
+                                                        conversationViewModel.switchState(ModMailState.MOD)
+                                                    }
+                                                )
+
+                                                DropdownMenuItem(
+                                                    text = {
+                                                        PrimaryText(
+                                                            R.string.action_view_user_info
+                                                        )
+                                                    },
+                                                    onClick = {
+                                                        isToolbarMenuOpen = false
+                                                        shouldShowUserInfoStates[selectedTabIndex].value = true
+                                                    }
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            ) {
+                                triggerBackPress()
+                            }
+                        },
+                        containerColor = Color(mCustomThemeWrapper.backgroundColor),
+                    ) { innerPadding ->
+                        Column(
+                            modifier = Modifier
+                                .padding(
+                                    top = innerPadding.calculateTopPadding()
+                                )
+                                .fillMaxSize()
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabBackground))
+                                    .padding(
+                                        PaddingValues(
+                                            start = innerPadding.calculateStartPadding(
+                                                LocalLayoutDirection.current
+                                            ),
+                                            end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
+                                        )
+                                    ),
+                            ) {
+                                val tabTitles = listOf(getString(R.string.mod_mail_unread), getString(R.string.mod_mail_recent),
+                                    getString(R.string.mod_mail_mod), getString(R.string.mod_mail_user))
+                                PrimaryScrollableTabRow(
+                                    selectedTabIndex = selectedTabIndex,
+                                    containerColor = Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabBackground),
+                                    modifier = Modifier.fillMaxWidth(),
+                                    edgePadding = 0.dp,
+                                    indicator = {
+                                        TabRowDefaults.PrimaryIndicator(
+                                            modifier = Modifier
+                                                .tabIndicatorOffset(
+                                                    selectedTabIndex,
+                                                    matchContentSize = true
+                                                )
+                                                .background(Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabBackground)),
+                                            width = Dp.Unspecified,
+                                            color = Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabIndicator),
+                                        )
+                                    },
+                                    divider = { }
+                                ) {
+                                    tabTitles.forEachIndexed { index, title ->
+                                        Tab(
+                                            selected = selectedTabIndex == index,
+                                            onClick = {
+                                                scope.launch {
+                                                    pagerState.animateScrollToPage(index)
+                                                }
+                                            },
+                                            selectedContentColor = Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabIndicator),
+                                            unselectedContentColor = Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabIndicator),
+                                            text = {
+                                                Text(text = title, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                                            }
                                         )
                                     }
-
-                                    DropdownMenu(
-                                        expanded = isToolbarMenuOpen,
-                                        containerColor = Color(LocalAppTheme.current.backgroundColor),
-                                        onDismissRequest = { isToolbarMenuOpen = false }
-                                    ) {
-                                        if (getNavigator(selectedTabIndex).scaffoldValue.get(ListDetailPaneScaffoldRole.List) != PaneAdaptedValue.Hidden) {
-                                            DropdownMenuItem(
-                                                text = {
-                                                    PrimaryText(
-                                                        R.string.action_refresh_mod_mail_conversations
-                                                    )
-                                                },
-                                                onClick = {
-                                                    isToolbarMenuOpen = false
-                                                    refreshConversationsTriggers[selectedTabIndex].value = !refreshConversationsTriggers[selectedTabIndex].value
-                                                }
-                                            )
-                                        }
-
-                                        if (getNavigator(selectedTabIndex).currentDestination?.contentKey != null) {
-                                            DropdownMenuItem(
-                                                text = {
-                                                    PrimaryText(
-                                                        R.string.action_refresh_mod_mail_messages_in_conversation
-                                                    )
-                                                },
-                                                onClick = {
-                                                    isToolbarMenuOpen = false
-                                                    refreshConversationMessagesTriggers[selectedTabIndex].value = !refreshConversationMessagesTriggers[selectedTabIndex].value
-                                                }
-                                            )
-
-                                            DropdownMenuItem(
-                                                text = {
-                                                    PrimaryText(
-                                                        R.string.action_user_mod_action
-                                                    )
-                                                },
-                                                onClick = {
-                                                    isToolbarMenuOpen = false
-                                                }
-                                            )
-
-                                            DropdownMenuItem(
-                                                text = {
-                                                    PrimaryText(
-                                                        R.string.action_view_user_info
-                                                    )
-                                                },
-                                                onClick = {
-                                                    isToolbarMenuOpen = false
-                                                    shouldShowUserInfoStates[selectedTabIndex].value = true
-                                                }
-                                            )
-                                        }
-                                    }
                                 }
                             }
-                        ) {
-                            triggerBackPress()
-                        }
-                    },
-                    containerColor = Color(mCustomThemeWrapper.backgroundColor),
-                ) { innerPadding ->
-                    Column(
-                        modifier = Modifier
-                            .padding(
-                                top = innerPadding.calculateTopPadding()
-                            )
-                            .fillMaxSize()
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabBackground))
-                                .padding(
-                                    PaddingValues(
-                                        start = innerPadding.calculateStartPadding(
-                                            LocalLayoutDirection.current
-                                        ),
-                                        end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
-                                    )
-                                ),
-                        ) {
-                            val tabTitles = listOf(getString(R.string.mod_mail_unread), getString(R.string.mod_mail_recent),
-                                getString(R.string.mod_mail_mod), getString(R.string.mod_mail_user))
-                            PrimaryScrollableTabRow(
-                                selectedTabIndex = selectedTabIndex,
-                                containerColor = Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabBackground),
-                                modifier = Modifier.fillMaxWidth(),
-                                edgePadding = 0.dp,
-                                indicator = {
-                                    TabRowDefaults.PrimaryIndicator(
-                                        modifier = Modifier
-                                            .tabIndicatorOffset(
-                                                selectedTabIndex,
-                                                matchContentSize = true
-                                            )
-                                            .background(Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabBackground)),
-                                        width = Dp.Unspecified,
-                                        color = Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabIndicator),
-                                    )
-                                },
-                                divider = { }
-                            ) {
-                                tabTitles.forEachIndexed { index, title ->
-                                    Tab(
-                                        selected = selectedTabIndex == index,
-                                        onClick = {
-                                            scope.launch {
-                                                pagerState.animateScrollToPage(index)
-                                            }
-                                        },
-                                        selectedContentColor = Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabIndicator),
-                                        unselectedContentColor = Color(mCustomThemeWrapper.tabLayoutWithCollapsedCollapsingToolbarTabIndicator),
-                                        text = {
-                                            Text(text = title, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                                        }
-                                    )
-                                }
-                            }
-                        }
 
-                        HorizontalPager(
-                            state = pagerState,
-                            contentPadding = PaddingValues(
-                                start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
-                                end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
-                            )
-                        ) { page ->
-                            ConversationListDetailPaneView(
-                                page,
-                                refreshConversationsTriggers[page].value,
-                                refreshConversationMessagesTriggers[page].value,
-                                shouldShowUserInfoStates[page],
-                                getNavigator(page)
-                            )
+                            HorizontalPager(
+                                state = pagerState,
+                                contentPadding = PaddingValues(
+                                    start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+                                    end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
+                                )
+                            ) { page ->
+                                ConversationListDetailPaneView(
+                                    page,
+                                    refreshConversationsTriggers[page].value,
+                                    refreshConversationMessagesTriggers[page].value,
+                                    shouldShowUserInfoStates[page],
+                                    getNavigator(page)
+                                )
+                            }
                         }
                     }
                 }

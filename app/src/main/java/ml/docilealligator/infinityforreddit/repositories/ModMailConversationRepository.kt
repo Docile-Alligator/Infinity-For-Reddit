@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.repositories
 
 import android.content.SharedPreferences
+import androidx.paging.LoadState
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +16,7 @@ import ml.docilealligator.infinityforreddit.moderation.modmail.ModActionTypeDese
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModMailUser
 import ml.docilealligator.infinityforreddit.utils.APIUtils
 import ml.docilealligator.infinityforreddit.utils.JSONUtils
+import ml.docilealligator.infinityforreddit.viewmodels.ModMailState
 import org.json.JSONObject
 import retrofit2.Retrofit
 import kotlin.coroutines.cancellation.CancellationException
@@ -45,35 +47,40 @@ class ModMailConversationRepository(
     private var _conversationMessagesDataLoadState = MutableStateFlow<DataLoadState<Unit>>(DataLoadState.Idle)
     val conversationMessagesDataLoadState = _conversationMessagesDataLoadState.asStateFlow()
 
-    suspend fun initialLoadConversations() {
+    suspend fun initialLoadConversations(state: ModMailState) {
         if (_loadState.value == DataLoadState.Idle) {
-            loadConversations()
+            loadConversations(state)
         }
     }
 
-    suspend fun refreshConversations() {
+    suspend fun refreshConversations(state: ModMailState) {
         _isRefreshingConversations.value = true
         conversationIds.clear()
         conversationsAfter = null
-        loadConversations()
+        loadConversations(state)
         _isRefreshingConversations.value = false
     }
 
-    suspend fun loadNextPageConversations() {
+    suspend fun loadNextPageConversations(state: ModMailState) {
         if (_conversations.value.isNullOrEmpty() || conversationsAfter.isNullOrEmpty()) {
             return
         }
 
         if (_loadState.value != DataLoadState.Loading) {
-            loadConversations()
+            loadConversations(state)
         }
     }
 
-    private suspend fun loadConversations() {
+    private suspend fun loadConversations(state: ModMailState) {
         try {
             _loadState.value = DataLoadState.Loading
             val response = oauthRetrofit.create(RedditAPIKt::class.java)
-                .getModMailConversations(APIUtils.getOAuthHeader(accessToken), sort, conversationsAfter)
+                .getModMailConversations(
+                    APIUtils.getOAuthHeader(accessToken),
+                    state.rawValue,
+                    sort,
+                    conversationsAfter
+                )
 
             if (response.isSuccessful) {
                 response.body()?.let { body ->
@@ -208,5 +215,15 @@ class ModMailConversationRepository(
                 oauthRetrofit, accessToken, id, content, isAuthorHidden, isInternal
             )
         }
+    }
+
+    fun resetState() {
+        _conversations.value = null
+        _modMailUser.value = null
+        _loadState.value = DataLoadState.Idle
+        _isRefreshingConversations.value = false
+        conversationsAfter = null
+        conversationIds.clear()
+        _conversationMessagesDataLoadState.value = DataLoadState.Idle
     }
 }

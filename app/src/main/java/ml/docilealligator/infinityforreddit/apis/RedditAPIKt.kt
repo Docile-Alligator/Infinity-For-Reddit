@@ -321,7 +321,8 @@ interface RedditAPIKt {
     @GET("/api/mod/conversations")
     suspend fun getModMailConversations(
         @HeaderMap headers: Map<String, String>,
-        @Query("sort") sort: String?,
+        @Query("state") state: String,
+        @Query("sort") sort: String,
         @Query("after") after: String?
     ): Response<String>
 

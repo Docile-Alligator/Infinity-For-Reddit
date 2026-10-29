@@ -4,6 +4,9 @@ import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
 import ml.docilealligator.infinityforreddit.repositories.ModMailConversationRepository
@@ -14,6 +17,9 @@ class ModMailConversationViewModel(
     private val accessToken: String,
     private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
+    private val _currentState = MutableStateFlow(ModMailState.ALL)
+    val currentState: StateFlow<ModMailState> = _currentState.asStateFlow()
+
     val recentModMailConversationRepository = ModMailConversationRepository(
         oauthRetrofit, accessToken, sharedPreferences, "recent"
     )
@@ -32,19 +38,19 @@ class ModMailConversationViewModel(
 
     fun initialLoad(repository: ModMailConversationRepository) {
         viewModelScope.launch {
-            repository.initialLoadConversations()
+            repository.initialLoadConversations(_currentState.value)
         }
     }
 
     fun loadNextPage(repository: ModMailConversationRepository) {
         viewModelScope.launch {
-            repository.loadNextPageConversations()
+            repository.loadNextPageConversations(_currentState.value)
         }
     }
 
     fun refreshConversations(repository: ModMailConversationRepository) {
         viewModelScope.launch {
-            repository.refreshConversations()
+            repository.refreshConversations(_currentState.value)
         }
     }
 
@@ -62,6 +68,13 @@ class ModMailConversationViewModel(
         repository.sendMessage(conversation, content, isAuthorHidden, isInternal)
     }
 
+    fun switchState(state: ModMailState) {
+        if (_currentState.value != state) {
+            recentModMailConversationRepository.resetState()
+            _currentState.value = state
+        }
+    }
+
     @Suppress("UNCHECKED_CAST")
     class Factory(
         private val oauthRetrofit: Retrofit,
@@ -70,6 +83,28 @@ class ModMailConversationViewModel(
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return ModMailConversationViewModel(oauthRetrofit, accessToken, sharedPreferences) as T
+        }
+    }
+}
+
+enum class ModMailState(val rawValue: String) {
+    ALL("all"),
+    APPEALS("appeals"),
+    NOTIFICATIONS("notifications"),
+    INBOX("inbox"),
+    FILTERED("filtered"),
+    IN_PROGRESS("inprogress"),
+    MOD("mod"),
+    ARCHIVED("archived"),
+    DEFAULT("default"),
+    HIGHLIGHTED("highlighted"),
+    ADMIN("admin"),
+    JOIN_REQUESTS("join_requests"),
+    NEW("new");
+
+    companion object {
+        fun fromString(value: String?): ModMailState {
+            return entries.find { it.rawValue.equals(value, ignoreCase = true) } ?: DEFAULT
         }
     }
 }
