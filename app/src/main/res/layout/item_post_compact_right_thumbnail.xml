@@ -159,7 +159,7 @@
                 android:id="@+id/archived_image_view_item_post_compact_right_thumbnail"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_archive_outline"
+                android:src="@drawable/ic_archive_rounded_24dp"
                 android:visibility="gone" />
 
             <ImageView

@@ -83,6 +83,12 @@ data class Conversation(
         return other.id == id && other.modMailItems == modMailItems && other.isUpdated == isUpdated
     }
 
+    val isRead: Boolean
+        get() = state == 2
+
+    val isArchived: Boolean
+        get() = state == 2
+
     companion object {
         fun parseConversation(
             gson: Gson,

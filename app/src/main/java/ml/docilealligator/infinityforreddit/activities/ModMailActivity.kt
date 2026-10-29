@@ -1,13 +1,11 @@
 package ml.docilealligator.infinityforreddit.activities
 
-import android.R.id.message
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Spanned
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -16,6 +14,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -79,6 +78,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -99,7 +100,6 @@ import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.MarkwonPlugin
 import io.noties.markwon.core.MarkwonTheme
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
@@ -114,6 +114,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.CustomModalBotto
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomSpinner
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextField
+import ml.docilealligator.infinityforreddit.customviews.compose.IconTextRowButton
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalTypography
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
@@ -339,7 +340,9 @@ class ModMailActivity : BaseActivity() {
                                             start = innerPadding.calculateStartPadding(
                                                 LocalLayoutDirection.current
                                             ),
-                                            end = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
+                                            end = innerPadding.calculateEndPadding(
+                                                LocalLayoutDirection.current
+                                            )
                                         )
                                     ),
                             ) {
@@ -438,6 +441,8 @@ class ModMailActivity : BaseActivity() {
             }
         }
 
+        var conversationForOptionsSheet by remember { mutableStateOf<Conversation?>(null) }
+
         val scope = rememberCoroutineScope()
 
         LaunchedEffect(needPagination) {
@@ -503,6 +508,9 @@ class ModMailActivity : BaseActivity() {
                         },
                         onRetryPagination = {
                             conversationViewModel.loadNextPage(getRepository(page))
+                        },
+                        onConversationLongClick = { conversation ->
+                            conversationForOptionsSheet = conversation
                         }
                     )
                 }
@@ -531,6 +539,34 @@ class ModMailActivity : BaseActivity() {
                     }
                 }
             }
+        } else if (conversationForOptionsSheet != null) {
+            CustomModalBottomSheet(onDismissRequest = { conversationForOptionsSheet = null }) {
+                conversationForOptionsSheet?.let {
+                    IconTextRowButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(if (it.isArchived) R.string.unarchive else R.string.archive),
+                        drawableResource = if (it.isArchived) R.drawable.ic_unarchive_rounded_24dp else R.drawable.ic_archive_rounded_24dp
+                    ) {
+
+                    }
+
+                    IconTextRowButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(if (it.isHighlighted == true) R.string.unhighlight else R.string.highlight),
+                        drawableResource = if (it.isHighlighted == true) R.drawable.ic_unhighlight_rounded_24dp else R.drawable.ic_highlight_rounded_24dp
+                    ) {
+
+                    }
+
+                    IconTextRowButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(if (it.isRead) R.string.unread else R.string.read),
+                        drawableResource = if (it.isRead) R.drawable.ic_unread_rounded_24dp else R.drawable.ic_read_rounded_24dp
+                    ) {
+
+                    }
+                }
+            }
         }
     }
 
@@ -542,7 +578,8 @@ class ModMailActivity : BaseActivity() {
         navigator: ThreePaneScaffoldNavigator<Conversation>,
         listState: LazyListState,
         onRefresh: () -> Unit,
-        onRetryPagination: () -> Unit
+        onRetryPagination: () -> Unit,
+        onConversationLongClick: (Conversation) -> Unit
     ) {
         val state: PullToRefreshState = rememberPullToRefreshState()
         val scope = rememberCoroutineScope()
@@ -574,11 +611,20 @@ class ModMailActivity : BaseActivity() {
                             contentType = { _ -> 1 },
                             key = { index -> it[index].id ?: index }
                         ) { index: Int ->
-                            ConversationView(it[index]) { conversation ->
-                                scope.launch {
-                                    navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, conversation)
+                            ConversationView(
+                                it[index],
+                                onItemClick = { conversation ->
+                                    scope.launch {
+                                        navigator.navigateTo(
+                                            ListDetailPaneScaffoldRole.Detail,
+                                            conversation
+                                        )
+                                    }
+                                },
+                                onItemLongClick = { conversation ->
+                                    onConversationLongClick(conversation)
                                 }
-                            }
+                            )
                         }
 
                         if (loadState is DataLoadState.Loading) {
@@ -694,11 +740,24 @@ class ModMailActivity : BaseActivity() {
     }
 
     @Composable
-    fun ConversationView(conversation: Conversation, onItemClick: (Conversation) -> Unit) {
+    fun ConversationView(
+        conversation: Conversation,
+        onItemClick: (Conversation) -> Unit,
+        onItemLongClick: (Conversation) -> Unit
+    ) {
+        val haptics = LocalHapticFeedback.current
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onItemClick(conversation) }
+                .combinedClickable(
+                    onClick = { onItemClick(conversation) },
+                    onLongClick = {
+                        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                        onItemLongClick(conversation)
+                    }
+                )
                 .padding(top = 16.dp)
         ) {
             Row(modifier = Modifier.fillMaxWidth()) {
