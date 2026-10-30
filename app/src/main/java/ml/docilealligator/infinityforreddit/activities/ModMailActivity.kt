@@ -563,6 +563,8 @@ class ModMailActivity : BaseActivity() {
                                     getString(if (it.isArchived) R.string.unarchived else R.string.archived),
                                     Toast.LENGTH_SHORT
                                 ).show()
+
+                                it.isArchived = !it.isArchived
                             } catch (e: Exception) {
                                 if (e is CancellationException) {
                                     throw e
@@ -597,6 +599,8 @@ class ModMailActivity : BaseActivity() {
                                     getString(if (it.isHighlighted == true) R.string.unhighlighted else R.string.highlighted),
                                     Toast.LENGTH_SHORT
                                 ).show()
+
+                                it.isHighlighted = if (it.isHighlighted == true) false else if (it.isHighlighted == false) true else false
                             } catch (e: Exception) {
                                 if (e is CancellationException) {
                                     throw e
@@ -631,6 +635,8 @@ class ModMailActivity : BaseActivity() {
                                     getString(if (it.isRead) R.string.unread else R.string.read),
                                     Toast.LENGTH_SHORT
                                 ).show()
+
+                                it.isRead = !it.isRead
                             } catch (e: Exception) {
                                 if (e is CancellationException) {
                                     throw e

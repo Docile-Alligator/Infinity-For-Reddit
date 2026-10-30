@@ -351,7 +351,6 @@ interface RedditAPIKt {
     @DELETE("/api/mod/conversations/{id}/highlight")
     suspend fun unhighlightModMailConversation(
         @Path("id") id: String,
-        @Path("action") action: String,
         @HeaderMap headers: Map<String, String>
     ): Response<String>
 

@@ -49,7 +49,9 @@ data class Conversation(
     @SerializedName("isHighlighted") var isHighlighted: Boolean? = null,
     @SerializedName("numMessages") var numMessages: Int? = null,
     @Ignore private var _modMailItems: MutableList<ModMailItem>? = mutableListOf(),
-    @Ignore var isUpdated: Boolean
+    @Ignore var isUpdated: Boolean,
+    var isArchived: Boolean = state == 2,
+    var isRead: Boolean = state != 0
 ): Parcelable {
     var modMailItems: MutableList<ModMailItem>
         get() = _modMailItems ?: mutableListOf<ModMailItem>().also { _modMailItems = it }
@@ -83,12 +85,6 @@ data class Conversation(
 
         return other.id == id && other.modMailItems == modMailItems && other.isUpdated == isUpdated
     }
-
-    val isRead: Boolean
-        get() = state == 2
-
-    val isArchived: Boolean
-        get() = state == 2
 
     companion object {
         fun parseConversation(
@@ -204,7 +200,6 @@ data class Conversation(
             val response: Response<String> = if (modConversationAction == ModConversationAction.UNHIGHLIGHT) {
                 oauthRetrofit.create(RedditAPIKt::class.java).unhighlightModMailConversation(
                     "ModmailConversation_$conversationId",
-                    modConversationAction.rawValue,
                     APIUtils.getOAuthHeader(accessToken)
                 )
             } else if (modConversationAction == ModConversationAction.READ || modConversationAction == ModConversationAction.UNREAD) {
