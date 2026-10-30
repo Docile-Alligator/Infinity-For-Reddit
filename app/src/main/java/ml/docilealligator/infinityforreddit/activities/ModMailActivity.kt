@@ -543,6 +543,15 @@ class ModMailActivity : BaseActivity() {
         } else if (conversationForOptionsSheet != null) {
             CustomModalBottomSheet(onDismissRequest = { conversationForOptionsSheet = null }) {
                 conversationForOptionsSheet?.let {
+                    it.subject?.let { subject ->
+                        PrimaryText(
+                            subject,
+                            modifier = Modifier.padding(16.dp),
+                            fontSize = LocalTypography.current.fontSize.size18,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
                     IconTextRowButton(
                         modifier = Modifier.fillMaxWidth(),
                         text = stringResource(if (it.isArchived) R.string.unarchive else R.string.archive),
