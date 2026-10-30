@@ -50,8 +50,8 @@ data class Conversation(
     @SerializedName("numMessages") var numMessages: Int? = null,
     @Ignore private var _modMailItems: MutableList<ModMailItem>? = mutableListOf(),
     @Ignore var isUpdated: Boolean,
-    var isArchived: Boolean = state == 2,
-    var isRead: Boolean = state != 0
+    var isArchived: Boolean,
+    var isRead: Boolean
 ): Parcelable {
     var modMailItems: MutableList<ModMailItem>
         get() = _modMailItems ?: mutableListOf<ModMailItem>().also { _modMailItems = it }
@@ -131,6 +131,9 @@ data class Conversation(
                         }
                     }
                 }
+
+                isArchived = state == 2
+                isRead = lastUnread == null
             }
         }
 
