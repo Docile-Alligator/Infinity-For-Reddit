@@ -13,6 +13,7 @@ import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
 import ml.docilealligator.infinityforreddit.utils.APIUtils
 import ml.docilealligator.infinityforreddit.utils.JSONUtils
 import ml.docilealligator.infinityforreddit.viewmodels.ModConversationAction
+import ml.docilealligator.infinityforreddit.viewmodels.ModUserAction
 import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -152,9 +153,7 @@ data class Conversation(
                     gson, responseJson.getString(JSONUtils.CONVERSATION_KEY),
                     responseJson.getJSONObject(JSONUtils.MESSAGES_KEY),
                     if (responseJson.has(JSONUtils.MOD_ACTIONS_KEY)) responseJson.getJSONObject(JSONUtils.MOD_ACTIONS_KEY) else null
-                ).apply {
-                    isUpdated = true
-                }
+                )
                 val modMailUserResponse = ModMailUser.parseModMailUser(gson, responseJson.getString(JSONUtils.USER_KEY))
 
                 return Pair(conversation, modMailUserResponse)
@@ -218,6 +217,50 @@ data class Conversation(
                 oauthRetrofit.create(RedditAPIKt::class.java).executeModMailConversationAction(
                     "ModmailConversation_$conversationId",
                     modConversationAction.rawValue,
+                    APIUtils.getOAuthHeader(accessToken)
+                )
+            }
+
+            // The response does not have the updated conversation state.
+            if (!response.isSuccessful) {
+                response.errorBody()?.string().let {
+                    val redditError: RedditError? = Gson().fromJson(it, RedditError::class.java)
+                    redditError?.let { redditError ->
+                        throw IOException(redditError.reason ?: "Failed")
+                    }
+                }
+
+                throw IOException("Failed")
+            }
+        }
+
+        suspend fun executeUserAction(
+            oauthRetrofit: Retrofit,
+            accessToken: String,
+            conversationId: String,
+            modUserAction: ModUserAction
+        ) {
+            val response: Response<String> = if (modUserAction is ModUserAction.TEMPBAN) {
+                // Response will be empty
+                oauthRetrofit.create(RedditAPIKt::class.java).tempBanModMailUserAction(
+                    conversationId,
+                    APIUtils.getOAuthHeader(accessToken),
+                    mutableMapOf<String, String>().apply {
+                        this[APIUtils.DURATION_KEY] = modUserAction.duration.toString()
+                    }
+                )
+            } else if (modUserAction is ModUserAction.MUTE) {
+                oauthRetrofit.create(RedditAPIKt::class.java).muteModMailUserAction(
+                    conversationId,
+                    APIUtils.getOAuthHeader(accessToken),
+                    mutableMapOf<String, String>().apply {
+                        this[APIUtils.NUM_HOURS_KEY] = modUserAction.nHours.toString()
+                    }
+                )
+            } else {
+                oauthRetrofit.create(RedditAPIKt::class.java).executeModMailUserAction(
+                    "ModmailConversation_$conversationId",
+                    modUserAction.rawValue,
                     APIUtils.getOAuthHeader(accessToken)
                 )
             }

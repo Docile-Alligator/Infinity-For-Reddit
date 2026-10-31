@@ -134,6 +134,7 @@ public class APIUtils {
     public static final String IS_AUTHOR_HIDDEN_KEY = "isAuthorHidden";
     public static final String IS_INTERNAL_KEY = "isInternal";
     public static final String CONVERSATION_IDS_KEY = "conversationIds";
+    public static final String NUM_HOURS_KEY = "num_hours";
 
     public static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();

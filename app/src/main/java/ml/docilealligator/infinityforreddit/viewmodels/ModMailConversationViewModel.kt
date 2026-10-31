@@ -87,6 +87,14 @@ class ModMailConversationViewModel(
         }
     }
 
+    suspend fun executeUserAction(
+        conversation: Conversation,
+        modUserAction: ModUserAction,
+        repository: ModMailConversationRepository
+    ) {
+        repository.executeUserAction(conversation, modUserAction)
+    }
+
     @Suppress("UNCHECKED_CAST")
     class Factory(
         private val oauthRetrofit: Retrofit,
@@ -134,4 +142,17 @@ enum class ModConversationAction(
     UNHIGHLIGHT("highlight"),
     READ("read"),
     UNREAD("unread")
+}
+
+sealed class ModUserAction(
+    val rawValue: String
+) {
+    object APPROVE : ModUserAction("approve")
+    object DISAPPROVE : ModUserAction("disapprove")
+    // nHours: one of (72, 168, 672)
+    data class MUTE(val nHours: Int) : ModUserAction("mute")
+    object UNMUTE : ModUserAction("unmute")
+    // duration: an integer between 1 and 999
+    data class TEMPBAN(val duration: Int) : ModUserAction("temp_ban")
+    object UNBAN : ModUserAction("unban")
 }

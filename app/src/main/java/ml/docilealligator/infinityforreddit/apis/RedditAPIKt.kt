@@ -362,4 +362,27 @@ interface RedditAPIKt {
         //A comma-separated list of items
         @FieldMap params: Map<String, String>
     ): Response<String>
+
+    @POST("/api/mod/conversations/{id}/{action}")
+    suspend fun executeModMailUserAction(
+        @Path("id") id: String,
+        @Path("action") action: String,
+        @HeaderMap headers: Map<String, String>
+    ): Response<String>
+
+    @FormUrlEncoded
+    @POST("/api/mod/conversations/{id}/mute")
+    suspend fun muteModMailUserAction(
+        @Path("id") id: String,
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): Response<String>
+
+    @FormUrlEncoded
+    @POST("/api/mod/conversations/{id}/temp_ban")
+    suspend fun tempBanModMailUserAction(
+        @Path("id") id: String,
+        @HeaderMap headers: Map<String, String>,
+        @FieldMap params: Map<String, String>
+    ): Response<String>
 }

@@ -1,5 +1,8 @@
 package ml.docilealligator.infinityforreddit.activities
 
+import android.R.attr.checked
+import android.R.attr.fontFamily
+import android.R.attr.textColor
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -12,6 +15,7 @@ import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -33,6 +37,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -40,12 +45,15 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Scaffold
@@ -70,6 +78,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -81,13 +90,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.text.isDigitsOnly
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -135,6 +147,7 @@ import ml.docilealligator.infinityforreddit.utils.Utils
 import ml.docilealligator.infinityforreddit.viewmodels.ModConversationAction
 import ml.docilealligator.infinityforreddit.viewmodels.ModMailConversationViewModel
 import ml.docilealligator.infinityforreddit.viewmodels.ModMailState
+import ml.docilealligator.infinityforreddit.viewmodels.ModUserAction
 import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Named
@@ -211,7 +224,14 @@ class ModMailActivity : BaseActivity() {
                         remember { mutableStateOf(false) }
                     )
 
-                    val shouldShowUserInfoStates = listOf(
+                    val showUserActions = listOf(
+                        remember { mutableStateOf(false) },
+                        remember { mutableStateOf(false) },
+                        remember { mutableStateOf(false) },
+                        remember { mutableStateOf(false) }
+                    )
+
+                    val showUserInfoStates = listOf(
                         remember { mutableStateOf(false) },
                         remember { mutableStateOf(false) },
                         remember { mutableStateOf(false) },
@@ -301,6 +321,7 @@ class ModMailActivity : BaseActivity() {
                                                     },
                                                     onClick = {
                                                         isToolbarMenuOpen = false
+                                                        showUserActions[selectedTabIndex].value = true
                                                     }
                                                 )
 
@@ -312,7 +333,7 @@ class ModMailActivity : BaseActivity() {
                                                     },
                                                     onClick = {
                                                         isToolbarMenuOpen = false
-                                                        shouldShowUserInfoStates[selectedTabIndex].value = true
+                                                        showUserInfoStates[selectedTabIndex].value = true
                                                     }
                                                 )
                                             }
@@ -397,7 +418,8 @@ class ModMailActivity : BaseActivity() {
                                     page,
                                     refreshConversationsTriggers[page].value,
                                     refreshConversationMessagesTriggers[page].value,
-                                    shouldShowUserInfoStates[page],
+                                    showUserActions[page],
+                                    showUserInfoStates[page],
                                     getNavigator(page)
                                 )
                             }
@@ -423,6 +445,7 @@ class ModMailActivity : BaseActivity() {
         page: Int,
         refreshConversationsTrigger: Boolean,
         refreshConversationMessagesTrigger: Boolean,
+        showUserActions: MutableState<Boolean>,
         showUserInfo: MutableState<Boolean>,
         navigator: ThreePaneScaffoldNavigator<Conversation>
     ) {
@@ -443,6 +466,7 @@ class ModMailActivity : BaseActivity() {
         }
 
         var conversationForOptionsSheet by remember { mutableStateOf<Conversation?>(null) }
+        var showBanBottomSheet by remember { mutableStateOf(false) }
 
         val scope = rememberCoroutineScope()
 
@@ -459,32 +483,6 @@ class ModMailActivity : BaseActivity() {
             }
 
             conversationViewModel.refreshConversations(getRepository(page))
-        }
-
-        val updateConversation: (Conversation, Conversation) -> Unit = { conversation, updatedConversation ->
-            conversation.apply {
-                if (updatedConversation.id == id) {
-                    isAuto = updatedConversation.isAuto
-                    participant = updatedConversation.participant
-                    objIds = updatedConversation.objIds
-                    isRepliable = updatedConversation.isRepliable
-                    lastUserUpdate = updatedConversation.lastUserUpdate
-                    isInternal = updatedConversation.isInternal
-                    lastModUpdate = updatedConversation.lastModUpdate
-                    authors = updatedConversation.authors
-                    lastUpdated = updatedConversation.lastUpdated
-                    legacyFirstMessageId = updatedConversation.legacyFirstMessageId
-                    this.state = updatedConversation.state
-                    conversationType = updatedConversation.conversationType
-                    lastUnread = updatedConversation.lastUnread
-                    owner = updatedConversation.owner
-                    subject = updatedConversation.subject
-                    isHighlighted = updatedConversation.isHighlighted
-                    numMessages = updatedConversation.numMessages
-                    modMailItems = updatedConversation.modMailItems
-                    isUpdated = true
-                }
-            }
         }
 
         BackHandler(navigator.canNavigateBack()) {
@@ -522,21 +520,264 @@ class ModMailActivity : BaseActivity() {
                         ConversationDetailsView(
                             page,
                             it,
-                            refreshConversationMessagesTrigger,
-                            updateConversation
+                            refreshConversationMessagesTrigger
                         )
                     }
                 }
             }
         )
 
-        if (showUserInfo.value) {
+        if (showBanBottomSheet) {
+            navigator.currentDestination?.contentKey?.let { conversation ->
+                modMailUser?.let {
+                    var reason by remember { mutableStateOf("") }
+                    var isPermanent by remember { mutableStateOf(false) }
+                    var duration by remember { mutableStateOf("") }
+                    var message by remember { mutableStateOf("") }
+                    var modNote by remember { mutableStateOf("") }
+
+                    CustomModalBottomSheet(onDismissRequest = { showBanBottomSheet = false }) {
+                        PrimaryText(
+                            stringResource(R.string.ban_user, "u/${it.name}"),
+                            modifier = Modifier.padding(16.dp),
+                            fontSize = LocalTypography.current.fontSize.size18,
+                            fontWeight = FontWeight.Bold
+                        )
+
+                        CustomTextField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            value = reason,
+                            placeholder = stringResource(R.string.ban_reason_hint),
+                            maxLines = 3,
+                            shape = RoundedCornerShape(16.dp)
+                        ) {
+                            reason = it
+                        }
+
+                        AnimatedVisibility(!isPermanent) {
+                            CustomTextField(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                value = duration,
+                                placeholder = stringResource(R.string.ban_duration_hint),
+                                maxLines = 1,
+                                shape = RoundedCornerShape(16.dp),
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                            ) {
+                                if (it.isDigitsOnly()) {
+                                    duration = it
+                                }
+                            }
+                        }
+
+                        Row(
+                            modifier = Modifier
+                                .clickable {
+                                    isPermanent = !isPermanent
+                                }
+                                .padding(start = 20.dp, end = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            PrimaryText(
+                                stringResource(R.string.perma_ban),
+                                modifier = Modifier.padding(end = 16.dp)
+                            )
+
+                            Spacer(modifier = Modifier.weight(1f))
+
+                            Checkbox(
+                                checked = isPermanent,
+                                onCheckedChange = { isPermanent = it }
+                            )
+                        }
+
+                        CustomTextField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            value = message,
+                            placeholder = stringResource(R.string.message),
+                            minLines = 3,
+                            maxLines = 5,
+                            shape = RoundedCornerShape(16.dp)
+                        ) {
+                            message = it
+                        }
+
+                        CustomTextField(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 16.dp)
+                                .padding(horizontal = 16.dp),
+                            value = modNote,
+                            placeholder = stringResource(R.string.ban_mod_note_hint),
+                            maxLines = 3,
+                            shape = RoundedCornerShape(16.dp)
+                        ) {
+                            modNote = it
+                        }
+
+                        SecondaryText(
+                            stringResource(R.string.ban_mod_note_description),
+                            modifier = Modifier
+                                .padding(bottom = 16.dp)
+                                .padding(horizontal = 20.dp)
+                        )
+                    }
+                }
+            }
+        } else if (showUserActions.value) {
+            modMailUser?.let {
+                CustomModalBottomSheet(onDismissRequest = { showUserActions.value = false }) {
+                    UserText(
+                        "u/${it.name}",
+                        modifier = Modifier.padding(16.dp),
+                        fontSize = LocalTypography.current.fontSize.size18,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    // Check if it.banStatus is null
+                    IconTextRowButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(if (it.banStatus.isBanned) R.string.unban else R.string.ban),
+                        drawableResource = if (it.banStatus.isBanned) R.drawable.ic_unlock_24dp else R.drawable.ic_ban_rounded_24dp
+                    ) {
+                        if (!it.banStatus.isBanned) {
+                            showBanBottomSheet = true
+                            return@IconTextRowButton
+                        }
+
+                        conversationForOptionsSheet = null
+
+                        /*scope.launch {
+                            try {
+                                conversationViewModel.executeUserAction(
+                                    it,
+                                    ModUserAction.UNBAN,
+                                    getRepository(page)
+                                )
+
+                                Toast.makeText(
+                                    this@ModMailActivity,
+                                    getString(if (it.isArchived) R.string.unarchived else R.string.archived),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                                it.isArchived = !it.isArchived
+                            } catch (e: Exception) {
+                                if (e is CancellationException) {
+                                    throw e
+                                }
+
+                                e.printStackTrace()
+
+                                Toast.makeText(this@ModMailActivity, e.message?.let { message ->
+                                    getString(if (it.isArchived) R.string.unarchive_failed_with_reason else R.string.archive_failed_with_reason, message)
+                                } ?: getString(if (it.isArchived) R.string.unarchive_failed else R.string.archive_failed), Toast.LENGTH_SHORT).show()
+                            }
+                        }*/
+                    }
+
+                    IconTextRowButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(if (it.muteStatus.isMuted) R.string.unmute else R.string.mute),
+                        drawableResource = if (it.muteStatus.isMuted) R.drawable.ic_unmute_24dp else R.drawable.ic_mute_24dp
+                    ) {
+                        conversationForOptionsSheet = null
+
+                        /*scope.launch {
+                            try {
+                                conversationViewModel.executeModConversationAction(
+                                    it,
+                                    if (it.isHighlighted == true) ModConversationAction.UNHIGHLIGHT else ModConversationAction.HIGHLIGHT,
+                                    getRepository(page)
+                                )
+
+                                Toast.makeText(
+                                    this@ModMailActivity,
+                                    getString(if (it.isHighlighted == true) R.string.unhighlighted else R.string.highlighted),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                                it.isHighlighted = it.isHighlighted != true && it.isHighlighted == false
+                            } catch (e: Exception) {
+                                if (e is CancellationException) {
+                                    throw e
+                                }
+
+                                e.printStackTrace()
+
+                                Toast.makeText(this@ModMailActivity, e.message?.let { message ->
+                                    getString(if (it.isHighlighted == true) R.string.unhighlight_failed_with_reason else R.string.highlight_failed_with_reason, message)
+                                } ?: getString(if (it.isHighlighted == true) R.string.unhighlight_failed else R.string.highlight_failed), Toast.LENGTH_SHORT).show()
+                            }
+                        }*/
+                    }
+
+                    IconTextRowButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(if (it.approveStatus.isApproved) R.string.remove_from_approved_users else R.string.approve),
+                        drawableResource = if (it.approveStatus.isApproved) R.drawable.ic_unapprove_rounded_24dp else R.drawable.ic_approve_rounded_24dp
+                    ) {
+                        conversationForOptionsSheet = null
+
+                        /*scope.launch {
+                            try {
+                                conversationViewModel.executeModConversationAction(
+                                    it,
+                                    if (it.isRead) ModConversationAction.UNREAD else ModConversationAction.READ,
+                                    getRepository(page)
+                                )
+
+                                Toast.makeText(
+                                    this@ModMailActivity,
+                                    getString(if (it.isRead) R.string.unread else R.string.read),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                                it.isRead = !it.isRead
+                            } catch (e: Exception) {
+                                if (e is CancellationException) {
+                                    throw e
+                                }
+
+                                e.printStackTrace()
+
+                                Toast.makeText(this@ModMailActivity, e.message?.let { message ->
+                                    getString(if (it.isRead) R.string.unread_failed_with_reason else R.string.read_failed_with_reason, message)
+                                } ?: getString(if (it.isRead) R.string.unread_failed else R.string.read_failed), Toast.LENGTH_SHORT).show()
+                            }
+                        }*/
+                    }
+                }
+            }
+        } else if (showUserInfo.value) {
             CustomModalBottomSheet(onDismissRequest = { showUserInfo.value = false }) {
                 modMailUser?.let {
+                    val recentConvo = it.recentConvos.entries.toList()
+
                     Row(modifier = Modifier.fillMaxWidth()) {
                         UserText(
-                            it.name
+                            it.name,
+                            modifier = Modifier.padding(16.dp),
+                            fontSize = LocalTypography.current.fontSize.size18,
+                            fontWeight = FontWeight.Bold
                         )
+
+                        if (it.recentConvos.isNotEmpty()) {
+                            LazyColumn {
+                                items(
+                                    count = recentConvo.size,
+                                    contentType = { _ -> 1 },
+                                    key = { index -> recentConvo[index].value.id }
+                                ) { index: Int ->
+
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -609,7 +850,7 @@ class ModMailActivity : BaseActivity() {
                                     Toast.LENGTH_SHORT
                                 ).show()
 
-                                it.isHighlighted = if (it.isHighlighted == true) false else if (it.isHighlighted == false) true else false
+                                it.isHighlighted = it.isHighlighted != true && it.isHighlighted == false
                             } catch (e: Exception) {
                                 if (e is CancellationException) {
                                     throw e
@@ -942,8 +1183,7 @@ class ModMailActivity : BaseActivity() {
     fun ConversationDetailsView(
         page: Int,
         conversation: Conversation,
-        refreshConversationMessagesTrigger: Boolean,
-        updateConversation: (Conversation, Conversation) -> Unit
+        refreshConversationMessagesTrigger: Boolean
     ) {
         val pullToRefreshState: PullToRefreshState = rememberPullToRefreshState()
         var refreshState by remember { mutableStateOf<DataLoadState<Unit>>(DataLoadState.Idle) }

@@ -1774,4 +1774,15 @@
     <string name="read_failed_with_reason">Failed to read. Error: %1$s</string>
     <string name="unread_failed">Failed to unread</string>
     <string name="unread_failed_with_reason">Failed to unread. Error: %1$s</string>
+    <string name="ban">Ban</string>
+    <string name="ban_user">Ban %1$s</string>
+    <string name="ban_reason_hint">Reason</string>
+    <string name="ban_duration_hint">Duration: (0 - 999) days</string>
+    <string name="perma_ban">Permanent Ban</string>
+    <string name="ban_mod_note_hint">Mod note</string>
+    <string name="ban_mod_note_description">Only mods can see this</string>
+    <string name="unban">Unban</string>
+    <string name="mute">Mute</string>
+    <string name="unmute">Unmute</string>
+    <string name="remove_from_approved_users">Remove from approved users</string>
 </resources>

@@ -18,6 +18,7 @@ import ml.docilealligator.infinityforreddit.utils.APIUtils
 import ml.docilealligator.infinityforreddit.utils.JSONUtils
 import ml.docilealligator.infinityforreddit.viewmodels.ModConversationAction
 import ml.docilealligator.infinityforreddit.viewmodels.ModMailState
+import ml.docilealligator.infinityforreddit.viewmodels.ModUserAction
 import org.json.JSONObject
 import retrofit2.Retrofit
 import kotlin.coroutines.cancellation.CancellationException
@@ -139,10 +140,13 @@ class ModMailConversationRepository(
                     try {
                         conversations.add(
                             Conversation.parseConversation(
-                            gson,
-                            json.getJSONObject(JSONUtils.CONVERSATIONS_KEY).getString(conversationId),
-                            json.getJSONObject(JSONUtils.MESSAGES_KEY),
-                                if (json.has(JSONUtils.MOD_ACTIONS_KEY)) json.getJSONObject(JSONUtils.MOD_ACTIONS_KEY) else null
+                                gson,
+                                json.getJSONObject(JSONUtils.CONVERSATIONS_KEY)
+                                    .getString(conversationId),
+                                json.getJSONObject(JSONUtils.MESSAGES_KEY),
+                                if (json.has(JSONUtils.MOD_ACTIONS_KEY)) json.getJSONObject(
+                                    JSONUtils.MOD_ACTIONS_KEY
+                                ) else null
                             )
                         )
                     } catch (e: kotlinx.coroutines.CancellationException) {
@@ -228,6 +232,18 @@ class ModMailConversationRepository(
             )
         }
     }
+
+    suspend fun executeUserAction(
+        conversation: Conversation,
+        modUserAction: ModUserAction
+    ) {
+        conversation.id?.let { id ->
+            Conversation.executeUserAction(
+                oauthRetrofit, accessToken, id, modUserAction
+            )
+        }
+    }
+
 
     fun resetState() {
         _conversations.value = null
