@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.utils;
 
 import android.content.ContentResolver;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.webkit.MimeTypeMap;
 
@@ -37,7 +38,6 @@ public class UploadImageUtils {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
         Map<String, String> uploadImageParams = new HashMap<>();
-        uploadImageParams.put(APIUtils.FILEPATH_KEY, "post_image.jpg");
         uploadImageParams.put(APIUtils.MIMETYPE_KEY, "image/jpeg");
 
         Call<String> uploadImageCall = api.uploadImage(APIUtils.getOAuthHeader(accessToken), uploadImageParams);
@@ -73,56 +73,61 @@ public class UploadImageUtils {
 
     @Nullable
     public static String uploadImage(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit, ContentResolver contentResolver,
-                                     String accessToken, Uri imageUri, boolean getImageKey) throws IOException, JSONException, XmlPullParserException {
-        return uploadImage(oauthRetrofit, uploadMediaRetrofit, contentResolver, accessToken, imageUri, false, getImageKey);
-    }
-
-    @Nullable
-    public static String uploadImage(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit, ContentResolver contentResolver,
                                      String accessToken, Uri imageUri,
-                                     boolean returnResponseForGallerySubmission,
                                      boolean getImageKey) throws IOException, JSONException, XmlPullParserException {
-        String mimeType = contentResolver.getType(imageUri);
-        String extension = "jpg";
-        if (mimeType != null) {
-            String extensionFromMimeType = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
-            extension = extensionFromMimeType == null ? extension : extensionFromMimeType;
+        byte[] buf;
+        try (InputStream inputStream = contentResolver.openInputStream(imageUri)) {
+            if (inputStream == null) {
+                return "Error: Cannot access the image.";
+            }
+            buf = IOUtils.toByteArray(inputStream);
         }
+
+        // The lease's mimetype, the uploaded part's name and the bytes all describe the same format.
+        String mimeType = resolveImageMimeType(contentResolver.getType(imageUri), buf);
+        String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType);
+        String fileName = "post_image." + (extension == null ? "jpg" : extension);
 
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
         Map<String, String> uploadImageParams = new HashMap<>();
-        uploadImageParams.put(APIUtils.FILEPATH_KEY, "post_image.jpg");
         uploadImageParams.put(APIUtils.MIMETYPE_KEY, mimeType);
 
         Call<String> uploadImageCall = api.uploadImage(APIUtils.getOAuthHeader(accessToken), uploadImageParams);
         Response<String> uploadImageResponse = uploadImageCall.execute();
-        if (uploadImageResponse.isSuccessful()) {
-            Map<String, RequestBody> nameValuePairsMap = parseJSONResponseFromAWS(uploadImageResponse.body());
-            try (InputStream inputStream = contentResolver.openInputStream(imageUri)) {
-                if (inputStream == null) {
-                    return "Error: Cannot access the image.";
-                }
-                byte[] buf = IOUtils.toByteArray(inputStream);
-                RequestBody fileBody = RequestBody.create(buf, MediaType.parse("application/octet-stream"));
-                MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", "post_image." + extension, fileBody);
-
-                RedditAPI uploadMediaToAWSApi = uploadMediaRetrofit.create(RedditAPI.class);
-                Call<String> uploadMediaToAWS = uploadMediaToAWSApi.uploadMediaToAWS(nameValuePairsMap, fileToUpload);
-                Response<String> uploadMediaToAWSResponse = uploadMediaToAWS.execute();
-                if (uploadMediaToAWSResponse.isSuccessful()) {
-                    if (returnResponseForGallerySubmission) {
-                        return uploadImageResponse.body();
-                    }
-                    return parseImageFromXMLResponseFromAWS(uploadMediaToAWSResponse.body(), getImageKey);
-                } else {
-                    return "Error: " + uploadMediaToAWSResponse.code();
-                }
-            }
-
-        } else {
+        if (!uploadImageResponse.isSuccessful()) {
             return "Error: " + uploadImageResponse.message();
         }
+
+        Map<String, RequestBody> nameValuePairsMap = parseJSONResponseFromAWS(uploadImageResponse.body());
+
+        RequestBody fileBody = RequestBody.create(buf, MediaType.parse("application/octet-stream"));
+        MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", fileName, fileBody);
+
+        RedditAPI uploadMediaToAWSApi = uploadMediaRetrofit.create(RedditAPI.class);
+        Call<String> uploadMediaToAWS = uploadMediaToAWSApi.uploadMediaToAWS(nameValuePairsMap, fileToUpload);
+        Response<String> uploadMediaToAWSResponse = uploadMediaToAWS.execute();
+        if (uploadMediaToAWSResponse.isSuccessful()) {
+            return parseImageFromXMLResponseFromAWS(uploadMediaToAWSResponse.body(), getImageKey);
+        } else {
+            return "Error: " + uploadMediaToAWSResponse.code();
+        }
+    }
+
+    /**
+     * The image's real format, read from its header, so a provider that mislabels the file (or, like
+     * a cropping app's cache provider, reports no type at all) cannot lease it under the wrong one.
+     * Falls back to the provider's type for anything BitmapFactory cannot identify, and to JPEG when
+     * there is neither -- a null mimetype would make Retrofit reject the lease request outright.
+     */
+    static String resolveImageMimeType(@Nullable String providerMimeType, byte[] image) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeByteArray(image, 0, image.length, options);
+        if (options.outMimeType != null) {
+            return options.outMimeType;
+        }
+        return providerMimeType == null ? "image/jpeg" : providerMimeType;
     }
 
     @Nullable
@@ -132,7 +137,10 @@ public class UploadImageUtils {
     }
 
     @Nullable
-    public static String parseImageFromXMLResponseFromAWS(String response, boolean getImageKey) throws XmlPullParserException, IOException {
+    public static String parseImageFromXMLResponseFromAWS(@Nullable String response, boolean getImageKey) throws XmlPullParserException, IOException {
+        if (response == null) {
+            return null;
+        }
         XmlPullParser xmlPullParser = XmlPullParserFactory.newInstance().newPullParser();
         xmlPullParser.setInput(new StringReader(response));
 
@@ -156,7 +164,11 @@ public class UploadImageUtils {
 
     public static Map<String, RequestBody> parseJSONResponseFromAWS(String response) throws JSONException {
         JSONObject responseObject = new JSONObject(response);
-        JSONArray nameValuePairs = responseObject.getJSONObject(JSONUtils.ARGS_KEY).getJSONArray(JSONUtils.FIELDS_KEY);
+        // The upload form arrives wrapped in `args` (a lease that names a filepath, as a video
+        // upload's does) or bare (an image lease; see imageLeaseParams).
+        JSONObject uploadForm = responseObject.has(JSONUtils.ARGS_KEY)
+                ? responseObject.getJSONObject(JSONUtils.ARGS_KEY) : responseObject;
+        JSONArray nameValuePairs = uploadForm.getJSONArray(JSONUtils.FIELDS_KEY);
 
         Map<String, RequestBody> nameValuePairsMap = new HashMap<>();
         for (int i = 0; i < nameValuePairs.length(); i++) {
