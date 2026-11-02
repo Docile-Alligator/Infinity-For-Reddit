@@ -188,9 +188,14 @@ public class DownloadRedditVideoService extends JobService {
                     })
                     .build();
 
-            retrofit = retrofit.newBuilder().client(client).build();
+            // Keep this call's Retrofit local. A JobService instance is shared by every job routed
+            // to it, so assigning the injected field here let a second concurrent download swap the
+            // client out from under the first: both downloads then streamed through whichever
+            // client won, and that client carries the other download's progress listener, so one
+            // notification counted twice while the other never left 0%.
+            Retrofit downloadRetrofit = retrofit.newBuilder().client(client).build();
 
-            DownloadFile downloadFileRetrofit = retrofit.create(DownloadFile.class);
+            DownloadFile downloadFileRetrofit = downloadRetrofit.create(DownloadFile.class);
 
             boolean separateDownloadFolder = sharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_FOLDER_FOR_EACH_SUBREDDIT, false);
 
