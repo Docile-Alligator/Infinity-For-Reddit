@@ -53,17 +53,18 @@ import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.database.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.asynctasks.AccountManagement;
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.database.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.databinding.ActivityViewPostDetailBinding;
 import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragmentEvent;
 import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.MorePostsInfoFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragmentNew;
+import ml.docilealligator.infinityforreddit.network.ImageOkHttpClient;
 import ml.docilealligator.infinityforreddit.post.LoadingMorePostsStatus;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostType;
@@ -166,7 +167,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         super.onCreate(savedInstanceState);
 
-        BigImageViewer.initialize(GlideImageLoader.with(this.getApplicationContext()));
+        BigImageViewer.initialize(GlideImageLoader.with(this.getApplicationContext(),
+                ImageOkHttpClient.get(this.getApplicationContext())));
 
         binding = ActivityViewPostDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

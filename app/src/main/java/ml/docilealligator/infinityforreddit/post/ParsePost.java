@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.post;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.Html;
-import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.OptIn;
@@ -236,6 +235,7 @@ public class ParsePost {
         }
 
         String permalink = Html.fromHtml(data.getString(JSONUtils.PERMALINK_KEY)).toString();
+        String thumbnailUrl = !data.has(JSONUtils.THUMBNAIL_KEY) || data.isNull(JSONUtils.THUMBNAIL_KEY) ? "" : data.getString(JSONUtils.THUMBNAIL_KEY);
 
         ArrayList<Post.Preview> previews = new ArrayList<>();
         if (data.has(JSONUtils.PREVIEW_KEY)) {
@@ -260,6 +260,25 @@ public class ParsePost {
         if (data.has(JSONUtils.CROSSPOST_PARENT_LIST)) {
             //Cross post
             //data.getJSONArray(JSONUtils.CROSSPOST_PARENT_LIST).getJSONObject(0) out of bounds????????????
+            JSONObject parentData = data.getJSONArray(JSONUtils.CROSSPOST_PARENT_LIST).getJSONObject(0);
+            // Use parent thumbnail if current post doesn't have a valid thumbnail — but not when the
+            // parent embeds its media inline: the body shows it, and the small thumbnail would only
+            // be upscaled into a blurry duplicate above the body (issue #317).
+            String parentThumbnailUrl = !parentData.has(JSONUtils.THUMBNAIL_KEY) || parentData.isNull(JSONUtils.THUMBNAIL_KEY) ? "" : parentData.getString(JSONUtils.THUMBNAIL_KEY);
+
+            Map<String, MediaMetadata> parentMediaMetadataMap = JSONUtils.parseMediaMetadata(parentData);
+            boolean parentEmbedsInlineMedia = parentMediaMetadataMap != null && !parentMediaMetadataMap.isEmpty();
+            if (!parentEmbedsInlineMedia
+                    && (thumbnailUrl.isEmpty() || thumbnailUrl.equals("self") || thumbnailUrl.equals("default"))
+                    && !parentThumbnailUrl.isEmpty() && !parentThumbnailUrl.equals("self") && !parentThumbnailUrl.equals("default")) {
+                thumbnailUrl = parentThumbnailUrl;
+            }
+            if (parentEmbedsInlineMedia) {
+                mediaMetadataMap = parentMediaMetadataMap;
+                previews = new ArrayList<>();
+                parentData.remove(JSONUtils.PREVIEW_KEY);
+            }
+
             data = data.getJSONArray(JSONUtils.CROSSPOST_PARENT_LIST).getJSONObject(0);
             Post crosspostParent = parseBasicData(data);
             Post post = parseData(data, permalink, id, fullName, subredditName, subredditNamePrefixed,
@@ -268,7 +287,7 @@ public class ParsePost {
                     score, voteType, nComments, upvoteRatio, flair, hidden,
                     spoiler, nsfw, stickied, archived, locked, saved, sendReplies, deleted, removed,
                     true, canModPost, approved, approvedAtUTC, approvedBy, spam, distinguished,
-                    suggestedSort);
+                    suggestedSort, thumbnailUrl);
             post.setCrosspostParentId(crosspostParent.getId());
             return post;
         } else {
@@ -278,7 +297,7 @@ public class ParsePost {
                     score, voteType, nComments, upvoteRatio, flair, hidden,
                     spoiler, nsfw, stickied, archived, locked, saved, sendReplies, deleted, removed,
                     false, canModPost, approved, approvedAtUTC, approvedBy, spam, distinguished,
-                    suggestedSort);
+                    suggestedSort, thumbnailUrl);
         }
     }
 
@@ -293,7 +312,7 @@ public class ParsePost {
                                   boolean locked, boolean saved, boolean sendReplies, boolean deleted,
                                   boolean removed, boolean isCrosspost, boolean canModPost, boolean approved,
                                   long approvedAtUTC, String approvedBy, boolean spam,
-                                  String distinguished, String suggestedSort) throws JSONException {
+                                  String distinguished, String suggestedSort, String thumbnailUrl) throws JSONException {
         Post post;
 
         boolean isVideo = data.getBoolean(JSONUtils.IS_VIDEO_KEY);
@@ -763,23 +782,13 @@ public class ParsePost {
                     JSONArray galleryIdsArray = data.getJSONObject(JSONUtils.GALLERY_DATA_KEY).getJSONArray(JSONUtils.ITEMS_KEY);
                     JSONObject galleryObject = data.getJSONObject(JSONUtils.MEDIA_METADATA_KEY);
                     ArrayList<Post.Gallery> gallery = new ArrayList<>();
+                    // Only read for items the listing reports as failed; see FailedRedditMedia.
+                    String thumbnailMediaId = FailedRedditMedia.thumbnailMediaId(thumbnailUrl, galleryIdsArray);
+                    String failedItemExtension = FailedRedditMedia.extension(thumbnailUrl, thumbnailMediaId);
                     for (int i = 0; i < galleryIdsArray.length(); i++) {
-                        String galleryId = galleryIdsArray.getJSONObject(i).getString(JSONUtils.MEDIA_ID_KEY);
-                        JSONObject singleGalleryObject = galleryObject.getJSONObject(galleryId);
-                        String mimeType = singleGalleryObject.getString(JSONUtils.M_KEY);
-                        String galleryItemUrl;
-                        if (MimeTypes.isImage(mimeType) && !mimeType.equals("image/gif")) {
-                            galleryItemUrl = singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getString(JSONUtils.U_KEY);
-                        } else {
-                            JSONObject sourceObject = singleGalleryObject.getJSONObject(JSONUtils.S_KEY);
-                            if (mimeType.equals("image/gif")) {
-                                galleryItemUrl = sourceObject.getString(JSONUtils.GIF_KEY);
-                            } else {
-                                galleryItemUrl = sourceObject.getString(JSONUtils.MP4_KEY);
-                            }
-                        }
-
                         JSONObject galleryItem = galleryIdsArray.getJSONObject(i);
+                        String galleryId = galleryItem.getString(JSONUtils.MEDIA_ID_KEY);
+
                         String galleryItemCaption = "";
                         String galleryItemCaptionUrl = "";
                         if (galleryItem.has(JSONUtils.CAPTION_KEY)) {
@@ -790,9 +799,59 @@ public class ParsePost {
                             galleryItemCaptionUrl = galleryItem.getString(JSONUtils.CAPTION_URL_KEY).trim();
                         }
 
+                        // Skip the missing item and keep the survivors
+                        JSONObject singleGalleryObject = galleryObject.optJSONObject(galleryId);
+                        if (singleGalleryObject == null) {
+                            continue;
+                        }
+
+                        String mimeType = singleGalleryObject.optString(JSONUtils.M_KEY);
+                        JSONObject sourceObject = singleGalleryObject.optJSONObject(JSONUtils.S_KEY);
+                        if (mimeType.isEmpty() || sourceObject == null) {
+                            if (!FailedRedditMedia.isReportedFailed(singleGalleryObject)
+                                    || galleryItem.optBoolean(JSONUtils.IS_DELETED_KEY)) {
+                                continue;
+                            }
+                            String failedMimeType = "image/" + failedItemExtension;
+                            String failedItemUrl = FailedRedditMedia.sourceUrl(galleryId, failedItemExtension);
+                            if (previews.isEmpty() && !failedItemExtension.equals("gif")) {
+                                // The thumbnail is the only size the listing gives, and only for its
+                                // own item and when it is not a crop; 0x0 is the cards' "size unknown".
+                                boolean sizeKnown = galleryId.equals(thumbnailMediaId)
+                                        && FailedRedditMedia.thumbnailIsUncropped(thumbnailUrl);
+                                previews.add(new Post.Preview(failedItemUrl,
+                                        sizeKnown ? data.optInt(JSONUtils.THUMBNAIL_WIDTH_KEY) : 0,
+                                        sizeKnown ? data.optInt(JSONUtils.THUMBNAIL_HEIGHT_KEY) : 0,
+                                        galleryItemCaption, galleryItemCaptionUrl));
+                            }
+                            // No fallback: the url already is the i.redd.it original the fallback
+                            // would otherwise name, and downloads prefer the fallback when one is set.
+                            gallery.add(new Post.Gallery(failedMimeType, failedItemUrl, "",
+                                    subredditName + "-" + galleryId + "." + failedItemExtension,
+                                    galleryItemCaption, galleryItemCaptionUrl));
+                            continue;
+                        }
+
+                        String galleryItemUrl;
+                        if (MimeTypes.isImage(mimeType) && !mimeType.equals("image/gif")) {
+                            galleryItemUrl = sourceObject.optString(JSONUtils.U_KEY);
+                        } else {
+                            if (mimeType.equals("image/gif")) {
+                                galleryItemUrl = sourceObject.optString(JSONUtils.GIF_KEY);
+                            } else {
+                                galleryItemUrl = sourceObject.optString(JSONUtils.MP4_KEY);
+                            }
+                        }
+                        // A type this code reads wrongly lands on a key the source does not have.
+                        // Skip that one item: a throw here would reach the catch below with the
+                        // list half built, and the post would be demoted to text with no images.
+                        if (galleryItemUrl.isEmpty()) {
+                            continue;
+                        }
+
                         if (previews.isEmpty() && MimeTypes.isImage(mimeType) && !mimeType.equals("image/gif")) {
-                            previews.add(new Post.Preview(galleryItemUrl, singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.X_KEY),
-                                    singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.Y_KEY), galleryItemCaption, galleryItemCaptionUrl));
+                            previews.add(new Post.Preview(galleryItemUrl, sourceObject.getInt(JSONUtils.X_KEY),
+                                    sourceObject.getInt(JSONUtils.Y_KEY), galleryItemCaption, galleryItemCaptionUrl));
                         }
 
                         Post.Gallery postGalleryItem = new Post.Gallery(
@@ -803,7 +862,7 @@ public class ParsePost {
 
                         // For issue #558
                         // Construct a fallback image url
-                        if (!TextUtils.isEmpty(galleryItemUrl) && !TextUtils.isEmpty(mimeType) && MimeTypes.isImage(mimeType) && !mimeType.equals("image/gif")) {
+                        if (MimeTypes.isImage(mimeType) && !mimeType.equals("image/gif")) {
                             postGalleryItem.setFallbackUrl("https://i.redd.it/" + galleryId + "." +  mimeType.substring(mimeType.lastIndexOf("/") + 1));
                             postGalleryItem.setHasFallback(true);
                         }

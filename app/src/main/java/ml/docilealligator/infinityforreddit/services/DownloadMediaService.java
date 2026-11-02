@@ -41,21 +41,22 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 
-import ml.docilealligator.infinityforreddit.network.DownloadProgressResponseBody;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.video.VideoLinkFetcher;
 import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.apis.DownloadFile;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.broadcastreceivers.DownloadedMediaDeleteActionBroadcastReceiver;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.extensions.StringKt;
+import ml.docilealligator.infinityforreddit.network.DownloadProgressResponseBody;
+import ml.docilealligator.infinityforreddit.network.RedditMediaExtensionInterceptor;
 import ml.docilealligator.infinityforreddit.post.ImgurMedia;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.NotificationUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.video.VideoLinkFetcher;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -539,17 +540,18 @@ public class DownloadMediaService extends JobService {
                                 .header("User-Agent", APIUtils.USER_AGENT)
                                 .build()
                 ))
+                // Same guessed-extension gallery items the image viewer loads; see ImageOkHttpClient.
+                .addInterceptor(RedditMediaExtensionInterceptor.INSTANCE)
                 .build();
 
         retrofit = retrofit.newBuilder().client(client).build();
 
         boolean separateDownloadFolder = mSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_FOLDER_FOR_EACH_SUBREDDIT, false);
 
-        Response<ResponseBody> response;
         String destinationFileUriString;
         boolean isDefaultDestination = true;
         try {
-            response = retrofit.create(DownloadFile.class).downloadFile(fileUrl).execute();
+            Response<ResponseBody> response = retrofit.create(DownloadFile.class).downloadFile(fileUrl).execute();
             try (ResponseBody responseBody = response.body()) {
                 if (response.isSuccessful() && responseBody != null) {
                     String destinationFileDirectory = getDownloadLocation(mediaType, isNsfw);
@@ -574,6 +576,20 @@ public class DownloadMediaService extends JobService {
                                 break;
                             default:
                                 mimeType = "image/png";
+                        }
+                    }
+
+                    // A gallery item the listing reported as failed was named from a guessed extension
+                    // (FailedRedditMedia), and the interceptor may have found the file under another
+                    // one. Name it for the bytes that came back. Nothing has been created yet: the
+                    // document and the share-cache file are both made below, under this name.
+                    String servedExtension = RedditMediaExtensionInterceptor.substitutedExtension(
+                            fileUrl, response.raw().request().url());
+                    if (servedExtension != null) {
+                        fileName = replaceExtension(fileName, servedExtension);
+                        String servedMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(servedExtension);
+                        if (servedMimeType != null) {
+                            mimeType = servedMimeType;
                         }
                     }
 
@@ -675,6 +691,16 @@ public class DownloadMediaService extends JobService {
                     ERROR_FILE_CANNOT_DOWNLOAD, multipleDownloads);
             return false;
         }
+    }
+
+    /**
+     * Replaces the name's extension, or appends one when it has none. A corrected MIME type has to
+     * correct the name with it: MediaStore appends an extension of its own whenever the declared
+     * type disagrees with the name.
+     */
+    private static String replaceExtension(String fileName, String extension) {
+        int dot = fileName.lastIndexOf('.');
+        return (dot <= 0 ? fileName : fileName.substring(0, dot)) + "." + extension;
     }
 
     private Notification createNotification(NotificationCompat.Builder builder, String fileName) {

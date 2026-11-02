@@ -66,6 +66,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetAsWallpaperB
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customviews.GlideGifImageViewFactory;
 import ml.docilealligator.infinityforreddit.databinding.FragmentViewRedditGalleryImageOrGifBinding;
+import ml.docilealligator.infinityforreddit.network.ImageOkHttpClient;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -106,7 +107,8 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        BigImageViewer.initialize(GlideImageLoader.with(activity.getApplicationContext()));
+        BigImageViewer.initialize(GlideImageLoader.with(activity.getApplicationContext(),
+                ImageOkHttpClient.get(activity.getApplicationContext())));
 
         binding = FragmentViewRedditGalleryImageOrGifBinding.inflate(inflater, container, false);
 

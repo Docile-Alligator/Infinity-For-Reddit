@@ -160,7 +160,7 @@ public class ViewImgurImageFragment extends Fragment {
     }
 
     private void loadImage() {
-        glide.asBitmap().load(imgurMedia.getLink()).listener(new RequestListener<Bitmap>() {
+        glide.asBitmap().load(imgurMedia.getLink()).listener(new RequestListener<>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                 binding.progressBarViewImgurImageFragment.setVisibility(View.GONE);

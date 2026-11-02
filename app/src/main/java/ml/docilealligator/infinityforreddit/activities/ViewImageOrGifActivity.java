@@ -78,6 +78,7 @@ import ml.docilealligator.infinityforreddit.font.FontFamily;
 import ml.docilealligator.infinityforreddit.font.FontStyle;
 import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
+import ml.docilealligator.infinityforreddit.network.ImageOkHttpClient;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -135,7 +136,8 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         getTheme().applyStyle(ContentFontFamily.valueOf(mSharedPreferences
                 .getString(SharedPreferencesUtils.CONTENT_FONT_FAMILY_KEY, ContentFontFamily.Default.name())).getResId(), true);
 
-        BigImageViewer.initialize(GlideImageLoader.with(this.getApplicationContext()));
+        BigImageViewer.initialize(GlideImageLoader.with(this.getApplicationContext(),
+                ImageOkHttpClient.get(this.getApplicationContext())));
 
         binding = ActivityViewImageOrGifBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
