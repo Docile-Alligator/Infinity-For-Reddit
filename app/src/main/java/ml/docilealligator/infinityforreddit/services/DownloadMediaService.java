@@ -544,14 +544,19 @@ public class DownloadMediaService extends JobService {
                 .addInterceptor(RedditMediaExtensionInterceptor.INSTANCE)
                 .build();
 
-        retrofit = retrofit.newBuilder().client(client).build();
+        // Keep this call's Retrofit local. A JobService instance is shared by every job routed to
+        // it, so assigning the injected field here let a second concurrent download swap the client
+        // out from under the first: both downloads then streamed through whichever client won, and
+        // that client carries the other download's progress listener, so one notification counted
+        // twice while the other never left 0%.
+        Retrofit downloadRetrofit = retrofit.newBuilder().client(client).build();
 
         boolean separateDownloadFolder = mSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_FOLDER_FOR_EACH_SUBREDDIT, false);
 
         String destinationFileUriString;
         boolean isDefaultDestination = true;
         try {
-            Response<ResponseBody> response = retrofit.create(DownloadFile.class).downloadFile(fileUrl).execute();
+            Response<ResponseBody> response = downloadRetrofit.create(DownloadFile.class).downloadFile(fileUrl).execute();
             try (ResponseBody responseBody = response.body()) {
                 if (response.isSuccessful() && responseBody != null) {
                     String destinationFileDirectory = getDownloadLocation(mediaType, isNsfw);
