@@ -261,7 +261,7 @@
             android:name=".activities.CreateMultiRedditActivity"
             android:label="@string/create_multi_reddit_activity_label"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.Slidable"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.ViewMultiRedditDetailActivity"
@@ -413,8 +413,7 @@
             android:name=".activities.PostTextActivity"
             android:label="@string/post_text_activity_label"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.CommentActivity"
             android:label="@string/comment_activity_label"

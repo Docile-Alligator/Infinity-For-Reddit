@@ -157,6 +157,13 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
                     Insets allInsets = Utils.getInsets(insets, true, isForcedImmersiveInterface());
 
+                    binding.getRoot().setPadding(
+                            0,
+                            0,
+                            0,
+                            allInsets.bottom
+                    );
+
                     setMargins(binding.toolbarPostImageActivity,
                             allInsets.left,
                             allInsets.top,
@@ -167,7 +174,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
                             allInsets.left,
                             0,
                             allInsets.right,
-                            allInsets.bottom
+                            0
                     );
 
                     return WindowInsetsCompat.CONSUMED;
