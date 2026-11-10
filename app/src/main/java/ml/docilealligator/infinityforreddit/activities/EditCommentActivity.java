@@ -143,6 +143,13 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
                     Insets allInsets = Utils.getInsets(insets, true, isForcedImmersiveInterface());
 
+                    binding.getRoot().setPadding(
+                            0,
+                            0,
+                            0,
+                            allInsets.bottom
+                    );
+
                     setMargins(binding.toolbarEditCommentActivity,
                             allInsets.left,
                             allInsets.top,
@@ -153,7 +160,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
                             allInsets.left,
                             0,
                             allInsets.right,
-                            allInsets.bottom
+                            0
                     );
 
                     return WindowInsetsCompat.CONSUMED;
@@ -277,7 +284,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
 
     @Override
     protected void applyCustomTheme() {
-        binding.coordinatorLayoutEditCommentActivity.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutEditCommentActivity, null, binding.toolbarEditCommentActivity);
         binding.commentEditTextEditCommentActivity.setTextColor(mCustomThemeWrapper.getCommentColor());
 
@@ -320,7 +327,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
         if (!isSubmitting) {
             isSubmitting = true;
 
-            Snackbar.make(binding.coordinatorLayoutEditCommentActivity, R.string.posting, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(binding.getRoot(), R.string.posting, Snackbar.LENGTH_SHORT).show();
 
             String content = binding.commentEditTextEditCommentActivity.getText().toString();
 
@@ -332,7 +339,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
                     params.put(APIUtils.TEXT_KEY, "");
                 } catch (JSONException e) {
                     isSubmitting = false;
-                    Snackbar.make(binding.coordinatorLayoutEditCommentActivity, R.string.convert_to_richtext_json_failed, Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(binding.getRoot(), R.string.convert_to_richtext_json_failed, Snackbar.LENGTH_SHORT).show();
                     return;
                 }
             } else {
@@ -363,14 +370,14 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
                     } else {
                         handler.post(() -> {
                             isSubmitting = false;
-                            Snackbar.make(binding.coordinatorLayoutEditCommentActivity, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(binding.getRoot(), R.string.post_failed, Snackbar.LENGTH_SHORT).show();
                         });
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                     handler.post(() -> {
                         isSubmitting = false;
-                        Snackbar.make(binding.coordinatorLayoutEditCommentActivity, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(binding.getRoot(), R.string.post_failed, Snackbar.LENGTH_SHORT).show();
                     });
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -428,11 +435,11 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
                 }
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
                         mAccessToken, binding.commentEditTextEditCommentActivity,
-                        binding.coordinatorLayoutEditCommentActivity, data.getData(), uploadedImages);
+                        binding.getRoot(), data.getData(), uploadedImages);
             } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
                         mAccessToken, binding.commentEditTextEditCommentActivity,
-                        binding.coordinatorLayoutEditCommentActivity, capturedImageUri, uploadedImages);
+                        binding.getRoot(), capturedImageUri, uploadedImages);
             } else if (requestCode == MARKDOWN_PREVIEW_REQUEST_CODE) {
                 editComment();
             }

@@ -185,6 +185,13 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
                         Insets allInsets = Utils.getInsets(insets, true, isForcedImmersiveInterface());
 
+                        binding.getRoot().setPadding(
+                                0,
+                                0,
+                                0,
+                                allInsets.bottom
+                        );
+
                         setMargins(binding.commentToolbar,
                                 allInsets.left,
                                 allInsets.top,
@@ -195,7 +202,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                                 allInsets.left,
                                 0,
                                 allInsets.right,
-                                allInsets.bottom
+                                0
                         );
 
                         return WindowInsetsCompat.CONSUMED;
@@ -447,7 +454,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
 
     @Override
     protected void applyCustomTheme() {
-        binding.commentCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.commentAppbarLayout, null, binding.commentToolbar);
         binding.commentParentTitleTextView.setTextColor(customThemeWrapper.getPostTitleColor());
         binding.commentDivider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
@@ -508,7 +515,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             isSubmitting = true;
             if (binding.commentCommentEditText.getText() == null || binding.commentCommentEditText.getText().toString().equals("")) {
                 isSubmitting = false;
-                Snackbar.make(binding.commentCoordinatorLayout, R.string.comment_content_required, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), R.string.comment_content_required, Snackbar.LENGTH_SHORT).show();
                 return;
             }
 
@@ -516,7 +523,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                 item.setEnabled(false);
                 item.getIcon().setAlpha(130);
             }
-            Snackbar sendingSnackbar = Snackbar.make(binding.commentCoordinatorLayout, R.string.sending_comment, Snackbar.LENGTH_INDEFINITE);
+            Snackbar sendingSnackbar = Snackbar.make(binding.getRoot(), R.string.sending_comment, Snackbar.LENGTH_INDEFINITE);
             sendingSnackbar.show();
 
             Retrofit newAuthenticatorOauthRetrofit = mOauthRetrofit.newBuilder().client(new OkHttpClient.Builder().authenticator(new AnyAccountAccessTokenAuthenticator(mRetrofit, mRedditDataRoomDatabase, selectedAccount, mCurrentAccountSharedPreferences))
@@ -560,9 +567,9 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                             }
 
                             if (errorMessage == null || errorMessage.isEmpty()) {
-                                Snackbar.make(binding.commentCoordinatorLayout, R.string.send_comment_failed, Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(binding.getRoot(), R.string.send_comment_failed, Snackbar.LENGTH_SHORT).show();
                             } else {
-                                Snackbar.make(binding.commentCoordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(binding.getRoot(), errorMessage, Snackbar.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -604,11 +611,11 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                 }
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
                         accessToken, binding.commentCommentEditText,
-                        binding.commentCoordinatorLayout, data.getData(), uploadedImages);
+                        binding.getRoot(), data.getData(), uploadedImages);
             } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
                         accessToken, binding.commentCommentEditText,
-                        binding.commentCoordinatorLayout, capturedImageUri, uploadedImages);
+                        binding.getRoot(), capturedImageUri, uploadedImages);
             } else if (requestCode == MARKDOWN_PREVIEW_REQUEST_CODE) {
                 sendComment(mMenu == null ? null : mMenu.findItem(R.id.action_send_comment_activity));
             }

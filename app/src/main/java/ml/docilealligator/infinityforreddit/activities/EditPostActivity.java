@@ -118,6 +118,13 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
                     Insets allInsets = Utils.getInsets(insets, true, isForcedImmersiveInterface());
 
+                    binding.getRoot().setPadding(
+                            0,
+                            0,
+                            0,
+                            allInsets.bottom
+                    );
+
                     setMargins(binding.toolbarEditPostActivity,
                             allInsets.left,
                             allInsets.top,
@@ -128,7 +135,7 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
                             allInsets.left,
                             0,
                             allInsets.right,
-                            allInsets.bottom
+                            0
                     );
 
                     return WindowInsetsCompat.CONSUMED;
@@ -210,7 +217,7 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
 
     @Override
     protected void applyCustomTheme() {
-        binding.coordinatorLayoutEditPostActivity.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        binding.getRoot().setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutEditPostActivity, null, binding.toolbarEditPostActivity);
         binding.postTitleTextViewEditPostActivity.setTextColor(mCustomThemeWrapper.getPostTitleColor());
         binding.dividerEditPostActivity.setBackgroundColor(mCustomThemeWrapper.getPostTitleColor());
@@ -258,7 +265,7 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
         if (!isSubmitting) {
             isSubmitting = true;
 
-            Snackbar.make(binding.coordinatorLayoutEditPostActivity, R.string.posting, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(binding.getRoot(), R.string.posting, Snackbar.LENGTH_SHORT).show();
 
             Map<String, String> params = new HashMap<>();
             params.put(APIUtils.THING_ID_KEY, mFullName);
@@ -279,7 +286,7 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
                         @Override
                         public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                             isSubmitting = false;
-                            Snackbar.make(binding.coordinatorLayoutEditPostActivity, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(binding.getRoot(), R.string.post_failed, Snackbar.LENGTH_SHORT).show();
                         }
                     });
 
@@ -297,11 +304,11 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
                 }
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
                         mAccessToken, binding.postContentEditTextEditPostActivity,
-                        binding.coordinatorLayoutEditPostActivity, data.getData(), uploadedImages);
+                        binding.getRoot(), data.getData(), uploadedImages);
             } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
                         mAccessToken, binding.postContentEditTextEditPostActivity,
-                        binding.coordinatorLayoutEditPostActivity, capturedImageUri, uploadedImages);
+                        binding.getRoot(), capturedImageUri, uploadedImages);
             } else if (requestCode == MARKDOWN_PREVIEW_REQUEST_CODE) {
                 editPost();
             }

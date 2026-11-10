@@ -293,8 +293,8 @@ public class CustomizeThemeActivity extends BaseActivity {
         } else if (itemId == R.id.action_save_customize_theme_activity) {
             if (adapter != null) {
                 themeName = adapter.getThemeName();
-                if (themeName.equals("")) {
-                    Snackbar.make(binding.coordinatorCustomizeThemeActivity, R.string.no_theme_name, Snackbar.LENGTH_SHORT).show();
+                if (themeName.isEmpty()) {
+                    Snackbar.make(binding.getRoot(), R.string.no_theme_name, Snackbar.LENGTH_SHORT).show();
                     return true;
                 }
                 CustomTheme customTheme = CustomTheme.convertSettingsItemsToCustomTheme(customThemeSettingsItems, themeName);
@@ -442,7 +442,7 @@ public class CustomizeThemeActivity extends BaseActivity {
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutCustomizeThemeActivity,
                 binding.collapsingToolbarLayoutCustomizeThemeActivity, binding.toolbarCustomizeThemeActivity);
         applyAppBarScrollFlagsIfApplicable(binding.collapsingToolbarLayoutCustomizeThemeActivity);
-        binding.coordinatorCustomizeThemeActivity.setBackgroundColor(customThemeWrapper.getBackgroundColor());
+        binding.getRoot().setBackgroundColor(customThemeWrapper.getBackgroundColor());
         binding.progressBarCustomizeThemeActivity.setIndicatorColor(customThemeWrapper.getColorAccent());
     }
 }

@@ -151,17 +151,25 @@ public class SearchActivity extends BaseActivity {
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
                     Insets allInsets = Utils.getInsets(insets, true, isForcedImmersiveInterface());
 
+                    binding.getRoot().setPadding(
+                            0,
+                            0,
+                            0,
+                            allInsets.bottom
+                    );
+
                     setMargins(binding.toolbar,
                             allInsets.left,
                             allInsets.top,
                             allInsets.right,
-                            BaseActivity.IGNORE_MARGIN);
+                            BaseActivity.IGNORE_MARGIN
+                    );
 
                     binding.nestedScrollViewSearchActivity.setPadding(
                             allInsets.left,
                             0,
                             allInsets.right,
-                            allInsets.bottom
+                            0
                     );
 
                     return WindowInsetsCompat.CONSUMED;
