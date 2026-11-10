@@ -188,7 +188,7 @@ public interface RedditAPI {
     @POST("/api/favorite")
     Call<String> favoriteThing(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
-    @GET("/api/multi/mine?expand_srs=true")
+    @GET("/api/multi/mine?expand_srs=true&raw_json=1")
     Call<String> getMyMultiReddits(@HeaderMap Map<String, String> headers);
 
     @FormUrlEncoded
@@ -196,7 +196,7 @@ public interface RedditAPI {
     Call<String> favoriteMultiReddit(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
-    @POST("/api/multi/multipath")
+    @POST("/api/multi/multipath?&raw_json=1")
     Call<String> createMultiReddit(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
     @FormUrlEncoded
@@ -206,7 +206,7 @@ public interface RedditAPI {
     @DELETE("/api/multi/multipath")
     Call<String> deleteMultiReddit(@HeaderMap Map<String, String> headers, @Query("multipath") String multipath);
 
-    @GET("/api/multi/multipath?expand_srs=true")
+    @GET("/api/multi/multipath?expand_srs=true&raw_json=1")
     Call<String> getMultiRedditInfo(@HeaderMap Map<String, String> headers, @Query("multipath") String multipath);
 
     @FormUrlEncoded

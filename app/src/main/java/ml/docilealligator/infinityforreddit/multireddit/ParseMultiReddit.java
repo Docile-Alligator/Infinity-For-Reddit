@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.multireddit;
 
 import android.os.Handler;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -78,13 +79,27 @@ public class ParseMultiReddit {
         JSONArray subredditsArray = singleMultiRedditJSON.getJSONArray(JSONUtils.SUBREDDITS_KEY);
         ArrayList<ExpandedSubredditInMultiReddit> subreddits = new ArrayList<>();
         for (int i = 0; i < subredditsArray.length(); i++) {
-            JSONObject subredditData = subredditsArray.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-            subreddits.add(
-                    new ExpandedSubredditInMultiReddit(
-                            subredditsArray.getJSONObject(i).getString(JSONUtils.NAME_KEY),
-                            subredditData.isNull(JSONUtils.COMMUNITY_ICON_KEY) ? subredditData.getString(JSONUtils.NAME_KEY) : subredditData.getString(JSONUtils.COMMUNITY_ICON_KEY)
-                    )
-            );
+            try {
+                JSONObject subredditObject = subredditsArray.getJSONObject(i);
+                if (subredditObject.has(JSONUtils.DATA_KEY)) {
+                    JSONObject subredditData = subredditObject.getJSONObject(JSONUtils.DATA_KEY);
+                    subreddits.add(
+                            new ExpandedSubredditInMultiReddit(
+                                    subredditObject.getString(JSONUtils.NAME_KEY),
+                                    subredditData.isNull(JSONUtils.COMMUNITY_ICON_KEY) ? subredditData.getString(JSONUtils.NAME_KEY) : subredditData.getString(JSONUtils.COMMUNITY_ICON_KEY)
+                            )
+                    );
+                } else {
+                    subreddits.add(
+                            new ExpandedSubredditInMultiReddit(
+                                    subredditObject.getString(JSONUtils.NAME_KEY),
+                                    null
+                            )
+                    );
+                }
+            } catch (JSONException e) {
+                Log.e("ParseMultiReddit", "Unable to parse ExpandedSubredditInMultiReddit.", e);
+            }
         }
 
         return new MultiReddit(path, displayName, name, description, copiedFrom,

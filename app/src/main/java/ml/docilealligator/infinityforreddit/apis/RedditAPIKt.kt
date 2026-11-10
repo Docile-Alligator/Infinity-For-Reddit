@@ -22,7 +22,7 @@ interface RedditAPIKt {
     ): String
 
     @FormUrlEncoded
-    @POST("/api/multi/copy?expand_srs=true")
+    @POST("/api/multi/copy?expand_srs=true&raw_json=1")
     suspend fun copyMultiReddit(
         @HeaderMap headers: Map<String, String>,
         @FieldMap params: Map<String, String>
