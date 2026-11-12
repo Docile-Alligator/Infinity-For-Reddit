@@ -57,7 +57,8 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String WIKI_PATTERN = "/[rR]/[\\w-]+/(wiki|w)(?:/[\\w-]+)*";
     private static final String GOOGLE_AMP_PATTERN = "/amp/s/amp.reddit.com/.*";
     private static final String STREAMABLE_PATTERN = "/\\w+/?";
-    
+    private static final String STREAMABLE_PATTERN_2 = "/s/\\w+/?";
+
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -374,6 +375,12 @@ public class LinkResolverActivity extends AppCompatActivity {
                         } else if (authority.equals("streamable.com")) {
                             if (path.matches(STREAMABLE_PATTERN)) {
                                 String shortCode = segments.get(0);
+                                Intent intent = new Intent(this, ViewVideoActivity.class);
+                                intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_STREAMABLE);
+                                intent.putExtra(ViewVideoActivity.EXTRA_STREAMABLE_SHORT_CODE, shortCode);
+                                startActivity(intent);
+                            } else if (path.matches(STREAMABLE_PATTERN_2)) {
+                                String shortCode = segments.get(1);
                                 Intent intent = new Intent(this, ViewVideoActivity.class);
                                 intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_STREAMABLE);
                                 intent.putExtra(ViewVideoActivity.EXTRA_STREAMABLE_SHORT_CODE, shortCode);

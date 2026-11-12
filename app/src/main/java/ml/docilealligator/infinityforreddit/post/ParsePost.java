@@ -424,7 +424,7 @@ public class ParsePost {
 
                                 }*/
                             } else if (authority.equals("streamable.com")) {
-                                String shortCode = url.substring(url.lastIndexOf("/") + 1);
+                                String shortCode = Uri.parse(url).getLastPathSegment();
                                 post.setPostType(Post.VIDEO_TYPE);
                                 post.setIsStreamable(true);
                                 post.setVideoUrl(url);
@@ -648,7 +648,7 @@ public class ParsePost {
                                     post.setVideoUrl(url);
                                     post.setRedgifsId(redgifsId);*/
                                 } else if (authority.equals("streamable.com")) {
-                                    String shortCode = url.substring(url.lastIndexOf("/") + 1);
+                                    String shortCode = Uri.parse(url).getLastPathSegment();
                                     post.setPostType(Post.VIDEO_TYPE);
                                     post.setIsStreamable(true);
                                     post.setVideoUrl(url);
@@ -737,7 +737,7 @@ public class ParsePost {
                             post.setVideoUrl(url);
                             post.setRedgifsId(redgifsId);*/
                         } else if (authority.equals("streamable.com")) {
-                            String shortCode = url.substring(url.lastIndexOf("/") + 1);
+                            String shortCode = Uri.parse(url).getLastPathSegment();
                             post.setPostType(Post.VIDEO_TYPE);
                             post.setIsStreamable(true);
                             post.setVideoUrl(url);
@@ -768,7 +768,7 @@ public class ParsePost {
                         post.setVideoUrl(url);
                         post.setRedgifsId(redgifsId.toLowerCase());*/
                     } else if (authority.equals("streamable.com")) {
-                        String shortCode = url.substring(url.lastIndexOf("/") + 1);
+                        String shortCode = Uri.parse(url).getLastPathSegment();
                         post.setPostType(Post.VIDEO_TYPE);
                         post.setIsStreamable(true);
                         post.setVideoUrl(url);
@@ -913,7 +913,7 @@ public class ParsePost {
                         post.setVideoUrl(url);
                         post.setRedgifsId(redgifsId);*/
                     } else if (authority.equals("streamable.com")) {
-                        String shortCode = url.substring(url.lastIndexOf("/") + 1);
+                        String shortCode = Uri.parse(url).getLastPathSegment();
                         post.setPostType(Post.VIDEO_TYPE);
                         post.setIsStreamable(true);
                         post.setVideoUrl(url);
