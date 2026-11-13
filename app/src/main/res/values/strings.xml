@@ -1532,8 +1532,10 @@
 
     <string name="i_understand">I understand</string>
     <string name="whats_new_in">What’s New in %1$s?</string>
-    <string name="whats_new_changelogs">Fixed an issue where certain gallery posts were not displaying correctly.
-        \nFixed an issue where submitted gallery posts were incorrectly rendered as link posts.
+    <string name="whats_new_changelogs">We’re sorry for the inconvenience, but due to changes in the platform’s service policy, a premium subscription is now required to use Infinity.
+        \n\nWe understand this change may be disappointing, especially for those who have been using the app for free, and we sincerely apologize.
+        \n\nThe good news is that you can start with a 7-day free trial to continue enjoying Infinity. Simply tap Subscribe in the app to get started.
+        \n\nThank you for your patience, understanding, and continued support. ❤️
     </string>
     <string name="important_info_post_comments_rework_join_subreddit">Click here to join r/Infinity_For_Reddit</string>
 
