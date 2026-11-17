@@ -1608,7 +1608,6 @@ Reddit 视频分辨率较低。
     <string name="error_fetching_video">获取视频时出错</string>
     <string name="error_fetching_video_invalid_type">获取视频时出错：类型无效</string>
     <string name="whats_new_in">%1$s 有什么新内容？</string>
-    <string name="whats_new_changelogs">新增功能：\n\n提醒：设置帖子或评论的提醒，以便稍后查看。\n\n新手引导界面：为新用户提供介绍。\n\n支持在帖子和评论中使用视频。\n\n帖子详情中新增版主选项：编辑标签\n\n评论中新增版主选项：（取消）显示版主身份\n\n备份和恢复评论草稿、已读帖子、提醒。\n\n显示帖子加载失败的具体原因。\n\n现在可以使用 Firefox 登录。\n\n新增选项：\n\n设置->界面->帖子->在可用时以网格形式显示图库媒体\n\n设置->界面->帖子详情->在可用时以网格形式显示图库媒体\n\n设置->界面->根据可用空间显示工具栏项目\n\n移除内容：\n\n移除“从……开始显示较少的工具栏选项”，因为评论工具栏选项现在会在空间有限时自动调整。\n\n由于 Android 平台的新限制，已移除平板电脑视频播放器自动切换到横屏模式的功能。\n\n链接帖子现在会在从其他应用分享时包含分享页面的标题和 URL。\n\n已修复内容：\n\n修复了提交链接帖子时标题建议功能失效的问题。\n\n修复了 Imgur 的处理问题。\n\n修复了多项底层错误并进行了改进。</string>
     <string name="set_reminder">设置提醒</string>
     <string name="choose_a_predefined_reminder_time">选择预设的提醒时间：</string>
     <string name="in_6_hours">6 小时后</string>
