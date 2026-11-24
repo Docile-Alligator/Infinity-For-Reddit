@@ -467,6 +467,7 @@ class ModMailActivity : BaseActivity() {
 
         var conversationForOptionsSheet by remember { mutableStateOf<Conversation?>(null) }
         var showBanBottomSheet by remember { mutableStateOf(false) }
+        var showMuteBottomSheet by remember { mutableStateOf(false) }
 
         val scope = rememberCoroutineScope()
 
@@ -658,13 +659,13 @@ class ModMailActivity : BaseActivity() {
                                         getRepository(page)
                                     )
 
+                                    it.unban()
+
                                     Toast.makeText(
                                         this@ModMailActivity,
                                         getString(R.string.unbanned),
                                         Toast.LENGTH_SHORT
                                     ).show()
-
-                                    it.unban()
                                 } catch (e: Exception) {
                                     if (e is CancellationException) {
                                         throw e
@@ -684,38 +685,45 @@ class ModMailActivity : BaseActivity() {
 
                     IconTextRowButton(
                         modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(if (it.muteStatus.isMuted) R.string.unmute else R.string.mute),
-                        drawableResource = if (it.muteStatus.isMuted) R.drawable.ic_unmute_24dp else R.drawable.ic_mute_24dp
+                        text = stringResource(if (it.isMuted()) R.string.unmute else R.string.mute),
+                        drawableResource = if (it.isMuted()) R.drawable.ic_unmute_24dp else R.drawable.ic_mute_24dp
                     ) {
-                        conversationForOptionsSheet = null
+                        if (!it.isMuted()) {
+                            showMuteBottomSheet = true
+                            return@IconTextRowButton
+                        }
 
-                        /*scope.launch {
-                            try {
-                                conversationViewModel.executeModConversationAction(
-                                    it,
-                                    if (it.isHighlighted == true) ModConversationAction.UNHIGHLIGHT else ModConversationAction.HIGHLIGHT,
-                                    getRepository(page)
-                                )
+                        conversationForOptionsSheet?.let { conversation ->
+                            scope.launch {
+                                try {
+                                    conversationViewModel.executeUserAction(
+                                        conversation,
+                                        ModUserAction.UNMUTE,
+                                        getRepository(page)
+                                    )
 
-                                Toast.makeText(
-                                    this@ModMailActivity,
-                                    getString(if (it.isHighlighted == true) R.string.unhighlighted else R.string.highlighted),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                    it.unmute()
 
-                                it.isHighlighted = it.isHighlighted != true && it.isHighlighted == false
-                            } catch (e: Exception) {
-                                if (e is CancellationException) {
-                                    throw e
+                                    Toast.makeText(
+                                        this@ModMailActivity,
+                                        getString(R.string.unmuted),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } catch (e: Exception) {
+                                    if (e is CancellationException) {
+                                        throw e
+                                    }
+
+                                    e.printStackTrace()
+
+                                    Toast.makeText(this@ModMailActivity, e.message?.let { message ->
+                                        getString(R.string.unmute_failed_with_reason, message)
+                                    } ?: getString(R.string.unmute_failed), Toast.LENGTH_SHORT).show()
                                 }
-
-                                e.printStackTrace()
-
-                                Toast.makeText(this@ModMailActivity, e.message?.let { message ->
-                                    getString(if (it.isHighlighted == true) R.string.unhighlight_failed_with_reason else R.string.highlight_failed_with_reason, message)
-                                } ?: getString(if (it.isHighlighted == true) R.string.unhighlight_failed else R.string.highlight_failed), Toast.LENGTH_SHORT).show()
                             }
-                        }*/
+
+                            conversationForOptionsSheet = null
+                        }
                     }
 
                     IconTextRowButton(

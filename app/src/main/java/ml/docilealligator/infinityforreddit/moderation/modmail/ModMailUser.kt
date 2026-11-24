@@ -12,7 +12,7 @@ data class ModMailUser(
     val recentComments: Map<String, ModMailRecentComment> = emptyMap(),
 
     @SerializedName("muteStatus")
-    val muteStatus: MuteStatus,
+    var muteStatus: MuteStatus,
 
     @SerializedName("name")
     val name: String,
@@ -47,6 +47,14 @@ data class ModMailUser(
 
     fun unban() {
         banStatus = BanStatus(null, "", false, false)
+    }
+
+    fun isMuted(): Boolean {
+        return muteStatus.isMuted
+    }
+
+    fun unmute() {
+        muteStatus = MuteStatus(muteStatus.muteCount, false, null, "")
     }
 
     companion object {
