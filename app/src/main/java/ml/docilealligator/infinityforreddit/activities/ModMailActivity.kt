@@ -728,38 +728,40 @@ class ModMailActivity : BaseActivity() {
 
                     IconTextRowButton(
                         modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(if (it.approveStatus.isApproved) R.string.remove_from_approved_users else R.string.approve),
-                        drawableResource = if (it.approveStatus.isApproved) R.drawable.ic_unapprove_rounded_24dp else R.drawable.ic_approve_rounded_24dp
+                        text = stringResource(if (it.isApproved()) R.string.remove_from_approved_users else R.string.approve),
+                        drawableResource = if (it.isApproved()) R.drawable.ic_unapprove_rounded_24dp else R.drawable.ic_approve_rounded_24dp
                     ) {
-                        conversationForOptionsSheet = null
+                        conversationForOptionsSheet?.let { conversation ->
+                            scope.launch {
+                                try {
+                                    conversationViewModel.executeUserAction(
+                                        conversation,
+                                        if (it.isApproved()) ModUserAction.DISAPPROVE else ModUserAction.APPROVE,
+                                        getRepository(page)
+                                    )
 
-                        /*scope.launch {
-                            try {
-                                conversationViewModel.executeModConversationAction(
-                                    it,
-                                    if (it.isRead) ModConversationAction.UNREAD else ModConversationAction.READ,
-                                    getRepository(page)
-                                )
+                                    it.setApproved(!it.isApproved())
 
-                                Toast.makeText(
-                                    this@ModMailActivity,
-                                    getString(if (it.isRead) R.string.unread else R.string.read),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                    Toast.makeText(
+                                        this@ModMailActivity,
+                                        getString(if (it.isApproved()) R.string.disapproved else R.string.approved),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } catch (e: Exception) {
+                                    if (e is CancellationException) {
+                                        throw e
+                                    }
 
-                                it.isRead = !it.isRead
-                            } catch (e: Exception) {
-                                if (e is CancellationException) {
-                                    throw e
+                                    e.printStackTrace()
+
+                                    Toast.makeText(this@ModMailActivity, e.message?.let { message ->
+                                        getString(if (it.isApproved()) R.string.disapprove_failed_with_reason else R.string.approve_failed_with_reason, message)
+                                    } ?: getString(if (it.isApproved()) R.string.disapprove_failed else R.string.approve_failed), Toast.LENGTH_SHORT).show()
                                 }
-
-                                e.printStackTrace()
-
-                                Toast.makeText(this@ModMailActivity, e.message?.let { message ->
-                                    getString(if (it.isRead) R.string.unread_failed_with_reason else R.string.read_failed_with_reason, message)
-                                } ?: getString(if (it.isRead) R.string.unread_failed else R.string.read_failed), Toast.LENGTH_SHORT).show()
                             }
-                        }*/
+
+                            conversationForOptionsSheet = null
+                        }
                     }
                 }
             }

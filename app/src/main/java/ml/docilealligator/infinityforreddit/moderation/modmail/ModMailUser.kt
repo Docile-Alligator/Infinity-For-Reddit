@@ -27,7 +27,7 @@ data class ModMailUser(
     val isSuspended: Boolean,
 
     @SerializedName("approveStatus")
-    val approveStatus: ApproveStatus,
+    var approveStatus: ApproveStatus,
 
     @SerializedName("isShadowBanned")
     val isShadowBanned: Boolean,
@@ -55,6 +55,14 @@ data class ModMailUser(
 
     fun unmute() {
         muteStatus = MuteStatus(muteStatus.muteCount, false, null, "")
+    }
+
+    fun isApproved(): Boolean {
+        return approveStatus.isApproved
+    }
+
+    fun setApproved(isApproved: Boolean) {
+        approveStatus = ApproveStatus(isApproved)
     }
 
     companion object {
