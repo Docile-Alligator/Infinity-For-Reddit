@@ -40,6 +40,8 @@ enum class ModActionType(val code: Int) {
     REPORTED_TO_ADMINS(4),
     MUTE(5),
     UN_MUTE(6),
+    APPROVED(9),
+    DISAPPROVED(10),
     UNKNOWN(-1);
 
     companion object {

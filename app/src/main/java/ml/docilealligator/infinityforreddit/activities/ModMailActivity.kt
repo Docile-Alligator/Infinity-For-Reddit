@@ -630,6 +630,8 @@ class ModMailActivity : BaseActivity() {
                     }
                 }
             }
+        } else if (showMuteBottomSheet) {
+
         } else if (showUserActions.value) {
             navigator.currentDestination?.contentKey?.let { conversation ->
                 modMailUser?.let {
@@ -1675,6 +1677,8 @@ class ModMailActivity : BaseActivity() {
                     ModActionType.REPORTED_TO_ADMINS -> R.string.mod_action_reported_to_admins_by
                     ModActionType.MUTE -> R.string.mod_action_muted_by
                     ModActionType.UN_MUTE -> R.string.mod_action_unmuted_by
+                    ModActionType.APPROVED -> R.string.mod_action_approved_by
+                    ModActionType.DISAPPROVED -> R.string.mod_action_removed_from_approved_users_by
                     ModActionType.UNKNOWN -> R.string.mod_action_unknown_action_by
                 }, modAction.author?.name?.let {"u/$it"} ?: stringResource(R.string.mod_action_unknown_user)),
                 modifier = Modifier.padding(16.dp),
