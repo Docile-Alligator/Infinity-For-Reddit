@@ -138,7 +138,7 @@ data class Conversation(
             }
         }
 
-        suspend fun fetchConversation(oauthRetrofit: Retrofit, accessToken: String, conversationId: String): Pair<Conversation, ModMailUser> {
+        suspend fun fetchConversation(oauthRetrofit: Retrofit, accessToken: String, conversationId: String): Pair<Conversation, ModMailUser?> {
             val response: Response<String> = oauthRetrofit.create(RedditAPIKt::class.java).getModMailConversation(
                 conversationId, APIUtils.getOAuthHeader(accessToken))
             if (response.isSuccessful && response.body() != null) {
@@ -154,9 +154,13 @@ data class Conversation(
                     responseJson.getJSONObject(JSONUtils.MESSAGES_KEY),
                     if (responseJson.has(JSONUtils.MOD_ACTIONS_KEY)) responseJson.getJSONObject(JSONUtils.MOD_ACTIONS_KEY) else null
                 )
-                val modMailUserResponse = ModMailUser.parseModMailUser(gson, responseJson.getString(JSONUtils.USER_KEY))
+                if (responseJson.getJSONObject(JSONUtils.USER_KEY).length() > 0) {
+                    val modMailUser = ModMailUser.parseModMailUser(gson, responseJson.getString(JSONUtils.USER_KEY))
 
-                return Pair(conversation, modMailUserResponse)
+                    return Pair(conversation, modMailUser)
+                }
+
+                return Pair(conversation, null)
             } else {
                 throw IOException(response.errorBody()?.string())
             }
