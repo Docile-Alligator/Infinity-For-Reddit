@@ -639,46 +639,47 @@ class ModMailActivity : BaseActivity() {
                         fontWeight = FontWeight.Bold
                     )
 
-                    // Check if it.banStatus is null
                     IconTextRowButton(
                         modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(if (it.banStatus.isBanned) R.string.unban else R.string.ban),
-                        drawableResource = if (it.banStatus.isBanned) R.drawable.ic_unlock_24dp else R.drawable.ic_ban_rounded_24dp
+                        text = stringResource(if (it.isBanned()) R.string.unban else R.string.ban),
+                        drawableResource = if (it.isBanned()) R.drawable.ic_unlock_24dp else R.drawable.ic_ban_rounded_24dp
                     ) {
-                        if (!it.banStatus.isBanned) {
+                        if (!it.isBanned()) {
                             showBanBottomSheet = true
                             return@IconTextRowButton
                         }
 
-                        conversationForOptionsSheet = null
+                        conversationForOptionsSheet?.let { conversation ->
+                            scope.launch {
+                                try {
+                                    conversationViewModel.executeUserAction(
+                                        conversation,
+                                        ModUserAction.UNBAN,
+                                        getRepository(page)
+                                    )
 
-                        /*scope.launch {
-                            try {
-                                conversationViewModel.executeUserAction(
-                                    it,
-                                    ModUserAction.UNBAN,
-                                    getRepository(page)
-                                )
+                                    Toast.makeText(
+                                        this@ModMailActivity,
+                                        getString(R.string.unbanned),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
 
-                                Toast.makeText(
-                                    this@ModMailActivity,
-                                    getString(if (it.isArchived) R.string.unarchived else R.string.archived),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                    it.unban()
+                                } catch (e: Exception) {
+                                    if (e is CancellationException) {
+                                        throw e
+                                    }
 
-                                it.isArchived = !it.isArchived
-                            } catch (e: Exception) {
-                                if (e is CancellationException) {
-                                    throw e
+                                    e.printStackTrace()
+
+                                    Toast.makeText(this@ModMailActivity, e.message?.let { message ->
+                                        getString(R.string.unban_failed_with_reason, message)
+                                    } ?: getString(R.string.unban_failed), Toast.LENGTH_SHORT).show()
                                 }
-
-                                e.printStackTrace()
-
-                                Toast.makeText(this@ModMailActivity, e.message?.let { message ->
-                                    getString(if (it.isArchived) R.string.unarchive_failed_with_reason else R.string.archive_failed_with_reason, message)
-                                } ?: getString(if (it.isArchived) R.string.unarchive_failed else R.string.archive_failed), Toast.LENGTH_SHORT).show()
                             }
-                        }*/
+
+                            conversationForOptionsSheet = null
+                        }
                     }
 
                     IconTextRowButton(
@@ -798,8 +799,6 @@ class ModMailActivity : BaseActivity() {
                         text = stringResource(if (it.isArchived) R.string.unarchive else R.string.archive),
                         drawableResource = if (it.isArchived) R.drawable.ic_unarchive_rounded_24dp else R.drawable.ic_archive_rounded_24dp
                     ) {
-                        conversationForOptionsSheet = null
-
                         scope.launch {
                             try {
                                 conversationViewModel.executeModConversationAction(
@@ -827,6 +826,8 @@ class ModMailActivity : BaseActivity() {
                                 } ?: getString(if (it.isArchived) R.string.unarchive_failed else R.string.archive_failed), Toast.LENGTH_SHORT).show()
                             }
                         }
+
+                        conversationForOptionsSheet = null
                     }
 
                     IconTextRowButton(
@@ -834,8 +835,6 @@ class ModMailActivity : BaseActivity() {
                         text = stringResource(if (it.isHighlighted == true) R.string.unhighlight else R.string.highlight),
                         drawableResource = if (it.isHighlighted == true) R.drawable.ic_unhighlight_rounded_24dp else R.drawable.ic_highlight_rounded_24dp
                     ) {
-                        conversationForOptionsSheet = null
-
                         scope.launch {
                             try {
                                 conversationViewModel.executeModConversationAction(
@@ -863,6 +862,8 @@ class ModMailActivity : BaseActivity() {
                                 } ?: getString(if (it.isHighlighted == true) R.string.unhighlight_failed else R.string.highlight_failed), Toast.LENGTH_SHORT).show()
                             }
                         }
+
+                        conversationForOptionsSheet = null
                     }
 
                     IconTextRowButton(
@@ -870,8 +871,6 @@ class ModMailActivity : BaseActivity() {
                         text = stringResource(if (it.isRead) R.string.unread else R.string.read),
                         drawableResource = if (it.isRead) R.drawable.ic_unread_rounded_24dp else R.drawable.ic_read_rounded_24dp
                     ) {
-                        conversationForOptionsSheet = null
-
                         scope.launch {
                             try {
                                 conversationViewModel.executeModConversationAction(
@@ -899,6 +898,8 @@ class ModMailActivity : BaseActivity() {
                                 } ?: getString(if (it.isRead) R.string.unread_failed else R.string.read_failed), Toast.LENGTH_SHORT).show()
                             }
                         }
+
+                        conversationForOptionsSheet = null
                     }
                 }
             }

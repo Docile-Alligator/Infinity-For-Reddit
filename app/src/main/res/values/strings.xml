@@ -1783,6 +1783,9 @@
     <string name="ban_mod_note_hint">Mod note</string>
     <string name="ban_mod_note_description">Only mods can see this</string>
     <string name="unban">Unban</string>
+    <string name="unbanned">Unbanned</string>
+    <string name="unban_failed">Failed to unban</string>
+    <string name="unban_failed_with_reason">Failed to unban. Error: %1$s</string>
     <string name="mute">Mute</string>
     <string name="unmute">Unmute</string>
     <string name="remove_from_approved_users">Remove from approved users</string>

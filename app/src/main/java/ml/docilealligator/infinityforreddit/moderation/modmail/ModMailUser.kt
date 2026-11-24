@@ -21,7 +21,7 @@ data class ModMailUser(
     val created: String,
 
     @SerializedName("banStatus")
-    val banStatus: BanStatus,
+    var banStatus: BanStatus,
 
     @SerializedName("isSuspended")
     val isSuspended: Boolean,
@@ -41,6 +41,14 @@ data class ModMailUser(
     @SerializedName("id")
     val id: String
 ): Parcelable {
+    fun isBanned(): Boolean {
+        return banStatus.isBanned
+    }
+
+    fun unban() {
+        banStatus = BanStatus(null, "", false, false)
+    }
+
     companion object {
         fun parseModMailUser(gson: Gson, json: String): ModMailUser {
             return gson.fromJson(json, ModMailUser::class.java)
