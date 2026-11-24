@@ -263,7 +263,7 @@ data class Conversation(
                 )
             } else {
                 oauthRetrofit.create(RedditAPIKt::class.java).executeModMailUserAction(
-                    "ModmailConversation_$conversationId",
+                    conversationId,
                     modUserAction.rawValue,
                     APIUtils.getOAuthHeader(accessToken)
                 )

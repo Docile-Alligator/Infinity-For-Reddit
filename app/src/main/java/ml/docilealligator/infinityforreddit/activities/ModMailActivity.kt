@@ -631,26 +631,27 @@ class ModMailActivity : BaseActivity() {
                 }
             }
         } else if (showUserActions.value) {
-            modMailUser?.let {
-                CustomModalBottomSheet(onDismissRequest = { showUserActions.value = false }) {
-                    UserText(
-                        "u/${it.name}",
-                        modifier = Modifier.padding(16.dp),
-                        fontSize = LocalTypography.current.fontSize.size18,
-                        fontWeight = FontWeight.Bold
-                    )
+            navigator.currentDestination?.contentKey?.let { conversation ->
+                modMailUser?.let {
+                    CustomModalBottomSheet(onDismissRequest = { showUserActions.value = false }) {
+                        UserText(
+                            "u/${it.name}",
+                            modifier = Modifier.padding(16.dp),
+                            fontSize = LocalTypography.current.fontSize.size18,
+                            fontWeight = FontWeight.Bold
+                        )
 
-                    IconTextRowButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(if (it.isBanned()) R.string.unban else R.string.ban),
-                        drawableResource = if (it.isBanned()) R.drawable.ic_unlock_24dp else R.drawable.ic_ban_rounded_24dp
-                    ) {
-                        if (!it.isBanned()) {
-                            showBanBottomSheet = true
-                            return@IconTextRowButton
-                        }
+                        IconTextRowButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(if (it.isBanned()) R.string.unban else R.string.ban),
+                            drawableResource = if (it.isBanned()) R.drawable.ic_unlock_24dp else R.drawable.ic_ban_rounded_24dp
+                        ) {
+                            if (!it.isBanned()) {
+                                showUserActions.value = false
+                                showBanBottomSheet = true
+                                return@IconTextRowButton
+                            }
 
-                        conversationForOptionsSheet?.let { conversation ->
                             scope.launch {
                                 try {
                                     conversationViewModel.executeUserAction(
@@ -679,21 +680,20 @@ class ModMailActivity : BaseActivity() {
                                 }
                             }
 
-                            conversationForOptionsSheet = null
-                        }
-                    }
-
-                    IconTextRowButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(if (it.isMuted()) R.string.unmute else R.string.mute),
-                        drawableResource = if (it.isMuted()) R.drawable.ic_unmute_24dp else R.drawable.ic_mute_24dp
-                    ) {
-                        if (!it.isMuted()) {
-                            showMuteBottomSheet = true
-                            return@IconTextRowButton
+                            showUserActions.value = false
                         }
 
-                        conversationForOptionsSheet?.let { conversation ->
+                        IconTextRowButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(if (it.isMuted()) R.string.unmute else R.string.mute),
+                            drawableResource = if (it.isMuted()) R.drawable.ic_unmute_24dp else R.drawable.ic_mute_24dp
+                        ) {
+                            if (!it.isMuted()) {
+                                showUserActions.value = false
+                                showMuteBottomSheet = true
+                                return@IconTextRowButton
+                            }
+
                             scope.launch {
                                 try {
                                     conversationViewModel.executeUserAction(
@@ -722,16 +722,14 @@ class ModMailActivity : BaseActivity() {
                                 }
                             }
 
-                            conversationForOptionsSheet = null
+                            showUserActions.value = false
                         }
-                    }
 
-                    IconTextRowButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(if (it.isApproved()) R.string.remove_from_approved_users else R.string.approve),
-                        drawableResource = if (it.isApproved()) R.drawable.ic_unapprove_rounded_24dp else R.drawable.ic_approve_rounded_24dp
-                    ) {
-                        conversationForOptionsSheet?.let { conversation ->
+                        IconTextRowButton(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(if (it.isApproved()) R.string.remove_from_approved_users else R.string.approve),
+                            drawableResource = if (it.isApproved()) R.drawable.ic_unapprove_rounded_24dp else R.drawable.ic_approve_rounded_24dp
+                        ) {
                             scope.launch {
                                 try {
                                     conversationViewModel.executeUserAction(
@@ -744,7 +742,7 @@ class ModMailActivity : BaseActivity() {
 
                                     Toast.makeText(
                                         this@ModMailActivity,
-                                        getString(if (it.isApproved()) R.string.disapproved else R.string.approved),
+                                        getString(if (it.isApproved()) R.string.approved else R.string.disapproved),
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 } catch (e: Exception) {
@@ -760,7 +758,7 @@ class ModMailActivity : BaseActivity() {
                                 }
                             }
 
-                            conversationForOptionsSheet = null
+                            showUserActions.value = false
                         }
                     }
                 }
