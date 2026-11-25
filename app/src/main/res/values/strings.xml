@@ -1750,8 +1750,12 @@
     <string name="mod_action_reported_to_admins_by">Reported to admins by %1$s.</string>
     <string name="mod_action_muted_by">Muted by %1$s.</string>
     <string name="mod_action_unmuted_by">Unmuted by %1$s.</string>
+    <string name="mod_action_banned_by">Banned by %1$s.</string>
+    <string name="mod_action_unbanned_by">Unbanned by %1$s.</string>
     <string name="mod_action_approved_by">Approved by %1$s</string>
     <string name="mod_action_removed_from_approved_users_by">Removed from approved users by %1$s</string>
+    <string name="mod_action_filtered_by">Filtered by %1$s.</string>
+    <string name="mod_action_unfiltered_by">Unfiltered by %1$s.</string>
     <string name="mod_action_unknown_action_by">Unknown action by %1$s.</string>
     <string name="mod_action_unknown_user">unknown user</string>
     <string name="no_mod_mail">No mod mail.</string>
