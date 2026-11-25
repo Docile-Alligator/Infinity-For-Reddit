@@ -1,20 +1,29 @@
 package ml.docilealligator.infinityforreddit.customviews.compose
 
+import android.R.attr.fontFamily
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.CircularWavyProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.WavyProgressIndicatorDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import ml.docilealligator.infinityforreddit.R
@@ -240,5 +250,44 @@ fun IconTextRowButton(
             fontFamily = fontFamily,
             fontSize = fontSize
         )
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
+fun FilledLoadingButton(
+    modifier: Modifier = Modifier,
+    @StringRes stringResId: Int,
+    fontFamily: FontFamily? = LocalTypography.current.fontFamily,
+    fontSize: TextUnit = LocalTypography.current.fontSize.default,
+    isLoading: Boolean,
+    onclick: () -> Unit
+) {
+    Button(
+        modifier = modifier,
+        colors = ButtonDefaults.buttonColors().copy(
+            containerColor = Color(LocalAppTheme.current.colorPrimaryLightTheme),
+            contentColor = Color(LocalAppTheme.current.buttonTextColor)
+        ),
+        onClick = onclick
+    ) {
+        if (isLoading) {
+            CircularWavyProgressIndicator(
+                modifier = Modifier.size(32.dp),
+                color = Color(LocalAppTheme.current.colorAccent),
+                trackColor = Color(LocalAppTheme.current.buttonTextColor)
+            )
+        } else {
+            Box(
+                modifier = Modifier.height(32.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    stringResource(stringResId),
+                    fontFamily = fontFamily,
+                    fontSize = fontSize
+                )
+            }
+        }
     }
 }

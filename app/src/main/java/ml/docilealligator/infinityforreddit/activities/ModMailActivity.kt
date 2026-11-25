@@ -126,6 +126,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.CustomModalBotto
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomSpinner
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextField
+import ml.docilealligator.infinityforreddit.customviews.compose.FilledLoadingButton
 import ml.docilealligator.infinityforreddit.customviews.compose.IconTextRowButton
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalTypography
@@ -540,120 +541,108 @@ class ModMailActivity : BaseActivity() {
                         var isBanningUser by remember { mutableStateOf(false) }
 
                         CustomModalBottomSheet(onDismissRequest = { showBanBottomSheet = false }) {
-                            Box {
-                                Column {
-                                    PrimaryText(
-                                        stringResource(R.string.ban_user, "u/${modMailUser.name}"),
-                                        modifier = Modifier.padding(16.dp),
-                                        fontSize = LocalTypography.current.fontSize.size18,
-                                        fontWeight = FontWeight.Bold
-                                    )
+                            Column {
+                                PrimaryText(
+                                    stringResource(R.string.ban_user, "u/${modMailUser.name}"),
+                                    modifier = Modifier.padding(16.dp),
+                                    fontSize = LocalTypography.current.fontSize.size18,
+                                    fontWeight = FontWeight.Bold
+                                )
 
+                                CustomTextField(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    value = reason,
+                                    placeholder = stringResource(R.string.ban_reason_hint),
+                                    maxLines = 3,
+                                    shape = RoundedCornerShape(16.dp)
+                                ) {
+                                    reason = it
+                                }
+
+                                AnimatedVisibility(!isPermanent) {
                                     CustomTextField(
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(16.dp),
-                                        value = reason,
-                                        placeholder = stringResource(R.string.ban_reason_hint),
-                                        maxLines = 3,
-                                        shape = RoundedCornerShape(16.dp)
+                                        value = duration,
+                                        placeholder = stringResource(R.string.ban_duration_hint),
+                                        maxLines = 1,
+                                        shape = RoundedCornerShape(16.dp),
+                                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                                     ) {
-                                        reason = it
-                                    }
-
-                                    AnimatedVisibility(!isPermanent) {
-                                        CustomTextField(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(16.dp),
-                                            value = duration,
-                                            placeholder = stringResource(R.string.ban_duration_hint),
-                                            maxLines = 1,
-                                            shape = RoundedCornerShape(16.dp),
-                                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                                        ) {
-                                            if (it.isDigitsOnly()) {
-                                                duration = it
-                                            }
+                                        if (it.isDigitsOnly()) {
+                                            duration = it
                                         }
                                     }
+                                }
 
-                                    Row(
-                                        modifier = Modifier
-                                            .clickable {
-                                                isPermanent = !isPermanent
-                                            }
-                                            .padding(start = 20.dp, end = 16.dp),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        PrimaryText(
-                                            stringResource(R.string.perma_ban),
-                                            modifier = Modifier.padding(end = 16.dp)
-                                        )
+                                Row(
+                                    modifier = Modifier
+                                        .clickable {
+                                            isPermanent = !isPermanent
+                                        }
+                                        .padding(start = 20.dp, end = 16.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    PrimaryText(
+                                        stringResource(R.string.perma_ban),
+                                        modifier = Modifier.padding(end = 16.dp)
+                                    )
 
-                                        Spacer(modifier = Modifier.weight(1f))
+                                    Spacer(modifier = Modifier.weight(1f))
 
-                                        Checkbox(
-                                            checked = isPermanent,
-                                            onCheckedChange = { isPermanent = it }
-                                        )
-                                    }
-
-                                    CustomTextField(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(16.dp),
-                                        value = message,
-                                        placeholder = stringResource(R.string.message),
-                                        minLines = 3,
-                                        maxLines = 5,
-                                        shape = RoundedCornerShape(16.dp)
-                                    ) {
-                                        message = it
-                                    }
-
-                                    CustomTextField(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(top = 16.dp)
-                                            .padding(horizontal = 16.dp),
-                                        value = modNote,
-                                        placeholder = stringResource(R.string.ban_mod_note_hint),
-                                        maxLines = 3,
-                                        shape = RoundedCornerShape(16.dp)
-                                    ) {
-                                        modNote = it
-                                    }
-
-                                    SecondaryText(
-                                        stringResource(R.string.ban_mod_note_description),
-                                        modifier = Modifier
-                                            .padding(bottom = 16.dp)
-                                            .padding(horizontal = 20.dp)
+                                    Checkbox(
+                                        checked = isPermanent,
+                                        onCheckedChange = { isPermanent = it }
                                     )
                                 }
 
-                                if (isBanningUser) {
-                                    Box(
-                                        modifier = Modifier
-                                            .matchParentSize()
-                                            .background(Color.Black.copy(alpha = 0.4f)),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        CustomLoadingIndicator()
-                                    }
+                                CustomTextField(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    value = message,
+                                    placeholder = stringResource(R.string.message),
+                                    minLines = 3,
+                                    maxLines = 5,
+                                    shape = RoundedCornerShape(16.dp)
+                                ) {
+                                    message = it
                                 }
+
+                                CustomTextField(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 16.dp)
+                                        .padding(horizontal = 16.dp),
+                                    value = modNote,
+                                    placeholder = stringResource(R.string.ban_mod_note_hint),
+                                    maxLines = 3,
+                                    shape = RoundedCornerShape(16.dp)
+                                ) {
+                                    modNote = it
+                                }
+
+                                SecondaryText(
+                                    stringResource(R.string.ban_mod_note_description),
+                                    modifier = Modifier
+                                        .padding(bottom = 16.dp)
+                                        .padding(horizontal = 20.dp)
+                                )
                             }
 
-                            CustomFilledButton(
+                            FilledLoadingButton(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(bottom = 16.dp)
                                     .padding(horizontal = 16.dp),
-                                stringResId = R.string.ban
+                                stringResId = R.string.ban,
+                                isLoading = isBanningUser
                             ) {
                                 if (isBanningUser) {
-                                    return@CustomFilledButton
+                                    return@FilledLoadingButton
                                 }
 
                                 isBanningUser = true
