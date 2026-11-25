@@ -247,10 +247,15 @@ data class Conversation(
             val response: Response<String> = if (modUserAction is ModUserAction.TEMPBAN) {
                 // Response will be empty
                 oauthRetrofit.create(RedditAPIKt::class.java).tempBanModMailUserAction(
-                    conversationId,
+                    modUserAction.subreddit,
                     APIUtils.getOAuthHeader(accessToken),
                     mutableMapOf<String, String>().apply {
+                        this[APIUtils.TYPE_KEY] = APIUtils.TYPE_BANNED
+                        this[APIUtils.NAME_KEY] = modUserAction.username
                         this[APIUtils.DURATION_KEY] = modUserAction.duration.toString()
+                        this[APIUtils.BAN_MESSAGE_KEY] = modUserAction.message
+                        this[APIUtils.BAN_REASON_KEY] = modUserAction.reason
+                        this[APIUtils.NOTE_KEY] = modUserAction.modNote
                     }
                 )
             } else if (modUserAction is ModUserAction.MUTE) {
@@ -274,11 +279,11 @@ data class Conversation(
                 response.errorBody()?.string().let {
                     val redditError: RedditError? = Gson().fromJson(it, RedditError::class.java)
                     redditError?.let { redditError ->
-                        throw IOException(redditError.reason ?: "Failed")
+                        throw IOException(redditError.reason ?: "None")
                     }
                 }
 
-                throw IOException("Failed")
+                throw IOException("Unknown reason")
             }
         }
     }

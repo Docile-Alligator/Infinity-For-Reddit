@@ -153,6 +153,7 @@ sealed class ModUserAction(
     data class MUTE(val nHours: Int) : ModUserAction("mute")
     object UNMUTE : ModUserAction("unmute")
     // duration: an integer between 1 and 999
-    data class TEMPBAN(val duration: Int) : ModUserAction("temp_ban")
+    data class TEMPBAN(val subreddit: String, val username: String, val duration: Int,
+                       val message: String, val reason: String, val modNote: String) : ModUserAction("temp_ban")
     object UNBAN : ModUserAction("unban")
 }

@@ -4,7 +4,11 @@ import android.os.Parcelable
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import kotlin.jvm.java
+import kotlin.time.Duration.Companion.days
 
 @Parcelize
 data class ModMailUser(
@@ -43,6 +47,20 @@ data class ModMailUser(
 ): Parcelable {
     fun isBanned(): Boolean {
         return banStatus.isBanned
+    }
+
+    fun ban(duration: Int, reason: String, isPermanent: Boolean) {
+        if (isPermanent) {
+            banStatus = BanStatus(null, reason, true, true)
+        } else {
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSxx")
+                .withZone(ZoneOffset.UTC)
+
+            val endDate = formatter.format(
+                Instant.now().plus(duration.toLong(), java.time.temporal.ChronoUnit.DAYS)
+            )
+            banStatus = BanStatus(endDate, reason, true, false)
+        }
     }
 
     fun unban() {

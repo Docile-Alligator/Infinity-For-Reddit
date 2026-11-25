@@ -379,9 +379,9 @@ interface RedditAPIKt {
     ): Response<String>
 
     @FormUrlEncoded
-    @POST("/api/mod/conversations/{id}/temp_ban")
+    @POST("/r/{subreddit}/api/friend")
     suspend fun tempBanModMailUserAction(
-        @Path("id") id: String,
+        @Path("subreddit") subreddit: String,
         @HeaderMap headers: Map<String, String>,
         @FieldMap params: Map<String, String>
     ): Response<String>

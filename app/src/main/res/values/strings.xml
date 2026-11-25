@@ -1784,6 +1784,10 @@
     <string name="perma_ban">Permanent Ban</string>
     <string name="ban_mod_note_hint">Mod note</string>
     <string name="ban_mod_note_description">Only mods can see this</string>
+    <string name="banned_with_duration">Banned %1$d days</string>
+    <string name="banned_permanently">Banned permanently</string>
+    <string name="ban_failed_with_reason">Failed to ban user. Error: %1$s</string>
+    <string name="ban_failed">Failed to ban user</string>
     <string name="unban">Unban</string>
     <string name="unbanned">Unbanned</string>
     <string name="unban_failed">Failed to unban</string>

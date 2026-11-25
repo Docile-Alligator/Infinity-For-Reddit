@@ -135,6 +135,11 @@ public class APIUtils {
     public static final String IS_INTERNAL_KEY = "isInternal";
     public static final String CONVERSATION_IDS_KEY = "conversationIds";
     public static final String NUM_HOURS_KEY = "num_hours";
+    public static final String TYPE_KEY = "type";
+    public static final String TYPE_BANNED = "banned";
+    public static final String BAN_MESSAGE_KEY = "ban_message";
+    public static final String BAN_REASON_KEY = "ban_reason";
+    public static final String NOTE_KEY = "note";
 
     public static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();
