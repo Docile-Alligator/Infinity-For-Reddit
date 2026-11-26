@@ -25,7 +25,7 @@ import ml.docilealligator.infinityforreddit.R
 @Composable
 fun <T> CustomSpinner(
     modifier: Modifier = Modifier,
-    isSpinnershownState: MutableState<Boolean>,
+    isSpinnerShownState: MutableState<Boolean>,
     options: List<T>,
     spinnerButtonText: String,
     fontFamily: FontFamily? = LocalTypography.current.fontFamily,
@@ -33,15 +33,14 @@ fun <T> CustomSpinner(
     optionName: (T) -> String,
     onOptionClick: (T) -> Unit
 ) {
-    Box {
+    Box(modifier = modifier) {
         Button(
-            modifier = modifier,
             colors = ButtonDefaults.buttonColors().copy(
                 containerColor = Color(LocalAppTheme.current.colorAccent),
                 contentColor = Color(LocalAppTheme.current.fabIconColor)
             ),
             onClick = {
-                isSpinnershownState.value = true
+                isSpinnerShownState.value = true
             }
         ) {
             Row(
@@ -56,8 +55,7 @@ fun <T> CustomSpinner(
                 Spacer(modifier = Modifier.width(4.dp))
 
                 Image(
-                    modifier = modifier,
-                    painter = painterResource(if (isSpinnershownState.value) R.drawable.ic_baseline_arrow_drop_up_24dp else R.drawable.ic_baseline_arrow_drop_down_24dp),
+                    painter = painterResource(if (isSpinnerShownState.value) R.drawable.ic_baseline_arrow_drop_up_24dp else R.drawable.ic_baseline_arrow_drop_down_24dp),
                     contentDescription = null,
                     colorFilter = ColorFilter.tint(Color(LocalAppTheme.current.fabIconColor))
                 )
@@ -65,9 +63,9 @@ fun <T> CustomSpinner(
         }
 
         DropdownMenu(
-            expanded = isSpinnershownState.value,
+            expanded = isSpinnerShownState.value,
             containerColor = Color(LocalAppTheme.current.backgroundColor),
-            onDismissRequest = { isSpinnershownState.value = false }
+            onDismissRequest = { isSpinnerShownState.value = false }
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
@@ -77,7 +75,69 @@ fun <T> CustomSpinner(
                         )
                     },
                     onClick = {
-                        isSpinnershownState.value = false
+                        isSpinnerShownState.value = false
+                        onOptionClick(option)
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun <T> CustomSpinner(
+    modifier: Modifier = Modifier,
+    isSpinnerShownState: MutableState<Boolean>,
+    options: Array<T>,
+    spinnerButtonText: String,
+    fontFamily: FontFamily? = LocalTypography.current.fontFamily,
+    fontSize: TextUnit = LocalTypography.current.fontSize.default,
+    optionName: (T) -> String,
+    onOptionClick: (T) -> Unit
+) {
+    Box(modifier = modifier) {
+        Button(
+            colors = ButtonDefaults.buttonColors().copy(
+                containerColor = Color(LocalAppTheme.current.colorAccent),
+                contentColor = Color(LocalAppTheme.current.fabIconColor)
+            ),
+            onClick = {
+                isSpinnerShownState.value = true
+            }
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    spinnerButtonText,
+                    fontFamily = fontFamily,
+                    fontSize = fontSize
+                )
+
+                Spacer(modifier = Modifier.width(4.dp))
+
+                Image(
+                    painter = painterResource(if (isSpinnerShownState.value) R.drawable.ic_baseline_arrow_drop_up_24dp else R.drawable.ic_baseline_arrow_drop_down_24dp),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(Color(LocalAppTheme.current.fabIconColor))
+                )
+            }
+        }
+
+        DropdownMenu(
+            expanded = isSpinnerShownState.value,
+            containerColor = Color(LocalAppTheme.current.backgroundColor),
+            onDismissRequest = { isSpinnerShownState.value = false }
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = {
+                        PrimaryText(
+                            optionName(option)
+                        )
+                    },
+                    onClick = {
+                        isSpinnerShownState.value = false
                         onOptionClick(option)
                     }
                 )

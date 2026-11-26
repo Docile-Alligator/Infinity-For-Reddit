@@ -839,4 +839,10 @@
         <item>500</item>
     </string-array>
 
+    <string-array name="mute_user_durations">
+        <item>@string/mute_duration_3_days</item>
+        <item>@string/mute_duration_7_days</item>
+        <item>@string/mute_duration_28_days</item>
+    </string-array>
+
 </resources>

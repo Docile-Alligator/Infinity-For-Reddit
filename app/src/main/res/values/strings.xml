@@ -1786,8 +1786,8 @@
     <string name="ban_reason_hint">Reason</string>
     <string name="ban_duration_hint">Duration: (0 - 999) days</string>
     <string name="perma_ban">Permanent Ban</string>
-    <string name="ban_mod_note_hint">Mod note</string>
-    <string name="ban_mod_note_description">Only mods can see this</string>
+    <string name="mod_note_hint">Mod note</string>
+    <string name="mod_note_description">Only mods can see this</string>
     <string name="banned_with_duration">Banned %1$d days</string>
     <string name="banned_permanently">Banned permanently</string>
     <string name="ban_failed_with_reason">Failed to ban user. Error: %1$s</string>
@@ -1797,6 +1797,13 @@
     <string name="unban_failed">Failed to unban</string>
     <string name="unban_failed_with_reason">Failed to unban. Error: %1$s</string>
     <string name="mute">Mute</string>
+    <string name="mute_user">Mute %1$s</string>
+    <string name="mute_duration_3_days">3 Days</string>
+    <string name="mute_duration_7_days">7 Days</string>
+    <string name="mute_duration_28_days">28 Days</string>
+    <string name="muted_with_duration">Muted %1$d days</string>
+    <string name="mute_failed_with_reason">Failed to mute user. Error: %1$s</string>
+    <string name="mute_failed">Failed to mute user</string>
     <string name="unmute">Unmute</string>
     <string name="unmuted">Unmuted</string>
     <string name="unmute_failed">Failed to unmute</string>

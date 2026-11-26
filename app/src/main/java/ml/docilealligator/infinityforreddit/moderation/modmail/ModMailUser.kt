@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.moderation.modmail
 
+import android.R.attr.duration
 import android.os.Parcelable
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
@@ -69,6 +70,16 @@ data class ModMailUser(
 
     fun isMuted(): Boolean {
         return muteStatus.isMuted
+    }
+
+    fun mute(duration: Int) {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSxx")
+            .withZone(ZoneOffset.UTC)
+
+        val endDate = formatter.format(
+            Instant.now().plus(duration.toLong(), java.time.temporal.ChronoUnit.HOURS)
+        )
+        muteStatus = MuteStatus(muteStatus.muteCount + 1, true, endDate, "")
     }
 
     fun unmute() {

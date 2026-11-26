@@ -1,8 +1,6 @@
 package ml.docilealligator.infinityforreddit.activities
 
-import android.R.attr.checked
-import android.R.attr.fontFamily
-import android.R.attr.textColor
+import android.R.id.message
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -37,7 +35,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -53,7 +50,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Scaffold
@@ -90,7 +86,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -262,7 +258,7 @@ class ModMailActivity : BaseActivity() {
                                 windowInsetsController = windowInsetsController,
                                 actions = {
                                     CustomSpinner(
-                                        isSpinnershownState = isStateSpinnerShownState,
+                                        isSpinnerShownState = isStateSpinnerShownState,
                                         spinnerButtonText = state.title,
                                         options = ModMailState.entries,
                                         optionName = { state ->
@@ -618,7 +614,7 @@ class ModMailActivity : BaseActivity() {
                                         .padding(top = 16.dp)
                                         .padding(horizontal = 16.dp),
                                     value = modNote,
-                                    placeholder = stringResource(R.string.ban_mod_note_hint),
+                                    placeholder = stringResource(R.string.mod_note_hint),
                                     maxLines = 3,
                                     shape = RoundedCornerShape(16.dp)
                                 ) {
@@ -626,7 +622,7 @@ class ModMailActivity : BaseActivity() {
                                 }
 
                                 SecondaryText(
-                                    stringResource(R.string.ban_mod_note_description),
+                                    stringResource(R.string.mod_note_description),
                                     modifier = Modifier
                                         .padding(bottom = 16.dp)
                                         .padding(horizontal = 20.dp)
@@ -695,7 +691,95 @@ class ModMailActivity : BaseActivity() {
                 }
             }
         } else if (showMuteBottomSheet) {
+            navigator.currentDestination?.contentKey?.let { conversation ->
+                modMailUser?.let { modMailUser ->
+                    conversation.owner?.displayName?.let { subreddit ->
+                        var duration by remember { mutableStateOf(getString(R.string.mute_duration_3_days)) }
+                        var durationHour by remember { mutableIntStateOf(72) }
+                        var isMutingUser by remember { mutableStateOf(false) }
+                        val muteDurations = stringArrayResource(R.array.mute_user_durations)
+                        val isDurationSpinnerShown = remember { mutableStateOf(false) }
 
+                        CustomModalBottomSheet(onDismissRequest = { showMuteBottomSheet = false }) {
+                            Column {
+                                PrimaryText(
+                                    stringResource(R.string.mute_user, "u/${modMailUser.name}"),
+                                    modifier = Modifier.padding(16.dp),
+                                    fontSize = LocalTypography.current.fontSize.size18,
+                                    fontWeight = FontWeight.Bold
+                                )
+
+                                CustomSpinner(
+                                    modifier = Modifier
+                                        .padding(horizontal = 16.dp),
+                                    isSpinnerShownState = isDurationSpinnerShown,
+                                    options = muteDurations,
+                                    spinnerButtonText = duration,
+                                    optionName = {
+                                        it
+                                    }
+                                ) {
+                                    duration = it
+                                    durationHour = when (it) {
+                                        getString(R.string.mute_duration_3_days) -> 72
+                                        getString(R.string.mute_duration_7_days) -> 168
+                                        getString(R.string.mute_duration_28_days) -> 672
+                                        else -> 72
+                                    }
+                                }
+                            }
+
+                            FilledLoadingButton(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                stringResId = R.string.mute,
+                                isLoading = isMutingUser
+                            ) {
+                                if (isMutingUser) {
+                                    return@FilledLoadingButton
+                                }
+
+                                isMutingUser = true
+
+                                scope.launch {
+                                    try {
+                                        conversationViewModel.executeUserAction(
+                                            conversation,
+                                            ModUserAction.MUTE(
+                                                durationHour
+                                            ),
+                                            getRepository(page)
+                                        )
+
+                                        modMailUser.mute(durationHour)
+
+                                        Toast.makeText(
+                                            this@ModMailActivity,
+                                            getString(R.string.muted_with_duration, durationHour / 24),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+
+                                        showMuteBottomSheet = false
+                                    } catch (e: Exception) {
+                                        if (e is CancellationException) {
+                                            throw e
+                                        }
+
+                                        e.printStackTrace()
+
+                                        Toast.makeText(this@ModMailActivity, e.message?.let { message ->
+                                            getString(R.string.mute_failed_with_reason, message)
+                                        } ?: getString(R.string.mute_failed), Toast.LENGTH_SHORT).show()
+                                    }
+
+                                    isMutingUser = false
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         } else if (showUserActions.value) {
             navigator.currentDestination?.contentKey?.let { conversation ->
                 modMailUser?.let {
