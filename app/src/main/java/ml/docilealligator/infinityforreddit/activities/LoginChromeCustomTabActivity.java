@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -177,10 +179,12 @@ public class LoginChromeCustomTabActivity extends BaseActivity {
         customTabsIntent.intent.putExtra("com.google.android.apps.chrome.EXTRA_OPEN_NEW_INCOGNITO_TAB", true);
 
         try {
+            String state = generateAndStoreOAuthState();
+
             Uri.Builder uriBuilder = Uri.parse(APIUtils.OAUTH_URL).buildUpon();
             uriBuilder.appendQueryParameter(APIUtils.CLIENT_ID_KEY, APIUtils.CLIENT_ID);
             uriBuilder.appendQueryParameter(APIUtils.RESPONSE_TYPE_KEY, APIUtils.RESPONSE_TYPE);
-            uriBuilder.appendQueryParameter(APIUtils.STATE_KEY, APIUtils.STATE);
+            uriBuilder.appendQueryParameter(APIUtils.STATE_KEY, state);
             uriBuilder.appendQueryParameter(APIUtils.REDIRECT_URI_KEY, APIUtils.REDIRECT_URI);
             uriBuilder.appendQueryParameter(APIUtils.DURATION_KEY, APIUtils.DURATION);
             uriBuilder.appendQueryParameter(APIUtils.SCOPE_KEY, APIUtils.SCOPE);
@@ -191,13 +195,32 @@ public class LoginChromeCustomTabActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Generates a fresh, unpredictable per-login-attempt state value, persists it so it
+     * survives the Chrome Custom Tab round trip, and returns it to be sent to Reddit as
+     * the OAuth "state" parameter. This replaces the previous hardcoded APIUtils.STATE
+     * constant, which offered no CSRF protection since it was a fixed value visible to
+     * anyone reading the source or decompiling the APK.
+     */
+    private String generateAndStoreOAuthState() {
+        byte[] randomBytes = new byte[32];
+        new SecureRandom().nextBytes(randomBytes);
+        String state = Base64.encodeToString(randomBytes, Base64.URL_SAFE | Base64.NO_WRAP | Base64.NO_PADDING);
+        mSharedPreferences.edit().putString(SharedPreferencesUtils.OAUTH_STATE, state).apply();
+        return state;
+    }
+
     private void handleRedirectUri(@NonNull Uri uri) {
         binding.openWebpageButtonLoginChromeCustomTabActivity.setVisibility(View.GONE);
 
         String authCode = uri.getQueryParameter("code");
         if (authCode != null) {
             String state = uri.getQueryParameter("state");
-            if (APIUtils.STATE.equals(state)) {
+            String expectedState = mSharedPreferences.getString(SharedPreferencesUtils.OAUTH_STATE, null);
+            // Consume the expected state immediately so it cannot be replayed by a second,
+            // later forged redirect even if this one is rejected.
+            mSharedPreferences.edit().remove(SharedPreferencesUtils.OAUTH_STATE).apply();
+            if (expectedState != null && expectedState.equals(state)) {
                 Map<String, String> params = new HashMap<>();
                 params.put(APIUtils.GRANT_TYPE_KEY, "authorization_code");
                 params.put("code", authCode);
