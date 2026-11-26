@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.activities
 
-import android.R.id.message
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -81,6 +80,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -144,6 +144,7 @@ import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModAction
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModActionType
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModMessage
+import ml.docilealligator.infinityforreddit.moderation.modmail.RecentConvo
 import ml.docilealligator.infinityforreddit.repositories.ModMailConversationRepository
 import ml.docilealligator.infinityforreddit.state.DataLoadState
 import ml.docilealligator.infinityforreddit.utils.Utils
@@ -931,39 +932,99 @@ class ModMailActivity : BaseActivity() {
                         .distinctUntilChanged()
                         .collectAsStateWithLifecycle(null)
 
-                    val recentConvo = modMailUser.recentConvos.entries.toList()
+                    val recentConvos = modMailUser.recentConvos.entries.toList()
+                    val recentComments = modMailUser.recentComments.entries.toList()
 
                     LaunchedEffect(Unit) {
                         conversationViewModel.loadUserData(modMailUser.name)
                     }
 
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        GlideImage(
-                            modifier = Modifier
-                                .size(72.dp),
-                            model = userData?.iconUrl,
-                            failure = placeholder(R.drawable.subreddit_default_icon),
-                            contentDescription = stringResource(R.string.content_description_user_avatar)
+                    userData?.let { userData ->
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            it.apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(144, 0)))
-                        }
+                            GlideImage(
+                                modifier = Modifier
+                                    .size(72.dp),
+                                model = userData.iconUrl,
+                                failure = placeholder(R.drawable.subreddit_default_icon),
+                                contentDescription = stringResource(R.string.content_description_user_avatar)
+                            ) {
+                                it.apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(144, 0)))
+                            }
 
-                        UserText(
-                            "u/${modMailUser.name}",
-                            modifier = Modifier.padding(16.dp),
-                            fontSize = LocalTypography.current.fontSize.size18,
-                            fontWeight = FontWeight.Bold
-                        )
+                            UserText(
+                                "u/${modMailUser.name}",
+                                modifier = Modifier.padding(16.dp),
+                                fontSize = LocalTypography.current.fontSize.size18,
+                                fontWeight = FontWeight.Bold
+                            )
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                            ) {
+                                Column {
+                                    PrimaryText(
+                                        R.string.post_karma,
+                                        fontWeight = FontWeight.Bold
+                                    )
+
+                                    PrimaryText(
+                                        userData.linkKarma.toString()
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.weight(1f))
+
+                                Column {
+                                    PrimaryText(
+                                        R.string.comment_karma,
+                                        fontWeight = FontWeight.Bold
+                                    )
+
+                                    PrimaryText(
+                                        userData.commentKarma.toString()
+                                    )
+                                }
+                            }
+                        }
                     }
+
                     if (modMailUser.recentConvos.isNotEmpty()) {
+                        PrimaryText(
+                            R.string.recent_conversations,
+                            modifier = Modifier.padding(16.dp),
+                            fontSize = LocalTypography.current.fontSize.size20
+                        )
+
                         LazyColumn {
                             items(
-                                count = recentConvo.size,
+                                count = recentConvos.size,
                                 contentType = { _ -> 1 },
-                                key = { index -> recentConvo[index].value.id }
+                                key = { index -> recentConvos[index].value.id }
+                            ) { index: Int ->
+                                RecentConvoView(recentConvos[index].value) {
+
+                                }
+                            }
+                        }
+                    }
+
+                    if (modMailUser.recentComments.isNotEmpty()) {
+                        PrimaryText(
+                            R.string.recent_comments,
+                            modifier = Modifier.padding(16.dp),
+                            fontSize = LocalTypography.current.fontSize.size20
+                        )
+
+                        LazyColumn {
+                            items(
+                                count = recentComments.size,
+                                contentType = { _ -> 1 },
+                                key = { index -> recentComments[index].key }
                             ) { index: Int ->
 
                             }
@@ -1869,6 +1930,42 @@ class ModMailActivity : BaseActivity() {
             )
 
             CustomHorizontalDivider(modifier = Modifier.padding(top = 12.dp))
+        }
+    }
+
+    @Composable
+    fun RecentConvoView(
+        recentConvo: RecentConvo,
+        onClick: () -> Unit
+    ) {
+        val dateElapsedString = remember { Utils.getElapsedTime(this@ModMailActivity, recentConvo.dateUTC) }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(vertical = 8.dp)
+                .background(
+                    Color(LocalAppTheme.current.filledCardViewBackgroundColor),
+                    shape = RoundedCornerShape(16.dp)
+                )
+                .clip(RoundedCornerShape(16.dp))
+                .clickable {
+                    onClick()
+                }
+                .padding(16.dp),
+        ) {
+            SecondaryText(
+                stringResource(R.string.last_updated_with_time, dateElapsedString),
+                modifier = Modifier
+                    .padding(bottom = 4.dp),
+                fontSize = LocalTypography.current.fontSize.size12
+            )
+
+            PrimaryText(
+                recentConvo.subject,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 

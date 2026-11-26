@@ -1814,4 +1814,7 @@
     <string name="disapprove_failed">Failed to remove from approved users</string>
     <string name="disapprove_failed_with_reason">Failed to remove from approved users. Error: %1$s</string>
     <string name="content_description_user_avatar">User avatar</string>
+    <string name="recent_conversations">Recent Conversations</string>
+    <string name="recent_comments">Recent Comments</string>
+    <string name="last_updated_with_time">Last updated: %1$s</string>
 </resources>

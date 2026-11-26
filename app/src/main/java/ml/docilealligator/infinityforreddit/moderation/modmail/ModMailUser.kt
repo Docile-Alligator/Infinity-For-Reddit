@@ -1,15 +1,15 @@
 package ml.docilealligator.infinityforreddit.moderation.modmail
 
-import android.R.attr.duration
 import android.os.Parcelable
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import java.time.Instant
+import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import kotlin.jvm.java
-import kotlin.time.Duration.Companion.days
 
 @Parcelize
 data class ModMailUser(
@@ -165,4 +165,18 @@ data class RecentConvo(
 
     @SerializedName("subject")
     val subject: String
-): Parcelable
+): Parcelable {
+    @IgnoredOnParcel
+    @Transient
+    private var _dateUTC: Long? = null
+
+    val dateUTC: Long
+        get() {
+            if (_dateUTC == null) {
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSxx")
+                _dateUTC = OffsetDateTime.parse(date, formatter).toInstant().toEpochMilli()
+            }
+
+            return _dateUTC!!
+        }
+}
