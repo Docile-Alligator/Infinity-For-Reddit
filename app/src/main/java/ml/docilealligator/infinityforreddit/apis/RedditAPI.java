@@ -56,7 +56,7 @@ public interface RedditAPI {
     @GET("user/{username}/about.json?raw_json=1")
     Call<String> getUserData(@Path("username") String username);
 
-    @GET("user/{username}/about.json?raw_json=1&limit=100")
+    @GET("user/{username}/about.json?raw_json=1")
     Call<String> getUserDataOauth(@HeaderMap Map<String, String> headers, @Path("username") String username);
 
     @GET("user/{username}/comments.json?raw_json=1&limit=100")

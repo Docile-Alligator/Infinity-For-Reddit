@@ -4,22 +4,30 @@ import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import ml.docilealligator.infinityforreddit.database.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
 import ml.docilealligator.infinityforreddit.repositories.ModMailConversationRepository
+import ml.docilealligator.infinityforreddit.result.AppResult
+import ml.docilealligator.infinityforreddit.user.UserData
+import ml.docilealligator.infinityforreddit.user.fetchUserData
 import retrofit2.Retrofit
 
 class ModMailConversationViewModel(
+    private val redditRoomDatabase: RedditDataRoomDatabase,
     private val oauthRetrofit: Retrofit,
     private val accessToken: String,
     private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
     private val _currentState = MutableStateFlow(ModMailState.ALL)
     val currentState: StateFlow<ModMailState> = _currentState.asStateFlow()
+
+    private val _userDataMap = MutableStateFlow<Map<String, UserData>>(emptyMap())
+    val userDataMap = _userDataMap.asStateFlow()
 
     val recentModMailConversationRepository = ModMailConversationRepository(
         oauthRetrofit, accessToken, sharedPreferences, "recent"
@@ -95,14 +103,35 @@ class ModMailConversationViewModel(
         repository.executeUserAction(conversation, modUserAction)
     }
 
+    fun loadUserData(userName: String) {
+        val userDataInMap = _userDataMap.value[userName]
+        if (userDataInMap != null) {
+            return
+        }
+
+        viewModelScope.launch {
+            when(val result = fetchUserData(redditRoomDatabase, oauthRetrofit, accessToken, userName)) {
+                is AppResult.Success<UserData> -> saveUserData(userName, result.data)
+                is AppResult.Error<*> -> TODO()
+            }
+        }
+    }
+
+    private fun saveUserData(userName: String, userData: UserData) {
+        _userDataMap.update {
+            it + (userName to userData)
+        }
+    }
+
     @Suppress("UNCHECKED_CAST")
     class Factory(
+        private val redditRoomDatabase: RedditDataRoomDatabase,
         private val oauthRetrofit: Retrofit,
         private val accessToken: String,
         private val sharedPreferences: SharedPreferences
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ModMailConversationViewModel(oauthRetrofit, accessToken, sharedPreferences) as T
+            return ModMailConversationViewModel(redditRoomDatabase, oauthRetrofit, accessToken, sharedPreferences) as T
         }
     }
 }

@@ -385,4 +385,10 @@ interface RedditAPIKt {
         @HeaderMap headers: Map<String, String>,
         @FieldMap params: Map<String, String>
     ): Response<String>
+
+    @GET("user/{username}/about.json?raw_json=1")
+    suspend fun getUserData(
+        @HeaderMap headers: MutableMap<String, String>,
+        @Path("username") username: String
+    ): Response<String>
 }

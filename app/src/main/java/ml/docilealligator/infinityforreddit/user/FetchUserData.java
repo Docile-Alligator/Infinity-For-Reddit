@@ -157,7 +157,7 @@ public class FetchUserData {
     }
 
     @WorkerThread
-    private static UserData parseUserDataBase(JSONObject userDataJson, boolean parseFullKarma) throws JSONException {
+    static UserData parseUserDataBase(JSONObject userDataJson, boolean parseFullKarma) throws JSONException {
         if (userDataJson == null) {
             return null;
         }

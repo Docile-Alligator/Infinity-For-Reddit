@@ -1813,4 +1813,5 @@
     <string name="disapproved">Disapproved</string>
     <string name="disapprove_failed">Failed to remove from approved users</string>
     <string name="disapprove_failed_with_reason">Failed to remove from approved users. Error: %1$s</string>
+    <string name="content_description_user_avatar">User avatar</string>
 </resources>

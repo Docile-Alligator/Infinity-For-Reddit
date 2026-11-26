@@ -102,12 +102,17 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
+import com.bumptech.glide.request.RequestOptions
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
 import io.noties.markwon.MarkwonPlugin
 import io.noties.markwon.core.MarkwonTheme
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
@@ -133,6 +138,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.SubredditText
 import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
 import ml.docilealligator.infinityforreddit.customviews.compose.ToolbarIcon
 import ml.docilealligator.infinityforreddit.customviews.compose.UserText
+import ml.docilealligator.infinityforreddit.database.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils
 import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModAction
@@ -153,6 +159,8 @@ import javax.inject.Named
     ExperimentalMaterial3ExpressiveApi::class, ExperimentalGlideComposeApi::class
 )
 class ModMailActivity : BaseActivity() {
+    @Inject
+    lateinit var mRedditDataRoomDatabase: RedditDataRoomDatabase
     @Inject
     @Named("oauth")
     lateinit var mOauthRetrofit: Retrofit
@@ -183,7 +191,8 @@ class ModMailActivity : BaseActivity() {
             }
         }
 
-        conversationViewModel = ViewModelProvider.create(this, ModMailConversationViewModel.Factory(mOauthRetrofit, accessToken!!, mSharedPreferences))[ModMailConversationViewModel::class]
+        conversationViewModel = ViewModelProvider.create(this, ModMailConversationViewModel.Factory(
+            mRedditDataRoomDatabase, mOauthRetrofit, accessToken!!, mSharedPreferences))[ModMailConversationViewModel::class]
 
         val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
         windowInsetsController.isAppearanceLightStatusBars = customThemeWrapper.isLightStatusBar
@@ -200,7 +209,7 @@ class ModMailActivity : BaseActivity() {
                     val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
                     var isToolbarMenuOpen by remember { mutableStateOf(false) }
 
-                    var isStateSpinnerShownState = remember { mutableStateOf(false) }
+                    val isStateSpinnerShownState = remember { mutableStateOf(false) }
 
                     val unreadNavigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
                     val recentNavigator = rememberListDetailPaneScaffoldNavigator<Conversation>()
@@ -915,26 +924,48 @@ class ModMailActivity : BaseActivity() {
             }
         } else if (showUserInfo.value) {
             CustomModalBottomSheet(onDismissRequest = { showUserInfo.value = false }) {
-                modMailUser?.let {
-                    val recentConvo = it.recentConvos.entries.toList()
+                modMailUser?.let { modMailUser ->
+                    val userData by conversationViewModel
+                        .userDataMap
+                        .map { it[modMailUser.name]}
+                        .distinctUntilChanged()
+                        .collectAsStateWithLifecycle(null)
 
-                    Row(modifier = Modifier.fillMaxWidth()) {
+                    val recentConvo = modMailUser.recentConvos.entries.toList()
+
+                    LaunchedEffect(Unit) {
+                        conversationViewModel.loadUserData(modMailUser.name)
+                    }
+
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        GlideImage(
+                            modifier = Modifier
+                                .size(72.dp),
+                            model = userData?.iconUrl,
+                            failure = placeholder(R.drawable.subreddit_default_icon),
+                            contentDescription = stringResource(R.string.content_description_user_avatar)
+                        ) {
+                            it.apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(144, 0)))
+                        }
+
                         UserText(
-                            it.name,
+                            "u/${modMailUser.name}",
                             modifier = Modifier.padding(16.dp),
                             fontSize = LocalTypography.current.fontSize.size18,
                             fontWeight = FontWeight.Bold
                         )
+                    }
+                    if (modMailUser.recentConvos.isNotEmpty()) {
+                        LazyColumn {
+                            items(
+                                count = recentConvo.size,
+                                contentType = { _ -> 1 },
+                                key = { index -> recentConvo[index].value.id }
+                            ) { index: Int ->
 
-                        if (it.recentConvos.isNotEmpty()) {
-                            LazyColumn {
-                                items(
-                                    count = recentConvo.size,
-                                    contentType = { _ -> 1 },
-                                    key = { index -> recentConvo[index].value.id }
-                                ) { index: Int ->
-
-                                }
                             }
                         }
                     }

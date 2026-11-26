@@ -49,6 +49,7 @@ import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubred
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserDao;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
 import ml.docilealligator.infinityforreddit.user.UserDao;
+import ml.docilealligator.infinityforreddit.user.UserDaoKt;
 import ml.docilealligator.infinityforreddit.user.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
@@ -81,6 +82,8 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     public abstract SubscribedSubredditDao subscribedSubredditDao();
 
     public abstract UserDao userDao();
+
+    public abstract UserDaoKt userDaoKt();
 
     public abstract SubscribedUserDao subscribedUserDao();
 
