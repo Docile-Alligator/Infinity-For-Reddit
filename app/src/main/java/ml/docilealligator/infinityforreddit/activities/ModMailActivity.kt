@@ -1135,7 +1135,9 @@ class ModMailActivity : BaseActivity() {
                                     contentType = { _ -> 1 },
                                     key = { index -> recentComments[index].key }
                                 ) { index: Int ->
+                                    RecentCommentView(recentComments[index].value) {
 
+                                    }
                                 }
                             }
                         }
@@ -2074,6 +2076,42 @@ class ModMailActivity : BaseActivity() {
 
             PrimaryText(
                 recentConvo.subject,
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+
+    @Composable
+    fun RecentCommentView(
+        recentComment: ModMailRecentComment,
+        onClick: () -> Unit
+    ) {
+        val dateElapsedString = remember { Utils.getElapsedTime(this@ModMailActivity, recentComment.dateUTC) }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .padding(vertical = 4.dp)
+                .background(
+                    Color(LocalAppTheme.current.filledCardViewBackgroundColor),
+                    shape = RoundedCornerShape(16.dp)
+                )
+                .clip(RoundedCornerShape(16.dp))
+                .clickable {
+                    onClick()
+                }
+                .padding(16.dp),
+        ) {
+            SecondaryText(
+                dateElapsedString,
+                modifier = Modifier
+                    .padding(bottom = 4.dp),
+                fontSize = LocalTypography.current.fontSize.size12
+            )
+
+            PrimaryText(
+                recentComment.title,
                 fontWeight = FontWeight.Bold
             )
         }

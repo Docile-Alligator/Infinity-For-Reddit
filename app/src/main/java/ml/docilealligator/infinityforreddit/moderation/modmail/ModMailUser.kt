@@ -114,7 +114,21 @@ data class ModMailRecentComment(
 
     @SerializedName("title")
     val title: String
-): Parcelable
+): Parcelable {
+    @IgnoredOnParcel
+    @Transient
+    private var _dateUTC: Long? = null
+
+    val dateUTC: Long
+        get() {
+            if (_dateUTC == null) {
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSxxx")
+                _dateUTC = OffsetDateTime.parse(date, formatter).toInstant().toEpochMilli()
+            }
+
+            return _dateUTC!!
+        }
+}
 
 @Parcelize
 data class MuteStatus(
