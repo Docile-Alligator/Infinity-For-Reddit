@@ -7,7 +7,6 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import ml.docilealligator.infinityforreddit.extensions.toEpochMilliForModMail
 import java.time.Instant
-import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import kotlin.jvm.java
@@ -158,7 +157,20 @@ data class BanStatus(
 
     @SerializedName("isPermanent")
     val isPermanent: Boolean
-): Parcelable
+): Parcelable {
+    @IgnoredOnParcel
+    @Transient
+    private var _endDate: Long? = null
+
+    val endDateUTC: Long
+        get() {
+            if (_endDate == null) {
+                _endDate = endDate?.toEpochMilliForModMail() ?: 0
+            }
+
+            return _endDate!!
+        }
+}
 
 @Parcelize
 data class ApproveStatus(

@@ -34,7 +34,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -84,7 +83,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -98,6 +96,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.net.toUri
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.ViewModelProvider
@@ -123,7 +122,6 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSh
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed
 import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
-import ml.docilealligator.infinityforreddit.customviews.compose.CustomCircularWavyProgressIndicator
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomHorizontalDivider
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingIndicator
@@ -154,7 +152,9 @@ import ml.docilealligator.infinityforreddit.moderation.modmail.ModMessage
 import ml.docilealligator.infinityforreddit.moderation.modmail.RecentConvo
 import ml.docilealligator.infinityforreddit.repositories.ModMailConversationRepository
 import ml.docilealligator.infinityforreddit.state.DataLoadState
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils
 import ml.docilealligator.infinityforreddit.utils.Utils
+import ml.docilealligator.infinityforreddit.utils.getFormattedTime
 import ml.docilealligator.infinityforreddit.viewmodels.ModConversationAction
 import ml.docilealligator.infinityforreddit.viewmodels.ModMailConversationViewModel
 import ml.docilealligator.infinityforreddit.viewmodels.ModMailState
@@ -162,7 +162,6 @@ import ml.docilealligator.infinityforreddit.viewmodels.ModUserAction
 import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Named
-import androidx.core.net.toUri
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3ExpressiveApi::class, ExperimentalGlideComposeApi::class
@@ -182,6 +181,7 @@ class ModMailActivity : BaseActivity() {
     @Inject
     lateinit var mCustomThemeWrapper: CustomThemeWrapper
     lateinit var conversationViewModel: ModMailConversationViewModel
+    lateinit var mTimeFormatPattern: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (application as Infinity).appComponent.inject(this)
@@ -205,6 +205,11 @@ class ModMailActivity : BaseActivity() {
 
         val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
         windowInsetsController.isAppearanceLightStatusBars = customThemeWrapper.isLightStatusBar
+
+        mTimeFormatPattern = mSharedPreferences.getString(
+            SharedPreferencesUtils.TIME_FORMAT_KEY,
+            SharedPreferencesUtils.TIME_FORMAT_DEFAULT_VALUE
+        ) ?: SharedPreferencesUtils.TIME_FORMAT_DEFAULT_VALUE
 
         setContent {
             AppTheme(customThemeWrapper.themeType, mSharedPreferences) {
@@ -1086,6 +1091,30 @@ class ModMailActivity : BaseActivity() {
                                             PrimaryText(
                                                 if (modMailUser.isApproved()) R.string.approved_user else R.string.not_approved_user
                                             )
+
+                                            if (modMailUser.isBanned()) {
+                                                val bannedUntil = remember { getFormattedTime(modMailUser.banStatus.endDateUTC, mTimeFormatPattern) }
+
+                                                PrimaryText(
+                                                    R.string.banned_user
+                                                )
+
+                                                PrimaryText(
+                                                    if (modMailUser.banStatus.isPermanent) {
+                                                        stringResource(R.string.permanent)
+                                                    } else {
+                                                        stringResource(R.string.banned_until, bannedUntil)
+                                                    }
+                                                )
+
+                                                PrimaryText(
+                                                    stringResource(R.string.ban_reason, modMailUser.banStatus.reason)
+                                                )
+                                            } else {
+                                                PrimaryText(
+                                                    R.string.not_banned_user
+                                                )
+                                            }
                                         }
                                     } ?: run {
                                         ShimmerSurface {
