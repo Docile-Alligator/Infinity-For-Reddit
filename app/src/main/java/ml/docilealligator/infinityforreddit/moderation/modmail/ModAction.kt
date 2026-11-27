@@ -6,6 +6,7 @@ import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import ml.docilealligator.infinityforreddit.extensions.toEpochMilliForModMail
 import java.lang.reflect.Type
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
@@ -24,8 +25,7 @@ data class ModAction(
     val dateUTC: Long
         get() {
             if (_dateUTC == null) {
-                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSxx")
-                _dateUTC = OffsetDateTime.parse(date, formatter).toInstant().toEpochMilli()
+                _dateUTC = date.toEpochMilliForModMail()
             }
 
             return _dateUTC!!

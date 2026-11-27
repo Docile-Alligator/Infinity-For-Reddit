@@ -9,6 +9,8 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.core.net.toUri
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
 fun String.linkify(mask: Int, linkStyle: SpanStyle, onUrlClick: (Uri) -> Unit) = buildAnnotatedString {
     append(this@linkify)
@@ -51,5 +53,19 @@ fun String.getLowercaseExtensionForFileName(extension: String): String {
         "${this.substring(0, index)}.$extension"
     } else {
         "$this.$extension"
+    }
+}
+
+fun String.toEpochMilliForModMail(): Long {
+    try {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSxx")
+        return OffsetDateTime.parse(this, formatter).toInstant().toEpochMilli()
+    } catch (_: Exception) {
+        try {
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSxxx")
+            return OffsetDateTime.parse(this, formatter).toInstant().toEpochMilli()
+        } catch (_: Exception) {
+            return 0
+        }
     }
 }

@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import ml.docilealligator.infinityforreddit.extensions.toEpochMilliForModMail
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -122,8 +123,7 @@ data class ModMailRecentComment(
     val dateUTC: Long
         get() {
             if (_dateUTC == null) {
-                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSxxx")
-                _dateUTC = OffsetDateTime.parse(date, formatter).toInstant().toEpochMilli()
+                _dateUTC = date.toEpochMilliForModMail()
             }
 
             return _dateUTC!!
@@ -187,8 +187,7 @@ data class RecentConvo(
     val dateUTC: Long
         get() {
             if (_dateUTC == null) {
-                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSxx")
-                _dateUTC = OffsetDateTime.parse(date, formatter).toInstant().toEpochMilli()
+                _dateUTC = date.toEpochMilliForModMail()
             }
 
             return _dateUTC!!

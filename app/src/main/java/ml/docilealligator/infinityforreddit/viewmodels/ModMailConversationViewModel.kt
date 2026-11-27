@@ -95,12 +95,13 @@ class ModMailConversationViewModel(
         }
     }
 
+    // Return true if modMailUser is updated
     suspend fun executeUserAction(
         conversation: Conversation,
         modUserAction: ModUserAction,
         repository: ModMailConversationRepository
-    ) {
-        repository.executeUserAction(conversation, modUserAction)
+    ): Boolean {
+        return repository.executeUserAction(conversation, modUserAction)
     }
 
     fun loadUserData(userName: String) {

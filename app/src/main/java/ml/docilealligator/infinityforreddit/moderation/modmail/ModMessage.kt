@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.moderation.modmail
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import ml.docilealligator.infinityforreddit.extensions.toEpochMilliForModMail
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
@@ -24,10 +25,7 @@ data class ModMessage(
     val dateUTC: Long
         get() {
             if (_dateUTC == null) {
-                _dateUTC = date?.let {
-                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSxx")
-                    OffsetDateTime.parse(it, formatter).toInstant().toEpochMilli()
-                } ?: 0
+                _dateUTC = date?.toEpochMilliForModMail() ?: 0
             }
 
             return _dateUTC!!

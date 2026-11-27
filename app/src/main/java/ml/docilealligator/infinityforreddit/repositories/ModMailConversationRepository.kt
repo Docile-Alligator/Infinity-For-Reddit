@@ -12,6 +12,7 @@ import ml.docilealligator.infinityforreddit.state.DataLoadState
 import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
 import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModAction
+import ml.docilealligator.infinityforreddit.moderation.modmail.ModActionType
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModActionTypeDeserializer
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModMailUser
 import ml.docilealligator.infinityforreddit.utils.APIUtils
@@ -132,7 +133,12 @@ class ModMailConversationRepository(
             if (conversationIdsArray.length() == 0) {
                 null
             } else {
-                val gson = Gson()
+                val gson = GsonBuilder()
+                    .registerTypeAdapter(
+                        ModActionType::class.java,
+                        ModActionTypeDeserializer()
+                    )
+                    .create()
                 val conversations: MutableList<Conversation> = mutableListOf()
 
                 for (i in 0 until conversationIdsArray.length()) {
@@ -188,7 +194,11 @@ class ModMailConversationRepository(
         }
     }
 
-    val updateConversation: (Conversation, Conversation) -> Unit = { conversation, updatedConversation ->
+    fun updateConversation(
+        conversation: Conversation,
+        updatedConversation: Conversation,
+        updateAuthors: Boolean = true
+    ) {
         conversation.apply {
             if (updatedConversation.id == id) {
                 isAuto = updatedConversation.isAuto
@@ -198,7 +208,9 @@ class ModMailConversationRepository(
                 lastUserUpdate = updatedConversation.lastUserUpdate
                 isInternal = updatedConversation.isInternal
                 lastModUpdate = updatedConversation.lastModUpdate
-                authors = updatedConversation.authors
+                if (updateAuthors) {
+                    authors = updatedConversation.authors
+                }
                 lastUpdated = updatedConversation.lastUpdated
                 legacyFirstMessageId = updatedConversation.legacyFirstMessageId
                 this.state = updatedConversation.state
@@ -233,15 +245,28 @@ class ModMailConversationRepository(
         }
     }
 
+    // Return true if modMailUser is updated
     suspend fun executeUserAction(
         conversation: Conversation,
         modUserAction: ModUserAction
-    ) {
+    ): Boolean {
         conversation.id?.let { id ->
-            Conversation.executeUserAction(
+            val (updatedConversation, updatedModMailUser) = Conversation.executeUserAction(
                 oauthRetrofit, accessToken, id, modUserAction
             )
+
+            updatedConversation?.let {
+                updateConversation(conversation, it, false)
+            }
+
+            updatedModMailUser?.let {
+                _modMailUser.value = it
+
+                return true
+            }
         }
+
+        return false
     }
 
 

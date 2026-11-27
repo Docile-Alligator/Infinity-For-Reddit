@@ -10,6 +10,7 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import ml.docilealligator.infinityforreddit.RedditError
 import ml.docilealligator.infinityforreddit.apis.RedditAPIKt
+import ml.docilealligator.infinityforreddit.extensions.toEpochMilliForModMail
 import ml.docilealligator.infinityforreddit.utils.APIUtils
 import ml.docilealligator.infinityforreddit.utils.JSONUtils
 import ml.docilealligator.infinityforreddit.viewmodels.ModConversationAction
@@ -56,8 +57,8 @@ data class Conversation(
 ): Parcelable {
     var modMailItems: MutableList<ModMailItem>
         get() = _modMailItems ?: mutableListOf<ModMailItem>().also { _modMailItems = it }
-        set(newMessages) {
-            _modMailItems = newMessages
+        set(newModMailItems) {
+            _modMailItems = newModMailItems
         }
 
     @IgnoredOnParcel
@@ -67,10 +68,7 @@ data class Conversation(
     val lastUpdatedUTC: Long
         get() {
             if (_lastUpdatedUTC == null) {
-                _lastUpdatedUTC = lastUpdated?.let {
-                    val formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSxx")
-                    OffsetDateTime.parse(it, formatter1).toInstant().toEpochMilli()
-                } ?: 0
+                _lastUpdatedUTC = lastUpdated?.toEpochMilliForModMail() ?: 0
             }
 
             return _lastUpdatedUTC!!
@@ -123,8 +121,8 @@ data class Conversation(
                                     )
                                 } catch (e: CancellationException) {
                                     throw e
-                                } catch (ignore: Exception) {
-                                    ignore.printStackTrace()
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
                                 }
                             }
                         } else {
@@ -243,35 +241,41 @@ data class Conversation(
             accessToken: String,
             conversationId: String,
             modUserAction: ModUserAction
-        ) {
-            val response: Response<String> = if (modUserAction is ModUserAction.TEMPBAN) {
-                // Response will be empty
-                oauthRetrofit.create(RedditAPIKt::class.java).tempBanModMailUserAction(
-                    modUserAction.subreddit,
-                    APIUtils.getOAuthHeader(accessToken),
-                    mutableMapOf<String, String>().apply {
-                        this[APIUtils.TYPE_KEY] = APIUtils.TYPE_BANNED
-                        this[APIUtils.NAME_KEY] = modUserAction.username
-                        this[APIUtils.DURATION_KEY] = modUserAction.duration.toString()
-                        this[APIUtils.BAN_MESSAGE_KEY] = modUserAction.message
-                        this[APIUtils.BAN_REASON_KEY] = modUserAction.reason
-                        this[APIUtils.NOTE_KEY] = modUserAction.modNote
-                    }
-                )
-            } else if (modUserAction is ModUserAction.MUTE) {
-                oauthRetrofit.create(RedditAPIKt::class.java).muteModMailUserAction(
-                    conversationId,
-                    APIUtils.getOAuthHeader(accessToken),
-                    mutableMapOf<String, String>().apply {
-                        this[APIUtils.NUM_HOURS_KEY] = modUserAction.nHours.toString()
-                    }
-                )
-            } else {
-                oauthRetrofit.create(RedditAPIKt::class.java).executeModMailUserAction(
-                    conversationId,
-                    modUserAction.rawValue,
-                    APIUtils.getOAuthHeader(accessToken)
-                )
+        ): Pair<Conversation?, ModMailUser?> {
+            val response: Response<String> = when (modUserAction) {
+                is ModUserAction.TEMPBAN -> {
+                    // Response will be empty
+                    oauthRetrofit.create(RedditAPIKt::class.java).tempBanModMailUserAction(
+                        modUserAction.subreddit,
+                        APIUtils.getOAuthHeader(accessToken),
+                        mutableMapOf<String, String>().apply {
+                            this[APIUtils.TYPE_KEY] = APIUtils.TYPE_BANNED
+                            this[APIUtils.NAME_KEY] = modUserAction.username
+                            this[APIUtils.DURATION_KEY] = modUserAction.duration.toString()
+                            this[APIUtils.BAN_MESSAGE_KEY] = modUserAction.message
+                            this[APIUtils.BAN_REASON_KEY] = modUserAction.reason
+                            this[APIUtils.NOTE_KEY] = modUserAction.modNote
+                        }
+                    )
+                }
+
+                is ModUserAction.MUTE -> {
+                    oauthRetrofit.create(RedditAPIKt::class.java).muteModMailUserAction(
+                        conversationId,
+                        APIUtils.getOAuthHeader(accessToken),
+                        mutableMapOf<String, String>().apply {
+                            this[APIUtils.NUM_HOURS_KEY] = modUserAction.nHours.toString()
+                        }
+                    )
+                }
+
+                else -> {
+                    oauthRetrofit.create(RedditAPIKt::class.java).executeModMailUserAction(
+                        conversationId,
+                        modUserAction.rawValue,
+                        APIUtils.getOAuthHeader(accessToken)
+                    )
+                }
             }
 
             // The response does not have the updated conversation state.
@@ -284,7 +288,43 @@ data class Conversation(
                 }
 
                 throw IOException("Unknown reason")
+            } else {
+                if (modUserAction !is ModUserAction.TEMPBAN && response.body() != null) {
+                    try {
+                        val responseJson = JSONObject(response.body()!!)
+                        val gson = GsonBuilder()
+                            .registerTypeAdapter(
+                                ModActionType::class.java,
+                                ModActionTypeDeserializer()
+                            )
+                            .create()
+
+                        // This conversation will have multiple duplicated authors.
+                        val conversation = parseConversation(
+                            gson,
+                            responseJson.getString(JSONUtils.CONVERSATIONS_KEY),
+                            responseJson.getJSONObject(JSONUtils.MESSAGES_KEY),
+                            if (responseJson.has(JSONUtils.MOD_ACTIONS_KEY)) responseJson.getJSONObject(
+                                JSONUtils.MOD_ACTIONS_KEY
+                            ) else null
+                        )
+
+                        if (responseJson.getJSONObject(JSONUtils.USER_KEY).length() > 0) {
+                            val modMailUser = ModMailUser.parseModMailUser(gson, responseJson.getString(JSONUtils.USER_KEY))
+
+                            return Pair(conversation, modMailUser)
+                        }
+
+                        return Pair(conversation, null)
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
             }
+
+            return Pair(null, null)
         }
     }
 }

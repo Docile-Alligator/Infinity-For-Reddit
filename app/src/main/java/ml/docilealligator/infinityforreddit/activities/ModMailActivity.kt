@@ -803,15 +803,16 @@ class ModMailActivity : BaseActivity() {
 
                                 scope.launch {
                                     try {
-                                        conversationViewModel.executeUserAction(
-                                            conversation,
-                                            ModUserAction.MUTE(
-                                                durationHour
-                                            ),
-                                            getRepository(page)
-                                        )
-
-                                        modMailUser.mute(durationHour)
+                                        if (!conversationViewModel.executeUserAction(
+                                                conversation,
+                                                ModUserAction.MUTE(
+                                                    durationHour
+                                                ),
+                                                getRepository(page)
+                                            )
+                                        ) {
+                                            modMailUser.mute(durationHour)
+                                        }
 
                                         Toast.makeText(
                                             this@ModMailActivity,
@@ -863,13 +864,13 @@ class ModMailActivity : BaseActivity() {
 
                             scope.launch {
                                 try {
-                                    conversationViewModel.executeUserAction(
+                                    if (!conversationViewModel.executeUserAction(
                                         conversation,
                                         ModUserAction.UNBAN,
                                         getRepository(page)
-                                    )
-
-                                    it.unban()
+                                    )) {
+                                        it.unban()
+                                    }
 
                                     Toast.makeText(
                                         this@ModMailActivity,
@@ -905,13 +906,13 @@ class ModMailActivity : BaseActivity() {
 
                             scope.launch {
                                 try {
-                                    conversationViewModel.executeUserAction(
+                                    if (!conversationViewModel.executeUserAction(
                                         conversation,
                                         ModUserAction.UNMUTE,
                                         getRepository(page)
-                                    )
-
-                                    it.unmute()
+                                    )) {
+                                        it.unmute()
+                                    }
 
                                     Toast.makeText(
                                         this@ModMailActivity,
@@ -941,13 +942,13 @@ class ModMailActivity : BaseActivity() {
                         ) {
                             scope.launch {
                                 try {
-                                    conversationViewModel.executeUserAction(
+                                    if (!conversationViewModel.executeUserAction(
                                         conversation,
                                         if (it.isApproved()) ModUserAction.DISAPPROVE else ModUserAction.APPROVE,
                                         getRepository(page)
-                                    )
-
-                                    it.setApproved(!it.isApproved())
+                                    )) {
+                                        it.setApproved(!it.isApproved())
+                                    }
 
                                     Toast.makeText(
                                         this@ModMailActivity,
@@ -1576,7 +1577,7 @@ class ModMailActivity : BaseActivity() {
                         UserText(
                             it,
                             modifier = Modifier.clickable {
-                                if (it != "[deleted") {
+                                if (it != "[deleted]") {
                                     startActivity(
                                         Intent(
                                             this@ModMailActivity,
