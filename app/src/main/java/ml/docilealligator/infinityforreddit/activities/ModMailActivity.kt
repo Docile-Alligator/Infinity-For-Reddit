@@ -483,6 +483,46 @@ class ModMailActivity : BaseActivity() {
         var showBanBottomSheet by remember { mutableStateOf(false) }
         var showMuteBottomSheet by remember { mutableStateOf(false) }
 
+        val markwon = remember {
+            val miscPlugin: MarkwonPlugin = object : AbstractMarkwonPlugin() {
+                override fun beforeSetText(textView: TextView, markdown: Spanned) {
+                    if (this@ModMailActivity.contentTypeface != null) {
+                        textView.setTypeface(this@ModMailActivity.contentTypeface)
+                    }
+                    textView.setTextColor(mCustomThemeWrapper.primaryTextColor)
+                    textView.highlightColor = android.graphics.Color.TRANSPARENT
+                }
+
+                override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
+                    builder.linkResolver { view: View?, link: String? ->
+                        val intent = Intent(this@ModMailActivity, LinkResolverActivity::class.java)
+                        val uri = Uri.parse(link)
+                        intent.setData(uri)
+                        startActivity(intent)
+                    }
+                }
+
+                override fun configureTheme(builder: MarkwonTheme.Builder) {
+                    builder.linkColor(mCustomThemeWrapper.linkColor)
+                }
+            }
+
+            MarkdownUtils.createDescriptionMarkwon(
+                this@ModMailActivity,
+                miscPlugin
+            ) { textView, url ->
+                val urlMenuBottomSheetFragment = UrlMenuBottomSheetFragment()
+                val bundle = Bundle()
+                bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url)
+                urlMenuBottomSheetFragment.setArguments(bundle)
+                urlMenuBottomSheetFragment.show(
+                    supportFragmentManager,
+                    urlMenuBottomSheetFragment.tag
+                )
+                return@createDescriptionMarkwon true
+            }
+        }
+
         val scope = rememberCoroutineScope()
 
         LaunchedEffect(needPagination) {
@@ -535,6 +575,7 @@ class ModMailActivity : BaseActivity() {
                         ConversationDetailsView(
                             page,
                             it,
+                            markwon,
                             refreshConversationMessagesTrigger
                         )
                     }
@@ -1103,7 +1144,7 @@ class ModMailActivity : BaseActivity() {
                                 PrimaryText(
                                     R.string.recent_conversations,
                                     modifier = Modifier
-                                        .padding(top = 16.dp, bottom = 8.dp)
+                                        .padding(top = 16.dp, bottom = 4.dp)
                                         .padding(horizontal = 16.dp),
                                     fontSize = LocalTypography.current.fontSize.size20
                                 )
@@ -1124,7 +1165,7 @@ class ModMailActivity : BaseActivity() {
                                     PrimaryText(
                                         R.string.recent_comments,
                                         modifier = Modifier
-                                            .padding(top = 16.dp, bottom = 8.dp)
+                                            .padding(top = 16.dp, bottom = 4.dp)
                                             .padding(horizontal = 16.dp),
                                         fontSize = LocalTypography.current.fontSize.size20
                                     )
@@ -1135,7 +1176,7 @@ class ModMailActivity : BaseActivity() {
                                     contentType = { _ -> 1 },
                                     key = { index -> recentComments[index].key }
                                 ) { index: Int ->
-                                    RecentCommentView(recentComments[index].value) {
+                                    RecentCommentView(recentComments[index].value, markwon) {
 
                                     }
                                 }
@@ -1546,6 +1587,7 @@ class ModMailActivity : BaseActivity() {
     fun ConversationDetailsView(
         page: Int,
         conversation: Conversation,
+        markwon: Markwon,
         refreshConversationMessagesTrigger: Boolean
     ) {
         val pullToRefreshState: PullToRefreshState = rememberPullToRefreshState()
@@ -1563,45 +1605,6 @@ class ModMailActivity : BaseActivity() {
 
         var isInitial by remember { mutableStateOf(true) }
 
-        val markwon = remember {
-            val miscPlugin: MarkwonPlugin = object : AbstractMarkwonPlugin() {
-                override fun beforeSetText(textView: TextView, markdown: Spanned) {
-                    if (this@ModMailActivity.contentTypeface != null) {
-                        textView.setTypeface(this@ModMailActivity.contentTypeface)
-                    }
-                    textView.setTextColor(mCustomThemeWrapper.primaryTextColor)
-                    textView.highlightColor = android.graphics.Color.TRANSPARENT
-                }
-
-                override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
-                    builder.linkResolver { view: View?, link: String? ->
-                        val intent = Intent(this@ModMailActivity, LinkResolverActivity::class.java)
-                        val uri = Uri.parse(link)
-                        intent.setData(uri)
-                        startActivity(intent)
-                    }
-                }
-
-                override fun configureTheme(builder: MarkwonTheme.Builder) {
-                    builder.linkColor(mCustomThemeWrapper.linkColor)
-                }
-            }
-
-            MarkdownUtils.createDescriptionMarkwon(
-                this@ModMailActivity,
-                miscPlugin
-            ) { textView, url ->
-                val urlMenuBottomSheetFragment = UrlMenuBottomSheetFragment()
-                val bundle = Bundle()
-                bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url)
-                urlMenuBottomSheetFragment.setArguments(bundle)
-                urlMenuBottomSheetFragment.show(
-                    supportFragmentManager,
-                    urlMenuBottomSheetFragment.tag
-                )
-                return@createDescriptionMarkwon true
-            }
-        }
         val scope = rememberCoroutineScope()
 
         suspend fun refresh() {
@@ -2084,9 +2087,13 @@ class ModMailActivity : BaseActivity() {
     @Composable
     fun RecentCommentView(
         recentComment: ModMailRecentComment,
+        markwon: Markwon,
         onClick: () -> Unit
     ) {
         val dateElapsedString = remember { Utils.getElapsedTime(this@ModMailActivity, recentComment.dateUTC) }
+        val markwonAdapter = remember {
+            MarkdownUtils.createCustomTablesAdapter(this@ModMailActivity)
+        }
 
         Column(
             modifier = Modifier
@@ -2101,18 +2108,43 @@ class ModMailActivity : BaseActivity() {
                 .clickable {
                     onClick()
                 }
-                .padding(16.dp),
+                .padding(vertical = 16.dp),
         ) {
             SecondaryText(
                 dateElapsedString,
                 modifier = Modifier
-                    .padding(bottom = 4.dp),
+                    .padding(bottom = 4.dp)
+                    .padding(horizontal = 16.dp),
                 fontSize = LocalTypography.current.fontSize.size12
             )
 
             PrimaryText(
                 recentComment.title,
+                modifier = Modifier.padding(horizontal = 16.dp),
                 fontWeight = FontWeight.Bold
+            )
+
+            AndroidView(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp),
+                factory = { context ->
+                    markwonAdapter.setMarkdown(markwon, recentComment.comment)
+                    // Creates view
+                    RecyclerView(context).apply {
+                        isNestedScrollingEnabled = false
+                        layoutManager = LinearLayoutManagerBugFixed(context)
+                        adapter = markwonAdapter
+                    }
+                },
+                update = { view ->
+                    // View's been inflated or state read in this block has been updated
+                    // Add logic here if necessary
+
+                    // As selectedItem is read here, AndroidView will recompose
+                    // whenever the state changes
+                    // Example of Compose -> View communication
+                }
             )
         }
     }
