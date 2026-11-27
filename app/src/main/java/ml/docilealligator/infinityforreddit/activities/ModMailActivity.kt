@@ -948,13 +948,20 @@ class ModMailActivity : BaseActivity() {
                                         getRepository(page)
                                     )) {
                                         it.setApproved(!it.isApproved())
-                                    }
 
-                                    Toast.makeText(
-                                        this@ModMailActivity,
-                                        getString(if (it.isApproved()) R.string.approved else R.string.disapproved),
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                        Toast.makeText(
+                                            this@ModMailActivity,
+                                            getString(if (it.isApproved()) R.string.approved else R.string.disapproved),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    } else {
+                                        // Still the old modMailUser, no new approval info.
+                                        Toast.makeText(
+                                            this@ModMailActivity,
+                                            getString(if (it.isApproved()) R.string.disapproved else R.string.approved),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
                                 } catch (e: Exception) {
                                     if (e is CancellationException) {
                                         throw e
@@ -2063,7 +2070,7 @@ class ModMailActivity : BaseActivity() {
                     ModActionType.BANNED -> R.string.mod_action_banned_by
                     ModActionType.UNBANNED -> R.string.mod_action_unbanned_by
                     ModActionType.APPROVED -> R.string.mod_action_approved_by
-                    ModActionType.DISAPPROVED -> R.string.mod_action_removed_from_approved_users_by
+                    ModActionType.DISAPPROVED -> R.string.mod_action_disapproved_by
                     ModActionType.FILTERED -> R.string.mod_action_filtered_by
                     ModActionType.UNFILTERED -> R.string.mod_action_unfiltered_by
                     ModActionType.UNKNOWN -> R.string.mod_action_unknown_action_by
