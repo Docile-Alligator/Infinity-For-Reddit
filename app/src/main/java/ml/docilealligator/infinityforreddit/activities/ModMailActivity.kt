@@ -432,7 +432,7 @@ class ModMailActivity : BaseActivity() {
                                 ConversationListDetailPaneView(
                                     page,
                                     refreshConversationsTriggers[page].value,
-                                    refreshConversationMessagesTriggers[page].value,
+                                    refreshConversationMessagesTriggers[page],
                                     showUserActions[page],
                                     showUserInfoStates[page],
                                     getNavigator(page)
@@ -459,7 +459,7 @@ class ModMailActivity : BaseActivity() {
     fun ConversationListDetailPaneView(
         page: Int,
         refreshConversationsTrigger: Boolean,
-        refreshConversationMessagesTrigger: Boolean,
+        refreshConversationMessagesTrigger: MutableState<Boolean>,
         showUserActions: MutableState<Boolean>,
         showUserInfo: MutableState<Boolean>,
         navigator: ThreePaneScaffoldNavigator<Conversation>
@@ -577,7 +577,7 @@ class ModMailActivity : BaseActivity() {
                             page,
                             it,
                             markwon,
-                            refreshConversationMessagesTrigger
+                            refreshConversationMessagesTrigger.value
                         )
                     }
                 }
@@ -962,6 +962,8 @@ class ModMailActivity : BaseActivity() {
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
+
+                                    refreshConversationMessagesTrigger.value = !refreshConversationMessagesTrigger.value
                                 } catch (e: Exception) {
                                     if (e is CancellationException) {
                                         throw e

@@ -299,15 +299,16 @@ data class Conversation(
                             )
                             .create()
 
-                        // This conversation will have multiple duplicated authors.
-                        val conversation = parseConversation(
+                        // This conversation will have multiple duplicated authors. For APPROVE and DISAPPROVE, there won't be a new mod action.
+                        val conversation = if (modUserAction !is ModUserAction.APPROVE
+                            && modUserAction !is ModUserAction.DISAPPROVE) parseConversation(
                             gson,
                             responseJson.getString(JSONUtils.CONVERSATIONS_KEY),
                             responseJson.getJSONObject(JSONUtils.MESSAGES_KEY),
                             if (responseJson.has(JSONUtils.MOD_ACTIONS_KEY)) responseJson.getJSONObject(
                                 JSONUtils.MOD_ACTIONS_KEY
                             ) else null
-                        )
+                        ) else null
 
                         if (responseJson.getJSONObject(JSONUtils.USER_KEY).length() > 0) {
                             val modMailUser = ModMailUser.parseModMailUser(gson, responseJson.getString(JSONUtils.USER_KEY))
