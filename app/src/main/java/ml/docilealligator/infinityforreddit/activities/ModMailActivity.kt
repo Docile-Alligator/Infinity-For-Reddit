@@ -34,12 +34,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -82,6 +84,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -120,6 +123,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSh
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed
 import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomCircularWavyProgressIndicator
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomHorizontalDivider
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingIndicator
@@ -138,11 +142,14 @@ import ml.docilealligator.infinityforreddit.customviews.compose.SubredditText
 import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
 import ml.docilealligator.infinityforreddit.customviews.compose.ToolbarIcon
 import ml.docilealligator.infinityforreddit.customviews.compose.UserText
+import ml.docilealligator.infinityforreddit.customviews.compose.shimmer.ShimmerContainer
+import ml.docilealligator.infinityforreddit.customviews.compose.shimmer.ShimmerSurface
 import ml.docilealligator.infinityforreddit.database.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils
 import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModAction
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModActionType
+import ml.docilealligator.infinityforreddit.moderation.modmail.ModMailRecentComment
 import ml.docilealligator.infinityforreddit.moderation.modmail.ModMessage
 import ml.docilealligator.infinityforreddit.moderation.modmail.RecentConvo
 import ml.docilealligator.infinityforreddit.repositories.ModMailConversationRepository
@@ -939,68 +946,169 @@ class ModMailActivity : BaseActivity() {
                         conversationViewModel.loadUserData(modMailUser.name)
                     }
 
-                    userData?.let { userData ->
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            GlideImage(
-                                modifier = Modifier
-                                    .size(72.dp),
-                                model = userData.iconUrl,
-                                failure = placeholder(R.drawable.subreddit_default_icon),
-                                contentDescription = stringResource(R.string.content_description_user_avatar)
+                    LazyColumn {
+                        item {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                it.apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(144, 0)))
-                            }
+                                userData?.let { userData ->
+                                    GlideImage(
+                                        modifier = Modifier
+                                            .size(72.dp),
+                                        model = userData.iconUrl,
+                                        failure = placeholder(R.drawable.subreddit_default_icon),
+                                        contentDescription = stringResource(R.string.content_description_user_avatar)
+                                    ) {
+                                        it.apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(144, 0)))
+                                    }
 
-                            UserText(
-                                "u/${modMailUser.name}",
-                                modifier = Modifier.padding(16.dp),
-                                fontSize = LocalTypography.current.fontSize.size18,
-                                fontWeight = FontWeight.Bold
-                            )
-
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp)
-                            ) {
-                                Column {
-                                    PrimaryText(
-                                        R.string.post_karma,
+                                    UserText(
+                                        "u/${modMailUser.name}",
+                                        modifier = Modifier.padding(16.dp),
+                                        fontSize = LocalTypography.current.fontSize.size18,
                                         fontWeight = FontWeight.Bold
                                     )
 
-                                    PrimaryText(
-                                        userData.linkKarma.toString()
-                                    )
-                                }
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(16.dp)
+                                    ) {
+                                        Column {
+                                            PrimaryText(
+                                                R.string.post_karma,
+                                                fontWeight = FontWeight.Bold
+                                            )
 
-                                Spacer(modifier = Modifier.weight(1f))
+                                            PrimaryText(
+                                                userData.linkKarma.toString()
+                                            )
+                                        }
 
-                                Column {
-                                    PrimaryText(
-                                        R.string.comment_karma,
-                                        fontWeight = FontWeight.Bold
-                                    )
+                                        Spacer(modifier = Modifier.weight(1f))
 
-                                    PrimaryText(
-                                        userData.commentKarma.toString()
-                                    )
+                                        Column {
+                                            PrimaryText(
+                                                R.string.comment_karma,
+                                                fontWeight = FontWeight.Bold
+                                            )
+
+                                            PrimaryText(
+                                                userData.commentKarma.toString()
+                                            )
+                                        }
+                                    }
+                                } ?: run {
+                                    ShimmerSurface {
+                                        ShimmerContainer(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                        ) {
+                                            Column(
+                                                modifier = Modifier
+                                                    .fillMaxWidth(),
+                                                horizontalAlignment = Alignment.CenterHorizontally
+                                            ) {
+                                                Box(
+                                                    modifier = Modifier
+                                                        .clip(CircleShape)
+                                                        .size(72.dp)
+                                                        .fillMaxWidth()
+                                                        .height(16.dp)
+                                                        .background(Color.Gray)
+                                                )
+                                            }
+                                        }
+
+                                        Column(
+                                            modifier = Modifier
+                                                .fillMaxWidth(),
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            UserText(
+                                                "u/${modMailUser.name}",
+                                                modifier = Modifier.padding(16.dp),
+                                                fontSize = LocalTypography.current.fontSize.size18,
+                                                fontWeight = FontWeight.Bold
+                                            )
+                                        }
+
+                                        ShimmerContainer(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                        ) {
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxSize()
+                                                    .padding(16.dp)
+                                            ) {
+                                                Column(
+                                                    modifier = Modifier
+                                                        .weight(0.25f)
+                                                ) {
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .clip(RoundedCornerShape(16.dp))
+                                                            .fillMaxWidth()
+                                                            .height(18.dp)
+                                                            .background(Color.Gray)
+                                                    )
+
+                                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .clip(RoundedCornerShape(16.dp))
+                                                            .fillMaxWidth()
+                                                            .height(18.dp)
+                                                            .background(Color.Gray)
+                                                    )
+                                                }
+
+                                                Spacer(modifier = Modifier.weight(0.5f))
+
+                                                Column(
+                                                    modifier = Modifier
+                                                        .fillMaxHeight()
+                                                        .weight(0.25f)
+                                                ) {
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .clip(RoundedCornerShape(10.dp))
+                                                            .fillMaxWidth()
+                                                            .height(18.dp)
+                                                            .background(Color.Gray)
+                                                    )
+
+                                                    Spacer(modifier = Modifier.height(8.dp))
+
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .clip(RoundedCornerShape(10.dp))
+                                                            .fillMaxWidth()
+                                                            .height(18.dp)
+                                                            .background(Color.Gray)
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    if (modMailUser.recentConvos.isNotEmpty()) {
-                        PrimaryText(
-                            R.string.recent_conversations,
-                            modifier = Modifier.padding(16.dp),
-                            fontSize = LocalTypography.current.fontSize.size20
-                        )
+                        if (modMailUser.recentConvos.isNotEmpty()) {
+                            item {
+                                PrimaryText(
+                                    R.string.recent_conversations,
+                                    modifier = Modifier
+                                        .padding(top = 16.dp, bottom = 8.dp)
+                                        .padding(horizontal = 16.dp),
+                                    fontSize = LocalTypography.current.fontSize.size20
+                                )
+                            }
 
-                        LazyColumn {
                             items(
                                 count = recentConvos.size,
                                 contentType = { _ -> 1 },
@@ -1010,23 +1118,25 @@ class ModMailActivity : BaseActivity() {
 
                                 }
                             }
-                        }
-                    }
 
-                    if (modMailUser.recentComments.isNotEmpty()) {
-                        PrimaryText(
-                            R.string.recent_comments,
-                            modifier = Modifier.padding(16.dp),
-                            fontSize = LocalTypography.current.fontSize.size20
-                        )
+                            if (modMailUser.recentComments.isNotEmpty()) {
+                                item {
+                                    PrimaryText(
+                                        R.string.recent_comments,
+                                        modifier = Modifier
+                                            .padding(top = 16.dp, bottom = 8.dp)
+                                            .padding(horizontal = 16.dp),
+                                        fontSize = LocalTypography.current.fontSize.size20
+                                    )
+                                }
 
-                        LazyColumn {
-                            items(
-                                count = recentComments.size,
-                                contentType = { _ -> 1 },
-                                key = { index -> recentComments[index].key }
-                            ) { index: Int ->
+                                items(
+                                    count = recentComments.size,
+                                    contentType = { _ -> 1 },
+                                    key = { index -> recentComments[index].key }
+                                ) { index: Int ->
 
+                                }
                             }
                         }
                     }
@@ -1944,7 +2054,7 @@ class ModMailActivity : BaseActivity() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .padding(vertical = 8.dp)
+                .padding(vertical = 4.dp)
                 .background(
                     Color(LocalAppTheme.current.filledCardViewBackgroundColor),
                     shape = RoundedCornerShape(16.dp)

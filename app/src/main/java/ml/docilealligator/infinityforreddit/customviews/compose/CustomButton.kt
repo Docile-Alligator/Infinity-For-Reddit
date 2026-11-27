@@ -253,7 +253,6 @@ fun IconTextRowButton(
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun FilledLoadingButton(
     modifier: Modifier = Modifier,
@@ -272,10 +271,8 @@ fun FilledLoadingButton(
         onClick = onclick
     ) {
         if (isLoading) {
-            CircularWavyProgressIndicator(
-                modifier = Modifier.size(32.dp),
-                color = Color(LocalAppTheme.current.colorAccent),
-                trackColor = Color(LocalAppTheme.current.buttonTextColor)
+            CustomCircularWavyProgressIndicator(
+                modifier = Modifier.size(32.dp)
             )
         } else {
             Box(
