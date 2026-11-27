@@ -1073,7 +1073,7 @@ class ModMailActivity : BaseActivity() {
                                         Column(
                                             modifier = Modifier
                                                 .fillMaxWidth()
-                                                .padding(16.dp)
+                                                .padding(horizontal = 16.dp)
                                         ) {
                                             conversation.owner?.let { owner ->
                                                 owner.displayName?.let { subreddit ->
@@ -1081,7 +1081,7 @@ class ModMailActivity : BaseActivity() {
                                                         PrimaryText(
                                                             stringResource(R.string.subreddit_activity, subreddit),
                                                             modifier = Modifier
-                                                                .padding(top = 16.dp, bottom = 8.dp),
+                                                                .padding(bottom = 8.dp),
                                                             fontSize = LocalTypography.current.fontSize.size20
                                                         )
                                                     }
