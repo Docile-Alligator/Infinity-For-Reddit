@@ -1004,8 +1004,8 @@ class ModMailActivity : BaseActivity() {
                             .distinctUntilChanged()
                             .collectAsStateWithLifecycle(null)
 
-                        val recentConvos = modMailUser.recentConvos.entries.toList()
-                        val recentComments = modMailUser.recentComments.entries.toList()
+                        val recentConvos = modMailUser.recentConvos.entries.toList().sortedByDescending { it.value.dateUTC }
+                        val recentComments = modMailUser.recentComments.entries.toList().sortedByDescending { it.value.dateUTC }
 
                         LaunchedEffect(Unit) {
                             conversationViewModel.loadUserData(modMailUser.name)
@@ -1291,7 +1291,7 @@ class ModMailActivity : BaseActivity() {
                                 }
                             }
 
-                            if (modMailUser.recentConvos.isNotEmpty()) {
+                            if (recentConvos.isNotEmpty()) {
                                 item {
                                     PrimaryText(
                                         R.string.recent_conversations,
@@ -1313,7 +1313,7 @@ class ModMailActivity : BaseActivity() {
                                 }
                             }
 
-                            if (modMailUser.recentComments.isNotEmpty()) {
+                            if (recentComments.isNotEmpty()) {
                                 item {
                                     PrimaryText(
                                         R.string.recent_comments,
