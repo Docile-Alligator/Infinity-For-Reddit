@@ -162,6 +162,7 @@ import ml.docilealligator.infinityforreddit.viewmodels.ModUserAction
 import retrofit2.Retrofit
 import javax.inject.Inject
 import javax.inject.Named
+import androidx.core.net.toUri
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class,
     ExperimentalMaterial3ExpressiveApi::class, ExperimentalGlideComposeApi::class
@@ -1177,7 +1178,11 @@ class ModMailActivity : BaseActivity() {
                                     key = { index -> recentComments[index].key }
                                 ) { index: Int ->
                                     RecentCommentView(recentComments[index].value, markwon) {
-
+                                        startActivity(
+                                            Intent(this@ModMailActivity, LinkResolverActivity::class.java).apply {
+                                                setData(recentComments[index].value.permalink.toUri())
+                                            }
+                                        )
                                     }
                                 }
                             }
@@ -2095,56 +2100,67 @@ class ModMailActivity : BaseActivity() {
             MarkdownUtils.createCustomTablesAdapter(this@ModMailActivity)
         }
 
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .padding(vertical = 4.dp)
-                .background(
-                    Color(LocalAppTheme.current.filledCardViewBackgroundColor),
-                    shape = RoundedCornerShape(16.dp)
-                )
-                .clip(RoundedCornerShape(16.dp))
-                .clickable {
-                    onClick()
-                }
-                .padding(vertical = 16.dp),
         ) {
-            SecondaryText(
-                dateElapsedString,
-                modifier = Modifier
-                    .padding(bottom = 4.dp)
-                    .padding(horizontal = 16.dp),
-                fontSize = LocalTypography.current.fontSize.size12
-            )
-
-            PrimaryText(
-                recentComment.title,
-                modifier = Modifier.padding(horizontal = 16.dp),
-                fontWeight = FontWeight.Bold
-            )
-
-            AndroidView(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                factory = { context ->
-                    markwonAdapter.setMarkdown(markwon, recentComment.comment)
-                    // Creates view
-                    RecyclerView(context).apply {
-                        isNestedScrollingEnabled = false
-                        layoutManager = LinearLayoutManagerBugFixed(context)
-                        adapter = markwonAdapter
-                    }
-                },
-                update = { view ->
-                    // View's been inflated or state read in this block has been updated
-                    // Add logic here if necessary
+                    .background(
+                        Color(LocalAppTheme.current.filledCardViewBackgroundColor),
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .clip(RoundedCornerShape(16.dp))
+                    .padding(vertical = 16.dp),
+            ) {
+                SecondaryText(
+                    dateElapsedString,
+                    modifier = Modifier
+                        .padding(bottom = 4.dp)
+                        .padding(horizontal = 16.dp),
+                    fontSize = LocalTypography.current.fontSize.size12
+                )
 
-                    // As selectedItem is read here, AndroidView will recompose
-                    // whenever the state changes
-                    // Example of Compose -> View communication
-                }
+                PrimaryText(
+                    recentComment.title,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    fontWeight = FontWeight.Bold
+                )
+
+                AndroidView(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                    factory = { context ->
+                        markwonAdapter.setMarkdown(markwon, recentComment.comment)
+                        // Creates view
+                        RecyclerView(context).apply {
+                            isNestedScrollingEnabled = false
+                            layoutManager = LinearLayoutManagerBugFixed(context)
+                            adapter = markwonAdapter
+                        }
+                    },
+                    update = { view ->
+                        // View's been inflated or state read in this block has been updated
+                        // Add logic here if necessary
+
+                        // As selectedItem is read here, AndroidView will recompose
+                        // whenever the state changes
+                        // Example of Compose -> View communication
+                    }
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .clip(RoundedCornerShape(16.dp))
+                    .clickable {
+                        onClick()
+                    }
             )
         }
     }
