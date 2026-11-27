@@ -122,6 +122,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSh
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed
 import ml.docilealligator.infinityforreddit.customviews.compose.AppTheme
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomCircularWavyProgressIndicator
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomHorizontalDivider
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingIndicator
@@ -1928,7 +1929,7 @@ class ModMailActivity : BaseActivity() {
                 maxLines = 3,
                 trailingIcon = {
                     if (isSendingMessage) {
-                        CircularWavyProgressIndicator(
+                        CustomCircularWavyProgressIndicator(
                             modifier = Modifier
                                 .padding(end = 8.dp)
                                 .size(28.dp)
