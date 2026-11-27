@@ -987,240 +987,265 @@ class ModMailActivity : BaseActivity() {
                 }
             }
         } else if (showUserInfo.value) {
-            CustomModalBottomSheet(onDismissRequest = { showUserInfo.value = false }) {
+            navigator.currentDestination?.contentKey?.let { conversation ->
                 modMailUser?.let { modMailUser ->
-                    val userData by conversationViewModel
-                        .userDataMap
-                        .map { it[modMailUser.name]}
-                        .distinctUntilChanged()
-                        .collectAsStateWithLifecycle(null)
+                    CustomModalBottomSheet(onDismissRequest = { showUserInfo.value = false }) {
+                        val userData by conversationViewModel
+                            .userDataMap
+                            .map { it[modMailUser.name]}
+                            .distinctUntilChanged()
+                            .collectAsStateWithLifecycle(null)
 
-                    val recentConvos = modMailUser.recentConvos.entries.toList()
-                    val recentComments = modMailUser.recentComments.entries.toList()
+                        val recentConvos = modMailUser.recentConvos.entries.toList()
+                        val recentComments = modMailUser.recentComments.entries.toList()
 
-                    LaunchedEffect(Unit) {
-                        conversationViewModel.loadUserData(modMailUser.name)
-                    }
+                        LaunchedEffect(Unit) {
+                            conversationViewModel.loadUserData(modMailUser.name)
+                        }
 
-                    LazyColumn {
-                        item {
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                userData?.let { userData ->
-                                    GlideImage(
-                                        modifier = Modifier
-                                            .size(72.dp),
-                                        model = userData.iconUrl,
-                                        failure = placeholder(R.drawable.subreddit_default_icon),
-                                        contentDescription = stringResource(R.string.content_description_user_avatar)
-                                    ) {
-                                        it.apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(144, 0)))
-                                    }
-
-                                    UserText(
-                                        "u/${modMailUser.name}",
-                                        modifier = Modifier.padding(16.dp),
-                                        fontSize = LocalTypography.current.fontSize.size18,
-                                        fontWeight = FontWeight.Bold
-                                    )
-
-                                    CustomFilledButton(
-                                        stringResId = R.string.view_profile
-                                    ) {
-                                        startActivity(Intent(this@ModMailActivity, ViewUserDetailActivity::class.java).apply {
-                                            putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, modMailUser.name)
-                                        })
-                                    }
-
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(16.dp)
-                                    ) {
-                                        Column {
-                                            PrimaryText(
-                                                R.string.post_karma,
-                                                fontWeight = FontWeight.Bold
-                                            )
-
-                                            PrimaryText(
-                                                userData.linkKarma.toString()
-                                            )
+                        LazyColumn {
+                            item {
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    userData?.let { userData ->
+                                        GlideImage(
+                                            modifier = Modifier
+                                                .size(72.dp),
+                                            model = userData.iconUrl,
+                                            failure = placeholder(R.drawable.subreddit_default_icon),
+                                            contentDescription = stringResource(R.string.content_description_user_avatar)
+                                        ) {
+                                            it.apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(144, 0)))
                                         }
 
-                                        Spacer(modifier = Modifier.weight(1f))
+                                        UserText(
+                                            "u/${modMailUser.name}",
+                                            modifier = Modifier.padding(16.dp),
+                                            fontSize = LocalTypography.current.fontSize.size18,
+                                            fontWeight = FontWeight.Bold
+                                        )
 
-                                        Column {
-                                            PrimaryText(
-                                                R.string.comment_karma,
-                                                fontWeight = FontWeight.Bold
-                                            )
-
-                                            PrimaryText(
-                                                userData.commentKarma.toString()
-                                            )
+                                        CustomFilledButton(
+                                            stringResId = R.string.view_profile
+                                        ) {
+                                            startActivity(Intent(this@ModMailActivity, ViewUserDetailActivity::class.java).apply {
+                                                putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, modMailUser.name)
+                                            })
                                         }
-                                    }
-                                } ?: run {
-                                    ShimmerSurface {
-                                        ShimmerContainer(
+
+                                        Row(
                                             modifier = Modifier
                                                 .fillMaxWidth()
+                                                .padding(16.dp)
                                         ) {
-                                            Column(
-                                                modifier = Modifier
-                                                    .fillMaxWidth(),
-                                                horizontalAlignment = Alignment.CenterHorizontally
-                                            ) {
-                                                Box(
-                                                    modifier = Modifier
-                                                        .clip(CircleShape)
-                                                        .size(72.dp)
-                                                        .fillMaxWidth()
-                                                        .height(16.dp)
-                                                        .background(Color.Gray)
+                                            Column {
+                                                PrimaryText(
+                                                    R.string.post_karma,
+                                                    fontWeight = FontWeight.Bold
+                                                )
+
+                                                PrimaryText(
+                                                    userData.linkKarma.toString()
+                                                )
+                                            }
+
+                                            Spacer(modifier = Modifier.weight(1f))
+
+                                            Column {
+                                                PrimaryText(
+                                                    R.string.comment_karma,
+                                                    fontWeight = FontWeight.Bold
+                                                )
+
+                                                PrimaryText(
+                                                    userData.commentKarma.toString()
                                                 )
                                             }
                                         }
 
                                         Column(
                                             modifier = Modifier
-                                                .fillMaxWidth(),
-                                            horizontalAlignment = Alignment.CenterHorizontally
-                                        ) {
-                                            UserText(
-                                                "u/${modMailUser.name}",
-                                                modifier = Modifier.padding(16.dp),
-                                                fontSize = LocalTypography.current.fontSize.size18,
-                                                fontWeight = FontWeight.Bold
-                                            )
-
-                                            CustomFilledButton(
-                                                stringResId = R.string.view_profile
-                                            ) {
-                                                startActivity(Intent(this@ModMailActivity, ViewUserDetailActivity::class.java).apply {
-                                                    putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, modMailUser.name)
-                                                })
-                                            }
-                                        }
-
-                                        ShimmerContainer(
-                                            modifier = Modifier
                                                 .fillMaxWidth()
+                                                .padding(16.dp)
                                         ) {
-                                            Row(
+                                            conversation.owner?.let { owner ->
+                                                owner.displayName?.let { subreddit ->
+                                                    if (owner.type.equals("subreddit")) {
+                                                        PrimaryText(
+                                                            stringResource(R.string.subreddit_activity, subreddit),
+                                                            modifier = Modifier
+                                                                .padding(top = 16.dp, bottom = 8.dp),
+                                                            fontSize = LocalTypography.current.fontSize.size20
+                                                        )
+                                                    }
+                                                }
+                                            }
+
+                                            PrimaryText(
+                                                if (modMailUser.isApproved()) R.string.approved_user else R.string.not_approved_user
+                                            )
+                                        }
+                                    } ?: run {
+                                        ShimmerSurface {
+                                            ShimmerContainer(
                                                 modifier = Modifier
-                                                    .fillMaxSize()
-                                                    .padding(16.dp)
+                                                    .fillMaxWidth()
                                             ) {
                                                 Column(
                                                     modifier = Modifier
-                                                        .weight(0.25f)
+                                                        .fillMaxWidth(),
+                                                    horizontalAlignment = Alignment.CenterHorizontally
                                                 ) {
                                                     Box(
                                                         modifier = Modifier
-                                                            .clip(RoundedCornerShape(16.dp))
+                                                            .clip(CircleShape)
+                                                            .size(72.dp)
                                                             .fillMaxWidth()
-                                                            .height(18.dp)
-                                                            .background(Color.Gray)
-                                                    )
-
-                                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                                    Box(
-                                                        modifier = Modifier
-                                                            .clip(RoundedCornerShape(16.dp))
-                                                            .fillMaxWidth()
-                                                            .height(18.dp)
+                                                            .height(16.dp)
                                                             .background(Color.Gray)
                                                     )
                                                 }
+                                            }
 
-                                                Spacer(modifier = Modifier.weight(0.5f))
+                                            Column(
+                                                modifier = Modifier
+                                                    .fillMaxWidth(),
+                                                horizontalAlignment = Alignment.CenterHorizontally
+                                            ) {
+                                                UserText(
+                                                    "u/${modMailUser.name}",
+                                                    modifier = Modifier.padding(16.dp),
+                                                    fontSize = LocalTypography.current.fontSize.size18,
+                                                    fontWeight = FontWeight.Bold
+                                                )
 
-                                                Column(
-                                                    modifier = Modifier
-                                                        .fillMaxHeight()
-                                                        .weight(0.25f)
+                                                CustomFilledButton(
+                                                    stringResId = R.string.view_profile
                                                 ) {
-                                                    Box(
-                                                        modifier = Modifier
-                                                            .clip(RoundedCornerShape(10.dp))
-                                                            .fillMaxWidth()
-                                                            .height(18.dp)
-                                                            .background(Color.Gray)
-                                                    )
+                                                    startActivity(Intent(this@ModMailActivity, ViewUserDetailActivity::class.java).apply {
+                                                        putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, modMailUser.name)
+                                                    })
+                                                }
+                                            }
 
-                                                    Spacer(modifier = Modifier.height(8.dp))
-
-                                                    Box(
+                                            ShimmerContainer(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                            ) {
+                                                Row(
+                                                    modifier = Modifier
+                                                        .fillMaxSize()
+                                                        .padding(16.dp)
+                                                ) {
+                                                    Column(
                                                         modifier = Modifier
-                                                            .clip(RoundedCornerShape(10.dp))
-                                                            .fillMaxWidth()
-                                                            .height(18.dp)
-                                                            .background(Color.Gray)
-                                                    )
+                                                            .weight(0.25f)
+                                                    ) {
+                                                        Box(
+                                                            modifier = Modifier
+                                                                .clip(RoundedCornerShape(16.dp))
+                                                                .fillMaxWidth()
+                                                                .height(18.dp)
+                                                                .background(Color.Gray)
+                                                        )
+
+                                                        Spacer(modifier = Modifier.height(8.dp))
+
+                                                        Box(
+                                                            modifier = Modifier
+                                                                .clip(RoundedCornerShape(16.dp))
+                                                                .fillMaxWidth()
+                                                                .height(18.dp)
+                                                                .background(Color.Gray)
+                                                        )
+                                                    }
+
+                                                    Spacer(modifier = Modifier.weight(0.5f))
+
+                                                    Column(
+                                                        modifier = Modifier
+                                                            .fillMaxHeight()
+                                                            .weight(0.25f)
+                                                    ) {
+                                                        Box(
+                                                            modifier = Modifier
+                                                                .clip(RoundedCornerShape(10.dp))
+                                                                .fillMaxWidth()
+                                                                .height(18.dp)
+                                                                .background(Color.Gray)
+                                                        )
+
+                                                        Spacer(modifier = Modifier.height(8.dp))
+
+                                                        Box(
+                                                            modifier = Modifier
+                                                                .clip(RoundedCornerShape(10.dp))
+                                                                .fillMaxWidth()
+                                                                .height(18.dp)
+                                                                .background(Color.Gray)
+                                                        )
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
-                        }
 
-                        if (modMailUser.recentConvos.isNotEmpty()) {
-                            item {
-                                PrimaryText(
-                                    R.string.recent_conversations,
-                                    modifier = Modifier
-                                        .padding(top = 16.dp, bottom = 4.dp)
-                                        .padding(horizontal = 16.dp),
-                                    fontSize = LocalTypography.current.fontSize.size20
-                                )
-                            }
-
-                            items(
-                                count = recentConvos.size,
-                                contentType = { _ -> 1 },
-                                key = { index -> recentConvos[index].value.id }
-                            ) { index: Int ->
-                                RecentConvoView(recentConvos[index].value) {
-
-                                }
-                            }
-                        }
-
-                        if (modMailUser.recentComments.isNotEmpty()) {
-                            item {
-                                PrimaryText(
-                                    R.string.recent_comments,
-                                    modifier = Modifier
-                                        .padding(top = 16.dp, bottom = 4.dp)
-                                        .padding(horizontal = 16.dp),
-                                    fontSize = LocalTypography.current.fontSize.size20
-                                )
-                            }
-
-                            items(
-                                count = recentComments.size,
-                                contentType = { _ -> 1 },
-                                key = { index -> recentComments[index].key }
-                            ) { index: Int ->
-                                RecentCommentView(recentComments[index].value, markwon) {
-                                    startActivity(
-                                        Intent(this@ModMailActivity, LinkResolverActivity::class.java).apply {
-                                            setData(recentComments[index].value.permalink.toUri())
-                                        }
+                            if (modMailUser.recentConvos.isNotEmpty()) {
+                                item {
+                                    PrimaryText(
+                                        R.string.recent_conversations,
+                                        modifier = Modifier
+                                            .padding(top = 16.dp, bottom = 4.dp)
+                                            .padding(horizontal = 16.dp),
+                                        fontSize = LocalTypography.current.fontSize.size20
                                     )
                                 }
-                            }
-                        }
 
-                        if (modMailUser.recentConvos.isNotEmpty() || modMailUser.recentComments.isNotEmpty()) {
-                            item {
-                                Spacer(modifier = Modifier.height(12.dp))
+                                items(
+                                    count = recentConvos.size,
+                                    contentType = { _ -> 1 },
+                                    key = { index -> recentConvos[index].value.id }
+                                ) { index: Int ->
+                                    RecentConvoView(recentConvos[index].value) {
+
+                                    }
+                                }
+                            }
+
+                            if (modMailUser.recentComments.isNotEmpty()) {
+                                item {
+                                    PrimaryText(
+                                        R.string.recent_comments,
+                                        modifier = Modifier
+                                            .padding(top = 16.dp, bottom = 4.dp)
+                                            .padding(horizontal = 16.dp),
+                                        fontSize = LocalTypography.current.fontSize.size20
+                                    )
+                                }
+
+                                items(
+                                    count = recentComments.size,
+                                    contentType = { _ -> 1 },
+                                    key = { index -> recentComments[index].key }
+                                ) { index: Int ->
+                                    RecentCommentView(recentComments[index].value, markwon) {
+                                        startActivity(
+                                            Intent(this@ModMailActivity, LinkResolverActivity::class.java).apply {
+                                                setData(recentComments[index].value.permalink.toUri())
+                                            }
+                                        )
+                                    }
+                                }
+                            }
+
+                            if (modMailUser.recentConvos.isNotEmpty() || modMailUser.recentComments.isNotEmpty()) {
+                                item {
+                                    Spacer(modifier = Modifier.height(12.dp))
+                                }
                             }
                         }
                     }
