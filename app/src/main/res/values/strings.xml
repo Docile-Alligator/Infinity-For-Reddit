@@ -1821,13 +1821,16 @@
     <string name="subreddit_activity">R/%1$s Activity</string>
     <string name="approved_user">Approved user</string>
     <string name="not_approved_user">Not approved user</string>
+    <string name="content_description_approval_info_icon">Approval info icon</string>
     <string name="banned_user">Banned user</string>
     <string name="banned_until">Banned until %1$s</string>
     <string name="permanent">Permanent</string>
     <string name="ban_reason">Reason: %1$s</string>
     <string name="not_banned_user">Not banned user</string>
+    <string name="content_description_ban_info_icon">Ban info icon</string>
     <string name="muted_user">Muted user</string>
     <string name="muted_until">Muted until %1$s</string>
     <string name="not_muted_user">Not muted user</string>
     <string name="mute_count_info">%1$d previous mute(s) </string>
+    <string name="content_description_mute_info_icon">Mute info icon</string>
 </resources>

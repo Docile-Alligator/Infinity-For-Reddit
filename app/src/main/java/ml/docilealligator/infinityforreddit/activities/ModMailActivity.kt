@@ -34,6 +34,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -134,6 +135,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.FilledLoadingBut
 import ml.docilealligator.infinityforreddit.customviews.compose.IconTextRowButton
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalAppTheme
 import ml.docilealligator.infinityforreddit.customviews.compose.LocalTypography
+import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryIcon
 import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SecondaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SendMessageIconButton
@@ -1070,75 +1072,6 @@ class ModMailActivity : BaseActivity() {
                                                 )
                                             }
                                         }
-
-                                        Column(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(horizontal = 16.dp)
-                                        ) {
-                                            conversation.owner?.let { owner ->
-                                                owner.displayName?.let { subreddit ->
-                                                    if (owner.type.equals("subreddit")) {
-                                                        PrimaryText(
-                                                            stringResource(R.string.subreddit_activity, subreddit),
-                                                            modifier = Modifier
-                                                                .padding(bottom = 8.dp),
-                                                            fontSize = LocalTypography.current.fontSize.size20
-                                                        )
-                                                    }
-                                                }
-                                            }
-
-                                            PrimaryText(
-                                                if (modMailUser.isApproved()) R.string.approved_user else R.string.not_approved_user
-                                            )
-
-                                            if (modMailUser.isBanned()) {
-                                                val bannedUntil = remember { getFormattedTime(modMailUser.banStatus.endDateUTC, mTimeFormatPattern) }
-
-                                                PrimaryText(
-                                                    R.string.banned_user
-                                                )
-
-                                                PrimaryText(
-                                                    if (modMailUser.banStatus.isPermanent) {
-                                                        stringResource(R.string.permanent)
-                                                    } else {
-                                                        stringResource(R.string.banned_until, bannedUntil)
-                                                    }
-                                                )
-
-                                                PrimaryText(
-                                                    stringResource(R.string.ban_reason, modMailUser.banStatus.reason)
-                                                )
-                                            } else {
-                                                PrimaryText(
-                                                    R.string.not_banned_user
-                                                )
-                                            }
-
-                                            if (modMailUser.isMuted()) {
-                                                PrimaryText(
-                                                    R.string.muted_user
-                                                )
-
-                                                modMailUser.muteStatus.endDate?.let {
-                                                    val mutedUntil = remember { getFormattedTime(modMailUser.muteStatus.endDateUTC, mTimeFormatPattern) }
-
-                                                    PrimaryText(
-                                                        stringResource(R.string.muted_until, mutedUntil)
-                                                    )
-                                                }
-                                            } else {
-                                                PrimaryText(
-                                                    R.string.not_muted_user
-                                                )
-                                            }
-
-                                            PrimaryText(
-                                                stringResource(R.string.mute_count_info, modMailUser.muteStatus.muteCount)
-                                            )
-                                        }
                                     } ?: run {
                                         ShimmerSurface {
                                             ShimmerContainer(
@@ -1240,6 +1173,117 @@ class ModMailActivity : BaseActivity() {
                                                         )
                                                     }
                                                 }
+                                            }
+                                        }
+                                    }
+
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 16.dp)
+                                    ) {
+                                        conversation.owner?.let { owner ->
+                                            owner.displayName?.let { subreddit ->
+                                                if (owner.type.equals("subreddit")) {
+                                                    PrimaryText(
+                                                        stringResource(R.string.subreddit_activity, subreddit),
+                                                        modifier = Modifier
+                                                            .padding(bottom = 8.dp),
+                                                        fontSize = LocalTypography.current.fontSize.size20
+                                                    )
+                                                }
+                                            }
+                                        }
+
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            PrimaryIcon(
+                                                modifier = Modifier.size(24.dp),
+                                                drawableId = if (modMailUser.isApproved()) R.drawable.ic_approved_user_rounded_24dp else R.drawable.ic_disapproved_user_rounded_24dp,
+                                                contentDescription = stringResource(R.string.content_description_approval_info_icon)
+                                            )
+
+                                            Spacer(modifier = Modifier.width(16.dp))
+
+                                            PrimaryText(
+                                                if (modMailUser.isApproved()) R.string.approved_user else R.string.not_approved_user
+                                            )
+                                        }
+
+                                        Row(
+                                            modifier = Modifier.padding(top = 8.dp),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            PrimaryIcon(
+                                                modifier = Modifier.size(24.dp),
+                                                drawableId = if (modMailUser.isBanned()) R.drawable.ic_ban_rounded_24dp else R.drawable.ic_check_circle_day_night_24dp,
+                                                contentDescription = stringResource(R.string.content_description_ban_info_icon)
+                                            )
+
+                                            Spacer(modifier = Modifier.width(16.dp))
+
+                                            if (modMailUser.isBanned()) {
+                                                val bannedUntil = remember { getFormattedTime(modMailUser.banStatus.endDateUTC, mTimeFormatPattern) }
+
+                                                Column {
+                                                    PrimaryText(
+                                                        R.string.banned_user
+                                                    )
+
+                                                    PrimaryText(
+                                                        if (modMailUser.banStatus.isPermanent) {
+                                                            stringResource(R.string.permanent)
+                                                        } else {
+                                                            stringResource(R.string.banned_until, bannedUntil)
+                                                        }
+                                                    )
+
+                                                    PrimaryText(
+                                                        stringResource(R.string.ban_reason, modMailUser.banStatus.reason)
+                                                    )
+                                                }
+                                            } else {
+                                                PrimaryText(
+                                                    R.string.not_banned_user
+                                                )
+                                            }
+                                        }
+
+                                        Row(
+                                            modifier = Modifier.padding(top = 8.dp),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            PrimaryIcon(
+                                                modifier = Modifier.size(24.dp),
+                                                drawableId = if (modMailUser.isMuted()) R.drawable.ic_mute_24dp else R.drawable.ic_unmute_24dp,
+                                                contentDescription = stringResource(R.string.content_description_mute_info_icon)
+                                            )
+
+                                            Spacer(modifier = Modifier.width(16.dp))
+
+                                            Column {
+                                                if (modMailUser.isMuted()) {
+                                                    PrimaryText(
+                                                        R.string.muted_user
+                                                    )
+
+                                                    modMailUser.muteStatus.endDate?.let {
+                                                        val mutedUntil = remember { getFormattedTime(modMailUser.muteStatus.endDateUTC, mTimeFormatPattern) }
+
+                                                        PrimaryText(
+                                                            stringResource(R.string.muted_until, mutedUntil)
+                                                        )
+                                                    }
+                                                } else {
+                                                    PrimaryText(
+                                                        R.string.not_muted_user
+                                                    )
+                                                }
+
+                                                PrimaryText(
+                                                    stringResource(R.string.mute_count_info, modMailUser.muteStatus.muteCount)
+                                                )
                                             }
                                         }
                                     }
