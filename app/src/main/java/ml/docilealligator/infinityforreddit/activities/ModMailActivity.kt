@@ -1012,6 +1012,14 @@ class ModMailActivity : BaseActivity() {
                                         fontWeight = FontWeight.Bold
                                     )
 
+                                    CustomFilledButton(
+                                        stringResId = R.string.view_profile
+                                    ) {
+                                        startActivity(Intent(this@ModMailActivity, ViewUserDetailActivity::class.java).apply {
+                                            putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, modMailUser.name)
+                                        })
+                                    }
+
                                     Row(
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -1074,6 +1082,14 @@ class ModMailActivity : BaseActivity() {
                                                 fontSize = LocalTypography.current.fontSize.size18,
                                                 fontWeight = FontWeight.Bold
                                             )
+
+                                            CustomFilledButton(
+                                                stringResId = R.string.view_profile
+                                            ) {
+                                                startActivity(Intent(this@ModMailActivity, ViewUserDetailActivity::class.java).apply {
+                                                    putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, modMailUser.name)
+                                                })
+                                            }
                                         }
 
                                         ShimmerContainer(

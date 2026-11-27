@@ -1817,4 +1817,5 @@
     <string name="recent_conversations">Recent Conversations</string>
     <string name="recent_comments">Recent Comments</string>
     <string name="last_updated_with_time">Last updated: %1$s</string>
+    <string name="view_profile">View profile</string>
 </resources>
