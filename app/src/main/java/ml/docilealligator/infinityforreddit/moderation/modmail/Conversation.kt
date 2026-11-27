@@ -19,8 +19,6 @@ import org.json.JSONObject
 import retrofit2.Response
 import retrofit2.Retrofit
 import java.io.IOException
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 
 @Parcelize
 data class Conversation(
@@ -185,9 +183,10 @@ data class Conversation(
             if (!response.isSuccessful) {
                 // The response.body() will be the current conversation object but without the new message. Weird.
                 response.errorBody()?.string().let {
-                    val redditError: RedditError? = Gson().fromJson(it, RedditError::class.java)
-                    redditError?.let { redditError ->
-                        throw IOException(redditError.reason ?: "Could not send message")
+                    val modMailSendMessageError: ModMailSendMessageError? = Gson().fromJson(it,
+                        ModMailSendMessageError::class.java)
+                    modMailSendMessageError?.let { modMailSendMessageError ->
+                        throw IOException(modMailSendMessageError.explanation ?: modMailSendMessageError.reason ?: "None")
                     }
                 }
 
