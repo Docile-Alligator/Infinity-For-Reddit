@@ -298,10 +298,8 @@ data class Conversation(
                             )
                             .create()
 
-                        // This conversation will have multiple duplicated authors. For APPROVE and DISAPPROVE, there won't be a new mod action.
-                        val conversation = if (modUserAction !is ModUserAction.UNBAN
-                            && modUserAction !is ModUserAction.APPROVE
-                            && modUserAction !is ModUserAction.DISAPPROVE) parseConversation(
+                        // This conversation will have multiple duplicated authors. Only MUTE will come with a new message in the conversation
+                        val conversation = if (modUserAction is ModUserAction.MUTE) parseConversation(
                             gson,
                             responseJson.getString(JSONUtils.CONVERSATIONS_KEY),
                             responseJson.getJSONObject(JSONUtils.MESSAGES_KEY),
