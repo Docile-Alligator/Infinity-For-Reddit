@@ -1160,31 +1160,37 @@ class ModMailActivity : BaseActivity() {
 
                                 }
                             }
+                        }
 
-                            if (modMailUser.recentComments.isNotEmpty()) {
-                                item {
-                                    PrimaryText(
-                                        R.string.recent_comments,
-                                        modifier = Modifier
-                                            .padding(top = 16.dp, bottom = 4.dp)
-                                            .padding(horizontal = 16.dp),
-                                        fontSize = LocalTypography.current.fontSize.size20
+                        if (modMailUser.recentComments.isNotEmpty()) {
+                            item {
+                                PrimaryText(
+                                    R.string.recent_comments,
+                                    modifier = Modifier
+                                        .padding(top = 16.dp, bottom = 4.dp)
+                                        .padding(horizontal = 16.dp),
+                                    fontSize = LocalTypography.current.fontSize.size20
+                                )
+                            }
+
+                            items(
+                                count = recentComments.size,
+                                contentType = { _ -> 1 },
+                                key = { index -> recentComments[index].key }
+                            ) { index: Int ->
+                                RecentCommentView(recentComments[index].value, markwon) {
+                                    startActivity(
+                                        Intent(this@ModMailActivity, LinkResolverActivity::class.java).apply {
+                                            setData(recentComments[index].value.permalink.toUri())
+                                        }
                                     )
                                 }
+                            }
+                        }
 
-                                items(
-                                    count = recentComments.size,
-                                    contentType = { _ -> 1 },
-                                    key = { index -> recentComments[index].key }
-                                ) { index: Int ->
-                                    RecentCommentView(recentComments[index].value, markwon) {
-                                        startActivity(
-                                            Intent(this@ModMailActivity, LinkResolverActivity::class.java).apply {
-                                                setData(recentComments[index].value.permalink.toUri())
-                                            }
-                                        )
-                                    }
-                                }
+                        if (modMailUser.recentConvos.isNotEmpty() || modMailUser.recentComments.isNotEmpty()) {
+                            item {
+                                Spacer(modifier = Modifier.height(12.dp))
                             }
                         }
                     }
