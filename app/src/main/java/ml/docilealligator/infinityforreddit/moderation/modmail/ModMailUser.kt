@@ -142,7 +142,20 @@ data class MuteStatus(
 
     @SerializedName("reason")
     val reason: String
-): Parcelable
+): Parcelable {
+    @IgnoredOnParcel
+    @Transient
+    private var _endDateUTC: Long? = null
+
+    val endDateUTC: Long
+        get() {
+            if (_endDateUTC == null) {
+                _endDateUTC = endDate?.toEpochMilliForModMail() ?: 0
+            }
+
+            return _endDateUTC!!
+        }
+}
 
 @Parcelize
 data class BanStatus(

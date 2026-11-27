@@ -1115,6 +1115,28 @@ class ModMailActivity : BaseActivity() {
                                                     R.string.not_banned_user
                                                 )
                                             }
+
+                                            PrimaryText(
+                                                stringResource(R.string.mute_count_info, modMailUser.muteStatus.muteCount)
+                                            )
+
+                                            if (modMailUser.isMuted()) {
+                                                PrimaryText(
+                                                    R.string.muted_user
+                                                )
+
+                                                modMailUser.muteStatus.endDate?.let {
+                                                    val mutedUntil = remember { getFormattedTime(modMailUser.muteStatus.endDateUTC, mTimeFormatPattern) }
+
+                                                    PrimaryText(
+                                                        stringResource(R.string.muted_until, mutedUntil)
+                                                    )
+                                                }
+                                            } else {
+                                                PrimaryText(
+                                                    R.string.not_muted_user
+                                                )
+                                            }
                                         }
                                     } ?: run {
                                         ShimmerSurface {
