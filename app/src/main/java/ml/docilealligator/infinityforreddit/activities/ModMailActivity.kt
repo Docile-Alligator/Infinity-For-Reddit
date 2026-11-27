@@ -1196,6 +1196,7 @@ class ModMailActivity : BaseActivity() {
                                         }
 
                                         Row(
+                                            modifier = Modifier.padding(top = 8.dp),
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
                                             PrimaryIcon(
