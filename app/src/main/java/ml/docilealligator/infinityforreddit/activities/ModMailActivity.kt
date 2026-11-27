@@ -877,6 +877,8 @@ class ModMailActivity : BaseActivity() {
                                         getString(R.string.unbanned),
                                         Toast.LENGTH_SHORT
                                     ).show()
+
+                                    refreshConversationMessagesTrigger.value = !refreshConversationMessagesTrigger.value
                                 } catch (e: Exception) {
                                     if (e is CancellationException) {
                                         throw e

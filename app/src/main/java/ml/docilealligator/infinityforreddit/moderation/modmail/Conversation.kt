@@ -299,7 +299,8 @@ data class Conversation(
                             .create()
 
                         // This conversation will have multiple duplicated authors. For APPROVE and DISAPPROVE, there won't be a new mod action.
-                        val conversation = if (modUserAction !is ModUserAction.APPROVE
+                        val conversation = if (modUserAction !is ModUserAction.UNBAN
+                            && modUserAction !is ModUserAction.APPROVE
                             && modUserAction !is ModUserAction.DISAPPROVE) parseConversation(
                             gson,
                             responseJson.getString(JSONUtils.CONVERSATIONS_KEY),
