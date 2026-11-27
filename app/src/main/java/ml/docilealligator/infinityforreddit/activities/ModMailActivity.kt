@@ -1116,10 +1116,6 @@ class ModMailActivity : BaseActivity() {
                                                 )
                                             }
 
-                                            PrimaryText(
-                                                stringResource(R.string.mute_count_info, modMailUser.muteStatus.muteCount)
-                                            )
-
                                             if (modMailUser.isMuted()) {
                                                 PrimaryText(
                                                     R.string.muted_user
@@ -1137,6 +1133,10 @@ class ModMailActivity : BaseActivity() {
                                                     R.string.not_muted_user
                                                 )
                                             }
+
+                                            PrimaryText(
+                                                stringResource(R.string.mute_count_info, modMailUser.muteStatus.muteCount)
+                                            )
                                         }
                                     } ?: run {
                                         ShimmerSurface {
