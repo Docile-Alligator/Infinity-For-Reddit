@@ -389,13 +389,13 @@ interface RedditAPIKt {
 
     @GET("/user/{username}/about.json?raw_json=1")
     suspend fun getUserData(
-        @HeaderMap headers: MutableMap<String, String>,
+        @HeaderMap headers: Map<String, String>,
         @Path("username") username: String
     ): Response<String>
 
     @GET("/subreddits/mine/moderator?raw_json=1&limit=100&sr_detail=1&show=all")
     suspend fun getModeratedSubreddits(
-        @HeaderMap headers: MutableMap<String, String>,
+        @HeaderMap headers: Map<String, String>,
         @Query("after") after: String?
     ): Response<String>
 }

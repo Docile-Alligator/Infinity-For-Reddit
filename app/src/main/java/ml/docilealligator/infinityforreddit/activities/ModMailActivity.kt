@@ -718,6 +718,7 @@ class ModMailActivity : BaseActivity() {
                         loadState,
                         isRefreshingConversations,
                         navigator,
+                        page,
                         listState,
                         onRefresh = {
                             conversationViewModel.refreshConversations(getRepository(page))
@@ -1631,6 +1632,7 @@ class ModMailActivity : BaseActivity() {
         loadState: DataLoadState<Unit>,
         isManualRefreshing: Boolean,
         navigator: ThreePaneScaffoldNavigator<Conversation>,
+        page: Int,
         listState: LazyListState,
         onRefresh: () -> Unit,
         onRetryPagination: () -> Unit,
@@ -1677,6 +1679,11 @@ class ModMailActivity : BaseActivity() {
                                             conversation
                                         )
                                     }
+
+                                    conversationViewModel.readConversation(
+                                        it[index],
+                                        getRepository(page)
+                                    )
                                 },
                                 onItemLongClick = { conversation ->
                                     onConversationLongClick(conversation)
@@ -1807,6 +1814,7 @@ class ModMailActivity : BaseActivity() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .background(if (!conversation.isRead) Color(LocalAppTheme.current.unreadMessageBackgroundColor) else Color.Transparent)
                 .clickable { onItemClick(conversation) }
                 .combinedClickable(
                     onClick = { onItemClick(conversation) },

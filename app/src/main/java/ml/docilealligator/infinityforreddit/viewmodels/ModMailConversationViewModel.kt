@@ -107,6 +107,22 @@ class ModMailConversationViewModel(
         repository.executeModConversationAction(conversation, modConversationAction)
     }
 
+    fun readConversation(
+        conversation: Conversation,
+        repository: ModMailConversationRepository
+    ) {
+        viewModelScope.launch {
+            try {
+                executeModConversationAction(conversation, ModConversationAction.READ, repository)
+                conversation.isRead = true
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     fun switchState(state: ModMailState) {
         if (_currentState.value != state) {
             resetState()

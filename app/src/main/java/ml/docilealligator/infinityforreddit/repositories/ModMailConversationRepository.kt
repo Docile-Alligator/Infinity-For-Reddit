@@ -270,6 +270,9 @@ class ModMailConversationRepository(
         return false
     }
 
+    suspend fun markConversationAsRead() {
+
+    }
 
     fun resetState() {
         _conversations.value = null
