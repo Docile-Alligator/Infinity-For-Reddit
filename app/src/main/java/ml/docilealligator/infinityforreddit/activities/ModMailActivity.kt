@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.activities
 
+import android.R.attr.checked
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -53,6 +54,8 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
@@ -137,6 +140,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.PrimaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SecondaryText
 import ml.docilealligator.infinityforreddit.customviews.compose.SendMessageIconButton
 import ml.docilealligator.infinityforreddit.customviews.compose.SubredditText
+import ml.docilealligator.infinityforreddit.customviews.compose.SwitchRow
 import ml.docilealligator.infinityforreddit.customviews.compose.ThemedTopAppBar
 import ml.docilealligator.infinityforreddit.customviews.compose.ToolbarIcon
 import ml.docilealligator.infinityforreddit.customviews.compose.UserText
@@ -154,6 +158,7 @@ import ml.docilealligator.infinityforreddit.repositories.ModMailConversationRepo
 import ml.docilealligator.infinityforreddit.state.DataLoadState
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils
 import ml.docilealligator.infinityforreddit.utils.Utils
+import ml.docilealligator.infinityforreddit.utils.deriveContrastingColor
 import ml.docilealligator.infinityforreddit.utils.getFormattedTime
 import ml.docilealligator.infinityforreddit.viewmodels.ModConversationAction
 import ml.docilealligator.infinityforreddit.viewmodels.ModMailConversationViewModel
@@ -201,7 +206,7 @@ class ModMailActivity : BaseActivity() {
         }
 
         conversationViewModel = ViewModelProvider.create(this, ModMailConversationViewModel.Factory(
-            mRedditDataRoomDatabase, mOauthRetrofit, accessToken!!, mSharedPreferences))[ModMailConversationViewModel::class]
+            mRedditDataRoomDatabase, mOauthRetrofit, accessToken!!, accountName, mSharedPreferences))[ModMailConversationViewModel::class]
 
         val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
         windowInsetsController.isAppearanceLightStatusBars = customThemeWrapper.isLightStatusBar
@@ -257,6 +262,8 @@ class ModMailActivity : BaseActivity() {
                         remember { mutableStateOf(false) },
                         remember { mutableStateOf(false) }
                     )
+
+                    var showSelectSubredditsSheet by remember { mutableStateOf(false) }
 
                     fun getNavigator(page: Int): ThreePaneScaffoldNavigator<Conversation> {
                         return when(page) {
@@ -319,6 +326,18 @@ class ModMailActivity : BaseActivity() {
                                                     }
                                                 )
                                             }
+
+                                            DropdownMenuItem(
+                                                text = {
+                                                    PrimaryText(
+                                                        R.string.action_select_subreddits
+                                                    )
+                                                },
+                                                onClick = {
+                                                    isToolbarMenuOpen = false
+                                                    showSelectSubredditsSheet = true
+                                                }
+                                            )
 
                                             if (getNavigator(selectedTabIndex).currentDestination?.contentKey != null) {
                                                 DropdownMenuItem(
@@ -442,6 +461,101 @@ class ModMailActivity : BaseActivity() {
                                     showUserInfoStates[page],
                                     getNavigator(page)
                                 )
+                            }
+                        }
+
+                        if (showSelectSubredditsSheet) {
+                            val moderatedSubreddits by conversationViewModel.moderatedSubreddits.collectAsStateWithLifecycle()
+                            val unselectedSubreddits by conversationViewModel.unselectedSubreddits.collectAsStateWithLifecycle()
+                            val allSubredditsSelected by conversationViewModel.allSubredditsSelected.collectAsStateWithLifecycle()
+                            val isLoadingModeratedSubreddits by conversationViewModel.isLoadingModeratedSubreddits.collectAsStateWithLifecycle()
+
+                            LaunchedEffect(Unit) {
+                                conversationViewModel.loadModeratedSubreddits()
+                            }
+
+                            fun onToggleSubreddit(subredditId: String) {
+                                conversationViewModel.selectSubreddit(subredditId)
+                            }
+
+                            CustomModalBottomSheet(onDismissRequest = { showSelectSubredditsSheet = false }) {
+                                LazyColumn {
+                                    item {
+                                        PrimaryText(
+                                            stringResource(R.string.select_subreddits),
+                                            modifier = Modifier.padding(16.dp),
+                                            fontSize = LocalTypography.current.fontSize.size18,
+                                            fontWeight = FontWeight.Bold
+                                        )
+
+                                        SwitchRow(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            checked = allSubredditsSelected,
+                                            title = stringResource(R.string.all_subreddits)
+                                        ) {
+                                            conversationViewModel.setAllSubredditsSelected(!allSubredditsSelected)
+                                        }
+                                    }
+
+                                    moderatedSubreddits?.let {
+                                        items(
+                                            count = it.size,
+                                            contentType = { _ -> 1 },
+                                            key = { index -> index }
+                                        ) { index: Int ->
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .clickable {
+                                                        onToggleSubreddit(it[index].id)
+                                                    }
+                                                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                GlideImage(
+                                                    modifier = Modifier
+                                                        .size(36.dp),
+                                                    model = it[index].iconUrl,
+                                                    failure = placeholder(R.drawable.subreddit_default_icon),
+                                                    contentDescription = stringResource(R.string.content_description_subreddit_icon)
+                                                ) {
+                                                    it.apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(72, 0)))
+                                                }
+
+                                                PrimaryText(
+                                                    it[index].name,
+                                                    modifier = Modifier.padding(horizontal = 16.dp)
+                                                )
+
+                                                Spacer(modifier = Modifier.weight(1f))
+
+                                                Switch(
+                                                    checked = unselectedSubreddits.contains(it[index].id),
+                                                    onCheckedChange = { selected ->
+                                                        onToggleSubreddit(it[index].id)
+                                                    },
+                                                    colors = SwitchDefaults.colors(
+                                                        checkedThumbColor = Color(LocalAppTheme.current.colorAccent),
+                                                        checkedTrackColor = Color(deriveContrastingColor(LocalAppTheme.current.colorAccent))
+                                                    )
+                                                )
+                                            }
+                                        }
+                                    } ?: run {
+                                        if (isLoadingModeratedSubreddits) {
+                                            item {
+                                                Column(
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .padding(16.dp),
+                                                    horizontalAlignment = Alignment.CenterHorizontally
+                                                ) {
+                                                    CustomLoadingIndicator()
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

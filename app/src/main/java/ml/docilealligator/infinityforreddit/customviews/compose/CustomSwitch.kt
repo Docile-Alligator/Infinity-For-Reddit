@@ -36,10 +36,7 @@ fun SwitchRow(
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = title,
-            color = Color(LocalAppTheme.current.primaryTextColor)
-        )
+        PrimaryText(title)
 
         Spacer(modifier = Modifier.weight(1f))
 

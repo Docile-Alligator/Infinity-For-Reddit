@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,6 +17,8 @@ import ml.docilealligator.infinityforreddit.database.RedditDataRoomDatabase
 import ml.docilealligator.infinityforreddit.moderation.modmail.Conversation
 import ml.docilealligator.infinityforreddit.repositories.ModMailConversationRepository
 import ml.docilealligator.infinityforreddit.result.AppResult
+import ml.docilealligator.infinityforreddit.subreddit.SubredditData
+import ml.docilealligator.infinityforreddit.subreddit.fetchAllSubredditListingData
 import ml.docilealligator.infinityforreddit.user.UserData
 import ml.docilealligator.infinityforreddit.user.fetchUserData
 import retrofit2.Retrofit
@@ -24,6 +27,7 @@ class ModMailConversationViewModel(
     private val redditRoomDatabase: RedditDataRoomDatabase,
     private val oauthRetrofit: Retrofit,
     private val accessToken: String,
+    private val accountName: String,
     private val sharedPreferences: SharedPreferences
 ) : ViewModel() {
     private val _currentState = MutableStateFlow(ModMailState.ALL)
@@ -31,6 +35,18 @@ class ModMailConversationViewModel(
 
     private val _userDataMap = MutableStateFlow<Map<String, UserData>>(emptyMap())
     val userDataMap = _userDataMap.asStateFlow()
+
+    private val _moderatedSubreddits = MutableStateFlow<List<SubredditData>?>(null)
+    val moderatedSubreddits = _moderatedSubreddits.asStateFlow()
+
+    private val _unselectedSubreddits = MutableStateFlow<Set<String>>(mutableSetOf())
+    val unselectedSubreddits = _unselectedSubreddits.asStateFlow()
+
+    private val _allSubredditsSelected = MutableStateFlow(true)
+    val allSubredditsSelected = _allSubredditsSelected.asStateFlow()
+
+    private val _isLoadingModeratedSubreddits = MutableStateFlow(false)
+    val isLoadingModeratedSubreddits = _isLoadingModeratedSubreddits.asStateFlow()
 
     val recentModMailConversationRepository = ModMailConversationRepository(
         oauthRetrofit, accessToken, sharedPreferences, "recent"
@@ -114,9 +130,9 @@ class ModMailConversationViewModel(
         }
 
         viewModelScope.launch {
-            when(val result = fetchUserData(redditRoomDatabase, oauthRetrofit, accessToken, userName)) {
+            when (val result = fetchUserData(redditRoomDatabase, oauthRetrofit, accessToken, userName)) {
                 is AppResult.Success<UserData> -> saveUserData(userName, result.data)
-                is AppResult.Error<*> -> TODO()
+                is AppResult.Error<*> -> {}
             }
         }
     }
@@ -133,15 +149,65 @@ class ModMailConversationViewModel(
         }
     }
 
+    fun loadModeratedSubreddits() {
+        if (!_isLoadingModeratedSubreddits.value) {
+            viewModelScope.launch {
+                _isLoadingModeratedSubreddits.value = true
+
+                try {
+                    when (
+                        val result = fetchAllSubredditListingData(
+                            retrofit = null,
+                            oauthRetrofit = oauthRetrofit,
+                            accessToken = accessToken,
+                            accountName = accountName,
+                            nsfw = true
+                        )
+                    ) {
+                        is AppResult.Success<List<SubredditData>> -> {
+                            _moderatedSubreddits.value = result.data
+                        }
+
+                        is AppResult.Error<*> -> {
+
+                        }
+                    }
+
+                    _isLoadingModeratedSubreddits.value = false
+                } catch (e: CancellationException) {
+                    _isLoadingModeratedSubreddits.value = false
+                    throw e
+                }
+            }
+        }
+    }
+
+    fun setAllSubredditsSelected(allSubredditsSelected: Boolean) {
+        _allSubredditsSelected.value = allSubredditsSelected
+    }
+
+    fun selectSubreddit(subredditId: String) {
+        if (_unselectedSubreddits.value.contains(subredditId)) {
+            _unselectedSubreddits.update {
+                it - subredditId
+            }
+        } else {
+            _unselectedSubreddits.update {
+                it + subredditId
+            }
+        }
+    }
+
     @Suppress("UNCHECKED_CAST")
     class Factory(
         private val redditRoomDatabase: RedditDataRoomDatabase,
         private val oauthRetrofit: Retrofit,
         private val accessToken: String,
+        private val accountName: String,
         private val sharedPreferences: SharedPreferences
     ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ModMailConversationViewModel(redditRoomDatabase, oauthRetrofit, accessToken, sharedPreferences) as T
+            return ModMailConversationViewModel(redditRoomDatabase, oauthRetrofit, accessToken, accountName, sharedPreferences) as T
         }
     }
 }

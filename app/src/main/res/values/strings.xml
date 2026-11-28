@@ -114,6 +114,7 @@
     <string name="action_refresh_mod_mail_messages_in_conversation">Refresh Messages</string>
     <string name="action_user_mod_action">User Actions</string>
     <string name="action_view_user_info">View User Info</string>
+    <string name="action_select_subreddits">Select Subreddits</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -1833,4 +1834,6 @@
     <string name="not_muted_user">Not muted user</string>
     <string name="mute_count_info">%1$d previous mute(s) </string>
     <string name="content_description_mute_info_icon">Mute info icon</string>
+    <string name="select_subreddits">Select Subreddits</string>
+    <string name="content_description_subreddit_icon">Subreddit icon</string>
 </resources>
