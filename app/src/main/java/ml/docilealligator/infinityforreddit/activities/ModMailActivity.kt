@@ -502,19 +502,17 @@ class ModMailActivity : BaseActivity() {
                                             Box(
                                                 contentAlignment = Alignment.Center
                                             ) {
-                                                if (moderatedSubreddits != null) {
-                                                    CustomCircularWavyProgressIndicator(
-                                                        modifier = Modifier
-                                                            .size(24.dp)
-                                                            .alpha(if (isLoadingModeratedSubreddits) 1f else 0f)
-                                                    )
+                                                CustomCircularWavyProgressIndicator(
+                                                    modifier = Modifier
+                                                        .size(24.dp)
+                                                        .alpha(if (isLoadingModeratedSubreddits && moderatedSubreddits != null) 1f else 0f)
+                                                )
 
-                                                    CustomPositiveTextButton(
-                                                        stringResId = R.string.refresh,
-                                                        modifier = Modifier.alpha(if (!isLoadingModeratedSubreddits) 1f else 0f)
-                                                    ) {
-                                                        conversationViewModel.loadModeratedSubreddits()
-                                                    }
+                                                CustomPositiveTextButton(
+                                                    stringResId = R.string.refresh,
+                                                    modifier = Modifier.alpha(if (!isLoadingModeratedSubreddits && moderatedSubreddits != null) 1f else 0f)
+                                                ) {
+                                                    conversationViewModel.loadModeratedSubreddits()
                                                 }
                                             }
                                         }
