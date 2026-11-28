@@ -33,6 +33,9 @@ class ModMailConversationViewModel(
     private val _currentState = MutableStateFlow(ModMailState.ALL)
     val currentState: StateFlow<ModMailState> = _currentState.asStateFlow()
 
+    private val _commaDelimitedSubreddits = MutableStateFlow("")
+    val commaDelimitedSubreddits = _commaDelimitedSubreddits.asStateFlow()
+
     private val _userDataMap = MutableStateFlow<Map<String, UserData>>(emptyMap())
     val userDataMap = _userDataMap.asStateFlow()
 
@@ -66,19 +69,19 @@ class ModMailConversationViewModel(
 
     fun initialLoad(repository: ModMailConversationRepository) {
         viewModelScope.launch {
-            repository.initialLoadConversations(_currentState.value)
+            repository.initialLoadConversations(_commaDelimitedSubreddits.value, _currentState.value)
         }
     }
 
     fun loadNextPage(repository: ModMailConversationRepository) {
         viewModelScope.launch {
-            repository.loadNextPageConversations(_currentState.value)
+            repository.loadNextPageConversations(_commaDelimitedSubreddits.value, _currentState.value)
         }
     }
 
     fun refreshConversations(repository: ModMailConversationRepository) {
         viewModelScope.launch {
-            repository.refreshConversations(_currentState.value)
+            repository.refreshConversations(_commaDelimitedSubreddits.value, _currentState.value)
         }
     }
 
@@ -106,12 +109,24 @@ class ModMailConversationViewModel(
 
     fun switchState(state: ModMailState) {
         if (_currentState.value != state) {
-            recentModMailConversationRepository.resetState()
-            modModMailConversationRepository.resetState()
-            userModMailConversationRepository.resetState()
-            unreadModMailConversationRepository.resetState()
+            resetState()
             _currentState.value = state
         }
+    }
+
+    fun changeSubreddits() {
+        val newCommaDelimitedSubreddits = getCommaDelimitedSubreddits()
+        if (_commaDelimitedSubreddits.value != newCommaDelimitedSubreddits) {
+            resetState()
+            _commaDelimitedSubreddits.value = newCommaDelimitedSubreddits
+        }
+    }
+
+    private fun resetState() {
+        recentModMailConversationRepository.resetState()
+        modModMailConversationRepository.resetState()
+        userModMailConversationRepository.resetState()
+        unreadModMailConversationRepository.resetState()
     }
 
     // Return true if modMailUser is updated
@@ -200,6 +215,21 @@ class ModMailConversationViewModel(
 
     fun clearUnSelectedSubreddits() {
         _unselectedSubreddits.value = emptySet()
+    }
+
+    private fun getCommaDelimitedSubreddits(): String {
+        if (_allSubredditsSelected.value) {
+            return ""
+        }
+
+        var result = ""
+        _moderatedSubreddits.value?.filter {
+            !_unselectedSubreddits.value.contains(it.id)
+        }?.forEach {
+            result = result + "," + it.name
+        }
+
+        return result
     }
 
     @Suppress("UNCHECKED_CAST")

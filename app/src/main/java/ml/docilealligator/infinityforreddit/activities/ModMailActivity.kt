@@ -218,8 +218,9 @@ class ModMailActivity : BaseActivity() {
         setContent {
             AppTheme(customThemeWrapper.themeType, mSharedPreferences) {
                 val state by conversationViewModel.currentState.collectAsStateWithLifecycle()
+                val commaDelimitedSubreddits by conversationViewModel.commaDelimitedSubreddits.collectAsStateWithLifecycle()
 
-                key(state) {
+                key(state, commaDelimitedSubreddits) {
                     val scrollBehavior = enterAlwaysScrollBehavior()
 
                     val scope = rememberCoroutineScope()
@@ -504,7 +505,7 @@ class ModMailActivity : BaseActivity() {
                                             ) {
                                                 CustomCircularWavyProgressIndicator(
                                                     modifier = Modifier
-                                                        .size(24.dp)
+                                                        .size(20.dp)
                                                         .alpha(if (isLoadingModeratedSubreddits && moderatedSubreddits != null) 1f else 0f)
                                                 )
 
@@ -595,6 +596,7 @@ class ModMailActivity : BaseActivity() {
                                     stringResId = R.string.apply
                                 ) {
                                     showSelectSubredditsSheet = false
+                                    conversationViewModel.changeSubreddits()
                                 }
                             }
                         }

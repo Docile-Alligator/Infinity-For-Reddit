@@ -50,36 +50,37 @@ class ModMailConversationRepository(
     private var _conversationMessagesDataLoadState = MutableStateFlow<DataLoadState<Unit>>(DataLoadState.Idle)
     val conversationMessagesDataLoadState = _conversationMessagesDataLoadState.asStateFlow()
 
-    suspend fun initialLoadConversations(state: ModMailState) {
+    suspend fun initialLoadConversations(commaDelimitedSubreddits: String, state: ModMailState) {
         if (_loadState.value == DataLoadState.Idle) {
-            loadConversations(state)
+            loadConversations(commaDelimitedSubreddits, state)
         }
     }
 
-    suspend fun refreshConversations(state: ModMailState) {
+    suspend fun refreshConversations(commaDelimitedSubreddits: String, state: ModMailState) {
         _isRefreshingConversations.value = true
         conversationIds.clear()
         conversationsAfter = null
-        loadConversations(state)
+        loadConversations(commaDelimitedSubreddits, state)
         _isRefreshingConversations.value = false
     }
 
-    suspend fun loadNextPageConversations(state: ModMailState) {
+    suspend fun loadNextPageConversations(commaDelimitedSubreddits: String, state: ModMailState) {
         if (_conversations.value.isNullOrEmpty() || conversationsAfter.isNullOrEmpty()) {
             return
         }
 
         if (_loadState.value != DataLoadState.Loading) {
-            loadConversations(state)
+            loadConversations(commaDelimitedSubreddits, state)
         }
     }
 
-    private suspend fun loadConversations(state: ModMailState) {
+    private suspend fun loadConversations(commaDelimitedSubreddits: String, state: ModMailState) {
         try {
             _loadState.value = DataLoadState.Loading
             val response = oauthRetrofit.create(RedditAPIKt::class.java)
                 .getModMailConversations(
                     APIUtils.getOAuthHeader(accessToken),
+                    commaDelimitedSubreddits,
                     state.rawValue,
                     sort,
                     conversationsAfter
