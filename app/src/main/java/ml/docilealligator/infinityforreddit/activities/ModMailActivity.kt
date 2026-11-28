@@ -46,7 +46,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CircularWavyProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -114,8 +113,6 @@ import io.noties.markwon.MarkwonPlugin
 import io.noties.markwon.core.MarkwonTheme
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.Infinity
 import ml.docilealligator.infinityforreddit.R
@@ -998,11 +995,11 @@ class ModMailActivity : BaseActivity() {
             navigator.currentDestination?.contentKey?.let { conversation ->
                 modMailUser?.let { modMailUser ->
                     CustomModalBottomSheet(onDismissRequest = { showUserInfo.value = false }) {
-                        val userData by conversationViewModel
-                            .userDataMap
-                            .map { it[modMailUser.name]}
-                            .distinctUntilChanged()
-                            .collectAsStateWithLifecycle(null)
+                        val userDataFlow = remember(conversationViewModel, modMailUser.name) {
+                            conversationViewModel.getUserDataFlow(modMailUser.name)
+                        }
+
+                        val userData by userDataFlow.collectAsStateWithLifecycle(null)
 
                         val recentConvos = modMailUser.recentConvos.entries.toList().sortedByDescending { it.value.dateUTC }
                         val recentComments = modMailUser.recentComments.entries.toList().sortedByDescending { it.value.dateUTC }

@@ -4,9 +4,12 @@ import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ml.docilealligator.infinityforreddit.database.RedditDataRoomDatabase
@@ -116,6 +119,12 @@ class ModMailConversationViewModel(
                 is AppResult.Error<*> -> TODO()
             }
         }
+    }
+
+    fun getUserDataFlow(username: String): Flow<UserData?> {
+        return userDataMap
+            .map { it[username]}
+            .distinctUntilChanged()
     }
 
     private fun saveUserData(userName: String, userData: UserData) {
