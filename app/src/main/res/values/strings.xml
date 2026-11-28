@@ -1836,4 +1836,5 @@
     <string name="content_description_mute_info_icon">Mute info icon</string>
     <string name="select_subreddits">Select Subreddits</string>
     <string name="content_description_subreddit_icon">Subreddit icon</string>
+    <string name="apply">Apply</string>
 </resources>

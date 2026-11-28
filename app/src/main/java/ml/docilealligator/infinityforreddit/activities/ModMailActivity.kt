@@ -81,6 +81,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
@@ -125,6 +126,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.CustomFilledButt
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomHorizontalDivider
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingIndicator
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomModalBottomSheet
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomPositiveTextButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomSpinner
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomSwitch
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextButton
@@ -468,7 +470,9 @@ class ModMailActivity : BaseActivity() {
                             val isLoadingModeratedSubreddits by conversationViewModel.isLoadingModeratedSubreddits.collectAsStateWithLifecycle()
 
                             LaunchedEffect(Unit) {
-                                conversationViewModel.loadModeratedSubreddits()
+                                if (moderatedSubreddits == null) {
+                                    conversationViewModel.loadModeratedSubreddits()
+                                }
                             }
 
                             fun toggleSubreddit(subredditId: String) {
@@ -476,14 +480,44 @@ class ModMailActivity : BaseActivity() {
                             }
 
                             CustomModalBottomSheet(onDismissRequest = { showSelectSubredditsSheet = false }) {
-                                LazyColumn {
+                                LazyColumn(
+                                    modifier = Modifier.weight(1f)
+                                ) {
                                     item {
-                                        PrimaryText(
-                                            stringResource(R.string.select_subreddits),
-                                            modifier = Modifier.padding(16.dp),
-                                            fontSize = LocalTypography.current.fontSize.size18,
-                                            fontWeight = FontWeight.Bold
-                                        )
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(16.dp),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            PrimaryText(
+                                                stringResource(R.string.select_subreddits),
+                                                modifier = Modifier
+                                                    .weight(1f)
+                                                    .padding(end = 16.dp),
+                                                fontSize = LocalTypography.current.fontSize.size18,
+                                                fontWeight = FontWeight.Bold
+                                            )
+
+                                            Box(
+                                                contentAlignment = Alignment.Center
+                                            ) {
+                                                if (moderatedSubreddits != null) {
+                                                    CustomCircularWavyProgressIndicator(
+                                                        modifier = Modifier
+                                                            .size(24.dp)
+                                                            .alpha(if (isLoadingModeratedSubreddits) 1f else 0f)
+                                                    )
+
+                                                    CustomPositiveTextButton(
+                                                        stringResId = R.string.refresh,
+                                                        modifier = Modifier.alpha(if (!isLoadingModeratedSubreddits) 1f else 0f)
+                                                    ) {
+                                                        conversationViewModel.loadModeratedSubreddits()
+                                                    }
+                                                }
+                                            }
+                                        }
 
                                         SwitchRow(
                                             modifier = Modifier.fillMaxWidth(),
@@ -554,6 +588,15 @@ class ModMailActivity : BaseActivity() {
                                             }
                                         }
                                     }
+                                }
+
+                                CustomFilledButton(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    stringResId = R.string.apply
+                                ) {
+                                    showSelectSubredditsSheet = false
                                 }
                             }
                         }
