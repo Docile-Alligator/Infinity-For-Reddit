@@ -186,7 +186,7 @@ class ModMailConversationViewModel(
         _allSubredditsSelected.value = allSubredditsSelected
     }
 
-    fun selectSubreddit(subredditId: String) {
+    fun toggleSubreddit(subredditId: String) {
         if (_unselectedSubreddits.value.contains(subredditId)) {
             _unselectedSubreddits.update {
                 it - subredditId
@@ -196,6 +196,10 @@ class ModMailConversationViewModel(
                 it + subredditId
             }
         }
+    }
+
+    fun clearUnSelectedSubreddits() {
+        _unselectedSubreddits.value = emptySet()
     }
 
     @Suppress("UNCHECKED_CAST")

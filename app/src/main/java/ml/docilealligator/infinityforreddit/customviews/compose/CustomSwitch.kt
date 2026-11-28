@@ -40,13 +40,27 @@ fun SwitchRow(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Switch(
+        CustomSwitch(
             checked = checked,
-            onCheckedChange = onCheckedChange,
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = Color(LocalAppTheme.current.colorAccent),
-                checkedTrackColor = Color(deriveContrastingColor(LocalAppTheme.current.colorAccent))
-            )
+            onCheckedChange = onCheckedChange
         )
     }
+}
+
+@Composable
+fun CustomSwitch(
+    modifier: Modifier = Modifier,
+    checked: Boolean,
+    enabled: Boolean = true,
+    onCheckedChange: ((Boolean) -> Unit)? = null
+) {
+    Switch(
+        checked = checked,
+        enabled = enabled,
+        onCheckedChange = onCheckedChange,
+        colors = SwitchDefaults.colors(
+            checkedThumbColor = Color(LocalAppTheme.current.colorAccent),
+            checkedTrackColor = Color(deriveContrastingColor(LocalAppTheme.current.colorAccent))
+        )
+    )
 }

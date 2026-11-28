@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.activities
 
-import android.R.attr.checked
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
@@ -54,8 +53,6 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
@@ -129,6 +126,7 @@ import ml.docilealligator.infinityforreddit.customviews.compose.CustomHorizontal
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomLoadingIndicator
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomModalBottomSheet
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomSpinner
+import ml.docilealligator.infinityforreddit.customviews.compose.CustomSwitch
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextButton
 import ml.docilealligator.infinityforreddit.customviews.compose.CustomTextField
 import ml.docilealligator.infinityforreddit.customviews.compose.FilledLoadingButton
@@ -158,7 +156,6 @@ import ml.docilealligator.infinityforreddit.repositories.ModMailConversationRepo
 import ml.docilealligator.infinityforreddit.state.DataLoadState
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils
 import ml.docilealligator.infinityforreddit.utils.Utils
-import ml.docilealligator.infinityforreddit.utils.deriveContrastingColor
 import ml.docilealligator.infinityforreddit.utils.getFormattedTime
 import ml.docilealligator.infinityforreddit.viewmodels.ModConversationAction
 import ml.docilealligator.infinityforreddit.viewmodels.ModMailConversationViewModel
@@ -474,8 +471,8 @@ class ModMailActivity : BaseActivity() {
                                 conversationViewModel.loadModeratedSubreddits()
                             }
 
-                            fun onToggleSubreddit(subredditId: String) {
-                                conversationViewModel.selectSubreddit(subredditId)
+                            fun toggleSubreddit(subredditId: String) {
+                                conversationViewModel.toggleSubreddit(subredditId)
                             }
 
                             CustomModalBottomSheet(onDismissRequest = { showSelectSubredditsSheet = false }) {
@@ -493,6 +490,9 @@ class ModMailActivity : BaseActivity() {
                                             checked = allSubredditsSelected,
                                             title = stringResource(R.string.all_subreddits)
                                         ) {
+                                            if (!allSubredditsSelected) {
+                                                conversationViewModel.clearUnSelectedSubreddits()
+                                            }
                                             conversationViewModel.setAllSubredditsSelected(!allSubredditsSelected)
                                         }
                                     }
@@ -507,7 +507,9 @@ class ModMailActivity : BaseActivity() {
                                                 modifier = Modifier
                                                     .fillMaxWidth()
                                                     .clickable {
-                                                        onToggleSubreddit(it[index].id)
+                                                        if (!allSubredditsSelected) {
+                                                            toggleSubreddit(it[index].id)
+                                                        }
                                                     }
                                                     .padding(horizontal = 16.dp, vertical = 8.dp),
                                                 verticalAlignment = Alignment.CenterVertically
@@ -529,15 +531,12 @@ class ModMailActivity : BaseActivity() {
 
                                                 Spacer(modifier = Modifier.weight(1f))
 
-                                                Switch(
-                                                    checked = unselectedSubreddits.contains(it[index].id),
-                                                    onCheckedChange = { selected ->
-                                                        onToggleSubreddit(it[index].id)
-                                                    },
-                                                    colors = SwitchDefaults.colors(
-                                                        checkedThumbColor = Color(LocalAppTheme.current.colorAccent),
-                                                        checkedTrackColor = Color(deriveContrastingColor(LocalAppTheme.current.colorAccent))
-                                                    )
+                                                CustomSwitch(
+                                                    checked = !unselectedSubreddits.contains(it[index].id),
+                                                    enabled = !allSubredditsSelected,
+                                                    onCheckedChange = { _ ->
+                                                        toggleSubreddit(it[index].id)
+                                                    }
                                                 )
                                             }
                                         }
